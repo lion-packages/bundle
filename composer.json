@@ -1,0 +1,19 @@
+{
+    "name": "lion-framework/lion-backend",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Sergio León",
+            "email": "sergioleon4004@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.0.9"
+    }
+}
