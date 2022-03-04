@@ -9,7 +9,7 @@ session_start();
 
 require_once("vendor/autoload.php");
 spl_autoload_register(function($class_name) {
-	include_once(str_replace("\\", "/", $class_name) . '.php');
+    require_once(str_replace("\\", "/", $class_name) . '.php');
 });
 (Dotenv\Dotenv::createImmutable(__DIR__))->load();
 include_once("routes/web.php");

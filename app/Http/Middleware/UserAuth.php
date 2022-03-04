@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use App\Config\PHPRoute;
-use App\Models\Class\Request;
+use LionRoute\Route;
+use LionRoute\Request;
 
 class UserAuth {
 	
@@ -14,7 +14,7 @@ class UserAuth {
 	public function auth() {
 		if(isset($_SESSION['user_session'])) {
 			if (!$_SESSION['user_session']) {
-				PHPRoute::processOutput(
+				Route::processOutput(
 					new Request("error", "El usuario debe estar autenticado para ver esta página.")
 				);
 			}
@@ -24,7 +24,7 @@ class UserAuth {
 	public function noAuth() {
 		if(isset($_SESSION['user_session'])) {
 			if ($_SESSION['user_session']) {
-				PHPRoute::processOutput(
+				Route::processOutput(
 					new Request("error", "El usuario no debe estar autenticado para ver esta página.")
 				);
 			}

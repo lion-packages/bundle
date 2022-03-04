@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "471fdb842893c819b27866c30c80ec15",
+    "content-hash": "9cd83c5add348121c6fdd129747efa28",
     "packages": [
         {
             "name": "graham-campbell/result-type",
@@ -69,17 +69,60 @@
             "time": "2021-11-21T21:41:47+00:00"
         },
         {
-            "name": "lion-framework/lion-sql",
-            "version": "v1.6",
+            "name": "lion-framework/lion-route",
+            "version": "v1.3.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Sleon4/Lion-SQL.git",
-                "reference": "68a3384ab90e815f81b5835432dfd36055a51b52"
+                "url": "https://github.com/Sleon4/Lion-Route.git",
+                "reference": "8ac55514492001bae0ed2730acbe73175a4651aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/68a3384ab90e815f81b5835432dfd36055a51b52",
-                "reference": "68a3384ab90e815f81b5835432dfd36055a51b52",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Route/zipball/8ac55514492001bae0ed2730acbe73175a4651aa",
+                "reference": "8ac55514492001bae0ed2730acbe73175a4651aa",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.0.9"
+            },
+            "require-dev": {
+                "phroute/phroute": "^2.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "LionRoute\\": "src/LionRoute/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sergio León",
+                    "email": "sergioleon4004@hotmail.com"
+                }
+            ],
+            "description": "This library has a fast router usage with regular expressions.",
+            "support": {
+                "issues": "https://github.com/Sleon4/Lion-Route/issues",
+                "source": "https://github.com/Sleon4/Lion-Route/tree/v1.3.1"
+            },
+            "time": "2022-03-03T21:56:36+00:00"
+        },
+        {
+            "name": "lion-framework/lion-sql",
+            "version": "v1.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Sleon4/Lion-SQL.git",
+                "reference": "d7a82d92a50c44ddfa99706217f12a478d1f26fb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/d7a82d92a50c44ddfa99706217f12a478d1f26fb",
+                "reference": "d7a82d92a50c44ddfa99706217f12a478d1f26fb",
                 "shasum": ""
             },
             "require": {
@@ -104,9 +147,9 @@
             "description": "package in charge of generating and executing MySQL processes.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-SQL/issues",
-                "source": "https://github.com/Sleon4/Lion-SQL/tree/v1.6"
+                "source": "https://github.com/Sleon4/Lion-SQL/tree/v1.7"
             },
-            "time": "2022-03-02T23:19:27+00:00"
+            "time": "2022-03-03T23:20:48+00:00"
         },
         {
             "name": "phpoption/phpoption",
@@ -562,7 +605,9 @@
     "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "php": ">=8.0.9"
+    },
     "platform-dev": [],
     "plugin-api-version": "2.2.0"
 }

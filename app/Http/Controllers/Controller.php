@@ -8,11 +8,6 @@ class Controller {
 		
 	}
 
-	public static function processOutput($response) {
-		echo(json_encode($response));
-		die();
-	}
-
 	public static function csrf() {
 		if (isset($_POST['csrf_token'], $_SESSION["csrf_token"])) {
 			if (!empty($_POST["csrf_token"])) {
@@ -35,10 +30,6 @@ class Controller {
 				// 	new Request("error", "Invalid Token. [1]")
 				// );
 		}
-	}
-
-	public static function fileGetContents(): void {
-		$_POST = json_decode(file_get_contents("php://input"), true);
 	}
 
 }

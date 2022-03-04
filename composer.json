@@ -14,6 +14,10 @@
         }
     ],
     "require": {
-        "php": ">=8.0.9"
+        "php": ">=8.0.9",
+        "lion-framework/lion-sql": "^1.7",
+        "lion-framework/lion-route": "^1.3",
+        "phroute/phroute": "^2.1",
+        "vlucas/phpdotenv": "^5.4"
     }
 }
