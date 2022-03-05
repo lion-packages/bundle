@@ -28,7 +28,7 @@ class SQLConnect {
 				]
 			);
 		} catch (PDOException $e) {
-			echo($e);
+			echo($e->getMessage());
 		}
 	}
 
@@ -45,7 +45,7 @@ class SQLConnect {
 	}
 
 	protected static function prepare(string $query): PDOStatement {
-		return self::$conn->prepare($query);
+		return self::$conn->prepare(trim($query));
 	}
 
 	protected static function fetch(PDOStatement $stmt): array {

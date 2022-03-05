@@ -28,6 +28,17 @@ class QueryBuilder extends SQLConnect {
 	private static string $delete = " DELETE";
 	private static string $call = " CALL";
 	private static string $like = " LIKE";
+	private static $groupBy = ' GROUP BY';
+	private static $asc = ' ASC';
+	private static $desc = ' DESC';
+	private static $orderBy = ' ORDER BY';
+	private static $count = ' COUNT(?)';
+	private static $max = ' MAX(?)';
+	private static $min = ' MIN(?)';
+	private static $sum = ' SUM(?)';
+	private static $avg = ' AVG(?)';
+	private static $limit = ' LIMIT';
+	private static $having = ' HAVING';
 	
 	public function __construct() {
 		
@@ -47,6 +58,46 @@ class QueryBuilder extends SQLConnect {
 		return $addValues;
 	}
 
+	public static function limit(bool $index): string {
+		if (!$index) {
+			return self::$limit . " ?";
+		} else {
+			return self::$limit . " ?, ?";
+		}
+	}
+
+	public static function min(string $column, ?string $alias = null): string {
+		return str_replace("?", $column, self::$min) . " " . ($alias != null ? self::$as . " {$alias}" : '');
+	}
+
+	public static function max(string $column, ?string $alias = null): string {
+		return str_replace("?", $column, self::$max) . " " . ($alias != null ? self::$as . " {$alias}" : '');
+	}
+
+	public static function count(?string $column = null, ?string $alias = null): string {
+		return ($column != null ? str_replace("?", $column, self::$count) : str_replace("?", "*", self::$count)) . " " . ($alias != null ? self::$as . " {$alias}" : '');
+	}
+
+	public static function avg(string $column, ?string $alias = null): string {
+		return str_replace("?", $column, self::$avg) . " " . ($alias != null ? self::$as . " {$alias}" : '');
+	}
+
+	public static function sum(?string $column = null, ?string $alias = null): string {
+		return str_replace("?", $column, self::$sum) . " " . ($alias != null ? self::$as . " {$alias}" : '');
+	}
+
+	public static function orderBy(string $column, ?string $type = null): string {
+		return self::$orderBy . " {$column} " . ($type != null ? strtoupper($type) : '');
+	}
+
+	public static function groupBy(string $column, ?string $type = null): string {
+		return self::$groupBy . " {$column} " . ($type != null ? strtoupper($type) : '');
+	}
+
+	public static function having(string $column, ?string $operator = null): string {
+		return self::$having . " {$column} " . ($operator != null ? "{$operator} ?" : '');
+	}
+
 	public static function like(): string {
 		return self::$like . " ?";
 	}
@@ -64,7 +115,7 @@ class QueryBuilder extends SQLConnect {
 				return ['status' => "warning", 'message' => "at least one row must be entered."];
 			}
 		} catch (PDOException $e) {
-			return ['status' => "error", 'message' => $e];
+			return ['status' => "error", 'message' => $e->getMessage()];
 		}
 	}
 
@@ -75,7 +126,7 @@ class QueryBuilder extends SQLConnect {
 
 			return ['status' => "success", 'message' => "row deleted successfully."];
 		} catch (PDOException $e) {
-			return ['status' => "error", 'message' => $e];
+			return ['status' => "error", 'message' => $e->getMessage()];
 		}
 	}
 
@@ -94,7 +145,7 @@ class QueryBuilder extends SQLConnect {
 				return ['status' => "warning", 'message' => "at least one row must be entered."];
 			}
 		} catch (PDOException $e) {
-			return ['status' => "error", 'message' => $e];
+			return ['status' => "error", 'message' => $e->getMessage()];
 		}
 	}
 
@@ -111,11 +162,11 @@ class QueryBuilder extends SQLConnect {
 				return ['status' => "warning", 'message' => "at least one row must be entered."];
 			}	
 		} catch (PDOException $e) {
-			return ['status' => "error", 'message' => $e];
+			return ['status' => "error", 'message' => $e->getMessage()];
 		}
 	}
 
-	public static function select(string $method, string $table, ?string $alias, string $columns, array $joins = [], array $files = []): array {
+	public static function select(string $method, string $table, ?string $alias, ?string $columns = null, array $joins = [], array $files = []): array {
 		try {
 			$addJoins = "";
 			if (count($joins) > 0) {
@@ -124,7 +175,7 @@ class QueryBuilder extends SQLConnect {
 				}
 			}
 
-			$sql = self::$select . " " . str_replace(",", ", ", $columns) . " " . self::$from . " {$table} " . ($alias != null ? self::$as . " {$alias} " : '') . " " . $addJoins;
+			$sql = self::$select . " " . ($columns != null ? str_replace(",", ", ", $columns) : '*') . " " . self::$from . " {$table} " . ($alias != null ? self::$as . " {$alias} " : '') . " " . $addJoins;
 			$prepare = self::prepare($sql);
 
 			if (count($files) > 0) {
@@ -134,7 +185,7 @@ class QueryBuilder extends SQLConnect {
 				return $method === 'fetch' ? self::fetch($prepare) : self::fetchAll($prepare);
 			}
 		} catch (PDOException $e) {
-			return ['status' => "error", 'message' => $e];
+			return ['status' => "error", 'message' => $e->getMessage()];
 		}
 	}
 
@@ -154,8 +205,16 @@ class QueryBuilder extends SQLConnect {
 		return self::$between . " ? " . self::$and . " ? ";
 	}
 
-	public static function join(string $type, string $table, ?string $alias, string $condition): string {
-		return "{$type} " . self::$join . " " . ($table) . " " . ($alias != null ? self::$as . " {$alias} " : '') . " " . self::$on . " " . ($condition);
+	public static function leftJoin(string $table, ?string $alias, string $condition): string {
+		return self::$left . self::$join . " " . ($table) . " " . ($alias != null ? self::$as . " {$alias} " : '') . " " . self::$on . " " . ($condition);
+	}
+
+	public static function rightJoin(string $table, ?string $alias, string $condition): string {
+		return self::$right . self::$join . " " . ($table) . " " . ($alias != null ? self::$as . " {$alias} " : '') . " " . self::$on . " " . ($condition);
+	}
+
+	public static function innerJoin(string $table, ?string $alias, string $condition): string {
+		return self::$inner . self::$join . " " . ($table) . " " . ($alias != null ? self::$as . " {$alias} " : '') . " " . self::$on . " " . ($condition);
 	}
 	
 }
