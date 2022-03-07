@@ -3,6 +3,7 @@
 use LionRoute\Route;
 use LionRoute\Request;
 
+use App\Http\Controllers\Controller;
 use App\Http\Middleware\UserAuth;
 use App\Http\Controllers\Example\ExampleController;
 
@@ -17,17 +18,14 @@ Route::init([
     ]
 ]);
 
-$_SESSION['user_session'] = isset($_SESSION['user_session']) ? $_SESSION['user_session'] : false;
-
 Route::any('/', function() {
-	Route::processOutput(
-		new Request('warning', 'Page not found. [index]')
-	);
+	return new Request('warning', 'Page not found. [index]');
 });
 
 Route::middleware(['before' => 'no-auth'], function() {
     Route::prefix('autenticar', function() {
         Route::post('ingreso', [ExampleController::class, 'methodExample']);
+        Route::post('token', [ExampleController::class, 'methodToken']);
     });
 });
 

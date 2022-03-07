@@ -97,7 +97,6 @@ class Route {
 
 	public static function processOutput($response): void {
 		echo(json_encode($response));
-		die();
 	}
 
 	public static function dispatch($index) {

@@ -67,17 +67,17 @@
         },
         {
             "name": "lion-framework/lion-route",
-            "version": "v1.3.1",
-            "version_normalized": "1.3.1.0",
+            "version": "v1.3.2",
+            "version_normalized": "1.3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Route.git",
-                "reference": "8ac55514492001bae0ed2730acbe73175a4651aa"
+                "reference": "a80d7af50a15f690a3e5a61b42351be1efc178c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Route/zipball/8ac55514492001bae0ed2730acbe73175a4651aa",
-                "reference": "8ac55514492001bae0ed2730acbe73175a4651aa",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Route/zipball/a80d7af50a15f690a3e5a61b42351be1efc178c5",
+                "reference": "a80d7af50a15f690a3e5a61b42351be1efc178c5",
                 "shasum": ""
             },
             "require": {
@@ -86,7 +86,7 @@
             "require-dev": {
                 "phroute/phroute": "^2.1"
             },
-            "time": "2022-03-03T21:56:36+00:00",
+            "time": "2022-03-06T15:58:07+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -107,7 +107,7 @@
             "description": "This library has a fast router usage with regular expressions.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Route/issues",
-                "source": "https://github.com/Sleon4/Lion-Route/tree/v1.3.1"
+                "source": "https://github.com/Sleon4/Lion-Route/tree/v1.3.2"
             },
             "install-path": "../lion-framework/lion-route"
         },
@@ -618,6 +618,68 @@
                 }
             ],
             "install-path": "../vlucas/phpdotenv"
+        },
+        {
+            "name": "vlucas/valitron",
+            "version": "v1.4.10",
+            "version_normalized": "1.4.10.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vlucas/valitron.git",
+                "reference": "5ebd5d7af82cc0a9d798e816a2ecad63f1b59ceb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vlucas/valitron/zipball/5ebd5d7af82cc0a9d798e816a2ecad63f1b59ceb",
+                "reference": "5ebd5d7af82cc0a9d798e816a2ecad63f1b59ceb",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": ">=4.8.35"
+            },
+            "suggest": {
+                "ext-mbstring": "It can support the multiple bytes string length."
+            },
+            "time": "2021-07-08T16:18:03+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Valitron\\": "src/Valitron"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Vance Lucas",
+                    "email": "vance@vancelucas.com",
+                    "homepage": "https://www.vancelucas.com"
+                }
+            ],
+            "description": "Simple, elegant, stand-alone validation library with NO dependencies",
+            "homepage": "https://github.com/vlucas/valitron",
+            "keywords": [
+                "valid",
+                "validation",
+                "validator"
+            ],
+            "support": {
+                "issues": "https://github.com/vlucas/valitron/issues",
+                "source": "https://github.com/vlucas/valitron/tree/v1.4.10"
+            },
+            "funding": [
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/vlucas/valitron",
+                    "type": "tidelift"
+                }
+            ],
+            "install-path": "../vlucas/valitron"
         }
     ],
     "dev": true,
