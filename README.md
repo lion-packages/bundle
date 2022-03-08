@@ -21,11 +21,6 @@ composer require lion-framework/lion-sql
 composer require lion-framework/lion-route
 ```
 
-[Lion-SQL](https://github.com/Sleon4/Lion-SQL)
-```
-composer require lion-framework/lion-sql
-```
-
 [Valitron](https://github.com/vlucas/valitron)
 ```
 composer require vlucas/valitron
@@ -39,4 +34,9 @@ composer require vlucas/phpdotenv
 [PHRoute](https://github.com/mrjgreen/phroute)
 ```
 composer require phroute/phroute
+```
+
+[PHPMailer](https://github.com/PHPMailer/PHPMailer)
+```
+composer require phpmailer/phpmailer
 ```
