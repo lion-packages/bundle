@@ -70,16 +70,16 @@
         },
         {
             "name": "lion-framework/lion-mailer",
-            "version": "v1.0",
+            "version": "v1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Mailer.git",
-                "reference": "249b98b9a65faf6b918a76947c7c06643b9543b8"
+                "reference": "3cab126c4d566d1a6d83c164cefa3126880e8578"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Mailer/zipball/249b98b9a65faf6b918a76947c7c06643b9543b8",
-                "reference": "249b98b9a65faf6b918a76947c7c06643b9543b8",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Mailer/zipball/3cab126c4d566d1a6d83c164cefa3126880e8578",
+                "reference": "3cab126c4d566d1a6d83c164cefa3126880e8578",
                 "shasum": ""
             },
             "require": {
@@ -104,22 +104,22 @@
             "description": "Library created for easy email sending based on PHPMailer.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Mailer/issues",
-                "source": "https://github.com/Sleon4/Lion-Mailer/tree/v1.0"
+                "source": "https://github.com/Sleon4/Lion-Mailer/tree/v1.2"
             },
-            "time": "2022-03-08T13:50:50+00:00"
+            "time": "2022-03-09T03:03:07+00:00"
         },
         {
             "name": "lion-framework/lion-route",
-            "version": "v1.3.2",
+            "version": "v1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Route.git",
-                "reference": "a80d7af50a15f690a3e5a61b42351be1efc178c5"
+                "reference": "3196bb0a7c22981a2061bc11df6cb960955acf00"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Route/zipball/a80d7af50a15f690a3e5a61b42351be1efc178c5",
-                "reference": "a80d7af50a15f690a3e5a61b42351be1efc178c5",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Route/zipball/3196bb0a7c22981a2061bc11df6cb960955acf00",
+                "reference": "3196bb0a7c22981a2061bc11df6cb960955acf00",
                 "shasum": ""
             },
             "require": {
@@ -147,9 +147,9 @@
             "description": "This library has a fast router usage with regular expressions.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Route/issues",
-                "source": "https://github.com/Sleon4/Lion-Route/tree/v1.3.2"
+                "source": "https://github.com/Sleon4/Lion-Route/tree/v1.4"
             },
-            "time": "2022-03-06T15:58:07+00:00"
+            "time": "2022-03-08T22:45:46+00:00"
         },
         {
             "name": "lion-framework/lion-sql",

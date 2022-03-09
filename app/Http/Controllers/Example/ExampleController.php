@@ -4,22 +4,23 @@ namespace App\Http\Controllers\Example;
 
 use App\Http\Controllers\Controller;
 use LionRoute\Request;
+use LionMailer\Mailer;
+use LionMailer\Attach;
 use Valitron\Validator;
 use App\Models\Class\Example;
 
 class ExampleController extends Controller {
 	
 	public function __construct() {
-
+		$this->init();
 	}
 
 	public function methodExample(): Request {
-		$validator = $this->make(new Validator($_POST), [
+		$this->content(true);
+
+		$validator = $this->make(new Validator((array) self::$form), [
 			'email' => [
 				['user_data_email']
-			],
-			'lengthMin' => [
-				['user_data_password', 8]
 			],
 			'required' => [
 				['user_data_email'], 
@@ -28,18 +29,10 @@ class ExampleController extends Controller {
 		]);
 
 		if($validator) {
-			return new Request('success', 'Welcome to example.', $_POST);
+			return new Request('success', 'Welcome to example.', self::$form);
 		} else {
 			return new Request('error', 'All fields are required and must meet the requested characteristics.');
 		}
-	}
-
-	public function methodToken(): array {
-		return [
-			'status' => "warning",
-			'message' => "Welcome to token",
-			'data' => $_POST
-		];
 	}
 
 }
