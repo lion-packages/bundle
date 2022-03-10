@@ -12,7 +12,7 @@ use App\Models\Class\Example;
 class ExampleController extends Controller {
 	
 	public function __construct() {
-		$this->init();
+		
 	}
 
 	public function methodExample(): Request {

@@ -28,4 +28,4 @@ Route::middleware(['before' => 'no-auth'], function() {
     });
 });
 
-Route::processOutput(Route::dispatch(3)); 
+Route::processOutput(Route::dispatch(3));

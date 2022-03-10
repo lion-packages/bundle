@@ -21,6 +21,11 @@ composer require lion-framework/lion-sql
 composer require lion-framework/lion-route
 ```
 
+[Lion-Mailer](https://github.com/Sleon4/Lion-Mailer)
+```
+composer require lion-framework/lion-mailer
+```
+
 [Valitron](https://github.com/vlucas/valitron)
 ```
 composer require vlucas/valitron
