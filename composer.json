@@ -21,6 +21,7 @@
         "phroute/phroute": "^2.1",
         "vlucas/phpdotenv": "^5.4",
         "vlucas/valitron": "^1.4",
-        "phpmailer/phpmailer": "^6.6"
+        "phpmailer/phpmailer": "^6.6",
+        "phpoffice/phpspreadsheet": "^1.22"
     }
 }

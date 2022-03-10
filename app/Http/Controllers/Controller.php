@@ -17,7 +17,7 @@ class Controller {
 
 	public static function content(bool $option = false): void {
 		if (!$option) {
-			self::$form = (object) ($_POST + $_FILES + $_ENV + $_GET + $_SESSION);
+			self::$form = (object) ($_POST + $_FILES + $_GET + $_SESSION + $_ENV);
 		} else {
 			self::$form = (object) json_decode(file_get_contents("php://input"), true);
 		}
