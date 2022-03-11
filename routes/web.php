@@ -24,7 +24,7 @@ Route::any('/', function() {
 
 Route::middleware(['before' => 'no-auth'], function() {
     Route::prefix('autenticar', function() {
-        Route::post('ingreso', [ExampleController::class, 'methodExample']);
+        Route::post('ingreso', [ExampleController::class, 'createMyWord']);
     });
 });
 

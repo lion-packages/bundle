@@ -46,12 +46,12 @@ class Files {
 	}
 
 	public static function upload(array $tmps, array $names, string $path): bool {
-		if (self::folder($path)) {
-			foreach ($names as $key_name => $name) {
-				if (!move_uploaded_file($tmps[$key_name], $path . self::rename($name))) {
-					return false;
-					break;
-				}
+		self::folder($path);
+		
+		foreach ($names as $key => $name) {
+			if (!move_uploaded_file($tmps[$key], $path . self::rename($name))) {
+				return false;
+				break;
 			}
 		}
 
@@ -60,6 +60,14 @@ class Files {
 
 	public static function getExtension(string $url_path): string {
 		return (new \SplFileInfo($url_path))->getExtension();
+	}
+
+	public static function getName(string $url_path): string {
+		return (new \SplFileInfo($url_path))->getBasename("." . self::getExtension($url_path));
+	}
+
+	public static function getBasename(string $url_path): string {
+		return (new \SplFileInfo($url_path))->getBasename();
 	}
 
 	public static function folder(string $path): bool {
@@ -77,6 +85,34 @@ class Files {
 		}
 
 		return true;
+	}
+
+	public static function replace($cell): string {
+		$cell = str_replace("á", "á", $cell);
+		$cell = str_replace("é", "é", $cell);
+		$cell = str_replace("í", "í", $cell);
+		$cell = str_replace("ó", "ó", $cell);
+		$cell = str_replace("ú", "ú", $cell);
+		$cell = str_replace("ñ", "ñ", $cell);
+		$cell = str_replace("Ã¡", "á", $cell);
+		$cell = str_replace("Ã©", "é", $cell);
+		$cell = str_replace("Ã", "í", $cell);
+		$cell = str_replace("Ã³", "ó", $cell);
+		$cell = str_replace("Ãº", "ú", $cell);
+		$cell = str_replace("Ã±", "ñ", $cell);
+		$cell = str_replace("Ã", "á", $cell);
+		$cell = str_replace("Ã‰", "é", $cell);
+		$cell = str_replace("Ã", "í", $cell);
+		$cell = str_replace("Ã“", "ó", $cell);
+		$cell = str_replace("Ãš", "ú", $cell);
+		$cell = str_replace("Ã‘", "ñ", $cell);
+		$cell = str_replace("&aacute;", "á", $cell);
+		$cell = str_replace("&eacute;", "é", $cell);
+		$cell = str_replace("&iacute;", "í", $cell);
+		$cell = str_replace("&oacute;", "ó", $cell);
+		$cell = str_replace("&uacute;", "ú", $cell);
+		$cell = str_replace("&ntilde;", "ñ", $cell);
+		return $cell;
 	}
 
 }

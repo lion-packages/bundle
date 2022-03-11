@@ -23,10 +23,6 @@ class Excel {
 		
 	}
 
-	public static function info(): array {
-		return self::$list_push;
-	}
-
 	public static function new(string $path, string $file_name): string {
 		Files::folder($path);
 		$file_name = Files::rename("{$file_name}.xlsx");
@@ -85,10 +81,10 @@ class Excel {
 
 	public static function add(string $index = null, string $value = null): void {
 		if ($index != null && $value != null) {
-			self::$worksheet->setCellValue($index, self::replace($value));
+			self::$worksheet->setCellValue($index, Files::replace($value));
 		} else {
 			foreach (self::$list_push as $key => $cell) {
-				self::$worksheet->setCellValue(((string) $key), self::replace($cell));
+				self::$worksheet->setCellValue(((string) $key), Files::replace($cell));
 			}
 		}
 	}
@@ -97,34 +93,6 @@ class Excel {
 		$file_name = Files::rename("{$file_name}.xlsx");
 		(new Xlsx(self::$spreadsheet))->save("{$path}{$file_name}");
 		return $file_name;
-	}
-
-	private static function replace($cell): string {
-		$cell = str_replace("á", "á", $cell);
-		$cell = str_replace("é", "é", $cell);
-		$cell = str_replace("í", "í", $cell);
-		$cell = str_replace("ó", "ó", $cell);
-		$cell = str_replace("ú", "ú", $cell);
-		$cell = str_replace("ñ", "ñ", $cell);
-		$cell = str_replace("Ã¡", "á", $cell);
-		$cell = str_replace("Ã©", "é", $cell);
-		$cell = str_replace("Ã", "í", $cell);
-		$cell = str_replace("Ã³", "ó", $cell);
-		$cell = str_replace("Ãº", "ú", $cell);
-		$cell = str_replace("Ã±", "ñ", $cell);
-		$cell = str_replace("Ã", "á", $cell);
-		$cell = str_replace("Ã‰", "é", $cell);
-		$cell = str_replace("Ã", "í", $cell);
-		$cell = str_replace("Ã“", "ó", $cell);
-		$cell = str_replace("Ãš", "ú", $cell);
-		$cell = str_replace("Ã‘", "ñ", $cell);
-		$cell = str_replace("&aacute;", "á", $cell);
-		$cell = str_replace("&eacute;", "é", $cell);
-		$cell = str_replace("&iacute;", "í", $cell);
-		$cell = str_replace("&oacute;", "ó", $cell);
-		$cell = str_replace("&uacute;", "ú", $cell);
-		$cell = str_replace("&ntilde;", "ñ", $cell);
-		return $cell;
 	}
 
 }

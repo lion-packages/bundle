@@ -22,6 +22,8 @@
         "vlucas/phpdotenv": "^5.4",
         "vlucas/valitron": "^1.4",
         "phpmailer/phpmailer": "^6.6",
-        "phpoffice/phpspreadsheet": "^1.22"
+        "phpoffice/phpspreadsheet": "^1.22",
+        "phpoffice/phpword": "^0.18.3",
+        "dompdf/dompdf": "^1.2"
     }
 }
