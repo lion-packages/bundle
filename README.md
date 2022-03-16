@@ -11,47 +11,47 @@ composer install
 ```
 
 ### Libraries used
-#####[Lion-SQL](https://github.com/Sleon4/Lion-SQL)
+##### [Lion-SQL](https://github.com/Sleon4/Lion-SQL)
 ```powershell
 composer require lion-framework/lion-sql
 ```
 
-#####[Lion-Route](https://github.com/Sleon4/Lion-Route)
+##### [Lion-Route](https://github.com/Sleon4/Lion-Route)
 ```powershell
 composer require lion-framework/lion-route
 ```
 
-#####[Lion-Mailer](https://github.com/Sleon4/Lion-Mailer)
+##### [Lion-Mailer](https://github.com/Sleon4/Lion-Mailer)
 ```powershell
 composer require lion-framework/lion-mailer
 ```
 
-#####[Valitron](https://github.com/vlucas/valitron)
+##### [Valitron](https://github.com/vlucas/valitron)
 ```powershell
 composer require vlucas/valitron
 ```
 
-#####[PHP dotenv](https://github.com/vlucas/phpdotenv)
+##### [PHP dotenv](https://github.com/vlucas/phpdotenv)
 ```powershell
 composer require vlucas/phpdotenv
 ```
 
-#####[PHRoute](https://github.com/mrjgreen/phroute)
+##### [PHRoute](https://github.com/mrjgreen/phroute)
 ```powershell
 composer require phroute/phroute
 ```
 
-#####[PHPMailer](https://github.com/PHPMailer/PHPMailer)
+##### [PHPMailer](https://github.com/PHPMailer/PHPMailer)
 ```powershell
 composer require phpmailer/phpmailer
 ```
 
-#####[PHPSpreadsheet](https://github.com/PHPOffice/PhpSpreadsheet)
+##### [PHPSpreadsheet](https://github.com/PHPOffice/PhpSpreadsheet)
 ```powershell
 composer require phpoffice/phpspreadsheet
 ```
 
-#####[Dompdf](https://github.com/dompdf/dompdf)
+##### [Dompdf](https://github.com/dompdf/dompdf)
 ```powershell
 composer require dompdf/dompdf
 ```

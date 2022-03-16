@@ -5,7 +5,7 @@ use LionRoute\Request;
 
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\UserAuth;
-use App\Http\Controllers\Example\ExampleController;
+use App\Http\Controllers\Authentication\LoginController;
 
 Route::init([
     'class' => [
@@ -24,7 +24,7 @@ Route::any('/', function() {
 
 Route::middleware(['before' => 'no-auth'], function() {
     Route::prefix('autenticar', function() {
-        Route::post('ingreso', [ExampleController::class, 'createMyWord']);
+        Route::post('ingreso', [LoginController::class, 'loginAuth']);
     });
 });
 

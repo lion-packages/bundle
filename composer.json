@@ -24,6 +24,7 @@
         "phpmailer/phpmailer": "^6.6",
         "phpoffice/phpspreadsheet": "^1.22",
         "phpoffice/phpword": "^0.18.3",
-        "dompdf/dompdf": "^1.2"
+        "dompdf/dompdf": "^1.2",
+        "firebase/php-jwt": "^6.0"
     }
 }

@@ -6,26 +6,14 @@ use Valitron\Validator;
 use LionMailer\Mailer;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
+use App\Http\Functions\Security;
 
 class Controller {
 
-	protected static object $form;
+	protected static object $request;
 	
 	public function __construct() {
 
-	}
-
-	public static function content(bool $option = false): void {
-		if (!$option) {
-			self::$form = (object) ($_POST + $_FILES + $_GET + $_SESSION + $_ENV);
-		} else {
-			self::$form = (object) json_decode(file_get_contents("php://input"), true);
-		}
-	}
-
-	public static function make(Validator $validator, array $rules) {
-		$validator->rules($rules);
-		return $validator->validate();
 	}
 
 	public static function init(): void {
@@ -43,6 +31,19 @@ class Controller {
 				'password' => $_ENV['MAIL_PASSWORD']
 			]
 		]);
+	}
+
+	public static function content(bool $option = true): void {
+		if ($option) {
+			self::$request = (object) ($_POST + $_FILES + $_GET + $_SESSION + $_ENV);
+		} else {
+			self::$request = (object) json_decode(file_get_contents("php://input"), true);
+		}
+	}
+
+	public static function validate(Validator $validator, array $rules) {
+		$validator->rules($rules);
+		return $validator->validate();
 	}
 
 }
