@@ -2,21 +2,17 @@
 
 namespace App\Http\Functions;
 
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\{ Spreadsheet, IOFactory };
+use PhpOffice\PhpSpreadsheet\Worksheet\{ Worksheet, Drawing };
+use PhpOffice\PhpSpreadsheet\Style\{ Fill, Color };
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Reader\Xls;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
-use PhpOffice\PhpSpreadsheet\Style\Color;
-use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use App\Http\Functions\Files;
-
 
 class Excel {
 
-	private static Spreadsheet $spreadsheet;
-	private static Worksheet $worksheet;
+	private static ?Spreadsheet $spreadsheet = null;
+	private static ?Worksheet $worksheet = null;
 	private static array $list_push = [];
 	
 	public function __construct() {

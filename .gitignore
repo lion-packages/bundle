@@ -1,4 +1,5 @@
 /vendor/
 /public/
 .env
-/app/Server/Secret/
+composer.lock
+/app/Server/

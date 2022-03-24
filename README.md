@@ -26,6 +26,16 @@ composer require lion-framework/lion-route
 composer require lion-framework/lion-mailer
 ```
 
+##### [PHRoute](https://github.com/mrjgreen/phroute)
+```powershell
+composer require phroute/phroute
+```
+
+##### [PHP-JWT](https://github.com/firebase/php-jwt)
+```powershell
+composer require firebase/php-jwt
+```
+
 ##### [Valitron](https://github.com/vlucas/valitron)
 ```powershell
 composer require vlucas/valitron
@@ -34,11 +44,6 @@ composer require vlucas/valitron
 ##### [PHP dotenv](https://github.com/vlucas/phpdotenv)
 ```powershell
 composer require vlucas/phpdotenv
-```
-
-##### [PHRoute](https://github.com/mrjgreen/phroute)
-```powershell
-composer require phroute/phroute
 ```
 
 ##### [PHPMailer](https://github.com/PHPMailer/PHPMailer)
@@ -51,7 +56,17 @@ composer require phpmailer/phpmailer
 composer require phpoffice/phpspreadsheet
 ```
 
+##### [PHPWord](https://github.com/PHPOffice/PHPWord)
+```powershell
+composer require phpoffice/phpword
+```
+
 ##### [Dompdf](https://github.com/dompdf/dompdf)
 ```powershell
 composer require dompdf/dompdf
+```
+
+##### [Carbon](https://github.com/briannesbitt/Carbon)
+```powershell
+composer require nesbot/carbon
 ```

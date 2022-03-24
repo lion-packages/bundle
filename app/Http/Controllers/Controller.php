@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Valitron\Validator;
 use LionMailer\Mailer;
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use App\Http\Functions\Security;
+use PHPMailer\PHPMailer\{ PHPMailer, SMTP };
 
 class Controller {
 
@@ -33,17 +30,9 @@ class Controller {
 		]);
 	}
 
-	public static function content(bool $option = true): void {
-		if ($option) {
-			self::$request = (object) ($_POST + $_FILES + $_GET + $_SESSION + $_ENV);
-		} else {
-			self::$request = (object) json_decode(file_get_contents("php://input"), true);
-		}
-	}
-
-	public static function validate(Validator $validator, array $rules) {
-		$validator->rules($rules);
-		return $validator->validate();
+	public static function content(): void {
+		$content = json_decode(file_get_contents("php://input"), true);
+		self::$request = $content === null ? (object) ($_POST + $_FILES + $_GET) : (object) $content;
 	}
 
 }

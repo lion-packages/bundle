@@ -1,13 +1,11 @@
 <?php
 
-//require_once  'dompdf/autoload.inc.php';
-
 namespace App\Http\Functions;
 
 use Dompdf\Dompdf;
 use App\Http\Functions\Files;
 
-class Pdf {
+class PDF {
 
 	private static Dompdf $dompdf;
 	

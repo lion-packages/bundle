@@ -10,7 +10,7 @@
     "authors": [
         {
             "name": "Sergio León",
-            "email": "sergioleon4004@gmail.com"
+            "email": "sergioleon4004@hotmail.com"
         }
     ],
     "require": {
@@ -25,6 +25,7 @@
         "phpoffice/phpspreadsheet": "^1.22",
         "phpoffice/phpword": "^0.18.3",
         "dompdf/dompdf": "^1.2",
-        "firebase/php-jwt": "^6.0"
+        "firebase/php-jwt": "^6.0",
+        "nesbot/carbon": "^2.57"
     }
 }

@@ -2,9 +2,7 @@
 
 namespace App\Http\Functions;
 
-use PhpOffice\PhpWord\TemplateProcessor;
-use PhpOffice\PhpWord\PhpWord;
-use PhpOffice\PhpWord\IOFactory;
+use PhpOffice\PhpWord\{ TemplateProcessor, PhpWord, IOFactory };
 use PhpOffice\PhpWord\Style\Font;
 use PhpOffice\PhpWord\Element\Section;
 use App\Http\Functions\Files;
