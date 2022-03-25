@@ -10,6 +10,10 @@ composer create-project lion-framework/lion-backend
 composer install
 ```
 
+```powershell
+composer update
+```
+
 ### Libraries used
 ##### [Lion-SQL](https://github.com/Sleon4/Lion-SQL)
 ```powershell

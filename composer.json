@@ -1,5 +1,6 @@
 {
     "name": "lion-framework/lion-backend",
+    "description": "Framework for PHP with the aim of making code cleaner and simpler.",
     "type": "project",
     "license": "MIT",
     "autoload": {
@@ -14,18 +15,14 @@
         }
     ],
     "require": {
-        "php": ">=8.0.9",
-        "lion-framework/lion-sql": "^1.7",
-        "lion-framework/lion-route": "^1.3",
-        "lion-framework/lion-mailer": "^1.0",
-        "phroute/phroute": "^2.1",
-        "vlucas/phpdotenv": "^5.4",
+        "lion-framework/lion-sql": "^1.8",
+        "lion-framework/lion-route": "^1.5",
+        "lion-framework/lion-mailer": "^1.2",
+        "firebase/php-jwt": "^6.1",
         "vlucas/valitron": "^1.4",
-        "phpmailer/phpmailer": "^6.6",
+        "vlucas/phpdotenv": "^5.4",
         "phpoffice/phpspreadsheet": "^1.22",
         "phpoffice/phpword": "^0.18.3",
-        "dompdf/dompdf": "^1.2",
-        "firebase/php-jwt": "^6.0",
-        "nesbot/carbon": "^2.57"
+        "dompdf/dompdf": "^1.2"
     }
 }
