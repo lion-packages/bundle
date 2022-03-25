@@ -18,11 +18,6 @@
         "lion-framework/lion-sql": "^1.8",
         "lion-framework/lion-route": "^1.5",
         "lion-framework/lion-mailer": "^1.2",
-        "firebase/php-jwt": "^6.1",
-        "vlucas/valitron": "^1.4",
-        "vlucas/phpdotenv": "^5.4",
-        "phpoffice/phpspreadsheet": "^1.22",
-        "phpoffice/phpword": "^0.18.3",
-        "dompdf/dompdf": "^1.2"
+        "lion-framework/lion-functions": "^1.1"
     }
 }

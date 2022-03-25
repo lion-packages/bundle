@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Functions\{ Security, AES, JWT, RSA };
+use LionFunctions\{ SECURITY, AES, JWT, RSA };
 use App\Models\Class\{ Request, Login };
 use App\Models\Auth\LoginModel;
 
@@ -19,11 +19,11 @@ class LoginController extends Controller {
 	public function auth(): Request {
 		$aesDec = AES::decode(self::$request, 'AES_KEY', 'AES_IV');
 
-		if (Security::validate((array) $aesDec, Login::getValidate('LoginController', 'auth'))) {
+		if (SECURITY::validate((array) $aesDec, Login::getValidate('LoginController', 'auth'))) {
 			$this->login = new Login($aesDec->users_email, $aesDec->users_password);
 			$rsaDecode = RSA::decode((object) $this->loginModel->validateAccount($this->login));
 
-			if (Security::passwordVerify($this->login->getUsersPassword(), $rsaDecode->users_password)) {
+			if (SECURITY::passwordVerify($this->login->getUsersPassword(), $rsaDecode->users_password)) {
 				$idusersDB = $this->loginModel->readUserDataDB($this->login);
 				$idusers = AES::encode((object) $idusersDB, 'AES_KEY', 'AES_IV');
 

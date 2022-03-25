@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1bb7016cc58cf0fb7d31e8cdd367459b",
+    "content-hash": "6c82a68c99997ede8675008812ef5f0d",
     "packages": [
         {
             "name": "dompdf/dompdf",
@@ -306,26 +306,31 @@
             "time": "2022-03-08T20:15:36+00:00"
         },
         {
-            "name": "lion-framework/lion-mailer",
-            "version": "v1.2",
+            "name": "lion-framework/lion-functions",
+            "version": "v1.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Sleon4/Lion-Mailer.git",
-                "reference": "3cab126c4d566d1a6d83c164cefa3126880e8578"
+                "url": "https://github.com/Sleon4/Lion-Functions.git",
+                "reference": "cab12c94acb4a41d9a9429633ca613953e550a16"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Mailer/zipball/3cab126c4d566d1a6d83c164cefa3126880e8578",
-                "reference": "3cab126c4d566d1a6d83c164cefa3126880e8578",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Functions/zipball/cab12c94acb4a41d9a9429633ca613953e550a16",
+                "reference": "cab12c94acb4a41d9a9429633ca613953e550a16",
                 "shasum": ""
             },
             "require": {
-                "phpmailer/phpmailer": "^6.6"
+                "dompdf/dompdf": "^1.2",
+                "firebase/php-jwt": "^6.1",
+                "phpoffice/phpspreadsheet": "^1.22",
+                "phpoffice/phpword": "^0.18.3",
+                "vlucas/phpdotenv": "^5.4",
+                "vlucas/valitron": "^1.4"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "LionMailer\\": "src/LionMailer"
+                    "LionFunctions\\": "src/LionFunctions/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -335,15 +340,55 @@
             "authors": [
                 {
                     "name": "Sergio León",
-                    "email": "56183278+Sleon4@users.noreply.github.com"
+                    "email": "sergioleon4004@hotmail.com"
+                }
+            ],
+            "description": "Library created with the purpose of performing different internal functions such as PDF, JWT, Word, Excel, Files, AES, RSA, and Security.",
+            "support": {
+                "issues": "https://github.com/Sleon4/Lion-Functions/issues",
+                "source": "https://github.com/Sleon4/Lion-Functions/tree/v1.1"
+            },
+            "time": "2022-03-25T19:24:16+00:00"
+        },
+        {
+            "name": "lion-framework/lion-mailer",
+            "version": "v1.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Sleon4/Lion-Mailer.git",
+                "reference": "d05fcf62ce4723886e13547e91e4ac2f9719d301"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Mailer/zipball/d05fcf62ce4723886e13547e91e4ac2f9719d301",
+                "reference": "d05fcf62ce4723886e13547e91e4ac2f9719d301",
+                "shasum": ""
+            },
+            "require": {
+                "phpmailer/phpmailer": "^6.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "LionMailer\\": "src/LionMailer/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sergio León",
+                    "email": "sergioleon4004@hotmail.com"
                 }
             ],
             "description": "Library created for easy email sending based on PHPMailer.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Mailer/issues",
-                "source": "https://github.com/Sleon4/Lion-Mailer/tree/v1.2"
+                "source": "https://github.com/Sleon4/Lion-Mailer/tree/v1.2.2"
             },
-            "time": "2022-03-09T03:03:07+00:00"
+            "time": "2022-03-25T19:38:52+00:00"
         },
         {
             "name": "lion-framework/lion-route",

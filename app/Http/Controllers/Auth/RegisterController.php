@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Functions\{ Security, AES, RSA };
+use LionFunctions\{ SECURITY, AES, RSA };
 use App\Models\Auth\RegisterModel;
 use App\Models\Class\{ Request, Users, DocumentTypes };
 
@@ -19,9 +19,9 @@ class RegisterController extends Controller {
 		$aesDec = AES::decode(self::$request, 'AES_KEY', 'AES_IV');
 		$aesDec->iddocument_types = (int) $aesDec->iddocument_types;
 
-		if (Security::validate((array) $aesDec, Users::getValidate('RegisterController', 'createUser'))) {
+		if (SECURITY::validate((array) $aesDec, Users::getValidate('RegisterController', 'createUser'))) {
 			$rsaEnc = RSA::encode((object) [
-				'users_password' => Security::passwordHash($aesDec->users_password),
+				'users_password' => SECURITY::passwordHash($aesDec->users_password),
 			]);
 
 			$users = new Users(null, $aesDec->users_email, $rsaEnc->users_password, $aesDec->users_name, $aesDec->users_last_name, $aesDec->users_document, new DocumentTypes($aesDec->iddocument_types), $aesDec->users_phone);

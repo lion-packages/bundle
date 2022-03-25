@@ -30,6 +30,13 @@ composer require lion-framework/lion-route
 composer require lion-framework/lion-mailer
 ```
 
+##### [Lion-Functions](https://github.com/Sleon4/Lion-Functions)
+```powershell
+composer require lion-framework/lion-functions
+```
+
+___
+
 ##### [PHRoute](https://github.com/mrjgreen/phroute)
 ```powershell
 composer require phroute/phroute
@@ -68,9 +75,4 @@ composer require phpoffice/phpword
 ##### [Dompdf](https://github.com/dompdf/dompdf)
 ```powershell
 composer require dompdf/dompdf
-```
-
-##### [Carbon](https://github.com/briannesbitt/Carbon)
-```powershell
-composer require nesbot/carbon
 ```

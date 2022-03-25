@@ -3,8 +3,8 @@
 namespace App\Http\Middleware;
 
 use LionRoute\Route;
+use LionFunctions\JWT;
 use App\Models\Class\Request;
-use App\Http\Functions\JWT;
 
 class AuthorizeJWT {
 
