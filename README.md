@@ -1,4 +1,5 @@
 # Lion-Framework-Backend
+Framework for PHP in order to make the code cleaner and simpler, requires PHP (v8.0.9).
 
 ## Install
 ```powershell
@@ -14,7 +15,8 @@ composer install
 composer update
 ```
 
-### Libraries used
+## Libraries used
+#### Installed by default
 ##### [Lion-SQL](https://github.com/Sleon4/Lion-SQL)
 ```powershell
 composer require lion-framework/lion-sql
@@ -30,21 +32,22 @@ composer require lion-framework/lion-route
 composer require lion-framework/lion-mailer
 ```
 
-##### [Lion-Functions](https://github.com/Sleon4/Lion-Functions)
+##### [Lion-Security](https://github.com/Sleon4/Lion-Security)
 ```powershell
-composer require lion-framework/lion-functions
+composer require lion-framework/lion-security
 ```
 
 ___
 
+##### [PHP dotenv](https://github.com/vlucas/phpdotenv)
+```powershell
+composer require vlucas/phpdotenv
+```
+
+#### Installed by other libraries
 ##### [PHRoute](https://github.com/mrjgreen/phroute)
 ```powershell
 composer require phroute/phroute
-```
-
-##### [PHP-JWT](https://github.com/firebase/php-jwt)
-```powershell
-composer require firebase/php-jwt
 ```
 
 ##### [Valitron](https://github.com/vlucas/valitron)
@@ -52,27 +55,12 @@ composer require firebase/php-jwt
 composer require vlucas/valitron
 ```
 
-##### [PHP dotenv](https://github.com/vlucas/phpdotenv)
-```powershell
-composer require vlucas/phpdotenv
-```
-
 ##### [PHPMailer](https://github.com/PHPMailer/PHPMailer)
 ```powershell
 composer require phpmailer/phpmailer
 ```
 
-##### [PHPSpreadsheet](https://github.com/PHPOffice/PhpSpreadsheet)
+##### [PHP-JWT](https://github.com/firebase/php-jwt)
 ```powershell
-composer require phpoffice/phpspreadsheet
-```
-
-##### [PHPWord](https://github.com/PHPOffice/PHPWord)
-```powershell
-composer require phpoffice/phpword
-```
-
-##### [Dompdf](https://github.com/dompdf/dompdf)
-```powershell
-composer require dompdf/dompdf
+composer require firebase/php-jwt
 ```

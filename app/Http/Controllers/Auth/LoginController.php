@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use LionFunctions\{ SECURITY, AES, JWT, RSA };
+use LionSecurity\{ SECURITY, AES, JWT, RSA };
 use App\Models\Class\{ Request, Login };
 use App\Models\Auth\LoginModel;
 
