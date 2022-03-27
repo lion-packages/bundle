@@ -1,6 +1,6 @@
 {
     "name": "lion-framework/lion-backend",
-    "description": "Framework for PHP with the aim of making code cleaner and simpler.",
+    "description": "Framework for PHP in order to make the code cleaner and simpler.",
     "type": "project",
     "license": "MIT",
     "autoload": {
@@ -19,7 +19,8 @@
         "lion-framework/lion-sql": "^1.8",
         "lion-framework/lion-route": "^1.5",
         "lion-framework/lion-mailer": "^1.2",
-        "lion-framework/lion-security": "^1.0",
+        "lion-framework/lion-security": "^3.0",
+        "lion-framework/lion-files": "^2.0",
         "vlucas/phpdotenv": "^5.4"
     }
 }

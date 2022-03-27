@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "727eefa74a84235ae6e5a4c31c833a2c",
+    "content-hash": "fc84408921c02b9039a985f9d306aff7",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -126,17 +126,57 @@
             "time": "2021-11-21T21:41:47+00:00"
         },
         {
-            "name": "lion-framework/lion-mailer",
-            "version": "v1.2.4",
+            "name": "lion-framework/lion-files",
+            "version": "v2.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Sleon4/Lion-Mailer.git",
-                "reference": "f3dd386c26bc643dc7fd9fdac143b025729b13bc"
+                "url": "https://github.com/Sleon4/Lion-Files.git",
+                "reference": "7aa0de31efc400787ae3fd617a467fbd23b70793"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Mailer/zipball/f3dd386c26bc643dc7fd9fdac143b025729b13bc",
-                "reference": "f3dd386c26bc643dc7fd9fdac143b025729b13bc",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Files/zipball/7aa0de31efc400787ae3fd617a467fbd23b70793",
+                "reference": "7aa0de31efc400787ae3fd617a467fbd23b70793",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.0.9"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "LionFiles\\": "src/LionFiles/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sergio León",
+                    "email": "sergioleon4004@hotmail.com"
+                }
+            ],
+            "description": "Library created with the function of working internal system files.",
+            "support": {
+                "issues": "https://github.com/Sleon4/Lion-Files/issues",
+                "source": "https://github.com/Sleon4/Lion-Files/tree/v2.0"
+            },
+            "time": "2022-03-27T17:45:36+00:00"
+        },
+        {
+            "name": "lion-framework/lion-mailer",
+            "version": "v1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Sleon4/Lion-Mailer.git",
+                "reference": "5f9cc90128ce36b8d58309aa9ff1bfef6a47f751"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Mailer/zipball/5f9cc90128ce36b8d58309aa9ff1bfef6a47f751",
+                "reference": "5f9cc90128ce36b8d58309aa9ff1bfef6a47f751",
                 "shasum": ""
             },
             "require": {
@@ -162,22 +202,22 @@
             "description": "Library created for easy email sending based on PHPMailer.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Mailer/issues",
-                "source": "https://github.com/Sleon4/Lion-Mailer/tree/v1.2.4"
+                "source": "https://github.com/Sleon4/Lion-Mailer/tree/v1.4"
             },
-            "time": "2022-03-26T23:02:34+00:00"
+            "time": "2022-03-27T18:02:29+00:00"
         },
         {
             "name": "lion-framework/lion-route",
-            "version": "v1.5.3",
+            "version": "v1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Route.git",
-                "reference": "2bf646f01c7458ba180366854a2933021f106835"
+                "reference": "368ca22d357a266ade43bcfc0bbe779d271a928c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Route/zipball/2bf646f01c7458ba180366854a2933021f106835",
-                "reference": "2bf646f01c7458ba180366854a2933021f106835",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Route/zipball/368ca22d357a266ade43bcfc0bbe779d271a928c",
+                "reference": "368ca22d357a266ade43bcfc0bbe779d271a928c",
                 "shasum": ""
             },
             "require": {
@@ -203,22 +243,22 @@
             "description": "This library has a fast router usage with regular expressions.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Route/issues",
-                "source": "https://github.com/Sleon4/Lion-Route/tree/v1.5.3"
+                "source": "https://github.com/Sleon4/Lion-Route/tree/v1.6"
             },
-            "time": "2022-03-26T23:08:20+00:00"
+            "time": "2022-03-27T17:31:49+00:00"
         },
         {
             "name": "lion-framework/lion-security",
-            "version": "v1.0.2",
+            "version": "v3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Security.git",
-                "reference": "8615dcc6c25a3b5a796ebfdcc036ecf48c5bddfb"
+                "reference": "734217e336524f7da46be6850c77b001b8f9efb5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Security/zipball/8615dcc6c25a3b5a796ebfdcc036ecf48c5bddfb",
-                "reference": "8615dcc6c25a3b5a796ebfdcc036ecf48c5bddfb",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Security/zipball/734217e336524f7da46be6850c77b001b8f9efb5",
+                "reference": "734217e336524f7da46be6850c77b001b8f9efb5",
                 "shasum": ""
             },
             "require": {
@@ -245,22 +285,22 @@
             "description": "Library created with the function of implementing AES, RSA and JWT Security functions for PHP.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Security/issues",
-                "source": "https://github.com/Sleon4/Lion-Security/tree/v1.0.2"
+                "source": "https://github.com/Sleon4/Lion-Security/tree/v3.0"
             },
-            "time": "2022-03-26T23:20:30+00:00"
+            "time": "2022-03-27T16:44:36+00:00"
         },
         {
             "name": "lion-framework/lion-sql",
-            "version": "v1.8.2",
+            "version": "v1.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-SQL.git",
-                "reference": "f8f646a23e9268d381686e1d1b38c4ae0072d93b"
+                "reference": "7ec3749dbf690f96b9bc6193e44d512d755198f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/f8f646a23e9268d381686e1d1b38c4ae0072d93b",
-                "reference": "f8f646a23e9268d381686e1d1b38c4ae0072d93b",
+                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/7ec3749dbf690f96b9bc6193e44d512d755198f9",
+                "reference": "7ec3749dbf690f96b9bc6193e44d512d755198f9",
                 "shasum": ""
             },
             "require": {
@@ -285,9 +325,9 @@
             "description": "package in charge of generating and executing MySQL processes.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-SQL/issues",
-                "source": "https://github.com/Sleon4/Lion-SQL/tree/v1.8.2"
+                "source": "https://github.com/Sleon4/Lion-SQL/tree/v1.9"
             },
-            "time": "2022-03-16T17:48:24+00:00"
+            "time": "2022-03-27T16:21:28+00:00"
         },
         {
             "name": "phpmailer/phpmailer",
