@@ -4,7 +4,7 @@ namespace App\Models\Auth;
 
 use App\Models\Model;
 use LionSql\QueryBuilder as Builder;
-use App\Models\Class\Login;
+use App\Models\Class\Users;
 
 class LoginModel extends Model {
 
@@ -12,19 +12,19 @@ class LoginModel extends Model {
 		$this->init();
 	}
 
-	public function validateAccount(Login $login): array {
+	public function validateAccount(Users $user): array {
 		return Builder::select('fetch', 'validate_login', null, 'users_password', [
 			Builder::where('users_email', '=')
 		], [
-			[$login->getUsersEmail()]
+			[$user->getUsersEmail()]
 		]);
 	}
 
-	public function readUserDataDB(Login $login): array {
+	public function readUserDataDB(Users $user): array {
 		return Builder::select('fetch', 'users', null, 'idusers', [
 			Builder::where('users_email', '=')
 		], [
-			[$login->getUsersEmail()]
+			[$user->getUsersEmail()]
 		]);
 	}
 

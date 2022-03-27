@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use LionRoute\Route;
-use LionFunctions\JWT;
+use LionSecurity\JWT;
 use App\Models\Class\Request;
 
 class AuthorizeJWT {

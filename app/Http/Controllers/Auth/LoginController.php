@@ -4,13 +4,12 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use LionSecurity\{ SECURITY, AES, JWT, RSA };
-use App\Models\Class\{ Request, Login };
+use App\Models\Class\{ Request, Users };
 use App\Models\Auth\LoginModel;
 
 class LoginController extends Controller {
 
 	private LoginModel $loginModel;
-	private Login $login;
 
 	public function __construct() {
 		$this->loginModel = new LoginModel();
@@ -19,12 +18,12 @@ class LoginController extends Controller {
 	public function auth(): Request {
 		$aesDec = AES::decode(self::$request, 'AES_KEY', 'AES_IV');
 
-		if (SECURITY::validate((array) $aesDec, Login::getValidate('LoginController', 'auth'))) {
-			$this->login = new Login($aesDec->users_email, $aesDec->users_password);
-			$rsaDecode = RSA::decode((object) $this->loginModel->validateAccount($this->login));
+		if (SECURITY::validate((array) $aesDec, Users::getValidate('LoginController', 'auth'))) {
+			$user = new Users(null, $aesDec->users_email, $aesDec->users_password);
+			$rsaDecode = RSA::decode((object) $this->loginModel->validateAccount($user));
 
-			if (SECURITY::passwordVerify($this->login->getUsersPassword(), $rsaDecode->users_password)) {
-				$idusersDB = $this->loginModel->readUserDataDB($this->login);
+			if (SECURITY::passwordVerify($user->getUsersPassword(), $rsaDecode->users_password)) {
+				$idusersDB = $this->loginModel->readUserDataDB($user);
 				$idusers = AES::encode((object) $idusersDB, 'AES_KEY', 'AES_IV');
 
 				return new Request('success', 'Autenticación exitosa.', [

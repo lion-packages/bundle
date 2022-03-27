@@ -51,6 +51,22 @@ class Users implements \JsonSerializable {
                         ['iddocument_types', 3]
                     ]
                 ]
+            ],
+            'LoginController' => [
+                'auth' => [
+                    'email' => [
+                        ['users_email']
+                    ],
+                    'required' => [
+                        ['users_email', 'users_password']
+                    ],
+                    'lengthMin' => [
+                        ['users_password', 64]
+                    ],
+                    'lengthMax' => [
+                        ['users_password', 64]
+                    ]
+                ]
             ]
         ];
 
