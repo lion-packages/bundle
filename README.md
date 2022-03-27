@@ -5,7 +5,7 @@ Framework for PHP in order to make the code cleaner and simpler.
 
 ## Install
 ```
-composer create-project lion-framework/lion-backend
+composer create-project lion-framework/lion-php
 ```
 
 ```
