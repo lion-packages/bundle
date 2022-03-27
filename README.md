@@ -4,61 +4,61 @@ Framework for PHP in order to make the code cleaner and simpler.
 [![Latest Stable Version](http://poser.pugx.org/lion-framework/lion-backend/v)](https://packagist.org/packages/lion-framework/lion-backend) [![Total Downloads](http://poser.pugx.org/lion-framework/lion-backend/downloads)](https://packagist.org/packages/lion-framework/lion-backend) [![License](http://poser.pugx.org/lion-framework/lion-backend/license)](https://packagist.org/packages/lion-framework/lion-backend) [![PHP Version Require](http://poser.pugx.org/lion-framework/lion-backend/require/php)](https://packagist.org/packages/lion-framework/lion-backend)
 
 ## Install
-```powershell
+```
 composer create-project lion-framework/lion-backend
 ```
 
-```powershell
+```
 composer update
 ```
 
 ## Libraries used
 #### Installed by default
 ##### [Lion-SQL](https://github.com/Sleon4/Lion-SQL)
-```powershell
+```
 composer require lion-framework/lion-sql
 ```
 
 ##### [Lion-Route](https://github.com/Sleon4/Lion-Route)
-```powershell
+```
 composer require lion-framework/lion-route
 ```
 
 ##### [Lion-Mailer](https://github.com/Sleon4/Lion-Mailer)
-```powershell
+```
 composer require lion-framework/lion-mailer
 ```
 
 ##### [Lion-Security](https://github.com/Sleon4/Lion-Security)
-```powershell
+```
 composer require lion-framework/lion-security
 ```
 
 ___
 
 ##### [PHP dotenv](https://github.com/vlucas/phpdotenv)
-```powershell
+```
 composer require vlucas/phpdotenv
 ```
 
 #### Installed by other libraries
 ##### [PHRoute](https://github.com/mrjgreen/phroute)
-```powershell
+```
 composer require phroute/phroute
 ```
 
 ##### [Valitron](https://github.com/vlucas/valitron)
-```powershell
+```
 composer require vlucas/valitron
 ```
 
 ##### [PHPMailer](https://github.com/PHPMailer/PHPMailer)
-```powershell
+```
 composer require phpmailer/phpmailer
 ```
 
 ##### [PHP-JWT](https://github.com/firebase/php-jwt)
-```powershell
+```
 composer require firebase/php-jwt
 ```
 
