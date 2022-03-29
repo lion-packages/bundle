@@ -6,6 +6,7 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Allow: GET, POST, PUT, DELETE, OPTIONS");
 header("Content-Type: application/json; charset=UTF-8");
+date_default_timezone_set('America/Bogota');
 
 require_once("vendor/autoload.php");
 spl_autoload_register(function($class_name) {
