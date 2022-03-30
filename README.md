@@ -1,7 +1,7 @@
 # Lion-PHP
 Framework for PHP in order to make the code cleaner and simpler.
 
-[![Latest Stable Version](http://poser.pugx.org/lion-framework/lion-backend/v)](https://packagist.org/packages/lion-framework/lion-backend) [![Total Downloads](http://poser.pugx.org/lion-framework/lion-backend/downloads)](https://packagist.org/packages/lion-framework/lion-backend) [![License](http://poser.pugx.org/lion-framework/lion-backend/license)](https://packagist.org/packages/lion-framework/lion-backend) [![PHP Version Require](http://poser.pugx.org/lion-framework/lion-backend/require/php)](https://packagist.org/packages/lion-framework/lion-backend)
+[![Latest Stable Version](http://poser.pugx.org/lion-framework/lion-php/v)](https://packagist.org/packages/lion-framework/lion-php) [![Total Downloads](http://poser.pugx.org/lion-framework/lion-php/downloads)](https://packagist.org/packages/lion-framework/lion-php) [![License](http://poser.pugx.org/lion-framework/lion-php/license)](https://packagist.org/packages/lion-framework/lion-php) [![PHP Version Require](http://poser.pugx.org/lion-framework/lion-php/require/php)](https://packagist.org/packages/lion-framework/lion-php)
 
 ## Install
 ```
@@ -149,11 +149,23 @@ Execute an HTTP request to a route where it generates the respective keys.
 
 ```php
 use LionSecurity\RSA;
-use LionFunctions\FILES;
+use LionFiles\FILES;
 
-Route::post('/', function() {
+Route::post('key', function() {
 	FILES::folder('path');
 	RSA::createKeys('path');
+
+	return [
+		'status' => 'success',
+		'message' => 'Keys created successfully.'
+	];
+});
+
+// or
+
+Route::post('key', function() {
+	FILES::folder('resources/secret/');
+	RSA::createKeys();
 
 	return [
 		'status' => 'success',
