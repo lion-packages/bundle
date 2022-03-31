@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use LionMailer\Mailer;
-use PHPMailer\PHPMailer\{ PHPMailer, SMTP };
 
 class Controller {
 
@@ -15,10 +14,6 @@ class Controller {
 
 	public static function init(): void {
 		Mailer::init([
-			'class' => [
-				'PHPMailer' => PHPMailer::class,
-				'SMTP' => SMTP::class
-			],
 			'info' => [
 				'debug' => $_ENV['MAIL_DEBUG'],
 				'host' => $_ENV['MAIL_HOST'],

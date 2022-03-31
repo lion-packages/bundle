@@ -127,16 +127,16 @@
         },
         {
             "name": "lion-framework/lion-files",
-            "version": "v3.0",
+            "version": "v3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Files.git",
-                "reference": "e2573904ec1e7c14eeff4143f82a7ebad80f876d"
+                "reference": "3077bc6e0d161f51be5614dc22a6d78266c3abfd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Files/zipball/e2573904ec1e7c14eeff4143f82a7ebad80f876d",
-                "reference": "e2573904ec1e7c14eeff4143f82a7ebad80f876d",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Files/zipball/3077bc6e0d161f51be5614dc22a6d78266c3abfd",
+                "reference": "3077bc6e0d161f51be5614dc22a6d78266c3abfd",
                 "shasum": ""
             },
             "require": {
@@ -161,22 +161,22 @@
             "description": "Library created with the function of working internal system files.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Files/issues",
-                "source": "https://github.com/Sleon4/Lion-Files/tree/v3.0"
+                "source": "https://github.com/Sleon4/Lion-Files/tree/v3.0.1"
             },
-            "time": "2022-03-29T22:33:19+00:00"
+            "time": "2022-03-30T02:04:49+00:00"
         },
         {
             "name": "lion-framework/lion-mailer",
-            "version": "v1.4",
+            "version": "v1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Mailer.git",
-                "reference": "5f9cc90128ce36b8d58309aa9ff1bfef6a47f751"
+                "reference": "92a258f6f469937da97be3780ae583385a6df935"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Mailer/zipball/5f9cc90128ce36b8d58309aa9ff1bfef6a47f751",
-                "reference": "5f9cc90128ce36b8d58309aa9ff1bfef6a47f751",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Mailer/zipball/92a258f6f469937da97be3780ae583385a6df935",
+                "reference": "92a258f6f469937da97be3780ae583385a6df935",
                 "shasum": ""
             },
             "require": {
@@ -202,9 +202,9 @@
             "description": "Library created for easy email sending based on PHPMailer.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Mailer/issues",
-                "source": "https://github.com/Sleon4/Lion-Mailer/tree/v1.4"
+                "source": "https://github.com/Sleon4/Lion-Mailer/tree/v1.5"
             },
-            "time": "2022-03-27T18:02:29+00:00"
+            "time": "2022-03-31T21:24:43+00:00"
         },
         {
             "name": "lion-framework/lion-route",
