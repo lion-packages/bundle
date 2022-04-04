@@ -1,65 +1,14 @@
 # Lion-PHP
 Framework for PHP in order to make the code cleaner and simpler.
 
-[![Latest Stable Version](http://poser.pugx.org/lion-framework/lion-php/v)](https://packagist.org/packages/lion-framework/lion-php) [![Total Downloads](http://poser.pugx.org/lion-framework/lion-php/downloads)](https://packagist.org/packages/lion-framework/lion-php) [![License](http://poser.pugx.org/lion-framework/lion-php/license)](https://packagist.org/packages/lion-framework/lion-php) [![PHP Version Require](http://poser.pugx.org/lion-framework/lion-php/require/php)](https://packagist.org/packages/lion-framework/lion-php)
+[![Latest Stable Version](http://poser.pugx.org/lion-framework/lion-php/v)](https://packagist.org/packages/lion-framework/lion-php) [![Total Downloads](http://poser.pugx.org/lion-framework/lion-php/downloads)](https://packagist.org/packages/lion-framework/lion-php) [![Latest Unstable Version](http://poser.pugx.org/lion-framework/lion-php/v/unstable)](https://packagist.org/packages/lion-framework/lion-php) [![License](http://poser.pugx.org/lion-framework/lion-php/license)](https://packagist.org/packages/lion-framework/lion-php) [![PHP Version Require](http://poser.pugx.org/lion-framework/lion-php/require/php)](https://packagist.org/packages/lion-framework/lion-php)
 
 ## Install
 ```
 composer create-project lion-framework/lion-php
 ```
-
 ```
-composer update
-```
-
-## Libraries used
-#### Installed by default
-##### [Lion-SQL](https://github.com/Sleon4/Lion-SQL)
-```
-composer require lion-framework/lion-sql
-```
-
-##### [Lion-Route](https://github.com/Sleon4/Lion-Route)
-```
-composer require lion-framework/lion-route
-```
-
-##### [Lion-Mailer](https://github.com/Sleon4/Lion-Mailer)
-```
-composer require lion-framework/lion-mailer
-```
-
-##### [Lion-Security](https://github.com/Sleon4/Lion-Security)
-```
-composer require lion-framework/lion-security
-```
-
-___
-
-##### [PHP dotenv](https://github.com/vlucas/phpdotenv)
-```
-composer require vlucas/phpdotenv
-```
-
-#### Installed by other libraries
-##### [PHRoute](https://github.com/mrjgreen/phroute)
-```
-composer require phroute/phroute
-```
-
-##### [Valitron](https://github.com/vlucas/valitron)
-```
-composer require vlucas/valitron
-```
-
-##### [PHPMailer](https://github.com/PHPMailer/PHPMailer)
-```
-composer require phpmailer/phpmailer
-```
-
-##### [PHP-JWT](https://github.com/firebase/php-jwt)
-```
-composer require firebase/php-jwt
+composer install
 ```
 
 ## Usage
@@ -152,8 +101,8 @@ use LionSecurity\RSA;
 use LionFiles\FILES;
 
 Route::post('key', function() {
-	FILES::folder('path');
-	RSA::createKeys('path');
+	FILES::folder();
+	RSA::createKeys();
 
 	return [
 		'status' => 'success',
@@ -165,7 +114,7 @@ Route::post('key', function() {
 
 Route::post('key', function() {
 	FILES::folder('resources/secret/');
-	RSA::createKeys();
+	RSA::createKeys('resources/secret/');
 
 	return [
 		'status' => 'success',

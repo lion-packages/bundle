@@ -8,15 +8,17 @@ use App\Models\Class\Request;
 
 class AuthorizeJWT {
 
-	public function __construct() {
+	private Request $request;
 
+	public function __construct() {
+		$this->request = Request::getInstance();
 	}
 
 	public function existJWT() {
 		$headers = apache_request_headers();
 
 		if (!isset($headers['Authorization'])) {
-			Route::processOutput(new Request('error', 'The JWT does not exist.'));
+			Route::processOutput($this->request->request('error', 'The JWT does not exist.'));
 			exit();
 		}
 	}
@@ -25,9 +27,14 @@ class AuthorizeJWT {
 		$headers = apache_request_headers();
 
 		if (preg_match('/Bearer\s(\S+)/', $headers['Authorization'], $matches)) {
-			JWT::decode($matches[1]);
+			$jwt = JWT::decode($matches[1]);
+
+			if ($jwt->status === 'error') {
+				Route::processOutput($jwt);
+				exit();
+			}
 		} else {
-			Route::processOutput(new Request('error', 'Bad JWT.'));
+			Route::processOutput($this->request->request('error', 'Invalid JWT.'));
 			exit();
 		}
 	}

@@ -3,16 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Class\Request;
 
 class HomeController extends Controller {
 
 	public function __construct() {
-
+		$this->init();
 	}
 
-	public function index(): Request {
-		return new Request('warning', 'Page not found. [index]');
+	public function index(): array {
+		return $this->request->request('warning', 'Page not found. [index]');
 	}
 
 }

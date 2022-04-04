@@ -16,11 +16,10 @@
     ],
     "require": {
         "php": ">=8.0.9",
-        "vlucas/phpdotenv": "^5.4",
-        "lion-framework/lion-sql": "^1.9",
-        "lion-framework/lion-route": "^1.6",
-        "lion-framework/lion-mailer": "^1.4",
-        "lion-framework/lion-security": "^4.0",
+        "lion-framework/lion-sql": "^2.0",
+        "lion-framework/lion-route": "^2.0",
+        "lion-framework/lion-mailer": "^1.5",
+        "lion-framework/lion-security": "^6.0",
         "lion-framework/lion-files": "^3.0"
     }
 }

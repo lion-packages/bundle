@@ -21,12 +21,12 @@ class Users implements \JsonSerializable {
         return get_object_vars($this);
     }
 
-    public static function getValidate(string $class, string $method): array {
+    public static function validate(string $class, string $method): array {
         $list_validator = [
             'RegisterController' => [
                 'createUser' => [
                     'lengthMin' => [
-                        ['users_document', 10],
+                        ['users_document', 6],
                         ['users_phone', 10],
                         ['users_name', 2],
                         ['users_last_name', 2]

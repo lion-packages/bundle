@@ -3,16 +3,25 @@
 namespace App\Http\Controllers;
 
 use LionMailer\Mailer;
+use App\Models\Class\Request;
 
 class Controller {
 
-	protected static object $request;
-	
+	protected Request $request;
+	protected object $input;
+
 	public function __construct() {
 
 	}
 
-	public static function init(): void {
+	public function content(): void {
+		$content = json_decode(file_get_contents("php://input"), true);
+		$this->input = $content === null ? (object) ($_POST + $_FILES + $_GET) : (object) $content;
+	}
+
+	public function init(): void {
+		$this->content();
+		$this->request = Request::getInstance();
 		Mailer::init([
 			'info' => [
 				'debug' => $_ENV['MAIL_DEBUG'],
@@ -25,9 +34,6 @@ class Controller {
 		]);
 	}
 
-	public static function content(): void {
-		$content = json_decode(file_get_contents("php://input"), true);
-		self::$request = $content === null ? (object) ($_POST + $_FILES + $_GET) : (object) $content;
-	}
+
 
 }

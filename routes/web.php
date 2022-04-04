@@ -4,17 +4,11 @@ use LionRoute\Route;
 
 use App\Http\Middleware\AuthorizeJWT;
 
-use App\Models\Class\Request;
-use App\Http\Controllers\{ Controller, HomeController };
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\{ LoginController, RegisterController, DocumentTypesController };
 use App\Http\Controllers\Users\ProfileController;
 
-Controller::content();
 Route::init([
-    'class' => [
-        'RouteCollector' => Phroute\Phroute\RouteCollector::class,
-        'Dispatcher' => Phroute\Phroute\Dispatcher::class
-    ],
     'middleware' => [
         Route::newMiddleware('exist-jwt', AuthorizeJWT::class, 'existJWT'),
         Route::newMiddleware('authorize-jwt', AuthorizeJWT::class, 'authorizeJWT')
@@ -31,9 +25,11 @@ Route::prefix('api', function() {
         Route::post('signup', [RegisterController::class, 'createUser']);
     });
 
-    Route::middleware(['before' => 'exist-jwt', 'after' => 'authorize-jwt'], function() {
+    Route::middleware(['exist-jwt', 'authorize-jwt'], function() {
         Route::post('example-athorize', [ProfileController::class, 'info']);
     });
 });
 
-Route::processOutput(Route::dispatch(3));
+Route::processOutput(
+    Route::dispatch(3)
+);
