@@ -9,116 +9,99 @@ composer create-project lion-framework/lion-php
 ```
 
 ## Usage
-The first step to make use of the framework is to create the database, which will perform user registration and authentication.
-It must be taken into account that the given script is a basic part for its initial operation, it is not recommended to use this same script for the development and production environment, the script must be modified according to its required parameters.
-```sql
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
+### 1. ROUTES
+Lion-Route has been implemented for route handling. More information at [Lion-Route](https://github.com/Sleon4/Lion-Route).
+```php
+use LionRoute\Route;
 
-DELIMITER $$
+use App\Http\Controllers\HomeController;
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `create_user` (IN `_users_email` VARCHAR(100), IN `_users_password` BLOB, IN `_users_name` VARCHAR(25), IN `_users_last_name` VARCHAR(25), IN `_users_document` BIGINT(11), IN `_iddocument_types` INT(11), IN `_users_phone` BIGINT(11))  BEGIN
-INSERT INTO users (
-	users_email,
-	users_password,
-	users_name,
-	users_last_name,
-	users_document,
-	iddocument_types,
-	users_phone
-	)
-VALUES (
-	_users_email,
-	_users_password,
-	_users_name,
-	_users_last_name,
-	_users_document,
-	_iddocument_types,
-	_users_phone
-	);
-END$$
+Route::init();
 
-DELIMITER ;
+Route::any('/', [HomeController::class, 'index']);
 
-CREATE TABLE `document_types` (
-	`iddocument_types` int(11) NOT NULL,
-	`document_types_name` varchar(45) COLLATE utf8_spanish_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-
-CREATE TABLE `users` (
-	`idusers` int(11) NOT NULL,
-	`users_email` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
-	`users_password` blob NOT NULL,
-	`users_name` varchar(25) COLLATE utf8_spanish_ci NOT NULL,
-	`users_last_name` varchar(25) COLLATE utf8_spanish_ci NOT NULL,
-	`users_document` bigint(11) NOT NULL,
-	`iddocument_types` int(11) NOT NULL,
-	`users_phone` bigint(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-
-CREATE TABLE `validate_login` (
-	`users_email` varchar(100)
-	,`users_password` blob
-);
-
-DROP TABLE IF EXISTS `validate_login`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `validate_login`  AS SELECT `users`.`users_email` AS `users_email`, `users`.`users_password` AS `users_password` FROM `users` ;
-
-ALTER TABLE `document_types`
-ADD PRIMARY KEY (`iddocument_types`);
-
-ALTER TABLE `users`
-ADD PRIMARY KEY (`idusers`),
-ADD UNIQUE KEY `users_phone_UNIQUE` (`users_phone`),
-ADD UNIQUE KEY `users_document_UNIQUE` (`users_document`),
-ADD UNIQUE KEY `users_email_UNIQUE` (`users_email`),
-ADD KEY `users_iddocument_types_FK_idx` (`iddocument_types`);
-
-ALTER TABLE `document_types`
-MODIFY `iddocument_types` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
-ALTER TABLE `users`
-MODIFY `idusers` int(11) NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `users`
-ADD CONSTRAINT `users_iddocument_types_FK` FOREIGN KEY (`iddocument_types`) REFERENCES `document_types` (`iddocument_types`);
-COMMIT;
+Route::processOutput(Route::dispatch(3));
 ```
 
-The second step to follow is to create the `.env` file. This must have the properties written in the `.env.example`.
-Replace all possible data in the `.env` file for the correct functioning of the framework.
-
-The public and private keys must be created for the correct operation of the integrated authentication in the system. <br>
-Execute an HTTP request to a route where it generates the respective keys.
+### 2. RESPONSE
+A basic internal response management system has been implemented, the available options are:
+1. response(type, message, data)
+2. success(message, data)
+3. error(message, data)
+4. warning(message, data)
+5. info(message, data)
+6. toResponse(info)
 
 ```php
-use LionSecurity\RSA;
-use LionFiles\FILES;
+use LionRoute\Route;
+use App\Http\Response;
 
-Route::post('key', function() {
-	FILES::folder();
-	RSA::createKeys();
+use App\Http\Controllers\HomeController;
 
-	return [
-		'status' => 'success',
-		'message' => 'Keys created successfully.'
-	];
+Route::init();
+
+Route::any('/', [HomeController::class, 'index']);
+
+Route::any('example', function() {
+	return (Response::getInstance())->response('success', 'Welcome to example!');
+	// return (Response::getInstance())->success('Welcome to example!');
+	// return (Response::getInstance())->error('Welcome to example!');
+	// return (Response::getInstance())->warning('Welcome to example!');
+	// return (Response::getInstance())->info('Welcome to example!');
 });
 
-// or
-
-Route::post('key', function() {
-	FILES::folder('resources/secret/');
-	RSA::createKeys('resources/secret/');
-
-	return [
-		'status' => 'success',
-		'message' => 'Keys created successfully.'
-	];
-});
+Route::processOutput(Route::dispatch(3));
 ```
+
+
+### 3. REQUEST
+A basic internal request management system has been implemented. Currently, it only has the collection of data sent through HTTP requests.
+```php
+/*
+Web.php
+*/
+use LionRoute\Route;
+use App\Http\Response;
+
+use App\Http\Controllers\HomeController;
+
+Route::init();
+
+Route::any('/', [HomeController::class, 'index']);
+
+Route::any('example', function() {
+	return (Response::getInstance())->success('Welcome to example!');
+});
+
+Route::get('profile/{name}/{last_name}', [HomeController::class, 'example']);
+
+Route::processOutput(Route::dispatch(3));
+
+/*
+HomeController.php
+*/
+
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+
+class HomeController extends Controller {
+
+	public function __construct() {
+		$this->init();
+	}
+
+	public function index() {
+		return $this->response->warning('Page not found. [index]');
+	}
+
+	public function example($name, $last_name) {
+		return $this->response->success("Welcome {$name} {$last_name}");
+	}
+
+}
+```
+
 
 ## Credits
 [PHRoute](https://github.com/mrjgreen/phroute) <br>

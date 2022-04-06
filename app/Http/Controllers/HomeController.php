@@ -14,4 +14,8 @@ class HomeController extends Controller {
 		return $this->response->warning('Page not found. [index]');
 	}
 
+	public function example($name, $last_name) {
+		return $this->response->success("Welcome {$name} {$last_name}");
+	}
+
 }
