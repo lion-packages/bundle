@@ -12,16 +12,16 @@ class LoginModel extends Model {
 		$this->init();
 	}
 
-	public function validateAccount(Users $user): array {
-		return Builder::select('fetch', 'validate_login', null, 'users_password', [
+	public function validateAccount(Users $user) {
+		return Builder::select(Builder::FETCH, 'validate_login', null, 'users_password', [
 			Builder::where('users_email', '=')
 		], [
 			[$user->getUsersEmail()]
 		]);
 	}
 
-	public function readUserDataDB(Users $user): array {
-		return Builder::select('fetch', 'users', null, 'idusers', [
+	public function readUserDataDB(Users $user) {
+		return Builder::select(Builder::FETCH, 'users', null, 'idusers', [
 			Builder::where('users_email', '=')
 		], [
 			[$user->getUsersEmail()]

@@ -13,14 +13,14 @@ class RegisterModel extends Model {
 	}
 
 	public function validateUserExistenceDB(string $column, string $value) {
-		return Builder::select('fetch', 'users', null, Builder::count(null, 'files'), [
+		return Builder::select(Builder::FETCH, 'users', null, Builder::count(null, 'existence'), [
 			Builder::where($column, '=')
 		], [
 			[$value, ($column === 'users_email' ? 'str' : 'int')]
 		]);
 	}
 
-	public function createUserDB(Users $users): array {
+	public function createUserDB(Users $users) {
 		return Builder::call('create_user', [
 			[$users->getUsersEmail()],
 			[$users->getUsersPassword()],

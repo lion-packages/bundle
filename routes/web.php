@@ -2,7 +2,7 @@
 
 use LionRoute\Route;
 
-use App\Http\Middleware\AuthorizeJWT;
+use App\Http\Middleware\JWT\AuthorizationControl;
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\{ LoginController, RegisterController, DocumentTypesController };
@@ -10,8 +10,8 @@ use App\Http\Controllers\Users\ProfileController;
 
 Route::init([
     'middleware' => [
-        Route::newMiddleware('exist-jwt', AuthorizeJWT::class, 'existJWT'),
-        Route::newMiddleware('authorize-jwt', AuthorizeJWT::class, 'authorizeJWT')
+        Route::newMiddleware('exist-jwt', AuthorizationControl::class, 'exist'),
+        Route::newMiddleware('authorize-jwt', AuthorizationControl::class, 'authorize')
     ]
 ]);
 

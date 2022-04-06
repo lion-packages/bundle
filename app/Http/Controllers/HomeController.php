@@ -10,8 +10,8 @@ class HomeController extends Controller {
 		$this->init();
 	}
 
-	public function index(): array {
-		return $this->request->request('warning', 'Page not found. [index]');
+	public function index() {
+		return $this->response->warning('Page not found. [index]');
 	}
 
 }

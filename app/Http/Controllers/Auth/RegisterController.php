@@ -19,19 +19,19 @@ class RegisterController extends Controller {
 
 	public function createUser(): object {
 		$aesDec = AES::decode((object) [
-			'users_password' => $this->input->users_password,
-			'confirm_user_password' => $this->input->confirm_user_password
+			'users_password' => $this->request->users_password,
+			'confirm_user_password' => $this->request->confirm_user_password
 		], 'AES_KEY', 'AES_IV');
 
-		$this->input->iddocument_types = (int) $this->input->iddocument_types;
-		$this->input->users_password = $aesDec->users_password;
-		$this->input->confirm_user_password = $aesDec->confirm_user_password;
+		$this->request->iddocument_types = (int) $this->request->iddocument_types;
+		$this->request->users_password = $aesDec->users_password;
+		$this->request->confirm_user_password = $aesDec->confirm_user_password;
 
-		if (!SECURITY::validate((array) $this->input, Users::validate('RegisterController', 'createUser'))) {
-			return $this->request->request('error', "Todos los campos deben cumplir sus requerimientos.");
+		if (!SECURITY::validate((array) $this->request, Users::validate('RegisterController', 'createUser'))) {
+			return $this->response->error("Todos los campos deben cumplir sus requerimientos.");
 		}
 
-		$this->users = new Users(null, $this->input->users_email, null, $this->input->users_name, $this->input->users_last_name, $this->input->users_document, new DocumentTypes($this->input->iddocument_types), $this->input->users_phone);
+		$this->users = new Users(null, $this->request->users_email, null, $this->request->users_name, $this->request->users_last_name, $this->request->users_document, new DocumentTypes($this->request->iddocument_types), $this->request->users_phone);
 
 		$requestExistence = $this->validateColumns();
 		if ($requestExistence->status === 'error') {
@@ -39,31 +39,32 @@ class RegisterController extends Controller {
 		}
 
 		$rsaEnc = RSA::encode((object) [
-			'users_password' => SECURITY::passwordHash($this->input->users_password),
+			'users_password' => SECURITY::passwordHash($this->request->users_password),
 		]);
 		$this->users->setUsersPassword($rsaEnc->users_password);
 
-		$request_create = $this->registerModel->createUserDB($this->users);
-		return $this->request->request($request_create['status'], $request_create['message']);
+		return $this->response->toResponse(
+			$this->registerModel->createUserDB($this->users)
+		);
 	}
 
 	private function validateColumns(): object {
 		$existence = $this->registerModel->validateUserExistenceDB('users_email', $this->users->getUsersEmail());
-		if ($existence['files'] > 0) {
-			return $this->request->request('error', "Ya existe el Email: '{$this->users->getUsersEmail()}' dentro del sistema.");
+		if ($existence->existence > 0) {
+			return $this->response->error("Ya existe el Email: '{$this->users->getUsersEmail()}' dentro del sistema.");
 		}
 
 		$existence = $this->registerModel->validateUserExistenceDB('users_document', $this->users->getUsersDocument());
-		if ($existence['files'] > 0) {
-			return $this->request->request('error', "Ya existe el Documento: '{$this->users->getUsersDocument()}' dentro del sistema.");
+		if ($existence->existence > 0) {
+			return $this->response->error("Ya existe el Documento: '{$this->users->getUsersDocument()}' dentro del sistema.");
 		}
 
 		$existence = $this->registerModel->validateUserExistenceDB('users_phone', $this->users->getUsersPhone());
-		if ($existence['files'] > 0) {
-			return $this->request->request('error', "Ya existe el Celular: '{$this->users->getUsersPhone()}' dentro del sistema.");
+		if ($existence->existence > 0) {
+			return $this->response->error("Ya existe el Celular: '{$this->users->getUsersPhone()}' dentro del sistema.");
 		}
 
-		return $this->request->request('success');
+		return $this->response->success();
 	}
 
 }

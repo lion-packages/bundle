@@ -10,10 +10,8 @@ class ProfileController extends Controller {
 		$this->init();
 	}
 
-	public function info(): object {
-		return $this->request->request('success', 'Authorize', [
-			'info' => $this->input
-		]);
+	public function info() {
+		return $this->response->success('Authorize', $this->input);
 	}
 
 }

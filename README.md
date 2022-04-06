@@ -7,9 +7,6 @@ Framework for PHP in order to make the code cleaner and simpler.
 ```
 composer create-project lion-framework/lion-php
 ```
-```
-composer install
-```
 
 ## Usage
 The first step to make use of the framework is to create the database, which will perform user registration and authentication.

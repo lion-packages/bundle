@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "419ed26e91e64a45f343f69bb2d35a6f",
+    "content-hash": "007245a66707ac7a00103f8ca65fcf88",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -292,16 +292,16 @@
         },
         {
             "name": "lion-framework/lion-sql",
-            "version": "v2.0",
+            "version": "v3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-SQL.git",
-                "reference": "16682b1b32eb9c6b277fa585bbe2e40a5fa59e7c"
+                "reference": "031639199197740a124e4f4a4c5df7172f6599bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/16682b1b32eb9c6b277fa585bbe2e40a5fa59e7c",
-                "reference": "16682b1b32eb9c6b277fa585bbe2e40a5fa59e7c",
+                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/031639199197740a124e4f4a4c5df7172f6599bb",
+                "reference": "031639199197740a124e4f4a4c5df7172f6599bb",
                 "shasum": ""
             },
             "require": {
@@ -326,9 +326,9 @@
             "description": "package in charge of generating and executing MySQL processes.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-SQL/issues",
-                "source": "https://github.com/Sleon4/Lion-SQL/tree/v2.0"
+                "source": "https://github.com/Sleon4/Lion-SQL/tree/v3.0"
             },
-            "time": "2022-04-02T17:09:37+00:00"
+            "time": "2022-04-06T00:29:58+00:00"
         },
         {
             "name": "phpmailer/phpmailer",

@@ -14,16 +14,8 @@ class DocumentTypesController extends Controller {
 		$this->documentTypesModel = new DocumentTypesModel();
 	}
 
-	public function readDocumentTypes(): array {
-		$list = [];
-		foreach ($this->documentTypesModel->readDocumentTypesDB() as $key => $documentType) {
-			$list[$key] = new DocumentTypes(
-				$documentType['iddocument_types'],
-				$documentType['document_types_name']
-			);
-		}
-
-		return $list;
+	public function readDocumentTypes() {
+		return (array) $this->documentTypesModel->readDocumentTypesDB();
 	}
 
 }

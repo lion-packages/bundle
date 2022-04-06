@@ -11,8 +11,8 @@ class DocumentTypesModel extends Model {
 		$this->init();
 	}
 
-	public function readDocumentTypesDB(): array {
-		return Builder::select('fetchAll', 'document_types');
+	public function readDocumentTypesDB() {
+		return Builder::select(Builder::FETCH_ALL, 'document_types');
 	}
 
 }

@@ -3,25 +3,25 @@
 namespace App\Http\Controllers;
 
 use LionMailer\Mailer;
-use App\Models\Class\Request;
+use App\Http\{ Request, Response };
+use LionSecurity\RSA;
 
 class Controller {
 
-	protected Request $request;
-	protected object $input;
+	protected object $request;
+	protected Response $response;
 
 	public function __construct() {
 
 	}
 
-	public function content(): void {
-		$content = json_decode(file_get_contents("php://input"), true);
-		$this->input = $content === null ? (object) ($_POST + $_FILES + $_GET) : (object) $content;
-	}
-
 	public function init(): void {
-		$this->content();
-		$this->request = Request::getInstance();
+		$this->request = Request::request();
+		$this->response = Response::getInstance();
+		if ($_ENV['RSA_URL_PATH'] != '') {
+			RSA::$url_path = $_ENV['RSA_URL_PATH'];
+		}
+
 		Mailer::init([
 			'info' => [
 				'debug' => $_ENV['MAIL_DEBUG'],
@@ -33,7 +33,5 @@ class Controller {
 			]
 		]);
 	}
-
-
 
 }
