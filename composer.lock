@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "007245a66707ac7a00103f8ca65fcf88",
+    "content-hash": "0d041ec22dfb7bfc7cb4697727704661",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -127,16 +127,16 @@
         },
         {
             "name": "lion-framework/lion-files",
-            "version": "v3.0.2",
+            "version": "v4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Files.git",
-                "reference": "9dbb0ef26666ef108f9655466d4d579d9fb2be59"
+                "reference": "da20b1077d18fd00071fd3eb9aa67645572c790b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Files/zipball/9dbb0ef26666ef108f9655466d4d579d9fb2be59",
-                "reference": "9dbb0ef26666ef108f9655466d4d579d9fb2be59",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Files/zipball/da20b1077d18fd00071fd3eb9aa67645572c790b",
+                "reference": "da20b1077d18fd00071fd3eb9aa67645572c790b",
                 "shasum": ""
             },
             "require": {
@@ -161,9 +161,9 @@
             "description": "Library created with the function of working internal system files.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Files/issues",
-                "source": "https://github.com/Sleon4/Lion-Files/tree/v3.0.2"
+                "source": "https://github.com/Sleon4/Lion-Files/tree/v4.0"
             },
-            "time": "2022-04-03T20:18:18+00:00"
+            "time": "2022-04-13T14:12:46+00:00"
         },
         {
             "name": "lion-framework/lion-mailer",

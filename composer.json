@@ -19,7 +19,7 @@
         "lion-framework/lion-route": "^2.0",
         "lion-framework/lion-mailer": "^1.5",
         "lion-framework/lion-security": "^6.0",
-        "lion-framework/lion-files": "^3.0",
-        "lion-framework/lion-sql": "^3.0"
+        "lion-framework/lion-sql": "^3.0",
+        "lion-framework/lion-files": "^4.0"
     }
 }
