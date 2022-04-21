@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use LionMailer\Mailer;
-use App\Http\{ Request, Response };
+use App\Http\Request\{ Request, Json, Response };
 use LionSecurity\RSA;
 
 class Controller {
 
 	protected object $request;
+	protected object $env;
+	protected Json $json;
 	protected Response $response;
 
 	public function __construct() {
@@ -16,10 +18,13 @@ class Controller {
 	}
 
 	public function init(): void {
-		$this->request = Request::request();
+		$this->env = Request::getInstance()->env();
+		$this->request = Request::getInstance()->request();
+		$this->json = Json::getInstance();
 		$this->response = Response::getInstance();
-		if ($_ENV['RSA_URL_PATH'] != '') {
-			RSA::$url_path = $_ENV['RSA_URL_PATH'];
+
+		if ($this->env->RSA_URL_PATH != '') {
+			RSA::$url_path = $this->env->RSA_URL_PATH;
 		}
 
 		Mailer::init([

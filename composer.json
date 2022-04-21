@@ -1,6 +1,6 @@
 {
     "name": "lion-framework/lion-php",
-    "description": "Framework for PHP in order to make the code cleaner and simpler.",
+    "description": "A simple and easy to use PHP framework.",
     "type": "project",
     "license": "MIT",
     "autoload": {

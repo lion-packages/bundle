@@ -1,14 +1,17 @@
 <?php
 
-require_once("vendor/autoload.php");
-spl_autoload_register(function($class_name) {
-    require_once(str_replace("\\", "/", $class_name) . '.php');
-});
+/**
+* Lion-PHP - A simple and easy to use PHP framework
+*
+* @package  Lion-Framework
+* @author   Sergio León <sergioleon4004@hotmail.com>
+*/
 
+require_once("vendor/autoload.php");
 (Dotenv\Dotenv::createImmutable(__DIR__))->load();
 
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Max-Age: 3600");
+header("Access-Control-Allow-Origin: {$_ENV['SERVER_ACCESS_CONTROL_ALLOW_ORIGIN']}");
+header("Access-Control-Max-Age: {$_ENV['SERVER_ACCESS_CONTROL_MAX_AGE']}");
 header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Allow: GET, POST, PUT, DELETE, OPTIONS");

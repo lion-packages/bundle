@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "firebase/php-jwt",
-            "version": "v6.1.0",
+            "version": "v6.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/firebase/php-jwt.git",
-                "reference": "fbb2967a3a68b07e37678c00c0cf51165051495f"
+                "reference": "c297139da7c6873dbd67cbd1093f09ec0bbd0c50"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/fbb2967a3a68b07e37678c00c0cf51165051495f",
-                "reference": "fbb2967a3a68b07e37678c00c0cf51165051495f",
+                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/c297139da7c6873dbd67cbd1093f09ec0bbd0c50",
+                "reference": "c297139da7c6873dbd67cbd1093f09ec0bbd0c50",
                 "shasum": ""
             },
             "require": {
@@ -59,9 +59,9 @@
             ],
             "support": {
                 "issues": "https://github.com/firebase/php-jwt/issues",
-                "source": "https://github.com/firebase/php-jwt/tree/v6.1.0"
+                "source": "https://github.com/firebase/php-jwt/tree/v6.1.2"
             },
-            "time": "2022-03-23T18:26:04+00:00"
+            "time": "2022-04-21T14:37:18+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -249,16 +249,16 @@
         },
         {
             "name": "lion-framework/lion-security",
-            "version": "v6.0",
+            "version": "v6.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Security.git",
-                "reference": "c361c9d7a109763a3bc72d70519ecc4b55f6ada1"
+                "reference": "ef73960f9d633d92fc05e7fdd7feaca976cfdb66"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Security/zipball/c361c9d7a109763a3bc72d70519ecc4b55f6ada1",
-                "reference": "c361c9d7a109763a3bc72d70519ecc4b55f6ada1",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Security/zipball/ef73960f9d633d92fc05e7fdd7feaca976cfdb66",
+                "reference": "ef73960f9d633d92fc05e7fdd7feaca976cfdb66",
                 "shasum": ""
             },
             "require": {
@@ -286,9 +286,9 @@
             "description": "Library created with the function of implementing AES, RSA and JWT Security functions for PHP.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Security/issues",
-                "source": "https://github.com/Sleon4/Lion-Security/tree/v6.0"
+                "source": "https://github.com/Sleon4/Lion-Security/tree/v6.0.1"
             },
-            "time": "2022-04-03T21:46:56+00:00"
+            "time": "2022-04-14T13:07:51+00:00"
         },
         {
             "name": "lion-framework/lion-sql",
@@ -925,5 +925,5 @@
         "php": ">=8.0.9"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }

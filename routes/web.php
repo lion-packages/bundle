@@ -1,18 +1,30 @@
 <?php
 
 use LionRoute\Route;
-use App\Http\Response;
 
+use App\Http\Middleware\Test\TestMiddleware;
 use App\Http\Controllers\HomeController;
 
-Route::init();
+// || ------------------------------------------------------------------------------
+// || Web Routes
+// || Here is where you can register web routes for your application.
+// || ------------------------------------------------------------------------------
+Route::init([
+	'middleware' => [
+		Route::newMiddleware('access', TestMiddleware::class, 'access')
+	]
+]);
 
 Route::any('/', [HomeController::class, 'index']);
 
-Route::any('example', function() {
-	return (Response::getInstance())->success('Welcome to example!');
+Route::prefix('api', function() {
+	Route::middleware(['access'], function() {
+		Route::post('example', [HomeController::class, 'apiExample']);
+	});
 });
 
-Route::get('profile/{name}/{last_name}', [HomeController::class, 'example']);
+Route::middleware(['access'], function() {
+	Route::post('example', [HomeController::class, 'example']);
+});
 
 Route::processOutput(Route::dispatch(3));
