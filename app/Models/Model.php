@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Http\Request;
+use App\Http\Request\Request;
 use LionSql\QueryBuilder as Builder;
 
 class Model {
