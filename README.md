@@ -8,19 +8,35 @@ Framework for PHP in order to make the code cleaner and simpler.
 composer create-project lion-framework/lion-php
 ```
 
+```
+composer update
+```
+
 ## Usage
-### 1. ROUTES
-Lion-Route has been implemented for route handling. More information at [Lion-Route](https://github.com/Sleon4/Lion-Route).
+### 1. ROUTES AND MIDDLEWARE
+Lion-Route has been implemented for route handling. More information at [Lion-Route](https://github.com/Sleon4/Lion-Route). <br>
+Middleware is easy to implement. They must have the main class imported into Middleware, which initializes different functions and objects at the Middleware level. <br>
+The rule for middleware is simple, in the constructor they must be initialized with the $this->init() function. More information about the use of Middleware in [Lion-Route](https://github.com/Sleon4/Lion-Route).
 ```php
-use LionRoute\Route;
+namespace App\Http\Middleware;
 
-use App\Http\Controllers\HomeController;
+use App\Http\Middleware\Middleware;
 
-Route::init();
+class HomeMiddleware extends Middleware {
 
-Route::any('/', [HomeController::class, 'index']);
+	public function __construct() {
+		$this->init();
+	}
 
-Route::processOutput(Route::dispatch(3));
+	public function example(): void {
+		if (!$this->request->user_session) {
+			$this->processOutput(
+				$this->response->error('Username does not exist.')
+			);
+		}
+	}
+
+}
 ```
 
 ### 2. RESPONSE
@@ -30,19 +46,14 @@ A basic internal response management system has been implemented, the available 
 3. error(message, data)
 4. warning(message, data)
 5. info(message, data)
-6. toResponse(info)
 
 ```php
 use LionRoute\Route;
-use App\Http\Response;
-
-use App\Http\Controllers\HomeController;
+use App\Http\Request\Response;
 
 Route::init();
 
-Route::any('/', [HomeController::class, 'index']);
-
-Route::any('example', function() {
+Route::any('/', function() {
 	return (Response::getInstance())->response('success', 'Welcome to example!');
 	// return (Response::getInstance())->success('Welcome to example!');
 	// return (Response::getInstance())->error('Welcome to example!');
@@ -53,34 +64,28 @@ Route::any('example', function() {
 Route::processOutput(Route::dispatch(3));
 ```
 
-
-### 3. REQUEST
-A basic internal request management system has been implemented. Currently, it only has the collection of data sent through HTTP requests.
 ```php
-/*
-Web.php
-*/
-use LionRoute\Route;
-use App\Http\Response;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Controller;
 
-Route::init();
+class HomeController extends Controller {
 
-Route::any('/', [HomeController::class, 'index']);
+	public function __construct() {
+		$this->init();
+	}
 
-Route::any('example', function() {
-	return (Response::getInstance())->success('Welcome to example!');
-});
+	public function index() {
+		return $this->response->response('warning', 'Page not found. [index]');
+	}
 
-Route::get('profile/{name}/{last_name}', [HomeController::class, 'example']);
+}
+```
 
-Route::processOutput(Route::dispatch(3));
-
-/*
-HomeController.php
-*/
-
+### 3. CONTROLLERS
+Controllers are easy to implement. They must have the parent class imported into `Controller`, which initializes different functions and objects at the Controller level. <br>
+The rule for Controllers is simple, in the constructor they must be initialized with the `$this->init()` function.
+```php
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
@@ -95,13 +100,76 @@ class HomeController extends Controller {
 		return $this->response->warning('Page not found. [index]');
 	}
 
-	public function example($name, $last_name) {
-		return $this->response->success("Welcome {$name} {$last_name}");
+}
+```
+
+#### 3.1 REQUEST
+A basic internal request management system has been implemented. Currently you only have data collection sent via HTTP requests and .env variable.
+```php
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+
+class HomeController extends Controller {
+
+	public function __construct() {
+		$this->init();
+	}
+
+	public function index() {
+		return $this->response->success("Welcome {$this->request->name} {$this->env->SERVER_URL}");
 	}
 
 }
 ```
 
+#### 3.2 JSON
+An internal class has been implemented for handling JSON objects. It has 2 basic functions `encode` and `decode`.
+```php
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+
+class HomeController extends Controller {
+
+	public function __construct() {
+		$this->init();
+	}
+
+	public function index() {
+		$data = [
+			'name' => "Sergio León",
+			'email' => "lion-framework@lion.com"
+		];
+
+		$encode = $this->json->encode($data);
+		$decode = $this->json->decode($encode);
+
+		return $this->response->success("Welcome", $decode);
+	}
+
+}
+```
+
+### 4. MODELS
+The models are easy to implement. They must have the main class imported into `Model`, which initializes various functions and objects at the model level. <br>
+The rule for models is simple, in the constructor they must be initialized with the `$this->init()` function.
+```php
+namespace App\Models;
+
+use App\Models\Model;
+
+class HomeModel extends Model {
+
+	public function __construct() {
+		$this->init();
+	}
+
+}
+```
+
+Note that when you want to implement methods that implement processes with databases, the QueryBuilder class must be imported for their respective operation. more information on [Lion-SQL](https://github.com/Sleon4/Lion-SQL). <br>
+Note that at the framework level Lion-SQL is already installed and implemented, the variables are located in the `.env` file, follow the import instructions for their use.
 
 ## Credits
 [PHRoute](https://github.com/mrjgreen/phroute) <br>
