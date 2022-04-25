@@ -12,11 +12,17 @@ composer create-project lion-framework/lion-php
 composer update
 ```
 
+## Commands
+more information about the use of internal commands. [Lion-Command](https://github.com/Sleon4/Lion-Command)
+
 ## Usage
 ### 1. ROUTES AND MIDDLEWARE
 Lion-Route has been implemented for route handling. More information at [Lion-Route](https://github.com/Sleon4/Lion-Route). <br>
 Middleware is easy to implement. They must have the main class imported into Middleware, which initializes different functions and objects at the Middleware level. <br>
 The rule for middleware is simple, in the constructor they must be initialized with the $this->init() function. More information about the use of Middleware in [Lion-Route](https://github.com/Sleon4/Lion-Route).
+```
+php lion new:middleware HomeMiddleware
+```
 ```php
 namespace App\Http\Middleware;
 
@@ -85,6 +91,9 @@ class HomeController extends Controller {
 ### 3. CONTROLLERS
 Controllers are easy to implement. They must have the parent class imported into `Controller`, which initializes different functions and objects at the Controller level. <br>
 The rule for Controllers is simple, in the constructor they must be initialized with the `$this->init()` function.
+```
+php lion new:controller HomeController
+```
 ```php
 namespace App\Http\Controllers;
 
@@ -117,6 +126,7 @@ class HomeController extends Controller {
 	}
 
 	public function index() {
+		$myEnv = $this->env; // available .env environment variables
 		return $this->response->success("Welcome {$this->request->name} {$this->env->SERVER_URL}");
 	}
 
@@ -154,6 +164,9 @@ class HomeController extends Controller {
 ### 4. MODELS
 The models are easy to implement. They must have the main class imported into `Model`, which initializes various functions and objects at the model level. <br>
 The rule for models is simple, in the constructor they must be initialized with the `$this->init()` function.
+```
+php lion new:model HomeModel
+```
 ```php
 namespace App\Models;
 
@@ -176,7 +189,8 @@ Note that at the framework level Lion-SQL is already installed and implemented, 
 [PHP dotenv](https://github.com/vlucas/phpdotenv) <br>
 [Valitron](https://github.com/vlucas/valitron) <br>
 [PHPMailer](https://github.com/PHPMailer/PHPMailer) <br>
-[PHP-JWT](https://github.com/firebase/php-jwt)
+[PHP-JWT](https://github.com/firebase/php-jwt) <br>
+[Symfony-Console](https://github.com/symfony/console)
 
 ## License
 Copyright © 2022 [MIT License](https://github.com/Sleon4/Lion-PHP/blob/main/LICENSE)
