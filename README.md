@@ -19,7 +19,8 @@ more information about the use of internal commands. [Lion-Command](https://gith
 ### 1. ROUTES AND MIDDLEWARE
 Lion-Route has been implemented for route handling. More information at [Lion-Route](https://github.com/Sleon4/Lion-Route). <br>
 Middleware is easy to implement. They must have the main class imported into Middleware, which initializes different functions and objects at the Middleware level. <br>
-The rule for middleware is simple, in the constructor they must be initialized with the $this->init() function. More information about the use of Middleware in [Lion-Route](https://github.com/Sleon4/Lion-Route).
+The rule for middleware is simple, in the constructor they must be initialized with the $this->init() function. More information about the use of Middleware in [Lion-Route](https://github.com/Sleon4/Lion-Route). <br>
+You can create a middleware with the command.
 ```
 php lion new:middleware HomeMiddleware
 ```
@@ -90,7 +91,8 @@ class HomeController extends Controller {
 
 ### 3. CONTROLLERS
 Controllers are easy to implement. They must have the parent class imported into `Controller`, which initializes different functions and objects at the Controller level. <br>
-The rule for Controllers is simple, in the constructor they must be initialized with the `$this->init()` function.
+The rule for Controllers is simple, in the constructor they must be initialized with the `$this->init()` function. <br>
+You can create a controller with the command.
 ```
 php lion new:controller HomeController
 ```
@@ -163,7 +165,8 @@ class HomeController extends Controller {
 
 ### 4. MODELS
 The models are easy to implement. They must have the main class imported into `Model`, which initializes various functions and objects at the model level. <br>
-The rule for models is simple, in the constructor they must be initialized with the `$this->init()` function.
+The rule for models is simple, in the constructor they must be initialized with the `$this->init()` function. <br>
+You can create a model with the command.
 ```
 php lion new:model HomeModel
 ```
@@ -181,7 +184,7 @@ class HomeModel extends Model {
 }
 ```
 
-Note that when you want to implement methods that implement processes with databases, the QueryBuilder class must be imported for their respective operation. more information on [Lion-SQL](https://github.com/Sleon4/Lion-SQL). <br>
+Note that when you want to implement methods that implement processes with databases, the `LionSql\Drivers\MySQLDriver` class must be imported for their respective operation. more information on [Lion-SQL](https://github.com/Sleon4/Lion-SQL). <br>
 Note that at the framework level Lion-SQL is already installed and implemented, the variables are located in the `.env` file, follow the import instructions for their use.
 
 ## Credits
@@ -191,6 +194,14 @@ Note that at the framework level Lion-SQL is already installed and implemented, 
 [PHPMailer](https://github.com/PHPMailer/PHPMailer) <br>
 [PHP-JWT](https://github.com/firebase/php-jwt) <br>
 [Symfony-Console](https://github.com/symfony/console)
+
+## Other libraries
+[Lion-SQL](https://github.com/Sleon4/Lion-SQL) <br>
+[Lion-Security](https://github.com/Sleon4/Lion-Security) <br>
+[Lion-Route](https://github.com/Sleon4/Lion-Route) <br>
+[Lion-Mailer](https://github.com/Sleon4/Lion-Mailer) <br>
+[Lion-Files](https://github.com/Sleon4/Lion-Files) <br>
+[Lion-Command](https://github.com/Sleon4/Lion-Command)
 
 ## License
 Copyright © 2022 [MIT License](https://github.com/Sleon4/Lion-PHP/blob/main/LICENSE)

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "55ab1193ba8eb384ccf6529a151c7d51",
+    "content-hash": "9614abd2635122acef5ab8696e0ab25d",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -290,16 +290,16 @@
         },
         {
             "name": "lion-framework/lion-security",
-            "version": "v6.1.1",
+            "version": "v6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Security.git",
-                "reference": "db7374a438c138e4daa73e252de9e325829f8210"
+                "reference": "47bfa51b36f2409b58aa067a1d37c865e2e0a6fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Security/zipball/db7374a438c138e4daa73e252de9e325829f8210",
-                "reference": "db7374a438c138e4daa73e252de9e325829f8210",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Security/zipball/47bfa51b36f2409b58aa067a1d37c865e2e0a6fa",
+                "reference": "47bfa51b36f2409b58aa067a1d37c865e2e0a6fa",
                 "shasum": ""
             },
             "require": {
@@ -327,22 +327,22 @@
             "description": "Library created with the function of implementing AES, RSA and JWT Security functions for PHP.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Security/issues",
-                "source": "https://github.com/Sleon4/Lion-Security/tree/v6.1.1"
+                "source": "https://github.com/Sleon4/Lion-Security/tree/v6.2"
             },
-            "time": "2022-04-22T01:09:13+00:00"
+            "time": "2022-04-30T19:47:20+00:00"
         },
         {
             "name": "lion-framework/lion-sql",
-            "version": "v3.0",
+            "version": "v4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-SQL.git",
-                "reference": "031639199197740a124e4f4a4c5df7172f6599bb"
+                "reference": "c5764fe8f98765b8c4298f74c667b97d82431fba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/031639199197740a124e4f4a4c5df7172f6599bb",
-                "reference": "031639199197740a124e4f4a4c5df7172f6599bb",
+                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/c5764fe8f98765b8c4298f74c667b97d82431fba",
+                "reference": "c5764fe8f98765b8c4298f74c667b97d82431fba",
                 "shasum": ""
             },
             "require": {
@@ -367,9 +367,9 @@
             "description": "package in charge of generating and executing MySQL processes.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-SQL/issues",
-                "source": "https://github.com/Sleon4/Lion-SQL/tree/v3.0"
+                "source": "https://github.com/Sleon4/Lion-SQL/tree/v4.0"
             },
-            "time": "2022-04-06T00:29:58+00:00"
+            "time": "2022-05-01T22:07:21+00:00"
         },
         {
             "name": "phpmailer/phpmailer",
@@ -623,16 +623,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v6.0.7",
+            "version": "v6.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "70dcf7b2ca2ea08ad6ebcc475f104a024fb5632e"
+                "reference": "0d00aa289215353aa8746a31d101f8e60826285c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/70dcf7b2ca2ea08ad6ebcc475f104a024fb5632e",
-                "reference": "70dcf7b2ca2ea08ad6ebcc475f104a024fb5632e",
+                "url": "https://api.github.com/repos/symfony/console/zipball/0d00aa289215353aa8746a31d101f8e60826285c",
+                "reference": "0d00aa289215353aa8746a31d101f8e60826285c",
                 "shasum": ""
             },
             "require": {
@@ -698,7 +698,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https://github.com/symfony/console/tree/v6.0.7"
+                "source": "https://github.com/symfony/console/tree/v6.0.8"
             },
             "funding": [
                 {
@@ -714,7 +714,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-03-31T17:18:25+00:00"
+            "time": "2022-04-20T15:01:42+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -1213,16 +1213,16 @@
         },
         {
             "name": "symfony/string",
-            "version": "v6.0.3",
+            "version": "v6.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
-                "reference": "522144f0c4c004c80d56fa47e40e17028e2eefc2"
+                "reference": "ac0aa5c2282e0de624c175b68d13f2c8f2e2649d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/522144f0c4c004c80d56fa47e40e17028e2eefc2",
-                "reference": "522144f0c4c004c80d56fa47e40e17028e2eefc2",
+                "url": "https://api.github.com/repos/symfony/string/zipball/ac0aa5c2282e0de624c175b68d13f2c8f2e2649d",
+                "reference": "ac0aa5c2282e0de624c175b68d13f2c8f2e2649d",
                 "shasum": ""
             },
             "require": {
@@ -1278,7 +1278,7 @@
                 "utf8"
             ],
             "support": {
-                "source": "https://github.com/symfony/string/tree/v6.0.3"
+                "source": "https://github.com/symfony/string/tree/v6.0.8"
             },
             "funding": [
                 {
@@ -1294,7 +1294,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-01-02T09:55:41+00:00"
+            "time": "2022-04-22T08:18:02+00:00"
         },
         {
             "name": "vlucas/phpdotenv",

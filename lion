@@ -1,5 +1,12 @@
 <?php
 
+/**
+* Lion-PHP - A simple and easy to use PHP framework
+*
+* @package  Lion-Framework
+* @author   Sergio León <sergioleon4004@hotmail.com>
+*/
+
 require_once("vendor/autoload.php");
 (Dotenv\Dotenv::createImmutable(__DIR__))->load();
 

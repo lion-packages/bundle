@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Http\Request\Request;
-use LionSql\QueryBuilder as Builder;
+use LionSql\Drivers\MySQLDriver as Builder;
 
 class Model {
 
@@ -16,7 +16,7 @@ class Model {
 	public function init(array $config = []): void {
 		$this->env = Request::getInstance()->env();
 
-		Builder::connect([
+		Builder::init([
 			'host' => isset($config['host']) ? $config['host'] : $this->env->DB_HOST,
 			'db_name' => isset($config['db_name']) ? $config['db_name'] : $this->env->DB_NAME,
 			'user' => isset($config['user']) ? $config['user'] : $this->env->DB_USER,
