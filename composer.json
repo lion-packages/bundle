@@ -22,5 +22,13 @@
         "lion-framework/lion-sql": "^4.0",
         "lion-framework/lion-files": "^4.1",
         "lion-framework/lion-command": "^1.2"
+    },
+    "scripts": {
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ]
+    },
+    "config": {
+        "optimize-autoloader": true
     }
 }
