@@ -12,10 +12,15 @@ composer create-project lion-framework/lion-php
 composer update
 ```
 
+# Lion-PHP the API Backend
+Lion-PHP can also serve as an API backend for a JavaScript single page application or a mobile application. For example, you can use Lion-PHP as an API backend for your Vite.js app or Kotlin app. <br>
+
+You can use Lion-PHP to provide authentication and data storage/retrieval for your application, while taking advantage of Lion-PHP services such as emails, databases, and more.
+
+## Usage
 ## Commands
 more information about the use of internal commands. [Lion-Command](https://github.com/Sleon4/Lion-Command)
 
-## Usage
 ### 1. ROUTES AND MIDDLEWARE
 Lion-Route has been implemented for route handling. More information at [Lion-Route](https://github.com/Sleon4/Lion-Route). <br>
 Middleware is easy to implement. They must have the main class imported into Middleware, which initializes different functions and objects at the Middleware level. <br>
