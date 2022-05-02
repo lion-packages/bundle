@@ -3,6 +3,7 @@
     "description": "A simple and easy to use PHP framework.",
     "type": "project",
     "license": "MIT",
+    "keywords": ["framework", "lion", "lion-framework"],
     "autoload": {
         "psr-4": {
             "App\\": "app/"
