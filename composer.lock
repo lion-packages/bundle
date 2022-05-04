@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "53677f1e42909e2ca3c55baf02a7cec4",
+    "content-hash": "5807625c6015620a28348b708ebc72be",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -127,20 +127,20 @@
         },
         {
             "name": "lion-framework/lion-command",
-            "version": "v1.2",
+            "version": "v1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Command.git",
-                "reference": "b4844ecaa992c310a50061b6d2c0fdfb275336b8"
+                "reference": "f5907d2edc7653cc8bc2689af8bf9c4f258df655"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Command/zipball/b4844ecaa992c310a50061b6d2c0fdfb275336b8",
-                "reference": "b4844ecaa992c310a50061b6d2c0fdfb275336b8",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Command/zipball/f5907d2edc7653cc8bc2689af8bf9c4f258df655",
+                "reference": "f5907d2edc7653cc8bc2689af8bf9c4f258df655",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.0.9",
+                "php": ">=8.1",
                 "symfony/console": "^6.0"
             },
             "type": "library",
@@ -162,9 +162,9 @@
             "description": "Library created with the function of executing commands from PHP.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Command/issues",
-                "source": "https://github.com/Sleon4/Lion-Command/tree/v1.2"
+                "source": "https://github.com/Sleon4/Lion-Command/tree/v1.3"
             },
-            "time": "2022-04-25T16:41:58+00:00"
+            "time": "2022-05-03T16:19:49+00:00"
         },
         {
             "name": "lion-framework/lion-files",
@@ -208,20 +208,20 @@
         },
         {
             "name": "lion-framework/lion-mailer",
-            "version": "v1.5.1",
+            "version": "v1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Mailer.git",
-                "reference": "e2e1b8efef90c01f13de3c7f77cab581be1c25c3"
+                "reference": "3e9573a2008a89df962fceca20bee4ed24cc8950"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Mailer/zipball/e2e1b8efef90c01f13de3c7f77cab581be1c25c3",
-                "reference": "e2e1b8efef90c01f13de3c7f77cab581be1c25c3",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Mailer/zipball/3e9573a2008a89df962fceca20bee4ed24cc8950",
+                "reference": "3e9573a2008a89df962fceca20bee4ed24cc8950",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.0.9",
+                "php": ">=8.1",
                 "phpmailer/phpmailer": "^6.6"
             },
             "type": "library",
@@ -243,26 +243,26 @@
             "description": "Library created for easy email sending based on PHPMailer.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Mailer/issues",
-                "source": "https://github.com/Sleon4/Lion-Mailer/tree/v1.5.1"
+                "source": "https://github.com/Sleon4/Lion-Mailer/tree/v1.6"
             },
-            "time": "2022-04-21T16:55:15+00:00"
+            "time": "2022-05-03T16:11:10+00:00"
         },
         {
             "name": "lion-framework/lion-route",
-            "version": "v2.0",
+            "version": "v2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Route.git",
-                "reference": "61b0f291a4e925d29668961d5787cea61fb1b71c"
+                "reference": "577712c9c7fac8449eb3be7a42e32813cf65d80b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Route/zipball/61b0f291a4e925d29668961d5787cea61fb1b71c",
-                "reference": "61b0f291a4e925d29668961d5787cea61fb1b71c",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Route/zipball/577712c9c7fac8449eb3be7a42e32813cf65d80b",
+                "reference": "577712c9c7fac8449eb3be7a42e32813cf65d80b",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.0.9",
+                "php": ">=8.1",
                 "phroute/phroute": "^2.1"
             },
             "type": "library",
@@ -284,9 +284,9 @@
             "description": "This library has a fast router usage with regular expressions.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Route/issues",
-                "source": "https://github.com/Sleon4/Lion-Route/tree/v2.0"
+                "source": "https://github.com/Sleon4/Lion-Route/tree/v2.1"
             },
-            "time": "2022-04-02T18:13:11+00:00"
+            "time": "2022-05-03T15:42:46+00:00"
         },
         {
             "name": "lion-framework/lion-security",
@@ -373,16 +373,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "2.57.0",
+            "version": "2.58.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "4a54375c21eea4811dbd1149fe6b246517554e78"
+                "reference": "97a34af22bde8d0ac20ab34b29d7bfe360902055"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/4a54375c21eea4811dbd1149fe6b246517554e78",
-                "reference": "4a54375c21eea4811dbd1149fe6b246517554e78",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/97a34af22bde8d0ac20ab34b29d7bfe360902055",
+                "reference": "97a34af22bde8d0ac20ab34b29d7bfe360902055",
                 "shasum": ""
             },
             "require": {
@@ -400,7 +400,8 @@
                 "phpmd/phpmd": "^2.9",
                 "phpstan/extension-installer": "^1.0",
                 "phpstan/phpstan": "^0.12.54 || ^1.0",
-                "phpunit/phpunit": "^7.5.20 || ^8.5.14",
+                "phpunit/php-file-iterator": "^2.0.5",
+                "phpunit/phpunit": "^7.5.20 || ^8.5.23",
                 "squizlabs/php_codesniffer": "^3.4"
             },
             "bin": [
@@ -465,7 +466,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-02-13T18:13:33+00:00"
+            "time": "2022-04-25T19:31:17+00:00"
         },
         {
             "name": "phpmailer/phpmailer",

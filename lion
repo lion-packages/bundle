@@ -5,7 +5,7 @@
 *
 * @package  Lion-Framework
 * @author   Sergio León <sergioleon4004@hotmail.com>
-*/
+**/
 
 require_once("vendor/autoload.php");
 

@@ -29,12 +29,13 @@ class Controller {
 
 		Mailer::init([
 			'info' => [
-				'debug' => $this->env->MAIL_DEBUG,
+				'debug' => (int) $this->env->MAIL_DEBUG,
 				'host' => $this->env->MAIL_HOST,
-				'port' => $this->env->MAIL_PORT,
+				'port' => (int) $this->env->MAIL_PORT,
 				'email' => $this->env->MAIL_EMAIL,
+				'password' => $this->env->MAIL_PASSWORD,
 				'user_name' => $this->env->MAIL_USER_NAME,
-				'password' => $this->env->MAIL_PASSWORD
+				'encryption' => $this->env->MAIL_ENCRYPTION === 'false' ? false : ($this->env->MAIL_ENCRYPTION === 'true' ? true : false)
 			]
 		]);
 	}
