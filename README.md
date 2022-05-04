@@ -1,7 +1,7 @@
 # Lion-PHP
 Framework for PHP in order to make the code cleaner and simpler.
 
-[![Latest Stable Version](http://poser.pugx.org/lion-framework/lion-php/v)](https://packagist.org/packages/lion-framework/lion-php) [![Total Downloads](http://poser.pugx.org/lion-framework/lion-php/downloads)](https://packagist.org/packages/lion-framework/lion-php) [![Latest Unstable Version](http://poser.pugx.org/lion-framework/lion-php/v/unstable)](https://packagist.org/packages/lion-framework/lion-php) [![License](http://poser.pugx.org/lion-framework/lion-php/license)](https://packagist.org/packages/lion-framework/lion-php) [![PHP Version Require](http://poser.pugx.org/lion-framework/lion-php/require/php)](https://packagist.org/packages/lion-framework/lion-php)
+[![Latest Stable Version](http://poser.pugx.org/lion-framework/lion-framework/v)](https://packagist.org/packages/lion-framework/lion-framework) [![Total Downloads](http://poser.pugx.org/lion-framework/lion-framework/downloads)](https://packagist.org/packages/lion-framework/lion-framework) [![Latest Unstable Version](http://poser.pugx.org/lion-framework/lion-framework/v/unstable)](https://packagist.org/packages/lion-framework/lion-framework) [![License](http://poser.pugx.org/lion-framework/lion-framework/license)](https://packagist.org/packages/lion-framework/lion-framework) [![PHP Version Require](http://poser.pugx.org/lion-framework/lion-framework/require/php)](https://packagist.org/packages/lion-framework/lion-framework)
 
 ## Install
 ```
