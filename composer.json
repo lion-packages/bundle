@@ -28,7 +28,7 @@
         "lion-framework/lion-files": "^4.1",
         "lion-framework/lion-route": "^2.1",
         "lion-framework/lion-command": "^1.4",
-        "nesbot/carbon": "^2.57",
+        "nesbot/carbon": "^2.57"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5"
