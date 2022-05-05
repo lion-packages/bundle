@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c23a4a2ae1e95ac9b83b85083588ea66",
+    "content-hash": "69d10df7c2b0410d8541a7d35e1b3202",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -127,16 +127,16 @@
         },
         {
             "name": "lion-framework/lion-command",
-            "version": "v1.3",
+            "version": "v1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Command.git",
-                "reference": "f5907d2edc7653cc8bc2689af8bf9c4f258df655"
+                "reference": "4999e430585142fa2b520d2543367b85fd21ed6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Command/zipball/f5907d2edc7653cc8bc2689af8bf9c4f258df655",
-                "reference": "f5907d2edc7653cc8bc2689af8bf9c4f258df655",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Command/zipball/4999e430585142fa2b520d2543367b85fd21ed6a",
+                "reference": "4999e430585142fa2b520d2543367b85fd21ed6a",
                 "shasum": ""
             },
             "require": {
@@ -162,9 +162,9 @@
             "description": "Library created with the function of executing commands from PHP.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Command/issues",
-                "source": "https://github.com/Sleon4/Lion-Command/tree/v1.3"
+                "source": "https://github.com/Sleon4/Lion-Command/tree/v1.4"
             },
-            "time": "2022-05-03T16:19:49+00:00"
+            "time": "2022-05-04T21:08:51+00:00"
         },
         {
             "name": "lion-framework/lion-files",

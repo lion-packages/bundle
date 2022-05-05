@@ -26,9 +26,9 @@
         "lion-framework/lion-security": "^6.2",
         "lion-framework/lion-sql": "^4.0",
         "lion-framework/lion-files": "^4.1",
-        "lion-framework/lion-command": "^1.2",
         "lion-framework/lion-route": "^2.1",
-        "nesbot/carbon": "^2.57"
+        "lion-framework/lion-command": "^1.4",
+        "nesbot/carbon": "^2.57",
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5"
