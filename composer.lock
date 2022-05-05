@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "69d10df7c2b0410d8541a7d35e1b3202",
+    "content-hash": "222225cb327ad869f31d49f3ab3d0cda",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -249,21 +249,21 @@
         },
         {
             "name": "lion-framework/lion-route",
-            "version": "v2.1",
+            "version": "v2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Route.git",
-                "reference": "577712c9c7fac8449eb3be7a42e32813cf65d80b"
+                "reference": "690c74d3307ba0827dc451157c4393e72559b5bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Route/zipball/577712c9c7fac8449eb3be7a42e32813cf65d80b",
-                "reference": "577712c9c7fac8449eb3be7a42e32813cf65d80b",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Route/zipball/690c74d3307ba0827dc451157c4393e72559b5bf",
+                "reference": "690c74d3307ba0827dc451157c4393e72559b5bf",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.1",
-                "phroute/phroute": "^2.1"
+                "phroute/phroute": "^2.2"
             },
             "type": "library",
             "autoload": {
@@ -284,9 +284,9 @@
             "description": "This library has a fast router usage with regular expressions.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Route/issues",
-                "source": "https://github.com/Sleon4/Lion-Route/tree/v2.1"
+                "source": "https://github.com/Sleon4/Lion-Route/tree/v2.2"
             },
-            "time": "2022-05-03T15:42:46+00:00"
+            "time": "2022-05-05T17:55:47+00:00"
         },
         {
             "name": "lion-framework/lion-security",
@@ -619,24 +619,24 @@
         },
         {
             "name": "phroute/phroute",
-            "version": "v2.1.0",
+            "version": "v2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mrjgreen/phroute.git",
-                "reference": "dbe2b986f9ee1dd33dc956fcc35d1fa22e8e196c"
+                "reference": "c1893b885966a0c7b50b9239dd867fda7a312dfa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mrjgreen/phroute/zipball/dbe2b986f9ee1dd33dc956fcc35d1fa22e8e196c",
-                "reference": "dbe2b986f9ee1dd33dc956fcc35d1fa22e8e196c",
+                "url": "https://api.github.com/repos/mrjgreen/phroute/zipball/c1893b885966a0c7b50b9239dd867fda7a312dfa",
+                "reference": "c1893b885966a0c7b50b9239dd867fda7a312dfa",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.4.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "*",
-                "satooshi/php-coveralls": "dev-master"
+                "php-coveralls/php-coveralls": "^2.5",
+                "phpunit/phpunit": "^9.0"
             },
             "type": "library",
             "autoload": {
@@ -661,9 +661,9 @@
             ],
             "support": {
                 "issues": "https://github.com/mrjgreen/phroute/issues",
-                "source": "https://github.com/mrjgreen/phroute/tree/master"
+                "source": "https://github.com/mrjgreen/phroute/tree/v2.2.0"
             },
-            "time": "2015-07-22T20:46:43+00:00"
+            "time": "2022-05-04T16:22:33+00:00"
         },
         {
             "name": "psr/container",
