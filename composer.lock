@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "222225cb327ad869f31d49f3ab3d0cda",
+    "content-hash": "6e4689503963a90e1c878068b296d6f0",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -208,16 +208,16 @@
         },
         {
             "name": "lion-framework/lion-mailer",
-            "version": "v1.6",
+            "version": "v3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Mailer.git",
-                "reference": "3e9573a2008a89df962fceca20bee4ed24cc8950"
+                "reference": "fa1eada86273908dc5663a14ab6d81c2ef168c5f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Mailer/zipball/3e9573a2008a89df962fceca20bee4ed24cc8950",
-                "reference": "3e9573a2008a89df962fceca20bee4ed24cc8950",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Mailer/zipball/fa1eada86273908dc5663a14ab6d81c2ef168c5f",
+                "reference": "fa1eada86273908dc5663a14ab6d81c2ef168c5f",
                 "shasum": ""
             },
             "require": {
@@ -243,9 +243,9 @@
             "description": "Library created for easy email sending based on PHPMailer.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Mailer/issues",
-                "source": "https://github.com/Sleon4/Lion-Mailer/tree/v1.6"
+                "source": "https://github.com/Sleon4/Lion-Mailer/tree/v3.0"
             },
-            "time": "2022-05-03T16:11:10+00:00"
+            "time": "2022-05-09T15:11:58+00:00"
         },
         {
             "name": "lion-framework/lion-route",
