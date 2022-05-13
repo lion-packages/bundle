@@ -27,7 +27,7 @@
         "lion-framework/lion-sql": "^4.0",
         "lion-framework/lion-files": "^4.1",
         "lion-framework/lion-command": "^1.4",
-        "lion-framework/lion-route": "^2.2",
+        "lion-framework/lion-route": "^3.0",
         "nesbot/carbon": "^2.58"
     },
     "require-dev": {

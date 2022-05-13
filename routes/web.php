@@ -10,8 +10,8 @@ use App\Http\Request\Response;
 // || ------------------------------------------------------------------------------
 Route::init();
 
-Route::any('/', function() {
-	return (Response::getInstance())->response('success', 'Welcome to index!');
+Route::get('/', function() {
+	return Response::success('Welcome to index!');
 });
 
-Route::processOutput(Route::dispatch(3));
+Route::dispatch(3);
