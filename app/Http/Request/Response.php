@@ -8,7 +8,7 @@ class Response {
 
 	use Singleton;
 
-	public function response(string $status, ?string $message = null, array|object $data = []): object {
+	public static function response(string $status, ?string $message = null, array|object $data = []): object {
         return (object) [
             'status' => $status,
             'message' => $message,
@@ -16,24 +16,20 @@ class Response {
         ];
     }
 
-    public function success(?string $message = null, array|object $data = []): object {
-    	return $this->response('success', $message, $data);
+    public static function success(?string $message = null, array|object $data = []): object {
+    	return self::response('success', $message, $data);
     }
 
-    public function error(?string $message = null, array|object $data = []): object {
-    	return $this->response('error', $message, $data);
+    public static function error(?string $message = null, array|object $data = []): object {
+    	return self::response('error', $message, $data);
     }
 
-    public function warning(?string $message = null, array|object $data = []): object {
-    	return $this->response('warning', $message, $data);
+    public static function warning(?string $message = null, array|object $data = []): object {
+    	return self::response('warning', $message, $data);
     }
 
-    public function info(?string $message = null, array|object $data = []): object {
-    	return $this->response('info', $message, $data);
-    }
-
-    public function toResponse(object $info): object {
-        return $this->response($info->status, $info->message);
+    public static function info(?string $message = null, array|object $data = []): object {
+    	return self::response('info', $message, $data);
     }
 
 }

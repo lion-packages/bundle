@@ -1,4 +1,4 @@
-# Lion-PHP
+# Lion-Framework
 Framework for PHP in order to make the code cleaner and simpler.
 
 [![Latest Stable Version](http://poser.pugx.org/lion-framework/lion-framework/v)](https://packagist.org/packages/lion-framework/lion-framework) [![Total Downloads](http://poser.pugx.org/lion-framework/lion-framework/downloads)](https://packagist.org/packages/lion-framework/lion-framework) [![Latest Unstable Version](http://poser.pugx.org/lion-framework/lion-framework/v/unstable)](https://packagist.org/packages/lion-framework/lion-framework) [![License](http://poser.pugx.org/lion-framework/lion-framework/license)](https://packagist.org/packages/lion-framework/lion-framework) [![PHP Version Require](http://poser.pugx.org/lion-framework/lion-framework/require/php)](https://packagist.org/packages/lion-framework/lion-framework)
@@ -9,17 +9,23 @@ composer create-project lion-framework/lion-framework
 ```
 
 ```
-composer update
+composer install
 ```
 
-# Lion-PHP the API Backend
-Lion-PHP can also serve as an API backend for a JavaScript single page application or a mobile application. For example, you can use Lion-PHP as an API backend for your Vite.js app or Kotlin app. <br>
+# Lion-Framework the API Backend
+Lion-Framework can also serve as an API backend for a JavaScript single page application or a mobile application. For example, you can use Lion-Framework as an API backend for your Vite.js app or Kotlin app. <br>
 
-You can use Lion-PHP to provide authentication and data storage/retrieval for your application, while taking advantage of Lion-PHP services such as emails, databases, and more.
+You can use Lion-Framework to provide authentication and data storage/retrieval for your application, while taking advantage of Lion-Framework services such as emails, databases, and more.
 
 ## Usage
 ## Commands
-more information about the use of internal commands. [Lion-Command](https://github.com/Sleon4/Lion-Command)
+More information about the use of internal commands. [Lion-Command](https://github.com/Sleon4/Lion-Command)
+
+## Security
+Learn more about using security features. [Lion-Security](https://github.com/Sleon4/Lion-Security)
+
+## Carbon
+The Carbon class inherits from the PHP DateTime class and is installed by default. (nesbot/carbon)[https://carbon.nesbot.com/]
 
 ### 1. ROUTES AND MIDDLEWARE
 Lion-Route has been implemented for route handling. More information at [Lion-Route](https://github.com/Sleon4/Lion-Route). <br>
@@ -66,11 +72,11 @@ use App\Http\Request\Response;
 Route::init();
 
 Route::any('/', function() {
-	return (Response::getInstance())->response('success', 'Welcome to example!');
-	// return (Response::getInstance())->success('Welcome to example!');
-	// return (Response::getInstance())->error('Welcome to example!');
-	// return (Response::getInstance())->warning('Welcome to example!');
-	// return (Response::getInstance())->info('Welcome to example!');
+	return Response::response('success', 'Welcome to index!');
+	// return Response::success('Welcome to index!');
+	// return Response::error('Welcome to index!');
+	// return Response::warning('Welcome to index!');
+	// return Response::info('Welcome to index!');
 });
 
 Route::processOutput(Route::dispatch(3));
@@ -198,7 +204,8 @@ Note that at the framework level Lion-SQL is already installed and implemented, 
 [Valitron](https://github.com/vlucas/valitron) <br>
 [PHPMailer](https://github.com/PHPMailer/PHPMailer) <br>
 [PHP-JWT](https://github.com/firebase/php-jwt) <br>
-[Symfony-Console](https://github.com/symfony/console)
+[Symfony-Console](https://github.com/symfony/console) <br>
+[Carbon](https://carbon.nesbot.com/)
 
 ## Other libraries
 [Lion-SQL](https://github.com/Sleon4/Lion-SQL) <br>
@@ -209,4 +216,4 @@ Note that at the framework level Lion-SQL is already installed and implemented, 
 [Lion-Command](https://github.com/Sleon4/Lion-Command)
 
 ## License
-Copyright © 2022 [MIT License](https://github.com/Sleon4/Lion-PHP/blob/main/LICENSE)
+Copyright © 2022 [MIT License](https://github.com/Sleon4/Lion-Framework/blob/main/LICENSE)

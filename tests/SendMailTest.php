@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Email;
+namespace Tests;
 
 use PHPUnit\Framework\TestCase;
 use Dotenv\Dotenv;
@@ -10,7 +10,7 @@ use App\Http\Request\Request;
 
 class SendMailTest extends TestCase {
 
-	public function setUp(): void {
+	public function setUp() {
 		(Dotenv::createImmutable(__DIR__))->load();
 
 		Mailer::init([
