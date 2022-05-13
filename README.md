@@ -25,7 +25,7 @@ More information about the use of internal commands. [Lion-Command](https://gith
 Learn more about using security features. [Lion-Security](https://github.com/Sleon4/Lion-Security)
 
 ## Carbon
-The Carbon class inherits from the PHP DateTime class and is installed by default. (nesbot/carbon)[https://carbon.nesbot.com/]
+The Carbon class inherits from the PHP DateTime class and is installed by default. [nesbot/carbon](https://carbon.nesbot.com/)
 
 ### 1. ROUTES AND MIDDLEWARE
 Lion-Route has been implemented for route handling. More information at [Lion-Route](https://github.com/Sleon4/Lion-Route). <br>
