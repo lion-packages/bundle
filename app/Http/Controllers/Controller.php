@@ -22,7 +22,7 @@ class Controller {
 		$this->request = Request::getInstance()->request();
 		$this->json = Json::getInstance();
 		$this->response = Response::getInstance();
-		RSA::$url_path = $this->env->RSA_URL_PATH != '' ? $this->env->RSA_URL_PATH : RSA::$url_path;
+		RSA::$url_path = $this->env->RSA_URL_PATH === '' ? RSA::$url_path : $this->env->RSA_URL_PATH;
 
 		Mailer::init([
 			'info' => [

@@ -21,9 +21,7 @@ class RSACommand extends Command {
 	} 
 
 	protected function interact(InputInterface $input, OutputInterface $output) {
-		if ($this->env->RSA_URL_PATH != '') {
-			RSA::$url_path = $this->env->RSA_URL_PATH;
-		}
+		RSA::$url_path = $this->env->RSA_URL_PATH === '' ? RSA::$url_path : $this->env->RSA_URL_PATH;
 	}
 
 	protected function configure() { 
