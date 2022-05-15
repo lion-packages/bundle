@@ -10,7 +10,7 @@ use App\Http\Request\Request;
 
 class SendMailTest extends TestCase {
 
-	public function setUp() {
+	public function setUp(): void {
 		(Dotenv::createImmutable(__DIR__))->load();
 
 		Mailer::init([
@@ -26,7 +26,7 @@ class SendMailTest extends TestCase {
 		]);
 	}
 
-	public function testSendMailTest() {
+	public function testSendMailTest(): void {
 		$request = Mailer::send(
 			Attach::newAttach(
 				[$_ENV['MAIL_SEND_MAIL'], $_ENV['MAIL_USER_NAME']],
@@ -35,9 +35,9 @@ class SendMailTest extends TestCase {
 				null
 			),
 			Mailer::newInfo(
-				'example',
-				'example',
-				'example'
+				'Lion - Framework',
+				'Email generated from <strong><a href="https://github.com/Sleon4/Lion-Framework" target="_blank">Lion - Framework</a><strong>',
+				'Email generated from <strong><a href="https://github.com/Sleon4/Lion-Framework" target="_blank">Lion - Framework</a><strong>'
 			)
 		);
 
