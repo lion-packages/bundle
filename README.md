@@ -4,11 +4,11 @@ Framework for PHP in order to make the code cleaner and simpler.
 [![Latest Stable Version](http://poser.pugx.org/lion-framework/lion-framework/v)](https://packagist.org/packages/lion-framework/lion-framework) [![Total Downloads](http://poser.pugx.org/lion-framework/lion-framework/downloads)](https://packagist.org/packages/lion-framework/lion-framework) [![Latest Unstable Version](http://poser.pugx.org/lion-framework/lion-framework/v/unstable)](https://packagist.org/packages/lion-framework/lion-framework) [![License](http://poser.pugx.org/lion-framework/lion-framework/license)](https://packagist.org/packages/lion-framework/lion-framework) [![PHP Version Require](http://poser.pugx.org/lion-framework/lion-framework/require/php)](https://packagist.org/packages/lion-framework/lion-framework)
 
 ## Install
-```
+```shell
 composer create-project lion-framework/lion-framework
 ```
 
-```
+```shell
 composer install
 ```
 
@@ -21,6 +21,17 @@ You can use Lion-Framework to provide authentication and data storage/retrieval 
 ## Commands
 More information about the use of internal commands. [Lion-Command](https://github.com/Sleon4/Lion-Command)
 
+### COMMAND LIST
+```shell
+php lion new:controller <name-controller>
+php lion new:model <name-model>
+php lion new:middleware <name-middleware>
+php lion new:command <name-command>
+php lion new:capsule <name-capsule>
+php lion new:test <name-test>
+php lion new:rsa
+```
+
 ## Security
 Learn more about using security features. [Lion-Security](https://github.com/Sleon4/Lion-Security)
 
@@ -32,9 +43,6 @@ Lion-Route has been implemented for route handling. More information at [Lion-Ro
 Middleware is easy to implement. They must have the main class imported into Middleware, which initializes different functions and objects at the Middleware level. <br>
 The rule for middleware is simple, in the constructor they must be initialized with the $this->init() function. More information about the use of Middleware in [Lion-Route](https://github.com/Sleon4/Lion-Route). <br>
 You can create a middleware with the command.
-```
-php lion new:middleware HomeMiddleware
-```
 ```php
 namespace App\Http\Middleware;
 
@@ -104,9 +112,6 @@ class HomeController extends Controller {
 Controllers are easy to implement. They must have the parent class imported into `Controller`, which initializes different functions and objects at the Controller level. <br>
 The rule for Controllers is simple, in the constructor they must be initialized with the `$this->init()` function. <br>
 You can create a controller with the command.
-```
-php lion new:controller HomeController
-```
 ```php
 namespace App\Http\Controllers;
 
@@ -178,9 +183,6 @@ class HomeController extends Controller {
 The models are easy to implement. They must have the main class imported into `Model`, which initializes various functions and objects at the model level. <br>
 The rule for models is simple, in the constructor they must be initialized with the `$this->init()` function. <br>
 You can create a model with the command.
-```
-php lion new:model HomeModel
-```
 ```php
 namespace App\Models;
 

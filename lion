@@ -12,5 +12,11 @@ require_once("vendor/autoload.php");
 (Dotenv\Dotenv::createImmutable(__DIR__))->load();
 
 LionCommand\SystemCommand::init([
+	LionCommand\Command\ControllerCommand::class,
+    LionCommand\Command\ModelCommand::class,
+    LionCommand\Command\MiddlewareCommand::class,
+    LionCommand\Command\CommandsCommand::class,
+    LionCommand\Command\CapsuleCommand::class,
+    LionCommand\Command\TestCommand::class,
 	App\Console\RSACommand::class
 ]);
