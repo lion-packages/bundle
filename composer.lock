@@ -132,16 +132,16 @@
         },
         {
             "name": "lion-framework/lion-command",
-            "version": "v1.5",
+            "version": "v1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Command.git",
-                "reference": "3a011307cfe5a9cd1bfccb8341133b9e2630f8ee"
+                "reference": "582f1fd3a4694ea82b328ac810d0e746dfd1629c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Command/zipball/3a011307cfe5a9cd1bfccb8341133b9e2630f8ee",
-                "reference": "3a011307cfe5a9cd1bfccb8341133b9e2630f8ee",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Command/zipball/582f1fd3a4694ea82b328ac810d0e746dfd1629c",
+                "reference": "582f1fd3a4694ea82b328ac810d0e746dfd1629c",
                 "shasum": ""
             },
             "require": {
@@ -167,9 +167,9 @@
             "description": "Library created with the function of executing commands from PHP.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Command/issues",
-                "source": "https://github.com/Sleon4/Lion-Command/tree/v1.5"
+                "source": "https://github.com/Sleon4/Lion-Command/tree/v1.6"
             },
-            "time": "2022-05-15T16:44:40+00:00"
+            "time": "2022-05-17T00:57:40+00:00"
         },
         {
             "name": "lion-framework/lion-files",
@@ -338,16 +338,16 @@
         },
         {
             "name": "lion-framework/lion-sql",
-            "version": "v4.0",
+            "version": "v4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-SQL.git",
-                "reference": "c5764fe8f98765b8c4298f74c667b97d82431fba"
+                "reference": "7d3ca34719eac3a8a1ee9b69ce1dc6b1c9e7e9fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/c5764fe8f98765b8c4298f74c667b97d82431fba",
-                "reference": "c5764fe8f98765b8c4298f74c667b97d82431fba",
+                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/7d3ca34719eac3a8a1ee9b69ce1dc6b1c9e7e9fb",
+                "reference": "7d3ca34719eac3a8a1ee9b69ce1dc6b1c9e7e9fb",
                 "shasum": ""
             },
             "require": {
@@ -372,9 +372,9 @@
             "description": "package in charge of generating and executing MySQL processes.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-SQL/issues",
-                "source": "https://github.com/Sleon4/Lion-SQL/tree/v4.0"
+                "source": "https://github.com/Sleon4/Lion-SQL/tree/v4.1"
             },
-            "time": "2022-05-01T22:07:21+00:00"
+            "time": "2022-05-17T00:36:07+00:00"
         },
         {
             "name": "nesbot/carbon",
