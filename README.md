@@ -21,7 +21,6 @@ You can use Lion-Framework to provide authentication and data storage/retrieval 
 ## Commands
 More information about the use of internal commands. [Lion-Command](https://github.com/Sleon4/Lion-Command)
 
-### COMMAND LIST
 ```shell
 php lion new:controller <name-controller>
 php lion new:model <name-model>
