@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "823569f7facf03ab506292927bd84b4b",
+    "content-hash": "66c4d3cf75d17c0ce44356298b1f88fc",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -253,17 +253,57 @@
             "time": "2022-05-09T15:11:58+00:00"
         },
         {
-            "name": "lion-framework/lion-route",
-            "version": "v4.0",
+            "name": "lion-framework/lion-request",
+            "version": "v3.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Sleon4/Lion-Route.git",
-                "reference": "091120593bd0865ec605c083354b12f964f4a1a1"
+                "url": "https://github.com/Sleon4/Lion-Request.git",
+                "reference": "fdac4e8e154d3b1737a6efdec5867511dc6f9662"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Route/zipball/091120593bd0865ec605c083354b12f964f4a1a1",
-                "reference": "091120593bd0865ec605c083354b12f964f4a1a1",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Request/zipball/fdac4e8e154d3b1737a6efdec5867511dc6f9662",
+                "reference": "fdac4e8e154d3b1737a6efdec5867511dc6f9662",
+                "shasum": ""
+            },
+            "require-dev": {
+                "vlucas/phpdotenv": "^5.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "LionRequest\\": "src/LionRequest/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sergio León",
+                    "email": "sergioleon4004@hotmail.com"
+                }
+            ],
+            "description": "Library created to request input data and response requests",
+            "support": {
+                "issues": "https://github.com/Sleon4/Lion-Request/issues",
+                "source": "https://github.com/Sleon4/Lion-Request/tree/v3.0"
+            },
+            "time": "2022-05-17T18:07:00+00:00"
+        },
+        {
+            "name": "lion-framework/lion-route",
+            "version": "v5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Sleon4/Lion-Route.git",
+                "reference": "df70e1ab0bad133ffbdced882cd15501f425162f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Route/zipball/df70e1ab0bad133ffbdced882cd15501f425162f",
+                "reference": "df70e1ab0bad133ffbdced882cd15501f425162f",
                 "shasum": ""
             },
             "require": {
@@ -289,9 +329,9 @@
             "description": "This library has a fast router usage with regular expressions.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Route/issues",
-                "source": "https://github.com/Sleon4/Lion-Route/tree/v4.0"
+                "source": "https://github.com/Sleon4/Lion-Route/tree/v5.0"
             },
-            "time": "2022-05-15T14:50:09+00:00"
+            "time": "2022-05-17T01:52:06+00:00"
         },
         {
             "name": "lion-framework/lion-security",
