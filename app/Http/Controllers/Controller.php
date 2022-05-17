@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use LionMailer\Mailer;
-use App\Http\Request\{ Request, Json, Response };
+use LionRequest\{ Request, Json, Response };
 use LionSecurity\RSA;
 
 class Controller {

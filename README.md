@@ -21,7 +21,6 @@ You can use Lion-Framework to provide authentication and data storage/retrieval 
 ## Commands
 More information about the use of internal commands. [Lion-Command](https://github.com/Sleon4/Lion-Command)
 
-### COMMAND LIST
 ```shell
 php lion new:controller <name-controller>
 php lion new:model <name-model>
@@ -32,10 +31,13 @@ php lion new:test <name-test>
 php lion new:rsa
 ```
 
-## Security
+## REQUEST AND RESPONSE
+Learn more about using request features. [Lion-Request](https://github.com/Sleon4/Lion-Request)
+
+## SECURITY
 Learn more about using security features. [Lion-Security](https://github.com/Sleon4/Lion-Security)
 
-## Carbon
+## CARBON
 The Carbon class inherits from the PHP DateTime class and is installed by default. [nesbot/carbon](https://carbon.nesbot.com/)
 
 ### 1. ROUTES AND MIDDLEWARE
@@ -65,50 +67,7 @@ class HomeMiddleware extends Middleware {
 }
 ```
 
-### 2. RESPONSE
-A basic internal response management system has been implemented, the available options are:
-1. response(type, message, data)
-2. success(message, data)
-3. error(message, data)
-4. warning(message, data)
-5. info(message, data)
-
-```php
-use LionRoute\Route;
-use App\Http\Request\Response;
-
-Route::init();
-
-Route::any('/', function() {
-	return Response::response('success', 'Welcome to index!');
-	// return Response::success('Welcome to index!');
-	// return Response::error('Welcome to index!');
-	// return Response::warning('Welcome to index!');
-	// return Response::info('Welcome to index!');
-});
-
-Route::processOutput(Route::dispatch(3));
-```
-
-```php
-namespace App\Http\Controllers;
-
-use App\Http\Controllers\Controller;
-
-class HomeController extends Controller {
-
-	public function __construct() {
-		$this->init();
-	}
-
-	public function index() {
-		return $this->response->response('warning', 'Page not found. [index]');
-	}
-
-}
-```
-
-### 3. CONTROLLERS
+### 2. CONTROLLERS
 Controllers are easy to implement. They must have the parent class imported into `Controller`, which initializes different functions and objects at the Controller level. <br>
 The rule for Controllers is simple, in the constructor they must be initialized with the `$this->init()` function. <br>
 You can create a controller with the command.
@@ -130,56 +89,7 @@ class HomeController extends Controller {
 }
 ```
 
-#### 3.1 REQUEST
-A basic internal request management system has been implemented. Currently you only have data collection sent via HTTP requests and .env variable.
-```php
-namespace App\Http\Controllers;
-
-use App\Http\Controllers\Controller;
-
-class HomeController extends Controller {
-
-	public function __construct() {
-		$this->init();
-	}
-
-	public function index() {
-		$myEnv = $this->env; // available .env environment variables
-		return $this->response->success("Welcome {$this->request->name} {$this->env->SERVER_URL}");
-	}
-
-}
-```
-
-#### 3.2 JSON
-An internal class has been implemented for handling JSON objects. It has 2 basic functions `encode` and `decode`.
-```php
-namespace App\Http\Controllers;
-
-use App\Http\Controllers\Controller;
-
-class HomeController extends Controller {
-
-	public function __construct() {
-		$this->init();
-	}
-
-	public function index() {
-		$data = [
-			'name' => "Sergio León",
-			'email' => "lion-framework@lion.com"
-		];
-
-		$encode = $this->json->encode($data);
-		$decode = $this->json->decode($encode);
-
-		return $this->response->success("Welcome", $decode);
-	}
-
-}
-```
-
-### 4. MODELS
+### 3. MODELS
 The models are easy to implement. They must have the main class imported into `Model`, which initializes various functions and objects at the model level. <br>
 The rule for models is simple, in the constructor they must be initialized with the `$this->init()` function. <br>
 You can create a model with the command.

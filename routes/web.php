@@ -2,7 +2,7 @@
 
 use LionRoute\Route;
 
-use App\Http\Request\Response;
+use LionRequest\Response;
 
 // || ------------------------------------------------------------------------------
 // || Web Routes
