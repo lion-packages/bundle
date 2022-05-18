@@ -125,7 +125,8 @@ Note that at the framework level Lion-SQL is already installed and implemented, 
 [Lion-Route](https://github.com/Sleon4/Lion-Route) <br>
 [Lion-Mailer](https://github.com/Sleon4/Lion-Mailer) <br>
 [Lion-Files](https://github.com/Sleon4/Lion-Files) <br>
-[Lion-Command](https://github.com/Sleon4/Lion-Command)
+[Lion-Command](https://github.com/Sleon4/Lion-Command) <br>
+[Lion-Request](https://github.com/Sleon4/Lion-Request)
 
 ## License
 Copyright © 2022 [MIT License](https://github.com/Sleon4/Lion-Framework/blob/main/LICENSE)
