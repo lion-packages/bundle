@@ -18,10 +18,11 @@ class RSACommand extends Command {
 	protected function initialize(InputInterface $input, OutputInterface $output) {
 		echo("Initializing RSA service... \r\n\n");
 		$this->env = Request::getInstance()->env();
+		RSA::$url_path = $this->env->RSA_URL_PATH === '' ? RSA::$url_path : $this->env->RSA_URL_PATH;
 	} 
 
 	protected function interact(InputInterface $input, OutputInterface $output) {
-		RSA::$url_path = $this->env->RSA_URL_PATH === '' ? RSA::$url_path : $this->env->RSA_URL_PATH;
+
 	}
 
 	protected function configure() { 
