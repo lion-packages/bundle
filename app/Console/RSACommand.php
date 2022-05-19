@@ -8,7 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
 use LionSecurity\RSA;
 use LionFiles\FILES;
-use App\Http\Request\Request;
+use LionRequest\Request;
 
 class RSACommand extends Command { 
 
@@ -16,7 +16,7 @@ class RSACommand extends Command {
 	private object $env;
 
 	protected function initialize(InputInterface $input, OutputInterface $output) {
-		echo("Initializing RSA service... \r\n\n");
+		echo("Initializing RSA service...\r\n");
 		$this->env = Request::getInstance()->env();
 		RSA::$url_path = $this->env->RSA_URL_PATH === '' ? RSA::$url_path : $this->env->RSA_URL_PATH;
 	} 
