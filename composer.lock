@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "66c4d3cf75d17c0ce44356298b1f88fc",
+    "content-hash": "a415216bd32c5fa51c28b0ba5437c9ca",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -254,16 +254,16 @@
         },
         {
             "name": "lion-framework/lion-request",
-            "version": "v3.0.1",
+            "version": "v3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Request.git",
-                "reference": "666a6b6b90ac770ec5eab2d813954d416de56118"
+                "reference": "f380249d00b88f45d8d5c5f6090881e4afba995a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Request/zipball/666a6b6b90ac770ec5eab2d813954d416de56118",
-                "reference": "666a6b6b90ac770ec5eab2d813954d416de56118",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Request/zipball/f380249d00b88f45d8d5c5f6090881e4afba995a",
+                "reference": "f380249d00b88f45d8d5c5f6090881e4afba995a",
                 "shasum": ""
             },
             "require-dev": {
@@ -288,9 +288,9 @@
             "description": "Library created to request input data and response requests",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Request/issues",
-                "source": "https://github.com/Sleon4/Lion-Request/tree/v3.0.1"
+                "source": "https://github.com/Sleon4/Lion-Request/tree/v3.1"
             },
-            "time": "2022-05-19T00:11:54+00:00"
+            "time": "2022-05-19T14:39:42+00:00"
         },
         {
             "name": "lion-framework/lion-route",
@@ -3770,9 +3770,9 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": [],
-    "prefer-stable": false,
+    "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": ">=8.1"
