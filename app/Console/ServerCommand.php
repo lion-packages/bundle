@@ -11,7 +11,7 @@ class ServerCommand extends Command {
 	protected static $defaultName = "serve";
 
 	protected function initialize(InputInterface $input, OutputInterface $output) {
-
+		$output->write("<info>Starting Lion development server: </info>");
 	}
 
 	protected function interact(InputInterface $input, OutputInterface $output) {
@@ -29,9 +29,10 @@ class ServerCommand extends Command {
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$port = $input->getOption('port');
 		if (!$port) {
-			$port = 4040;
+			$port = 40400;
 		}
 
+		$output->writeln("<comment>http://localhost:{$port}</comment>");
 		shell_exec("php -S localhost:{$port}");
 		return Command::SUCCESS;
 	}
