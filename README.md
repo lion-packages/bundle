@@ -18,14 +18,14 @@ Lion-Framework can also serve as an API backend for a JavaScript single page app
 You can use Lion-Framework to provide authentication and data storage/retrieval for your application, while taking advantage of Lion-Framework services such as emails, databases, and more.
 
 ## Usage
-Start by running the server, by default it runs on port `4040`.
+Start by running the server, by default it runs on port `40400`.
 ```shell
 php lion serve
 ```
 
 use another port.
 ```shell
-php lion serve --port=4041
+php lion serve --port=40401
 ```
 
 ## Commands
