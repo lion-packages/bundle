@@ -39,7 +39,7 @@ php lion new:middleware <name-middleware>
 php lion new:command <name-command>
 php lion new:capsule <name-capsule>
 php lion new:test <name-test>
-php lion new:rsa
+php lion key:rsa
 ```
 
 ## REQUEST AND RESPONSE
