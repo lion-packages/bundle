@@ -48,6 +48,9 @@ Learn more about using request features. [Lion-Request](https://github.com/Sleon
 ## SECURITY
 Learn more about using security features. [Lion-Security](https://github.com/Sleon4/Lion-Security)
 
+## FILES
+Learn more about using functions in files. [Lion-Files](https://github.com/Sleon4/Lion-Files)
+
 ## CARBON
 The Carbon class inherits from the PHP DateTime class and is installed by default. [nesbot/carbon](https://carbon.nesbot.com/)
 
