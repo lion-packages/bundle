@@ -14,4 +14,4 @@ Route::get('/', function() {
 	return Response::success('Welcome to index! ' . Carbon\Carbon::now());
 });
 
-Route::dispatch(3);
+Route::dispatch(1);
