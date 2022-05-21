@@ -16,7 +16,7 @@ class RSACommand extends Command {
 	private object $env;
 
 	protected function initialize(InputInterface $input, OutputInterface $output) {
-		echo("Initializing RSA service...\r\n");
+		$output->writeln("<comment>Initializing RSA service...</comment>");
 		$this->env = Request::getInstance()->env();
 		RSA::$url_path = $this->env->RSA_URL_PATH === '' ? RSA::$url_path : $this->env->RSA_URL_PATH;
 	} 
@@ -34,7 +34,7 @@ class RSACommand extends Command {
 		RSA::createKeys();
 		FILES::remove('.rnd');
 
-		$output->writeln("Public and private key generated correctly.");
+		$output->writeln("<info>Public and private key created successfully</info>");
 		return Command::SUCCESS;
 	} 
 
