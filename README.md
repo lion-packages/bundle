@@ -56,8 +56,8 @@ The Carbon class inherits from the PHP DateTime class and is installed by defaul
 
 ### 1. ROUTES AND MIDDLEWARE
 Lion-Route has been implemented for route handling. More information at [Lion-Route](https://github.com/Sleon4/Lion-Route). <br>
-Middleware is easy to implement. They must have the main class imported into Middleware, which initializes different functions and objects at the Middleware level. <br>
-The rule for middleware is simple, in the constructor they must be initialized with the $this->init() function. More information about the use of Middleware in [Lion-Route](https://github.com/Sleon4/Lion-Route). <br>
+Middleware is easy to implement. They must have the main class imported into `Middleware`, which initializes different functions and objects at the Middleware level. <br>
+The rule for middleware is simple, in the constructor they must be initialized with the `$this->init()` function. More information about the use of Middleware in [Lion-Route](https://github.com/Sleon4/Lion-Route). <br>
 You can create a middleware with the command.
 ```php
 namespace App\Http\Middleware;
