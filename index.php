@@ -17,5 +17,6 @@ header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Allow: GET, POST, PUT, DELETE, OPTIONS");
 header("Content-Type: application/json; charset=UTF-8");
 date_default_timezone_set($_ENV['SERVER_DEFAULT_TIME_ZONE']);
+// session_start();
 
 include_once("routes/web.php");

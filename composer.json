@@ -22,13 +22,13 @@
     },
     "require": {
         "php": ">=8.1",
+        "lion-framework/lion-command": "^1.5",
+        "lion-framework/lion-files": "^4.1",
         "lion-framework/lion-mailer": "^3.0",
+        "lion-framework/lion-request": "^3.0",
+        "lion-framework/lion-route": "^5.0",
         "lion-framework/lion-security": "^6.3",
         "lion-framework/lion-sql": "^4.0",
-        "lion-framework/lion-files": "^4.1",
-        "lion-framework/lion-command": "^1.5",
-        "lion-framework/lion-route": "^5.0",
-        "lion-framework/lion-request": "^3.0",
         "nesbot/carbon": "^2.58"
     },
     "require-dev": {
