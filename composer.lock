@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ff457673cfe4c689ffeec8daf88c8b52",
+    "content-hash": "7d2af0abc5992068fcdd76e590e45c75",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -379,21 +379,21 @@
         },
         {
             "name": "lion-framework/lion-sql",
-            "version": "v4.3",
+            "version": "v4.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-SQL.git",
-                "reference": "26cf39cf858ea5d63634c36224ae323f84669842"
+                "reference": "38737ff7e350c9e3f93a982bfe28ee0300a05dee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/26cf39cf858ea5d63634c36224ae323f84669842",
-                "reference": "26cf39cf858ea5d63634c36224ae323f84669842",
+                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/38737ff7e350c9e3f93a982bfe28ee0300a05dee",
+                "reference": "38737ff7e350c9e3f93a982bfe28ee0300a05dee",
                 "shasum": ""
             },
             "require": {
                 "lion-framework/lion-request": "^3.1",
-                "php": ">=8.0.9"
+                "php": ">=8.1"
             },
             "type": "library",
             "autoload": {
@@ -411,12 +411,12 @@
                     "email": "sergioleon4004@hotmail.com"
                 }
             ],
-            "description": "package in charge of generating and executing MySQL processes.",
+            "description": "package in charge of generating and executing MySQL processes",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-SQL/issues",
-                "source": "https://github.com/Sleon4/Lion-SQL/tree/v4.3"
+                "source": "https://github.com/Sleon4/Lion-SQL/tree/v4.4"
             },
-            "time": "2022-05-20T18:13:43+00:00"
+            "time": "2022-05-23T20:59:37+00:00"
         },
         {
             "name": "nesbot/carbon",
@@ -3772,7 +3772,7 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
