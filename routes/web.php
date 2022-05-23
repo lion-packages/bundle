@@ -12,7 +12,7 @@ use Carbon\Carbon;
 Route::init();
 
 Route::get('/', function() {
-	return Response::success('Welcome to index! ' . Carbon::now());
+    return Response::success('Welcome to index! ' . Carbon::now());
 });
 
 Route::dispatch();
