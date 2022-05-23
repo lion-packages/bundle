@@ -3,6 +3,7 @@
 use LionRoute\Route;
 
 use LionRequest\Response;
+use Carbon\Carbon;
 
 // || ------------------------------------------------------------------------------
 // || Web Routes
@@ -11,7 +12,7 @@ use LionRequest\Response;
 Route::init();
 
 Route::get('/', function() {
-	return Response::success('Welcome to index! ' . Carbon\Carbon::now());
+	return Response::success('Welcome to index! ' . Carbon::now());
 });
 
-Route::dispatch(1);
+Route::dispatch();
