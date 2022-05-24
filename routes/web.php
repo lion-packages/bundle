@@ -14,7 +14,6 @@ use App\Http\Middleware\JWT\AuthorizationControlMiddleware;
  **/
 
 Route::newMiddleware([
-    ['jwt-exist', AuthorizationControlMiddleware::class, 'exist'],
     ['jwt-authorize', AuthorizationControlMiddleware::class, 'authorize']
 ]);
 
@@ -33,7 +32,7 @@ Route::prefix('auth', function() {
 });
 
 Route::prefix('reports', function() {
-    Route::middleware(['jwt-exist', 'jwt-authorize'], function() {
+    Route::middleware(['jwt-authorize'], function() {
         Route::get('word', function() {
             return Response::success('Word report');
         });
@@ -45,7 +44,7 @@ Route::prefix('reports', function() {
 
     Route::get('power-point', function() {
         return Response::success('Power-Point report');
-    }, ['jwt-exist', 'jwt-authorize']);
+    }, ['jwt-authorize']);
 
     Route::get('pdf', function() {
         return Response::success('PDF report');
