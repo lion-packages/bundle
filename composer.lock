@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7d2af0abc5992068fcdd76e590e45c75",
+    "content-hash": "82023c80389d1fa2946429a45d53e6cb",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -295,16 +295,16 @@
         },
         {
             "name": "lion-framework/lion-route",
-            "version": "v5.2",
+            "version": "v6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Route.git",
-                "reference": "198d9f645970f84c49227506731a670b1e3e5ad3"
+                "reference": "bca0feebbae4ff50edb25f3e8c75637d79d234db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Route/zipball/198d9f645970f84c49227506731a670b1e3e5ad3",
-                "reference": "198d9f645970f84c49227506731a670b1e3e5ad3",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Route/zipball/bca0feebbae4ff50edb25f3e8c75637d79d234db",
+                "reference": "bca0feebbae4ff50edb25f3e8c75637d79d234db",
                 "shasum": ""
             },
             "require": {
@@ -330,9 +330,9 @@
             "description": "This library has a fast router usage with regular expressions.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Route/issues",
-                "source": "https://github.com/Sleon4/Lion-Route/tree/v5.2"
+                "source": "https://github.com/Sleon4/Lion-Route/tree/v6.0"
             },
-            "time": "2022-05-23T14:30:27+00:00"
+            "time": "2022-05-24T17:05:36+00:00"
         },
         {
             "name": "lion-framework/lion-security",
