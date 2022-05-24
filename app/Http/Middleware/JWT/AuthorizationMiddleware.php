@@ -5,7 +5,7 @@ namespace App\Http\Middleware\JWT;
 use App\Http\Middleware\Middleware;
 use LionSecurity\JWT;
 
-class AuthorizationControlMiddleware extends Middleware {
+class AuthorizationMiddleware extends Middleware {
 
 	public function __construct() {
 		$this->init();
