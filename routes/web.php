@@ -30,23 +30,3 @@ Route::prefix('auth', function() {
         return Response::success('signout...');
     });
 });
-
-Route::prefix('reports', function() {
-    Route::middleware(['jwt-authorize'], function() {
-        Route::get('word', function() {
-            return Response::success('Word report');
-        });
-
-        Route::get('excel', function() {
-            return Response::success('Excel report');
-        });
-    });
-
-    Route::get('power-point', function() {
-        return Response::success('Power-Point report');
-    }, ['jwt-authorize']);
-
-    Route::get('pdf', function() {
-        return Response::success('PDF report');
-    });
-});

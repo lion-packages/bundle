@@ -11,12 +11,22 @@ class AuthorizationMiddleware extends Middleware {
 		$this->init();
 	}
 
+    public function notAuthorize(): void {
+        $headers = apache_request_headers();
+
+        if (isset($headers['Authorization'])) {
+            $this->processOutput(
+                $this->response->error('User in session, You must close the session')
+            );
+        }
+    }
+
 	public function authorize(): void {
 		$headers = apache_request_headers();
 
         if (!isset($headers['Authorization'])) {
             $this->processOutput(
-                $this->response->error('The JWT does not exist.')
+                $this->response->error('The JWT does not exist')
             );
         } else {
             if (preg_match('/Bearer\s(\S+)/', $headers['Authorization'], $matches)) {
@@ -27,7 +37,7 @@ class AuthorizationMiddleware extends Middleware {
                 }
             } else {
                 $this->processOutput(
-                    $this->response->error('Invalid JWT.')
+                    $this->response->error('Invalid JWT')
                 );
             }
         }
