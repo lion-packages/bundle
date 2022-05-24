@@ -4,7 +4,7 @@ use LionRoute\Route;
 use LionRequest\Response;
 use Carbon\Carbon;
 
-use App\Http\Middleware\JWT\AuthorizationControlMiddleware;
+use App\Http\Middleware\JWT\AuthorizationMiddleware;
 
 /**
  * ------------------------------------------------------------------------------
@@ -14,7 +14,8 @@ use App\Http\Middleware\JWT\AuthorizationControlMiddleware;
  **/
 
 Route::newMiddleware([
-    ['jwt-authorize', AuthorizationControlMiddleware::class, 'authorize']
+    ['auth', AuthorizationMiddleware::class, 'authorize'],
+    ['no-auth', AuthorizationMiddleware::class, 'notAuthorize']
 ]);
 
 Route::get('/', function() {
@@ -22,11 +23,15 @@ Route::get('/', function() {
 });
 
 Route::prefix('auth', function() {
-    Route::get('signin', function() {
+    Route::post('signin', function() {
         return Response::success('signin...');
-    });
+    }, ['no-auth']);
 
-    Route::get('signout', function() {
+    Route::post('signout', function() {
         return Response::success('signout...');
-    });
+    }, ['no-auth']);
+
+    Route::get('logout', function() {
+        return Response::success('logout...');
+    }, ['auth']);
 });
