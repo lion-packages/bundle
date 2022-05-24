@@ -6,10 +6,12 @@ use Carbon\Carbon;
 
 use App\Http\Middleware\JWT\AuthorizationControlMiddleware;
 
-// || ------------------------------------------------------------------------------
-// || Web Routes
-// || Here is where you can register web routes for your application.
-// || ------------------------------------------------------------------------------
+/**
+ * ------------------------------------------------------------------------------
+ * Web Routes
+ * Here is where you can register web routes for your application
+ * ------------------------------------------------------------------------------
+ **/
 
 Route::newMiddleware([
     ['jwt-exist', AuthorizationControlMiddleware::class, 'exist'],
