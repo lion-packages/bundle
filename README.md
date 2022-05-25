@@ -30,7 +30,6 @@ php lion serve --port=40401
 
 ## Commands
 More information about the use of internal commands. [Lion-Command](https://github.com/Sleon4/Lion-Command)
-
 ```shell
 php lion serve
 php lion new:controller <name-controller>
@@ -41,6 +40,13 @@ php lion new:capsule <name-capsule>
 php lion new:test <name-test>
 php lion key:rsa
 ```
+
+## Optional Parameters
+```shell
+php lion serve --port=40401
+php lion key:rsa --path="storage/other-secret-key/"
+```
+
 
 ## REQUEST AND RESPONSE
 Learn more about using request features. [Lion-Request](https://github.com/Sleon4/Lion-Request)
