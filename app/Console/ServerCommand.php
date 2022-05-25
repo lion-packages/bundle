@@ -22,7 +22,7 @@ class ServerCommand extends Command {
 		$this->setDescription(
 			"created command to start server locally"
 		)->addOption(
-			'port', null, InputOption::VALUE_REQUIRED, 'How many times should the message be printed?'
+			'port', null, InputOption::VALUE_REQUIRED, 'Do you want to set your own port?'
 		);
 	}
 
