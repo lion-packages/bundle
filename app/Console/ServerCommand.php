@@ -28,7 +28,7 @@ class ServerCommand extends Command {
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$port = $input->getOption('port');
-		if (!$port) {
+		if ($port === null) {
 			$port = 40400;
 		}
 
