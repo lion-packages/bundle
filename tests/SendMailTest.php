@@ -3,15 +3,13 @@
 namespace Tests;
 
 use PHPUnit\Framework\TestCase;
-use Dotenv\Dotenv;
 use LionMailer\Mailer;
 use LionMailer\DataMailer\Attach;
-use App\Http\Request\Request;
 
 class SendMailTest extends TestCase {
 
 	public function setUp(): void {
-		(Dotenv::createImmutable(__DIR__))->load();
+		(\Dotenv\Dotenv::createImmutable(__DIR__))->load();
 
 		Mailer::init([
 			'info' => [
@@ -26,7 +24,7 @@ class SendMailTest extends TestCase {
 		]);
 	}
 
-	public function testSendMailTest(): void {
+	public function testSendMail(): void {
 		$request = Mailer::send(
 			Attach::newAttach(
 				[$_ENV['MAIL_SEND_MAIL'], $_ENV['MAIL_USER_NAME']],
