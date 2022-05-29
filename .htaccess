@@ -1,3 +1,15 @@
+Options -Indexes
+
+<Files ~ "\.(env|env.example|editorconfig|json|md|gitignore|gitattributes|lock|xml|phpunit.result.cache)$">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files ~ "(lion|LICENSE)$">
+    Order allow,deny
+    Deny from all
+</Files>
+
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
