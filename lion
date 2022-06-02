@@ -18,6 +18,6 @@ LionCommand\SystemCommand::init([
     LionCommand\Command\CommandsCommand::class,
     LionCommand\Command\CapsuleCommand::class,
     LionCommand\Command\TestCommand::class,
-    App\Console\ServerCommand::class,
+    LionCommand\Command\ServerCommand::class,
 	App\Console\RSACommand::class
 ]);
