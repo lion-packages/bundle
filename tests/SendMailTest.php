@@ -9,7 +9,7 @@ use LionMailer\DataMailer\Attach;
 class SendMailTest extends TestCase {
 
 	public function setUp(): void {
-		(\Dotenv\Dotenv::createImmutable(__DIR__))->load();
+		(\Dotenv\Dotenv::createImmutable(__DIR__ . "/../"))->load();
 
 		Mailer::init([
 			'info' => [

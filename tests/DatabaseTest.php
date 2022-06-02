@@ -8,7 +8,7 @@ use LionSQL\Drivers\MySQLDriver as Builder;
 class DatabaseTest extends TestCase {
 
     public function setUp(): void {
-        (\Dotenv\Dotenv::createImmutable(__DIR__))->load();
+        (\Dotenv\Dotenv::createImmutable(__DIR__ . "/../"))->load();
     }
 
     public function testConnection(): void {
