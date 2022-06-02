@@ -1,6 +1,6 @@
 Options -Indexes
 
-<Files ~ "\.(env|env.example|editorconfig|json|md|gitignore|gitattributes|lock|xml|phpunit.result.cache)$">
+<Files ~ "\.(env|env.example|htaccess|editorconfig|json|md|gitignore|gitattributes|lock|xml|phpunit.result.cache)$">
     Order allow,deny
     Deny from all
 </Files>
