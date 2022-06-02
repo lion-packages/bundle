@@ -5,6 +5,7 @@ use LionRequest\Response;
 use Carbon\Carbon;
 
 use App\Http\Middleware\JWT\AuthorizationMiddleware;
+use App\Http\Controllers\Auth\{ LoginController, RegisterController };
 
 /**
  * ------------------------------------------------------------------------------
@@ -23,15 +24,7 @@ Route::get('/', function() {
 });
 
 Route::prefix('auth', function() {
-    Route::post('signin', function() {
-        return Response::success('signin...');
-    }, ['no-auth']);
-
-    Route::post('signout', function() {
-        return Response::success('signout...');
-    }, ['no-auth']);
-
-    Route::get('logout', function() {
-        return Response::success('logout...');
-    }, ['auth']);
+    Route::get('signin', [LoginController::class, 'auth'], ['no-auth']);
+    Route::get('logout', [LoginController::class, 'logout'], ['auth']);
+    Route::get('signout', [RegisterController::class, 'register'], ['no-auth']);
 });
