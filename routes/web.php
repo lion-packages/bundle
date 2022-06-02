@@ -24,7 +24,7 @@ Route::get('/', function() {
 });
 
 Route::prefix('auth', function() {
-    Route::get('signin', [LoginController::class, 'auth'], ['no-auth']);
+    Route::post('signin', [LoginController::class, 'auth'], ['no-auth']);
     Route::get('logout', [LoginController::class, 'logout'], ['auth']);
-    Route::get('signout', [RegisterController::class, 'register'], ['no-auth']);
+    Route::post('signout', [RegisterController::class, 'register'], ['no-auth']);
 });
