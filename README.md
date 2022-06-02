@@ -25,7 +25,7 @@ php lion serve
 
 use another port.
 ```shell
-php lion serve --port=40401
+php lion serve --port=4041
 ```
 
 ## Commands
@@ -43,7 +43,7 @@ php lion key:rsa
 
 ## Optional Parameters
 ```shell
-php lion serve --port=40401
+php lion serve --port=4041
 php lion key:rsa --path="storage/other-secret-key/"
 ```
 
