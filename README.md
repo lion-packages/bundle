@@ -18,35 +18,35 @@ Lion-Framework can also serve as an API backend for a JavaScript single page app
 You can use Lion-Framework to provide authentication and data storage/retrieval for your application, while taking advantage of Lion-Framework services such as emails, databases, and more.
 
 ## Usage
-Start by running the server, by default it runs on port `4040`.
+Start by running the server, by default it runs on port `8000`.
 ```shell
 php lion serve
 ```
 
 use another port.
 ```shell
-php lion serve --port=4041
+php lion serve --port=8001
 ```
 
 ## Commands
 More information about the use of internal commands. [Lion-Command](https://github.com/Sleon4/Lion-Command)
 ```shell
 php lion serve
-php lion new:controller <name-controller>
-php lion new:model <name-model>
-php lion new:middleware <name-middleware>
-php lion new:command <name-command>
-php lion new:capsule <name-capsule>
-php lion new:test <name-test>
+php lion new:controller <name_controller>
+php lion new:model <name_model>
+php lion new:middleware <name_middleware>
+php lion new:command <name_command>
+php lion new:capsule <name_capsule>
+php lion new:test <name_test>
 php lion key:rsa
+php lion test
 ```
 
 ## Optional Parameters
 ```shell
-php lion serve --port=4041
+php lion serve --port=8001
 php lion key:rsa --path="storage/other-secret-key/"
 ```
-
 
 ## REQUEST AND RESPONSE
 Learn more about using request features. [Lion-Request](https://github.com/Sleon4/Lion-Request)
