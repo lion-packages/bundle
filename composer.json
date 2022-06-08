@@ -24,7 +24,7 @@
     },
     "require": {
         "php": ">=8.1",
-        "lion-framework/lion-command": "^1.7",
+        "lion-framework/lion-command": "^1.10",
         "lion-framework/lion-files": "^4.3",
         "lion-framework/lion-mailer": "^3.1",
         "lion-framework/lion-request": "^3.1",

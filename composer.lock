@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "911ca83f74cc0e1002690da257f2cc1f",
+    "content-hash": "791b6ede9609edfe585734f8ecc9101a",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -132,16 +132,16 @@
         },
         {
             "name": "lion-framework/lion-command",
-            "version": "v1.9",
+            "version": "v1.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Command.git",
-                "reference": "86dee3f3a764bba0d96ef8b87a36043f8b0f08c6"
+                "reference": "c0e885b1125cf946b72ddd53dc51310db2bd0f7c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Command/zipball/86dee3f3a764bba0d96ef8b87a36043f8b0f08c6",
-                "reference": "86dee3f3a764bba0d96ef8b87a36043f8b0f08c6",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Command/zipball/c0e885b1125cf946b72ddd53dc51310db2bd0f7c",
+                "reference": "c0e885b1125cf946b72ddd53dc51310db2bd0f7c",
                 "shasum": ""
             },
             "require": {
@@ -167,9 +167,9 @@
             "description": "Library created with the function of executing commands from PHP.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Command/issues",
-                "source": "https://github.com/Sleon4/Lion-Command/tree/v1.9"
+                "source": "https://github.com/Sleon4/Lion-Command/tree/v1.10"
             },
-            "time": "2022-06-02T13:38:40+00:00"
+            "time": "2022-06-08T00:19:45+00:00"
         },
         {
             "name": "lion-framework/lion-files",
@@ -3789,21 +3789,21 @@
         },
         {
             "name": "webmozart/assert",
-            "version": "1.10.0",
+            "version": "1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmozarts/assert.git",
-                "reference": "6964c76c7804814a842473e0c8fd15bab0f18e25"
+                "reference": "11cb2199493b2f8a3b53e7f19068fc6aac760991"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozarts/assert/zipball/6964c76c7804814a842473e0c8fd15bab0f18e25",
-                "reference": "6964c76c7804814a842473e0c8fd15bab0f18e25",
+                "url": "https://api.github.com/repos/webmozarts/assert/zipball/11cb2199493b2f8a3b53e7f19068fc6aac760991",
+                "reference": "11cb2199493b2f8a3b53e7f19068fc6aac760991",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2 || ^8.0",
-                "symfony/polyfill-ctype": "^1.8"
+                "ext-ctype": "*",
+                "php": "^7.2 || ^8.0"
             },
             "conflict": {
                 "phpstan/phpstan": "<0.12.20",
@@ -3841,9 +3841,9 @@
             ],
             "support": {
                 "issues": "https://github.com/webmozarts/assert/issues",
-                "source": "https://github.com/webmozarts/assert/tree/1.10.0"
+                "source": "https://github.com/webmozarts/assert/tree/1.11.0"
             },
-            "time": "2021-03-09T10:59:23+00:00"
+            "time": "2022-06-03T18:03:27+00:00"
         }
     ],
     "aliases": [],
