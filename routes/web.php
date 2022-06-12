@@ -15,8 +15,8 @@ use App\Http\Controllers\Users\UsersController;
  **/
 
 Route::newMiddleware([
-    ['auth', AuthorizationMiddleware::class, 'authorize'],
-    ['no-auth', AuthorizationMiddleware::class, 'notAuthorize']
+    ['jwt-auth', AuthorizationMiddleware::class, 'authorize'],
+    ['jwt-no-auth', AuthorizationMiddleware::class, 'notAuthorize']
 ]);
 
 Route::any('/', function() {

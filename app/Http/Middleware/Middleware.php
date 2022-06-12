@@ -12,11 +12,11 @@ class Middleware {
 	protected Json $json;
 	protected Response $response;
 
-	public function __construct() {
+	private function __construct() {
 
 	}
 
-	public function init(): void {
+	protected function init(): void {
 		$this->env = Request::getInstance()->env();
 		$this->request = Request::getInstance()->request();
 		$this->json = Json::getInstance();
@@ -24,7 +24,7 @@ class Middleware {
 		RSA::$url_path = $this->env->RSA_URL_PATH === '' ? RSA::$url_path : $this->env->RSA_URL_PATH;
 	}
 
-	public function processOutput($response): void {
+	protected function processOutput($response): void {
 		echo(json_encode($response));
 		exit();
 	}
