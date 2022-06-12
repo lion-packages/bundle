@@ -8,12 +8,12 @@ use LionRequest\Request;
 class Model {
 
 	protected object $env;
-	
-	public function __construct() {
-		
+
+	private function __construct() {
+
 	}
 
-	public function init(array $config = []): void {
+	protected function init(array $config = []): void {
 		$this->env = Request::getInstance()->env();
 
 		Builder::init([
