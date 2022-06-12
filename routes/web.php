@@ -5,7 +5,7 @@ use LionRequest\Response;
 use Carbon\Carbon;
 
 use App\Http\Middleware\JWT\AuthorizationMiddleware;
-use App\Http\Controllers\Auth\{ LoginController, RegisterController };
+use App\Http\Controllers\Users\UsersController;
 
 /**
  * ------------------------------------------------------------------------------
@@ -19,12 +19,11 @@ Route::newMiddleware([
     ['no-auth', AuthorizationMiddleware::class, 'notAuthorize']
 ]);
 
-Route::get('/', function() {
+Route::any('/', function() {
     return Response::success('Welcome to index! ' . Carbon::now());
 });
 
-Route::prefix('auth', function() {
-    Route::post('signin', [LoginController::class, 'auth'], ['no-auth']);
-    Route::get('logout', [LoginController::class, 'logout'], ['auth']);
-    Route::post('signout', [RegisterController::class, 'register'], ['no-auth']);
+Route::prefix('users', function() {
+    Route::post('create', [UsersController::class, 'createUsers']);
+    Route::get('read', [UsersController::class, 'readUsers']);
 });

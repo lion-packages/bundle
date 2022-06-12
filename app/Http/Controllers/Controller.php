@@ -13,11 +13,11 @@ class Controller {
 	protected Json $json;
 	protected Response $response;
 
-	public function __construct() {
+	private function __construct() {
 
 	}
 
-	public function init(): void {
+	protected function init(): void {
 		$this->env = Request::getInstance()->env();
 		$this->request = Request::getInstance()->request();
 		$this->json = Json::getInstance();
