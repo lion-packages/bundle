@@ -12,7 +12,7 @@ class RegisterController extends Controller {
 	}
 
     public function register() {
-        return Response::success('signout...');
+        return $this->response->success('signout...');
     }
 
 }

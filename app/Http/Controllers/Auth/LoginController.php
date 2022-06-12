@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use LionRequest\Response;
 
 class LoginController extends Controller {
 
@@ -12,11 +11,11 @@ class LoginController extends Controller {
 	}
 
     public function auth() {
-        return Response::success('signin...');
+        return $this->response->success('signin...');
     }
 
     public function logout() {
-        return Response::success('logout...');
+        return $this->response->success('logout...');
     }
 
 }
