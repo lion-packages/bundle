@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Http\Request\Request;
 use LionSQL\Drivers\MySQLDriver as Builder;
+use LionRequest\Request;
 
 class Model {
 
