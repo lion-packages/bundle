@@ -13,7 +13,7 @@ use App\Http\Controllers\Users\UsersController;
  * Here is where you can register web routes for your application
  * ------------------------------------------------------------------------------
  **/
-Route::init();
+
 Route::newMiddleware([
     ['jwt-exist', AuthorizationMiddleware::class, 'exist'],
     ['jwt-authorize', AuthorizationMiddleware::class, 'authorize'],
@@ -32,5 +32,3 @@ Route::prefix('users', function() {
     Route::get('read', [UsersController::class, 'readUsers']);
     Route::get('read/{idusers}', [UsersController::class, 'readUsers']);
 });
-
-Route::dispatch();
