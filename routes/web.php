@@ -4,7 +4,6 @@ use LionRoute\Route;
 use LionRequest\Response;
 use Carbon\Carbon;
 
-use App\Http\Middleware\JWT\AuthorizationMiddleware;
 use App\Http\Controllers\Users\UsersController;
 
 /**
@@ -13,12 +12,6 @@ use App\Http\Controllers\Users\UsersController;
  * Here is where you can register web routes for your application
  * ------------------------------------------------------------------------------
  **/
-
-Route::newMiddleware([
-    ['jwt-exist', AuthorizationMiddleware::class, 'exist'],
-    ['jwt-authorize', AuthorizationMiddleware::class, 'authorize'],
-    ['jwt-not-authorize', AuthorizationMiddleware::class, 'notAuthorize']
-]);
 
 Route::any('/', function() {
     return Response::success('Welcome to index! ' . Carbon::now());

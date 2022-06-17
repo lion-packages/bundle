@@ -18,5 +18,6 @@ header("Content-Type: application/json; charset=UTF-8");
 date_default_timezone_set($_ENV['SERVER_DEFAULT_TIME_ZONE']);
 
 LionRoute\Route::init();
+include_once("../routes/middleware.php");
 include_once("../routes/web.php");
 LionRoute\Route::dispatch();
