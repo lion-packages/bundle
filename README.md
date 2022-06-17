@@ -40,6 +40,7 @@ php lion new:capsule <name_capsule>
 php lion new:test <name_test>
 php lion key:rsa
 php lion test
+php lion token:jwt
 ```
 
 ## Optional Parameters
