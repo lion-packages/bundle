@@ -7,21 +7,33 @@ use App\Models\Users\UsersModel;
 
 class UsersController extends Controller {
 
-	private UsersModel $usersModel;
+    private UsersModel $usersModel;
 
-	public function __construct() {
-		$this->init();
-		$this->usersModel = new UsersModel();
-	}
+    public function __construct() {
+        $this->init();
+        $this->usersModel = new UsersModel();
+    }
 
-	public function createUsers(): object {
-		return $this->response->success(
-			$this->usersModel->createUsersDB($this->request)
-		);
-	}
+    public function createUsers(): object {
+        if (!$this->usersModel->createUsersDB()) {
+            return $this->response->error("An error occurred while creating the user");
+        }
 
-	public function readUsers(): array {
-		return $this->usersModel->readUsersDB();
-	}
+        return $this->response->success("user created successfully");
+    }
+
+    public function readUsers(?string $idusers = null): array|object {
+        if ($idusers === null) {
+            return $this->usersModel->readUsersDB();
+        }
+
+        $data = $this->usersModel->readUsersDB();
+        $id = (int) $idusers;
+        if ($id > 5) {
+            return $data[0];
+        }
+
+        return $data[$id - 1];
+    }
 
 }
