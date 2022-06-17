@@ -25,7 +25,7 @@ Route::any('/', function() {
 });
 
 Route::prefix('users', function() {
-    Route::middleware(['exist'], function() {
+    Route::middleware(['jwt-exist'], function() {
         Route::post('create', [UsersController::class, 'createUsers']);
     });
 

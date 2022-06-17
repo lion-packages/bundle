@@ -14,10 +14,6 @@ class AuthorizationMiddleware extends Middleware {
     public function exist(): void {
         $headers = apache_request_headers();
 
-        $this->processOutput($headers);
-
-        var_dump($headers);
-
         if (!isset($headers['Authorization'])) {
             $this->processOutput(
                 $this->response->error('The JWT does not exist')
