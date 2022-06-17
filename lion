@@ -20,5 +20,6 @@ LionCommand\SystemCommand::init([
     LionCommand\Command\TestCommand::class,
     LionCommand\Command\ServerCommand::class,
 	App\Console\RSACommand::class,
-    App\Console\TestCommand::class
+    App\Console\TestCommand::class,
+    App\Console\GenerateJWTCommand::class
 ]);

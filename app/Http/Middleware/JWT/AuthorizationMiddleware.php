@@ -3,7 +3,7 @@
 namespace App\Http\Middleware\JWT;
 
 use App\Http\Middleware\Middleware;
-use LionSecurity\JWT;
+use LionSecurity\{ JWT, RSA };
 
 class AuthorizationMiddleware extends Middleware {
 
@@ -26,7 +26,6 @@ class AuthorizationMiddleware extends Middleware {
 
         if (preg_match('/Bearer\s(\S+)/', $headers['Authorization'], $matches)) {
             $jwt = JWT::decode($matches[1]);
-
             if ($jwt->status === 'error') $this->processOutput($jwt);
         } else {
             $this->processOutput(
