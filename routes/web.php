@@ -1,9 +1,6 @@
 <?php
 
 use LionRoute\Route;
-use LionRequest\Response;
-use Carbon\Carbon;
-
 use App\Http\Controllers\Users\UsersController;
 
 /**
@@ -14,7 +11,7 @@ use App\Http\Controllers\Users\UsersController;
  **/
 
 Route::any('/', function() {
-    return Response::success('Welcome to index! ' . Carbon::now());
+    return LionRequest\Response::success('Welcome to index! ' . Carbon\Carbon::now());
 });
 
 Route::prefix('users', function() {

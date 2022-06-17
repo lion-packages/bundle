@@ -88,6 +88,17 @@ class HomeMiddleware extends Middleware {
 }
 ```
 
+to add a middleware you must open the middleware file located in `routes/middleware.php`, where there are default middleware for the use of JWT.
+```php
+use App\Http\Middleware\JWT\AuthorizationMiddleware;
+
+LionRoute\Route::newMiddleware([
+    ['jwt-exist', AuthorizationMiddleware::class, 'exist'],
+    ['jwt-authorize', AuthorizationMiddleware::class, 'authorize'],
+    ['jwt-not-authorize', AuthorizationMiddleware::class, 'notAuthorize']
+]);
+```
+
 ### 2. CONTROLLERS
 Controllers are easy to implement. They must have the parent class imported into `Controller`, which initializes different functions and objects at the Controller level. <br>
 The rule for Controllers is simple, in the constructor they must be initialized with the `$this->init()` function. <br>
