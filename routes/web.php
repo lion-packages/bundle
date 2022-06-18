@@ -11,7 +11,7 @@ use App\Http\Controllers\Users\UsersController;
  **/
 
 Route::any('/', function() {
-    return LionRequest\Response::success('Welcome to index! ' . Carbon\Carbon::now());
+    return LionRequest\Response::success('Welcome to index');
 });
 
 Route::prefix('users', function() {
@@ -19,6 +19,8 @@ Route::prefix('users', function() {
         Route::post('create', [UsersController::class, 'createUsers']);
     });
 
-    Route::get('read', [UsersController::class, 'readUsers']);
-    Route::get('read/{idusers}', [UsersController::class, 'readUsers']);
+    Route::middleware(['jwt-not-exist'], function() {
+        Route::get('read', [UsersController::class, 'readUsers']);
+        Route::get('read/{idusers}', [UsersController::class, 'readUsers']);
+    });
 });
