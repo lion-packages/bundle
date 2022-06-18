@@ -90,12 +90,12 @@ class HomeMiddleware extends Middleware {
 
 to add a middleware you must open the middleware file located in `routes/middleware.php`, where there are default middleware for the use of JWT.
 ```php
-use App\Http\Middleware\JWT\AuthorizationMiddleware;
-
 LionRoute\Route::newMiddleware([
-    ['jwt-exist', AuthorizationMiddleware::class, 'exist'],
-    ['jwt-authorize', AuthorizationMiddleware::class, 'authorize'],
-    ['jwt-not-authorize', AuthorizationMiddleware::class, 'notAuthorize']
+    App\Http\Middleware\JWT\AuthorizationMiddleware::class => [
+        ['name' => "jwt-exist", 'method' => "exist"],
+        ['name' => "jwt-authorize", 'method' => "authorize"],
+        ['name' => "jwt-not-authorize", 'method' => "notAuthorize"]
+    ]
 ]);
 ```
 
