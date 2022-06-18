@@ -336,16 +336,16 @@
         },
         {
             "name": "lion-framework/lion-security",
-            "version": "v6.4.1",
+            "version": "v6.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Security.git",
-                "reference": "89c8b87563d6620ce58931c3b13f324c7684a1cc"
+                "reference": "24f0eb203858df97e82a7b76814d8c6589c1283b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Security/zipball/89c8b87563d6620ce58931c3b13f324c7684a1cc",
-                "reference": "89c8b87563d6620ce58931c3b13f324c7684a1cc",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Security/zipball/24f0eb203858df97e82a7b76814d8c6589c1283b",
+                "reference": "24f0eb203858df97e82a7b76814d8c6589c1283b",
                 "shasum": ""
             },
             "require": {
@@ -373,9 +373,9 @@
             "description": "Library created with the function of implementing AES, RSA and JWT Security functions for PHP.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Security/issues",
-                "source": "https://github.com/Sleon4/Lion-Security/tree/v6.4.1"
+                "source": "https://github.com/Sleon4/Lion-Security/tree/v6.4.2"
             },
-            "time": "2022-06-17T00:48:11+00:00"
+            "time": "2022-06-18T14:01:18+00:00"
         },
         {
             "name": "lion-framework/lion-sql",
