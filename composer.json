@@ -28,7 +28,7 @@
         "lion-framework/lion-files": "^4.3",
         "lion-framework/lion-mailer": "^3.1",
         "lion-framework/lion-request": "^3.1",
-        "lion-framework/lion-route": "^6.1",
+        "lion-framework/lion-route": "^6.2",
         "lion-framework/lion-security": "^6.4",
         "lion-framework/lion-sql": "^5.1",
         "nesbot/carbon": "^2.58"
