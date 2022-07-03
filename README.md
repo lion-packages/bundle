@@ -41,6 +41,7 @@ php lion new:test <name_test>
 php lion key:rsa
 php lion test
 php lion token:jwt
+php lion route:list
 ```
 
 ## Optional Parameters
@@ -48,6 +49,13 @@ php lion token:jwt
 php lion serve --port=8001
 php lion key:rsa --path="storage/other-secret-key/"
 ```
+
+## Route list
+To view the available routes, start the local server first, run the `php lion serve` command, and then view the routes.
+```php
+php lion route:list
+```
+Warning note: Routes are loaded with server path `SERVER_URL` set in .env, modify this path to avoid errors in process execution.
 
 ## REQUEST AND RESPONSE
 Learn more about using request features. [Lion-Request](https://github.com/Sleon4/Lion-Request)
