@@ -72,8 +72,7 @@ The Carbon class inherits from the PHP DateTime class and is installed by defaul
 ### 1. ROUTES AND MIDDLEWARE
 Lion-Route has been implemented for route handling. More information at [Lion-Route](https://github.com/Sleon4/Lion-Route). <br>
 Middleware is easy to implement. They must have the main class imported into `Middleware`, which initializes different functions and objects at the Middleware level. <br>
-The rule for middleware is simple, in the constructor they must be initialized with the `$this->init()` function. More information about the use of Middleware in [Lion-Route](https://github.com/Sleon4/Lion-Route). <br>
-You can create a middleware with the command.
+The rule for middleware is simple, in the constructor they must be initialized with the `$this->init()` function. More information about the use of Middleware in [Lion-Route](https://github.com/Sleon4/Lion-Route).
 ```php
 namespace App\Http\Middleware;
 
@@ -109,8 +108,7 @@ LionRoute\Route::newMiddleware([
 
 ### 2. CONTROLLERS
 Controllers are easy to implement. They must have the parent class imported into `Controller`, which initializes different functions and objects at the Controller level. <br>
-The rule for Controllers is simple, in the constructor they must be initialized with the `$this->init()` function. <br>
-You can create a controller with the command.
+The rule for Controllers is simple, in the constructor they must be initialized with the `$this->init()` function.
 ```php
 namespace App\Http\Controllers;
 
@@ -131,8 +129,7 @@ class HomeController extends Controller {
 
 ### 3. MODELS
 The models are easy to implement. They must have the main class imported into `Model`, which initializes various functions and objects at the model level. <br>
-The rule for models is simple, in the constructor they must be initialized with the `$this->init()` function. <br>
-You can create a model with the command.
+The rule for models is simple, in the constructor they must be initialized with the `$this->init()` function.
 ```php
 namespace App\Models;
 
