@@ -11,10 +11,14 @@ use App\Http\Controllers\Users\UsersController;
  **/
 
 Route::any('/', function() {
-    return LionRequest\Response::success('Welcome to index');
+    return LionRequest\Response::success("Welcome to index");
 });
 
 Route::prefix('users', function() {
+    Route::get('/', function() {
+        return LionRequest\Response::success("Welcome to users");
+    });
+
     Route::middleware(['jwt-exist', 'jwt-authorize'], function() {
         Route::post('create', [UsersController::class, 'createUsers']);
     });

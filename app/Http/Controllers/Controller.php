@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use LionMailer\Mailer;
 use LionRequest\{ Request, Json, Response };
-use LionSecurity\RSA;
 
 class Controller {
 
@@ -22,7 +21,6 @@ class Controller {
         $this->request = Request::getInstance()->request();
         $this->json = Json::getInstance();
         $this->response = Response::getInstance();
-        RSA::$url_path = $this->env->RSA_URL_PATH === '' ? RSA::$url_path : "../{$this->env->RSA_URL_PATH}";
 
         Mailer::init([
             'info' => [
