@@ -24,7 +24,7 @@ Route::prefix('users', function() {
     });
 
     Route::middleware(['jwt-not-exist'], function() {
-        Route::get('read', [UsersController::class, 'readUsers']);
+        Route::get('read', [UsersController::class, 'readUsers'], ['auth']);
         Route::get('read/{idusers}', [UsersController::class, 'readUsers']);
     });
 });

@@ -21,5 +21,6 @@ LionCommand\SystemCommand::init([
     LionCommand\Command\ServerCommand::class,
 	App\Console\RSACommand::class,
     App\Console\TestCommand::class,
-    App\Console\GenerateJWTCommand::class
+    App\Console\GenerateJWTCommand::class,
+    App\Console\RouteListCommand::class
 ]);
