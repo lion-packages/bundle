@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use LionMailer\Mailer;
 use LionRequest\{ Request, Json, Response };
 
 class Controller {
@@ -22,7 +21,7 @@ class Controller {
         $this->json = Json::getInstance();
         $this->response = Response::getInstance();
 
-        Mailer::init([
+        \LionMailer\Mailer::init([
             'info' => [
                 'debug' => (int) $this->env->MAIL_DEBUG,
                 'host' => $this->env->MAIL_HOST,

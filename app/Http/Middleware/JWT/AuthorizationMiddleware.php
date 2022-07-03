@@ -3,7 +3,7 @@
 namespace App\Http\Middleware\JWT;
 
 use App\Http\Middleware\Middleware;
-use LionSecurity\{ JWT, RSA };
+use LionSecurity\JWT;
 
 class AuthorizationMiddleware extends Middleware {
 

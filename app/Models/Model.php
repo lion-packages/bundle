@@ -2,9 +2,6 @@
 
 namespace App\Models;
 
-use LionSQL\Drivers\MySQLDriver as Builder;
-use LionRequest\Request;
-
 class Model {
 
 	protected object $env;
@@ -14,9 +11,9 @@ class Model {
 	}
 
 	protected function init(array $config = []): void {
-		$this->env = Request::getInstance()->env();
+		$this->env = \LionRequest\Request::getInstance()->env();
 
-		Builder::init([
+		\LionSQL\Drivers\MySQLDriver::init([
 			'host' => isset($config['host']) ? $config['host'] : $this->env->DB_HOST,
             'port' => isset($config['port']) ? $config['port'] : $this->env->DB_PORT,
 			'db_name' => isset($config['db_name']) ? $config['db_name'] : $this->env->DB_NAME,

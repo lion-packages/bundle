@@ -29,7 +29,7 @@ class UsersController extends Controller {
 
         $data = $this->usersModel->readUsersDB();
         $id = (int) $idusers;
-        if ($id > 5) {
+        if ($id < 1 || $id > 5) {
             return $data[0];
         }
 

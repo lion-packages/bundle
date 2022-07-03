@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use LionRequest\{ Request, Json, Response };
-use LionSecurity\RSA;
 
 class Middleware {
 
