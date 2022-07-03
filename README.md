@@ -52,7 +52,7 @@ php lion key:rsa --path="storage/other-secret-key/"
 
 ## Route list
 To view the available routes, start the local server first, run the `php lion serve` command, and then view the routes.
-```php
+```shell
 php lion route:list
 ```
 Warning note: Routes are loaded with server path `SERVER_URL` set in .env, modify this path to avoid errors in process execution.
