@@ -9,6 +9,7 @@
 
 require_once("vendor/autoload.php");
 
+include_once("routes/console.php");
 (Dotenv\Dotenv::createImmutable(__DIR__))->load();
 
 LionCommand\SystemCommand::init([
@@ -19,8 +20,9 @@ LionCommand\SystemCommand::init([
     LionCommand\Command\CapsuleCommand::class,
     LionCommand\Command\TestCommand::class,
     LionCommand\Command\ServerCommand::class,
-	App\Console\RSACommand::class,
+    App\Console\RSACommand::class,
     App\Console\TestCommand::class,
     App\Console\GenerateJWTCommand::class,
-    App\Console\RouteListCommand::class
+    App\Console\RouteListCommand::class,
+    ...$commands
 ]);
