@@ -7,9 +7,9 @@ use LionSecurity\JWT;
 
 class AuthorizationMiddleware extends Middleware {
 
-	public function __construct() {
-		$this->init();
-	}
+    public function __construct() {
+        $this->init();
+    }
 
     public function exist(): void {
         $headers = apache_request_headers();

@@ -3,6 +3,8 @@ A simple and easy to use PHP framework
 
 [![Latest Stable Version](http://poser.pugx.org/lion-framework/lion-framework/v)](https://packagist.org/packages/lion-framework/lion-framework) [![Total Downloads](http://poser.pugx.org/lion-framework/lion-framework/downloads)](https://packagist.org/packages/lion-framework/lion-framework) [![License](http://poser.pugx.org/lion-framework/lion-framework/license)](https://packagist.org/packages/lion-framework/lion-framework) [![PHP Version Require](http://poser.pugx.org/lion-framework/lion-framework/require/php)](https://packagist.org/packages/lion-framework/lion-framework)
 
+#### Note: very soon youtube tutorials on the basic operation of the framework
+
 ## Install
 ```shell
 composer create-project lion-framework/lion-framework
@@ -70,27 +72,59 @@ Learn more about using functions in files. [Lion-Files](https://github.com/Sleon
 The Carbon class inherits from the PHP DateTime class and is installed by default. [nesbot/carbon](https://carbon.nesbot.com/)
 
 ### 1. ROUTES AND MIDDLEWARE
-Lion-Route has been implemented for route handling. More information at [Lion-Route](https://github.com/Sleon4/Lion-Route). <br>
+Lion-Route has been implemented for route handling. More information at [Lion-Route](https://github.com/Sleon4/Lion-Route), from the web you can add all the necessary routes for the operation of your web application `routes/web.php`
+```php
+Route::any('/', function() {
+	return LionRequest\Response::success("Welcome to index");
+});
+```
+
 Middleware is easy to implement. They must have the main class imported into `Middleware`, which initializes different functions and objects at the Middleware level. <br>
 The rule for middleware is simple, in the constructor they must be initialized with the `$this->init()` function. More information about the use of Middleware in [Lion-Route](https://github.com/Sleon4/Lion-Route).
 ```php
-namespace App\Http\Middleware;
+namespace App\Http\Middleware\JWT;
 
 use App\Http\Middleware\Middleware;
+use LionSecurity\JWT;
 
-class HomeMiddleware extends Middleware {
+class AuthorizationMiddleware extends Middleware {
 
-	public function __construct() {
-		$this->init();
-	}
+    public function __construct() {
+        $this->init();
+    }
 
-	public function example(): void {
-		if (!$this->request->user_session) {
-			$this->processOutput(
-				$this->response->error('Username does not exist.')
-			);
-		}
-	}
+    public function exist(): void {
+        $headers = apache_request_headers();
+
+        if (!isset($headers['Authorization'])) {
+            $this->processOutput(
+                $this->response->error('The JWT does not exist')
+            );
+        }
+    }
+
+    public function authorize(): void {
+        $headers = apache_request_headers();
+
+        if (preg_match('/Bearer\s(\S+)/', $headers['Authorization'], $matches)) {
+            $jwt = JWT::decode($matches[1]);
+            if ($jwt->status === 'error') $this->processOutput($jwt);
+        } else {
+            $this->processOutput(
+                $this->response->error('Invalid JWT')
+            );
+        }
+    }
+
+    public function notAuthorize(): void {
+        $headers = apache_request_headers();
+
+        if (isset($headers['Authorization'])) {
+            $this->processOutput(
+                $this->response->error('User in session, You must close the session')
+            );
+        }
+    }
 
 }
 ```
@@ -98,11 +132,11 @@ class HomeMiddleware extends Middleware {
 to add a middleware you must open the middleware file located in `routes/middleware.php`, where there are default middleware for the use of JWT.
 ```php
 LionRoute\Route::newMiddleware([
-    App\Http\Middleware\JWT\AuthorizationMiddleware::class => [
-        ['name' => "jwt-exist", 'method' => "exist"],
-        ['name' => "jwt-authorize", 'method' => "authorize"],
-        ['name' => "jwt-not-authorize", 'method' => "notAuthorize"]
-    ]
+	App\Http\Middleware\JWT\AuthorizationMiddleware::class => [
+		['name' => "jwt-exist", 'method' => "exist"],
+		['name' => "jwt-authorize", 'method' => "authorize"],
+		['name' => "jwt-not-authorize", 'method' => "notAuthorize"]
+	]
 ]);
 ```
 
