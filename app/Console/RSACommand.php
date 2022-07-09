@@ -7,16 +7,13 @@ use Symfony\Component\Console\Input\{ InputInterface, InputArgument, InputOption
 use Symfony\Component\Console\Output\OutputInterface;
 use LionSecurity\RSA;
 use LionFiles\FILES;
-use LionRequest\Request;
 
 class RSACommand extends Command {
 
 	protected static $defaultName = "key:rsa";
-	private object $env;
 
 	protected function initialize(InputInterface $input, OutputInterface $output) {
 		$output->writeln("<comment>Initializing RSA service...</comment>");
-		$this->env = Request::getInstance()->env();
 	}
 
 	protected function interact(InputInterface $input, OutputInterface $output) {
@@ -34,7 +31,7 @@ class RSACommand extends Command {
 	protected function execute(InputInterface $input, OutputInterface $output) {
         $path = $input->getOption('path');
         if ($path === null) {
-            RSA::$url_path = $this->env->RSA_URL_PATH === '' ? RSA::$url_path : $this->env->RSA_URL_PATH;
+            if ($_ENV['RSA_URL_PATH'] != '') RSA::$url_path = $_ENV['RSA_URL_PATH'];
         } else {
             RSA::$url_path = $path;
         }
