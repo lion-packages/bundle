@@ -29,7 +29,7 @@ class RouteListCommand extends Command {
         array_pop($routes);
 
         $table = new Table($output);
-        $table->setStyle('box');
+        // $table->setStyle('box');
 
         $rows = [];
         $i = 0;
@@ -49,13 +49,13 @@ class RouteListCommand extends Command {
                     isset($controller[1]) ? $controller[1] : 'callback'
                 ];
 
-                if ($i < ($total_cont - 1)) $rows[] = new TableSeparator();
+                // if ($i < ($total_cont - 1)) $rows[] = new TableSeparator();
             }
 
             $i++;
         }
 
-        $table->setHeaders(['#', 'HTTP METHOD', 'URL', 'CONTROLLER', 'METHOD'])->setRows($rows);
+        $table->setHeaders(['#', 'TYPE', 'URL', 'CONTROLLER', 'METHOD'])->setRows($rows);
         $table->render();
 
         return Command::SUCCESS;
