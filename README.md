@@ -63,6 +63,7 @@ The commands must be added in an array from `routes/console.php`
 ```php
 $commands = [
     // commands
+    // example App\Console\NewCommand::class
 ];
 ```
 
