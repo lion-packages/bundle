@@ -13,7 +13,7 @@ class GenerateJWTCommand extends Command {
 
     protected function initialize(InputInterface $input, OutputInterface $output) {
         $output->writeln("<comment>Generating JWT...</comment>");
-        RSA::$url_path = $_ENV['RSA_URL_PATH'] === '' ? RSA::$url_path : $_ENV['RSA_URL_PATH'];
+        if ($_ENV['RSA_URL_PATH'] != '') RSA::$url_path = $_ENV['RSA_URL_PATH'];
     }
 
     protected function interact(InputInterface $input, OutputInterface $output) {
@@ -29,7 +29,7 @@ class GenerateJWTCommand extends Command {
             JWT::encode([
                 'system' => "Lion Framework",
                 'autor' => "Sergio Leon",
-                'github' => "https://github.com/Sleon4"
+                'github' => "https://github.com/Sleon4/Lion-Framework"
             ])
         );
 
