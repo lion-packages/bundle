@@ -20,7 +20,7 @@ class RouteListCommand extends Command {
     }
 
     protected function configure() {
-        $this->setDescription("");
+        $this->setDescription("Command to view a list of available web routes");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
