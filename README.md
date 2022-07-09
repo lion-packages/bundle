@@ -57,6 +57,15 @@ To view the available routes, start the local server first, run the `php lion se
 ```shell
 php lion route:list
 ```
+
+## Add commands
+Los comandos deben ser agregados en un array desde `routes/console.php`
+```php
+$commands = [
+    // commands
+];
+```
+
 Warning note: Routes are loaded with server path `SERVER_URL` set in .env, modify this path to avoid errors in process execution.
 
 ## REQUEST AND RESPONSE
