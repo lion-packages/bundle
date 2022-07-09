@@ -10,10 +10,6 @@ A simple and easy to use PHP framework
 composer create-project lion-framework/lion-framework
 ```
 
-```shell
-composer install
-```
-
 # Lion-Framework the API Backend
 Lion-Framework can also serve as an API backend for a JavaScript single page application or a mobile application. For example, you can use Lion-Framework as an API backend for your Vite.js app or Kotlin app. <br>
 
