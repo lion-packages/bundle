@@ -59,7 +59,7 @@ php lion route:list
 ```
 
 ## Add commands
-Los comandos deben ser agregados en un array desde `routes/console.php`
+The commands must be added in an array from `routes/console.php`
 ```php
 $commands = [
     // commands
