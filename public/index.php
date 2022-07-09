@@ -10,7 +10,7 @@
 // vendor import
 require_once(__DIR__ . "/../vendor/autoload.php");
 
-//i .env import
+// .env import
 (Dotenv\Dotenv::createImmutable(__DIR__ . "/../"))->load();
 
 // initialize RSA path
