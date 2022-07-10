@@ -23,9 +23,5 @@ include_once("../routes/header.php");
 LionRoute\Route::init();
 include_once("../routes/middleware.php");
 include_once("../routes/web.php");
-
-LionRoute\Route::any('route-list', function() {
-    return LionRoute\Route::getRoutes();
-});
-
+LionRoute\Route::get('route-list', function() { return LionRoute\Route::getRoutes(); });
 LionRoute\Route::dispatch();
