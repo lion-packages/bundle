@@ -1,19 +1,34 @@
 <?php
 
 /**
-* Lion-PHP - A simple and easy to use PHP framework
-*
-* @package  Lion-Framework
-* @author   Sergio León <sergioleon4004@hotmail.com>
-**/
+ * ------------------------------------------------------------------------------
+ * Register The Auto Loader
+ * ------------------------------------------------------------------------------
+ * Composer provides a convenient, automatically generated class loader for
+ * this application
+ * ------------------------------------------------------------------------------
+ **/
 
-// vendor import
 require_once(__DIR__ . "/../vendor/autoload.php");
 
-// .env import
+/**
+ * ------------------------------------------------------------------------------
+ * Register environment variable loader automatically
+ * ------------------------------------------------------------------------------
+ * .dotenv provides an easy way to access environment variables with $_ENV
+ * ------------------------------------------------------------------------------
+ **/
+
 (Dotenv\Dotenv::createImmutable(__DIR__ . "/../"))->load();
 
-// initialize RSA path
+/**
+ * ------------------------------------------------------------------------------
+ * Import route for RSA
+ * ------------------------------------------------------------------------------
+ * Load default route for RSA
+ * ------------------------------------------------------------------------------
+ **/
+
 if ($_ENV['RSA_URL_PATH'] != '') LionSecurity\RSA::$url_path = "../{$_ENV['RSA_URL_PATH']}";
 
 // all headers import

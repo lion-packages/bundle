@@ -1,17 +1,35 @@
 <?php
 
 /**
-* Lion-PHP - A simple and easy to use PHP framework
-*
-* @package  Lion-Framework
-* @author   Sergio León <sergioleon4004@hotmail.com>
-**/
+ * ------------------------------------------------------------------------------
+ * Register The Auto Loader
+ * ------------------------------------------------------------------------------
+ * Composer provides a convenient, automatically generated class loader for
+ * this application
+ * ------------------------------------------------------------------------------
+ **/
 
 require_once("vendor/autoload.php");
 
-include_once("routes/console.php");
+/**
+ * ------------------------------------------------------------------------------
+ * Register environment variable loader automatically
+ * ------------------------------------------------------------------------------
+ * .dotenv provides an easy way to access environment variables with $_ENV
+ * ------------------------------------------------------------------------------
+ **/
+
 (Dotenv\Dotenv::createImmutable(__DIR__))->load();
 
+/**
+ * ------------------------------------------------------------------------------
+ * Console Routes
+ * ------------------------------------------------------------------------------
+ * This is where you can record your commands for your application
+ * ------------------------------------------------------------------------------
+ **/
+
+include_once("routes/console.php");
 LionCommand\SystemCommand::init([
 	LionCommand\Command\ControllerCommand::class,
     LionCommand\Command\ModelCommand::class,
