@@ -9,5 +9,7 @@
  **/
 
 $commands = [
-    // commands...
+    App\Console\RSACommand::class,
+    App\Console\GenerateJWTCommand::class,
+    App\Console\RouteListCommand::class
 ];
