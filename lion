@@ -29,7 +29,6 @@ require_once("vendor/autoload.php");
  * ------------------------------------------------------------------------------
  **/
 
-include_once("routes/console.php");
 LionCommand\SystemCommand::init([
 	LionCommand\Command\ControllerCommand::class,
     LionCommand\Command\ModelCommand::class,
@@ -39,5 +38,5 @@ LionCommand\SystemCommand::init([
     LionCommand\Command\TestCommand::class,
     LionCommand\Command\ServerCommand::class,
     LionCommand\Command\RunTestCommand::class,
-    ...$commands
+    ...include_once("routes/console.php")
 ]);
