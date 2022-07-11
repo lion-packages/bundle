@@ -63,6 +63,7 @@ return [
     App\Console\RouteListCommand::class
 ];
 ```
+Warning note: Routes are loaded with server path `SERVER_URL` set in .env, modify this path to avoid errors in process execution.
 
 ## Add headers
 Headers must be added in an array from `routes/header.php`
@@ -75,8 +76,6 @@ LionRequest\Request::header([
     ['type' => "Access-Control-Allow-Headers", 'value' => "Origin, X-Requested-With, Content-Type, Accept, Authorization"]
 ]);
 ```
-
-Warning note: Routes are loaded with server path `SERVER_URL` set in .env, modify this path to avoid errors in process execution.
 
 ## REQUEST AND RESPONSE
 Learn more about using request features. [Lion-Request](https://github.com/Sleon4/Lion-Request)
