@@ -57,9 +57,10 @@ php lion route:list
 ## Add commands
 The commands must be added in an array from `routes/console.php`
 ```php
-$commands = [
-    // commands
-    // example App\Console\NewCommand::class
+return [
+    App\Console\RSACommand::class,
+    App\Console\GenerateJWTCommand::class,
+    App\Console\RouteListCommand::class
 ];
 ```
 
