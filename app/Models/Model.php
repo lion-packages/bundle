@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use LionRequest\Response;
-
 class Model {
 
 	protected object $env;
@@ -29,9 +27,7 @@ class Model {
             'charset' => isset($config['charset']) ? $config['charset'] : $this->env->DB_CHARSET
         ]);
 
-        if ($response_conn->status === 'error') {
-            $this->processOutput(Response::error($response_conn->message));
-        }
+        if ($response_conn->status === 'error') $this->processOutput($response_conn);
     }
 
 }
