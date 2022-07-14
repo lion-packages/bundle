@@ -22,9 +22,4 @@ class Middleware {
         $this->response = Response::getInstance();
     }
 
-    protected function processOutput($response): void {
-        echo(json_encode($response));
-        exit();
-    }
-
 }
