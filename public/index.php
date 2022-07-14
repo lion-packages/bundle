@@ -31,12 +31,44 @@ require_once(__DIR__ . "/../vendor/autoload.php");
 
 if ($_ENV['RSA_URL_PATH'] != '') LionSecurity\RSA::$url_path = "../{$_ENV['RSA_URL_PATH']}";
 
-// all headers import
-include_once("../routes/header.php");
+/**
+ * ------------------------------------------------------------------------------
+ * Web headers
+ * ------------------------------------------------------------------------------
+ * This is where you can register headers for your application
+ * ------------------------------------------------------------------------------
+ **/
+include_once(__DIR__ . "/../routes/header.php");
 
-// importing and initialize web routes
+/**
+ * ------------------------------------------------------------------------------
+ * Start database service
+ * ------------------------------------------------------------------------------
+ * Upload data to establish a connection
+ * ------------------------------------------------------------------------------
+ **/
+
+$response_conn = LionSQL\Drivers\MySQLDriver::init([
+    'host' => $_ENV['DB_HOST'],
+    'port' => $_ENV['DB_PORT'],
+    'db_name' => $_ENV['DB_NAME'],
+    'user' => $_ENV['DB_USER'],
+    'password' => $_ENV['DB_PASSWORD'],
+    'charset' => $_ENV['DB_CHARSET']
+]);
+
+if ($response_conn->status === 'error') die(LionRequest\Json::encode($response_conn));
+
+/**
+ * ------------------------------------------------------------------------------
+ * Web Routes
+ * ------------------------------------------------------------------------------
+ * Here is where you can register web routes for your application
+ * ------------------------------------------------------------------------------
+ **/
+
 LionRoute\Route::init();
-include_once("../routes/middleware.php");
-include_once("../routes/web.php");
-LionRoute\Route::get('route-list', function() { return LionRoute\Route::getRoutes(); });
+include_once(__DIR__ . "/../routes/middleware.php");
+include_once(__DIR__ . "/../routes/web.php");
+LionRoute\Route::get('route-list', fn() => LionRoute\Route::getRoutes());
 LionRoute\Route::dispatch();
