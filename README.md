@@ -104,6 +104,7 @@ namespace App\Http\Middleware\JWT;
 
 use App\Http\Middleware\Middleware;
 use LionSecurity\JWT;
+use LionRequest\{ Json, Response };
 
 class AuthorizationMiddleware extends Middleware {
 
@@ -115,8 +116,8 @@ class AuthorizationMiddleware extends Middleware {
         $headers = apache_request_headers();
 
         if (!isset($headers['Authorization'])) {
-            $this->processOutput(
-                $this->response->error('The JWT does not exist')
+            Response::finish(
+                Json::encode($this->response->error('The JWT does not exist'))
             );
         }
     }
@@ -126,10 +127,10 @@ class AuthorizationMiddleware extends Middleware {
 
         if (preg_match('/Bearer\s(\S+)/', $headers['Authorization'], $matches)) {
             $jwt = JWT::decode($matches[1]);
-            if ($jwt->status === 'error') $this->processOutput($jwt);
+            if ($jwt->status === 'error') Response::finish(Json::encode($jwt));
         } else {
-            $this->processOutput(
-                $this->response->error('Invalid JWT')
+            Response::finish(
+                Json::encode($this->response->error('Invalid JWT'))
             );
         }
     }
@@ -138,8 +139,8 @@ class AuthorizationMiddleware extends Middleware {
         $headers = apache_request_headers();
 
         if (isset($headers['Authorization'])) {
-            $this->processOutput(
-                $this->response->error('User in session, You must close the session')
+            Response::finish(
+                Json::encode($this->response->error('User in session, You must close the session'))
             );
         }
     }
