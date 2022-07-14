@@ -57,7 +57,11 @@ $response_conn = LionSQL\Drivers\MySQLDriver::init([
     'charset' => $_ENV['DB_CHARSET']
 ]);
 
-if ($response_conn->status === 'error') die(LionRequest\Json::encode($response_conn));
+if ($response_conn->status === 'error') {
+    LionRequest\Response::finish(
+        LionRequest\Json::encode($response_conn)
+    );
+}
 
 /**
  * ------------------------------------------------------------------------------
