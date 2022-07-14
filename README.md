@@ -199,6 +199,12 @@ class HomeModel extends Model {
 Note that when you want to implement methods that implement processes with databases, the `LionSql\Drivers\MySQLDriver` class must be imported for their respective operation. more information on [Lion-SQL](https://github.com/Sleon4/Lion-SQL). <br>
 Note that at the framework level Lion-SQL is already installed and implemented, the variables are located in the `.env` file, follow the import instructions for their use.
 
+### DEPLOY HEROKU
+Create the Procfile file in the main directory of your project (without extension and with a capital P), and inside it place the following
+```
+web: vendor/bin/heroku-php-apache2 public/
+```
+
 ## Credits
 [PHRoute](https://github.com/mrjgreen/phroute) <br>
 [PHP dotenv](https://github.com/vlucas/phpdotenv) <br>
