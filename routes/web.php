@@ -1,7 +1,6 @@
 <?php
 
 use LionRoute\Route;
-use App\Http\Controllers\Users\UsersController;
 
 /**
  * ------------------------------------------------------------------------------
@@ -11,21 +10,5 @@ use App\Http\Controllers\Users\UsersController;
  * ------------------------------------------------------------------------------
  **/
 
-Route::any('/', function() {
-    return LionRequest\Response::success("Welcome to index");
-});
-
-Route::prefix('users', function() {
-    Route::get('/', function() {
-        return LionRequest\Response::success("Welcome to users");
-    });
-
-    Route::middleware(['jwt-exist', 'jwt-authorize'], function() {
-        Route::post('create', [UsersController::class, 'createUsers']);
-    });
-
-    Route::middleware(['jwt-not-exist'], function() {
-        Route::get('read', [UsersController::class, 'readUsers']);
-        Route::get('read/{idusers}', [UsersController::class, 'readUsers']);
-    });
-});
+Route::get('/', fn() => LionRequest\Response::success("Welcome to index"));
+Route::get('users', fn() => LionRequest\Response::success("All users"));
