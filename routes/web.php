@@ -11,7 +11,4 @@ use LionRoute\Route;
  **/
 
 Route::get('/', fn() => LionRequest\Response::success("Welcome to index"));
-
-Route::middleware(['jwt-authorize', 'jwt-exist'], function() {
-    Route::get('users', fn() => LionRequest\Response::success("All users"));
-});
+Route::get('users', fn() => LionRequest\Response::success("All users"));
