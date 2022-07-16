@@ -70,7 +70,7 @@ Headers must be added in an array from `routes/header.php`
 ```php
 LionRequest\Request::header([
     ['type' => "Content-Type", 'value' => "application/json; charset=UTF-8"],
-    ['type' => "Access-Control-Allow-Origin", 'value' => '**'],
+    ['type' => "Access-Control-Allow-Origin", 'value' => '*'],
     ['type' => "Access-Control-Max-Age", 'value' => '3600'],
     ['type' => "Access-Control-Allow-Methods", 'value' => "GET, POST, PUT, DELETE"],
     ['type' => "Access-Control-Allow-Headers", 'value' => "Origin, X-Requested-With, Content-Type, Accept, Authorization"]
