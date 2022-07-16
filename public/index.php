@@ -65,6 +65,26 @@ if ($response_conn->status === 'error') {
 
 /**
  * ------------------------------------------------------------------------------
+ * Start email sending service
+ * ------------------------------------------------------------------------------
+ * enter account access credentials
+ * ------------------------------------------------------------------------------
+ **/
+
+LionMailer\Mailer::init([
+    'info' => [
+        'debug' => (int) $_ENV['MAIL_DEBUG'],
+        'host' => $_ENV['MAIL_HOST'],
+        'port' => (int) $_ENV['MAIL_PORT'],
+        'email' => $_ENV['MAIL_EMAIL'],
+        'password' => $_ENV['MAIL_PASSWORD'],
+        'user_name' => $_ENV['MAIL_USER_NAME'],
+        'encryption' => $_ENV['MAIL_ENCRYPTION'] === 'false' ? false : ($_ENV['MAIL_ENCRYPTION'] === 'true' ? true : false)
+    ]
+]);
+
+/**
+ * ------------------------------------------------------------------------------
  * Web Routes
  * ------------------------------------------------------------------------------
  * Here is where you can register web routes for your application

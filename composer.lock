@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "firebase/php-jwt",
-            "version": "v6.2.0",
+            "version": "v6.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/firebase/php-jwt.git",
-                "reference": "d28e6df83830252650da4623c78aaaf98fb385f3"
+                "reference": "018dfc4e1da92ad8a1b90adc4893f476a3b41cb8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/d28e6df83830252650da4623c78aaaf98fb385f3",
-                "reference": "d28e6df83830252650da4623c78aaaf98fb385f3",
+                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/018dfc4e1da92ad8a1b90adc4893f476a3b41cb8",
+                "reference": "018dfc4e1da92ad8a1b90adc4893f476a3b41cb8",
                 "shasum": ""
             },
             "require": {
@@ -64,9 +64,9 @@
             ],
             "support": {
                 "issues": "https://github.com/firebase/php-jwt/issues",
-                "source": "https://github.com/firebase/php-jwt/tree/v6.2.0"
+                "source": "https://github.com/firebase/php-jwt/tree/v6.3.0"
             },
-            "time": "2022-05-13T20:54:50+00:00"
+            "time": "2022-07-15T16:48:45+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -216,16 +216,16 @@
         },
         {
             "name": "lion-framework/lion-mailer",
-            "version": "v3.1",
+            "version": "v3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Mailer.git",
-                "reference": "722ba87cdff3348fb51bed50869cd98a01966123"
+                "reference": "90c7002bf08b62efa370ec8e7ac54b5a1339dca2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Mailer/zipball/722ba87cdff3348fb51bed50869cd98a01966123",
-                "reference": "722ba87cdff3348fb51bed50869cd98a01966123",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Mailer/zipball/90c7002bf08b62efa370ec8e7ac54b5a1339dca2",
+                "reference": "90c7002bf08b62efa370ec8e7ac54b5a1339dca2",
                 "shasum": ""
             },
             "require": {
@@ -251,9 +251,9 @@
             "description": "Library created for easy email sending based on PHPMailer.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Mailer/issues",
-                "source": "https://github.com/Sleon4/Lion-Mailer/tree/v3.1"
+                "source": "https://github.com/Sleon4/Lion-Mailer/tree/v3.2"
             },
-            "time": "2022-05-19T00:32:30+00:00"
+            "time": "2022-07-16T20:19:30+00:00"
         },
         {
             "name": "lion-framework/lion-request",
