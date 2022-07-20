@@ -53,7 +53,7 @@ To view the available routes, start the local server first, run the `php lion se
 ```shell
 php lion route:list
 ```
-Warning note: Routes are loaded with server path `SERVER_URL` set in .env, modify this path to avoid errors in process execution.
+Warning note: the routes are loaded with the server route `SERVER_URL` set in .env, modify this route to avoid errors in the execution of the process, in the file `public/index.php` there is a public route which allows get the available routes from the terminal, comment this line once your web app is deployed
 
 ## Add commands
 The commands must be added in an array from `routes/console.php`

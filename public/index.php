@@ -38,6 +38,7 @@ if ($_ENV['RSA_URL_PATH'] != '') LionSecurity\RSA::$url_path = "../{$_ENV['RSA_U
  * This is where you can register headers for your application
  * ------------------------------------------------------------------------------
  **/
+
 include_once(__DIR__ . "/../routes/header.php");
 
 /**
