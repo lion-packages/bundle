@@ -44,7 +44,9 @@ define('env', LionRequest\Request::getInstance()->env());
  * ------------------------------------------------------------------------------
  **/
 
-if ($_ENV['RSA_URL_PATH'] != '') LionSecurity\RSA::$url_path = "../{$_ENV['RSA_URL_PATH']}";
+if ($_ENV['RSA_URL_PATH'] != '') {
+    LionSecurity\RSA::$url_path = "../{$_ENV['RSA_URL_PATH']}";
+}
 
 /**
  * ------------------------------------------------------------------------------
