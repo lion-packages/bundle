@@ -24,6 +24,19 @@ require_once(__DIR__ . "/../vendor/autoload.php");
 (Dotenv\Dotenv::createImmutable(__DIR__ . "/../"))->load();
 
 /**
+ * ------------------------------------------------- --------------------------------------------
+ * Request and Response function initializer
+ * ------------------------------------------------- --------------------------------------------
+ * HTTP requests function, to obtain input data and give responses
+ * ------------------------------------------------- --------------------------------------------
+ **/
+
+define('request', LionRequest\Request::getInstance()->request());
+define('response', LionRequest\Response::getInstance());
+define('json', LionRequest\Json::getInstance());
+define('env', LionRequest\Request::getInstance()->env());
+
+/**
  * ------------------------------------------------------------------------------
  * Import route for RSA
  * ------------------------------------------------------------------------------
