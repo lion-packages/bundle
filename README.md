@@ -95,8 +95,7 @@ Lion-Route has been implemented for route handling. More information at [Lion-Ro
 Route::any('/', fn() => response->success("Welcome to index"));
 ```
 
-Middleware is easy to implement. They must have the main class imported into `Middleware`, which initializes different functions and objects at the Middleware level. <br>
-The rule for middleware is simple, in the constructor they must be initialized with the `$this->init()` function. More information about the use of Middleware in [Lion-Route](https://github.com/Sleon4/Lion-Route).
+You can create middleware from command line `php lion new:controller controller_name`. More information about the use of Middleware in [Lion-Route](https://github.com/Sleon4/Lion-Route).
 ```php
 namespace App\Http\Middleware\JWT;
 
