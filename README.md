@@ -92,9 +92,7 @@ The Carbon class inherits from the PHP DateTime class and is installed by defaul
 ### 1. ROUTES AND MIDDLEWARE
 Lion-Route has been implemented for route handling. More information at [Lion-Route](https://github.com/Sleon4/Lion-Route), from the web you can add all the necessary routes for the operation of your web application `routes/web.php`
 ```php
-Route::any('/', function() {
-	return LionRequest\Response::success("Welcome to index");
-});
+Route::any('/', fn() => response->success("Welcome to index"));
 ```
 
 Middleware is easy to implement. They must have the main class imported into `Middleware`, which initializes different functions and objects at the Middleware level. <br>
@@ -102,22 +100,22 @@ The rule for middleware is simple, in the constructor they must be initialized w
 ```php
 namespace App\Http\Middleware\JWT;
 
-use App\Http\Middleware\Middleware;
 use LionSecurity\JWT;
-use LionRequest\{ Json, Response };
 
-class AuthorizationMiddleware extends Middleware {
+class AuthorizationMiddleware {
 
     public function __construct() {
-        $this->init();
+
     }
 
     public function exist(): void {
         $headers = apache_request_headers();
 
         if (!isset($headers['Authorization'])) {
-            Response::finish(
-                Json::encode($this->response->error('The JWT does not exist'))
+            response->finish(
+                json->encode(
+                    response->error('The JWT does not exist')
+                )
             );
         }
     }
@@ -127,10 +125,19 @@ class AuthorizationMiddleware extends Middleware {
 
         if (preg_match('/Bearer\s(\S+)/', $headers['Authorization'], $matches)) {
             $jwt = JWT::decode($matches[1]);
-            if ($jwt->status === 'error') Response::finish(Json::encode($jwt));
+
+            if ($jwt->status === 'error') {
+                response->finish(
+                    json->encode(
+                        response->error($jwt)
+                    )
+                );
+            }
         } else {
-            Response::finish(
-                Json::encode($this->response->error('Invalid JWT'))
+            response->finish(
+                json->encode(
+                    response->error('Invalid JWT')
+                )
             );
         }
     }
@@ -139,8 +146,10 @@ class AuthorizationMiddleware extends Middleware {
         $headers = apache_request_headers();
 
         if (isset($headers['Authorization'])) {
-            Response::finish(
-                Json::encode($this->response->error('User in session, You must close the session'))
+            response->finish(
+                json->encode(
+                    response->error('User in session, You must close the session')
+                )
             );
         }
     }
@@ -160,38 +169,34 @@ LionRoute\Route::newMiddleware([
 ```
 
 ### 2. CONTROLLERS
-Controllers are easy to implement. They must have the parent class imported into `Controller`, which initializes different functions and objects at the Controller level. <br>
-The rule for Controllers is simple, in the constructor they must be initialized with the `$this->init()` function.
+You can create controllers from the command line `php lion new:controller controller_name`
 ```php
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-
-class HomeController extends Controller {
+class HomeController {
 
 	public function __construct() {
-		$this->init();
+
 	}
 
 	public function index() {
-		return $this->response->warning('Page not found. [index]');
+		return response->warning('Page not found. [index]');
 	}
 
 }
 ```
 
 ### 3. MODELS
-The models are easy to implement. They must have the main class imported into `Model`, which initializes various functions and objects at the model level. <br>
-The rule for models is simple, in the constructor they must be initialized with the `$this->init()` function.
+You can create models from the command line `php lion new:model model_name`
 ```php
 namespace App\Models;
 
-use App\Models\Model;
+use LionSql\Drivers\MySQLDriver as Builder;
 
-class HomeModel extends Model {
+class HomeModel {
 
 	public function __construct() {
-		$this->init();
+
 	}
 
 }
