@@ -1,6 +1,8 @@
 <?php
 
 use LionRoute\Route;
+
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\LoginController;
 
 /**
@@ -11,5 +13,4 @@ use App\Http\Controllers\Auth\LoginController;
  * ------------------------------------------------------------------------------
  **/
 
-Route::get('/', fn() => response->success("Welcome to index"));
-Route::get('users', fn() => response->success("All users"));
+Route::get('/', [HomeController::class, 'index']);
