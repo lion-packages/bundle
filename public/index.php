@@ -76,9 +76,7 @@ $response_conn = LionSQL\Drivers\MySQLDriver::init([
 ]);
 
 if ($response_conn->status === 'error') {
-    response->finish(
-        json->encode($response_conn)
-    );
+    response->finish(json->encode($response_conn));
 }
 
 /**
