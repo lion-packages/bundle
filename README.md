@@ -254,13 +254,13 @@ class EmailRule {
 	public function passes(): EmailRule {
 		$this->validation = SECURITY::validate(
 			(array) request, [
-                'required' => [
-                    ['users_email']
-                ],
-                'email' => [
-                    ['users_email']
-                ]
-            ]
+				'required' => [
+					['users_email']
+				],
+				'email' => [
+					['users_email']
+				]
+			]
 		)->data;
 
 		return $this;
