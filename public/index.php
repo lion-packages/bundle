@@ -24,11 +24,11 @@ require_once(__DIR__ . "/../vendor/autoload.php");
 (Dotenv\Dotenv::createImmutable(__DIR__ . "/../"))->load();
 
 /**
- * ------------------------------------------------- --------------------------------------------
+ * ------------------------------------------------------------------------------
  * Request and Response function initializer
- * ------------------------------------------------- --------------------------------------------
+ * ------------------------------------------------------------------------------
  * HTTP requests function, to obtain input data and give responses
- * ------------------------------------------------- --------------------------------------------
+ * ------------------------------------------------------------------------------
  **/
 
 define('request', LionRequest\Request::getInstance()->request());
@@ -100,6 +100,33 @@ LionMailer\Mailer::init([
         'encryption' => $_ENV['MAIL_ENCRYPTION'] === 'false' ? false : ($_ENV['MAIL_ENCRYPTION'] === 'true' ? true : false)
     ]
 ]);
+
+/**
+ * ------------------------------------------------------------------------------
+ * Initialize validator class language
+ * ------------------------------------------------------------------------------
+ * valitron provides a set of languages for responses
+ * https://github.com/vlucas/valitron/tree/master/lang
+ * ------------------------------------------------------------------------------
+ **/
+
+Valitron\Validator::lang(env->APP_LANG);
+
+/**
+ * ------------------------------------------------------------------------------
+ * Use rules by routes
+ * ------------------------------------------------------------------------------
+ * use whatever rules you want to validate input data
+ * ------------------------------------------------------------------------------
+ **/
+
+$rules = include_once(__DIR__ . "/../routes/rules.php");
+
+if (isset($rules[$_SERVER['REQUEST_URI']])) {
+    foreach ($rules[$_SERVER['REQUEST_URI']] as $key => $rule) {
+        (new $rule())->passes()->display();
+    }
+}
 
 /**
  * ------------------------------------------------------------------------------

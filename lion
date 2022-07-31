@@ -38,5 +38,6 @@ LionCommand\SystemCommand::init([
     LionCommand\Command\TestCommand::class,
     LionCommand\Command\ServerCommand::class,
     LionCommand\Command\RunTestCommand::class,
+    LionCommand\Command\RulesCommand::class,
     ...include_once("routes/console.php")
 ]);
