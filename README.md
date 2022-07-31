@@ -269,6 +269,16 @@ class EmailRule {
 }
 ```
 
+Add your rules to different routes in `routes/rules.php`
+
+```php
+return [
+    'api/auth/signin' => [
+        App\Rules\EmailRule::class
+    ]
+];
+```
+
 ### DEPLOY HEROKU
 
 Create the Procfile file in the main directory of your project (without extension and with a capital P), and inside it place the following
