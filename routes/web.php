@@ -18,6 +18,5 @@ Route::get('/', [HomeController::class, 'index']);
 Route::prefix('api', function() {
     Route::prefix('auth', function() {
         Route::post('signin', [LoginController::class, 'auth']);
-        Route::post('signout', [LoginController::class, 'auth']);
     });
 });
