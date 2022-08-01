@@ -14,11 +14,7 @@ class AuthorizationMiddleware {
         $headers = apache_request_headers();
 
         if (!isset($headers['Authorization'])) {
-            response->finish(
-                json->encode(
-                    response->error('The JWT does not exist')
-                )
-            );
+            response->finish(json->encode(response->error('The JWT does not exist')));
         }
     }
 
@@ -29,18 +25,10 @@ class AuthorizationMiddleware {
             $jwt = JWT::decode($matches[1]);
 
             if ($jwt->status === 'error') {
-                response->finish(
-                    json->encode(
-                        response->error($jwt)
-                    )
-                );
+                response->finish(json->encode(response->error($jwt->message)));
             }
         } else {
-            response->finish(
-                json->encode(
-                    response->error('Invalid JWT')
-                )
-            );
+            response->finish(json->encode(response->error('Invalid JWT')));
         }
     }
 
@@ -48,11 +36,7 @@ class AuthorizationMiddleware {
         $headers = apache_request_headers();
 
         if (isset($headers['Authorization'])) {
-            response->finish(
-                json->encode(
-                    response->error('User in session, You must close the session')
-                )
-            );
+            response->finish(json->encode(response->error('User in session, You must close the session')));
         }
     }
 

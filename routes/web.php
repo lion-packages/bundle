@@ -14,9 +14,3 @@ use App\Http\Controllers\Auth\LoginController;
  **/
 
 Route::get('/', [HomeController::class, 'index']);
-
-Route::prefix('api', function() {
-    Route::prefix('auth', function() {
-        Route::post('signin', [LoginController::class, 'auth']);
-    });
-});
