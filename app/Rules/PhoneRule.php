@@ -2,7 +2,7 @@
 
 namespace App\Rules;
 
-use LionSecurity\SECURITY;
+use LionSecurity\Validation;
 use App\Traits\DisplayErrors;
 
 class PhoneRule {
@@ -14,7 +14,7 @@ class PhoneRule {
 	}
 
 	public function passes(): PhoneRule {
-		$this->validation = SECURITY::validate(
+		$this->validation = Validation::validate(
 			(array) request, [
                 'required' => [
                     ['users_phone']

@@ -2,7 +2,7 @@
 
 namespace App\Rules;
 
-use LionSecurity\SECURITY;
+use LionSecurity\Validation;
 use App\Traits\DisplayErrors;
 
 class NameRule {
@@ -14,7 +14,7 @@ class NameRule {
 	}
 
 	public function passes(): NameRule {
-		$this->validation = SECURITY::validate(
+		$this->validation = Validation::validate(
 			(array) request, [
                 'required' => [
                     ['users_name']

@@ -2,7 +2,7 @@
 
 namespace App\Rules;
 
-use LionSecurity\SECURITY;
+use LionSecurity\Validation;
 use App\Traits\DisplayErrors;
 
 class EmailRule {
@@ -14,7 +14,7 @@ class EmailRule {
 	}
 
 	public function passes(): EmailRule {
-		$this->validation = SECURITY::validate(
+		$this->validation = Validation::validate(
 			(array) request, [
                 'required' => [
                     ['users_email']
