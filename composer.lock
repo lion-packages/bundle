@@ -132,16 +132,16 @@
         },
         {
             "name": "lion-framework/lion-command",
-            "version": "v2.2",
+            "version": "v2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Command.git",
-                "reference": "d909c6850b6e0380cb7266a264a4ac6652d668a5"
+                "reference": "dbf2945d0d32e10306b692f3920b505849aa34f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Command/zipball/d909c6850b6e0380cb7266a264a4ac6652d668a5",
-                "reference": "d909c6850b6e0380cb7266a264a4ac6652d668a5",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Command/zipball/dbf2945d0d32e10306b692f3920b505849aa34f5",
+                "reference": "dbf2945d0d32e10306b692f3920b505849aa34f5",
                 "shasum": ""
             },
             "require": {
@@ -167,9 +167,9 @@
             "description": "Library created with the function of executing commands from PHP.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Command/issues",
-                "source": "https://github.com/Sleon4/Lion-Command/tree/v2.2"
+                "source": "https://github.com/Sleon4/Lion-Command/tree/v2.3"
             },
-            "time": "2022-07-31T17:33:47+00:00"
+            "time": "2022-08-15T21:17:24+00:00"
         },
         {
             "name": "lion-framework/lion-files",
@@ -336,21 +336,21 @@
         },
         {
             "name": "lion-framework/lion-security",
-            "version": "v6.5",
+            "version": "v6.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Security.git",
-                "reference": "9bab288bfcec2bfcda6fb002bfd915ab185fd50d"
+                "reference": "a5a08a5d7dcf75e4c7023ca1275bcaef1b60a1cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Security/zipball/9bab288bfcec2bfcda6fb002bfd915ab185fd50d",
-                "reference": "9bab288bfcec2bfcda6fb002bfd915ab185fd50d",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Security/zipball/a5a08a5d7dcf75e4c7023ca1275bcaef1b60a1cb",
+                "reference": "a5a08a5d7dcf75e4c7023ca1275bcaef1b60a1cb",
                 "shasum": ""
             },
             "require": {
                 "firebase/php-jwt": "^6.1",
-                "php": ">=8.0.9",
+                "php": ">=8.0",
                 "vlucas/phpdotenv": "^5.4",
                 "vlucas/valitron": "^1.4"
             },
@@ -373,9 +373,9 @@
             "description": "Library created with the function of implementing AES, RSA and JWT Security functions for PHP.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Security/issues",
-                "source": "https://github.com/Sleon4/Lion-Security/tree/v6.5"
+                "source": "https://github.com/Sleon4/Lion-Security/tree/v6.6"
             },
-            "time": "2022-07-16T20:24:11+00:00"
+            "time": "2022-08-15T21:10:24+00:00"
         },
         {
             "name": "lion-framework/lion-sql",
