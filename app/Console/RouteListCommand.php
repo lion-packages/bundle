@@ -2,7 +2,7 @@
 
 namespace App\Console;
 
-use Symfony\Component\Console\Command\Command; 
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\{ Table, TableSeparator };
@@ -12,7 +12,7 @@ class RouteListCommand extends Command {
 	protected static $defaultName = "route:list";
 
 	protected function initialize(InputInterface $input, OutputInterface $output) {
-        $output->writeln("<comment>Route list</comment>");
+
     }
 
     protected function interact(InputInterface $input, OutputInterface $output) {
@@ -24,7 +24,7 @@ class RouteListCommand extends Command {
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $url = "{$_ENV['SERVER_URL']}route-list";
+        $url = env->SERVER_URL . "route-list";
         $routes = (array) json_decode(file_get_contents($url));
         array_pop($routes);
 
@@ -32,8 +32,8 @@ class RouteListCommand extends Command {
         // $table->setStyle('box');
 
         $rows = [];
-        $i = 0;
-        $total_cont = count($routes);
+        // $i = 0;
+        // $total_cont = count($routes);
         foreach ($routes as $key => $route) {
             $route = (array) $route;
 
@@ -42,7 +42,7 @@ class RouteListCommand extends Command {
                 $controller = (array) $info_route[0];
 
                 $rows[] = [
-                    ($i + 1),
+                    // ($i + 1),
                     "<comment>{$key2}</comment>",
                     ($key === '' ? '/' : $key),
                     isset($controller[0]) ? $controller[0] : '',
@@ -52,10 +52,10 @@ class RouteListCommand extends Command {
                 // if ($i < ($total_cont - 1)) $rows[] = new TableSeparator();
             }
 
-            $i++;
+            // $i++;
         }
 
-        $table->setHeaders(['#', 'TYPE', 'URL', 'CONTROLLER', 'METHOD'])->setRows($rows);
+        $table->setHeaders([/* '#', */ 'TYPE', 'URL', 'CONTROLLER', 'METHOD'])->setRows($rows);
         $table->render();
 
         return Command::SUCCESS;
