@@ -31,10 +31,10 @@ require_once(__DIR__ . "/../vendor/autoload.php");
  * ------------------------------------------------------------------------------
  **/
 
-define('request', LionRequest\Request::getInstance()->request());
+define('request', LionRequest\Request::getInstance()->capture());
 define('response', LionRequest\Response::getInstance());
 define('json', LionRequest\Json::getInstance());
-define('env', LionRequest\Request::getInstance()->env());
+define('env', (object) $_ENV);
 
 /**
  * ------------------------------------------------------------------------------
