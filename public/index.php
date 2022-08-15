@@ -44,8 +44,8 @@ define('env', (object) $_ENV);
  * ------------------------------------------------------------------------------
  **/
 
-if ($_ENV['RSA_URL_PATH'] != '') {
-    LionSecurity\RSA::$url_path = "../{$_ENV['RSA_URL_PATH']}";
+if (env->RSA_URL_PATH != '') {
+    LionSecurity\RSA::$url_path = "../" . env->RSA_URL_PATH;
 }
 
 /**
@@ -67,12 +67,12 @@ include_once(__DIR__ . "/../routes/header.php");
  **/
 
 $response_conn = LionSQL\Drivers\MySQLDriver::init([
-    'host' => $_ENV['DB_HOST'],
-    'port' => $_ENV['DB_PORT'],
-    'db_name' => $_ENV['DB_NAME'],
-    'user' => $_ENV['DB_USER'],
-    'password' => $_ENV['DB_PASSWORD'],
-    'charset' => $_ENV['DB_CHARSET']
+    'host' => env->DB_HOST,
+    'port' => env->DB_PORT,
+    'db_name' => env->DB_NAME,
+    'user' => env->DB_USER,
+    'password' => env->DB_PASSWORD,
+    'charset' => env->DB_CHARSET
 ]);
 
 if ($response_conn->status === 'error') {
@@ -89,13 +89,13 @@ if ($response_conn->status === 'error') {
 
 LionMailer\Mailer::init([
     'info' => [
-        'debug' => (int) $_ENV['MAIL_DEBUG'],
-        'host' => $_ENV['MAIL_HOST'],
-        'port' => (int) $_ENV['MAIL_PORT'],
-        'email' => $_ENV['MAIL_EMAIL'],
-        'password' => $_ENV['MAIL_PASSWORD'],
-        'user_name' => $_ENV['MAIL_USER_NAME'],
-        'encryption' => $_ENV['MAIL_ENCRYPTION'] === 'false' ? false : ($_ENV['MAIL_ENCRYPTION'] === 'true' ? true : false)
+        'debug' => (int) env->MAIL_DEBUG,
+        'host' => env->MAIL_HOST,
+        'port' => (int) env->MAIL_PORT,
+        'email' => env->MAIL_EMAIL,
+        'password' => env->MAIL_PASSWORD,
+        'user_name' => env->MAIL_USER_NAME,
+        'encryption' => env->MAIL_ENCRYPTION === 'false' ? false : (env->MAIL_ENCRYPTION === 'true' ? true : false)
     ]
 ]);
 
