@@ -16,7 +16,7 @@ class IdentificationDocumentRule {
 	public function passes(): IdentificationDocumentRule {
 		$this->validation = SECURITY::validate(
 			(array) request, [
-                'required', => [
+                'required' => [
                     ['users_identification_document']
                 ]
             ]
