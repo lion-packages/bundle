@@ -66,7 +66,7 @@ include_once(__DIR__ . "/../routes/header.php");
  * ------------------------------------------------------------------------------
  **/
 
-$response_conn = LionSQL\Drivers\MySQLDriver::init([
+LionSQL\Drivers\MySQLDriver::init([
     'host' => env->DB_HOST,
     'port' => env->DB_PORT,
     'db_name' => env->DB_NAME,
@@ -74,10 +74,6 @@ $response_conn = LionSQL\Drivers\MySQLDriver::init([
     'password' => env->DB_PASSWORD,
     'charset' => env->DB_CHARSET
 ]);
-
-if ($response_conn->status === 'error') {
-    response->finish(json->encode($response_conn));
-}
 
 /**
  * ------------------------------------------------------------------------------
