@@ -16,7 +16,7 @@ class PhoneRule {
 	public function passes(): PhoneRule {
 		$this->validation = SECURITY::validate(
 			(array) request, [
-                'required', => [
+                'required' => [
                     ['users_phone']
                 ],
             ]
