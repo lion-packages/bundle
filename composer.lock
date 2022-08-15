@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "76f56bddcc19a674e7e453bcd168adc1",
+    "content-hash": "789dd416eb2708e45e866cd648adc557",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -173,23 +173,21 @@
         },
         {
             "name": "lion-framework/lion-files",
-            "version": "v4.5",
+            "version": "v4.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Files.git",
-                "reference": "6c5283f8a903ac17729680784d11c05096ff5efd"
+                "reference": "4188570ee12059b3ba05c91fe56d467c3a4d3370"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Files/zipball/6c5283f8a903ac17729680784d11c05096ff5efd",
-                "reference": "6c5283f8a903ac17729680784d11c05096ff5efd",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Files/zipball/4188570ee12059b3ba05c91fe56d467c3a4d3370",
+                "reference": "4188570ee12059b3ba05c91fe56d467c3a4d3370",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.0"
-            },
-            "require-dev": {
-                "lion-framework/lion-request": "^5.0"
+                "lion-framework/lion-request": "^5.1",
+                "php": ">=8.1"
             },
             "type": "library",
             "autoload": {
@@ -210,9 +208,9 @@
             "description": "Library created with the function of working internal system files.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Files/issues",
-                "source": "https://github.com/Sleon4/Lion-Files/tree/v4.5"
+                "source": "https://github.com/Sleon4/Lion-Files/tree/v4.6.1"
             },
-            "time": "2022-07-14T14:40:06+00:00"
+            "time": "2022-08-15T17:05:17+00:00"
         },
         {
             "name": "lion-framework/lion-mailer",
@@ -257,23 +255,20 @@
         },
         {
             "name": "lion-framework/lion-request",
-            "version": "v5.0.1",
+            "version": "v5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Request.git",
-                "reference": "06301372d16bbe0b50ce9b381db4a8612dcd22a6"
+                "reference": "dd243063b6d837cca4433a11badb8244c9afb0ef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Request/zipball/06301372d16bbe0b50ce9b381db4a8612dcd22a6",
-                "reference": "06301372d16bbe0b50ce9b381db4a8612dcd22a6",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Request/zipball/dd243063b6d837cca4433a11badb8244c9afb0ef",
+                "reference": "dd243063b6d837cca4433a11badb8244c9afb0ef",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.0"
-            },
-            "require-dev": {
-                "vlucas/phpdotenv": "^5.4"
+                "php": ">=8.1"
             },
             "type": "library",
             "autoload": {
@@ -294,9 +289,9 @@
             "description": "Library created to request input data and response requests",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Request/issues",
-                "source": "https://github.com/Sleon4/Lion-Request/tree/v5.0.1"
+                "source": "https://github.com/Sleon4/Lion-Request/tree/v5.1"
             },
-            "time": "2022-07-16T23:13:58+00:00"
+            "time": "2022-08-15T16:14:17+00:00"
         },
         {
             "name": "lion-framework/lion-route",
@@ -384,23 +379,21 @@
         },
         {
             "name": "lion-framework/lion-sql",
-            "version": "v5.5.1",
+            "version": "v5.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-SQL.git",
-                "reference": "f36c1d34614d935e626945916d9b8c846c91670b"
+                "reference": "0bac30e8d5d56b1cd88db5da67670d7954494e99"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/f36c1d34614d935e626945916d9b8c846c91670b",
-                "reference": "f36c1d34614d935e626945916d9b8c846c91670b",
+                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/0bac30e8d5d56b1cd88db5da67670d7954494e99",
+                "reference": "0bac30e8d5d56b1cd88db5da67670d7954494e99",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.0"
-            },
-            "require-dev": {
-                "lion-framework/lion-request": "^5.0"
+                "lion-framework/lion-request": "^5.1",
+                "php": ">=8.1"
             },
             "type": "library",
             "autoload": {
@@ -421,22 +414,22 @@
             "description": "package in charge of generating and executing MySQL processes",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-SQL/issues",
-                "source": "https://github.com/Sleon4/Lion-SQL/tree/v5.5.1"
+                "source": "https://github.com/Sleon4/Lion-SQL/tree/v5.6"
             },
-            "time": "2022-07-17T05:13:30+00:00"
+            "time": "2022-08-15T16:27:35+00:00"
         },
         {
             "name": "nesbot/carbon",
-            "version": "2.60.0",
+            "version": "2.61.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "00a259ae02b003c563158b54fb6743252b638ea6"
+                "reference": "bdf4f4fe3a3eac4de84dbec0738082a862c68ba6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/00a259ae02b003c563158b54fb6743252b638ea6",
-                "reference": "00a259ae02b003c563158b54fb6743252b638ea6",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/bdf4f4fe3a3eac4de84dbec0738082a862c68ba6",
+                "reference": "bdf4f4fe3a3eac4de84dbec0738082a862c68ba6",
                 "shasum": ""
             },
             "require": {
@@ -525,7 +518,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-07-27T15:57:48+00:00"
+            "time": "2022-08-06T12:41:24+00:00"
         },
         {
             "name": "phpmailer/phpmailer",
