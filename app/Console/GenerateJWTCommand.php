@@ -2,7 +2,7 @@
 
 namespace App\Console;
 
-use Symfony\Component\Console\Command\Command; 
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use LionSecurity\{ RSA, JWT };
@@ -13,7 +13,6 @@ class GenerateJWTCommand extends Command {
 
     protected function initialize(InputInterface $input, OutputInterface $output) {
         $output->writeln("<comment>Generating JWT...</comment>");
-        if ($_ENV['RSA_URL_PATH'] != '') RSA::$url_path = $_ENV['RSA_URL_PATH'];
     }
 
     protected function interact(InputInterface $input, OutputInterface $output) {

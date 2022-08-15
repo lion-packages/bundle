@@ -20,6 +20,19 @@ require_once("vendor/autoload.php");
  **/
 
 (Dotenv\Dotenv::createImmutable(__DIR__))->load();
+define('env', (object) $_ENV);
+
+/**
+ * ------------------------------------------------------------------------------
+ * Import route for RSA
+ * ------------------------------------------------------------------------------
+ * Load default route for RSA
+ * ------------------------------------------------------------------------------
+ **/
+
+if (env->RSA_URL_PATH != '') {
+    LionSecurity\RSA::$url_path = env->RSA_URL_PATH;
+}
 
 /**
  * ------------------------------------------------------------------------------
@@ -28,6 +41,8 @@ require_once("vendor/autoload.php");
  * This is where you can record your commands for your application
  * ------------------------------------------------------------------------------
  **/
+
+$commands = include_once("routes/console.php");
 
 LionCommand\SystemCommand::init([
 	LionCommand\Command\ControllerCommand::class,
@@ -39,5 +54,5 @@ LionCommand\SystemCommand::init([
     LionCommand\Command\ServerCommand::class,
     LionCommand\Command\RunTestCommand::class,
     LionCommand\Command\RulesCommand::class,
-    ...include_once("routes/console.php")
+    ...$commands
 ]);
