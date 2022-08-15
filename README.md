@@ -14,19 +14,19 @@ composer create-project lion-framework/lion-framework
 
 # Lion-Framework the API Backend
 
-Lion-Framework can also serve as an API backend for a JavaScript single page application or a mobile application. For example, you can use Lion-Framework as an API backend for your Vite.js app or Kotlin app. <br>
+Lion-Framework can also serve as an API backend for a JavaScript single page application or a mobile application. For example, you can use Lion-Framework as an API backend for your Vite.js app or Kotlin app <br>
 
-You can use Lion-Framework to provide authentication and data storage/retrieval for your application, while taking advantage of Lion-Framework services such as emails, databases, and more.
+You can use Lion-Framework to provide authentication and data storage/retrieval for your application, while taking advantage of Lion-Framework services such as emails, databases, and more
 
 ## Usage
 
-Start by running the server, by default it runs on port `8000`.
+Start by running the server, by default it runs on port `8000`
 
 ```shell
 php lion serve
 ```
 
-use another port.
+use another port
 
 ```shell
 php lion serve --port=8001
@@ -34,7 +34,7 @@ php lion serve --port=8001
 
 ## Commands
 
-More information about the use of internal commands. [Lion-Command](https://github.com/Sleon4/Lion-Command)
+More information about the use of internal commands [Lion-Command](https://github.com/Sleon4/Lion-Command)
 
 ```shell
 php lion serve
@@ -60,7 +60,7 @@ php lion key:rsa --path="storage/other-secret-key/"
 
 ## Route list
 
-To view the available routes, start the local server first, run the `php lion serve` command, and then view the routes.
+To view the available routes, start the local server first, run the `php lion serve` command, and then view the routes
 
 ```shell
 php lion route:list
@@ -85,40 +85,57 @@ return [
 Headers must be added in an array from `routes/header.php`
 
 ```php
-LionRequest\Request::header([
-    ['type' => "Content-Type", 'value' => "application/json; charset=UTF-8"],
-    ['type' => "Access-Control-Allow-Origin", 'value' => '*'],
-    ['type' => "Access-Control-Max-Age", 'value' => '3600'],
-    ['type' => "Access-Control-Allow-Methods", 'value' => "GET, POST, PUT, DELETE"],
-    ['type' => "Access-Control-Allow-Headers", 'value' => "Origin, X-Requested-With, Content-Type, Accept, Authorization"]
-]);
+LionRequest\Request::header(
+    'Content-Type',
+    'application/json; charset=UTF-8'
+);
+
+LionRequest\Request::header(
+    'Access-Control-Allow-Origin',
+    env->SERVER_ACCESS_CONTROL_ALLOW_ORIGIN
+);
+
+LionRequest\Request::header(
+    'Access-Control-Max-Age',
+    env->SERVER_ACCESS_CONTROL_MAX_AGE
+);
+
+LionRequest\Request::header(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PUT, DELETE'
+);
+
+LionRequest\Request::header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+);
 ```
 
 ## REQUEST AND RESPONSE
 
-Learn more about using request features. [Lion-Request](https://github.com/Sleon4/Lion-Request)
+Learn more about using request features [Lion-Request](https://github.com/Sleon4/Lion-Request)
 
 ## SECURITY
 
-Learn more about using security features. [Lion-Security](https://github.com/Sleon4/Lion-Security)
+Learn more about using security features [Lion-Security](https://github.com/Sleon4/Lion-Security)
 
 ## FILES
 
-Learn more about using functions in files. [Lion-Files](https://github.com/Sleon4/Lion-Files)
+Learn more about using functions in files [Lion-Files](https://github.com/Sleon4/Lion-Files)
 
 ## CARBON
 
-The Carbon class inherits from the PHP DateTime class and is installed by default. [nesbot/carbon](https://carbon.nesbot.com/)
+The Carbon class inherits from the PHP DateTime class and is installed by default [nesbot/carbon](https://carbon.nesbot.com/)
 
 ### 1. ROUTES AND MIDDLEWARE
 
 Lion-Route has been implemented for route handling. More information at [Lion-Route](https://github.com/Sleon4/Lion-Route), from the web you can add all the necessary routes for the operation of your web application `routes/web.php`
 
 ```php
-Route::any('/', fn() => response->success("Welcome to index"));
+Route::get('/', [HomeController::class, 'index']);
 ```
 
-You can create middleware from command line `php lion new:controller controller_name`. More information about the use of Middleware in [Lion-Route](https://github.com/Sleon4/Lion-Route).
+You can create middleware from command line `php lion new:controller controller_name`. More information about the use of Middleware in [Lion-Route](https://github.com/Sleon4/Lion-Route)
 
 ```php
 namespace App\Http\Middleware\JWT;
@@ -180,7 +197,7 @@ class AuthorizationMiddleware {
 }
 ```
 
-to add a middleware you must open the middleware file located in `routes/middleware.php`, where there are default middleware for the use of JWT.
+to add a middleware you must open the middleware file located in `routes/middleware.php`, where there are default middleware for the use of JWT
 
 ```php
 LionRoute\Route::newMiddleware([
@@ -230,8 +247,8 @@ class HomeModel {
 }
 ```
 
-Note that when you want to implement methods that implement processes with databases, the `LionSql\Drivers\MySQLDriver` class must be imported for their respective operation. more information on [Lion-SQL](https://github.com/Sleon4/Lion-SQL). <br>
-Note that at the framework level Lion-SQL is already installed and implemented, the variables are located in the `.env` file, follow the import instructions for their use.
+Note that when you want to implement methods that implement processes with databases, the `LionSql\Drivers\MySQLDriver` class must be imported for their respective operation. more information on [Lion-SQL](https://github.com/Sleon4/Lion-SQL) <br>
+Note that at the framework level Lion-SQL is already installed and implemented, the variables are located in the `.env` file, follow the import instructions for their use
 
 ### 4. RULES
 
@@ -273,7 +290,7 @@ Add your rules to different routes in `routes/rules.php`
 
 ```php
 return [
-    'api/auth/signin' => [
+    '/api/auth/signin' => [
         App\Rules\EmailRule::class
     ]
 ];
