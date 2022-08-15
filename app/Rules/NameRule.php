@@ -16,7 +16,7 @@ class NameRule {
 	public function passes(): NameRule {
 		$this->validation = SECURITY::validate(
 			(array) request, [
-                'required', => [
+                'required' => [
                     ['users_name']
                 ],
             ]
