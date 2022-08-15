@@ -16,7 +16,7 @@ class LastNameRule {
 	public function passes(): LastNameRule {
 		$this->validation = SECURITY::validate(
 			(array) request, [
-                'required', => [
+                'required' => [
                     ['users_last_name']
                 ],
             ]
