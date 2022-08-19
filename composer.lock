@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "789dd416eb2708e45e866cd648adc557",
+    "content-hash": "30f6ecf9a4efd6cbfe94f19b0e5da02a",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -132,16 +132,16 @@
         },
         {
             "name": "lion-framework/lion-command",
-            "version": "v2.3",
+            "version": "v2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Command.git",
-                "reference": "dbf2945d0d32e10306b692f3920b505849aa34f5"
+                "reference": "09b4fc23d91b000d1cf64862e11cd4e4aef5827f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Command/zipball/dbf2945d0d32e10306b692f3920b505849aa34f5",
-                "reference": "dbf2945d0d32e10306b692f3920b505849aa34f5",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Command/zipball/09b4fc23d91b000d1cf64862e11cd4e4aef5827f",
+                "reference": "09b4fc23d91b000d1cf64862e11cd4e4aef5827f",
                 "shasum": ""
             },
             "require": {
@@ -167,9 +167,9 @@
             "description": "Library created with the function of executing commands from PHP.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Command/issues",
-                "source": "https://github.com/Sleon4/Lion-Command/tree/v2.3"
+                "source": "https://github.com/Sleon4/Lion-Command/tree/v2.4"
             },
-            "time": "2022-08-15T21:17:24+00:00"
+            "time": "2022-08-19T00:56:25+00:00"
         },
         {
             "name": "lion-framework/lion-files",
@@ -295,16 +295,16 @@
         },
         {
             "name": "lion-framework/lion-route",
-            "version": "v6.2",
+            "version": "v7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Route.git",
-                "reference": "9de571f02a3af839eef636fc7b08cf19de09f5b9"
+                "reference": "9a60473c7759e3d2a6edbfbb38433508f573a5fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Route/zipball/9de571f02a3af839eef636fc7b08cf19de09f5b9",
-                "reference": "9de571f02a3af839eef636fc7b08cf19de09f5b9",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Route/zipball/9a60473c7759e3d2a6edbfbb38433508f573a5fe",
+                "reference": "9a60473c7759e3d2a6edbfbb38433508f573a5fe",
                 "shasum": ""
             },
             "require": {
@@ -330,9 +330,9 @@
             "description": "This library has a fast router usage with regular expressions.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Route/issues",
-                "source": "https://github.com/Sleon4/Lion-Route/tree/v6.2"
+                "source": "https://github.com/Sleon4/Lion-Route/tree/v7.0"
             },
-            "time": "2022-06-18T01:32:25+00:00"
+            "time": "2022-08-19T01:21:35+00:00"
         },
         {
             "name": "lion-framework/lion-security",
