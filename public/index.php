@@ -66,7 +66,9 @@ include_once(__DIR__ . "/../routes/header.php");
  * ------------------------------------------------------------------------------
  **/
 
-LionSQL\Drivers\MySQLDriver::init([
+use LionSQL\Drivers\MySQLDriver as Builder;
+
+Builder::init([
     'host' => env->DB_HOST,
     'port' => env->DB_PORT,
     'db_name' => env->DB_NAME,
