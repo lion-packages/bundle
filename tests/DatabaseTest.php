@@ -17,8 +17,7 @@ class DatabaseTest extends TestCase {
             'port' => $_ENV['DB_PORT'],
             'db_name' => $_ENV['DB_NAME'],
             'user' => $_ENV['DB_USER'],
-            'password' => $_ENV['DB_PASSWORD'],
-            'charset' => $_ENV['DB_CHARSET']
+            'password' => $_ENV['DB_PASSWORD']
         ]);
 
         $this->assertEquals('success', $responseConnect->status);

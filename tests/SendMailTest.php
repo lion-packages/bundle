@@ -27,7 +27,7 @@ class SendMailTest extends TestCase {
 	public function testSendMail(): void {
 		$request = Mailer::send(
 			Attach::newAttach(
-				[$_ENV['MAIL_SEND_MAIL'], $_ENV['MAIL_USER_NAME']],
+				[$_ENV['MAIL_EMAIL'], $_ENV['MAIL_USER_NAME']],
 				[$_ENV['MAIL_EMAIL'], $_ENV['MAIL_USER_NAME']],
 				null,
 				null
