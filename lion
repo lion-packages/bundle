@@ -54,5 +54,8 @@ LionCommand\SystemCommand::init([
     LionCommand\Command\ServerCommand::class,
     LionCommand\Command\RunTestCommand::class,
     LionCommand\Command\RulesCommand::class,
+    App\Console\RSACommand::class,
+    App\Console\GenerateJWTCommand::class,
+    App\Console\RouteListCommand::class,
     ...$commands
 ]);
