@@ -132,16 +132,16 @@
         },
         {
             "name": "lion-framework/lion-command",
-            "version": "v2.6.0",
+            "version": "v2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Command.git",
-                "reference": "4e9c0f68d0d8706026553deb47405c41d57569fb"
+                "reference": "33f7fbd0ac999d1013b6869cc3975b16e13fe1df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Command/zipball/4e9c0f68d0d8706026553deb47405c41d57569fb",
-                "reference": "4e9c0f68d0d8706026553deb47405c41d57569fb",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Command/zipball/33f7fbd0ac999d1013b6869cc3975b16e13fe1df",
+                "reference": "33f7fbd0ac999d1013b6869cc3975b16e13fe1df",
                 "shasum": ""
             },
             "require": {
@@ -167,9 +167,9 @@
             "description": "Library created with the function of executing commands from PHP.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Command/issues",
-                "source": "https://github.com/Sleon4/Lion-Command/tree/v2.6.0"
+                "source": "https://github.com/Sleon4/Lion-Command/tree/v2.7.0"
             },
-            "time": "2022-10-06T01:05:19+00:00"
+            "time": "2022-10-10T02:42:59+00:00"
         },
         {
             "name": "lion-framework/lion-files",
@@ -214,16 +214,16 @@
         },
         {
             "name": "lion-framework/lion-mailer",
-            "version": "v3.3",
+            "version": "v3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Mailer.git",
-                "reference": "752d8adafacc47466c79ff0cdb49a83696e76199"
+                "reference": "bb6c93aa2a08472e3b6c2221fdc4f97488147449"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Mailer/zipball/752d8adafacc47466c79ff0cdb49a83696e76199",
-                "reference": "752d8adafacc47466c79ff0cdb49a83696e76199",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Mailer/zipball/bb6c93aa2a08472e3b6c2221fdc4f97488147449",
+                "reference": "bb6c93aa2a08472e3b6c2221fdc4f97488147449",
                 "shasum": ""
             },
             "require": {
@@ -249,9 +249,9 @@
             "description": "Library created for easy email sending based on PHPMailer.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Mailer/issues",
-                "source": "https://github.com/Sleon4/Lion-Mailer/tree/v3.3"
+                "source": "https://github.com/Sleon4/Lion-Mailer/tree/v3.4.0"
             },
-            "time": "2022-09-18T23:43:43+00:00"
+            "time": "2022-10-10T02:47:31+00:00"
         },
         {
             "name": "lion-framework/lion-request",
@@ -522,16 +522,16 @@
         },
         {
             "name": "phpmailer/phpmailer",
-            "version": "v6.6.4",
+            "version": "v6.6.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPMailer/PHPMailer.git",
-                "reference": "a94fdebaea6bd17f51be0c2373ab80d3d681269b"
+                "reference": "8b6386d7417526d1ea4da9edb70b8352f7543627"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/a94fdebaea6bd17f51be0c2373ab80d3d681269b",
-                "reference": "a94fdebaea6bd17f51be0c2373ab80d3d681269b",
+                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/8b6386d7417526d1ea4da9edb70b8352f7543627",
+                "reference": "8b6386d7417526d1ea4da9edb70b8352f7543627",
                 "shasum": ""
             },
             "require": {
@@ -555,8 +555,8 @@
                 "hayageek/oauth2-yahoo": "Needed for Yahoo XOAUTH2 authentication",
                 "league/oauth2-google": "Needed for Google XOAUTH2 authentication",
                 "psr/log": "For optional PSR-3 debug logging",
-                "stevenmaguire/oauth2-microsoft": "Needed for Microsoft XOAUTH2 authentication",
-                "symfony/polyfill-mbstring": "To support UTF-8 if the Mbstring PHP extension is not enabled (^1.2)"
+                "symfony/polyfill-mbstring": "To support UTF-8 if the Mbstring PHP extension is not enabled (^1.2)",
+                "thenetworg/oauth2-azure": "Needed for Microsoft XOAUTH2 authentication"
             },
             "type": "library",
             "autoload": {
@@ -588,7 +588,7 @@
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
             "support": {
                 "issues": "https://github.com/PHPMailer/PHPMailer/issues",
-                "source": "https://github.com/PHPMailer/PHPMailer/tree/v6.6.4"
+                "source": "https://github.com/PHPMailer/PHPMailer/tree/v6.6.5"
             },
             "funding": [
                 {
@@ -596,7 +596,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-08-22T09:22:00+00:00"
+            "time": "2022-10-07T12:23:10+00:00"
         },
         {
             "name": "phpoption/phpoption",
