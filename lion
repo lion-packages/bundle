@@ -57,5 +57,6 @@ LionCommand\SystemCommand::init([
     App\Console\Framework\GenerateJWTCommand::class,
     App\Console\Framework\RouteListCommand::class,
     App\Console\Framework\CapsuleCommand::class,
+    App\Console\Framework\AllCapsulesCommand::class,
     ...$commands
 ]);
