@@ -49,13 +49,13 @@ LionCommand\SystemCommand::init([
     LionCommand\Command\ModelCommand::class,
     LionCommand\Command\MiddlewareCommand::class,
     LionCommand\Command\CommandsCommand::class,
-    LionCommand\Command\CapsuleCommand::class,
     LionCommand\Command\TestCommand::class,
     LionCommand\Command\ServerCommand::class,
     LionCommand\Command\RunTestCommand::class,
     LionCommand\Command\RulesCommand::class,
-    App\Console\RSACommand::class,
-    App\Console\GenerateJWTCommand::class,
-    App\Console\RouteListCommand::class,
+    App\Console\Framework\RSACommand::class,
+    App\Console\Framework\GenerateJWTCommand::class,
+    App\Console\Framework\RouteListCommand::class,
+    App\Console\Framework\CapsuleCommand::class,
     ...$commands
 ]);
