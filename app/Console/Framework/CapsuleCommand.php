@@ -14,8 +14,6 @@ class CapsuleCommand extends Command {
     private string $default_path = "app/Class/";
 
     protected function initialize(InputInterface $input, OutputInterface $output) {
-        $output->writeln("<comment>Creating capsule...</comment>");
-
         Builder::init([
             'host' => env->DB_HOST,
             'port' => env->DB_PORT,
@@ -36,12 +34,19 @@ class CapsuleCommand extends Command {
             'capsule', InputArgument::REQUIRED, '', null
         )->addOption(
             'path', null, InputOption::VALUE_REQUIRED, 'Do you want to configure your own route?'
+        )->addOption(
+            'message', null, InputOption::VALUE_REQUIRED, ''
         );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
         $table = $input->getArgument('capsule');
         $path = $input->getOption('path');
+        $message = $input->getOption('message');
+
+        if ($message === null) {
+            $output->writeln("<comment>Creating capsule...</comment>");
+        }
 
         if ($path === null) {
             $path = "";
@@ -115,7 +120,10 @@ class CapsuleCommand extends Command {
         ClassPath::force();
         ClassPath::close();
 
-        $output->writeln("<info>Capsule created successfully</info>");
+        if ($message === null) {
+            $output->writeln("<info>Capsule created successfully</info>");
+        }
+
         return Command::SUCCESS;
     }
 

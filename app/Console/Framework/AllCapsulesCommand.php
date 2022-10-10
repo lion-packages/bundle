@@ -5,6 +5,7 @@ namespace App\Console\Framework;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\{ InputInterface, InputArgument, InputOption, ArrayInput };
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Helper\ProgressBar;
 use LionCommand\Functions\{ FILES, ClassPath };
 use LionSQL\Drivers\MySQLDriver as Builder;
 
@@ -40,17 +41,31 @@ class AllCapsulesCommand extends Command {
     protected function execute(InputInterface $input, OutputInterface $output) {
         $path = $input->getOption('path');
         $all_tables = Builder::showTables(env->DB_NAME);
+        $size = count($all_tables);
+        $progressBar = new ProgressBar($output, $size);
+        $progressBar->setFormat('debug_nomax');
+        $progressBar->start();
 
         foreach ($all_tables as $keyTables => $tableDB) {
+            if ($keyTables < ($size * 0.90)) {
+                $progressBar->setBarCharacter('<comment>=</comment>');
+            } else {
+                $progressBar->setBarCharacter('<info>=</info>');
+            }
+
             $this->getApplication()->find('new:capsule')->run(
                 new ArrayInput([
                     'capsule' => $tableDB->{"Tables_in_" . env->DB_NAME},
-                    '--path' => ($path === null ? false : $path)
+                    '--path' => ($path === null ? false : $path),
+                    '--message' => true
                 ]),
                 $output
             );
+
+            $progressBar->advance();
         }
 
+        $progressBar->finish();
         return Command::SUCCESS;
     }
 
