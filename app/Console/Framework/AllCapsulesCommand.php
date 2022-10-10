@@ -32,24 +32,19 @@ class AllCapsulesCommand extends Command {
     protected function configure() {
         $this->setDescription(
             'Command required for the creation of all new Capsules available from the database'
-        )->addArgument(
-            'capsule', InputArgument::REQUIRED, '', null
         )->addOption(
             'path', null, InputOption::VALUE_REQUIRED, 'Do you want to configure your own route?'
         );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $database = $input->getArgument('capsule');
         $path = $input->getOption('path');
-        $all_tables = Builder::showTables(trim($database));
+        $all_tables = Builder::showTables(env->DB_NAME);
 
         foreach ($all_tables as $keyTables => $tableDB) {
-            $table = $tableDB->{"Tables_in_" . env->DB_NAME};
-
             $this->getApplication()->find('new:capsule')->run(
                 new ArrayInput([
-                    'capsule' => $table,
+                    'capsule' => $tableDB->{"Tables_in_" . env->DB_NAME},
                     '--path' => ($path === null ? false : $path)
                 ]),
                 $output
