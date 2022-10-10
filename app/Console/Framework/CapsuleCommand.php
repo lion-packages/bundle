@@ -93,7 +93,7 @@ class CapsuleCommand extends Command {
 
         // Getters and Setters
         foreach ($columns as $key => $column) {
-            ClassPath::add("\tpublic function get" . $normalize($column->Field) . "(): " . $addType($column->Type) . " {\n\t\t");
+            ClassPath::add("\tpublic function get" . $normalize($column->Field) . "(): ?" . $addType($column->Type) . " {\n\t\t");
             ClassPath::add('return $this->' . $column->Field . ";");
             ClassPath::add("\n\t}\n\n");
 
