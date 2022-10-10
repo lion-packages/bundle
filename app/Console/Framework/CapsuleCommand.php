@@ -71,19 +71,25 @@ class CapsuleCommand extends Command {
             return preg_match("/^int|bigint/", $type) ? "int" : "string";
         };
 
+        $cleanField = function($field) {
+            return str_replace("-", "_", $field);
+        };
+
         // Propierties
         foreach ($columns as $key => $column) {
+            $field = $cleanField($column->Field);
+
             if ($key === 0 ) {
                 // ClassPath::add("\tprivate ?" . $addType($column->Type) . ' $' . "{$column->Field};\n");
-                $parameters_union.= "\n\t\tprivate ?" . $addType($column->Type) . ' $' . $column->Field . ' = null,' . "\n";
+                $parameters_union.= "\n\t\tprivate ?" . $addType($column->Type) . ' $' . $field . ' = null,' . "\n";
                 // $variables_union.= "\t\t" . '$this->' . $column->Field . ' = $' . $column->Field . ";\n";
             } elseif ($key === ($count - 1)) {
                 // ClassPath::add("\tprivate ?" . $addType($column->Type) . ' $' . "{$column->Field};\n\n");
-                $parameters_union.= "\t\tprivate ?" . $addType($column->Type) . ' $' . $column->Field . ' = null' . "\n\t";
+                $parameters_union.= "\t\tprivate ?" . $addType($column->Type) . ' $' . $field . ' = null' . "\n\t";
                 // $variables_union.= "\t\t" . '$this->' . $column->Field . ' = $' . $column->Field . ";";
             } else {
                 // ClassPath::add("\tprivate ?" . $addType($column->Type) . ' $' . "{$column->Field};\n");
-                $parameters_union.= "\t\tprivate ?" . $addType($column->Type) . ' $' . $column->Field . ' = null,' . "\n";
+                $parameters_union.= "\t\tprivate ?" . $addType($column->Type) . ' $' . $field . ' = null,' . "\n";
                 // $variables_union.= "\t\t" . '$this->' . $column->Field . ' = $' . $column->Field . ";\n";
             }
         }
@@ -93,12 +99,14 @@ class CapsuleCommand extends Command {
 
         // Getters and Setters
         foreach ($columns as $key => $column) {
-            ClassPath::add("\tpublic function get" . $normalize($column->Field) . "(): ?" . $addType($column->Type) . " {\n\t\t");
-            ClassPath::add('return $this->' . $column->Field . ";");
+            $field = $cleanField($column->Field);
+
+            ClassPath::add("\tpublic function get" . $normalize($field) . "(): ?" . $addType($column->Type) . " {\n\t\t");
+            ClassPath::add('return $this->' . $field . ";");
             ClassPath::add("\n\t}\n\n");
 
-            ClassPath::add("\tpublic function set" . $normalize($column->Field) . '(?' . $addType($column->Type) . ' $' . $column->Field . "): {$list['class']} {\n\t\t");
-            ClassPath::add('$this->' . $column->Field . " =" . ' $' . "{$column->Field};\n\t\t");
+            ClassPath::add("\tpublic function set" . $normalize($field) . '(?' . $addType($column->Type) . ' $' . $field . "): {$list['class']} {\n\t\t");
+            ClassPath::add('$this->' . $field . " =" . ' $' . "{$field};\n\t\t");
             ClassPath::add('return $this;');
             ClassPath::add("\n\t}\n\n");
         }
