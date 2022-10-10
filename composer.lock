@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "afaed97dbfaf7ef4e24e2cbb199a5167",
+    "content-hash": "0ff36bb8e4e026a6af644a2a77fee2f3",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -379,16 +379,16 @@
         },
         {
             "name": "lion-framework/lion-sql",
-            "version": "v6.0.0",
+            "version": "v5.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-SQL.git",
-                "reference": "566a96185f02b60fc51ec70f0f4ba8a9b75861e8"
+                "reference": "c1687b27b82d9ab222c4051f5c0004b47ed7a96a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/566a96185f02b60fc51ec70f0f4ba8a9b75861e8",
-                "reference": "566a96185f02b60fc51ec70f0f4ba8a9b75861e8",
+                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/c1687b27b82d9ab222c4051f5c0004b47ed7a96a",
+                "reference": "c1687b27b82d9ab222c4051f5c0004b47ed7a96a",
                 "shasum": ""
             },
             "require": {
@@ -414,9 +414,9 @@
             "description": "package in charge of generating and executing MySQL processes",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-SQL/issues",
-                "source": "https://github.com/Sleon4/Lion-SQL/tree/v6.0.0"
+                "source": "https://github.com/Sleon4/Lion-SQL/tree/v5.8.0"
             },
-            "time": "2022-10-10T03:16:54+00:00"
+            "time": "2022-10-10T13:50:52+00:00"
         },
         {
             "name": "nesbot/carbon",
