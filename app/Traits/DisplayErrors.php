@@ -22,6 +22,4 @@ trait DisplayErrors {
         }
     }
 
-
-
 }
