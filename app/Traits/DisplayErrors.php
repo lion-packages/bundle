@@ -2,9 +2,15 @@
 
 namespace App\Traits;
 
+use LionSecurity\Validation;
+
 trait DisplayErrors {
 
     private array $validation;
+
+    public function validateRules(array $rules): void {
+        $this->validation = Validation::validate((array) request, $rules)->data;
+    }
 
     public function display(): void {
         if (count($this->validation) > 0) {
@@ -15,5 +21,7 @@ trait DisplayErrors {
             }
         }
     }
+
+
 
 }
