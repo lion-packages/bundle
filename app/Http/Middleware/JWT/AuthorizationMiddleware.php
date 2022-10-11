@@ -36,7 +36,17 @@ class AuthorizationMiddleware {
         $headers = apache_request_headers();
 
         if (isset($headers['Authorization'])) {
-            response->finish(json->encode(response->error('User in session, You must close the session')));
+            if (preg_match('/Bearer\s(\S+)/', $headers['Authorization'], $matches)) {
+                $jwt = JWT::decode($matches[1]);
+
+                if ($jwt->status === 'success') {
+                    response->finish(json->encode(response->error('User in session, You must close the session')));
+                } elseif ($jwt->status === 'error') {
+                    response->finish(json->encode(response->error($jwt->message)));
+                }
+            } else {
+                response->finish(json->encode(response->error('Invalid JWT')));
+            }
         }
     }
 
