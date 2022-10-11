@@ -40,7 +40,13 @@ class AuthorizationMiddleware {
                 $jwt = JWT::decode($matches[1]);
 
                 if ($jwt->status === 'success') {
-                    response->finish(json->encode(response->error('User in session, You must close the session')));
+                    if (!isset($jwt->data->session)) {
+                        response->finish(json->encode(response->error('undefined session')));
+                    }
+
+                    if ($jwt->data->session) {
+                        response->finish(json->encode(response->error('User in session, You must close the session')));
+                    }
                 } elseif ($jwt->status === 'error') {
                     response->finish(json->encode(response->error($jwt->message)));
                 }
