@@ -26,6 +26,7 @@ class GenerateJWTCommand extends Command {
     protected function execute(InputInterface $input, OutputInterface $output) {
         $output->writeln(
             JWT::encode([
+                'session' => false,
                 'system' => "Lion Framework",
                 'autor' => "Sergio Leon",
                 'github' => "https://github.com/Sleon4/Lion-Framework"
