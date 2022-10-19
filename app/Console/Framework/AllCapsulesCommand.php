@@ -56,7 +56,7 @@ class AllCapsulesCommand extends Command {
                 new ArrayInput([
                     'capsule' => $tableDB->{"Tables_in_" . env->DB_NAME},
                     '--path' => ($path === null ? false : $path),
-                    '--message' => true
+                    '--message' => false
                 ]),
                 $output
             );
