@@ -14,7 +14,3 @@ use App\Http\Controllers\HomeController;
  **/
 
 Route::get('/', [HomeController::class, 'index']);
-
-Route::post('send-data', function() {
-    return new FilesCustomers();
-});

@@ -12,7 +12,6 @@ use LionSQL\Drivers\MySQLDriver as Builder;
 class AllCapsulesCommand extends Command {
 
     protected static $defaultName = "new:all-capsule";
-    private string $default_path = "app/Class/";
 
     protected function initialize(InputInterface $input, OutputInterface $output) {
         $output->writeln("<comment>Creating all the capsules...</comment>");
