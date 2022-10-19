@@ -1,6 +1,5 @@
 <?php
 
-use App\Class\FilesCustomers;
 use LionRoute\Route;
 
 use App\Http\Controllers\HomeController;
