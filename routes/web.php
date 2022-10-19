@@ -1,5 +1,6 @@
 <?php
 
+use App\Class\FilesCustomers;
 use LionRoute\Route;
 
 use App\Http\Controllers\HomeController;
@@ -13,3 +14,7 @@ use App\Http\Controllers\HomeController;
  **/
 
 Route::get('/', [HomeController::class, 'index']);
+
+Route::post('send-data', function() {
+    return new FilesCustomers();
+});
