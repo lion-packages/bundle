@@ -43,8 +43,9 @@ class CapsuleCommand extends Command {
         $table = $input->getArgument('capsule');
         $path = $input->getOption('path');
         $message = $input->getOption('message');
+        if ($message === null) $message = true;
 
-        if ($message === null) {
+        if ($message) {
             $output->writeln("<comment>Creating capsule...</comment>");
         }
 
@@ -120,7 +121,7 @@ class CapsuleCommand extends Command {
         ClassPath::force();
         ClassPath::close();
 
-        if ($message === null) {
+        if ($message) {
             $output->writeln("<info>Capsule created successfully</info>");
         }
 
