@@ -6,53 +6,55 @@ use LionSecurity\JWT;
 
 class AuthorizationMiddleware {
 
-    public function __construct() {
+    private array $headers;
 
+    public function __construct() {
+        $this->headers = apache_request_headers();
     }
 
-    public function exist(): void {
-        $headers = apache_request_headers();
+    private function exist(): void {
+        if (!isset($this->headers['Authorization'])) {
+            response->finish(response->response('session-error', 'The JWT does not exist'));
+        }
+    }
 
-        if (!isset($headers['Authorization'])) {
-            response->finish(json->encode(response->error('The JWT does not exist')));
+    private function validateSession($jwt): void {
+        if ($jwt->status === 'error') {
+            response->finish(response->response('session-error', $jwt->message));
+        }
+
+        if (!isset($jwt->data->session)) {
+            response->finish(response->response('session-error', 'undefined session'));
         }
     }
 
     public function authorize(): void {
-        $headers = apache_request_headers();
+        $this->exist();
 
-        if (preg_match('/Bearer\s(\S+)/', $headers['Authorization'], $matches)) {
+        if (preg_match('/Bearer\s(\S+)/', $this->headers['Authorization'], $matches)) {
             $jwt = JWT::decode($matches[1]);
+            $this->validateSession($jwt);
 
-            if ($jwt->status === 'error') {
-                response->finish(json->encode(response->error($jwt->message)));
+            if (!$jwt->data->session) {
+                response->finish(response->response('session-error', 'User not logged in, you must log in'));
             }
         } else {
-            response->finish(json->encode(response->error('Invalid JWT')));
+            response->finish(response->response('session-error', 'Invalid JWT'));
         }
     }
 
     public function notAuthorize(): void {
-        $headers = apache_request_headers();
+        $this->exist();
 
-        if (isset($headers['Authorization'])) {
-            if (preg_match('/Bearer\s(\S+)/', $headers['Authorization'], $matches)) {
-                $jwt = JWT::decode($matches[1]);
+        if (preg_match('/Bearer\s(\S+)/', $this->headers['Authorization'], $matches)) {
+            $jwt = JWT::decode($matches[1]);
+            $this->validateSession($jwt);
 
-                if ($jwt->status === 'success') {
-                    if (!isset($jwt->data->session)) {
-                        response->finish(json->encode(response->error('undefined session')));
-                    }
-
-                    if ($jwt->data->session) {
-                        response->finish(json->encode(response->error('User in session, You must close the session')));
-                    }
-                } elseif ($jwt->status === 'error') {
-                    response->finish(json->encode(response->error($jwt->message)));
-                }
-            } else {
-                response->finish(json->encode(response->error('Invalid JWT')));
+            if ($jwt->data->session) {
+                response->finish(response->response('session-error', 'User in session, you must close the session'));
             }
+        } else {
+            response->finish(response->response('session-error', 'Invalid JWT'));
         }
     }
 

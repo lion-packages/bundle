@@ -3,7 +3,7 @@
 namespace App\Console\Framework;
 
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\{ InputInterface, InputArgument };
 use Symfony\Component\Console\Output\OutputInterface;
 use LionSecurity\{ RSA, JWT };
 
@@ -20,13 +20,17 @@ class GenerateJWTCommand extends Command {
     }
 
     protected function configure() {
-        $this->setDescription("Created command to generate JWT token");
+        $this->setDescription(
+            "Created command to generate JWT token"
+        )->addArgument(
+            'session', InputArgument::REQUIRED, '', null
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
         $output->writeln(
             JWT::encode([
-                'session' => false,
+                'session' => $input->getArgument('session') === 'true' ? true : false,
                 'system' => "Lion Framework",
                 'autor' => "Sergio Leon",
                 'github' => "https://github.com/Sleon4/Lion-Framework"
