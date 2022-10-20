@@ -11,7 +11,7 @@ use LionSQL\Drivers\MySQLDriver as Builder;
 
 class AllCapsulesCommand extends Command {
 
-    protected static $defaultName = "new:all-capsule";
+    protected static $defaultName = "new:all-capsules";
 
     protected function initialize(InputInterface $input, OutputInterface $output) {
         $output->writeln("<comment>Creating all the capsules...</comment>");
@@ -52,7 +52,7 @@ class AllCapsulesCommand extends Command {
                 $progressBar->setBarCharacter('<info>=</info>');
             }
 
-            $this->getApplication()->find('new:capsule')->run(
+            $this->getApplication()->find('new:capsules')->run(
                 new ArrayInput([
                     'capsule' => $tableDB->{"Tables_in_" . env->DB_NAME},
                     '--path' => ($path === null ? false : $path),
