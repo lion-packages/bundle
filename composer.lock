@@ -255,16 +255,16 @@
         },
         {
             "name": "lion-framework/lion-request",
-            "version": "v5.1",
+            "version": "v5.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Request.git",
-                "reference": "dd243063b6d837cca4433a11badb8244c9afb0ef"
+                "reference": "19160ce0ec7f3bc706e56db2a1d38b1b1ba166d6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Request/zipball/dd243063b6d837cca4433a11badb8244c9afb0ef",
-                "reference": "dd243063b6d837cca4433a11badb8244c9afb0ef",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Request/zipball/19160ce0ec7f3bc706e56db2a1d38b1b1ba166d6",
+                "reference": "19160ce0ec7f3bc706e56db2a1d38b1b1ba166d6",
                 "shasum": ""
             },
             "require": {
@@ -289,9 +289,9 @@
             "description": "Library created to request input data and response requests",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Request/issues",
-                "source": "https://github.com/Sleon4/Lion-Request/tree/v5.1"
+                "source": "https://github.com/Sleon4/Lion-Request/tree/v5.2.0"
             },
-            "time": "2022-08-15T16:14:17+00:00"
+            "time": "2022-10-20T15:19:00+00:00"
         },
         {
             "name": "lion-framework/lion-route",

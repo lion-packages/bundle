@@ -1,7 +1,6 @@
 <?php
 
 use LionRoute\Route;
-
 use App\Http\Controllers\HomeController;
 
 /**
