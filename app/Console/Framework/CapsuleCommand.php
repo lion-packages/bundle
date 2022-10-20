@@ -10,7 +10,7 @@ use LionSQL\Drivers\MySQLDriver as Builder;
 
 class CapsuleCommand extends Command {
 
-	protected static $defaultName = "new:capsule";
+	protected static $defaultName = "new:capsules";
     private string $default_path = "app/Class/";
 
     protected function initialize(InputInterface $input, OutputInterface $output) {
@@ -62,7 +62,8 @@ class CapsuleCommand extends Command {
         $list = ClassPath::export($this->default_path, ($path . $normalize($table)));
         $columns = Builder::showColumns($table);
         $count = count($columns);
-        $parameters_union = "";
+        $functions_union = "";
+        // $parameters_union = "";
         // $variables_union = "";
 
         $url_folder = lcfirst(str_replace("\\", "/", $list['namespace']));
@@ -71,7 +72,7 @@ class CapsuleCommand extends Command {
         ClassPath::create($url_folder, $list['class']);
         ClassPath::add("<?php\r\n\n");
         ClassPath::add("namespace {$list['namespace']};\r\n\n");
-        ClassPath::add("class {$list['class']} {\r\n\n");
+        ClassPath::add("class {$list['class']} implements \JsonSerializable {\r\n\n");
 
         $addType = function($type) {
             return preg_match("/^int|bigint/", $type) ? "int" : "string";
@@ -84,24 +85,36 @@ class CapsuleCommand extends Command {
         // Propierties
         foreach ($columns as $key => $column) {
             $field = $cleanField($column->Field);
+            $object = '$' . strtolower($list['class']);
+            $request_field = "request->{$field}";
 
-            if ($key === 0 ) {
+            if ($key === 0) {
                 // ClassPath::add("\tprivate ?" . $addType($column->Type) . ' $' . "{$column->Field};\n");
-                $parameters_union.= "\n\t\tprivate ?" . $addType($column->Type) . ' $' . $field . ' = null,' . "\n";
+                // $parameters_union.= "\t\tprivate ?" . $addType($column->Type) . ' $' . $field . ' = null,' . "\n";
                 // $variables_union.= "\t\t" . '$this->' . $column->Field . ' = $' . $column->Field . ";\n";
+                ClassPath::add("\tprivate ?" . $addType($column->Type) . ' $' . $field . ' = null;' . "\n");
+                $functions_union.= $object . ' = new ' . "{$list['class']}();\n\n\t\t";
+                $functions_union.= $object . '->set' . $normalize($field) . "(\n\t\t\t" . "isset({$request_field}) ? {$request_field} : null" . "\n\t\t);\n\n";
             } elseif ($key === ($count - 1)) {
                 // ClassPath::add("\tprivate ?" . $addType($column->Type) . ' $' . "{$column->Field};\n\n");
-                $parameters_union.= "\t\tprivate ?" . $addType($column->Type) . ' $' . $field . ' = null' . "\n\t";
+                // $parameters_union.= "\t\tprivate ?" . $addType($column->Type) . ' $' . $field . ' = null' . "\n\t";
                 // $variables_union.= "\t\t" . '$this->' . $column->Field . ' = $' . $column->Field . ";";
+                ClassPath::add("\tprivate ?" . $addType($column->Type) . ' $' . $field . ' = null;' . "\n\n");
+                $functions_union.= "\t\t" . $object . '->set' . $normalize($field) . "(\n\t\t\t" . "isset({$request_field}) ? {$request_field} : null" . "\n\t\t);\n\n\t\t" . "return {$object};";
             } else {
                 // ClassPath::add("\tprivate ?" . $addType($column->Type) . ' $' . "{$column->Field};\n");
-                $parameters_union.= "\t\tprivate ?" . $addType($column->Type) . ' $' . $field . ' = null,' . "\n";
+                // $parameters_union.= "\t\tprivate ?" . $addType($column->Type) . ' $' . $field . ' = null,' . "\n";
                 // $variables_union.= "\t\t" . '$this->' . $column->Field . ' = $' . $column->Field . ";\n";
+                ClassPath::add("\tprivate ?" . $addType($column->Type) . ' $' . $field . ' = null;' . "\n");
+                 $functions_union.= "\t\t" . $object . '->set' . $normalize($field) . "(\n\t\t\t" . "isset({$request_field}) ? {$request_field} : null" . "\n\t\t);\n\n";
             }
         }
 
         // Constructor
-        ClassPath::add("\tpublic function __construct({$parameters_union}) {}\n\n");
+        // ClassPath::add("\tpublic function __construct({$parameters_union}) {}\n\n");
+        ClassPath::add("\tpublic function __construct() {}\n\n");
+        ClassPath::add("\tpublic function jsonSerialize(): mixed {\n\t\t" . 'return get_object_vars($this);' . "\n\t}\n\n");
+        ClassPath::add("\tpublic static function formFields(): {$list['class']} {\n\t\t{$functions_union}\n\t}\n\n");
 
         // Getters and Setters
         foreach ($columns as $key => $column) {
