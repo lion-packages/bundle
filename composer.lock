@@ -295,16 +295,16 @@
         },
         {
             "name": "lion-framework/lion-route",
-            "version": "v7.0",
+            "version": "v7.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Route.git",
-                "reference": "9a60473c7759e3d2a6edbfbb38433508f573a5fe"
+                "reference": "0b0ef16a167edd29b16889e092ba321ed997c7a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Route/zipball/9a60473c7759e3d2a6edbfbb38433508f573a5fe",
-                "reference": "9a60473c7759e3d2a6edbfbb38433508f573a5fe",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Route/zipball/0b0ef16a167edd29b16889e092ba321ed997c7a3",
+                "reference": "0b0ef16a167edd29b16889e092ba321ed997c7a3",
                 "shasum": ""
             },
             "require": {
@@ -330,9 +330,9 @@
             "description": "This library has a fast router usage with regular expressions.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Route/issues",
-                "source": "https://github.com/Sleon4/Lion-Route/tree/v7.0"
+                "source": "https://github.com/Sleon4/Lion-Route/tree/v7.1.0"
             },
-            "time": "2022-08-19T01:21:35+00:00"
+            "time": "2022-10-21T18:30:33+00:00"
         },
         {
             "name": "lion-framework/lion-security",
