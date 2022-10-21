@@ -75,10 +75,17 @@ class CapsuleCommand extends Command {
         ClassPath::add("class {$list['class']} implements \JsonSerializable {\r\n\n");
 
         $addType = function($type) {
-            return preg_match("/^int|bigint/", $type) ? "int" : "string";
+            if (preg_match("/^int|bigint/", $type)) {
+                return "int";
+            } elseif (preg_match("/^float/", $type)) {
+                return "float";
+            } else {
+                return "string";
+            }
         };
 
         $cleanField = function($field) {
+            $field = str_replace(" ", "", $field);
             return str_replace("-", "_", $field);
         };
 
@@ -92,27 +99,34 @@ class CapsuleCommand extends Command {
                 // ClassPath::add("\tprivate ?" . $addType($column->Type) . ' $' . "{$column->Field};\n");
                 // $parameters_union.= "\t\tprivate ?" . $addType($column->Type) . ' $' . $field . ' = null,' . "\n";
                 // $variables_union.= "\t\t" . '$this->' . $column->Field . ' = $' . $column->Field . ";\n";
-                ClassPath::add("\tprivate ?" . $addType($column->Type) . ' $' . $field . ' = null;' . "\n");
-                $functions_union.= $object . ' = new ' . "{$list['class']}();\n\n\t\t";
-                $functions_union.= $object . '->set' . $normalize($field) . "(\n\t\t\t" . "isset({$request_field}) ? {$request_field} : null" . "\n\t\t);\n\n";
+
+                if ($key === ($count - 1)) {
+                    ClassPath::add("\tprivate ?" . $addType($column->Type) . ' $' . $field . ' = null;' . "\n");
+                    $functions_union.= $object . ' = new ' . "{$list['class']}();\n\n\t\t";
+                    $functions_union.= $object . '->set' . $normalize($field) . "(\n\t\t\t" . "isset({$request_field}) ? {$request_field} : null" . "\n\t\t);\n\n\t\t" . "return {$object};";
+                } else {
+                    ClassPath::add("\tprivate ?" . $addType($column->Type) . ' $' . $field . ' = null;' . "\n");
+                    $functions_union.= $object . ' = new ' . "{$list['class']}();\n\n\t\t";
+                    $functions_union.= $object . '->set' . $normalize($field) . "(\n\t\t\t" . "isset({$request_field}) ? {$request_field} : null" . "\n\t\t);\n\n";
+                }
             } elseif ($key === ($count - 1)) {
                 // ClassPath::add("\tprivate ?" . $addType($column->Type) . ' $' . "{$column->Field};\n\n");
                 // $parameters_union.= "\t\tprivate ?" . $addType($column->Type) . ' $' . $field . ' = null' . "\n\t";
                 // $variables_union.= "\t\t" . '$this->' . $column->Field . ' = $' . $column->Field . ";";
-                ClassPath::add("\tprivate ?" . $addType($column->Type) . ' $' . $field . ' = null;' . "\n\n");
+                ClassPath::add("\tprivate ?" . $addType($column->Type) . ' $' . $field . ' = null;' . "\n");
                 $functions_union.= "\t\t" . $object . '->set' . $normalize($field) . "(\n\t\t\t" . "isset({$request_field}) ? {$request_field} : null" . "\n\t\t);\n\n\t\t" . "return {$object};";
             } else {
                 // ClassPath::add("\tprivate ?" . $addType($column->Type) . ' $' . "{$column->Field};\n");
                 // $parameters_union.= "\t\tprivate ?" . $addType($column->Type) . ' $' . $field . ' = null,' . "\n";
                 // $variables_union.= "\t\t" . '$this->' . $column->Field . ' = $' . $column->Field . ";\n";
                 ClassPath::add("\tprivate ?" . $addType($column->Type) . ' $' . $field . ' = null;' . "\n");
-                 $functions_union.= "\t\t" . $object . '->set' . $normalize($field) . "(\n\t\t\t" . "isset({$request_field}) ? {$request_field} : null" . "\n\t\t);\n\n";
+                $functions_union.= "\t\t" . $object . '->set' . $normalize($field) . "(\n\t\t\t" . "isset({$request_field}) ? {$request_field} : null" . "\n\t\t);\n\n";
             }
         }
 
         // Constructor
         // ClassPath::add("\tpublic function __construct({$parameters_union}) {}\n\n");
-        ClassPath::add("\tpublic function __construct() {}\n\n");
+        ClassPath::add("\n\tpublic function __construct() {}\n\n");
         ClassPath::add("\tpublic function jsonSerialize(): mixed {\n\t\t" . 'return get_object_vars($this);' . "\n\t}\n\n");
         ClassPath::add("\tpublic static function formFields(): {$list['class']} {\n\t\t{$functions_union}\n\t}\n\n");
 
