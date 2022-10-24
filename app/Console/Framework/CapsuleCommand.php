@@ -10,8 +10,8 @@ use LionSQL\Drivers\MySQLDriver as Builder;
 
 class CapsuleCommand extends Command {
 
-	protected static $defaultName = "new:capsules";
-    private string $default_path = "app/Class/";
+	protected static $defaultName = "database:capsule";
+    private string $default_path = "Database/Class/";
 
     protected function initialize(InputInterface $input, OutputInterface $output) {
         Builder::init([
@@ -43,7 +43,10 @@ class CapsuleCommand extends Command {
         $table = $input->getArgument('capsule');
         $path = $input->getOption('path');
         $message = $input->getOption('message');
-        if ($message === null) $message = true;
+
+        if ($message === null) {
+            $message = true;
+        }
 
         if ($message) {
             $output->writeln("<comment>Creating capsule...</comment>");
