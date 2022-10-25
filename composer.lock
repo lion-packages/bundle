@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0ff36bb8e4e026a6af644a2a77fee2f3",
+    "content-hash": "6b8a2825f24971edf7a9851c2c064132",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -383,12 +383,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-SQL.git",
-                "reference": "bff5caa6ee6ece875a6c7060c362d3c0588958c6"
+                "reference": "ebc46fed3dff8b8b859abd068b41e866b2e918a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/bff5caa6ee6ece875a6c7060c362d3c0588958c6",
-                "reference": "bff5caa6ee6ece875a6c7060c362d3c0588958c6",
+                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/ebc46fed3dff8b8b859abd068b41e866b2e918a3",
+                "reference": "ebc46fed3dff8b8b859abd068b41e866b2e918a3",
                 "shasum": ""
             },
             "require": {
@@ -416,7 +416,7 @@
                 "issues": "https://github.com/Sleon4/Lion-SQL/issues",
                 "source": "https://github.com/Sleon4/Lion-SQL/tree/v5.10.0"
             },
-            "time": "2022-10-25T15:24:47+00:00"
+            "time": "2022-10-25T15:40:46+00:00"
         },
         {
             "name": "nesbot/carbon",
