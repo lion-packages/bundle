@@ -25,6 +25,7 @@
     },
     "require": {
         "php": ">=8.1",
+        "fakerphp/faker": "^1.20",
         "lion-framework/lion-command": "^2.4",
         "lion-framework/lion-files": "^4.6",
         "lion-framework/lion-mailer": "^3.2",
