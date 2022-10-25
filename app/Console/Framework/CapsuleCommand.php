@@ -88,7 +88,7 @@ class CapsuleCommand extends Command {
         };
 
         $cleanField = function($field) {
-            $field = str_replace(" ", "", $field);
+            $field = str_replace(" ", "_", $field);
             return str_replace("-", "_", $field);
         };
 
