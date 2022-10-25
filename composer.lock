@@ -199,16 +199,16 @@
         },
         {
             "name": "lion-framework/lion-command",
-            "version": "v2.9.0",
+            "version": "v2.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Command.git",
-                "reference": "22679f5b74c5833cd8819cdfa11b43c932f5a51e"
+                "reference": "03ef7073df47615adb31703fc2bf5cf47fb1c908"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Command/zipball/22679f5b74c5833cd8819cdfa11b43c932f5a51e",
-                "reference": "22679f5b74c5833cd8819cdfa11b43c932f5a51e",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Command/zipball/03ef7073df47615adb31703fc2bf5cf47fb1c908",
+                "reference": "03ef7073df47615adb31703fc2bf5cf47fb1c908",
                 "shasum": ""
             },
             "require": {
@@ -234,9 +234,9 @@
             "description": "Library created with the function of executing commands from PHP.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Command/issues",
-                "source": "https://github.com/Sleon4/Lion-Command/tree/v2.9.0"
+                "source": "https://github.com/Sleon4/Lion-Command/tree/v2.10.0"
             },
-            "time": "2022-10-19T22:14:24+00:00"
+            "time": "2022-10-25T22:07:19+00:00"
         },
         {
             "name": "lion-framework/lion-files",
