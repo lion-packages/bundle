@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4f33db87e82f5407b599e06f3a5e0758",
+    "content-hash": "cb330dbdd94336f1ad3cb8e027e7a129",
     "packages": [
         {
             "name": "fakerphp/faker",
@@ -196,47 +196,6 @@
                 }
             ],
             "time": "2022-07-30T15:56:11+00:00"
-        },
-        {
-            "name": "lion-framework/lion-command",
-            "version": "v2.10.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Sleon4/Lion-Command.git",
-                "reference": "03ef7073df47615adb31703fc2bf5cf47fb1c908"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Command/zipball/03ef7073df47615adb31703fc2bf5cf47fb1c908",
-                "reference": "03ef7073df47615adb31703fc2bf5cf47fb1c908",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.1",
-                "symfony/console": "^6.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "LionCommand\\": "src/LionCommand/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Sergio León",
-                    "email": "56183278+Sleon4@users.noreply.github.com"
-                }
-            ],
-            "description": "Library created with the function of executing commands from PHP.",
-            "support": {
-                "issues": "https://github.com/Sleon4/Lion-Command/issues",
-                "source": "https://github.com/Sleon4/Lion-Command/tree/v2.10.0"
-            },
-            "time": "2022-10-25T22:07:19+00:00"
         },
         {
             "name": "lion-framework/lion-files",
