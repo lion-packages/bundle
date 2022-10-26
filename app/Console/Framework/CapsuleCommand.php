@@ -5,13 +5,13 @@ namespace App\Console\Framework;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\{ InputInterface, InputArgument, InputOption };
 use Symfony\Component\Console\Output\OutputInterface;
-use LionCommand\Functions\{ FILES, ClassPath };
+use LionFiles\Manage;
 use LionSQL\Drivers\MySQLDriver as Builder;
+use App\Traits\Framework\ClassPath;
 
 class CapsuleCommand extends Command {
 
 	protected static $defaultName = "database:capsule";
-    private string $default_path = "Database/Class/";
 
     protected function initialize(InputInterface $input, OutputInterface $output) {
         Builder::init([
@@ -62,7 +62,7 @@ class CapsuleCommand extends Command {
             return trim(str_replace(" ", "", $str));
         };
 
-        $list = ClassPath::export($this->default_path, ($path . $normalize($table)));
+        $list = ClassPath::export("Database/Class/", ($path . $normalize($table)));
         $columns = Builder::showColumns($table);
         $count = count($columns);
         $functions_union = "";
@@ -70,7 +70,7 @@ class CapsuleCommand extends Command {
         // $variables_union = "";
 
         $url_folder = lcfirst(str_replace("\\", "/", $list['namespace']));
-        FILES::folder($url_folder);
+        Manage::folder($url_folder);
 
         ClassPath::create($url_folder, $list['class']);
         ClassPath::add("<?php\r\n\n");
