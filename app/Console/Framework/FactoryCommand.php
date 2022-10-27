@@ -64,9 +64,7 @@ class FactoryCommand extends Command {
         ClassPath::add("namespace {$list['namespace']};\r\n\n");
         ClassPath::add("use Faker\Factory;\n\n");
         ClassPath::add("class {$list['class']} {\r\n\n");
-        ClassPath::add("\t" . 'private $faker;' . "\n\n");
-        ClassPath::add("\tpublic function __construct() {\n\t\t" . '$this->faker = Factory::create();' . "\n\t}\n\n");
-        ClassPath::add("\tpublic function definition(): array {\n\t\treturn [];\n\t}\n\n");
+        ClassPath::add("\tpublic static function definition(): array {\n\t\t" . '$faker = Factory::create();' . "\n\n\t\treturn [];\n\t}\n\n");
         ClassPath::add("}");
 
         ClassPath::add("");
