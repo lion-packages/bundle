@@ -10,7 +10,7 @@ use LionSQL\Drivers\MySQLDriver as Builder;
 
 class AllCapsulesCommand extends Command {
 
-    protected static $defaultName = "database:all-capsules";
+    protected static $defaultName = "db:all-capsules";
 
     protected function initialize(InputInterface $input, OutputInterface $output) {
         $output->writeln("<comment>Creating all the capsules...</comment>");

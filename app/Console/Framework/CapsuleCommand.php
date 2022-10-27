@@ -11,7 +11,7 @@ use App\Traits\Framework\ClassPath;
 
 class CapsuleCommand extends Command {
 
-	protected static $defaultName = "database:capsule";
+	protected static $defaultName = "db:capsule";
 
     protected function initialize(InputInterface $input, OutputInterface $output) {
         Builder::init([

@@ -60,6 +60,7 @@ $commands = [
     App\Console\Framework\RouteListCommand::class,
     App\Console\Framework\CapsuleCommand::class,
     App\Console\Framework\AllCapsulesCommand::class,
+    App\Console\Framework\FactoryCommand::class,
     ...$web_commands
 ];
 
