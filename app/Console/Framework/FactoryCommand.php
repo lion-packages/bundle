@@ -14,14 +14,14 @@ class FactoryCommand extends Command {
 
 	protected function initialize(InputInterface $input, OutputInterface $output) {
 
-	}
+    }
 
-	protected function interact(InputInterface $input, OutputInterface $output) {
+    protected function interact(InputInterface $input, OutputInterface $output) {
 
-	}
+    }
 
-	protected function configure() {
-		$this->setDescription(
+    protected function configure() {
+        $this->setDescription(
             'Command required for the creation of new factories'
         )->addArgument(
             'factory', InputArgument::REQUIRED
