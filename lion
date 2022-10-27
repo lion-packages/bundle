@@ -61,6 +61,7 @@ $commands = [
     App\Console\Framework\CapsuleCommand::class,
     App\Console\Framework\AllCapsulesCommand::class,
     App\Console\Framework\FactoryCommand::class,
+    \App\Console\Framework\TraitCommand::class,
     ...$web_commands
 ];
 
