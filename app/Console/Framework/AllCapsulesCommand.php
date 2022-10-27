@@ -51,7 +51,7 @@ class AllCapsulesCommand extends Command {
                 $progressBar->setBarCharacter('<info>=</info>');
             }
 
-            $this->getApplication()->find('database:capsule')->run(
+            $this->getApplication()->find('db:capsule')->run(
                 new ArrayInput([
                     'capsule' => $tableDB->{"Tables_in_" . env->DB_NAME},
                     '--path' => ($path === null ? false : $path),
