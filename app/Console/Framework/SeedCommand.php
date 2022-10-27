@@ -27,15 +27,24 @@ class SeedCommand extends Command {
             'seed', InputArgument::REQUIRED
         )->addOption(
             'run', null, InputOption::VALUE_REQUIRED, ''
+        )->addOption(
+            'iterate', null, InputOption::VALUE_REQUIRED, ''
         );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
         $seed = $input->getArgument('seed');
         $run = $input->getOption('run');
+        $iterate = $input->getOption('iterate');
 
         if (empty($run)) {
             $run = false;
+        }
+
+        if (empty($iterate)) {
+            $iterate = 1;
+        } else {
+            $iterate = (int) $iterate;
         }
 
         if ($run === 'true') {
@@ -73,18 +82,25 @@ class SeedCommand extends Command {
         }
 
         $namespace = "Database\\Seeders\\" . str_replace("/", "\\", $seed);
-        $exist_class = class_exists($namespace);
+        $objectSeeder = null;
 
-        if (!$exist_class) {
+        if (!class_exists($namespace)) {
             $output->writeln("<error>Class does not exist</error>");
             return Command::INVALID;
         }
 
-        $requestSeeder = (new $namespace())->run();
+        for ($i = 0; $i < $iterate; $i++) {
+            if ($i === 0) {
+                $objectSeeder = new $namespace();
+            }
 
-        if ($requestSeeder->status === 'error') {
-            $output->writeln("<error>{$requestSeeder->message}</error>");
-            return Command::INVALID;
+            $requestSeeder = $objectSeeder->run();
+
+            if ($requestSeeder->status === 'error') {
+                $output->writeln("<error>{$requestSeeder->message}</error>");
+                return Command::INVALID;
+                break;
+            }
         }
 
         $output->writeln("<info>{$requestSeeder->message}</info>");
