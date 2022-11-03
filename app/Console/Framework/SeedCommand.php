@@ -67,7 +67,7 @@ class SeedCommand extends Command {
             ClassPath::add("class {$list['class']} {\r\n\n");
             ClassPath::add("\t/**\n");
             ClassPath::add("\t * ------------------------------------------------------------------------------\n");
-            ClassPath::add("\t * Seed the application's database.\n");
+            ClassPath::add("\t * Seed the application's database\n");
             ClassPath::add("\t * ------------------------------------------------------------------------------\n");
             ClassPath::add("\t **/\n");
             ClassPath::add("\tpublic function run(): object {\r\n\t\treturn DB::call('stored_procedure', []);\n\t}\r\n\n}");
