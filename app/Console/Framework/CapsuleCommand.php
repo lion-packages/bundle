@@ -6,7 +6,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\{ InputInterface, InputArgument, InputOption };
 use Symfony\Component\Console\Output\OutputInterface;
 use LionFiles\Manage;
-use LionSQL\Drivers\MySQLDriver as Builder;
+use LionSQL\Drivers\MySQLDriver as DB;
 use App\Traits\Framework\ClassPath;
 
 class CapsuleCommand extends Command {
@@ -14,13 +14,7 @@ class CapsuleCommand extends Command {
 	protected static $defaultName = "db:capsule";
 
     protected function initialize(InputInterface $input, OutputInterface $output) {
-        Builder::init([
-            'host' => env->DB_HOST,
-            'port' => env->DB_PORT,
-            'db_name' => env->DB_NAME,
-            'user' => env->DB_USER,
-            'password' => env->DB_PASSWORD
-        ]);
+
     }
 
     protected function interact(InputInterface $input, OutputInterface $output) {
@@ -63,7 +57,7 @@ class CapsuleCommand extends Command {
         };
 
         $list = ClassPath::export("Database/Class/", ($path . $normalize($table)));
-        $columns = Builder::showColumns($table);
+        $columns = DB::table($table)->showColumns()->getAll();
         $count = count($columns);
         $functions_union = "";
         // $parameters_union = "";

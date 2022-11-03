@@ -6,7 +6,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\{ InputInterface, InputArgument, InputOption, ArrayInput };
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
-use LionSQL\Drivers\MySQLDriver as Builder;
+use LionSQL\Drivers\MySQLDriver as DB;
 
 class AllCapsulesCommand extends Command {
 
@@ -14,14 +14,6 @@ class AllCapsulesCommand extends Command {
 
     protected function initialize(InputInterface $input, OutputInterface $output) {
         $output->writeln("<comment>Creating all the capsules...</comment>");
-
-        Builder::init([
-            'host' => env->DB_HOST,
-            'port' => env->DB_PORT,
-            'db_name' => env->DB_NAME,
-            'user' => env->DB_USER,
-            'password' => env->DB_PASSWORD
-        ]);
     }
 
     protected function interact(InputInterface $input, OutputInterface $output) {
@@ -38,7 +30,7 @@ class AllCapsulesCommand extends Command {
 
     protected function execute(InputInterface $input, OutputInterface $output) {
         $path = $input->getOption('path');
-        $all_tables = Builder::showTables(env->DB_NAME);
+        $all_tables = DB::showTables(env->DB_NAME)->getAll();
         $size = count($all_tables);
         $progressBar = new ProgressBar($output, $size);
         $progressBar->setFormat('debug_nomax');
