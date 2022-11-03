@@ -338,16 +338,16 @@
         },
         {
             "name": "lion-framework/lion-sql",
-            "version": "v6.0.0",
+            "version": "v6.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-SQL.git",
-                "reference": "4c5f8a8b74e686e0c614d76db719b45ec40bea71"
+                "reference": "ce87c39b45dcc8cf5b91e08c77d094b7f733bf20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/4c5f8a8b74e686e0c614d76db719b45ec40bea71",
-                "reference": "4c5f8a8b74e686e0c614d76db719b45ec40bea71",
+                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/ce87c39b45dcc8cf5b91e08c77d094b7f733bf20",
+                "reference": "ce87c39b45dcc8cf5b91e08c77d094b7f733bf20",
                 "shasum": ""
             },
             "require": {
@@ -373,9 +373,9 @@
             "description": "package in charge of generating and executing MySQL processes",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-SQL/issues",
-                "source": "https://github.com/Sleon4/Lion-SQL/tree/v6.0.0"
+                "source": "https://github.com/Sleon4/Lion-SQL/tree/v6.0.3"
             },
-            "time": "2022-11-03T15:23:18+00:00"
+            "time": "2022-11-03T17:56:41+00:00"
         },
         {
             "name": "nesbot/carbon",

@@ -63,17 +63,14 @@ class SeedCommand extends Command {
             ClassPath::create($url_folder, $list['class']);
             ClassPath::add("<?php\r\n\n");
             ClassPath::add("namespace {$list['namespace']};\r\n\n");
-            ClassPath::add("use LionSQL\Drivers\MySQLDriver as Builder;\n\n");
+            ClassPath::add("use LionSQL\Drivers\MySQLDriver as DB;\n\n");
             ClassPath::add("class {$list['class']} {\r\n\n");
-            ClassPath::add("\tpublic function __construct() {\n");
-            ClassPath::add("\t\tBuilder::init([\n\t\t\t'host' => env->DB_HOST,\n");
-            ClassPath::add("\t\t\t'port' => env->DB_PORT,\n");
-            ClassPath::add("\t\t\t'db_name' => env->DB_NAME,\n");
-            ClassPath::add("\t\t\t'user' => env->DB_USER,\n");
-            ClassPath::add("\t\t\t'password' => env->DB_PASSWORD,\n");
-            ClassPath::add("\t\t]);");
-            ClassPath::add("\n\t}\n\n");
-            ClassPath::add("\tpublic function run(): object {\r\n\t\treturn Builder::call('stored_procedure', []);\n\t}\r\n\n}");
+            ClassPath::add("\t/**\n");
+            ClassPath::add("\t * ------------------------------------------------------------------------------\n");
+            ClassPath::add("\t * Seed the application's database.\n");
+            ClassPath::add("\t * ------------------------------------------------------------------------------\n");
+            ClassPath::add("\t **/\n");
+            ClassPath::add("\tpublic function run(): object {\r\n\t\treturn DB::call('stored_procedure', []);\n\t}\r\n\n}");
             ClassPath::force();
             ClassPath::close();
 
@@ -90,13 +87,9 @@ class SeedCommand extends Command {
         }
 
         for ($i = 0; $i < $iterate; $i++) {
-            if ($i === 0) {
-                $objectSeeder = new $namespace();
-            }
+            $requestSeeder = (new $namespace())->run();
 
-            $requestSeeder = $objectSeeder->run();
-
-            if ($requestSeeder->status === 'error') {
+            if ($requestSeeder->status === 'database-error') {
                 $output->writeln("<error>{$requestSeeder->message}</error>");
                 return Command::INVALID;
                 break;
