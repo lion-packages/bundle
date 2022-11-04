@@ -16,7 +16,7 @@ trait DisplayErrors {
         if (count($this->validation) > 0) {
             foreach ($this->validation as $keyErrors => $errors) {
                 foreach ($errors as $keyError => $message) {
-                    response->finish(json->encode(response->error($message)));
+                    response->finish(response->error($message));
                 }
             }
         }
