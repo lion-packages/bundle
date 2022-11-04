@@ -15,14 +15,14 @@
     "autoload": {
         "psr-4": {
             "App\\": "app/",
-            "Database\\Class\\": "database/Class/"
+            "Database\\Class\\": "database/Class/",
+            "Database\\Factories\\": "database/Factories/",
+            "Database\\Seeders\\": "database/Seeders/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/",
-            "Database\\Factories\\": "database/Factories/",
-            "Database\\Seeders\\": "database/Seeders/"
+            "Tests\\": "tests/"
         }
     },
     "require": {
