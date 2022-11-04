@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\Auth\LoginModel;
+
 class LoginController {
 
-	public function __construct() {
+    private LoginModel $loginModel;
 
+	public function __construct() {
+        $this->loginModel = new LoginModel();
 	}
 
     public function auth() {
-        return response->success('Your are loggin!!');
+        return $this->loginModel->authDB();
     }
 
 }
