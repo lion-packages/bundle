@@ -2,23 +2,17 @@
 
 namespace App\Rules;
 
-use App\Traits\Framework\DisplayErrors;
+use App\Traits\Framework\ShowErrors;
 
 class EmailRule {
 
-	use DisplayErrors;
+	use ShowErrors;
 
-	public function __construct() {
-
-	}
-
-	public function passes(): EmailRule {
-		$this->validateRules([
-			'required' => ["users_email"],
-			'email' => ["users_email"]
-		]);
-
-		return $this;
+	public static function passes(): void {
+		self::validate(function(\Valitron\Validator $validator) {
+            $validator->rule("required", "users_email")->message("El correo del usuario es requerido");
+            $validator->rule("email", "users_email")->message("El correo del usuario debe ser un correo valido");
+        });
 	}
 
 }

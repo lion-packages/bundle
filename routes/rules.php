@@ -10,7 +10,7 @@
 
 return [
     '/auth/login' => [
-        App\Rules\EmailRule::class,
-        App\Rules\PasswordRule::class
+        \App\Rules\EmailRule::class,
+        \App\Rules\PasswordRule::class
     ]
 ];

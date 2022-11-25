@@ -118,7 +118,8 @@ $rules = include_once(__DIR__ . "/../routes/rules.php");
 
 if (isset($rules[$_SERVER['REQUEST_URI']])) {
     foreach ($rules[$_SERVER['REQUEST_URI']] as $key => $rule) {
-        (new $rule())->passes()->display();
+        $rule::passes();
+        $rule::display();
     }
 }
 
