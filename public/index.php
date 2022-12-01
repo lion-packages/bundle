@@ -51,7 +51,7 @@ if (env->RSA_URL_PATH != '') {
  * ------------------------------------------------------------------------------
  **/
 
-include_once(__DIR__ . "/../routes/header.php");
+include_once(path("routes\\header.php"));
 
 /**
  * ------------------------------------------------------------------------------
@@ -109,7 +109,7 @@ Valitron\Validator::lang(env->APP_LANG);
  * ------------------------------------------------------------------------------
  **/
 
-$rules = include_once(__DIR__ . "/../routes/rules.php");
+$rules = include_once(path("routes\\rules.php"));
 
 if (isset($rules[$_SERVER['REQUEST_URI']])) {
     foreach ($rules[$_SERVER['REQUEST_URI']] as $key => $rule) {
@@ -128,7 +128,7 @@ if (isset($rules[$_SERVER['REQUEST_URI']])) {
 
 LionRoute\Route::init();
 LionRoute\Request::init(new GuzzleHttp\Client());
-include_once(__DIR__ . "/../routes/middleware.php");
-include_once(__DIR__ . "/../routes/web.php");
+include_once(path("routes\\middleware.php"));
+include_once(path("routes\\web.php"));
 LionRoute\Route::get('route-list', fn() => LionRoute\Route::getRoutes());
 LionRoute\Route::dispatch();
