@@ -1,6 +1,6 @@
 <?php
 
-use LionRoute\{ Route, Request };
+use LionRoute\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
 

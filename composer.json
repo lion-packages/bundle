@@ -1,5 +1,5 @@
 {
-    "name": "lion-framework/lion-framework",
+    "name": "lion/framework",
     "description": "A simple and easy way to use lion-framework",
     "type": "project",
     "homepage": "https://github.com/Sleon4/Lion-Framework",
@@ -27,11 +27,11 @@
     },
     "require": {
         "php": ">=8.1",
-        "lion-framework/lion-files": "^4.6",
-        "lion-framework/lion-mailer": "^3.2",
-        "lion-framework/lion-route": "^8.0",
-        "lion-framework/lion-security": "^6.8",
-        "lion-framework/lion-sql": "^6.0",
+        "lion/files": "^4.7",
+        "lion/mailer": "^3.5",
+        "lion/route": "^8.1",
+        "lion/security": "^6.9",
+        "lion/sql": "^6.3",
         "nesbot/carbon": "^2.62"
     },
     "require-dev": {
