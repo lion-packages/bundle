@@ -11,7 +11,7 @@ class ServerCommand extends Command {
 	protected static $defaultName = "serve";
 
 	protected function initialize(InputInterface $input, OutputInterface $output) {
-        $output->write("<info>Starting Lion development server: </info>");
+        $output->writeln("\n<info>Starting Lion development server</info>\n");
 	}
 
 	protected function interact(InputInterface $input, OutputInterface $output) {
@@ -34,7 +34,8 @@ class ServerCommand extends Command {
         }
 
         $host = "127.0.0.1:{$port}";
-        $output->writeln("<comment>http://{$host}</comment>");
+        $output->writeln("\t<question>INFO</question> Server running on [http://{$host}].\n");
+        $output->writeln("<comment>Press Ctrl+C to stop the server</comment>\n");
         exec("php -S $host -t public");
 
         return Command::SUCCESS;
