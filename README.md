@@ -7,10 +7,8 @@
 ## Install
 
 ```shell
-composer create-project lion-framework/lion-framework
+composer create-project lion/framework
 ```
-
-[full documentation](https://lion-client.vercel.app/)
 
 ## License
 
