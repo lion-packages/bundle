@@ -25,16 +25,11 @@ require_once(__DIR__ . "/../vendor/autoload.php");
 
 /**
  * ------------------------------------------------------------------------------
- * Request and Response function initializer
- * ------------------------------------------------------------------------------
- * HTTP requests function, to obtain input data and give responses
+ * initialization of predefined constants and functions
  * ------------------------------------------------------------------------------
  **/
 
-define('request', LionRequest\Request::getInstance()->capture());
-define('response', LionRequest\Response::getInstance());
-define('json', LionRequest\Json::getInstance());
-define('env', (object) $_ENV);
+include_once(__DIR__ . "/../storage/framework/functions.php");
 
 /**
  * ------------------------------------------------------------------------------
@@ -132,6 +127,7 @@ if (isset($rules[$_SERVER['REQUEST_URI']])) {
  **/
 
 LionRoute\Route::init();
+LionRoute\Request::init(new GuzzleHttp\Client());
 include_once(__DIR__ . "/../routes/middleware.php");
 include_once(__DIR__ . "/../routes/web.php");
 LionRoute\Route::get('route-list', fn() => LionRoute\Route::getRoutes());

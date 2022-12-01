@@ -1,6 +1,6 @@
 <?php
 
-use LionRoute\Route;
+use LionRoute\{ Route, Request };
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
 
@@ -12,8 +12,10 @@ use App\Http\Controllers\HomeController;
  * ------------------------------------------------------------------------------
  **/
 
-Route::get('/', [HomeController::class, 'index']);
+Route::any('/', [HomeController::class, 'index']);
 
-Route::prefix('auth', function() {
-    Route::post('login', [LoginController::class, 'auth']);
+Route::prefix('api', function() {
+    Route::prefix('auth', function() {
+        Route::post('login', [LoginController::class, 'auth']);
+    });
 });
