@@ -29,7 +29,7 @@ require_once(__DIR__ . "/../vendor/autoload.php");
  * ------------------------------------------------------------------------------
  **/
 
-include_once(__DIR__ . "/../storage/framework/functions.php");
+include_once(__DIR__ . "/../storage/framework/helpers.php");
 
 /**
  * ------------------------------------------------------------------------------
@@ -127,7 +127,7 @@ if (isset($rules[$_SERVER['REQUEST_URI']])) {
  **/
 
 LionRoute\Route::init();
-LionRoute\Request::init(new GuzzleHttp\Client());
+LionRoute\Request::init(client);
 include_once(path("routes\\middleware.php"));
 include_once(path("routes\\web.php"));
 LionRoute\Route::get('route-list', fn() => LionRoute\Route::getRoutes());

@@ -6,6 +6,7 @@
  * ------------------------------------------------------------------------------
  **/
 
+define('client', new GuzzleHttp\Client());
 define('request', LionRequest\Request::getInstance()->capture());
 define('response', LionRequest\Response::getInstance());
 define('json', LionRequest\Json::getInstance());
@@ -20,7 +21,7 @@ define('env', (object) $_ENV);
 if (!function_exists('fetch')) {
     function fetch(string $method, string $uri, array $options = []): array {
         return json->decode(
-            (new GuzzleHttp\Client())
+            (client)
                 ->request($method, $uri, $options)
                 ->getBody()
         );
@@ -53,12 +54,24 @@ if (!function_exists('storage_path')) {
 
 /**
  * ------------------------------------------------------------------------------
- * Function to get the path of the public directory
+ * Function to display a response and end the execution of processes
  * ------------------------------------------------------------------------------
  **/
 
-if (!function_exists('storage_public')) {
-    function public_path(string $path = ""): string {
-        return path("public\\{$path}");
+if (!function_exists('finish')) {
+    function finish(mixed $response): void {
+        response->finish($response);
+    }
+}
+
+/**
+ * ------------------------------------------------------------------------------
+ * Function to perform a var_dump
+ * ------------------------------------------------------------------------------
+ **/
+
+if (!function_exists('vd')) {
+    function vd(mixed $response): void {
+        var_dump($response);
     }
 }
