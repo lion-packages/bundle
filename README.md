@@ -1,6 +1,6 @@
 # Lion-Framework
 
-[![Latest Stable Version](http://poser.pugx.org/lion-framework/lion-framework/v)](https://packagist.org/packages/lion-framework/lion-framework) [![Total Downloads](http://poser.pugx.org/lion-framework/lion-framework/downloads)](https://packagist.org/packages/lion-framework/lion-framework) [![License](http://poser.pugx.org/lion-framework/lion-framework/license)](https://packagist.org/packages/lion-framework/lion-framework) [![PHP Version Require](http://poser.pugx.org/lion-framework/lion-framework/require/php)](https://packagist.org/packages/lion-framework/lion-framework)
+[![Latest Stable Version](http://poser.pugx.org/lion/framework/v)](https://packagist.org/packages/lion/framework) [![Total Downloads](http://poser.pugx.org/lion/framework/downloads)](https://packagist.org/packages/lion/framework) [![License](http://poser.pugx.org/lion/framework/license)](https://packagist.org/packages/lion/framework) [![PHP Version Require](http://poser.pugx.org/lion/framework/require/php)](https://packagist.org/packages/lion/framework)
 
 #### Note: very soon youtube tutorials on the basic operation of the framework
 
