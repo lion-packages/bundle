@@ -21,9 +21,9 @@ class SendMailTest extends TestCase {
     }
 
     public function testSendMail(): void {
-        $responseEmail = Mailer::from('example-dev@outlook.com')
-            ->address('example-dev@outlook.com')
-            ->replyTo('example-dev@outlook.com')
+        $responseEmail = Mailer::from($_ENV['MAIL_USERNAME'])
+            ->address($_ENV['MAIL_USERNAME'])
+            ->replyTo($_ENV['MAIL_USERNAME'])
             ->subject('subject test')
             ->body('body test')
             ->altBody('altbody test')
