@@ -60,6 +60,23 @@ LionSQL\Drivers\MySQLDriver::init([
 
 /**
  * ------------------------------------------------------------------------------
+ * Start email sending service
+ * ------------------------------------------------------------------------------
+ * enter account access credentials
+ * ------------------------------------------------------------------------------
+ **/
+
+LionMailer\Mailer::init([
+    'debug' => (int) env->MAIL_DEBUG,
+    'host' => env->MAIL_HOST,
+    'username' => env->MAIL_USERNAME,
+    'password' => env->MAIL_PASSWORD,
+    'encryption' => env->MAIL_ENCRYPTION,
+    'port' => (int) env->MAIL_PORT,
+]);
+
+/**
+ * ------------------------------------------------------------------------------
  * Console Routes
  * ------------------------------------------------------------------------------
  * This is where you can record your commands for your application

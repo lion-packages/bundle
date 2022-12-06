@@ -79,15 +79,12 @@ LionSQL\Drivers\MySQLDriver::init([
  **/
 
 LionMailer\Mailer::init([
-    'info' => [
-        'debug' => (int) env->MAIL_DEBUG,
-        'host' => env->MAIL_HOST,
-        'port' => (int) env->MAIL_PORT,
-        'email' => env->MAIL_EMAIL,
-        'password' => env->MAIL_PASSWORD,
-        'user_name' => env->MAIL_USER_NAME,
-        'encryption' => env->MAIL_ENCRYPTION === 'false' ? false : (env->MAIL_ENCRYPTION === 'true' ? true : false)
-    ]
+    'debug' => (int) env->MAIL_DEBUG,
+    'host' => env->MAIL_HOST,
+    'username' => env->MAIL_USERNAME,
+    'password' => env->MAIL_PASSWORD,
+    'encryption' => env->MAIL_ENCRYPTION,
+    'port' => (int) env->MAIL_PORT,
 ]);
 
 /**
