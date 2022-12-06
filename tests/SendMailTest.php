@@ -4,12 +4,20 @@ namespace Tests;
 
 use PHPUnit\Framework\TestCase;
 use LionMailer\Mailer;
-use LionMailer\DataMailer\Attach;
 
 class SendMailTest extends TestCase {
 
 	public function setUp(): void {
+        (\Dotenv\Dotenv::createImmutable(__DIR__ . "/../"))->load();
 
+        Mailer::init([
+            'debug' => (int) $_ENV['MAIL_DEBUG'],
+            'host' => $_ENV['MAIL_HOST'],
+            'username' => $_ENV['MAIL_USERNAME'],
+            'password' => $_ENV['MAIL_PASSWORD'],
+            'encryption' => $_ENV['MAIL_ENCRYPTION'],
+            'port' => (int) $_ENV['MAIL_PORT'],
+        ]);
     }
 
     public function testSendMail(): void {
@@ -21,7 +29,7 @@ class SendMailTest extends TestCase {
             ->altBody('el altbody')
             ->send();
 
-		$this->assertEquals('success', $responseEmail->status);
+        $this->assertEquals('success', $responseEmail->status);
     }
 
 }
