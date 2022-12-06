@@ -24,9 +24,9 @@ class SendMailTest extends TestCase {
         $responseEmail = Mailer::from('example-dev@outlook.com')
             ->address('example-dev@outlook.com')
             ->replyTo('example-dev@outlook.com')
-            ->subject('el subject')
-            ->body('el body')
-            ->altBody('el altbody')
+            ->subject('subject test')
+            ->body('body test')
+            ->altBody('altbody test')
             ->send();
 
         $this->assertEquals('success', $responseEmail->status);

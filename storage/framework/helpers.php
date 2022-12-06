@@ -20,11 +20,7 @@ define('env', (object) $_ENV);
 
 if (!function_exists('fetch')) {
     function fetch(string $method, string $uri, array $options = []): array {
-        return json->decode(
-            (client)
-                ->request($method, $uri, $options)
-                ->getBody()
-        );
+        return json->decode(client->request($method, $uri, $options)->getBody());
     }
 }
 
