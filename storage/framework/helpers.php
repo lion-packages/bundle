@@ -71,3 +71,15 @@ if (!function_exists('vd')) {
         var_dump($response);
     }
 }
+
+/**
+ * ------------------------------------------------------------------------------
+ * Function to convert an empty string to null
+ * ------------------------------------------------------------------------------
+ **/
+
+if (!function_exists('stringToNull')) {
+    function stringToNull(string $str) {
+        return empty(trim($str)) ? null : $str;
+    }
+}
