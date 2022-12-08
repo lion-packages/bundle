@@ -1,5 +1,7 @@
 <?php
 
+define('LION_START', microtime(true));
+
 /**
  * ------------------------------------------------------------------------------
  * Register The Auto Loader
