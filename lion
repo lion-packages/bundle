@@ -90,7 +90,7 @@ $commands = [
     ...$web_commands
 ];
 
-$application = new Symfony\Component\Console\Application('Lion-Framework');
+$application = new Symfony\Component\Console\Application('Lion-Framework ' . env->APP_VERSION);
 
 foreach ($commands as $key => $command) {
     $application->add(new $command());
