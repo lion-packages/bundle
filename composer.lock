@@ -504,16 +504,16 @@
         },
         {
             "name": "lion/helpers",
-            "version": "v1.0.0",
+            "version": "v1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Helpers.git",
-                "reference": "52d41113c7289d47e29e60baaef7f28ee64e872a"
+                "reference": "269a0df172379c61c20d452d0e680da29fbcc0e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Helpers/zipball/52d41113c7289d47e29e60baaef7f28ee64e872a",
-                "reference": "52d41113c7289d47e29e60baaef7f28ee64e872a",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Helpers/zipball/269a0df172379c61c20d452d0e680da29fbcc0e8",
+                "reference": "269a0df172379c61c20d452d0e680da29fbcc0e8",
                 "shasum": ""
             },
             "require": {
@@ -538,9 +538,9 @@
             "description": "easy to use helpers for any type of use",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Helpers/issues",
-                "source": "https://github.com/Sleon4/Lion-Helpers/tree/v1.0.0"
+                "source": "https://github.com/Sleon4/Lion-Helpers/tree/v1.2.0"
             },
-            "time": "2022-12-09T00:04:53+00:00"
+            "time": "2022-12-09T22:50:37+00:00"
         },
         {
             "name": "lion/mailer",
@@ -2580,16 +2580,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.5.26",
+            "version": "9.5.27",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "851867efcbb6a1b992ec515c71cdcf20d895e9d2"
+                "reference": "a2bc7ffdca99f92d959b3f2270529334030bba38"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/851867efcbb6a1b992ec515c71cdcf20d895e9d2",
-                "reference": "851867efcbb6a1b992ec515c71cdcf20d895e9d2",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/a2bc7ffdca99f92d959b3f2270529334030bba38",
+                "reference": "a2bc7ffdca99f92d959b3f2270529334030bba38",
                 "shasum": ""
             },
             "require": {
@@ -2662,7 +2662,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.26"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.27"
             },
             "funding": [
                 {
@@ -2678,7 +2678,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-10-28T06:00:21+00:00"
+            "time": "2022-12-09T07:31:23+00:00"
         },
         {
             "name": "psr/container",
