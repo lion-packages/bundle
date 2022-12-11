@@ -57,7 +57,7 @@ class CapsuleCommand extends Command {
         };
 
         $list = ClassPath::export("Database/Class/", ($path . $normalize($table)));
-        $columns = DB::table($table)->showColumns()->getAll();
+        $columns = DB::table($table)->show()->columns()->getAll();
         $count = count($columns);
         $functions_union = "";
         // $parameters_union = "";
