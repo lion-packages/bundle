@@ -30,7 +30,7 @@ class AllCapsulesCommand extends Command {
 
     protected function execute(InputInterface $input, OutputInterface $output) {
         $path = $input->getOption('path');
-        $all_tables = DB::showTables(env->DB_NAME)->getAll();
+        $all_tables = DB::show()->tables()->getAll();
         $size = count($all_tables);
         $progressBar = new ProgressBar($output, $size);
         $progressBar->setFormat('debug_nomax');
