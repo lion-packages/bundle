@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "df8b5e8ff684e97a8545e6be366393ee",
+    "content-hash": "86e5584cfa2bf86affad64c8e1506499",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -504,16 +504,16 @@
         },
         {
             "name": "lion/helpers",
-            "version": "v1.2.0",
+            "version": "v2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Helpers.git",
-                "reference": "269a0df172379c61c20d452d0e680da29fbcc0e8"
+                "reference": "ec7d69019a6fe7f7cce2c46d0d155c78e30dca0d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Helpers/zipball/269a0df172379c61c20d452d0e680da29fbcc0e8",
-                "reference": "269a0df172379c61c20d452d0e680da29fbcc0e8",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Helpers/zipball/ec7d69019a6fe7f7cce2c46d0d155c78e30dca0d",
+                "reference": "ec7d69019a6fe7f7cce2c46d0d155c78e30dca0d",
                 "shasum": ""
             },
             "require": {
@@ -538,9 +538,9 @@
             "description": "easy to use helpers for any type of use",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Helpers/issues",
-                "source": "https://github.com/Sleon4/Lion-Helpers/tree/v1.2.0"
+                "source": "https://github.com/Sleon4/Lion-Helpers/tree/v2.1.0"
             },
-            "time": "2022-12-09T22:50:37+00:00"
+            "time": "2022-12-11T21:27:56+00:00"
         },
         {
             "name": "lion/mailer",

@@ -28,7 +28,7 @@
     "require": {
         "php": ">=8.1",
         "lion/files": "^4.7",
-        "lion/helpers": "^1.0",
+        "lion/helpers": "^2.0",
         "lion/mailer": "^4.0",
         "lion/route": "^8.1",
         "lion/security": "^6.9",

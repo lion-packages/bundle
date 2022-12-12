@@ -2,14 +2,38 @@
 
 namespace App\Traits\Framework;
 
+use LionHelpers\Arr;
+use LionHelpers\Str;
+
 trait ClassPath {
 
     private static $content;
 
+    public static function cleanField(string $field): string {
+        $field = Str::of($field)->replace(" ", "_")->get();
+        return Str::of($field)->replace("-", "_")->get();
+    }
+
+    public static function addType(string $type): string {
+        if (Str::of($type)->test("/^int|bigint/")) {
+            return "int";
+        } elseif (Str::of($type)->test("/^float/")) {
+            return "float";
+        } else {
+            return "string";
+        }
+    }
+
+    public static function normalize(string $class): string {
+        $class = Str::of($class)->replace("_", "")->trim();
+        $class = Str::of(ucwords($class))->trim();
+        return Str::of($class)->replace(" ", "")->trim();
+    }
+
     public static function export(string $default_path, string $class_name): array {
         $namespace = "";
         $separate = explode("/", "{$default_path}{$class_name}");
-        $count = count($separate);
+        $count = Arr::of($separate)->length();
         $list = [];
 
         foreach ($separate as $key => $part) {
