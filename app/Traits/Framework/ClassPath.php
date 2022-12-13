@@ -25,8 +25,8 @@ trait ClassPath {
     }
 
     public static function normalize(string $class): string {
-        $class = Str::of($class)->replace("_", "")->trim();
-        $class = Str::of(ucwords($class))->trim();
+        $class = Str::of($class)->replace("_", " ")->trim();
+        $class = ucwords($class);
         return Str::of($class)->replace(" ", "")->trim();
     }
 
