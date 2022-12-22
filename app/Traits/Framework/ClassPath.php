@@ -9,6 +9,22 @@ trait ClassPath {
 
     private static $content;
 
+    public static function addNewObjectClass(string $class): string {
+        return '$' . Str::of($class)->lower() . " = new {$class}();\n\n";
+    }
+
+    public static function addPropierty($type, $field): string {
+        return "\tprivate ?" . self::addType($type) . ' $' . $field . " = null;\n";
+    }
+
+    public static function addSetFunctionIsset(string $class, string $field, string $request_field): string {
+        return "\t\t{$class}->set" . self::normalize($field) . "(\n\t\t\tisset({$request_field}) ? {$request_field} : null\n\t\t);\n";
+    }
+
+    public static function addSetFunction(string $column, string $field, string $class) {
+        return "\tpublic function set" . self::normalize($field) . "(?" . self::addType($column) . ' $' . "{$field}): {$class}";
+    }
+
     public static function cleanField(string $field): string {
         $field = Str::of($field)->replace(" ", "_")->get();
         return Str::of($field)->replace("-", "_")->get();
