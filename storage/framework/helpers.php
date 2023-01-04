@@ -32,7 +32,7 @@ if (!function_exists('fetch')) {
 
 if (!function_exists('path')) {
     function path(string $path = ""): string {
-        return __DIR__ . ".\\..\\..\\{$path}";
+        return __DIR__ . "./../../{$path}";
     }
 }
 
@@ -44,7 +44,7 @@ if (!function_exists('path')) {
 
 if (!function_exists('storage_path')) {
     function storage_path(string $path = ""): string {
-        return path("storage\\{$path}");
+        return path("storage/{$path}");
     }
 }
 
