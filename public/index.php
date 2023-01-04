@@ -61,7 +61,7 @@ include_once(path("routes\\header.php"));
  * ------------------------------------------------------------------------------
  **/
 
-LionSQL\Drivers\MySQLDriver::init([
+LionSQL\Drivers\MySQL::init([
     'type' => env->DB_TYPE,
     'host' => env->DB_HOST,
     'port' => env->DB_PORT,

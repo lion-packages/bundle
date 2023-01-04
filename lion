@@ -51,7 +51,7 @@ if (env->RSA_URL_PATH != '') {
  * ------------------------------------------------------------------------------
  **/
 
-LionSQL\Drivers\MySQLDriver::init([
+LionSQL\Drivers\MySQL::init([
     'type' => env->DB_TYPE,
     'host' => env->DB_HOST,
     'port' => env->DB_PORT,
