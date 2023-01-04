@@ -32,7 +32,7 @@
         "lion/mailer": "^4.0",
         "lion/route": "^8.1",
         "lion/security": "^6.9",
-        "lion/sql": "^6.3",
+        "lion/sql": "^6.5",
         "nesbot/carbon": "^2.62"
     },
     "require-dev": {
