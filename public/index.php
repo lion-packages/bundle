@@ -40,7 +40,7 @@ include_once(__DIR__ . "/../storage/framework/helpers.php");
  **/
 
 if (env->RSA_URL_PATH != '') {
-    LionSecurity\RSA::$url_path = path(env->RSA_URL_PATH);
+    LionSecurity\RSA::$url_path = "../" . env->RSA_URL_PATH;
 }
 
 /**
@@ -51,7 +51,7 @@ if (env->RSA_URL_PATH != '') {
  * ------------------------------------------------------------------------------
  **/
 
-include_once(path("routes/header.php"));
+include_once("../routes/header.php");
 
 /**
  * ------------------------------------------------------------------------------
@@ -106,7 +106,7 @@ Valitron\Validator::lang(env->APP_LANG);
  * ------------------------------------------------------------------------------
  **/
 
-$rules = include_once(path("routes/rules.php"));
+$rules = include_once("../routes/rules.php");
 
 if (isset($rules[$_SERVER['REQUEST_URI']])) {
     foreach ($rules[$_SERVER['REQUEST_URI']] as $key => $rule) {
@@ -125,7 +125,7 @@ if (isset($rules[$_SERVER['REQUEST_URI']])) {
 
 LionRoute\Route::init();
 LionRoute\Request::init(client);
-include_once(path("routes/middleware.php"));
-include_once(path("routes/web.php"));
+include_once("../routes/middleware.php");
+include_once("../routes/web.php");
 LionRoute\Route::get('route-list', fn() => LionRoute\Route::getRoutes());
 LionRoute\Route::dispatch();

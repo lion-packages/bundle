@@ -26,25 +26,13 @@ if (!function_exists('fetch')) {
 
 /**
  * ------------------------------------------------------------------------------
- * Function to get current directory path
- * ------------------------------------------------------------------------------
- **/
-
-if (!function_exists('path')) {
-    function path(string $path = ""): string {
-        return __DIR__ . "./../../{$path}";
-    }
-}
-
-/**
- * ------------------------------------------------------------------------------
  * Function to get the path of the storage directory
  * ------------------------------------------------------------------------------
  **/
 
 if (!function_exists('storage_path')) {
     function storage_path(string $path = ""): string {
-        return path("storage/{$path}");
+        return "../storage/{$path}";
     }
 }
 
