@@ -68,8 +68,6 @@ LionSQL\Drivers\MySQL::init([
  * ------------------------------------------------------------------------------
  **/
 
-use App\Console\Kernel;
-
-Kernel::init();
-Kernel::add();
-Kernel::run();
+$kernel = new App\Console\Kernel();
+$kernel->add();
+$kernel->run();

@@ -89,17 +89,6 @@ LionMailer\Mailer::init([
 
 /**
  * ------------------------------------------------------------------------------
- * Initialize validator class language
- * ------------------------------------------------------------------------------
- * valitron provides a set of languages for responses
- * https://github.com/vlucas/valitron/tree/master/lang
- * ------------------------------------------------------------------------------
- **/
-
-Valitron\Validator::lang(env->APP_LANG);
-
-/**
- * ------------------------------------------------------------------------------
  * Use rules by routes
  * ------------------------------------------------------------------------------
  * use whatever rules you want to validate input data
