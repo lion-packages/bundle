@@ -33,7 +33,7 @@
         "lion/route": "^8.1",
         "lion/security": "^6.9",
         "lion/sql": "^6.5",
-        "nesbot/carbon": "^2.62"
+        "nesbot/carbon": "^2.66"
     },
     "require-dev": {
         "fakerphp/faker": "^1.20",
