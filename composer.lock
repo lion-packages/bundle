@@ -710,16 +710,16 @@
         },
         {
             "name": "lion/sql",
-            "version": "v6.5.1",
+            "version": "v6.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-SQL.git",
-                "reference": "90a2609c1636197ce971d2d3b068aeb64dbbc82f"
+                "reference": "67f5aed44af4b06290fed561b2072a98810b7acf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/90a2609c1636197ce971d2d3b068aeb64dbbc82f",
-                "reference": "90a2609c1636197ce971d2d3b068aeb64dbbc82f",
+                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/67f5aed44af4b06290fed561b2072a98810b7acf",
+                "reference": "67f5aed44af4b06290fed561b2072a98810b7acf",
                 "shasum": ""
             },
             "require": {
@@ -745,9 +745,9 @@
             "description": "package in charge of generating and executing MySQL processes",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-SQL/issues",
-                "source": "https://github.com/Sleon4/Lion-SQL/tree/v6.5.1"
+                "source": "https://github.com/Sleon4/Lion-SQL/tree/v6.6.0"
             },
-            "time": "2023-01-04T18:30:24+00:00"
+            "time": "2023-02-04T15:27:04+00:00"
         },
         {
             "name": "nesbot/carbon",
@@ -2581,16 +2581,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.6.1",
+            "version": "9.6.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "9a52e8385f3e432d7e8ecab72c4d211a67223285"
+                "reference": "e7b1615e3e887d6c719121c6d4a44b0ab9645555"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/9a52e8385f3e432d7e8ecab72c4d211a67223285",
-                "reference": "9a52e8385f3e432d7e8ecab72c4d211a67223285",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/e7b1615e3e887d6c719121c6d4a44b0ab9645555",
+                "reference": "e7b1615e3e887d6c719121c6d4a44b0ab9645555",
                 "shasum": ""
             },
             "require": {
@@ -2663,7 +2663,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.1"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.3"
             },
             "funding": [
                 {
@@ -2679,7 +2679,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-02-03T19:31:30+00:00"
+            "time": "2023-02-04T13:37:15+00:00"
         },
         {
             "name": "psr/container",
