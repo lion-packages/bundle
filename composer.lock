@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "79d49a94830559da1af92867622ff298",
+    "content-hash": "84b17c4c3e0d9201e63dbe89402d2bcb",
     "packages": [
         {
             "name": "firebase/php-jwt",
-            "version": "v6.3.2",
+            "version": "v6.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/firebase/php-jwt.git",
-                "reference": "ea7dda77098b96e666c5ef382452f94841e439cd"
+                "reference": "4dd1e007f22a927ac77da5a3fbb067b42d3bc224"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/ea7dda77098b96e666c5ef382452f94841e439cd",
-                "reference": "ea7dda77098b96e666c5ef382452f94841e439cd",
+                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/4dd1e007f22a927ac77da5a3fbb067b42d3bc224",
+                "reference": "4dd1e007f22a927ac77da5a3fbb067b42d3bc224",
                 "shasum": ""
             },
             "require": {
@@ -32,6 +32,7 @@
                 "psr/http-factory": "^1.0"
             },
             "suggest": {
+                "ext-sodium": "Support EdDSA (Ed25519) signatures",
                 "paragonie/sodium_compat": "Support EdDSA (Ed25519) signatures when libsodium is not present"
             },
             "type": "library",
@@ -64,9 +65,9 @@
             ],
             "support": {
                 "issues": "https://github.com/firebase/php-jwt/issues",
-                "source": "https://github.com/firebase/php-jwt/tree/v6.3.2"
+                "source": "https://github.com/firebase/php-jwt/tree/v6.4.0"
             },
-            "time": "2022-12-19T17:10:46+00:00"
+            "time": "2023-02-09T21:01:23+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -463,16 +464,16 @@
         },
         {
             "name": "lion/files",
-            "version": "v4.7.0",
+            "version": "v4.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Files.git",
-                "reference": "cc61f6a2bc1801ab7da40c63716dd2788a89c49f"
+                "reference": "476e322e5732922b76b46d613e291605c148c414"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Files/zipball/cc61f6a2bc1801ab7da40c63716dd2788a89c49f",
-                "reference": "cc61f6a2bc1801ab7da40c63716dd2788a89c49f",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Files/zipball/476e322e5732922b76b46d613e291605c148c414",
+                "reference": "476e322e5732922b76b46d613e291605c148c414",
                 "shasum": ""
             },
             "require": {
@@ -498,9 +499,9 @@
             "description": "Library created with the function of working internal system files.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Files/issues",
-                "source": "https://github.com/Sleon4/Lion-Files/tree/v4.7.0"
+                "source": "https://github.com/Sleon4/Lion-Files/tree/v4.8.0"
             },
-            "time": "2022-12-01T19:45:51+00:00"
+            "time": "2023-02-10T21:53:23+00:00"
         },
         {
             "name": "lion/helpers",
@@ -667,16 +668,16 @@
         },
         {
             "name": "lion/security",
-            "version": "v6.10.1",
+            "version": "v6.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Security.git",
-                "reference": "448323f39ba4231d31871907b052a1c6c2a3812d"
+                "reference": "ddbdf4e8f8c7c41c9a7b795d2c759bbd6e7afec7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Security/zipball/448323f39ba4231d31871907b052a1c6c2a3812d",
-                "reference": "448323f39ba4231d31871907b052a1c6c2a3812d",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Security/zipball/ddbdf4e8f8c7c41c9a7b795d2c759bbd6e7afec7",
+                "reference": "ddbdf4e8f8c7c41c9a7b795d2c759bbd6e7afec7",
                 "shasum": ""
             },
             "require": {
@@ -704,9 +705,9 @@
             "description": "Library created with the function of implementing AES, RSA and JWT Security functions for PHP.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Security/issues",
-                "source": "https://github.com/Sleon4/Lion-Security/tree/v6.10.1"
+                "source": "https://github.com/Sleon4/Lion-Security/tree/v6.11.0"
             },
-            "time": "2023-02-03T20:06:08+00:00"
+            "time": "2023-02-10T21:55:50+00:00"
         },
         {
             "name": "lion/sql",
