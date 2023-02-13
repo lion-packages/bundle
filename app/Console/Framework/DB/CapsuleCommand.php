@@ -5,7 +5,7 @@ namespace App\Console\Framework\DB;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\{ InputInterface, InputArgument, InputOption };
 use Symfony\Component\Console\Output\OutputInterface;
-use LionFiles\Manage;
+use LionFiles\Store;
 use LionSQL\Drivers\MySQL as DB;
 use App\Traits\Framework\ClassPath;
 use LionHelpers\Str;
@@ -60,7 +60,7 @@ class CapsuleCommand extends Command {
         $object_class = "";
 
         $url_folder = lcfirst(Str::of($list['namespace'])->replace("\\", "/")->get());
-        Manage::folder($url_folder);
+        Store::folder($url_folder);
 
         ClassPath::create($url_folder, $list['class']);
         ClassPath::add(Str::of("<?php")->ln()->ln()->get());

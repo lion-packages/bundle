@@ -2,7 +2,7 @@
 
 namespace App\Console\Framework\New;
 
-use LionFiles\Manage;
+use LionFiles\Store;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -33,7 +33,7 @@ class CapsuleCommand extends Command {
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$list = ClassPath::export("database/Class/", $input->getArgument('capsule'));
         $url_folder = lcfirst(str_replace("\\", "/", $list['namespace']));
-        Manage::folder($url_folder);
+        Store::folder($url_folder);
 
         ClassPath::create($url_folder, $list['class']);
         ClassPath::add(Str::of("<?php\r")->ln()->ln()->get());

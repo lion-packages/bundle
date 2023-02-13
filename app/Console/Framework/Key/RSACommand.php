@@ -6,7 +6,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\{ InputInterface, InputOption };
 use Symfony\Component\Console\Output\OutputInterface;
 use LionSecurity\RSA;
-use LionFiles\Manage;
+use LionFiles\Store;
 
 class RSACommand extends Command {
 
@@ -32,9 +32,9 @@ class RSACommand extends Command {
         $path = $input->getOption('path');
 
         RSA::$url_path = $path === null ? RSA::$url_path : path($path);
-		Manage::folder(RSA::$url_path);
+		Store::folder(RSA::$url_path);
 		RSA::createKeys();
-		Manage::remove('.rnd');
+		Store::remove('.rnd');
 
 		$output->writeln("<info>Public and private key created successfully</info>");
 		return Command::SUCCESS;
