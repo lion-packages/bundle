@@ -55,7 +55,7 @@ class SeedCommand extends Command {
             ClassPath::create($url_folder, $list['class']);
             ClassPath::add(Str::of("<?php\r")->ln()->ln()->get());
             ClassPath::add(Str::of("namespace ")->concat($list['namespace'])->concat(";\r")->ln()->ln()->get());
-            ClassPath::add(Str::of("use LionSQL\Drivers\MySQLDriver as DB;")->ln()->ln()->get());
+            ClassPath::add(Str::of("use LionSQL\Drivers\MySQL as DB;")->ln()->ln()->get());
             ClassPath::add(Str::of("class ")->concat($list['class'])->concat(" {\r")->ln()->ln()->get());
             ClassPath::add("\t/**\n");
             ClassPath::add("\t * ------------------------------------------------------------------------------\n");
