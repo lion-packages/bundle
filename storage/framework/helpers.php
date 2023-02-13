@@ -59,3 +59,20 @@ if (!function_exists('vd')) {
         var_dump($response);
     }
 }
+
+/**
+ * ------------------------------------------------------------------------------
+ * Function to add a line to the log file
+ * ------------------------------------------------------------------------------
+ **/
+
+if (!function_exists('logger')) {
+    function logger(string $str, string $log_type = 'info', array $data = []): void {
+        (new Monolog\Logger('log'))->pushHandler(
+            new Monolog\Handler\StreamHandler(
+                storage_path("logs/lion-" . Carbon\Carbon::now()->format("Y-m-d") . ".log"),
+                Monolog\Level::Debug
+            )
+        )->$log_type($str, $data);
+    }
+}

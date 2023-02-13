@@ -33,6 +33,7 @@
         "lion/route": "^8.1",
         "lion/security": "^6.11",
         "lion/sql": "^6.5",
+        "monolog/monolog": "^3.3",
         "nesbot/carbon": "^2.66"
     },
     "require-dev": {

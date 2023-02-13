@@ -61,7 +61,7 @@ include_once("../routes/header.php");
  * ------------------------------------------------------------------------------
  **/
 
-LionSQL\Drivers\MySQL::init([
+$responseDatabase = LionSQL\Drivers\MySQL::init([
     'type' => env->DB_TYPE,
     'host' => env->DB_HOST,
     'port' => env->DB_PORT,
@@ -69,6 +69,10 @@ LionSQL\Drivers\MySQL::init([
     'user' => env->DB_USER,
     'password' => env->DB_PASSWORD
 ]);
+
+if ($responseDatabase->status === 'error') {
+    logger($responseDatabase->message, 'error');
+}
 
 /**
  * ------------------------------------------------------------------------------
