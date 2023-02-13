@@ -464,16 +464,16 @@
         },
         {
             "name": "lion/files",
-            "version": "v4.8.0",
+            "version": "v4.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Files.git",
-                "reference": "476e322e5732922b76b46d613e291605c148c414"
+                "reference": "f83af0a0a4358bd4de5b492d4df5651e68c2f409"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Files/zipball/476e322e5732922b76b46d613e291605c148c414",
-                "reference": "476e322e5732922b76b46d613e291605c148c414",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Files/zipball/f83af0a0a4358bd4de5b492d4df5651e68c2f409",
+                "reference": "f83af0a0a4358bd4de5b492d4df5651e68c2f409",
                 "shasum": ""
             },
             "require": {
@@ -499,9 +499,9 @@
             "description": "Library created with the function of working internal system files.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Files/issues",
-                "source": "https://github.com/Sleon4/Lion-Files/tree/v4.8.0"
+                "source": "https://github.com/Sleon4/Lion-Files/tree/v4.9.0"
             },
-            "time": "2023-02-10T21:53:23+00:00"
+            "time": "2023-02-13T17:11:11+00:00"
         },
         {
             "name": "lion/helpers",
