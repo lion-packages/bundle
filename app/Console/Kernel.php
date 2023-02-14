@@ -29,7 +29,7 @@ class Kernel {
     private Application $application;
 
     public function __construct() {
-        $this->application = new Application(env->APP_NAME . ' ' . env->APP_VERSION);
+        $this->application = new Application(env->APP_NAME);
     }
 
     public function add(): void {
