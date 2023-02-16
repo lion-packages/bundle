@@ -3,7 +3,6 @@
 use LionRoute\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
-use LionSQL\Drivers\MySQL as DB;
 
 /**
  * ------------------------------------------------------------------------------
