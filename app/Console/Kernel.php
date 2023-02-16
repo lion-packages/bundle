@@ -7,8 +7,7 @@ use Symfony\Component\Console\Application;
 class Kernel {
 
     private array $commands = [
-        \App\Console\Framework\ServerCommand::class,
-        \App\Console\Framework\RunTestCommand::class,
+        // ---------------------------------------------------------------------- //
         \App\Console\Framework\DB\CapsuleCommand::class,
         \App\Console\Framework\DB\SeedCommand::class,
         \App\Console\Framework\DB\FactoryCommand::class,
@@ -22,8 +21,17 @@ class Kernel {
         \App\Console\Framework\New\RulesCommand::class,
         \App\Console\Framework\New\TestCommand::class,
         \App\Console\Framework\New\TraitCommand::class,
+        \App\Console\Framework\New\WebSocketsCommand::class,
         \App\Console\Framework\Route\RouteListCommand::class,
-        \App\Console\Framework\Token\GenerateJWTCommand::class
+        \App\Console\Framework\Sockets\RunWebSocketsCommand::class,
+        \App\Console\Framework\Token\GenerateJWTCommand::class,
+        \App\Console\Framework\RunTestCommand::class,
+        \App\Console\Framework\ServerCommand::class
+        // ---------------------------------------------------------------------- //
+    ];
+
+    private array $socket_commands = [
+        // 'ExampleSocket' => \App\Http\Sockets\ExampleSocket::class
     ];
 
     private Application $application;
@@ -38,14 +46,12 @@ class Kernel {
         }
     }
 
-    public function push(array $commands): void {
-        foreach ($commands as $key => $command) {
-            $this->application->add(new $command());
-        }
-    }
-
     public function run(): void {
         $this->application->run();
+    }
+
+    public function getClass(string $class_name): string {
+        return $this->socket_commands[$class_name];
     }
 
 }

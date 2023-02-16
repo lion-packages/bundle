@@ -27,6 +27,7 @@
     },
     "require": {
         "php": ">=8.1",
+        "cboden/ratchet": "^0.4.4",
         "lion/files": "^4.7",
         "lion/helpers": "^2.0",
         "lion/mailer": "^4.0",
