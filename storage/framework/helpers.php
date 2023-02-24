@@ -67,10 +67,14 @@ if (!function_exists('vd')) {
  **/
 
 if (!function_exists('logger')) {
-    function logger(string $str, string $log_type = 'info', array $data = []): void {
+    function logger(string $str, string $log_type = 'info', array $data = [], bool $index = true): void {
+        $file_name = "lion-" . Carbon\Carbon::now()->format("Y-m-d") . ".log";
+        $path = !$index ? "storage/logs/" : storage_path("logs/");
+        LionFiles\Store::folder($path);
+
         (new Monolog\Logger('log'))->pushHandler(
             new Monolog\Handler\StreamHandler(
-                storage_path("logs/lion-" . Carbon\Carbon::now()->format("Y-m-d") . ".log"),
+                ($path . $file_name),
                 Monolog\Level::Debug
             )
         )->$log_type($str, $data);

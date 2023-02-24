@@ -1,8 +1,8 @@
 <?php
 
-use LionRoute\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
+use LionRoute\Route;
 
 /**
  * ------------------------------------------------------------------------------
