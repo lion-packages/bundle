@@ -34,17 +34,21 @@ class ModelCommand extends Command {
 		Store::folder($url_folder);
 
 		ClassPath::create($url_folder, $list['class']);
-		ClassPath::add("<?php\r\n\n");
-		ClassPath::add("namespace {$list['namespace']};\r\n\n");
-		ClassPath::add("use LionSQL\Drivers\MySQL as DB;\r\n\n");
-		ClassPath::add("class {$list['class']} {\r\n\n");
-		ClassPath::add("\tpublic function __construct() {\r\n\t\t\r\n\t}");
-		ClassPath::add("\r\n\n}");
-		ClassPath::force();
-		ClassPath::close();
+		ClassPath::add("<?php\n\n");
+		ClassPath::add("namespace {$list['namespace']};\n\n");
+		ClassPath::add("use LionSQL\Drivers\MySQL as DB;\n\n");
+		ClassPath::add("class {$list['class']} {\n\n");
+		ClassPath::add("\tpublic function __construct() {\n\t\t\n\t}\n\n");
+        ClassPath::add("\tpublic function createDB() {\n\n\t}\n\n");
+        ClassPath::add("\tpublic function readDB() {\n\n\t}\n\n");
+        ClassPath::add("\tpublic function updateDB() {\n\n\t}\n\n");
+        ClassPath::add("\tpublic function deleteDB() {\n\n\t}\n\n");
+        ClassPath::add("}");
+        ClassPath::force();
+        ClassPath::close();
 
-		$output->writeln("<info>Model created successfully</info>");
-		return Command::SUCCESS;
-	}
+        $output->writeln("<info>Model created successfully</info>");
+        return Command::SUCCESS;
+    }
 
 }
