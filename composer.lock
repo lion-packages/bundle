@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "17867c762c9dcd82aa9f398376aac7b5",
+    "content-hash": "69aed55c5589f1f267775d0eb0fe4aa2",
     "packages": [
         {
             "name": "cboden/ratchet",
@@ -455,16 +455,16 @@
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "2.4.3",
+            "version": "2.4.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "67c26b443f348a51926030c83481b85718457d3d"
+                "reference": "3cf1b6d4f0c820a2cf8bcaec39fc698f3443b5cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/67c26b443f348a51926030c83481b85718457d3d",
-                "reference": "67c26b443f348a51926030c83481b85718457d3d",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/3cf1b6d4f0c820a2cf8bcaec39fc698f3443b5cf",
+                "reference": "3cf1b6d4f0c820a2cf8bcaec39fc698f3443b5cf",
                 "shasum": ""
             },
             "require": {
@@ -554,7 +554,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/psr7/issues",
-                "source": "https://github.com/guzzle/psr7/tree/2.4.3"
+                "source": "https://github.com/guzzle/psr7/tree/2.4.4"
             },
             "funding": [
                 {
@@ -570,7 +570,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-10-26T14:07:24+00:00"
+            "time": "2023-03-09T13:19:02+00:00"
         },
         {
             "name": "lion/files",
@@ -736,16 +736,16 @@
         },
         {
             "name": "lion/route",
-            "version": "v8.1.0",
+            "version": "v8.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Route.git",
-                "reference": "bef9168ee1c0c7129c62f46eba0b7c9423242f28"
+                "reference": "f560d2f583aa32a7a7eacea93de836911969de09"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Route/zipball/bef9168ee1c0c7129c62f46eba0b7c9423242f28",
-                "reference": "bef9168ee1c0c7129c62f46eba0b7c9423242f28",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Route/zipball/f560d2f583aa32a7a7eacea93de836911969de09",
+                "reference": "f560d2f583aa32a7a7eacea93de836911969de09",
                 "shasum": ""
             },
             "require": {
@@ -765,16 +765,15 @@
             ],
             "authors": [
                 {
-                    "name": "Sergio León",
-                    "email": "sergioleon4004@hotmail.com"
+                    "name": "Sergio León"
                 }
             ],
             "description": "This library has a fast router usage with regular expressions.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Route/issues",
-                "source": "https://github.com/Sleon4/Lion-Route/tree/v8.1.0"
+                "source": "https://github.com/Sleon4/Lion-Route/tree/v8.2.0"
             },
-            "time": "2022-12-01T17:18:07+00:00"
+            "time": "2023-03-17T18:14:23+00:00"
         },
         {
             "name": "lion/security",
@@ -782,12 +781,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Security.git",
-                "reference": "ddbdf4e8f8c7c41c9a7b795d2c759bbd6e7afec7"
+                "reference": "324a829bd4eee950ed171e6aa500ed7a6c14a867"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Security/zipball/ddbdf4e8f8c7c41c9a7b795d2c759bbd6e7afec7",
-                "reference": "ddbdf4e8f8c7c41c9a7b795d2c759bbd6e7afec7",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Security/zipball/324a829bd4eee950ed171e6aa500ed7a6c14a867",
+                "reference": "324a829bd4eee950ed171e6aa500ed7a6c14a867",
                 "shasum": ""
             },
             "require": {
@@ -808,8 +807,7 @@
             ],
             "authors": [
                 {
-                    "name": "Sergio León",
-                    "email": "sergioleon4004@hotmail.com"
+                    "name": "Sergio León"
                 }
             ],
             "description": "Library created with the function of implementing AES, RSA and JWT Security functions for PHP.",
@@ -817,7 +815,7 @@
                 "issues": "https://github.com/Sleon4/Lion-Security/issues",
                 "source": "https://github.com/Sleon4/Lion-Security/tree/v6.11.0"
             },
-            "time": "2023-02-10T21:55:50+00:00"
+            "time": "2023-03-17T18:08:35+00:00"
         },
         {
             "name": "lion/sql",
@@ -4106,16 +4104,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.6.4",
+            "version": "9.6.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "9125ee085b6d95e78277dc07aa1f46f9e0607b8d"
+                "reference": "86e761949019ae83f49240b2f2123fb5ab3b2fc5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/9125ee085b6d95e78277dc07aa1f46f9e0607b8d",
-                "reference": "9125ee085b6d95e78277dc07aa1f46f9e0607b8d",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/86e761949019ae83f49240b2f2123fb5ab3b2fc5",
+                "reference": "86e761949019ae83f49240b2f2123fb5ab3b2fc5",
                 "shasum": ""
             },
             "require": {
@@ -4148,8 +4146,8 @@
                 "sebastian/version": "^3.0.2"
             },
             "suggest": {
-                "ext-soap": "*",
-                "ext-xdebug": "*"
+                "ext-soap": "To be able to generate mocks based on WSDL files",
+                "ext-xdebug": "PHP extension that provides line coverage as well as branch and path coverage"
             },
             "bin": [
                 "phpunit"
@@ -4188,7 +4186,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.4"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.5"
             },
             "funding": [
                 {
@@ -4204,7 +4202,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-02-27T13:06:37+00:00"
+            "time": "2023-03-09T06:34:10+00:00"
         },
         {
             "name": "sebastian/cli-parser",
