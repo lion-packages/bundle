@@ -24,7 +24,6 @@ class RouteListCommand extends Command {
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $table = new Table($output);
         $routes = (array) json_decode(file_get_contents(env->SERVER_URL . "/route-list"));
         array_pop($routes);
 
@@ -56,8 +55,10 @@ class RouteListCommand extends Command {
             }
         }
 
-        $table->setHeaders(['TYPE', 'URL', 'CONTROLLER', 'METHOD', 'REQUEST'])->setRows($rows);
-        $table->render();
+        (new Table($output))
+            ->setHeaders(['TYPE', 'URL', 'CONTROLLER', 'METHOD', 'REQUEST'])
+            ->setRows($rows)
+            ->render();
 
         return Command::SUCCESS;
     }
