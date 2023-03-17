@@ -17,6 +17,7 @@ trait ShowErrors {
     public static function display(): void {
         if (count(self::$validation) > 0) {
             foreach (self::$validation as $keyErrors => $errors) {
+                logger($errors[0], 'error');
                 response->finish(response->error($errors[0]));
             }
         }
