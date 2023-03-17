@@ -18,4 +18,6 @@ Route::prefix('api', function() {
     Route::prefix('auth', function() {
         Route::post('login', [LoginController::class, 'auth']);
     });
+
+    Route::get('jsonplaceholder', 'https://jsonplaceholder.typicode.com/posts');
 });

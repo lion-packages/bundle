@@ -24,16 +24,11 @@ class RouteListCommand extends Command {
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $url = env->SERVER_URL . "/route-list";
-        $routes = (array) json_decode(file_get_contents($url));
+        $table = new Table($output);
+        $routes = (array) json_decode(file_get_contents(env->SERVER_URL . "/route-list"));
         array_pop($routes);
 
-        $table = new Table($output);
-        // $table->setStyle('box');
-
         $rows = [];
-        // $i = 0;
-        // $total_cont = count($routes);
         foreach ($routes as $key => $route) {
             $route = (array) $route;
 
@@ -41,21 +36,27 @@ class RouteListCommand extends Command {
                 $info_route = (array) $info_route;
                 $controller = (array) $info_route[0];
 
-                $rows[] = [
-                    // ($i + 1),
-                    "<comment>{$key2}</comment>",
-                    ($key === '' ? '/' : $key),
-                    isset($controller[0]) ? $controller[0] : '',
-                    isset($controller[1]) ? $controller[1] : 'callback'
-                ];
-
-                // if ($i < ($total_cont - 1)) $rows[] = new TableSeparator();
+                if (count($controller) === 0) {
+                    $rows[] = [
+                        "<comment>{$key2}</comment>",
+                        ($key === '' ? '/' : $key),
+                        '',
+                        '',
+                        'true'
+                    ];
+                } else {
+                    $rows[] = [
+                        "<comment>{$key2}</comment>",
+                        ($key === '' ? '/' : $key),
+                        isset($controller[0]) ? $controller[0] : '',
+                        isset($controller[1]) ? $controller[1] : 'callback',
+                        'false'
+                    ];
+                }
             }
-
-            // $i++;
         }
 
-        $table->setHeaders([/* '#', */ 'TYPE', 'URL', 'CONTROLLER', 'METHOD'])->setRows($rows);
+        $table->setHeaders(['TYPE', 'URL', 'CONTROLLER', 'METHOD', 'REQUEST'])->setRows($rows);
         $table->render();
 
         return Command::SUCCESS;
