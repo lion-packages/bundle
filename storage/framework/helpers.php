@@ -98,6 +98,18 @@ if (!function_exists('warning')) {
 
 /**
  * ------------------------------------------------------------------------------
+ * Function to display a info response and end the execution of processes
+ * ------------------------------------------------------------------------------
+ **/
+
+if (!function_exists('info')) {
+    function info(mixed $response, array|object $data = []): object {
+        return response->info($response, $data);
+    }
+}
+
+/**
+ * ------------------------------------------------------------------------------
  * Function to perform a var_dump
  * ------------------------------------------------------------------------------
  **/
