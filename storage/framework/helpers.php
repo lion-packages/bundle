@@ -62,7 +62,7 @@ if (!function_exists('finish')) {
 
 /**
  * ------------------------------------------------------------------------------
- * Function to display a success response and end the execution of processes
+ * Function to display a success response
  * ------------------------------------------------------------------------------
  **/
 
@@ -74,7 +74,7 @@ if (!function_exists('success')) {
 
 /**
  * ------------------------------------------------------------------------------
- * Function to display a error response and end the execution of processes
+ * Function to display a error response
  * ------------------------------------------------------------------------------
  **/
 
@@ -86,7 +86,7 @@ if (!function_exists('error')) {
 
 /**
  * ------------------------------------------------------------------------------
- * Function to display a warning response and end the execution of processes
+ * Function to display a warning response
  * ------------------------------------------------------------------------------
  **/
 
@@ -98,7 +98,7 @@ if (!function_exists('warning')) {
 
 /**
  * ------------------------------------------------------------------------------
- * Function to display a info response and end the execution of processes
+ * Function to display a info response
  * ------------------------------------------------------------------------------
  **/
 
