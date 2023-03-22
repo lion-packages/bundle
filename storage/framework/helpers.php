@@ -86,6 +86,18 @@ if (!function_exists('error')) {
 
 /**
  * ------------------------------------------------------------------------------
+ * Function to display a warning response and end the execution of processes
+ * ------------------------------------------------------------------------------
+ **/
+
+if (!function_exists('warning')) {
+    function warning(mixed $response, array|object $data = []): object {
+        return response->warning($response, $data);
+    }
+}
+
+/**
+ * ------------------------------------------------------------------------------
  * Function to perform a var_dump
  * ------------------------------------------------------------------------------
  **/
