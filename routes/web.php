@@ -15,7 +15,7 @@ use LionRoute\Route;
 Route::any('/', [HomeController::class, 'index']);
 
 Route::get('example', function() {
-    return success("Hola mundo");
+    return error("Hola mundo");
 });
 
 Route::prefix('api', function() {

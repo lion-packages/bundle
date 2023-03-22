@@ -74,6 +74,18 @@ if (!function_exists('success')) {
 
 /**
  * ------------------------------------------------------------------------------
+ * Function to display a error response and end the execution of processes
+ * ------------------------------------------------------------------------------
+ **/
+
+if (!function_exists('error')) {
+    function error(mixed $response, array|object $data = []): object {
+        return response->error($response, $data);
+    }
+}
+
+/**
+ * ------------------------------------------------------------------------------
  * Function to perform a var_dump
  * ------------------------------------------------------------------------------
  **/
