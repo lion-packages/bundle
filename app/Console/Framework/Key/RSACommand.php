@@ -31,7 +31,7 @@ class RSACommand extends Command {
 	protected function execute(InputInterface $input, OutputInterface $output) {
         $path = $input->getOption('path');
 
-        RSA::$url_path = $path === null ? RSA::$url_path : path($path);
+        RSA::$url_path = $path === null ? RSA::$url_path : storage_path($path, false);
 		Store::folder(RSA::$url_path);
 		RSA::createKeys();
 		Store::remove('.rnd');
