@@ -62,6 +62,18 @@ if (!function_exists('finish')) {
 
 /**
  * ------------------------------------------------------------------------------
+ * Function to display a success response and end the execution of processes
+ * ------------------------------------------------------------------------------
+ **/
+
+if (!function_exists('success')) {
+    function success(mixed $response, array|object $data = []): object {
+        return response->success($response, $data);
+    }
+}
+
+/**
+ * ------------------------------------------------------------------------------
  * Function to perform a var_dump
  * ------------------------------------------------------------------------------
  **/

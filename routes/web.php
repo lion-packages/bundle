@@ -14,6 +14,10 @@ use LionRoute\Route;
 
 Route::any('/', [HomeController::class, 'index']);
 
+Route::get('example', function() {
+    return success("Hola mundo");
+});
+
 Route::prefix('api', function() {
     Route::prefix('auth', function() {
         Route::post('login', [LoginController::class, 'auth']);
