@@ -26,6 +26,18 @@ if (!function_exists('fetch')) {
 
 /**
  * ------------------------------------------------------------------------------
+ * Function to make HTTP requests with guzzlehttp
+ * ------------------------------------------------------------------------------
+ **/
+
+if (!function_exists('fetchXML')) {
+    function fetchXML(string $method, string $uri, array $options = []): string {
+        return client->request($method, $uri, $options)->getBody()->getContents();
+    }
+}
+
+/**
+ * ------------------------------------------------------------------------------
  * Function to get the path of the storage directory
  * ------------------------------------------------------------------------------
  **/
