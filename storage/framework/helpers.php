@@ -43,8 +43,8 @@ if (!function_exists('fetchXML')) {
  **/
 
 if (!function_exists('storage_path')) {
-    function storage_path(string $path = ""): string {
-        return "../storage/{$path}";
+    function storage_path(string $path = "", bool $index = true): string {
+        return !$index ? "storage/{$path}" : "../storage/{$path}";
     }
 }
 
@@ -81,7 +81,7 @@ if (!function_exists('vd')) {
 if (!function_exists('logger')) {
     function logger(string $str, string $log_type = 'info', array $data = [], bool $index = true): void {
         $file_name = "lion-" . Carbon\Carbon::now()->format("Y-m-d") . ".log";
-        $path = !$index ? "storage/logs/" : storage_path("logs/");
+        $path = storage_path("logs/", $index);
         LionFiles\Store::folder($path);
 
         (new Monolog\Logger('log'))->pushHandler(
