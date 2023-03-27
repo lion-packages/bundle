@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "69aed55c5589f1f267775d0eb0fe4aa2",
+    "content-hash": "774e1a017c7f8efa0d395421cfba26b1",
     "packages": [
         {
             "name": "cboden/ratchet",
@@ -819,16 +819,16 @@
         },
         {
             "name": "lion/sql",
-            "version": "v7.0.0",
+            "version": "v7.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-SQL.git",
-                "reference": "fed6b232efc604f488ec32e5b4d7f07593d9f4a9"
+                "reference": "da815bfacf297d0e3e91242e7023902ec632408a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/fed6b232efc604f488ec32e5b4d7f07593d9f4a9",
-                "reference": "fed6b232efc604f488ec32e5b4d7f07593d9f4a9",
+                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/da815bfacf297d0e3e91242e7023902ec632408a",
+                "reference": "da815bfacf297d0e3e91242e7023902ec632408a",
                 "shasum": ""
             },
             "require": {
@@ -854,9 +854,9 @@
             "description": "package in charge of generating and executing MySQL processes",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-SQL/issues",
-                "source": "https://github.com/Sleon4/Lion-SQL/tree/v7.0.0"
+                "source": "https://github.com/Sleon4/Lion-SQL/tree/v7.1.0"
             },
-            "time": "2023-02-24T16:19:27+00:00"
+            "time": "2023-03-25T06:12:47+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -4104,16 +4104,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.6.5",
+            "version": "9.6.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "86e761949019ae83f49240b2f2123fb5ab3b2fc5"
+                "reference": "b65d59a059d3004a040c16a82e07bbdf6cfdd115"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/86e761949019ae83f49240b2f2123fb5ab3b2fc5",
-                "reference": "86e761949019ae83f49240b2f2123fb5ab3b2fc5",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/b65d59a059d3004a040c16a82e07bbdf6cfdd115",
+                "reference": "b65d59a059d3004a040c16a82e07bbdf6cfdd115",
                 "shasum": ""
             },
             "require": {
@@ -4186,7 +4186,8 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.5"
+                "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.6"
             },
             "funding": [
                 {
@@ -4202,7 +4203,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-03-09T06:34:10+00:00"
+            "time": "2023-03-27T11:43:46+00:00"
         },
         {
             "name": "sebastian/cli-parser",
