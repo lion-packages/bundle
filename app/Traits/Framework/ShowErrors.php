@@ -20,7 +20,7 @@ trait ShowErrors {
                 logger($errors[0], 'error');
 
                 response->finish(response->error($errors[0], [
-                    'fields' => $keyErrors
+                    'fields' => self::$validation,
                 ]));
             }
         }

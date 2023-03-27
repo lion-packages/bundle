@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\HomeController;
 use LionRoute\Route;
 
 /**
@@ -12,16 +11,12 @@ use LionRoute\Route;
  * ------------------------------------------------------------------------------
  **/
 
-Route::any('/', [HomeController::class, 'index']);
-
-Route::get('example', function() {
-    return info("Hola mundo");
+Route::any('/', function() {
+    return info("Hola mundo", request);
 });
 
 Route::prefix('api', function() {
     Route::prefix('auth', function() {
         Route::post('login', [LoginController::class, 'auth']);
     });
-
-    Route::get('jsonplaceholder', 'https://jsonplaceholder.typicode.com/posts');
 });
