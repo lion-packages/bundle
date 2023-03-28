@@ -1,5 +1,11 @@
 # Release Notes
 
+## [v13.5.0](https://github.com/Sleon4/Lion-Framework/compare/v13.4.0...v13.5.0) (2023-03-22)
+
+### Changed
+- rules response format is modified where properties are added to obtain required validation responses for a property
+- sql library updated
+
 ## [v13.4.0](https://github.com/Sleon4/Lion-Framework/compare/v13.3.0...v13.4.0) (2023-03-22)
 
 ### Added
