@@ -9,7 +9,5 @@
  **/
 
 return [
-    '/' => [
-        \App\Rules\ExampleRule::class
-    ]
+
 ];

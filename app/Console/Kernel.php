@@ -21,6 +21,7 @@ class Kernel {
         \App\Console\Framework\New\RulesCommand::class,
         \App\Console\Framework\New\TestCommand::class,
         \App\Console\Framework\New\TraitCommand::class,
+        \App\Console\Framework\New\EnumsCommand::class,
         \App\Console\Framework\New\WebSocketsCommand::class,
         \App\Console\Framework\Route\RouteListCommand::class,
         \App\Console\Framework\Sockets\RunWebSocketsCommand::class,
