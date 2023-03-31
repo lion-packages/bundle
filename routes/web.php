@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use LionRoute\Route;
+use App\Traits\Framework\ClassPath;
 
 /**
  * ------------------------------------------------------------------------------
@@ -12,6 +13,10 @@ use LionRoute\Route;
  **/
 
 Route::any('/', function() {
+    $items = ClassPath::addPostmanJsonItems([], "api/users/create", "POST", true);
+    // ClassPath::addPostmanJsonItems("api/users/update", "PUT");
+    // ClassPath::addPostmanJsonItems("exito/auth/token", "POST");
+    return $items;
     return info("Hola mundo", request);
 });
 

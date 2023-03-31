@@ -24,6 +24,7 @@ class Kernel {
         \App\Console\Framework\New\EnumsCommand::class,
         \App\Console\Framework\New\WebSocketsCommand::class,
         \App\Console\Framework\Route\RouteListCommand::class,
+        \App\Console\Framework\Route\PostmanCollectionCommand::class,
         \App\Console\Framework\Sockets\RunWebSocketsCommand::class,
         \App\Console\Framework\Token\GenerateJWTCommand::class,
         \App\Console\Framework\RunTestCommand::class,
