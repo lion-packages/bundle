@@ -61,6 +61,8 @@ include_once("../routes/header.php");
  * ------------------------------------------------------------------------------
  **/
 
+LionSQL\Drivers\Driver::addLog();
+
 $responseDatabase = LionSQL\Drivers\Driver::run([
     'type' => env->DB_TYPE,
     'host' => env->DB_HOST,
@@ -71,7 +73,6 @@ $responseDatabase = LionSQL\Drivers\Driver::run([
 ]);
 
 if ($responseDatabase->status === 'database-error') {
-    logger($responseDatabase->message, 'error');
     finish($responseDatabase);
 }
 
@@ -117,6 +118,7 @@ if (isset($rules[$_SERVER['REQUEST_URI']])) {
  * ------------------------------------------------------------------------------
  **/
 
+LionRoute\Route::addLog();
 LionRoute\Route::init();
 LionRoute\Request::init(client);
 include_once("../routes/middleware.php");

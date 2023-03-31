@@ -736,16 +736,16 @@
         },
         {
             "name": "lion/route",
-            "version": "v8.3.0",
+            "version": "v8.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Route.git",
-                "reference": "21132f07cb4eb9c2922659ce7785f7277e8edff5"
+                "reference": "9a02ac2c538534f829dcec905d31ad609f921744"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Route/zipball/21132f07cb4eb9c2922659ce7785f7277e8edff5",
-                "reference": "21132f07cb4eb9c2922659ce7785f7277e8edff5",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Route/zipball/9a02ac2c538534f829dcec905d31ad609f921744",
+                "reference": "9a02ac2c538534f829dcec905d31ad609f921744",
                 "shasum": ""
             },
             "require": {
@@ -771,9 +771,9 @@
             "description": "This library has a fast router usage with regular expressions.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Route/issues",
-                "source": "https://github.com/Sleon4/Lion-Route/tree/v8.3.0"
+                "source": "https://github.com/Sleon4/Lion-Route/tree/v8.3.1"
             },
-            "time": "2023-03-30T23:28:32+00:00"
+            "time": "2023-03-31T00:58:55+00:00"
         },
         {
             "name": "lion/security",
@@ -819,16 +819,16 @@
         },
         {
             "name": "lion/sql",
-            "version": "v7.2.0",
+            "version": "v7.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-SQL.git",
-                "reference": "662877f3be958b9a0157fcbc6d27d513a8311cfa"
+                "reference": "4c842ef64bfe71b384cf8e04f769caabbe5ef1a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/662877f3be958b9a0157fcbc6d27d513a8311cfa",
-                "reference": "662877f3be958b9a0157fcbc6d27d513a8311cfa",
+                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/4c842ef64bfe71b384cf8e04f769caabbe5ef1a4",
+                "reference": "4c842ef64bfe71b384cf8e04f769caabbe5ef1a4",
                 "shasum": ""
             },
             "require": {
@@ -854,9 +854,9 @@
             "description": "package in charge of generating and executing MySQL processes",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-SQL/issues",
-                "source": "https://github.com/Sleon4/Lion-SQL/tree/v7.2.0"
+                "source": "https://github.com/Sleon4/Lion-SQL/tree/v7.2.1"
             },
-            "time": "2023-03-31T00:50:12+00:00"
+            "time": "2023-03-31T01:10:20+00:00"
         },
         {
             "name": "monolog/monolog",
