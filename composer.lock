@@ -736,16 +736,16 @@
         },
         {
             "name": "lion/route",
-            "version": "v8.3.1",
+            "version": "v8.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Route.git",
-                "reference": "9a02ac2c538534f829dcec905d31ad609f921744"
+                "reference": "59f255093febb12b4b0c3d15fe49f7213856cac2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Route/zipball/9a02ac2c538534f829dcec905d31ad609f921744",
-                "reference": "9a02ac2c538534f829dcec905d31ad609f921744",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Route/zipball/59f255093febb12b4b0c3d15fe49f7213856cac2",
+                "reference": "59f255093febb12b4b0c3d15fe49f7213856cac2",
                 "shasum": ""
             },
             "require": {
@@ -771,9 +771,9 @@
             "description": "This library has a fast router usage with regular expressions.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Route/issues",
-                "source": "https://github.com/Sleon4/Lion-Route/tree/v8.3.1"
+                "source": "https://github.com/Sleon4/Lion-Route/tree/v8.3.2"
             },
-            "time": "2023-03-31T00:58:55+00:00"
+            "time": "2023-03-31T01:43:22+00:00"
         },
         {
             "name": "lion/security",
