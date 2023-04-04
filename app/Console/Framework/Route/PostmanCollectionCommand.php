@@ -26,7 +26,7 @@ class PostmanCollectionCommand extends Command {
 	}
 
 	protected function configure() {
-		$this->setDescription("");
+		$this->setDescription("Command required to create postman collections in JSON format");
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
