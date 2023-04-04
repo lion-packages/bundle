@@ -1,5 +1,6 @@
 /vendor/
 /storage/**/*.key
 /storage/**/*.log
+/storage/postman/
 .env
 .phpunit.result.cache
