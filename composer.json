@@ -8,8 +8,7 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Sergio León",
-            "email": "sergioleon4004@hotmail.com"
+            "name": "Sergio León"
         }
     ],
     "autoload": {

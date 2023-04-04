@@ -6,13 +6,19 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use App\Traits\Framework\ClassPath;
+use App\Traits\Framework\PostmanCollector;
+use LionFiles\Store;
+use LionHelpers\Str;
 
 class PostmanCollectionCommand extends Command {
 
 	protected static $defaultName = "route:postman";
+    private array $routes;
 
 	protected function initialize(InputInterface $input, OutputInterface $output) {
-
+        PostmanCollector::init(env->SERVER_URL);
+        $this->routes = fetch('GET', env->SERVER_URL . "/route-list");
+        array_pop($this->routes);
 	}
 
 	protected function interact(InputInterface $input, OutputInterface $output) {
@@ -24,56 +30,29 @@ class PostmanCollectionCommand extends Command {
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
-        $postman_id =  function ($data = null) : string {
-            $data = $data ?? random_bytes(16);
-            assert(strlen($data) == 16);
-
-            $data[6] = chr(ord($data[6]) & 0x0f | 0x40);
-            $data[8] = chr(ord($data[8]) & 0x3f | 0x80);
-
-            return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
-        };
-
-        $routes = fetch('GET', env->SERVER_URL . "/route-list");
-        array_pop($routes);
-        vd($routes);
-        $items = [];
-
-        foreach($items as $key => $route) {
+        foreach($this->routes as $key_items => $route) {
             foreach ($route as $key_route => $item) {
-                echo($key_route);
+                $name = $key_items === "" ? "index" : $key_items;
+                PostmanCollector::add($name, $key_items, $key_route);
             }
         }
 
-        ClassPath::new(env->APP_NAME . ".postman_collection", "json");
-        ClassPath::add(str_replace("\/", "/", json->encode([
+        $json_name = Str::of(date('Y-m-d') . "_lion_collection")->lower();
+        $path = storage_path("postman/", false);
+        Store::folder($path);
+        ClassPath::new("{$path}{$json_name}", "json");
+
+        ClassPath::add(json->encode([
             'info' => [
-                '_postman_id' => $postman_id(),
-                'name' => "Lion-Example",
+                'name' => "Lion-Framework",
                 'schema' => 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json'
             ],
             'variable' => [
                 ['key' => 'base_url', 'value' => env->SERVER_URL, 'type' => 'string']
             ],
-            'item' => [
-                [
-                    'name' => 'index',
-                    'response' => [],
-                    'request' => [
-                        'method' => 'POST',
-                        'header' => [],
-                        'body' => [],
-                        'url' => [
-                            'raw' => '{{base_url}}/api',
-                            'host' => "{{base_url}}",
-                            'path' => [
-                                "api"
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ])));
+            'item' => PostmanCollector::get()
+        ]));
+
         ClassPath::force();
         ClassPath::close();
 

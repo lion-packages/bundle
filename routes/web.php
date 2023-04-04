@@ -1,8 +1,7 @@
 <?php
 
-use App\Http\Controllers\Auth\LoginController;
 use LionRoute\Route;
-use App\Traits\Framework\ClassPath;
+use App\Traits\Framework\PostmanCollector;
 
 /**
  * ------------------------------------------------------------------------------
@@ -12,16 +11,18 @@ use App\Traits\Framework\ClassPath;
  * ------------------------------------------------------------------------------
  **/
 
-Route::any('/', function() {
-    $items = ClassPath::addPostmanJsonItems([], "api/users/create", "POST", true);
-    // ClassPath::addPostmanJsonItems("api/users/update", "PUT");
-    // ClassPath::addPostmanJsonItems("exito/auth/token", "POST");
-    return $items;
-    return info("Hola mundo", request);
+Route::post('/', function() {
+    return info("Welcome to index");
 });
 
-Route::prefix('api', function() {
-    Route::prefix('auth', function() {
-        Route::post('login', [LoginController::class, 'auth']);
-    });
+Route::get('read-users', function() {
+    return [];
+});
+
+Route::put('example/dev/create', function() {
+    return info("Info");
+});
+
+Route::delete('delete', function() {
+    return request;
 });
