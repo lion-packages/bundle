@@ -9,6 +9,23 @@ trait PostmanCollector {
 
     private static array $postman_functions = [];
 
+    public static function init(string $host) {
+        self::$postman_functions['params'] = [
+            'host' => [
+                'url' => $host,
+                'params' => [
+                    // 'protocol' => "",
+                    'host' => ["{{base_url}}"]
+                ]
+            ],
+            'items' => [],
+        ];
+
+        // self::createHost();
+        // self::createProtocol();
+        // self::createPort();
+    }
+
     private static function createPort(): void {
         $after_host = Str::of(self::$postman_functions['params']['host']['url'])->after("://");
         $after_host = Str::of($after_host)->after(":");
@@ -30,33 +47,18 @@ trait PostmanCollector {
         )->before("://");
     }
 
-    public static function init(string $host) {
-        self::$postman_functions['params'] = [
-            'host' => [
-                'url' => $host,
-                'params' => [
-                    'protocol' => "",
-                    'host' => ""
-                ]
-            ],
-            'items' => [],
-        ];
-
-        self::createHost();
-        self::createProtocol();
-        self::createPort();
-    }
-
     private static function addGet(string $name, string $route): array {
         return [
             'name' => $name,
             'response' => [],
             'request' => [
                 'method' => "GET",
-                'header' => [],
+                'header' => [
+                    ["key" => "Content-Type", "value" => "application\/json"]
+                ],
                 'url' => [
                     ...self::$postman_functions['params']['host']['params'],
-                    'raw' => "{{base_url}}/{$route}",
+                    'raw' => '{{base_url}}/' . $route,
                     'path' => [...explode("/", $route)]
                 ]
             ]
@@ -87,7 +89,7 @@ trait PostmanCollector {
                 ],
                 'url' => [
                     ...self::$postman_functions['params']['host']['params'],
-                    'raw' => "{{base_url}}/{$route}",
+                    'raw' => '{{base_url}}/' . $route,
                     'path' => [...explode("/", $route)]
                 ]
             ]
@@ -111,14 +113,13 @@ trait PostmanCollector {
                     'formdata' => [
                         [
                             'key' => "example",
-                            'value' => "example_value",
-                            'type' => "text"
+                            'value' => "example_value"
                         ]
                     ]
                 ],
                 'url' => [
                     ...self::$postman_functions['params']['host']['params'],
-                    'raw' => "{{base_url}}/{$route}",
+                    'raw' => '{{base_url}}/' . $route,
                     'path' => [...explode("/", $route)]
                 ]
             ]
@@ -149,7 +150,7 @@ trait PostmanCollector {
                 ],
                 'url' => [
                     ...self::$postman_functions['params']['host']['params'],
-                    'raw' => "{{base_url}}/{$route}",
+                    'raw' => '{{base_url}}/' . $route,
                     'path' => [...explode("/", $route)]
                 ]
             ]

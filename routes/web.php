@@ -1,7 +1,6 @@
 <?php
 
 use LionRoute\Route;
-use App\Traits\Framework\PostmanCollector;
 
 /**
  * ------------------------------------------------------------------------------
@@ -11,18 +10,14 @@ use App\Traits\Framework\PostmanCollector;
  * ------------------------------------------------------------------------------
  **/
 
-Route::post('/', function() {
+Route::get('/', function() {
     return info("Welcome to index");
 });
 
-Route::get('read-users', function() {
-    return [];
+Route::post('users/create', function() {
+    return info("Welcome to create");
 });
 
-Route::put('example/dev/create', function() {
-    return info("Info");
-});
-
-Route::delete('delete', function() {
-    return request;
+Route::put('users/update', function() {
+    return info("Welcome to update");
 });
