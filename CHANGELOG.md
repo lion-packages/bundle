@@ -1,5 +1,17 @@
 # Release Notes
 
+## [v13.6.0](https://github.com/Sleon4/Lion-Framework/compare/v13.5.0...v13.6.0) (2023-04-05)
+
+### Added
+- add command to create enums
+- added log recording for routes and database
+- the first tree format for the Postman collection has been organized
+- trait has been created to make basic collections to import into postman
+
+### Changed
+- basic information of the 'route:postman' command is added
+- properties have been hidden to export the collection in postman
+
 ## [v13.5.0](https://github.com/Sleon4/Lion-Framework/compare/v13.4.0...v13.5.0) (2023-03-27)
 
 ### Changed
