@@ -1,5 +1,10 @@
 # Release Notes
 
+## [v13.7.0](https://github.com/Sleon4/Lion-Framework/compare/v13.6.0...v13.7.0) (2023-04-06)
+
+### Changed
+- the export of collections to postman has been restructured
+
 ## [v13.6.0](https://github.com/Sleon4/Lion-Framework/compare/v13.5.0...v13.6.0) (2023-04-05)
 
 ### Added
