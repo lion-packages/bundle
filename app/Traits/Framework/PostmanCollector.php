@@ -7,43 +7,40 @@ use LionHelpers\Str;
 
 trait PostmanCollector {
 
-    private static array $postman_functions = [];
+    private static array $postman = [];
 
     public static function init(string $host) {
-        self::$postman_functions['params'] = [
+        self::$postman['params'] = [
+            'routes' => [],
+            'items' => [],
             'host' => [
                 'url' => $host,
                 'params' => [
                     // 'protocol' => "",
                     'host' => ["{{base_url}}"]
                 ]
-            ],
-            'items' => [],
+            ]
         ];
-
-        // self::createHost();
-        // self::createProtocol();
-        // self::createPort();
     }
 
     private static function createPort(): void {
-        $after_host = Str::of(self::$postman_functions['params']['host']['url'])->after("://");
+        $after_host = Str::of(self::$postman['params']['host']['url'])->after("://");
         $after_host = Str::of($after_host)->after(":");
 
         if (preg_match("/^([0-9]+)(\s[0-9]+)*$/", $after_host)) {
-            self::$postman_functions['params']['host']['params']['port'] = $after_host;
+            self::$postman['params']['host']['params']['port'] = $after_host;
         }
     }
 
     private static function createHost(): void {
-        $after_host = Str::of(self::$postman_functions['params']['host']['url'])->after("://");
+        $after_host = Str::of(self::$postman['params']['host']['url'])->after("://");
         $before_host = Str::of($after_host)->before(":");
-        self::$postman_functions['params']['host']['params']['host'] = explode(".", $before_host);
+        self::$postman['params']['host']['params']['host'] = explode(".", $before_host);
     }
 
     private static function createProtocol(): void {
-        self::$postman_functions['params']['host']['params']['protocol'] = Str::of(
-            self::$postman_functions['params']['host']['url']
+        self::$postman['params']['host']['params']['protocol'] = Str::of(
+            self::$postman['params']['host']['url']
         )->before("://");
     }
 
@@ -57,7 +54,7 @@ trait PostmanCollector {
                     ["key" => "Content-Type", "value" => "application\/json"]
                 ],
                 'url' => [
-                    ...self::$postman_functions['params']['host']['params'],
+                    ...self::$postman['params']['host']['params'],
                     'raw' => '{{base_url}}/' . $route,
                     'path' => [...explode("/", $route)]
                 ]
@@ -88,7 +85,7 @@ trait PostmanCollector {
                     ]
                 ],
                 'url' => [
-                    ...self::$postman_functions['params']['host']['params'],
+                    ...self::$postman['params']['host']['params'],
                     'raw' => '{{base_url}}/' . $route,
                     'path' => [...explode("/", $route)]
                 ]
@@ -118,7 +115,7 @@ trait PostmanCollector {
                     ]
                 ],
                 'url' => [
-                    ...self::$postman_functions['params']['host']['params'],
+                    ...self::$postman['params']['host']['params'],
                     'raw' => '{{base_url}}/' . $route,
                     'path' => [...explode("/", $route)]
                 ]
@@ -149,7 +146,7 @@ trait PostmanCollector {
                     ]
                 ],
                 'url' => [
-                    ...self::$postman_functions['params']['host']['params'],
+                    ...self::$postman['params']['host']['params'],
                     'raw' => '{{base_url}}/' . $route,
                     'path' => [...explode("/", $route)]
                 ]
@@ -157,25 +154,107 @@ trait PostmanCollector {
         ];
     }
 
-    public static function add(string $name, string $route, string $method) {
-        $method = Str::of($method)->upper();
-        $name = Arr::of(explode("/", $name))->join("-");
-
+    private static function addRequest($name, $route, $method) {
         if ($method === "POST") {
-            array_push(self::$postman_functions['params']['items'], self::addPost($name, $route));
+            return self::addPost($name, $route);
         } elseif ($method === "GET") {
-            array_push(self::$postman_functions['params']['items'], self::addGet($name, $route));
+            return self::addGet($name, $route);
         } elseif ($method === "PUT") {
-            array_push(self::$postman_functions['params']['items'], self::addPut($name, $route));
+            return self::addPut($name, $route);
         } elseif ($method === "DELETE") {
-            array_push(self::$postman_functions['params']['items'], self::addDelete($name, $route));
+            return self::addDelete($name, $route);
         } else {
-            array_push(self::$postman_functions['params']['items'], self::addGet($name, $route));
+            return self::addGet($name, $route);
         }
     }
 
-    public static function get(): array {
-        return self::$postman_functions['params']['items'];
+    public static function addRoutes(array $routes) {
+        foreach($routes as $key_items => $route) {
+            foreach ($route as $key_route => $item) {
+                self::$postman['params']['routes'][] = [
+                    'url' => $key_items === "" ? "/" : $key_items,
+                    'method' => $key_route
+                ];
+            }
+        }
+    }
+
+    public static function generateItems() {
+        foreach (self::$postman['params']['routes'] as $key_route => $route) {
+            $split_all = explode('/', $route['url']);
+            $reverse = self::reverseArray($split_all);
+            $size = count($reverse) - 1;
+            $request = null;
+            $initial = true;
+            $last_array = [];
+
+            foreach ($reverse as $key_split => $split) {
+                $name = $split === "" ? "index" : $split;
+
+                if ($key_split === 0) {
+                    $request = self::addRequest($name, $route['url'], $route['method']);
+                } else {
+                    if ($initial) {
+                        $initial = false;
+
+                        $last_array = [
+                            'name' => $name,
+                            'item' => [$request]
+                        ];
+                    } else {
+                        $last_array = [
+                            'name' => $name,
+                            'item' => [$last_array]
+                        ];
+                    }
+
+                    if ($key_split === $size) {
+                        self::$postman['params']['items'][] = $last_array;
+                    }
+                }
+            }
+
+            $initial = true;
+            $last_array = [];
+        }
+    }
+
+    public static function createCollection(array $items): array {
+        $result = [];
+
+        foreach ($items as $json) {
+            if (isset($result[$json['name']])) {
+                if (isset($json['item'])) {
+                    $result[$json['name']]['item'] = array_merge(
+                        $result[$json['name']]['item'],
+                        $json['item']
+                    );
+                } else {
+                    $result[$json['name']] = array_merge_recursive(
+                        $result[$json['name']],
+                        $json
+                    );
+                }
+            } else {
+                $result[$json['name']] = $json;
+            }
+        }
+
+        foreach ($result as &$item) {
+            if (isset($item['item'])) {
+                $item['item'] = self::createCollection($item['item']);
+            }
+        }
+
+        return array_values($result);
+    }
+
+    public static function getRoutes(): array {
+        return self::$postman['params']['routes'];
+    }
+
+    public static function getItems(): array {
+        return self::$postman['params']['items'];
     }
 
     public static function reverseArray(array $items): array {

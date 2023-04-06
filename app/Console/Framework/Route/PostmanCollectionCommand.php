@@ -34,19 +34,11 @@ class PostmanCollectionCommand extends Command {
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
-        foreach($this->routes as $key_items => $route) {
-            foreach ($route as $key_route => $item) {
-                $name = $key_items === "" ? "index" : $key_items;
-                PostmanCollector::add($name, $key_items, $key_route);
-            }
-        }
+        PostmanCollector::addRoutes($this->routes);
+        PostmanCollector::generateItems();
+        $items = PostmanCollector::getItems();
 
-
-        $path = storage_path("postman/", false);
-        Store::folder($path);
-        ClassPath::new("{$path}{$this->json_name}", "json");
-
-        ClassPath::add(json->encode([
+        $json = json->encode([
             'variable' => [
                 ['key' => 'base_url', 'value' => env->SERVER_URL, 'type' => "string"]
             ],
@@ -54,14 +46,18 @@ class PostmanCollectionCommand extends Command {
                 'name' => "Lion-Framework",
                 'schema' => 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json'
             ],
-            'item' => PostmanCollector::get(),
+            'item' => PostmanCollector::createCollection($items),
             'event' => []
-        ]));
+        ]);
 
+        $path = storage_path("postman/", false);
+        Store::folder($path);
+        ClassPath::new("{$path}{$this->json_name}", "json");
+        ClassPath::add($json);
         ClassPath::force();
         ClassPath::close();
-        $output->writeln("<info>Exported collection: {$path}{$this->json_name}.json</info>");
 
+        $output->writeln("<info>Exported collection: {$path}{$this->json_name}.json</info>");
         return Command::SUCCESS;
     }
 

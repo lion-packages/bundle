@@ -10,14 +10,4 @@ use LionRoute\Route;
  * ------------------------------------------------------------------------------
  **/
 
-Route::get('/', function() {
-    return info("Welcome to index");
-});
-
-Route::post('users/create', function() {
-    return info("Welcome to create");
-});
-
-Route::put('users/update', function() {
-    return info("Welcome to update");
-});
+Route::get('/', fn() => info("Welcome to index"));
