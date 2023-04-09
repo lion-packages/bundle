@@ -1,5 +1,13 @@
 # Release Notes
 
+## [v13.8.0](https://github.com/Sleon4/Lion-Framework/compare/v13.7.0...v13.8.0) (2023-04-09)
+
+### Added
+- the config section has been created to create configuration files for the framework
+
+### Fixed
+- fixed route export for postman
+
 ## [v13.7.0](https://github.com/Sleon4/Lion-Framework/compare/v13.6.0...v13.7.0) (2023-04-06)
 
 ### Changed
