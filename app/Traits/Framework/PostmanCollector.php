@@ -181,7 +181,14 @@ trait PostmanCollector {
 
     public static function generateItems() {
         foreach (self::$postman['params']['routes'] as $key_route => $route) {
-            $split_all = explode('/', $route['url']);
+            $split_all = null;
+
+            if ($route['url'] === "/") {
+                $split_all = ["index"];
+            } else {
+                $split_all = explode('/', $route['url']);
+            }
+
             $reverse = self::reverseArray($split_all);
             $size = count($reverse) - 1;
             $request = null;
@@ -193,6 +200,10 @@ trait PostmanCollector {
 
                 if ($key_split === 0) {
                     $request = self::addRequest($name, $route['url'], $route['method']);
+
+                    if ($key_split === $size) {
+                        self::$postman['params']['items'][] = $request;
+                    }
                 } else {
                     if ($initial) {
                         $initial = false;

@@ -12,7 +12,3 @@ use LionSQL\Drivers\MySQL as DB;
  **/
 
 Route::get('/', fn() => info("Welcome to index"));
-
-Route::get('example', function() {
-    return DB::table('users')->select()->getAll();
-});
