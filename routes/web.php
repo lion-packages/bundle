@@ -1,7 +1,6 @@
 <?php
 
 use LionRoute\Route;
-use LionSQL\Drivers\MySQL as DB;
 
 /**
  * ------------------------------------------------------------------------------
