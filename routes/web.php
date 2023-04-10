@@ -10,4 +10,4 @@ use LionRoute\Route;
  * ------------------------------------------------------------------------------
  **/
 
-Route::get('/', fn() => info("Welcome to index"));
+Route::get('/', fn() => info("Welcome to index: " . Carbon\Carbon::now()->format('Y-m-d')));

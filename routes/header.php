@@ -8,7 +8,7 @@
  * ------------------------------------------------------------------------------
  **/
 
-date_default_timezone_set("America/Bogota");
+date_default_timezone_set(env->SERVER_DATE_TIMEZONE);
 
 LionRequest\Request::header(
     'Access-Control-Allow-Origin',
