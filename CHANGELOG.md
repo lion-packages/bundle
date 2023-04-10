@@ -1,6 +1,6 @@
 # Release Notes
 
-## [v13.9.0](https://github.com/Sleon4/Lion-Framework/compare/v13.8.0...v13.9.0) (2023-04-10)
+## [v13.8.1](https://github.com/Sleon4/Lion-Framework/compare/v13.8.0...v13.8.1) (2023-04-10)
 
 ### Fixed
 - fixed capsule class generation for multiple connections
