@@ -20,7 +20,7 @@ class PostmanCollectionCommand extends Command {
         $output->writeln("<comment>Exporting collection...</comment>");
 
         PostmanCollector::init(env->SERVER_URL);
-        $this->json_name = Str::of(date('Y-m-d') . "_" . uniqid(uniqid()) . "_lion_collection")->lower();
+        $this->json_name = Str::of(date('Y-m-d') . "_lion_collection")->lower();
         $this->routes = fetch('GET', env->SERVER_URL . "/route-list");
         array_pop($this->routes);
 	}
@@ -43,7 +43,7 @@ class PostmanCollectionCommand extends Command {
                 ['key' => 'base_url', 'value' => env->SERVER_URL, 'type' => "string"]
             ],
             'info' => [
-                'name' => "Lion-Framework",
+                'name' => env->APP_NAME,
                 'schema' => 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json'
             ],
             'item' => PostmanCollector::createCollection($items),
