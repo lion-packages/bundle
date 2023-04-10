@@ -2,6 +2,9 @@
 
 ## [v13.8.1](https://github.com/Sleon4/Lion-Framework/compare/v13.8.0...v13.8.1) (2023-04-10)
 
+### Added
+- added environment variable
+
 ### Fixed
 - fixed capsule class generation for multiple connections
 
