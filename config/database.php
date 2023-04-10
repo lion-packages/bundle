@@ -9,7 +9,7 @@
  **/
 
 return [
-    'default' => env->DB_NAME,
+    'default' => env->DB_DEFAULT_CONNECTION,
     'connections' => [
         env->DB_NAME => [
             'type' => env->DB_TYPE,
@@ -18,6 +18,14 @@ return [
             'dbname' => env->DB_NAME,
             'user' => env->DB_USER,
             'password' => env->DB_PASSWORD
+        ],
+        env->DB_NAME_REQUEST => [
+            'type' => env->DB_TYPE_REQUEST,
+            'host' => env->DB_HOST_REQUEST,
+            'port' => env->DB_PORT_REQUEST,
+            'dbname' => env->DB_NAME_REQUEST,
+            'user' => env->DB_USER_REQUEST,
+            'password' => env->DB_PASSWORD_REQUEST
         ]
     ]
 ];

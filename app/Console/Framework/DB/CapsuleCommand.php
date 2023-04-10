@@ -30,6 +30,8 @@ class CapsuleCommand extends Command {
         )->addOption(
             'path', null, InputOption::VALUE_REQUIRED, 'Do you want to configure your own route?'
         )->addOption(
+            'connection', null, InputOption::VALUE_REQUIRED, 'Do you want to use a specific connection?'
+        )->addOption(
             'message', null, InputOption::VALUE_REQUIRED, ''
         );
     }
@@ -37,7 +39,9 @@ class CapsuleCommand extends Command {
     protected function execute(InputInterface $input, OutputInterface $output) {
         $table = $input->getArgument('capsule');
         $path = $input->getOption('path');
+        $connection = $input->getOption('connection');
         $message = $input->getOption('message');
+        $columns = null;
 
         if ($message === null) {
             $message = true;
@@ -51,9 +55,14 @@ class CapsuleCommand extends Command {
             $path = "";
         }
 
+        if ($connection === null) {
+            $columns = DB::table($table)->show()->columns()->getAll();
+        } else {
+            $columns = DB::connection($connection)->table($table)->show()->columns()->getAll();
+        }
+
         $index = 0;
         $list = ClassPath::export("Database/Class/", ($path . ClassPath::normalize($table)));
-        $columns = DB::table($table)->show()->columns()->getAll();
         $functions_union = "";
         $propierties_union = "";
         $new_object_union = "";
@@ -93,15 +102,15 @@ class CapsuleCommand extends Command {
 
         ClassPath::add(
             Str::of("\tpublic static function formFields(): ")
-                ->concat($list['class'])
-                ->concat(" {\n\t\t")
-                ->concat($new_object_union)
-                ->concat($functions_union)
-                ->concat("\t\treturn ")
-                ->concat($object_class)
-                ->concat(";")
-                ->concat("\n\t}\n\n")
-                ->get()
+            ->concat($list['class'])
+            ->concat(" {\n\t\t")
+            ->concat($new_object_union)
+            ->concat($functions_union)
+            ->concat("\t\treturn ")
+            ->concat($object_class)
+            ->concat(";")
+            ->concat("\n\t}\n\n")
+            ->get()
         );
 
         // Getters and Setters
@@ -114,16 +123,16 @@ class CapsuleCommand extends Command {
 
             ClassPath::add(
                 Str::of(ClassPath::addSetFunction($column->Type, $field, $list['class']))
-                    ->concat(" {\n")
-                    ->concat("\t\t")
-                    ->concat('$this->')
-                    ->concat($field)
-                    ->concat(" = $")
-                    ->concat($field)
-                    ->concat(";\n\t\t")
-                    ->concat('return $this;')
-                    ->concat("\n\t}\n\n")
-                    ->get()
+                ->concat(" {\n")
+                ->concat("\t\t")
+                ->concat('$this->')
+                ->concat($field)
+                ->concat(" = $")
+                ->concat($field)
+                ->concat(";\n\t\t")
+                ->concat('return $this;')
+                ->concat("\n\t}\n\n")
+                ->get()
             );
         }
 
