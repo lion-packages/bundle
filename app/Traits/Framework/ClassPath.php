@@ -14,7 +14,7 @@ trait ClassPath {
     }
 
     public static function addPropierty($type, $field): string {
-        return "\tprivate ?" . self::addType($type) . ' $' . $field . " = null;\n";
+        return "\tprivate ?" . self::addType($type) . ' $' . self::normalize($field, true) . " = null;\n";
     }
 
     public static function addSetFunctionIsset(string $class, string $field, string $request_field): string {
@@ -40,11 +40,16 @@ trait ClassPath {
         }
     }
 
-    public static function normalize(string $class): string {
+    public static function normalize(string $class, bool $field = false): string {
         $class = Str::of($class)->replace("_", " ")->trim();
         $class = Str::of($class)->lower();
-        $class = Str::of($class)->headline();
-        return Str::of($class)->replace(" ", "")->trim();
+
+        if (!$field) {
+            $class = Str::of($class)->headline();
+            return Str::of($class)->replace(" ", "")->trim();
+        }
+
+        return Str::of($class)->replace(" ", "_")->trim();
     }
 
     public static function export(string $default_path, string $class_name): array {

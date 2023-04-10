@@ -70,7 +70,6 @@ class CapsuleCommand extends Command {
 
         $url_folder = lcfirst(Str::of($list['namespace'])->replace("\\", "/")->get());
         Store::folder($url_folder);
-
         ClassPath::create($url_folder, $list['class']);
         ClassPath::add(Str::of("<?php")->ln()->ln()->get());
         ClassPath::add(Str::of("namespace ")->concat($list['namespace'])->concat(";\r\n\n")->get());
@@ -85,13 +84,11 @@ class CapsuleCommand extends Command {
             }
 
             $field = ClassPath::cleanField($column->Field);
+            $normalize_field = ClassPath::normalize($field, true);
+            $prop = Str::of('request->')->concat($normalize_field)->get();
             $propierties_union .= ClassPath::addPropierty($column->Type, $field);
             $functions_union .= Str::of(
-                ClassPath::addSetFunctionIsset(
-                    $object_class,
-                    $field,
-                    Str::of('request->')->concat($field)->get()
-                )
+                ClassPath::addSetFunctionIsset($object_class, $field, $prop)
             )->ln()->get();
         }
 
@@ -116,23 +113,24 @@ class CapsuleCommand extends Command {
         // Getters and Setters
         foreach ($columns as $key => $column) {
             $field = ClassPath::cleanField($column->Field);
+            $normalize_field = ClassPath::normalize($field, true);
 
             ClassPath::add("\tpublic function get" . ClassPath::normalize($field) . "(): ?" . ClassPath::addType($column->Type) . " {\n\t\t");
-            ClassPath::add('return $this->' . $field . ";");
+            ClassPath::add('return $this->' . $normalize_field . ";");
             ClassPath::add("\n\t}\n\n");
 
             ClassPath::add(
-                Str::of(ClassPath::addSetFunction($column->Type, $field, $list['class']))
-                ->concat(" {\n")
-                ->concat("\t\t")
-                ->concat('$this->')
-                ->concat($field)
-                ->concat(" = $")
-                ->concat($field)
-                ->concat(";\n\t\t")
-                ->concat('return $this;')
-                ->concat("\n\t}\n\n")
-                ->get()
+                Str::of(ClassPath::addSetFunction($column->Type, $normalize_field, $list['class']))
+                    ->concat(" {\n")
+                    ->concat("\t\t")
+                    ->concat('$this->')
+                    ->concat($normalize_field)
+                    ->concat(" = $")
+                    ->concat($normalize_field)
+                    ->concat(";\n\t\t")
+                    ->concat('return $this;')
+                    ->concat("\n\t}\n\n")
+                    ->get()
             );
         }
 
