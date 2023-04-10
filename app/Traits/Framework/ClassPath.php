@@ -2,7 +2,6 @@
 
 namespace App\Traits\Framework;
 
-use \Closure;
 use LionHelpers\Arr;
 use LionHelpers\Str;
 
@@ -43,7 +42,8 @@ trait ClassPath {
 
     public static function normalize(string $class): string {
         $class = Str::of($class)->replace("_", " ")->trim();
-        $class = ucwords($class);
+        $class = Str::of($class)->lower();
+        $class = Str::of($class)->headline();
         return Str::of($class)->replace(" ", "")->trim();
     }
 
