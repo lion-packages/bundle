@@ -26,6 +26,14 @@ return [
             'dbname' => env->DB_NAME_REQUEST,
             'user' => env->DB_USER_REQUEST,
             'password' => env->DB_PASSWORD_REQUEST
+        ],
+        env->DB_NAME_ENVIEXPRESS => [
+            'type' => env->DB_TYPE_ENVIEXPRESS,
+            'host' => env->DB_HOST_ENVIEXPRESS,
+            'port' => env->DB_PORT_ENVIEXPRESS,
+            'dbname' => env->DB_NAME_ENVIEXPRESS,
+            'user' => env->DB_USER_ENVIEXPRESS,
+            'password' => env->DB_PASSWORD_ENVIEXPRESS
         ]
     ]
 ];

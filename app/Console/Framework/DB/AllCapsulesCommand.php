@@ -51,15 +51,15 @@ class AllCapsulesCommand extends Command {
                 $tableDB = (array) $tableDB;
                 $table_key = array_keys($tableDB);
 
-                if ($keyTables < ($table['size'] * 0.90)) {
-                    $progressBar->setBarCharacter('<comment>=</comment>');
-                } else {
+                if ($keyTables === ($table['size'] - 1)) {
                     $progressBar->setBarCharacter('<info>=</info>');
+                } else {
+                    $progressBar->setBarCharacter('<comment>=</comment>');
                 }
 
                 $this->getApplication()->find('db:capsule')->run(
                     new ArrayInput([
-                        'capsule' => strtolower($tableDB[$table_key[0]]),
+                        'capsule' => $tableDB[$table_key[0]],
                         '--path' => $table['connection'] . "/",
                         '--connection' => $table['connection'],
                         '--message' => false
@@ -71,7 +71,15 @@ class AllCapsulesCommand extends Command {
             }
 
             $progressBar->finish();
-            $output->writeln("<info>Capsules of the '{$table['connection']}' connection were generated correctly...</info>");
+            $output->writeln("");
+        }
+
+        $output->writeln("");
+        if (Arr::of($connections_keys)->length() > 1) {
+            $join = Arr::of($connections_keys)->join(", ", " and ");
+            $output->writeln("<info>Capsules for connections '{$join}' were generated successfully...</info>");
+        } else {
+            $output->writeln("<info>Capsules of the '{$connections_keys[0]}' connection were generated correctly...</info>");
         }
 
         return Command::SUCCESS;
