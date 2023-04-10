@@ -1,5 +1,14 @@
 # Release Notes
 
+## [v13.9.0](https://github.com/Sleon4/Lion-Framework/compare/v13.8.1...v13.9.0) (2023-04-10)
+
+### Added
+- added property to set default time zone
+
+### Changed
+- capsule class properties have been normalized
+- export for postman collections has been normalized
+
 ## [v13.8.1](https://github.com/Sleon4/Lion-Framework/compare/v13.8.0...v13.8.1) (2023-04-10)
 
 ### Added
