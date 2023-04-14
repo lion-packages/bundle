@@ -34,16 +34,16 @@ class RulesCommand extends Command {
         Store::folder($url_folder);
 
         ClassPath::create($url_folder, $list['class']);
-        ClassPath::add("<?php\r\n\n");
-        ClassPath::add("namespace {$list['namespace']};\r\n\n");
-        ClassPath::add("use App\Traits\Framework\ShowErrors;\r\n\n");
-        ClassPath::add("class {$list['class']} {\r\n\n");
+        ClassPath::add("<?php\n\n");
+        ClassPath::add("namespace {$list['namespace']};\n\n");
+        ClassPath::add("use App\Traits\Framework\ShowErrors;\n\n");
+        ClassPath::add("class {$list['class']} {\n\n");
         ClassPath::add("\tuse ShowErrors;\n\n");
-        // ClassPath::add("\tpublic function __construct() {\r\n\n\t}\r\n\n");
+        ClassPath::add("\t" . 'public static string $field = "";' . "\n\n");
         ClassPath::add("\tpublic static function passes(): void {\n");
-        ClassPath::add("\t\t" . 'self::validate(function(\Valitron\Validator $validator) {');
-        ClassPath::add("\n\t\t\t" . '$validator->rule("", "")->message("");' . "\n\t\t});\n");
-        ClassPath::add("\t}\r\n\n}");
+        ClassPath::add("\t\t" . 'self::validate(function(\Valitron\Validator $validator) {' . "\n");
+        ClassPath::add("\t\t\t" . '$validator->rule("required", self::$field)->message("property is required");' . "\n\t\t});\n");
+        ClassPath::add("\t}\n\n}");
         ClassPath::force();
         ClassPath::close();
 
