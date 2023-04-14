@@ -4,6 +4,7 @@
 
 ### Added
 - dynamic parameters have been added to export collections in postman
+- added header to set a default time zone
 
 ### Changed
 - command to create rules has been modified
