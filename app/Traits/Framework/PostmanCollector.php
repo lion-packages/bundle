@@ -44,6 +44,25 @@ trait PostmanCollector {
         )->before("://");
     }
 
+    private static function addParams(string $method, array $params): array {
+        $new_params = [];
+
+        foreach ($params as $key => $param) {
+            if ($method === "POST") {
+                $new_params[] = [
+                    'key' => $param::$field,
+                    'value' => '',
+                    'type' => "text"
+                ];
+            } else {
+                vd($param::$field);
+                $new_params[$param::$field] = "";
+            }
+        }
+
+        return $new_params;
+    }
+
     private static function addGet(string $name, string $route): array {
         return [
             'name' => $name,
@@ -62,7 +81,7 @@ trait PostmanCollector {
         ];
     }
 
-    private static function addDelete(string $name, string $route): array {
+    private static function addDelete(string $name, string $route, array $params): array {
         return [
             'name' => $name,
             'response' => [],
@@ -77,7 +96,7 @@ trait PostmanCollector {
                 ],
                 'body' => [
                     'mode' => "raw",
-                    'raw' => '{"example":"example_value"}',
+                    'raw' => json->encode(self::addParams("DELETE", $params)),
                     'options' => [
                         'raw' => [
                             'language' => "json"
@@ -93,7 +112,7 @@ trait PostmanCollector {
         ];
     }
 
-    private static function addPost(string $name, string $route): array {
+    private static function addPost(string $name, string $route, array $params): array {
         return [
             'name' => $name,
             'response' => [],
@@ -107,12 +126,7 @@ trait PostmanCollector {
                 ],
                 'body' => [
                     'mode' => "formdata",
-                    'formdata' => [
-                        [
-                            'key' => "example",
-                            'value' => "example_value"
-                        ]
-                    ]
+                    'formdata' => self::addParams("POST", $params)
                 ],
                 'url' => [
                     ...self::$postman['params']['host']['params'],
@@ -123,7 +137,7 @@ trait PostmanCollector {
         ];
     }
 
-    private static function addPut(string $name, string $route): array {
+    private static function addPut(string $name, string $route, array $params): array {
         return [
             'name' => $name,
             'response' => [],
@@ -138,7 +152,7 @@ trait PostmanCollector {
                 ],
                 'body' => [
                     'mode' => "raw",
-                    'raw' => '{"example":"example_value"}',
+                    'raw' => json->encode(self::addParams("PUT", $params)),
                     'options' => [
                         'raw' => [
                             'language' => "json"
@@ -154,15 +168,15 @@ trait PostmanCollector {
         ];
     }
 
-    private static function addRequest($name, $route, $method) {
+    private static function addRequest($name, $route, $method, $params) {
         if ($method === "POST") {
-            return self::addPost($name, $route);
+            return self::addPost($name, $route, $params);
         } elseif ($method === "GET") {
             return self::addGet($name, $route);
         } elseif ($method === "PUT") {
-            return self::addPut($name, $route);
+            return self::addPut($name, $route, $params);
         } elseif ($method === "DELETE") {
-            return self::addDelete($name, $route);
+            return self::addDelete($name, $route, $params);
         } else {
             return self::addGet($name, $route);
         }
@@ -173,7 +187,8 @@ trait PostmanCollector {
             foreach ($route as $key_route => $item) {
                 self::$postman['params']['routes'][] = [
                     'url' => $key_items === "" ? "/" : $key_items,
-                    'method' => $key_route
+                    'method' => $key_route,
+                    'params' => isset(rules["/{$key_items}"]) ? rules["/{$key_items}"] : []
                 ];
             }
         }
@@ -199,7 +214,12 @@ trait PostmanCollector {
                 $name = $split === "" ? "index" : $split;
 
                 if ($key_split === 0) {
-                    $request = self::addRequest($name, $route['url'], $route['method']);
+                    $request = self::addRequest(
+                        $name,
+                        $route['url'],
+                        $route['method'],
+                        $route['params']
+                    );
 
                     if ($key_split === $size) {
                         self::$postman['params']['items'][] = $request;

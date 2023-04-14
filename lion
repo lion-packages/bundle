@@ -1,6 +1,7 @@
 <?php
 
 define('LION_START', microtime(true));
+define('rules', include_once("./routes/rules.php"));
 
 /**
  * ------------------------------------------------------------------------------
