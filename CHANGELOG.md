@@ -1,5 +1,14 @@
 # Release Notes
 
+## [v13.10.0](https://github.com/Sleon4/Lion-Framework/compare/v13.9.0...v13.10.0) (2023-04-14)
+
+### Added
+- dynamic parameters have been added to export collections in postman
+
+### Changed
+- command to create rules has been modified
+- add default value for environment variables
+
 ## [v13.9.0](https://github.com/Sleon4/Lion-Framework/compare/v13.8.1...v13.9.0) (2023-04-10)
 
 ### Added
