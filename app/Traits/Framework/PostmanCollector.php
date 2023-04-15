@@ -55,7 +55,6 @@ trait PostmanCollector {
                     'type' => "text"
                 ];
             } else {
-                vd($param::$field);
                 $new_params[$param::$field] = "";
             }
         }
