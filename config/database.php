@@ -9,7 +9,7 @@
  **/
 
 return [
-    'default' => env->DB_DEFAULT_CONNECTION,
+    'default' => env->DB_NAME,
     'connections' => [
         env->DB_NAME => [
             'type' => env->DB_TYPE,
