@@ -14,7 +14,7 @@ class FactoryCommand extends Command {
 	protected static $defaultName = "db:factory";
 
 	protected function initialize(InputInterface $input, OutputInterface $output) {
-
+        $output->writeln("<comment>Creating factory...</comment>");
     }
 
     protected function interact(InputInterface $input, OutputInterface $output) {
@@ -26,35 +26,11 @@ class FactoryCommand extends Command {
             'Command required for the creation of new factories'
         )->addArgument(
             'factory', InputArgument::REQUIRED
-        )->addOption(
-            'path', null, InputOption::VALUE_REQUIRED, 'Do you want to configure your own route?'
-        )->addOption(
-            'message', null, InputOption::VALUE_REQUIRED, ''
         );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $factory = $input->getArgument('factory');
-        $message = $input->getOption("message");
-        $path = $input->getOption("path");
-
-        if ($message === null) {
-            $message = true;
-        }
-
-        if ($message) {
-            $output->writeln("<comment>Creating factory...</comment>");
-        }
-
-        if ($path === null) {
-            $path = "";
-        }
-
-        $list = ClassPath::export(
-            "Database/Factories/",
-            ($path . ClassPath::normalize($factory))
-        );
-
+        $list = ClassPath::export("Database/Factories/", $input->getArgument('factory'));
         $url_folder = lcfirst(Str::of($list['namespace'])->replace("\\", "/")->get());
         Store::folder($url_folder);
 
@@ -73,10 +49,7 @@ class FactoryCommand extends Command {
         ClassPath::force();
         ClassPath::close();
 
-        if ($message) {
-            $output->writeln("<info>Factory created successfully</info>");
-        }
-
+        $output->writeln("<info>Factory created successfully</info>");
         return Command::SUCCESS;
     }
 

@@ -62,7 +62,7 @@ class CapsuleCommand extends Command {
         }
 
         $index = 0;
-        $list = ClassPath::export("Database/Class/", ($path . ClassPath::normalize($table)));
+        $list = ClassPath::export("Database/Class/", ($path . ClassPath::normalizeClass($table)));
         $functions_union = "";
         $propierties_union = "";
         $new_object_union = "";
@@ -84,7 +84,7 @@ class CapsuleCommand extends Command {
             }
 
             $field = ClassPath::cleanField($column->Field);
-            $normalize_field = ClassPath::normalize($field, true);
+            $normalize_field = ClassPath::normalizeField($field, true);
             $prop = Str::of('request->')->concat($normalize_field)->get();
             $propierties_union .= ClassPath::addPropierty($column->Type, $field);
             $functions_union .= Str::of(
@@ -113,9 +113,9 @@ class CapsuleCommand extends Command {
         // Getters and Setters
         foreach ($columns as $key => $column) {
             $field = ClassPath::cleanField($column->Field);
-            $normalize_field = ClassPath::normalize($field, true);
+            $normalize_field = ClassPath::normalizeField($field, true);
 
-            ClassPath::add("\tpublic function get" . ClassPath::normalize($field) . "(): ?" . ClassPath::addType($column->Type) . " {\n\t\t");
+            ClassPath::add("\tpublic function get" . ClassPath::normalizeClass($field) . "(): ?" . ClassPath::addType($column->Type) . " {\n\t\t");
             ClassPath::add('return $this->' . $normalize_field . ";");
             ClassPath::add("\n\t}\n\n");
 

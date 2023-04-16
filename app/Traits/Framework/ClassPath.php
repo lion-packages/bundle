@@ -14,15 +14,15 @@ trait ClassPath {
     }
 
     public static function addPropierty($type, $field): string {
-        return "\tprivate ?" . self::addType($type) . ' $' . self::normalize($field, true) . " = null;\n";
+        return "\tprivate ?" . self::addType($type) . ' $' . self::normalizeField($field, true) . " = null;\n";
     }
 
     public static function addSetFunctionIsset(string $class, string $field, string $request_field): string {
-        return "\t\t{$class}->set" . self::normalize($field) . "(\n\t\t\tisset({$request_field}) ? {$request_field} : null\n\t\t);\n";
+        return "\t\t{$class}->set" . self::normalizeClass($field) . "(\n\t\t\tisset({$request_field}) ? {$request_field} : null\n\t\t);\n";
     }
 
     public static function addSetFunction(string $column, string $field, string $class) {
-        return "\tpublic function set" . self::normalize($field) . "(?" . self::addType($column) . ' $' . "{$field}): {$class}";
+        return "\tpublic function set" . self::normalizeClass($field) . "(?" . self::addType($column) . ' $' . "{$field}): {$class}";
     }
 
     public static function cleanField(string $field): string {
@@ -40,16 +40,17 @@ trait ClassPath {
         }
     }
 
-    public static function normalize(string $class, bool $field = false): string {
+    public static function normalizeClass(string $class): string {
         $class = Str::of($class)->replace("_", " ")->trim();
-        $class = Str::of($class)->lower();
+        $class = Str::of($class)->headline();
+        return Str::of($class)->replace(" ", "")->trim();
+    }
 
-        if (!$field) {
-            $class = Str::of($class)->headline();
-            return Str::of($class)->replace(" ", "")->trim();
-        }
-
-        return Str::of($class)->replace(" ", "_")->trim();
+    public static function normalizeField(string $field): string {
+        $field = Str::of($field)->replace("_", " ")->trim();
+        $field = Str::of($field)->replace("-", " ")->trim();
+        $field = Str::of($field)->lower();
+        return Str::of($field)->replace(" ", "_")->trim();
     }
 
     public static function export(string $default_path, string $class_name): array {
