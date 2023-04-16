@@ -1,5 +1,15 @@
 # Release Notes
 
+## [v13.11.0](https://github.com/Sleon4/Lion-Framework/compare/v13.10.0...v13.11.0) (2023-04-16)
+
+### Added
+- added option to create models when creating controllers
+- added table to display query data for seeders
+
+### Changed
+- seeders and factories format has been standardized
+- property has been modified to set the current database connection
+
 ## [v13.10.0](https://github.com/Sleon4/Lion-Framework/compare/v13.9.0...v13.10.0) (2023-04-14)
 
 ### Added
