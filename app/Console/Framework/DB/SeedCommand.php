@@ -2,11 +2,12 @@
 
 namespace App\Console\Framework\DB;
 
+use App\Traits\Framework\ClassPath;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\{ InputInterface, InputArgument, InputOption };
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Helper\Table;
 use LionFiles\Store;
-use App\Traits\Framework\ClassPath;
 use LionHelpers\Str;
 
 class SeedCommand extends Command {
@@ -72,12 +73,20 @@ class SeedCommand extends Command {
         }
 
         $requestSeeder = (new $namespace())->run();
-        if ($requestSeeder->status === 'database-error') {
-            $output->writeln("<error>{$requestSeeder->message}</error>");
-            return Command::INVALID;
+        if (!isset($requestSeeder->status)) {
+            (new Table($output))
+                ->setHeaders($requestSeeder['columns'])
+                ->setRows($requestSeeder['rows'])
+                ->render();
+        } else {
+            if ($requestSeeder->status === 'database-error') {
+                $output->writeln("<error>{$requestSeeder->message}</error>");
+                return Command::INVALID;
+            }
+
+            $output->writeln("<info>{$requestSeeder->message}</info>");
         }
 
-        $output->writeln("<info>{$requestSeeder->message}</info>");
         return Command::SUCCESS;
     }
 
