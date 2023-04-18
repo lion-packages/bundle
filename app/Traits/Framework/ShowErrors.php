@@ -18,10 +18,7 @@ trait ShowErrors {
         if (count(self::$validation) > 0) {
             foreach (self::$validation as $keyErrors => $errors) {
                 logger($errors[0], 'error');
-
-                response->finish(response->error($errors[0], [
-                    'fields' => self::$validation,
-                ]));
+                response->finish(error($errors[0]));
             }
         }
     }
