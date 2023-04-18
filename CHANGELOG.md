@@ -1,5 +1,13 @@
 # Release Notes
 
+## [v13.12.0](https://github.com/Sleon4/Lion-Framework/compare/v13.11.0...v13.12.0) (2023-04-18)
+
+### Added
+- property has been added to the command to create controllers
+
+### Changed
+- data properties have been removed for rule response
+
 ## [v13.11.0](https://github.com/Sleon4/Lion-Framework/compare/v13.10.0...v13.11.0) (2023-04-16)
 
 ### Added
