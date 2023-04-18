@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\{ArrayInput, InputInterface, InputArgument, 
 use Symfony\Component\Console\Output\OutputInterface;
 use LionFiles\Store;
 use App\Traits\Framework\ClassPath;
+use LionHelpers\Str;
 
 class ControllerCommand extends Command {
 
@@ -33,14 +34,32 @@ class ControllerCommand extends Command {
     protected function execute(InputInterface $input, OutputInterface $output) {
         $model = $input->getOption('model');
         $list = ClassPath::export("app/Http/Controllers/", $input->getArgument('controller'));
+        $list_model = null;
         $url_folder = lcfirst(str_replace("\\", "/", $list['namespace']));
         Store::folder($url_folder);
+
+        if ($model != null) {
+            $list_model = ClassPath::export("app/models/", $model);
+        }
 
         ClassPath::create($url_folder, $list['class']);
         ClassPath::add("<?php\n\n");
         ClassPath::add("namespace {$list['namespace']};\n\n");
+
+        if ($model != null) {
+            ClassPath::add("use {$list_model['namespace']}\\{$list_model['class']}; \n\n");
+        }
+
         ClassPath::add("class {$list['class']} {\n\n");
-        ClassPath::add("\tpublic function __construct() {\n\n\t}\n\n");
+
+        if ($model != null) {
+            $camel_class = Str::of($list_model['class'])->camel();
+            ClassPath::add(Str::of("\tprivate {$list_model['class']} $")->concat($camel_class)->concat(";")->ln()->ln()->get());
+            ClassPath::add("\tpublic function __construct() {\n\t\t" . '$this->' . "{$camel_class} = new {$list_model['class']}();\n\t}\n\n");
+        } else {
+            ClassPath::add("\tpublic function __construct() {\n\n\t}\n\n");
+        }
+
         ClassPath::add("\tpublic function create() {\n\n\t}\n\n");
         ClassPath::add("\tpublic function read() {\n\n\t}\n\n");
         ClassPath::add("\tpublic function update() {\n\n\t}\n\n");
