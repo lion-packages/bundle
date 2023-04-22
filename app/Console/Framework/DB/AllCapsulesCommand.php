@@ -43,6 +43,7 @@ class AllCapsulesCommand extends Command {
         }
 
         foreach ($list_all_tables as $key => $table) {
+            $output->writeln("Connection: {$table['connection']}");
             $progressBar = new ProgressBar($output, $table['size']);
             $progressBar->setFormat('debug_nomax');
             $progressBar->start();
@@ -71,7 +72,7 @@ class AllCapsulesCommand extends Command {
             }
 
             $progressBar->finish();
-            $output->writeln("");
+            $output->writeln("\n");
         }
 
         $output->writeln("");
