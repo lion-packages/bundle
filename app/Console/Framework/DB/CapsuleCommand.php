@@ -37,17 +37,14 @@ class CapsuleCommand extends Command {
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
+        $columns = null;
         $table = $input->getArgument('capsule');
-        $path = $input->getOption('path');
         $connection = $input->getOption('connection');
         $message = $input->getOption('message');
-        $columns = null;
+        $path = $input->getOption('path');
 
         if ($message === null) {
             $message = true;
-        }
-
-        if ($message) {
             $output->writeln("<comment>Creating capsule...</comment>");
         }
 
@@ -138,7 +135,7 @@ class CapsuleCommand extends Command {
         ClassPath::force();
         ClassPath::close();
 
-        if ($message) {
+        if ($message != null) {
             $output->writeln("<info>Capsule created successfully</info>");
         }
 

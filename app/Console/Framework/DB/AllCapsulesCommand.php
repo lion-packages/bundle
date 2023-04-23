@@ -3,6 +3,7 @@
 namespace App\Console\Framework\DB;
 
 use LionHelpers\Arr;
+use LionHelpers\Str;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\{ InputInterface, InputArgument, InputOption, ArrayInput };
 use Symfony\Component\Console\Output\OutputInterface;
@@ -58,10 +59,13 @@ class AllCapsulesCommand extends Command {
                     $progressBar->setBarCharacter('<comment>=</comment>');
                 }
 
+                $path = Str::of($table['connection'])->replace("_", " ")->get();
+                $path = Str::of($path)->headline();
+
                 $this->getApplication()->find('db:capsule')->run(
                     new ArrayInput([
                         'capsule' => $tableDB[$table_key[0]],
-                        '--path' => $table['connection'] . "/",
+                        '--path' => Str::of($path)->replace(" ", "")->get() . "/",
                         '--connection' => $table['connection'],
                         '--message' => false
                     ]),
