@@ -1,5 +1,14 @@
 # Release Notes
 
+## [v13.14.0](https://github.com/Sleon4/Lion-Framework/compare/v13.13.0...v13.14.0) (2023-04-25)
+
+### Added
+- the visualization of middleware available for each route is added
+
+### Changed
+- added properties for editorconfig
+- added properties in gitignore
+
 ## [v13.13.0](https://github.com/Sleon4/Lion-Framework/compare/v13.12.0...v13.13.0) (2023-04-24)
 
 ### Changed
