@@ -1,5 +1,11 @@
 # Release Notes
 
+## [v13.13.0](https://github.com/Sleon4/Lion-Framework/compare/v13.12.0...v13.13.0) (2023-04-24)
+
+### Changed
+- added database visualization when mapping databases in general
+- PSR4 format has been modified to create capsule classes
+
 ## [v13.12.0](https://github.com/Sleon4/Lion-Framework/compare/v13.11.0...v13.12.0) (2023-04-18)
 
 ### Added
