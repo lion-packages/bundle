@@ -140,3 +140,15 @@ if (!function_exists('logger')) {
         )->$log_type($str, $data);
     }
 }
+
+/**
+ * ------------------------------------------------------------------------------
+ * Function to convert data to json
+ * ------------------------------------------------------------------------------
+ **/
+
+if (!function_exists('json')) {
+    function json(mixed $value): string {
+        return json->encode($value);
+    }
+}
