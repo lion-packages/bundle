@@ -40,7 +40,7 @@ class TraitCommand extends Command {
         ClassPath::force();
         ClassPath::close();
 
-        $output->writeln("<info>Controller created successfully</info>");
+        $output->writeln("<info>Trait created successfully</info>");
         return Command::SUCCESS;
     }
 
