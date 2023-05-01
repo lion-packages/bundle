@@ -1,7 +1,6 @@
 <?php
 
 use LionRoute\Route;
-use LionSQL\Drivers\MySQL as DB;
 
 /**
  * ------------------------------------------------------------------------------
@@ -12,5 +11,3 @@ use LionSQL\Drivers\MySQL as DB;
  **/
 
 Route::get('/', fn() => info("Welcome to index"));
-
-Route::get('users', fn() => DB::table('users')->select()->getAll());
