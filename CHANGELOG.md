@@ -1,5 +1,13 @@
 # Release Notes
 
+## [v14.0.0](https://github.com/Sleon4/Lion-Framework/compare/v13.14.0...v14.0.0) (2023-05-01)
+
+### Added
+- added helper to convert data to json
+- command to modify host when starting local server has been modified
+- trait SoftDeletes has been added to perform temporary data deletion
+- necessary files for docker containers have been added
+
 ## [v13.14.0](https://github.com/Sleon4/Lion-Framework/compare/v13.13.0...v13.14.0) (2023-04-25)
 
 ### Added
