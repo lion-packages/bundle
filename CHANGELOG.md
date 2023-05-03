@@ -1,5 +1,11 @@
 # Release Notes
 
+## [v14.1.0](https://github.com/Sleon4/Lion-Framework/compare/v14.0.0...v14.1.0) (2023-05-03)
+
+### Changed
+- .env properties have been modified
+- Dockerfile has been updated
+
 ## [v14.0.0](https://github.com/Sleon4/Lion-Framework/compare/v13.14.0...v14.0.0) (2023-05-01)
 
 ### Added
