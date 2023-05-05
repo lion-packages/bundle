@@ -36,7 +36,8 @@ class ModelCommand extends Command {
 		ClassPath::create($url_folder, $list['class']);
 		ClassPath::add("<?php\n\n");
 		ClassPath::add("namespace {$list['namespace']};\n\n");
-		ClassPath::add("use LionSQL\Drivers\MySQL as DB;\n\n");
+		ClassPath::add("use LionSQL\Drivers\MySQL\MySQL as DB;\n");
+        ClassPath::add("use LionSQL\Drivers\MySQL\Schema;\n\n");
 		ClassPath::add("class {$list['class']} {\n\n");
 		ClassPath::add("\tpublic function __construct() {\n\t\t\n\t}\n\n");
         ClassPath::add("\tpublic function createDB() {\n\n\t}\n\n");

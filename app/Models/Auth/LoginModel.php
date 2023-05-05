@@ -2,7 +2,7 @@
 
 namespace App\Models\Auth;
 
-use LionSQL\Drivers\MySQL as DB;
+use LionSQL\Drivers\MySQL\MySQL as DB;
 
 class LoginModel {
 

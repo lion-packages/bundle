@@ -8,7 +8,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\{ InputInterface, InputArgument, InputOption, ArrayInput };
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
-use LionSQL\Drivers\MySQL as DB;
+use LionSQL\Drivers\MySQL\MySQL as DB;
 
 class AllCapsulesCommand extends Command {
 
