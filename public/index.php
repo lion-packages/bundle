@@ -61,13 +61,14 @@ include_once("../routes/header.php");
  * ------------------------------------------------------------------------------
  **/
 
-LionSQL\Drivers\Driver::addLog();
+LionSQL\Driver::addLog();
 
-$responseDatabase = LionSQL\Drivers\Driver::run(
+$responseDatabase = LionSQL\Driver::run(
     include_once("../config/database.php")
 );
 
 if ($responseDatabase->status === 'database-error') {
+    logger($responseDatabase->message, 'error', []);
     finish($responseDatabase);
 }
 
