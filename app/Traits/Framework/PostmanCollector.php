@@ -52,6 +52,7 @@ trait PostmanCollector {
                 $new_params[] = [
                     'key' => $param::$field,
                     'value' => '',
+                    'description' => $param::$desc,
                     'type' => "text"
                 ];
             } else {

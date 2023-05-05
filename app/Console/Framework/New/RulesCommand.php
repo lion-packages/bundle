@@ -39,7 +39,8 @@ class RulesCommand extends Command {
         ClassPath::add("use App\Traits\Framework\ShowErrors;\n\n");
         ClassPath::add("class {$list['class']} {\n\n");
         ClassPath::add("\tuse ShowErrors;\n\n");
-        ClassPath::add("\t" . 'public static string $field = "";' . "\n\n");
+        ClassPath::add("\t" . 'public static string $field = "";' . "\n");
+        ClassPath::add("\t" . 'public static string $desc = "";' . "\n\n");
         ClassPath::add("\tpublic static function passes(): void {\n");
         ClassPath::add("\t\t" . 'self::validate(function(\Valitron\Validator $validator) {' . "\n");
         ClassPath::add("\t\t\t" . '$validator->rule("required", self::$field)->message("property is required");' . "\n\t\t});\n");
