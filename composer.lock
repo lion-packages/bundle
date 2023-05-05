@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3b3627daf2bf7dc6c9fa76e257096793",
+    "content-hash": "111bfd4e6839c78883106cabbe01b1c7",
     "packages": [
         {
             "name": "cboden/ratchet",
@@ -816,16 +816,16 @@
         },
         {
             "name": "lion/sql",
-            "version": "v7.7.0",
+            "version": "v8.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-SQL.git",
-                "reference": "74f45fb6829e2c2fd62bdef144d141de88ac27e3"
+                "reference": "7b22b4684dccd7ee45879f1dfa1b9dcfa5fcc038"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/74f45fb6829e2c2fd62bdef144d141de88ac27e3",
-                "reference": "74f45fb6829e2c2fd62bdef144d141de88ac27e3",
+                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/7b22b4684dccd7ee45879f1dfa1b9dcfa5fcc038",
+                "reference": "7b22b4684dccd7ee45879f1dfa1b9dcfa5fcc038",
                 "shasum": ""
             },
             "require": {
@@ -845,9 +845,9 @@
             "description": "package in charge of generating and executing MySQL processes",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-SQL/issues",
-                "source": "https://github.com/Sleon4/Lion-SQL/tree/v7.7.0"
+                "source": "https://github.com/Sleon4/Lion-SQL/tree/v8.0.1"
             },
-            "time": "2023-05-01T01:29:30+00:00"
+            "time": "2023-05-05T04:43:58+00:00"
         },
         {
             "name": "monolog/monolog",
