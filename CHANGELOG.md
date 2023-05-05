@@ -1,5 +1,17 @@
 # Release Notes
 
+## [v14.2.0](https://github.com/Sleon4/Lion-Framework/compare/v14.1.0...v14.2.0) (2023-05-05)
+
+### Added
+- desc property is added to assign a description in postman properties
+
+### Changed
+- lion/sql library has been updated
+
+### Fixed
+- import for connection to databases has been corrected
+- fixed database import in different commands
+
 ## [v14.1.0](https://github.com/Sleon4/Lion-Framework/compare/v14.0.0...v14.1.0) (2023-05-03)
 
 ### Changed
