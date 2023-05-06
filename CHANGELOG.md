@@ -8,6 +8,7 @@
 
 ### Changed
 - validation with enum values have been added
+- sql library has been updated to v8.0.2
 
 ## [v14.2.0](https://github.com/Sleon4/Lion-Framework/compare/v14.1.0...v14.2.0) (2023-05-05)
 
