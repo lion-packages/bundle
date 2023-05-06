@@ -1,5 +1,14 @@
 # Release Notes
 
+## [v14.3.0](https://github.com/Sleon4/Lion-Framework/compare/v14.2.0...v14.3.0) (2023-05-06)
+
+### Added
+- session controller has been created to refresh JWT token
+- added trait to generate fake data in factory
+
+### Changed
+- validation with enum values have been added
+
 ## [v14.2.0](https://github.com/Sleon4/Lion-Framework/compare/v14.1.0...v14.2.0) (2023-05-05)
 
 ### Added
