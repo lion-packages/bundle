@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware\JWT;
 
+use App\Enums\Framework\StatusEnum;
 use LionSecurity\JWT;
 
 class AuthorizationMiddleware {
@@ -14,17 +15,17 @@ class AuthorizationMiddleware {
 
     private function exist(): void {
         if (!isset($this->headers['Authorization'])) {
-            response->finish(response->response('session-error', 'The JWT does not exist'));
+            finish(response->response(StatusEnum::SESSION_ERROR->value, 'The JWT does not exist'));
         }
     }
 
     private function validateSession($jwt): void {
-        if ($jwt->status === 'error') {
-            response->finish(response->response('session-error', $jwt->message));
+        if ($jwt->status === StatusEnum::ERROR->value) {
+            finish(response->response(StatusEnum::SESSION_ERROR->value, $jwt->message));
         }
 
         if (!isset($jwt->data->session)) {
-            response->finish(response->response('session-error', 'undefined session'));
+            finish(response->response(StatusEnum::SESSION_ERROR->value, 'undefined session'));
         }
     }
 
@@ -36,10 +37,10 @@ class AuthorizationMiddleware {
             $this->validateSession($jwt);
 
             if (!$jwt->data->session) {
-                response->finish(response->response('session-error', 'User not logged in, you must log in'));
+                finish(response->response(StatusEnum::SESSION_ERROR->value, 'User not logged in, you must log in'));
             }
         } else {
-            response->finish(response->response('session-error', 'Invalid JWT'));
+            finish(response->response(StatusEnum::SESSION_ERROR->value, 'Invalid JWT'));
         }
     }
 
@@ -51,10 +52,10 @@ class AuthorizationMiddleware {
             $this->validateSession($jwt);
 
             if ($jwt->data->session) {
-                response->finish(response->response('session-error', 'User in session, you must close the session'));
+                finish(response->response(StatusEnum::SESSION_ERROR->value, 'User in session, you must close the session'));
             }
         } else {
-            response->finish(response->response('session-error', 'Invalid JWT'));
+            finish(response->response(StatusEnum::SESSION_ERROR->value, 'Invalid JWT'));
         }
     }
 

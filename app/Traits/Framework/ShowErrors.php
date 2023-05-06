@@ -2,6 +2,7 @@
 
 namespace App\Traits\Framework;
 
+use App\Enums\Framework\StatusEnum;
 use \Closure;
 use LionSecurity\Validation;
 
@@ -11,14 +12,14 @@ trait ShowErrors {
 
     public static function validate(Closure $validate_function): void {
         $response = Validation::validate((array) request, $validate_function);
-        self::$validation = $response->status === 'error' ? $response->messages : [];
+        self::$validation = $response->status === StatusEnum::ERROR->value ? $response->messages : [];
     }
 
     public static function display(): void {
         if (count(self::$validation) > 0) {
             foreach (self::$validation as $keyErrors => $errors) {
-                logger($errors[0], 'error');
-                response->finish(error($errors[0]));
+                logger($errors[0], StatusEnum::ERROR->value);
+                finish(error($errors[0]));
             }
         }
     }
