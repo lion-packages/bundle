@@ -37,14 +37,15 @@ class FactoryCommand extends Command {
         ClassPath::create($url_folder, $list['class']);
         ClassPath::add(Str::of("<?php\r")->ln()->ln()->get());
         ClassPath::add(Str::of("namespace ")->concat($list['namespace'])->concat(";")->ln()->ln()->get());
-        ClassPath::add(Str::of("use Faker\Factory;")->ln()->ln()->get());
+        ClassPath::add(Str::of("use App\Traits\Framework\Faker;")->ln()->ln()->get());
         ClassPath::add(Str::of("class ")->concat($list['class'])->concat(" {\r")->ln()->ln()->get());
+        ClassPath::add("\tuse Faker;\n\n");
         ClassPath::add("\t/**\n");
         ClassPath::add("\t * ------------------------------------------------------------------------------\n");
         ClassPath::add("\t * Define the model's default state\n");
         ClassPath::add("\t * ------------------------------------------------------------------------------\n");
         ClassPath::add("\t **/\n");
-        ClassPath::add("\tpublic static function definition(): array {\n\t\t" . '$faker = Factory::create();' . "\n\n\t\treturn [];\n\t}\n\n");
+        ClassPath::add("\tpublic static function definition(): array {\n\t\treturn [self::get()->name()];\n\t}\n\n");
         ClassPath::add("}");
         ClassPath::force();
         ClassPath::close();
