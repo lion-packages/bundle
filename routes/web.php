@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Auth\JWTController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\SessionController;
 use LionRoute\Route;
 
 /**
@@ -16,7 +16,7 @@ Route::get('/', fn() => info("Welcome to index"));
 
 Route::prefix('api', function() {
     Route::prefix('auth', function() {
-        Route::post('login', [LoginController::class, 'auth']);
-        Route::post('refresh', [JWTController::class, 'refresh'], ['jwt-authorize']);
+        Route::post('login', [LoginController::class, 'auth'], ['jwt-not-authorize']);
+        Route::get('refresh', [SessionController::class, 'refresh'], ['jwt-authorize']);
     });
 });
