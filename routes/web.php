@@ -16,7 +16,7 @@ Route::get('/', fn() => info("Welcome to index"));
 
 Route::prefix('api', function() {
     Route::prefix('auth', function() {
-        Route::post('login', [LoginController::class, 'auth'], ['jwt-not-authorize']);
+        Route::post('login', [LoginController::class, 'auth']);
         Route::get('refresh', [SessionController::class, 'refresh'], ['jwt-authorize']);
     });
 });

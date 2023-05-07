@@ -70,7 +70,7 @@ trait PostmanCollector {
             'request' => [
                 'method' => "GET",
                 'header' => [
-                    ["key" => "Content-Type", "value" => "application\/json"]
+                    ["key" => "Content-Type", "value" => "application/json"]
                 ],
                 'url' => [
                     ...self::$postman['params']['host']['params'],
