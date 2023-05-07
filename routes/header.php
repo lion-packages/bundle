@@ -12,7 +12,7 @@ date_default_timezone_set(env->SERVER_DATE_TIMEZONE);
 
 LionRequest\Request::header(
     'Access-Control-Allow-Origin',
-    "*"
+    '*'
 );
 
 LionRequest\Request::header(
@@ -22,12 +22,17 @@ LionRequest\Request::header(
 
 LionRequest\Request::header(
     'Access-Control-Max-Age',
-    "3600"
+    '3600'
+);
+
+LionRequest\Request::header(
+    'Allow',
+    'GET, POST, PUT, DELETE, PATCH, OPTIONS'
 );
 
 LionRequest\Request::header(
     'Access-Control-Allow-Methods',
-    'GET, POST, PUT, DELETE'
+    'GET, POST, PUT, DELETE, PATCH, OPTIONS'
 );
 
 LionRequest\Request::header(
