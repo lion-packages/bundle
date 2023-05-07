@@ -63,14 +63,58 @@ trait PostmanCollector {
         return $new_params;
     }
 
-    private static function addGet(string $name, string $route): array {
+    private static function addPatch(string $name, string $route, $params): array {
+        return [
+            'name' => $name,
+            'response' => [],
+            'request' => [
+                'method' => "PATCH",
+                'header' => [
+                    [
+                        "key" => "Content-Type",
+                        "value" => "application/json",
+                        'type' => "text"
+                    ]
+                ],
+                'body' => [
+                    'mode' => "raw",
+                    'raw' => json->encode((object) self::addParams("PATCH", $params)),
+                    'options' => [
+                        'raw' => [
+                            'language' => "json"
+                        ]
+                    ]
+                ],
+                'url' => [
+                    ...self::$postman['params']['host']['params'],
+                    'raw' => '{{base_url}}/' . $route,
+                    'path' => [...explode("/", $route)]
+                ]
+            ]
+        ];
+    }
+
+    private static function addGet(string $name, string $route, array $params): array {
         return [
             'name' => $name,
             'response' => [],
             'request' => [
                 'method' => "GET",
                 'header' => [
-                    ["key" => "Content-Type", "value" => "application/json"]
+                    [
+                        "key" => "Content-Type",
+                        "value" => "application/json",
+                        'type' => "text"
+                    ]
+                ],
+                'body' => [
+                    'mode' => "raw",
+                    'raw' => json->encode((object) self::addParams("GET", $params)),
+                    'options' => [
+                        'raw' => [
+                            'language' => "json"
+                        ]
+                    ]
                 ],
                 'url' => [
                     ...self::$postman['params']['host']['params'],
@@ -96,7 +140,7 @@ trait PostmanCollector {
                 ],
                 'body' => [
                     'mode' => "raw",
-                    'raw' => json->encode(self::addParams("DELETE", $params)),
+                    'raw' => json->encode((object) self::addParams("DELETE", $params)),
                     'options' => [
                         'raw' => [
                             'language' => "json"
@@ -152,7 +196,7 @@ trait PostmanCollector {
                 ],
                 'body' => [
                     'mode' => "raw",
-                    'raw' => json->encode(self::addParams("PUT", $params)),
+                    'raw' => json->encode((object) self::addParams("PUT", $params)),
                     'options' => [
                         'raw' => [
                             'language' => "json"
@@ -172,13 +216,15 @@ trait PostmanCollector {
         if ($method === "POST") {
             return self::addPost($name, $route, $params);
         } elseif ($method === "GET") {
-            return self::addGet($name, $route);
+            return self::addGet($name, $route, $params);
         } elseif ($method === "PUT") {
             return self::addPut($name, $route, $params);
         } elseif ($method === "DELETE") {
             return self::addDelete($name, $route, $params);
+        } elseif ($method === "PATCH") {
+            return self::addPatch($name, $route, $params);
         } else {
-            return self::addGet($name, $route);
+            return self::addGet($name, $route, $params);
         }
     }
 
