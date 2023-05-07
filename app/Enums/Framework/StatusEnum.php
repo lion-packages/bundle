@@ -12,4 +12,8 @@ enum StatusEnum: string {
     case SESSION_ERROR = "session-error";
     case ROUTE_ERROR = "route-error";
 
+    public static function values(): array {
+        return array_map(fn($value) => $value->value, self::cases());
+    }
+
 }
