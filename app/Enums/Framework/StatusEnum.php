@@ -16,4 +16,13 @@ enum StatusEnum: string {
         return array_map(fn($value) => $value->value, self::cases());
     }
 
+    public static function isError(object $res): bool {
+        return in_array($res->status, [
+            self::ERROR->value,
+            self::DATABASE_ERROR->value,
+            self::SESSION_ERROR->value,
+            self::ROUTE_ERROR->value
+        ]);
+    }
+
 }
