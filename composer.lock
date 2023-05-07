@@ -612,16 +612,16 @@
         },
         {
             "name": "lion/helpers",
-            "version": "v2.1.3",
+            "version": "v2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Helpers.git",
-                "reference": "e4ea6f6b6d7a152bcf38a6127a306d9471732c26"
+                "reference": "06fdaae639592e948149a10b091c231d5ac44227"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Helpers/zipball/e4ea6f6b6d7a152bcf38a6127a306d9471732c26",
-                "reference": "e4ea6f6b6d7a152bcf38a6127a306d9471732c26",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Helpers/zipball/06fdaae639592e948149a10b091c231d5ac44227",
+                "reference": "06fdaae639592e948149a10b091c231d5ac44227",
                 "shasum": ""
             },
             "require": {
@@ -646,9 +646,9 @@
             "description": "easy to use helpers for any type of use",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Helpers/issues",
-                "source": "https://github.com/Sleon4/Lion-Helpers/tree/v2.1.3"
+                "source": "https://github.com/Sleon4/Lion-Helpers/tree/v2.2.0"
             },
-            "time": "2023-03-08T18:54:57+00:00"
+            "time": "2023-05-07T18:48:19+00:00"
         },
         {
             "name": "lion/mailer",
@@ -4486,16 +4486,16 @@
         },
         {
             "name": "sebastian/diff",
-            "version": "4.0.4",
+            "version": "4.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/diff.git",
-                "reference": "3461e3fccc7cfdfc2720be910d3bd73c69be590d"
+                "reference": "74be17022044ebaaecfdf0c5cd504fc9cd5a7131"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/3461e3fccc7cfdfc2720be910d3bd73c69be590d",
-                "reference": "3461e3fccc7cfdfc2720be910d3bd73c69be590d",
+                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/74be17022044ebaaecfdf0c5cd504fc9cd5a7131",
+                "reference": "74be17022044ebaaecfdf0c5cd504fc9cd5a7131",
                 "shasum": ""
             },
             "require": {
@@ -4540,7 +4540,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/diff/issues",
-                "source": "https://github.com/sebastianbergmann/diff/tree/4.0.4"
+                "source": "https://github.com/sebastianbergmann/diff/tree/4.0.5"
             },
             "funding": [
                 {
@@ -4548,7 +4548,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-10-26T13:10:38+00:00"
+            "time": "2023-05-07T05:35:17+00:00"
         },
         {
             "name": "sebastian/environment",
