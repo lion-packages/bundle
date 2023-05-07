@@ -47,7 +47,10 @@ class ControllerCommand extends Command {
         ClassPath::add("namespace {$list['namespace']};\n\n");
 
         if ($model != null) {
+            ClassPath::add("use App\Enums\Framework\StatusEnum;\n");
             ClassPath::add("use {$list_model['namespace']}\\{$list_model['class']}; \n\n");
+        } else {
+            ClassPath::add("use App\Enums\Framework\StatusEnum;\n\n");
         }
 
         ClassPath::add("class {$list['class']} {\n\n");
@@ -71,6 +74,8 @@ class ControllerCommand extends Command {
         $output->writeln("<info>Controller created successfully</info>");
 
         if ($model != null) {
+            $output->writeln("");
+
             $this->getApplication()->find('new:model')->run(
                 new ArrayInput(['model' => $model]),
                 $output
