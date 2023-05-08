@@ -12,9 +12,9 @@ class SessionController {
 
     public function refresh() {
         return success("refreshed session token", [
-            'jwt' => JWT::encode([
-                'session' => true,
-            ])
+            'jwt' => JWT::encode(
+                (array) JWT::decode(JWT::get())->data
+            )
         ]);
     }
 
