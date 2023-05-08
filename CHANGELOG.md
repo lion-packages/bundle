@@ -1,5 +1,21 @@
 # Release Notes
 
+## [v14.3.1](https://github.com/Sleon4/Lion-Framework/compare/v14.3.0...v14.3.1) (2023-05-07)
+
+### Added
+- values method is added in StatusEnum to obtain the available statuses
+- function has been added to check if an object is of type error
+- added http PATCH protocol for exporting in postman collections
+- added enum as import to controller command
+
+### Changed
+- headers have been modified
+- updated lion/helpers library to v2.2.0
+
+### Fixed
+- fixed json format for postman collections
+- commands that do not return strings have been modified
+
 ## [v14.3.0](https://github.com/Sleon4/Lion-Framework/compare/v14.2.0...v14.3.0) (2023-05-06)
 
 ### Added
