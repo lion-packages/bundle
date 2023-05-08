@@ -10,7 +10,7 @@ trait ClassPath {
     private static $content;
 
     public static function addNewObjectClass(string $class): string {
-        return '$' . Str::of($class)->lower() . " = new {$class}();\n\n";
+        return '$' . Str::of($class)->lower()->get() . " = new {$class}();\n\n";
     }
 
     public static function addPropierty($type, $field): string {
@@ -26,8 +26,7 @@ trait ClassPath {
     }
 
     public static function cleanField(string $field): string {
-        $field = Str::of($field)->replace(" ", "_")->get();
-        return Str::of($field)->replace("-", "_")->get();
+        return Str::of($field)->replace(" ", "_")->replace("-", "_")->get();
     }
 
     public static function addType(string $type): string {
@@ -41,16 +40,25 @@ trait ClassPath {
     }
 
     public static function normalizeClass(string $class): string {
-        $class = Str::of($class)->replace("_", " ")->trim();
-        $class = Str::of($class)->headline();
-        return Str::of($class)->replace(" ", "")->trim();
+        return Str::of($class)
+            ->replace("_", " ")
+            ->trim()
+            ->headline()
+            ->replace(" ", "")
+            ->trim()
+            ->get();
     }
 
     public static function normalizeField(string $field): string {
-        $field = Str::of($field)->replace("_", " ")->trim();
-        $field = Str::of($field)->replace("-", " ")->trim();
-        $field = Str::of($field)->lower();
-        return Str::of($field)->replace(" ", "_")->trim();
+        return Str::of($field)
+            ->replace("_", " ")
+            ->trim()
+            ->replace("-", " ")
+            ->trim()
+            ->lower()
+            ->replace(" ", "_")
+            ->trim()
+            ->get();
     }
 
     public static function export(string $default_path, string $class_name): array {

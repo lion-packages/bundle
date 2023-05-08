@@ -20,7 +20,7 @@ class AuthorizationMiddleware {
     }
 
     private function validateSession($jwt): void {
-        if ($jwt->status === StatusEnum::ERROR->value) {
+        if (StatusEnum::isError($jwt)) {
             finish(response->response(StatusEnum::SESSION_ERROR->value, $jwt->message));
         }
 

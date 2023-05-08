@@ -56,7 +56,7 @@ class ControllerCommand extends Command {
         ClassPath::add("class {$list['class']} {\n\n");
 
         if ($model != null) {
-            $camel_class = Str::of($list_model['class'])->camel();
+            $camel_class = Str::of($list_model['class'])->camel()->get();
             ClassPath::add(Str::of("\tprivate {$list_model['class']} $")->concat($camel_class)->concat(";")->ln()->ln()->get());
             ClassPath::add("\tpublic function __construct() {\n\t\t" . '$this->' . "{$camel_class} = new {$list_model['class']}();\n\t}\n\n");
         } else {

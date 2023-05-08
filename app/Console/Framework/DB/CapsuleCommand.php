@@ -70,13 +70,18 @@ class CapsuleCommand extends Command {
         ClassPath::create($url_folder, $list['class']);
         ClassPath::add(Str::of("<?php")->ln()->ln()->get());
         ClassPath::add(Str::of("namespace ")->concat($list['namespace'])->concat(";\r\n\n")->get());
-        ClassPath::add(Str::of("class ")->concat($list['class'])->concat(" implements \JsonSerializable {\n\n")->get());
+        ClassPath::add(
+            Str::of("class ")
+                ->concat($list['class'])
+                ->concat(" implements \JsonSerializable {")->ln()->ln()
+                ->get()
+        );
 
         // Propierties
         foreach ($columns as $key => $column) {
             if ($index === 0) {
                 $new_object_union = ClassPath::addNewObjectClass($list['class']);
-                $object_class = Str::of('$')->concat($list['class'])->lower();
+                $object_class = Str::of('$')->concat($list['class'])->lower()->get();
                 $index++;
             }
 
@@ -96,15 +101,15 @@ class CapsuleCommand extends Command {
 
         ClassPath::add(
             Str::of("\tpublic static function formFields(): ")
-            ->concat($list['class'])
-            ->concat(" {\n\t\t")
-            ->concat($new_object_union)
-            ->concat($functions_union)
-            ->concat("\t\treturn ")
-            ->concat($object_class)
-            ->concat(";")
-            ->concat("\n\t}\n\n")
-            ->get()
+                ->concat($list['class'])
+                ->concat(" {\n\t\t")
+                ->concat($new_object_union)
+                ->concat($functions_union)
+                ->concat("\t\treturn ")
+                ->concat($object_class)
+                ->concat(";")
+                ->concat("\n\t}\n\n")
+                ->get()
         );
 
         // Getters and Setters

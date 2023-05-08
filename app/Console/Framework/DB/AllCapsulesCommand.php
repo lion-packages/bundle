@@ -59,13 +59,16 @@ class AllCapsulesCommand extends Command {
                     $progressBar->setBarCharacter('<comment>=</comment>');
                 }
 
-                $path = Str::of($table['connection'])->replace("_", " ")->get();
-                $path = Str::of($path)->headline();
+                $path = Str::of($table['connection'])
+                    ->replace("_", " ")
+                    ->headline()
+                    ->replace(" ", "")
+                    ->get();
 
                 $this->getApplication()->find('db:capsule')->run(
                     new ArrayInput([
                         'capsule' => $tableDB[$table_key[0]],
-                        '--path' => Str::of($path)->replace(" ", "")->get() . "/",
+                        '--path' => $path . "/",
                         '--connection' => $table['connection'],
                         '--message' => false
                     ]),

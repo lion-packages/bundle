@@ -2,6 +2,7 @@
 
 namespace App\Console\Framework\DB;
 
+use App\Enums\Framework\StatusEnum;
 use App\Traits\Framework\ClassPath;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\{ InputInterface, InputArgument, InputOption };
@@ -80,7 +81,8 @@ class SeedCommand extends Command {
                 ->setRows($requestSeeder['rows'])
                 ->render();
         } else {
-            if ($requestSeeder->status === 'database-error') {
+
+            if (StatusEnum::isError($requestSeeder)) {
                 $output->writeln("<error>{$requestSeeder->message}</error>");
                 return Command::INVALID;
             }

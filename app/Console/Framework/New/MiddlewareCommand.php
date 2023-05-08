@@ -34,10 +34,10 @@ class MiddlewareCommand extends Command {
 		Store::folder($url_folder);
 
 		ClassPath::create($url_folder, $list['class']);
-		ClassPath::add("<?php\r\n\n");
-		ClassPath::add("namespace {$list['namespace']};\r\n\n");
-		ClassPath::add("class {$list['class']} {\r\n\n");
-		ClassPath::add("\tpublic function __construct() {\r\n\n\t}\r\n\n}");
+		ClassPath::add("<?php\n\n");
+		ClassPath::add("namespace {$list['namespace']};\n\n");
+		ClassPath::add("class {$list['class']} {\n\n");
+		ClassPath::add("\tpublic function __construct() {\n\n\t}\n\n}");
 		ClassPath::force();
 		ClassPath::close();
 

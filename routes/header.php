@@ -12,7 +12,7 @@ date_default_timezone_set(env->SERVER_DATE_TIMEZONE);
 
 LionRequest\Request::header(
     'Access-Control-Allow-Origin',
-    '*'
+    env->SERVER_URL_AUD
 );
 
 LionRequest\Request::header(

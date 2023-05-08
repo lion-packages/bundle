@@ -62,10 +62,6 @@ class RouteListCommand extends Command {
                 ];
 
                 if (Arr::of($middleware)->length() > 0) {
-                    // if ($cont < ($size - 1)) {
-                        // $rows[] = new TableSeparator();
-                    // }
-
                     $rows[] = [
                         new TableCell(
                             "<fire>MIDDLEWARE:</fire>",

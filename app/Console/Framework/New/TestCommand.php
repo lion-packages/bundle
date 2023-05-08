@@ -34,10 +34,10 @@ class TestCommand extends Command {
 		Store::folder($url_folder);
 
 		ClassPath::create($url_folder, $list['class']);
-		ClassPath::add("<?php\r\n\n");
-		ClassPath::add("namespace {$list['namespace']};\r\n\n");
-		ClassPath::add("use PHPUnit\Framework\TestCase;\r\n\n");
-		ClassPath::add("class {$list['class']} extends TestCase {\r\n\n}");
+		ClassPath::add("<?php\n\n");
+		ClassPath::add("namespace {$list['namespace']};\n\n");
+		ClassPath::add("use PHPUnit\Framework\TestCase;\n\n");
+		ClassPath::add("class {$list['class']} extends TestCase {\n\n}");
 		ClassPath::force();
 		ClassPath::close();
 

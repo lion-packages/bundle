@@ -36,9 +36,9 @@ class EnumsCommand extends Command {
         Store::folder($url_folder);
 
         ClassPath::create($url_folder, $list['class']);
-        ClassPath::add(Str::of("<?php\r")->ln()->ln()->get());
-        ClassPath::add(Str::of("namespace ")->concat($list['namespace'])->concat(";\r")->ln()->ln()->get());
-        ClassPath::add(Str::of("enum ")->concat($list['class'])->concat(": string {\r")->ln()->ln()->concat("}")->get());
+        ClassPath::add(Str::of("<?php")->ln()->ln()->get());
+        ClassPath::add(Str::of("namespace ")->concat($list['namespace'])->concat(";")->ln()->ln()->get());
+        ClassPath::add(Str::of("enum ")->concat($list['class'])->concat(": string {")->ln()->ln()->concat("}")->get());
         ClassPath::force();
         ClassPath::close();
 

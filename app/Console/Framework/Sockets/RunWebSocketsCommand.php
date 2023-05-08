@@ -46,7 +46,7 @@ class RunWebSocketsCommand extends Command {
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $class = $this->kernel->getClass(Str::of($input->getArgument('websocket'))->trim());
+        $class = $this->kernel->getClass(Str::of($input->getArgument('websocket'))->trim()->get());
 
         if (!class_exists($class)) {
             return Command::FAILURE;
