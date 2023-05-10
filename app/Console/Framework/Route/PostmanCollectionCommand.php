@@ -20,7 +20,7 @@ class PostmanCollectionCommand extends Command {
         $output->writeln("<comment>Exporting collection...</comment>");
 
         PostmanCollector::init(env->SERVER_URL);
-        $this->json_name = Str::of(date('Y-m-d') . "_lion_collection")->lower();
+        $this->json_name = Str::of(date('Y-m-d') . "_lion_collection")->lower()->get();
         $this->routes = fetch('GET', env->SERVER_URL . "/route-list");
         array_pop($this->routes);
     }
