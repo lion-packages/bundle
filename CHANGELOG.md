@@ -16,6 +16,7 @@
 ### Fixed
 - fixed json format for postman collections
 - commands that do not return strings have been modified
+- table format to generate capsule classes has been corrected
 
 ## [v14.3.0](https://github.com/Sleon4/Lion-Framework/compare/v14.2.0...v14.3.0) (2023-05-06)
 
