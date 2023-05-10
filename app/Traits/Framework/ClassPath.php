@@ -42,6 +42,7 @@ trait ClassPath {
     public static function normalizeClass(string $class): string {
         return Str::of($class)
             ->replace("_", " ")
+            ->replace("-", " ")
             ->trim()
             ->headline()
             ->replace(" ", "")

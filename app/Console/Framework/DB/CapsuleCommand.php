@@ -60,7 +60,10 @@ class CapsuleCommand extends Command {
         }
 
         $index = 0;
-        $list = ClassPath::export("Database/Class/", ($path . ClassPath::normalizeClass($table)));
+        $list = ClassPath::export(
+            "Database/Class/",
+            ($path . ClassPath::normalizeClass(Str::of($table)->replace('`', '')->get()))
+        );
         $functions_union = "";
         $propierties_union = "";
         $new_object_union = "";
