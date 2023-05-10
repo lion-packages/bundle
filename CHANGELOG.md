@@ -1,6 +1,6 @@
 # Release Notes
 
-## [v14.3.1](https://github.com/Sleon4/Lion-Framework/compare/v14.3.0...v14.3.1) (2023-05-07)
+## [v14.3.1](https://github.com/Sleon4/Lion-Framework/compare/v14.3.0...v14.3.1) (2023-05-10)
 
 ### Added
 - values method is added in StatusEnum to obtain the available statuses
@@ -17,6 +17,7 @@
 - fixed json format for postman collections
 - commands that do not return strings have been modified
 - table format to generate capsule classes has been corrected
+- classes and attributes have been normalized for capsule classes
 
 ## [v14.3.0](https://github.com/Sleon4/Lion-Framework/compare/v14.2.0...v14.3.0) (2023-05-06)
 
