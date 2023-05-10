@@ -42,6 +42,7 @@ class CapsuleCommand extends Command {
         $connection = $input->getOption('connection');
         $message = $input->getOption('message');
         $path = $input->getOption('path');
+        $table = Str::of($table)->test("/-/") ? "`{$table}`" : $table;
 
         if ($message === null) {
             $message = true;
