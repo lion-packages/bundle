@@ -11,6 +11,7 @@
 ### Changed
 - headers have been modified
 - updated lion/helpers library to v2.2.0
+- updated lion/sql library to v8.0.3
 
 ### Fixed
 - fixed json format for postman collections
