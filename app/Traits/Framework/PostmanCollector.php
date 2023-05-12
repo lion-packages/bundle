@@ -302,10 +302,12 @@ trait PostmanCollector {
         foreach ($items as $json) {
             if (isset($result[$json['name']])) {
                 if (isset($json['item'])) {
-                    $result[$json['name']]['item'] = array_merge(
-                        $result[$json['name']]['item'],
-                        $json['item']
-                    );
+                    if (isset($result[$json['name']]['item'])) {
+                        $result[$json['name']]['item'] = array_merge(
+                            $result[$json['name']]['item'],
+                            $json['item']
+                        );
+                    }
                 } else {
                     $result[$json['name']] = array_merge_recursive(
                         $result[$json['name']],
