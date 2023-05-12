@@ -1,5 +1,13 @@
 # Release Notes
 
+## [v14.3.2](https://github.com/Sleon4/Lion-Framework/compare/v14.3.1...v14.3.2) (2023-05-12)
+
+### Changed
+- updated lion/sql library to v8.0.3
+
+### Fixed
+- postman collections has been validated
+
 ## [v14.3.1](https://github.com/Sleon4/Lion-Framework/compare/v14.3.0...v14.3.1) (2023-05-10)
 
 ### Added
