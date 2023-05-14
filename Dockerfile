@@ -2,6 +2,9 @@ FROM php:8.2-apache
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update \
+    && apt-get install -y sudo \
+    && apt-get install -y nano \
+    && apt-get install -y cron \
     && apt-get install -y sendmail libpng-dev \
     && apt-get install -y libzip-dev \
     && apt-get install -y zlib1g-dev \
