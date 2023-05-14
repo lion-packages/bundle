@@ -4,6 +4,7 @@
 
 ### Added
 - docker files have been updated to implement cron tasks
+- command to create files with sh extension has been added
 
 ## [v14.3.2](https://github.com/Sleon4/Lion-Framework/compare/v14.3.1...v14.3.2) (2023-05-12)
 
