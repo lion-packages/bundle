@@ -1,5 +1,11 @@
 # Release Notes
 
+## [v14.5.0](https://github.com/Sleon4/Lion-Framework/compare/v14.4.0...v14.5.0) (2023-05-15)
+
+### Added
+- command to create rules and add properties has been modified
+- added value and disabled properties to export data in postman collections
+
 ## [v14.4.0](https://github.com/Sleon4/Lion-Framework/compare/v14.3.2...v14.4.0) (2023-05-14)
 
 ### Added
