@@ -51,9 +51,10 @@ trait PostmanCollector {
             if ($method === "POST") {
                 $new_params[] = [
                     'key' => $param::$field,
-                    'value' => '',
+                    'value' => $param::$value,
                     'description' => $param::$desc,
-                    'type' => "text"
+                    'type' => "text",
+                    'disabled' => $param::$disabled
                 ];
             } else {
                 $new_params[$param::$field] = "";

@@ -12,7 +12,7 @@ use LionRoute\Route;
  * ------------------------------------------------------------------------------
  **/
 
-Route::post('/', fn() => info("Welcome to index"));
+Route::get('/', fn() => info("Welcome to index"));
 
 Route::prefix('api', function() {
     Route::prefix('auth', function() {
