@@ -70,6 +70,8 @@ if ($responseDatabase->status === 'database-error') {
  **/
 
 date_default_timezone_set(env->SERVER_DATE_TIMEZONE);
-$kernel = new App\Console\Kernel();
-$kernel->add();
-$kernel->run();
+
+(new App\Console\Kernel(
+    include_once("./config/commands.php"),
+    include_once("./config/socket-commands.php")
+))->add()->run();
