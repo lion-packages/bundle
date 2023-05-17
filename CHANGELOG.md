@@ -9,6 +9,7 @@
 - command to create sockets have been relocated
 - function has been validated to refresh jwt token
 - dockerfile has been updated
+- updated path to create commands
 
 ## [v14.5.0](https://github.com/Sleon4/Lion-Framework/compare/v14.4.0...v14.5.0) (2023-05-15)
 
