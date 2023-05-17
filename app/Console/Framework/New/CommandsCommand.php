@@ -29,7 +29,7 @@ class CommandsCommand extends Command {
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
-		$list = ClassPath::export("app/Console/", $input->getArgument('new-command'));
+		$list = ClassPath::export("app/Console/Commands/", $input->getArgument('new-command'));
         $url_folder = lcfirst(str_replace("\\", "/", $list['namespace']));
         Store::folder($url_folder);
 
