@@ -1,5 +1,15 @@
 # Release Notes
 
+## [v14.6.0](https://github.com/Sleon4/Lion-Framework/compare/v14.5.0...v14.6.0) (2023-05-17)
+
+### Added
+- command list and socket commands have been relocated
+
+### Changed
+- command to create sockets have been relocated
+- function has been validated to refresh jwt token
+- dockerfile has been updated
+
 ## [v14.5.0](https://github.com/Sleon4/Lion-Framework/compare/v14.4.0...v14.5.0) (2023-05-15)
 
 ### Added
