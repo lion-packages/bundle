@@ -29,4 +29,8 @@ enum StatusResponseEnum: string {
         return $value === null ? true : false;
     }
 
+    public static function exitStatus(mixed $value): bool {
+        return isset($value->status);
+    }
+
 }
