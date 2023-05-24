@@ -169,3 +169,17 @@ if (!function_exists('isError')) {
         ]);
     }
 }
+
+/**
+ * ------------------------------------------------------------------------------
+ * Function to check if a response object is successful
+ * ------------------------------------------------------------------------------
+ **/
+
+if (!function_exists('isSuccess')) {
+    function isSuccess(object $res): string {
+        return in_array($res->status, [
+            \App\Enums\Framework\StatusResponseEnum::SUCCESS->value
+        ]);
+    }
+}
