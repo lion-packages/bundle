@@ -63,10 +63,20 @@ class ControllerCommand extends Command {
             ClassPath::add("\tpublic function __construct() {\n\n\t}\n\n");
         }
 
-        ClassPath::add("\tpublic function create() {\n\n\t}\n\n");
-        ClassPath::add("\tpublic function read() {\n\n\t}\n\n");
-        ClassPath::add("\tpublic function update() {\n\n\t}\n\n");
-        ClassPath::add("\tpublic function delete() {\n\n\t}\n\n");
+        foreach (["create", "read", "update", "delete"] as $key => $method) {
+            ClassPath::add(
+                Str::of("")->lt()
+                    ->concat("public function ")
+                    ->concat($method)
+                    ->concat($list['class'])
+                    ->replace("Controller", "")
+                    ->concat("() {")->ln()->lt()->lt()
+                    ->concat("return success();")->ln()->lt()
+                    ->concat("}")->ln()->ln()
+                    ->get()
+            );
+        }
+
         ClassPath::add("}");
         ClassPath::force();
         ClassPath::close();
