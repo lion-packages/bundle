@@ -16,8 +16,4 @@ enum StatusResponseEnum: string {
         return array_map(fn($value) => $value->value, self::cases());
     }
 
-    public static function isNull(mixed $value): bool {
-        return $value === null ? true : false;
-    }
-
 }
