@@ -2,12 +2,12 @@
 
 namespace App\Console\Framework\New;
 
+use App\Traits\Framework\ClassPath;
+use LionFiles\Store;
+use LionHelpers\Str;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\{ArrayInput, InputInterface, InputArgument, InputOption};
 use Symfony\Component\Console\Output\OutputInterface;
-use LionFiles\Store;
-use App\Traits\Framework\ClassPath;
-use LionHelpers\Str;
 
 class ControllerCommand extends Command {
 
@@ -70,6 +70,7 @@ class ControllerCommand extends Command {
                     ->concat($method)
                     ->concat($list['class'])
                     ->replace("Controller", "")
+                    ->replace("controller", "")
                     ->concat("() {")->ln()->lt()->lt()
                     ->concat("return success();")->ln()->lt()
                     ->concat("}")->ln()->ln()

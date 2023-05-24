@@ -2,11 +2,12 @@
 
 namespace App\Console\Framework\New;
 
+use App\Traits\Framework\ClassPath;
+use LionFiles\Store;
+use LionHelpers\Str;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\{ InputInterface, InputArgument };
 use Symfony\Component\Console\Output\OutputInterface;
-use LionFiles\Store;
-use App\Traits\Framework\ClassPath;
 
 class ModelCommand extends Command {
 
@@ -40,10 +41,23 @@ class ModelCommand extends Command {
         ClassPath::add("use LionSQL\Drivers\MySQL\Schema;\n\n");
 		ClassPath::add("class {$list['class']} {\n\n");
 		ClassPath::add("\tpublic function __construct() {\n\t\t\n\t}\n\n");
-        ClassPath::add("\tpublic function createDB() {\n\n\t}\n\n");
-        ClassPath::add("\tpublic function readDB() {\n\n\t}\n\n");
-        ClassPath::add("\tpublic function updateDB() {\n\n\t}\n\n");
-        ClassPath::add("\tpublic function deleteDB() {\n\n\t}\n\n");
+
+        foreach (["create", "read", "update", "delete"] as $key => $method) {
+            ClassPath::add(
+                Str::of("")->lt()
+                    ->concat("public function ")
+                    ->concat($method)
+                    ->concat($list['class'])
+                    ->replace("Model", "")
+                    ->replace("model", "")
+                    ->concat("DB")
+                    ->concat("() {")->ln()->lt()->lt()
+                    ->concat("return success();")->ln()->lt()
+                    ->concat("}")->ln()->ln()
+                    ->get()
+            );
+        }
+
         ClassPath::add("}");
         ClassPath::force();
         ClassPath::close();
