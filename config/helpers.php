@@ -67,7 +67,7 @@ if (!function_exists('finish')) {
  **/
 
 if (!function_exists('success')) {
-    function success(mixed $response, array|object $data = []): object {
+    function success(mixed $response = null, array|object $data = []): object {
         return response->success($response, $data);
     }
 }
@@ -79,7 +79,7 @@ if (!function_exists('success')) {
  **/
 
 if (!function_exists('error')) {
-    function error(mixed $response, array|object $data = []): object {
+    function error(mixed $response = null, array|object $data = []): object {
         return response->error($response, $data);
     }
 }
@@ -91,7 +91,7 @@ if (!function_exists('error')) {
  **/
 
 if (!function_exists('warning')) {
-    function warning(mixed $response, array|object $data = []): object {
+    function warning(mixed $response = null, array|object $data = []): object {
         return response->warning($response, $data);
     }
 }
@@ -103,7 +103,7 @@ if (!function_exists('warning')) {
  **/
 
 if (!function_exists('info')) {
-    function info(mixed $response, array|object $data = []): object {
+    function info(mixed $response = null, array|object $data = []): object {
         return response->info($response, $data);
     }
 }
