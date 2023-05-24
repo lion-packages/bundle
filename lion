@@ -30,7 +30,7 @@ require_once("vendor/autoload.php");
  * ------------------------------------------------------------------------------
  **/
 
-include_once(__DIR__ . "/storage/framework/helpers.php");
+include_once(__DIR__ . "/config/helpers.php");
 
 /**
  * ------------------------------------------------------------------------------
@@ -70,8 +70,10 @@ if ($responseDatabase->status === 'database-error') {
  **/
 
 date_default_timezone_set(env->SERVER_DATE_TIMEZONE);
+$commands = include_once("./config/commands.php");
+$socket_commands = include_once("./config/socket-commands.php");
 
 (new App\Console\Kernel(
-    commands: include_once("./config/commands.php"),
-    socket_commands: include_once("./config/socket-commands.php")
+    commands: [...$commands['framework'], ...$commands['app']],
+    socket_commands: [...$socket_commands['app']]
 ))->add()->run();

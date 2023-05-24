@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * ------------------------------------------------------------------------------
+ * Startup commands for sockets in Lion-Framework
+ * ------------------------------------------------------------------------------
+ * List of available sockets
+ * ------------------------------------------------------------------------------
+ **/
+
 return [
-    // 'ExampleSocket' => \App\Console\ExampleSocket::class
+    'app' => [
+        // 'ExampleSocket' => \App\Console\ExampleSocket::class
+    ]
 ];
