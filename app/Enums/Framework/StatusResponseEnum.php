@@ -25,6 +25,12 @@ enum StatusResponseEnum: string {
         ]);
     }
 
+    public static function isSuccess(object $res): bool {
+        return in_array($res->status, [
+            self::SUCCESS->value
+        ]);
+    }
+
     public static function isNull(mixed $value): bool {
         return $value === null ? true : false;
     }
