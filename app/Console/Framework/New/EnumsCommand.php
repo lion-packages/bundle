@@ -38,17 +38,19 @@ class EnumsCommand extends Command {
         ClassPath::create($url_folder, $list['class']);
         ClassPath::add(Str::of("<?php")->ln()->ln()->get());
         ClassPath::add(Str::of("namespace ")->concat($list['namespace'])->concat(";")->ln()->ln()->get());
+
         ClassPath::add(
             Str::of("enum ")
-            ->concat($list['class'])
-            ->concat(": string {")->ln()->ln()->lt()
-            ->concat("case EXAMPLE = 'example';")->ln()->ln()->lt()
-            ->concat("public static function values(): array {")->ln()->lt()->lt()
-            ->concat('return array_map(fn($value) => $value->value, self::cases());')->ln()->lt()
-            ->concat("}")->ln()->ln()
-            ->concat("}")
-            ->get()
+                ->concat($list['class'])
+                ->concat(": string {")->ln()->ln()->lt()
+                ->concat("case EXAMPLE = 'example';")->ln()->ln()->lt()
+                ->concat("public static function values(): array {")->ln()->lt()->lt()
+                ->concat('return array_map(fn($value) => $value->value, self::cases());')->ln()->lt()
+                ->concat("}")->ln()->ln()
+                ->concat("}")
+                ->get()
         );
+
         ClassPath::force();
         ClassPath::close();
 
