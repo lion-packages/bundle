@@ -85,7 +85,7 @@ class CapsuleCommand extends Command {
         foreach ($columns as $key => $column) {
             if ($index === 0) {
                 $new_object_union = ClassPath::addNewObjectClass($list['class']);
-                $object_class = Str::of('$')->concat($list['class'])->lower()->get();
+                $object_class = Str::of('$')->concat(lcfirst($list['class']))->trim()->get();
                 $index++;
             }
 
@@ -104,15 +104,15 @@ class CapsuleCommand extends Command {
         ClassPath::add("\tpublic function jsonSerialize(): mixed {\n\t\t" . 'return get_object_vars($this);' . "\n\t}\n\n");
 
         ClassPath::add(
-            Str::of("\tpublic static function formFields(): ")
+            Str::of("\tpublic static function capsule(): ")
                 ->concat($list['class'])
-                ->concat(" {\n\t\t")
+                ->concat(" {")->ln()->lt()->lt()
                 ->concat($new_object_union)
-                ->concat($functions_union)
-                ->concat("\t\treturn ")
+                ->concat($functions_union)->lt()->lt()
+                ->concat("return ")
                 ->concat($object_class)
-                ->concat(";")
-                ->concat("\n\t}\n\n")
+                ->concat(";")->ln()->lt()
+                ->concat("}")->ln()->ln()
                 ->get()
         );
 

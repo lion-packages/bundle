@@ -10,7 +10,7 @@ trait ClassPath {
     private static $content;
 
     public static function addNewObjectClass(string $class): string {
-        return '$' . Str::of($class)->lower()->get() . " = new {$class}();\n\n";
+        return '$' . Str::of(lcfirst($class))->trim()->get() . " = new {$class}();\n\n";
     }
 
     public static function addPropierty($type, $field): string {
@@ -18,7 +18,7 @@ trait ClassPath {
     }
 
     public static function addSetFunctionIsset(string $class, string $field, string $request_field): string {
-        return "\t\t{$class}->set" . self::normalizeClass($field) . "(\n\t\t\tisset({$request_field}) ? {$request_field} : null\n\t\t);\n";
+        return "\t\t" . trim(lcfirst($class)) . "->set" . self::normalizeClass($field) . "(\n\t\t\tisset({$request_field}) ? {$request_field} : null\n\t\t);\n";
     }
 
     public static function addSetFunction(string $column, string $field, string $class) {
