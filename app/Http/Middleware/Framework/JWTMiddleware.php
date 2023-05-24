@@ -13,12 +13,6 @@ class JWTMiddleware {
         $this->headers = apache_request_headers();
     }
 
-    private function exist(): void {
-        if (!isset($this->headers['Authorization'])) {
-            finish(response->response(StatusEnum::SESSION_ERROR->value, 'The JWT does not exist'));
-        }
-    }
-
     private function validateSession($jwt): void {
         if (StatusEnum::isError($jwt)) {
             finish(response->response(StatusEnum::SESSION_ERROR->value, $jwt->message));
@@ -29,8 +23,14 @@ class JWTMiddleware {
         }
     }
 
+    public function existence(): void {
+        if (!isset($this->headers['Authorization'])) {
+            finish(response->response(StatusEnum::SESSION_ERROR->value, 'The JWT does not exist'));
+        }
+    }
+
     public function authorize(): void {
-        $this->exist();
+        $this->existence();
 
         if (preg_match('/Bearer\s(\S+)/', $this->headers['Authorization'], $matches)) {
             $jwt = JWT::decode($matches[1]);
@@ -45,7 +45,7 @@ class JWTMiddleware {
     }
 
     public function notAuthorize(): void {
-        $this->exist();
+        $this->existence();
 
         if (preg_match('/Bearer\s(\S+)/', $this->headers['Authorization'], $matches)) {
             $jwt = JWT::decode($matches[1]);
