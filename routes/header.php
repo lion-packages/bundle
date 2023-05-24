@@ -10,32 +10,32 @@
 
 date_default_timezone_set(env->SERVER_DATE_TIMEZONE);
 
-LionRequest\Request::header(
+\LionRequest\Request::header(
     'Access-Control-Allow-Origin',
     env->SERVER_URL_AUD
 );
 
-LionRequest\Request::header(
+\LionRequest\Request::header(
     'Content-Type',
     'application/json; charset=UTF-8'
 );
 
-LionRequest\Request::header(
+\LionRequest\Request::header(
     'Access-Control-Max-Age',
     '3600'
 );
 
-LionRequest\Request::header(
+\LionRequest\Request::header(
     'Allow',
     'GET, POST, PUT, DELETE, PATCH, OPTIONS'
 );
 
-LionRequest\Request::header(
+\LionRequest\Request::header(
     'Access-Control-Allow-Methods',
     'GET, POST, PUT, DELETE, PATCH, OPTIONS'
 );
 
-LionRequest\Request::header(
+\LionRequest\Request::header(
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content-Type, Accept, Authorization'
 );

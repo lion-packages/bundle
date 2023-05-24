@@ -21,7 +21,7 @@ require_once(__DIR__ . "/../vendor/autoload.php");
  * ------------------------------------------------------------------------------
  **/
 
-(Dotenv\Dotenv::createImmutable(__DIR__ . "/../"))->load();
+(\Dotenv\Dotenv::createImmutable(__DIR__ . "/../"))->load();
 
 /**
  * ------------------------------------------------------------------------------
@@ -40,7 +40,7 @@ include_once(__DIR__ . "/../config/helpers.php");
  **/
 
 if (env->RSA_URL_PATH != '') {
-    LionSecurity\RSA::$url_path = storage_path(env->RSA_URL_PATH);
+    \LionSecurity\RSA::$url_path = storage_path(env->RSA_URL_PATH);
 }
 
 /**
@@ -61,14 +61,11 @@ include_once("../routes/header.php");
  * ------------------------------------------------------------------------------
  **/
 
-LionSQL\Driver::addLog();
+\LionSQL\Driver::addLog();
+$responseDatabase = \LionSQL\Driver::run(include_once("../config/database.php"));
 
-$responseDatabase = LionSQL\Driver::run(
-    include_once("../config/database.php")
-);
-
-if (\App\Enums\Framework\StatusResponseEnum::isError($responseDatabase)) {
-    logger($responseDatabase->message, \App\Enums\Framework\StatusResponseEnum::ERROR->value, []);
+if (isError($responseDatabase)) {
+    logger($responseDatabase->message, 'error', []);
     finish($responseDatabase);
 }
 
@@ -80,7 +77,7 @@ if (\App\Enums\Framework\StatusResponseEnum::isError($responseDatabase)) {
  * ------------------------------------------------------------------------------
  **/
 
-LionMailer\Mailer::init([
+\LionMailer\Mailer::init([
     'debug' => (int) env->MAIL_DEBUG,
     'host' => env->MAIL_HOST,
     'username' => env->MAIL_USERNAME,
@@ -114,10 +111,10 @@ if (isset($rules[$_SERVER['REQUEST_URI']])) {
  * ------------------------------------------------------------------------------
  **/
 
-LionRoute\Route::addLog();
-LionRoute\Route::init();
-LionRoute\Request::init(client);
+\LionRoute\Route::addLog();
+\LionRoute\Route::init();
+\LionRoute\Request::init(client);
 include_once("../routes/middleware.php");
 include_once("../routes/web.php");
-LionRoute\Route::get('route-list', fn() => LionRoute\Route::getRoutes());
-LionRoute\Route::dispatch();
+\LionRoute\Route::get('route-list', fn() => \LionRoute\Route::getRoutes());
+\LionRoute\Route::dispatch();

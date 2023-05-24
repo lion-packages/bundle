@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware\Framework;
 
-use App\Enums\Framework\StatusEnum;
+use App\Enums\Framework\StatusResponseEnum;
 use LionFiles\Store;
 use LionHelpers\Arr;
 use LionSecurity\JWT;
@@ -17,18 +17,18 @@ class JWTMiddleware {
     }
 
     private function validateSession($jwt): void {
-        if (StatusEnum::isError($jwt)) {
-            finish(response->response(StatusEnum::SESSION_ERROR->value, $jwt->message));
+        if (isError($jwt)) {
+            finish(response->response(StatusResponseEnum::SESSION_ERROR->value, $jwt->message));
         }
 
         if (!isset($jwt->data->session)) {
-            finish(response->response(StatusEnum::SESSION_ERROR->value, 'undefined session'));
+            finish(response->response(StatusResponseEnum::SESSION_ERROR->value, 'undefined session'));
         }
     }
 
     public function existence(): void {
         if (!isset($this->headers['Authorization'])) {
-            finish(response->response(StatusEnum::SESSION_ERROR->value, 'The JWT does not exist'));
+            finish(response->response(StatusResponseEnum::SESSION_ERROR->value, 'The JWT does not exist'));
         }
     }
 
@@ -37,20 +37,20 @@ class JWTMiddleware {
         $jwt = explode('.', JWT::get());
 
         if (Arr::of($jwt)->length() != 3) {
-            finish(response->response(StatusEnum::SESSION_ERROR->value, 'Invalid JWT'));
+            finish(response->response(StatusResponseEnum::SESSION_ERROR->value, 'Invalid JWT'));
         }
 
         $data = (object) ((object) json->decode(base64_decode($jwt[1])))->data;
 
         // if (!isset($data->users_code)) {
-        //     finish(response->response(StatusEnum::SESSION_ERROR->value, 'Invalid JWT'));
+        //     finish(response->response(StatusResponseEnum::SESSION_ERROR->value, 'Invalid JWT'));
         // }
 
         // $path = storage_path("keys/{$data->users_code}/");
         // $response = Store::exist($path);
 
-        // if (StatusEnum::isError($response)) {
-        //     finish(response->response(StatusEnum::SESSION_ERROR->value, 'Invalid JWT'));
+        // if (isError($response)) {
+        //     finish(response->response(StatusResponseEnum::SESSION_ERROR->value, 'Invalid JWT'));
         // }
 
         // RSA::$url_path = storage_path($path);
@@ -64,10 +64,10 @@ class JWTMiddleware {
             $this->validateSession($jwt);
 
             if (!$jwt->data->session) {
-                finish(response->response(StatusEnum::SESSION_ERROR->value, 'User not logged in, you must log in'));
+                finish(response->response(StatusResponseEnum::SESSION_ERROR->value, 'User not logged in, you must log in'));
             }
         } else {
-            finish(response->response(StatusEnum::SESSION_ERROR->value, 'Invalid JWT'));
+            finish(response->response(StatusResponseEnum::SESSION_ERROR->value, 'Invalid JWT'));
         }
     }
 
@@ -79,10 +79,10 @@ class JWTMiddleware {
             $this->validateSession($jwt);
 
             if ($jwt->data->session) {
-                finish(response->response(StatusEnum::SESSION_ERROR->value, 'User in session, you must close the session'));
+                finish(response->response(StatusResponseEnum::SESSION_ERROR->value, 'User in session, you must close the session'));
             }
         } else {
-            finish(response->response(StatusEnum::SESSION_ERROR->value, 'Invalid JWT'));
+            finish(response->response(StatusResponseEnum::SESSION_ERROR->value, 'Invalid JWT'));
         }
     }
 

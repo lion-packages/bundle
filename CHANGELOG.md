@@ -1,5 +1,24 @@
 # Release Notes
 
+## [v14.7.0](https://github.com/Sleon4/Lion-Framework/compare/v14.6.0...v14.7.0) (2023-05-24)
+
+### Added
+- middleware has been added to check if the jwt exists
+- middleware has been added to check if the jwt exists and validate it without digital signature
+- added helper to check if a response object is of type error
+- added helper to check if a response object is successful
+
+### Changed
+- class has been renamed to JWTMiddleware
+- moved helpers to config
+- added default null value for helpers (success, error, warning, info)
+- list of commands and sockets has been modified
+- camelCase format has been added for capsule method in generated capsule classes
+- added camelCase format for model objects generated from controller command
+- format of functions for controllers have been modified
+- format of functions for model have been modified
+- format of for enums have been modified
+
 ## [v14.6.0](https://github.com/Sleon4/Lion-Framework/compare/v14.5.0...v14.6.0) (2023-05-17)
 
 ### Added
