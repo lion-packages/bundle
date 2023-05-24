@@ -7,6 +7,7 @@
 - middleware has been added to check if the jwt exists and validate it without digital signature
 - added helper to check if a response object is of type error
 - added helper to check if a response object is successful
+- command has been added to display basic information of the framework
 
 ### Changed
 - class has been renamed to JWTMiddleware
