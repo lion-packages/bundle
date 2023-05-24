@@ -43,19 +43,7 @@ class ModelCommand extends Command {
 		ClassPath::add("\tpublic function __construct() {\n\t\t\n\t}\n\n");
 
         foreach (["create", "read", "update", "delete"] as $key => $method) {
-            ClassPath::add(
-                Str::of("")->lt()
-                    ->concat("public function ")
-                    ->concat($method)
-                    ->concat($list['class'])
-                    ->replace("Model", "")
-                    ->replace("model", "")
-                    ->concat("DB")
-                    ->concat("() {")->ln()->lt()->lt()
-                    ->concat("return success();")->ln()->lt()
-                    ->concat("}")->ln()->ln()
-                    ->get()
-            );
+            ClassPath::add(ClassPath::generateFunctionsModel($method, $list['class']));
         }
 
         ClassPath::add("}");

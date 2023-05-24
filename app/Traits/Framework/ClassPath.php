@@ -9,6 +9,34 @@ trait ClassPath {
 
     private static $content;
 
+    public static function generateFunctionsModel(string $method, string $model): string {
+        if ($method === "read") {
+            return Str::of("")->lt()
+                ->concat("public function ")
+                ->concat($method)
+                ->concat($model)
+                ->replace("Model", "")
+                ->replace("model", "")
+                ->concat("DB")
+                ->concat("() {")->ln()->lt()->lt()
+                ->concat("return DB::view('')->select()->getAll();")->ln()->lt()
+                ->concat("}")->ln()->ln()
+                ->get();
+        }
+
+        return Str::of("")->lt()
+            ->concat("public function ")
+            ->concat($method)
+            ->concat($model)
+            ->replace("Model", "")
+            ->replace("model", "")
+            ->concat("DB")
+            ->concat("() {")->ln()->lt()->lt()
+            ->concat("return DB::call('', [])->execute();")->ln()->lt()
+            ->concat("}")->ln()->ln()
+            ->get();
+    }
+
     public static function generateFunctionsController(string $method, string $controller, ?string $model = null): string {
         if ($model === null) {
             return Str::of("")->lt()
