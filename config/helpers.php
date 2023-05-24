@@ -152,3 +152,20 @@ if (!function_exists('json')) {
         return json->encode($value);
     }
 }
+
+/**
+ * ------------------------------------------------------------------------------
+ * Function to check if a response object comes with errors
+ * ------------------------------------------------------------------------------
+ **/
+
+if (!function_exists('isError')) {
+    function isError(object $res): string {
+        return in_array($res->status, [
+            \App\Enums\Framework\StatusResponseEnum::ERROR->value,
+            \App\Enums\Framework\StatusResponseEnum::DATABASE_ERROR->value,
+            \App\Enums\Framework\StatusResponseEnum::SESSION_ERROR->value,
+            \App\Enums\Framework\StatusResponseEnum::ROUTE_ERROR->value
+        ]);
+    }
+}
