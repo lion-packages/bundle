@@ -36,6 +36,7 @@ class ControllerCommand extends Command {
         $list = ClassPath::export("app/Http/Controllers/", $input->getArgument('controller'));
         $list_model = null;
         $url_folder = lcfirst(str_replace("\\", "/", $list['namespace']));
+        $camel_class = "";
         Store::folder($url_folder);
 
         if ($model != null) {
@@ -64,18 +65,22 @@ class ControllerCommand extends Command {
         }
 
         foreach (["create", "read", "update", "delete"] as $key => $method) {
-            ClassPath::add(
-                Str::of("")->lt()
-                    ->concat("public function ")
-                    ->concat($method)
-                    ->concat($list['class'])
-                    ->replace("Controller", "")
-                    ->replace("controller", "")
-                    ->concat("() {")->ln()->lt()->lt()
-                    ->concat("return success();")->ln()->lt()
-                    ->concat("}")->ln()->ln()
-                    ->get()
-            );
+            if ($model != null) {
+                ClassPath::add(
+                    ClassPath::generateFunctionsController(
+                        $method,
+                        $list['class'],
+                        $camel_class
+                    )
+                );
+            } else {
+                ClassPath::add(
+                    ClassPath::generateFunctionsController(
+                        $method,
+                        $list['class']
+                    )
+                );
+            }
         }
 
         ClassPath::add("}");

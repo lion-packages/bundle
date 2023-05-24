@@ -9,6 +9,60 @@ trait ClassPath {
 
     private static $content;
 
+    public static function generateFunctionsController(string $method, string $controller, ?string $model = null): string {
+        if ($model === null) {
+            return Str::of("")->lt()
+                ->concat("public function ")
+                ->concat($method)
+                ->concat($controller)
+                ->replace("Controller", "")
+                ->replace("controller", "")
+                ->concat("() {")->ln()->lt()->lt()
+                ->concat("return success();")->ln()->lt()
+                ->concat("}")->ln()->ln()
+                ->get();
+        }
+
+        $model_method = Str::of($method)
+                ->concat($model)
+                ->replace("Model", "")
+                ->replace("model", "")
+                ->concat("DB();")
+                ->get();
+
+        if ($method === "read") {
+            return Str::of("")->lt()
+                ->concat("public function ")
+                ->concat($method)
+                ->concat($controller)
+                ->replace("Controller", "")
+                ->replace("controller", "")
+                ->concat("() {")->ln()->lt()->lt()
+                ->concat('return $this->' . $model . "->")
+                ->concat($model_method)->ln()->lt()
+                ->concat("}")->ln()->ln()
+                ->get();
+        } else {
+            return Str::of("")->lt()
+                ->concat("public function ")
+                ->concat($method)
+                ->concat($controller)
+                ->replace("Controller", "")
+                ->replace("controller", "")
+                ->concat("() {")->ln()->lt()->lt()
+                ->concat('$response_' . $method . ' = $this->' . $model . "->")
+                ->concat($model_method)->ln()->ln()->lt()->lt()
+                ->concat("if (isError(")
+                ->concat('$response_' . $method)
+                ->concat(")) {")->ln()->lt()->lt()->lt()
+                ->concat("return error();")->ln()->lt()->lt()
+                ->concat("}")->ln()->ln()->lt()->lt()
+                ->concat("return success();")->ln()->lt()
+                ->concat("}")->ln()->ln()
+                ->get();
+        }
+    }
+
     public static function addNewObjectClass(string $class): string {
         return '$' . Str::of(lcfirst($class))->trim()->get() . " = new {$class}();\n\n";
     }
