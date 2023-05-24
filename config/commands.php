@@ -33,6 +33,7 @@ return [
         \App\Console\Framework\Sockets\RunWebSocketsCommand::class,
         \App\Console\Framework\SSH\SSHFileCommand::class,
         \App\Console\Framework\Token\GenerateJWTCommand::class,
+        \App\Console\Framework\InfoCommand::class,
         \App\Console\Framework\RunTestCommand::class,
         \App\Console\Framework\ServerCommand::class
     ]
