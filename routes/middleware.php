@@ -9,7 +9,7 @@
  **/
 
 LionRoute\Route::addMiddleware([
-    \App\Http\Middleware\JWT\AuthorizationMiddleware::class => [
+    \App\Http\Middleware\Framework\JWTMiddleware::class => [
         ['name' => "jwt-authorize", 'method' => "authorize"],
         ['name' => "jwt-not-authorize", 'method' => "notAuthorize"]
     ]

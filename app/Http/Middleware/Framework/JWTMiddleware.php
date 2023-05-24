@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Middleware\JWT;
+namespace App\Http\Middleware\Framework;
 
 use App\Enums\Framework\StatusEnum;
 use LionSecurity\JWT;
 
-class AuthorizationMiddleware {
+class JWTMiddleware {
 
     private array $headers;
 
