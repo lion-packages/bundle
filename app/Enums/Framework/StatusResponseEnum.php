@@ -2,7 +2,7 @@
 
 namespace App\Enums\Framework;
 
-enum StatusEnum: string {
+enum StatusResponseEnum: string {
 
     case SUCCESS = "success";
     case ERROR = "error";
@@ -23,6 +23,10 @@ enum StatusEnum: string {
             self::SESSION_ERROR->value,
             self::ROUTE_ERROR->value
         ]);
+    }
+
+    public static function isNull(mixed $value): bool {
+        return $value === null ? true : false;
     }
 
 }

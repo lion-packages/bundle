@@ -67,8 +67,8 @@ $responseDatabase = LionSQL\Driver::run(
     include_once("../config/database.php")
 );
 
-if ($responseDatabase->status === App\Enums\Framework\StatusEnum::DATABASE_ERROR->value) {
-    logger($responseDatabase->message, App\Enums\Framework\StatusEnum::ERROR->value, []);
+if (\App\Enums\Framework\StatusResponseEnum::isError($responseDatabase)) {
+    logger($responseDatabase->message, \App\Enums\Framework\StatusResponseEnum::ERROR->value, []);
     finish($responseDatabase);
 }
 
