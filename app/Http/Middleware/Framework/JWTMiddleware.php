@@ -3,7 +3,10 @@
 namespace App\Http\Middleware\Framework;
 
 use App\Enums\Framework\StatusEnum;
+use LionFiles\Store;
+use LionHelpers\Arr;
 use LionSecurity\JWT;
+use LionSecurity\RSA;
 
 class JWTMiddleware {
 
@@ -27,6 +30,30 @@ class JWTMiddleware {
         if (!isset($this->headers['Authorization'])) {
             finish(response->response(StatusEnum::SESSION_ERROR->value, 'The JWT does not exist'));
         }
+    }
+
+    public function authorizeWithoutSignature() {
+        $this->existence();
+        $jwt = explode('.', JWT::get());
+
+        if (Arr::of($jwt)->length() != 3) {
+            finish(response->response(StatusEnum::SESSION_ERROR->value, 'Invalid JWT'));
+        }
+
+        $data = (object) ((object) json->decode(base64_decode($jwt[1])))->data;
+
+        // if (!isset($data->users_code)) {
+        //     finish(response->response(StatusEnum::SESSION_ERROR->value, 'Invalid JWT'));
+        // }
+
+        // $path = storage_path("keys/{$data->users_code}/");
+        // $response = Store::exist($path);
+
+        // if (StatusEnum::isError($response)) {
+        //     finish(response->response(StatusEnum::SESSION_ERROR->value, 'Invalid JWT'));
+        // }
+
+        // RSA::$url_path = storage_path($path);
     }
 
     public function authorize(): void {
