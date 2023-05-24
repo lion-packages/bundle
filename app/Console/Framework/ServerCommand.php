@@ -21,7 +21,7 @@ class ServerCommand extends Command {
 
 	protected function configure() {
 		$this->setDescription(
-            "created command to start server locally"
+            "Created command to start server locally"
         )->addOption(
             'port', null, InputOption::VALUE_REQUIRED, 'Do you want to set your own port?'
         )->addOption(
