@@ -11,6 +11,7 @@ class ServerCommand extends Command {
 	protected static $defaultName = "serve";
 
 	protected function initialize(InputInterface $input, OutputInterface $output) {
+        $output->write("\033[2J\033[;H");
         $output->write("\n<info>Lion-Framework</info> ");
         $output->writeln("ready in " . number_format((microtime(true) - LION_START), 3) . " ms\n");
 	}
