@@ -19,7 +19,7 @@ class SessionController {
 
         return success("refreshed session token", [
             'jwt' => JWT::encode([
-                'refresh' => 1,
+                'refresh' => isset($jwt->refresh) ? (((int) $jwt->refresh) + 1) : 1,
                 ...((array) $jwt)
             ])
         ]);
