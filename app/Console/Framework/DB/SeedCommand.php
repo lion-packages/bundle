@@ -81,8 +81,7 @@ class SeedCommand extends Command {
                 ->setRows($requestSeeder['rows'])
                 ->render();
         } else {
-
-            if (StatusEnum::isError($requestSeeder)) {
+            if (isError($requestSeeder)) {
                 $output->writeln("<error>{$requestSeeder->message}</error>");
                 return Command::INVALID;
             }
