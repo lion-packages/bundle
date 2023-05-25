@@ -28,7 +28,7 @@
         "cboden/ratchet": "^0.4.4",
         "lion/files": "^4.7",
         "lion/helpers": "^2.0",
-        "lion/mailer": "^4.0",
+        "lion/mailer": "^4.3",
         "lion/route": "^8.2",
         "lion/security": "^6.11",
         "lion/sql": "^8.0",

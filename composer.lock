@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "111bfd4e6839c78883106cabbe01b1c7",
+    "content-hash": "1a38532e0900be80748b940f2a766596",
     "packages": [
         {
             "name": "cboden/ratchet",
@@ -653,12 +653,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Mailer.git",
-                "reference": "6d963e4dca2247ffa0d24246ab4e49336fd431b4"
+                "reference": "9a69b9c70b17b7994ac359f66a88ffa5f6955148"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Mailer/zipball/6d963e4dca2247ffa0d24246ab4e49336fd431b4",
-                "reference": "6d963e4dca2247ffa0d24246ab4e49336fd431b4",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Mailer/zipball/9a69b9c70b17b7994ac359f66a88ffa5f6955148",
+                "reference": "9a69b9c70b17b7994ac359f66a88ffa5f6955148",
                 "shasum": ""
             },
             "require": {
@@ -686,7 +686,7 @@
                 "issues": "https://github.com/Sleon4/Lion-Mailer/issues",
                 "source": "https://github.com/Sleon4/Lion-Mailer/tree/v4.3.0"
             },
-            "time": "2023-05-18T15:44:18+00:00"
+            "time": "2023-05-25T01:39:47+00:00"
         },
         {
             "name": "lion/request",
