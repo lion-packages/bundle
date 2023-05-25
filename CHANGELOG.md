@@ -24,6 +24,7 @@
 - updated lion/mailer library to v4.3.0
 - environment variables have been updated
 - updated validation to refresh JWT token
+- command format to initialize local server has been modified
 
 ## [v14.6.0](https://github.com/Sleon4/Lion-Framework/compare/v14.5.0...v14.6.0) (2023-05-17)
 
