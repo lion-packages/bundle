@@ -20,6 +20,8 @@
 - format of functions for model have been modified
 - format of for enums have been modified
 - updated lion/mailer library to v4.3.0
+- environment variables have been updated
+- added command to generate keys for AES encryption
 
 ## [v14.6.0](https://github.com/Sleon4/Lion-Framework/compare/v14.5.0...v14.6.0) (2023-05-17)
 
