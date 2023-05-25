@@ -20,6 +20,7 @@ return [
         \App\Console\Framework\DB\ShowDatabasesCommand::class,
         // -----------------------------------------------------------------------------------------
         \App\Console\Framework\Key\RSACommand::class,
+        \App\Console\Framework\Key\AESCommand::class,
         // -----------------------------------------------------------------------------------------
         \App\Console\Framework\New\CapsuleCommand::class,
         \App\Console\Framework\New\CommandsCommand::class,
