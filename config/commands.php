@@ -43,6 +43,7 @@ return [
         \App\Console\Framework\Token\GenerateJWTCommand::class,
         // -----------------------------------------------------------------------------------------
         \App\Console\Framework\InfoCommand::class,
+        \App\Console\Framework\InitCommand::class,
         \App\Console\Framework\RunTestCommand::class,
         \App\Console\Framework\ServerCommand::class
     ]
