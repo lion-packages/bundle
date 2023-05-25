@@ -9,6 +9,7 @@
 - added helper to check if a response object is successful
 - command has been added to display basic information of the framework
 - added command to generate keys for AES encryption
+- basic information for commands has been added
 
 ### Changed
 - class has been renamed to JWTMiddleware
