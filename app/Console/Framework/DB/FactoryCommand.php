@@ -25,7 +25,7 @@ class FactoryCommand extends Command {
         $this->setDescription(
             'Command required for the creation of new factories'
         )->addArgument(
-            'factory', InputArgument::REQUIRED
+            'factory', InputArgument::REQUIRED, 'Factory name'
         );
     }
 

@@ -24,7 +24,7 @@ class MiddlewareCommand extends Command {
 		$this->setDescription(
 			'Command required for the creation of new Middleware'
 		)->addArgument(
-			'middleware', InputArgument::REQUIRED, '', null
+			'middleware', InputArgument::REQUIRED, 'Middleware name', null
 		);
 	}
 

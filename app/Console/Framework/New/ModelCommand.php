@@ -25,7 +25,7 @@ class ModelCommand extends Command {
 		$this->setDescription(
 			'Command required for the creation of new Models'
 		)->addArgument(
-			'model', InputArgument::REQUIRED, '', null
+			'model', InputArgument::REQUIRED, 'Model name', null
 		);
 	}
 

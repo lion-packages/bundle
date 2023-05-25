@@ -24,7 +24,7 @@ class TestCommand extends Command {
 		$this->setDescription(
 			'Command required for the creation of new test'
 		)->addArgument(
-			'test', InputArgument::REQUIRED, '', null
+			'test', InputArgument::REQUIRED, 'Test name', null
 		);
 	}
 

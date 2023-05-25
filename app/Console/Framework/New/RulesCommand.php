@@ -24,7 +24,7 @@ class RulesCommand extends Command {
         $this->setDescription(
             'Command required for rule creation'
         )->addArgument(
-            'rule', InputArgument::REQUIRED, '', null
+            'rule', InputArgument::REQUIRED, 'Rule name', null
         );
     }
 

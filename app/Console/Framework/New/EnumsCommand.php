@@ -26,7 +26,7 @@ class EnumsCommand extends Command {
 		$this->setDescription(
             "Command required for creating new Enums"
         )->addArgument(
-            'enum', InputArgument::REQUIRED, '', null
+            'enum', InputArgument::REQUIRED, 'Enum name', null
         );
 	}
 

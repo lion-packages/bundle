@@ -23,7 +23,7 @@ class SSHFileCommand extends Command {
 	protected function configure() {
 		$this
             ->setDescription("Command to create files with extension sh")
-            ->addArgument("sh", InputArgument::REQUIRED, '', null);
+            ->addArgument("sh", InputArgument::REQUIRED, 'SH name', null);
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {

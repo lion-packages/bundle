@@ -24,7 +24,7 @@ class TraitCommand extends Command {
         $this->setDescription(
             "Command required for trait creation"
         )->addArgument(
-            'trait', InputArgument::REQUIRED, '', null
+            'trait', InputArgument::REQUIRED, 'Trait name', null
         );
     }
 

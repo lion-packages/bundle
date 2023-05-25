@@ -23,7 +23,7 @@ class GenerateJWTCommand extends Command {
         $this->setDescription(
             "Created command to generate JWT token"
         )->addArgument(
-            'session', InputArgument::REQUIRED, '', null
+            'session', InputArgument::REQUIRED, 'Session must be true or false', null
         );
     }
 

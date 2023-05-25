@@ -10,6 +10,6 @@
 
 return [
     'app' => [
-        // 'ExampleSocket' => \App\Console\ExampleSocket::class
+        // 'ExampleSocket' => \App\Http\Sockets\ExampleSocket::class
     ]
 ];

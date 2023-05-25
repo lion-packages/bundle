@@ -25,7 +25,7 @@ class ControllerCommand extends Command {
         $this->setDescription(
             'Command required for the creation of new Controllers'
         )->addArgument(
-            'controller', InputArgument::REQUIRED, '', null
+            'controller', InputArgument::REQUIRED, 'Controller name', null
         )->addOption(
             'model', null, InputOption::VALUE_REQUIRED, 'Do you want to create the model?'
         );

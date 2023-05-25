@@ -27,7 +27,7 @@ class SeedCommand extends Command {
         $this->setDescription(
             "Command required for creating new seeds"
         )->addArgument(
-            'seed', InputArgument::REQUIRED
+            'seed', InputArgument::REQUIRED, 'Name or namespace of the Seed'
         )->addOption(
             'run', null, InputOption::VALUE_REQUIRED, 'Do you want to run the seeder?'
         );

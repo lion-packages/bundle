@@ -2,36 +2,36 @@
 
 namespace App\Console;
 
+use App\Traits\Framework\Singleton;
 use Symfony\Component\Console\Application;
 
 class Kernel {
+
+    use Singleton;
 
     private array $commands;
     private array $socket_commands;
 
     private Application $application;
 
-    public function __construct(array $commands, array $socket_commands) {
+    public function initialize(array $commands, array $socket_commands): void {
         $this->commands = $commands;
         $this->socket_commands = $socket_commands;
         $this->application = new Application(env->APP_NAME);
     }
 
-    public function add(): Kernel {
+    public function add(): void {
         foreach ($this->commands as $key => $command) {
             $this->application->add(new $command());
         }
-
-        return $this;
     }
 
-    public function run(): Kernel {
+    public function run(): void {
         $this->application->run();
-        return $this;
     }
 
     public function getClass(string $class_name): string {
-        return $this->socket_commands[$class_name];
+        return isset($this->socket_commands[$class_name]) ? $this->socket_commands[$class_name] : false;
     }
 
 }

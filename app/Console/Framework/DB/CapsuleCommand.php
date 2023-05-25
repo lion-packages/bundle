@@ -26,7 +26,7 @@ class CapsuleCommand extends Command {
         $this->setDescription(
             'Command required for the creation of new Capsules'
         )->addArgument(
-            'capsule', InputArgument::REQUIRED, '', null
+            'capsule', InputArgument::REQUIRED, 'Capsule name', null
         )->addOption(
             'path', null, InputOption::VALUE_REQUIRED, 'Do you want to configure your own route?'
         )->addOption(

@@ -24,7 +24,7 @@ class CommandsCommand extends Command {
 		$this->setDescription(
             'Command required for the creation of new Commands'
         )->addArgument(
-            'new-command', InputArgument::REQUIRED, '', null
+            'new-command', InputArgument::REQUIRED, 'Command name', null
         );
 	}
 

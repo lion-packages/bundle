@@ -71,7 +71,12 @@ date_default_timezone_set(env->SERVER_DATE_TIMEZONE);
 $commands = include_once("./config/commands.php");
 $socket_commands = include_once("./config/socket-commands.php");
 
-(new App\Console\Kernel(
+$kernel = \App\Console\Kernel::getInstance();
+
+$kernel->initialize(
     commands: [...$commands['framework'], ...$commands['app']],
     socket_commands: [...$socket_commands['app']]
-))->add()->run();
+);
+
+$kernel->add();
+$kernel->run();

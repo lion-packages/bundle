@@ -25,12 +25,12 @@ class WebSocketsCommand extends Command {
         $this->setDescription(
             'Command required for creating new WebSockets'
         )->addArgument(
-            'websocket', InputArgument::REQUIRED, '', null
+            'web-socket', InputArgument::REQUIRED, 'Socket name', null
         );
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
-		$list = ClassPath::export("app/Http/Sockets/", $input->getArgument('websocket'));
+		$list = ClassPath::export("app/Http/Sockets/", $input->getArgument('web-socket'));
         $url_folder = lcfirst(str_replace("\\", "/", $list['namespace']));
         Store::folder($url_folder);
 
