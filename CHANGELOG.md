@@ -8,6 +8,7 @@
 - added helper to check if a response object is of type error
 - added helper to check if a response object is successful
 - command has been added to display basic information of the framework
+- added command to generate keys for AES encryption
 
 ### Changed
 - class has been renamed to JWTMiddleware
@@ -21,7 +22,7 @@
 - format of for enums have been modified
 - updated lion/mailer library to v4.3.0
 - environment variables have been updated
-- added command to generate keys for AES encryption
+- updated validation to refresh JWT token
 
 ## [v14.6.0](https://github.com/Sleon4/Lion-Framework/compare/v14.5.0...v14.6.0) (2023-05-17)
 
