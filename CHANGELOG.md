@@ -1,6 +1,6 @@
 # Release Notes
 
-## [v14.7.0](https://github.com/Sleon4/Lion-Framework/compare/v14.6.0...v14.7.0) (2023-05-24)
+## [v14.7.0](https://github.com/Sleon4/Lion-Framework/compare/v14.6.0...v14.7.0) (2023-05-25)
 
 ### Added
 - middleware has been added to check if the jwt exists
