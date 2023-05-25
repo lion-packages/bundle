@@ -52,7 +52,7 @@ trait ClassPath {
         }
 
         $model_method = Str::of($method)
-                ->concat($model)
+                ->concat(ucwords($model))
                 ->replace("Model", "")
                 ->replace("model", "")
                 ->concat("DB();")
