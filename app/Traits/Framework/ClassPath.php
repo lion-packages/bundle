@@ -78,14 +78,11 @@ trait ClassPath {
                 ->replace("Controller", "")
                 ->replace("controller", "")
                 ->concat("() {")->ln()->lt()->lt()
-                ->concat('$response_' . $method . ' = $this->' . $model . "->")
+                ->concat('$res_' . $method . ' = $this->' . $model . "->")
                 ->concat($model_method)->ln()->ln()->lt()->lt()
-                ->concat("if (isError(")
-                ->concat('$response_' . $method)
-                ->concat(")) {")->ln()->lt()->lt()->lt()
-                ->concat("return error();")->ln()->lt()->lt()
-                ->concat("}")->ln()->ln()->lt()->lt()
-                ->concat("return success();")->ln()->lt()
+                ->concat('return isError($res_'. $method . ')')->ln()->lt()->lt()->lt()
+                ->concat('? error()')->ln()->lt()->lt()->lt()
+                ->concat(': success();')->ln()->lt()
                 ->concat("}")->ln()->ln()
                 ->get();
         }
