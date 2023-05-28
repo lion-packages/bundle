@@ -1,5 +1,10 @@
 # Release Notes
 
+## [v14.8.0](https://github.com/Sleon4/Lion-Framework/compare/v14.7.0...v14.8.0) (2023-05-27)
+
+### Changed
+- lion/route library has been updated to v8.4.0
+
 ## [v14.7.0](https://github.com/Sleon4/Lion-Framework/compare/v14.6.0...v14.7.0) (2023-05-25)
 
 ### Added
