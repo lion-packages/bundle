@@ -160,7 +160,7 @@ if (!function_exists('json')) {
  **/
 
 if (!function_exists('isError')) {
-    function isError(object $res): string {
+    function isError(object $res): bool {
         return in_array($res->status, [
             \App\Enums\Framework\StatusResponseEnum::ERROR->value,
             \App\Enums\Framework\StatusResponseEnum::DATABASE_ERROR->value,
@@ -177,7 +177,7 @@ if (!function_exists('isError')) {
  **/
 
 if (!function_exists('isSuccess')) {
-    function isSuccess(object $res): string {
+    function isSuccess(object $res): bool {
         return in_array($res->status, [
             \App\Enums\Framework\StatusResponseEnum::SUCCESS->value
         ]);
