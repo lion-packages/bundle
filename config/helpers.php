@@ -192,10 +192,6 @@ if (!function_exists('isSuccess')) {
 
 if (!function_exists('jwt')) {
     function jwt(): object {
-        $response = \LionSecurity\JWT::decode(\LionSecurity\JWT::get());
-
-        return isError($response)
-            ? response->response("session-error", $response->message)
-            : $response;
+        return \LionSecurity\JWT::decode(\LionSecurity\JWT::get());
     }
 }
