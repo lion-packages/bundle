@@ -183,3 +183,19 @@ if (!function_exists('isSuccess')) {
         ]);
     }
 }
+
+/**
+ * ------------------------------------------------------------------------------
+ * Function that returns JWT token if it exists
+ * ------------------------------------------------------------------------------
+ **/
+
+if (!function_exists('jwt')) {
+    function jwt(): object {
+        $response = \LionSecurity\JWT::decode(\LionSecurity\JWT::get());
+
+        return isError($response)
+            ? response->response("session-error", $response->message)
+            : $response;
+    }
+}
