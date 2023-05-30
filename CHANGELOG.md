@@ -1,5 +1,14 @@
 # Release Notes
 
+## [v14.9.0](https://github.com/Sleon4/Lion-Framework/compare/v14.8.0...v14.9.0) (2023-05-30)
+
+### Added
+- added new helper to verify and get JWT token
+- the execute function has been added in the kernel to execute commands
+
+### Fixed
+- fixed value type that returns helper isError and isSuccess to bool
+
 ## [v14.8.0](https://github.com/Sleon4/Lion-Framework/compare/v14.7.0...v14.8.0) (2023-05-27)
 
 ### Changed
