@@ -6,6 +6,10 @@
 - added new helper to verify and get JWT token
 - the execute function has been added in the kernel to execute commands
 
+### Changed
+- lion/files library has been updated to v4.10.0
+- nesbot/carbon library has been updated to v2.67.0
+
 ### Fixed
 - fixed value type that returns helper isError and isSuccess to bool
 

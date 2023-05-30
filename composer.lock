@@ -568,16 +568,16 @@
         },
         {
             "name": "lion/files",
-            "version": "v4.9.0",
+            "version": "v4.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Files.git",
-                "reference": "f83af0a0a4358bd4de5b492d4df5651e68c2f409"
+                "reference": "529753744b9353bb260f1539646795de923aede9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Files/zipball/f83af0a0a4358bd4de5b492d4df5651e68c2f409",
-                "reference": "f83af0a0a4358bd4de5b492d4df5651e68c2f409",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Files/zipball/529753744b9353bb260f1539646795de923aede9",
+                "reference": "529753744b9353bb260f1539646795de923aede9",
                 "shasum": ""
             },
             "require": {
@@ -594,18 +594,12 @@
             "license": [
                 "MIT"
             ],
-            "authors": [
-                {
-                    "name": "Sergio León",
-                    "email": "sergioleon4004@hotmail.com"
-                }
-            ],
             "description": "Library created with the function of working internal system files.",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Files/issues",
-                "source": "https://github.com/Sleon4/Lion-Files/tree/v4.9.0"
+                "source": "https://github.com/Sleon4/Lion-Files/tree/v4.10.0"
             },
-            "time": "2023-02-13T17:11:11+00:00"
+            "time": "2023-05-30T16:10:10+00:00"
         },
         {
             "name": "lion/helpers",
@@ -944,16 +938,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "2.66.0",
+            "version": "2.67.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "496712849902241f04902033b0441b269effe001"
+                "reference": "c1001b3bc75039b07f38a79db5237c4c529e04c8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/496712849902241f04902033b0441b269effe001",
-                "reference": "496712849902241f04902033b0441b269effe001",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/c1001b3bc75039b07f38a79db5237c4c529e04c8",
+                "reference": "c1001b3bc75039b07f38a79db5237c4c529e04c8",
                 "shasum": ""
             },
             "require": {
@@ -1042,7 +1036,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-01-29T18:53:47+00:00"
+            "time": "2023-05-25T22:09:47+00:00"
         },
         {
             "name": "phpmailer/phpmailer",
