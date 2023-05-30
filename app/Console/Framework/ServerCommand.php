@@ -2,6 +2,7 @@
 
 namespace App\Console\Framework;
 
+use App\Console\Kernel;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\{ InputInterface, InputOption };
 use Symfony\Component\Console\Output\OutputInterface;
@@ -45,8 +46,7 @@ class ServerCommand extends Command {
         $url = "{$host}:{$port}";
         $output->writeln("\t<question> INFO </question> Server running on <href=http://{$url}>[http://{$url}]</>\n");
         $output->writeln("<comment>Press Ctrl+C to stop the server</comment>\n");
-        exec("php -S {$host}:{$port} -t public");
-
+        Kernel::getInstance()->execute("php -S {$host}:{$port} -t public");
         return Command::SUCCESS;
 	}
 
