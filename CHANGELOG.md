@@ -1,5 +1,12 @@
 # Release Notes
 
+## [v14.10.0](https://github.com/Sleon4/Lion-Framework/compare/v14.9.0...v14.10.0) (2023-05-31)
+
+### Changed
+- lion/helpers library has been updated to v2.3.0
+- lion/security library has been updated to v6.12.0
+- lion/mailer library has been updated to v5.0.0
+
 ## [v14.9.0](https://github.com/Sleon4/Lion-Framework/compare/v14.8.0...v14.9.0) (2023-05-30)
 
 ### Added
