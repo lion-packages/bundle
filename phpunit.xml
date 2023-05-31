@@ -7,7 +7,7 @@
     convertNoticesToExceptions="true"
     convertWarningsToExceptions="true"
     processIsolation="false"
-    stopOnFailure="false"
+    stopOnFailure="true"
     bootstrap="vendor/autoload.php"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
@@ -19,6 +19,6 @@
 	</testsuites>
 
 	<php>
-        <env name="APP_ENV" value="testing"/>
+        <env name="APP_ENV" value="testing" />
     </php>
 </phpunit>
