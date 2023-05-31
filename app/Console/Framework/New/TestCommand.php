@@ -2,11 +2,12 @@
 
 namespace App\Console\Framework\New;
 
+use App\Traits\Framework\ClassPath;
+use LionFiles\Store;
+use LionHelpers\Str;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\{ InputInterface, InputArgument };
 use Symfony\Component\Console\Output\OutputInterface;
-use LionFiles\Store;
-use App\Traits\Framework\ClassPath;
 
 class TestCommand extends Command {
 
@@ -37,12 +38,24 @@ class TestCommand extends Command {
 		ClassPath::add("<?php\n\n");
 		ClassPath::add("namespace {$list['namespace']};\n\n");
 		ClassPath::add("use PHPUnit\Framework\TestCase;\n\n");
-		ClassPath::add("class {$list['class']} extends TestCase {\n\n}");
-		ClassPath::force();
-		ClassPath::close();
 
-		$output->writeln("<info>Test created successfully</info>");
-		return Command::SUCCESS;
-	}
+        ClassPath::add(
+            Str::of("class ")
+                ->concat($list['class'])
+                ->concat(" extends TestCase {")->ln()->ln()->lt()
+                ->concat("public function setUp(): void {")->ln()->ln()->lt()
+                ->concat("}")->ln()->ln()->lt()
+                ->concat("public function testExample() {")->ln()->ln()->lt()
+                ->concat("}")->ln()->ln()
+                ->concat("}")
+                ->get()
+        );
+
+        ClassPath::force();
+        ClassPath::close();
+
+        $output->writeln("<info>Test created successfully</info>");
+        return Command::SUCCESS;
+    }
 
 }
