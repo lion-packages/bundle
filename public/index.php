@@ -62,11 +62,13 @@ include_once("../routes/header.php");
  **/
 
 \LionSQL\Driver::addLog();
-$responseDatabase = \LionSQL\Driver::run(include_once("../config/database.php"));
+$response_database = \LionSQL\Driver::run(
+    include_once("../config/database.php")
+);
 
-if (isError($responseDatabase)) {
-    logger($responseDatabase->message, 'error', []);
-    finish($responseDatabase);
+if (isError($response_database)) {
+    logger($response_database->message, 'error', []);
+    finish($response_database);
 }
 
 /**
@@ -77,14 +79,14 @@ if (isError($responseDatabase)) {
  * ------------------------------------------------------------------------------
  **/
 
-\LionMailer\Mailer::init([
-    'debug' => (int) env->MAIL_DEBUG,
-    'host' => env->MAIL_HOST,
-    'username' => env->MAIL_USERNAME,
-    'password' => env->MAIL_PASSWORD,
-    'encryption' => env->MAIL_ENCRYPTION,
-    'port' => (int) env->MAIL_PORT,
-]);
+$response_email = \LionMailer\MailService::run(
+    include_once("../config/email.php")
+);
+
+if (isError($response_email)) {
+    logger($response_email->message, 'error', []);
+    finish($response_email);
+}
 
 /**
  * ------------------------------------------------------------------------------

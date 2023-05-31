@@ -165,7 +165,8 @@ if (!function_exists('isError')) {
             \App\Enums\Framework\StatusResponseEnum::ERROR->value,
             \App\Enums\Framework\StatusResponseEnum::DATABASE_ERROR->value,
             \App\Enums\Framework\StatusResponseEnum::SESSION_ERROR->value,
-            \App\Enums\Framework\StatusResponseEnum::ROUTE_ERROR->value
+            \App\Enums\Framework\StatusResponseEnum::ROUTE_ERROR->value,
+            \App\Enums\Framework\StatusResponseEnum::MAIL_ERROR->value
         ]);
     }
 }
