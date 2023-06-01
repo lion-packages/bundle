@@ -12,6 +12,7 @@ define('response', LionRequest\Response::getInstance());
 define('json', LionRequest\Json::getInstance());
 define('env', (object) $_ENV);
 define('str', new LionHelpers\Str());
+define('arr', new LionHelpers\Arr());
 
 /**
  * ------------------------------------------------------------------------------
