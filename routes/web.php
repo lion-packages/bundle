@@ -17,6 +17,9 @@ Route::get('/', fn() => info("Welcome to the index, access the web: " . env->SER
 Route::prefix('api', function() {
     Route::prefix('auth', function() {
         Route::post('login', [LoginController::class, 'auth']);
-        Route::get('refresh', [SessionController::class, 'refresh'], ['jwt-authorize']);
+
+        Route::prefix('session', function() {
+            Route::get('refresh', [SessionController::class, 'refresh'], ['jwt-existence']);
+        });
     });
 });
