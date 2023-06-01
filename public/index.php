@@ -53,7 +53,7 @@ if (env->RSA_URL_PATH != '') {
  * ------------------------------------------------------------------------------
  **/
 
-foreach (include_once("../config/cors.php") as $key => $header) {
+foreach (require_once("../config/cors.php") as $key => $header) {
     \LionRequest\Request::header($key, $header);
 }
 
@@ -67,7 +67,7 @@ foreach (include_once("../config/cors.php") as $key => $header) {
 
 \LionSQL\Driver::addLog();
 $response_database = \LionSQL\Driver::run(
-    include_once("../config/database.php")
+    require_once("../config/database.php")
 );
 
 if (isError($response_database)) {
@@ -84,7 +84,7 @@ if (isError($response_database)) {
  **/
 
 $response_email = \LionMailer\MailService::run(
-    include_once("../config/email.php")
+    require_once("../config/email.php")
 );
 
 if (isError($response_email)) {
@@ -100,7 +100,7 @@ if (isError($response_email)) {
  * ------------------------------------------------------------------------------
  **/
 
-$rules = include_once("../routes/rules.php");
+$rules = require_once("../routes/rules.php");
 
 if (isset($rules[$_SERVER['REQUEST_URI']])) {
     foreach ($rules[$_SERVER['REQUEST_URI']] as $key => $rule) {
