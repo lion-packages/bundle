@@ -822,12 +822,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Request.git",
-                "reference": "0ccfb92ff684faca0376e5d41652b999f6881f84"
+                "reference": "e7e8c008537897eb545c663867d248b9f3a90d29"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Request/zipball/0ccfb92ff684faca0376e5d41652b999f6881f84",
-                "reference": "0ccfb92ff684faca0376e5d41652b999f6881f84",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Request/zipball/e7e8c008537897eb545c663867d248b9f3a90d29",
+                "reference": "e7e8c008537897eb545c663867d248b9f3a90d29",
                 "shasum": ""
             },
             "require": {
@@ -843,18 +843,12 @@
             "license": [
                 "MIT"
             ],
-            "authors": [
-                {
-                    "name": "Sergio León",
-                    "email": "sergioleon4004@hotmail.com"
-                }
-            ],
             "description": "Library created to request input data and response requests",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Request/issues",
                 "source": "https://github.com/Sleon4/Lion-Request/tree/v5.3.0"
             },
-            "time": "2022-12-01T19:17:35+00:00"
+            "time": "2023-06-01T20:04:02+00:00"
         },
         {
             "name": "lion/route",
