@@ -45,13 +45,17 @@ if (env->RSA_URL_PATH != '') {
 
 /**
  * ------------------------------------------------------------------------------
- * Web headers
+ * Cross-Origin Resource Sharing (CORS) Configuration
  * ------------------------------------------------------------------------------
- * This is where you can register headers for your application
+ * Here you can configure your settings for cross-origin resource
+ * sharing or "CORS". This determines which cross-origin operations
+ * can be executed in web browsers.
  * ------------------------------------------------------------------------------
  **/
 
-include_once("../routes/header.php");
+foreach (include_once("../config/cors.php") as $key => $header) {
+    \LionRequest\Request::header($key, $header);
+}
 
 /**
  * ------------------------------------------------------------------------------
