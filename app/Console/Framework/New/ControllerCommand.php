@@ -48,10 +48,7 @@ class ControllerCommand extends Command {
         ClassPath::add("namespace {$list['namespace']};\n\n");
 
         if ($model != null) {
-            ClassPath::add("use App\Enums\Framework\StatusResponseEnum;\n");
             ClassPath::add("use {$list_model['namespace']}\\{$list_model['class']}; \n\n");
-        } else {
-            ClassPath::add("use App\Enums\Framework\StatusResponseEnum;\n\n");
         }
 
         ClassPath::add("class {$list['class']} {\n\n");
