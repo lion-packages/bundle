@@ -11,6 +11,7 @@ define('request', LionRequest\Request::getInstance()->capture());
 define('response', LionRequest\Response::getInstance());
 define('json', LionRequest\Json::getInstance());
 define('env', (object) $_ENV);
+define('str', new LionHelpers\Str());
 
 /**
  * ------------------------------------------------------------------------------
