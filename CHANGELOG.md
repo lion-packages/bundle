@@ -1,5 +1,13 @@
 # Release Notes
 
+## [v14.10.1](https://github.com/Sleon4/Lion-Framework/compare/v14.10.0...v14.10.1) (2023-06-02)
+
+### Changed
+- lion/sql library has been updated v8.1.1
+
+### Fixed
+- fixed rule validation
+
 ## [v14.10.0](https://github.com/Sleon4/Lion-Framework/compare/v14.9.0...v14.10.0) (2023-06-01)
 
 ### Added
