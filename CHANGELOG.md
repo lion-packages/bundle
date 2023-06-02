@@ -2,11 +2,22 @@
 
 ## [v14.10.0](https://github.com/Sleon4/Lion-Framework/compare/v14.9.0...v14.10.0) (2023-06-01)
 
+### Added
+- email has been added to the config to configure multiple email accounts
+- environment variables have been added
+- unit test has been added for emails
+- email has been added to the config to configure multiple email accounts
+- constant has been added as a helper for the Str class of the LionHelpers library
+- constant has been added as a helper for the Arr class of the LionHelpers library
+- added cors in config to configure headers in the framework
+
 ### Changed
 - lion/helpers library has been updated to v2.3.0
 - lion/security library has been updated to v6.12.0
 - lion/mailer library has been updated to v5.0.0
 - lion/sql library has been updated v8.1.0
+- command format to create test has been modified
+- format has been modified to create controllers in command
 
 ## [v14.9.0](https://github.com/Sleon4/Lion-Framework/compare/v14.8.0...v14.9.0) (2023-05-30)
 
