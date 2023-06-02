@@ -12,7 +12,7 @@ trait ShowErrors {
 
     public static function validate(Closure $validate_function): void {
         $response = Validation::validate((array) request, $validate_function);
-        self::$validation = isError($response->status) ? $response->messages : [];
+        self::$validation = isError($response) ? $response->messages : [];
     }
 
     public static function display(): void {
