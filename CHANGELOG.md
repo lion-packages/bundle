@@ -14,7 +14,6 @@
 - email has been added to the config to configure multiple email accounts
 - environment variables have been added
 - unit test has been added for emails
-- email has been added to the config to configure multiple email accounts
 - constant has been added as a helper for the Str class of the LionHelpers library
 - constant has been added as a helper for the Arr class of the LionHelpers library
 - added cors in config to configure headers in the framework
