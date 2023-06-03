@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Framework\New;
+namespace App\Console\Framework\DB;
 
 use App\Traits\Framework\ClassPath;
 use LionSQL\Drivers\MySQL\MySQL as DB;
@@ -16,7 +16,6 @@ class CrudCommand extends Command {
 	protected static $defaultName = "db:crud";
 
 	protected function initialize(InputInterface $input, OutputInterface $output) {
-        $output->write("\033[2J\033[;H");
         $output->writeln("<comment>Generating CRUD...</comment>\n");
     }
 

@@ -14,6 +14,7 @@ return [
     ],
     'framework' => [
         \App\Console\Framework\DB\CapsuleCommand::class,
+        \App\Console\Framework\DB\CrudCommand::class,
         \App\Console\Framework\DB\SeedCommand::class,
         \App\Console\Framework\DB\FactoryCommand::class,
         \App\Console\Framework\DB\AllCapsulesCommand::class,
@@ -25,7 +26,6 @@ return [
         \App\Console\Framework\New\CapsuleCommand::class,
         \App\Console\Framework\New\CommandsCommand::class,
         \App\Console\Framework\New\ControllerCommand::class,
-        \App\Console\Framework\New\CrudCommand::class,
         \App\Console\Framework\New\MiddlewareCommand::class,
         \App\Console\Framework\New\ModelCommand::class,
         \App\Console\Framework\New\RulesCommand::class,
