@@ -62,7 +62,6 @@ class ShowDatabasesCommand extends Command {
             ->setRows($list_connections)
             ->render();
 
-		$output->writeln("");
 		return Command::SUCCESS;
 	}
 
