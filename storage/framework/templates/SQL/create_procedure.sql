@@ -1,13 +1,9 @@
 USE `--DATABASE--`;
 DROP procedure IF EXISTS `--PROCEDURE--`;
 
-DELIMITER $$
-USE `--DATABASE--`$$
 CREATE PROCEDURE `--PROCEDURE--` (
     --PARAMS--
 )
 BEGIN
     --SQL--;
-END$$
-
-DELIMITER ;
+END;

@@ -3,6 +3,7 @@
 namespace App\Console\Framework\DB;
 
 use App\Traits\Framework\ClassPath;
+use LionFiles\Store;
 use LionSQL\Drivers\MySQL\MySQL as DB;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -72,11 +73,10 @@ class CrudCommand extends Command {
         ]);
 
         // modify models
+        $columns = DB::connection($main_conn)->table($entity)->show()->columns()->getAll();
         $path_m = "app/Models/" . ($path === null ? "" : $path) . "{$entity_pascal}Model.php";
         $list_methods = ['create' => "", 'update' => "", 'delete' => ""];
-        $methods = ClassPath::generateGetters(
-            DB::connection($main_conn)->table($entity)->show()->columns()->getAll()
-        );
+        $methods = ClassPath::generateGetters($columns);
 
         foreach ($methods as $key => $method) {
             foreach ($method as $keyMethod => $name) {
@@ -89,11 +89,6 @@ class CrudCommand extends Command {
                     ->get();
             }
         }
-
-        // vd(count($methods['create']));
-        // vd(count($methods['update']));
-        // vd(count($methods['delete']));
-        // die;
 
         ClassPath::readFileRows($path_m, [
             4 => [ // namespace
@@ -114,8 +109,8 @@ class CrudCommand extends Command {
             20 => [ // read entity
                 'replace' => true,
                 'multiple' => [
-                    ['content' => "table", 'search' => "view"],
-                    ['content' => "'{$entity}'", 'search' => "''"]
+                    // ['content' => "table", 'search' => "view"],
+                    ['content' => "'read_{$entity}'", 'search' => "''"]
                 ]
             ],
             23 => [ // parameter update entity
@@ -141,6 +136,148 @@ class CrudCommand extends Command {
                 ]
             ],
         ]);
+
+        // modify database
+        $generate_params = function(array $columns, string $method): array {
+            $items = ['values' => [], 'params' => [], 'columns' => []];
+
+            foreach ($columns as $key => $column) {
+                if ($method === "create" && $column->Key != "PRI") {
+                    $items['params'][] = "IN _{$column->Field} " . strtoupper($column->Type);
+                    $items['values'][] = "_{$column->Field}";
+                    $items['columns'][] = $column->Field;
+                }
+
+                if ($method === "update") {
+                    if ($key === (count($columns) - 1)) {
+                        $items['params'][] = "IN _{$column->Field} " . strtoupper($column->Type);
+                        $items['columns'][] = $column->Field;
+                        $items['values'][] = "_{$column->Field}";
+
+                        $items = [
+                            'params' => [
+                                ...arr->of($items['params'])->where(fn($value, $key) => $key != 0),
+                                $items['params'][0]
+                            ],
+                            'values' => [
+                                ...arr->of($items['values'])->where(fn($value, $key) => $key != 0),
+                                $items['values'][0]
+                            ],
+                            'columns' => [
+                                ...arr->of($items['columns'])->where(fn($value, $key) => $key != 0),
+                                $items['columns'][0]
+                            ]
+                        ];
+                    } else {
+                        $items['params'][] = "IN _{$column->Field} " . strtoupper($column->Type);
+                        $items['values'][] = "_{$column->Field}";
+                        $items['columns'][] = $column->Field;
+                    }
+                }
+
+                if ($method === "delete" && $column->Key === "PRI") {
+                    $items['params'][] = "IN _{$column->Field} " . strtoupper($column->Type);
+                    $items['values'][] = "_{$column->Field}";
+                    $items['columns'][] = $column->Field;
+                }
+            }
+
+            return $items;
+        };
+
+        $generate_list = function(array $columns, string $method): array {
+            $items = [];
+
+            foreach ($columns as $key => $column) {
+                if ($method === "create" && $column->Key != "PRI") {
+                    $items[$column->Field] = "";
+                }
+
+                if ($method === "update") {
+                    $items[$column->Field] = "";
+                }
+
+                if ($method === "delete" && $column->Key === "PRI") {
+                    $items[$column->Field] = "";
+                }
+            }
+
+            return $items;
+        };
+
+
+
+        foreach (["create", "read", "update", "delete"] as $key => $method) {
+            $file = "";
+            $sql = null;
+
+            if ($method === "read") {
+                $str_file = Store::get(storage_path("framework/templates/SQL/create_view.sql", false));
+                $sql = DB::connection($main_conn)->table($entity)->select()->getQueryString();
+
+                $file = str->of($str_file)
+                    ->replace("--DATABASE--", $main_conn)
+                    ->replace("--VIEW--", "{$method}_{$entity}")
+                    ->replace("--SQL--", $sql->data->sql)
+                    ->get();
+
+                DB::connection($main_conn)->query($file)->execute();
+            } elseif ($method === "create") {
+                $str_file = Store::get(storage_path("framework/templates/SQL/create_procedure.sql", false));
+                $values = $generate_params($columns, $method);
+                $sql = "INSERT INTO {$entity} (" . arr->of($generate_list($columns, $method))->keys()->join(",") . ") VALUES (" . arr->of($values['values'])->join(",") . ")";
+
+                $file = str->of($str_file)
+                    ->replace("--DATABASE--", $main_conn)
+                    ->replace("--PROCEDURE--", "{$method}_{$entity}")
+                    ->replace("--PARAMS--", arr->of($values['params'])->join(","))
+                    ->replace("--SQL--", $sql)
+                    ->get();
+
+                DB::connection($main_conn)->query($file)->execute();
+            } elseif ($method === "update") {
+                $str_file = Store::get(storage_path("framework/templates/SQL/create_procedure.sql", false));
+                $values = $generate_params($columns, $method);
+                $new_values = "";
+
+                $combine = array_combine($values['columns'], $values['values']);
+                $i = 0;
+                foreach ($combine as $key => $value) {
+                    if ($i === (count($combine) - 1)) {
+                        $new_values .= " WHERE {$key}=$value";
+                    } else {
+                        if ($i === (count($combine) - 2)) {
+                            $new_values .= "{$key}=$value";
+                        } else {
+                            $new_values .= "{$key}=$value,";
+                        }
+                    }
+
+                    $i++;
+                }
+
+                $file = str->of($str_file)
+                    ->replace("--DATABASE--", $main_conn)
+                    ->replace("--PROCEDURE--", "{$method}_{$entity}")
+                    ->replace("--PARAMS--", arr->of($values['params'])->join(", "))
+                    ->replace("--SQL--", "UPDATE {$entity} SET {$new_values}")
+                    ->get();
+
+                DB::connection($main_conn)->query($file)->execute();
+            } elseif ($method === "delete") {
+                $str_file = Store::get(storage_path("framework/templates/SQL/create_procedure.sql", false));
+                $values = $generate_params($columns, $method);
+
+                $file = str->of($str_file)
+                    ->replace("--DATABASE--", $main_conn)
+                    ->replace("--PROCEDURE--", "{$method}_{$entity}")
+                    ->replace("--PARAMS--", arr->of($values['params'])->join(", "))
+                    ->replace("--SQL--", "DELETE FROM {$entity} WHERE {$values['columns'][0]}={$values['values'][0]}")
+                    ->get();
+
+                DB::connection($main_conn)->query($file)->execute();
+            }
+        }
 
         return Command::SUCCESS;
     }

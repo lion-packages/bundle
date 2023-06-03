@@ -1,0 +1,3 @@
+USE `--DATABASE--`;
+CREATE OR REPLACE VIEW `--VIEW--` AS
+    --SQL--;
