@@ -26,18 +26,26 @@ class ShowDatabasesCommand extends Command {
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
-        $connections = ((object) DB::getConnections())->connections;
+        $connections = DB::getConnections();
         $size = Arr::of($connections)->length();
         $list_connections = [];
 
-        foreach ($connections as $key => $connection) {
-            $list_connections[] = [
-                "<fg=#FFB63E>{$connection['type']}</>",
-                "<fg=#FFB63E>{$connection['host']}</>",
-                "<fg=#FFB63E>{$connection['port']}</>",
-                "<fg=#007AE2>{$connection['dbname']}</>",
-                "<fg=#007AE2>{$connection['user']}</>"
+        foreach ($connections['connections'] as $key => $connection) {
+            $item = [
+                'type' => "<fg=#FFB63E>{$connection['type']}</>",
+                'host' => "<fg=#FFB63E>{$connection['host']}</>",
+                'port' => "<fg=#FFB63E>{$connection['port']}</>",
+                'dbname' => "",
+                'user' => "<fg=#007AE2>{$connection['user']}</>"
             ];
+
+            if ($connection['dbname'] === $connections['default']) {
+                $item['dbname'] = "<fg=#007AE2>{$connection['dbname']}</> <fg=#FFB63E>(default)</>";
+            } else {
+                $item['dbname'] = "<fg=#007AE2>{$connection['dbname']}</>";
+            }
+
+            $list_connections[] = $item;
         }
 
         (new Table($output))
