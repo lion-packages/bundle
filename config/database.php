@@ -19,13 +19,5 @@ return [
             'user' => env->DB_USER,
             'password' => env->DB_PASSWORD
         ],
-        "requirements_teclab" => [
-            'type' => "mysql",
-            'host' => "127.0.0.1",
-            'port' => 3306,
-            'dbname' => "requirements_teclab",
-            'user' => "root",
-            'password' => ""
-        ]
     ]
 ];

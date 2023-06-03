@@ -205,8 +205,6 @@ class CrudCommand extends Command {
             return $items;
         };
 
-
-
         foreach (["create", "read", "update", "delete"] as $key => $method) {
             $file = "";
             $sql = null;
@@ -265,20 +263,39 @@ class CrudCommand extends Command {
 
                 DB::connection($main_conn)->query($file)->execute();
             } elseif ($method === "delete") {
+                $file = "";
                 $str_file = Store::get(storage_path("framework/templates/SQL/create_procedure.sql", false));
                 $values = $generate_params($columns, $method);
 
-                $file = str->of($str_file)
-                    ->replace("--DATABASE--", $main_conn)
-                    ->replace("--PROCEDURE--", "{$method}_{$entity}")
-                    ->replace("--PARAMS--", arr->of($values['params'])->join(", "))
-                    ->replace("--SQL--", "DELETE FROM {$entity} WHERE {$values['columns'][0]}={$values['values'][0]}")
-                    ->get();
+                if (arr->of($values['values'])->length() > 0) {
+                    $file = str->of($str_file)
+                        ->replace("--DATABASE--", $main_conn)
+                        ->replace("--PROCEDURE--", "{$method}_{$entity}")
+                        ->replace("--PARAMS--", arr->of($values['params'])->join(", "))
+                        ->replace("--SQL--", "DELETE FROM {$entity} WHERE {$values['columns'][0]}={$values['values'][0]}")
+                        ->get();
 
-                DB::connection($main_conn)->query($file)->execute();
+                    DB::connection($main_conn)->query($file)->execute();
+                } else {
+                    $i = 0;
+                    $new_values = "";
+
+                    foreach ($columns as $key => $column) {
+                        if ($i === 0) {
+                            $new_values .= " WHERE {$column->Field}=_{$column->Field}";
+                        } else {
+                            $new_values .= " AND {$column->Field}=_{$column->Field}";
+                        }
+
+                        $i++;
+                    }
+
+                    DB::connection($main_conn)->query("DELETE FROM {$entity} " . $new_values)->execute();
+                }
             }
         }
 
+        $output->writeln("<info>The CRUD for the {$entity} has been generated correctly</info>");
         return Command::SUCCESS;
     }
 

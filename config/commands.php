@@ -13,11 +13,12 @@ return [
         //
     ],
     'framework' => [
+        \App\Console\Framework\DB\AllCapsulesCommand::class,
+        \App\Console\Framework\DB\AllCrudCommand::class,
         \App\Console\Framework\DB\CapsuleCommand::class,
         \App\Console\Framework\DB\CrudCommand::class,
-        \App\Console\Framework\DB\SeedCommand::class,
         \App\Console\Framework\DB\FactoryCommand::class,
-        \App\Console\Framework\DB\AllCapsulesCommand::class,
+        \App\Console\Framework\DB\SeedCommand::class,
         \App\Console\Framework\DB\ShowDatabasesCommand::class,
         // -----------------------------------------------------------------------------------------
         \App\Console\Framework\Key\RSACommand::class,
