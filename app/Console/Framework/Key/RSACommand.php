@@ -21,11 +21,9 @@ class RSACommand extends Command {
 	}
 
 	protected function configure() {
-		$this->setDescription(
-			"Command to create public and private keys with RSA"
-		)->addOption(
-            'path', null, InputOption::VALUE_REQUIRED, 'Save to a specific path?'
-        );
+		$this
+            ->setDescription("Command to create public and private keys with RSA")
+            ->addOption('path', 'p', InputOption::VALUE_REQUIRED, 'Save to a specific path?');
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {

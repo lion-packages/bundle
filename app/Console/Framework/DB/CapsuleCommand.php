@@ -145,7 +145,7 @@ class CapsuleCommand extends Command {
         ClassPath::close();
 
         if ($message != null) {
-            $output->writeln("<info>Capsule created successfully</info>");
+            $output->writeln("<info>Capsule created successfully</info>\n");
         }
 
         return Command::SUCCESS;

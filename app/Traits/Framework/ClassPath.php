@@ -9,6 +9,105 @@ trait ClassPath {
 
     private static $content;
 
+    public static function generateGetters(array $columns): array {
+        $methods = ['create' => [], 'update' => [], 'delete' => []];
+
+        foreach (['create', 'update', 'delete'] as $keyMethod => $method) {
+            foreach ($columns as $keyColumn => $column) {
+                $field = ClassPath::cleanField($column->Field);
+                $getter = "get" . ClassPath::normalizeClass($field) . "()";
+
+                if ($method === "create" && $column->Key != "PRI") {
+                    $methods[$method][] = $getter;
+                }
+
+                if ($method === "update") {
+                    $methods[$method][] = $getter;
+                }
+
+                if ($method === "delete" && $column->Key === "PRI") {
+                    $methods[$method][] = $getter;
+                }
+            }
+        }
+
+        foreach ($columns as $key => $column) {
+            if ($column->Key === "PRI") {
+                $methods['update'] = [
+                    ...Arr::of($methods['update'])->where(fn($value, $key) => $key != 0),
+                    $methods['update'][0]
+                ];
+            }
+        }
+
+        return $methods;
+    }
+
+    private static function increment(array $row, int $increment): int {
+        if (Str::of($row['content'])->contains(["\n"]) !== false) {
+            $increment += (substr_count($row['content'], "\n") - 1);
+        }
+
+        return $increment;
+    }
+
+    private static function replaceContent(array $row, string $modified_line, string $original_line): string {
+        if ($row['search'] === "--all-elem--") {
+            $modified_line = str_pad($row['content'], strlen($original_line));
+        } else {
+            $new_line = Str::of($original_line)->replace($row['search'], $row['content'])->get();
+            $modified_line = str_pad($new_line, strlen($original_line));
+        }
+
+        return $modified_line;
+    }
+
+    public static function readFileRows($path, array $rows): void {
+        $increment = 0;
+
+        foreach ($rows as $key => $row) {
+            $file = fopen($path, "r+");
+            $rows_file = file($path);
+
+            if ($key >= 1 && $key <= count($rows_file)) {
+                $total = ($key - 1) + $increment;
+                $original_line = $rows_file[$total];
+                $modified_line = "";
+
+                if ($row['replace'] === false) {
+                    $modified_line = str_pad($row['content'], strlen($original_line));
+                    $increment = self::increment($row, $increment);
+                } else {
+                    if (isset($row['multiple'])) {
+                        foreach ($row['multiple'] as $key => $content) {
+                            $modified_line = self::replaceContent(
+                                $content,
+                                $modified_line,
+                                ($key === 0 ? $original_line : $modified_line)
+                            );
+
+                            $increment = self::increment($content, $increment);
+                        }
+                    } else {
+                        $modified_line = self::replaceContent($row, $modified_line, $original_line);
+                        $increment = self::increment($row, $increment);
+                    }
+                }
+
+                fseek($file, 0);
+                for ($i = 0; $i < count($rows_file); $i++) {
+                    if ($i == $total) {
+                        fwrite($file, $modified_line);
+                    } else {
+                        fwrite($file, $rows_file[$i]);
+                    }
+                }
+            }
+
+            fclose($file);
+        }
+    }
+
     public static function generateFunctionsModel(string $method, string $model): string {
         if ($method === "read") {
             return Str::of("")->lt()
@@ -52,11 +151,11 @@ trait ClassPath {
         }
 
         $model_method = Str::of($method)
-                ->concat(ucwords($model))
-                ->replace("Model", "")
-                ->replace("model", "")
-                ->concat("DB();")
-                ->get();
+            ->concat(ucwords($model))
+            ->replace("Model", "")
+            ->replace("model", "")
+            ->concat("DB();")
+            ->get();
 
         if ($method === "read") {
             return Str::of("")->lt()
