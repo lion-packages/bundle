@@ -1,5 +1,15 @@
 # Release Notes
 
+## [v14.11.0](https://github.com/Sleon4/Lion-Framework/compare/v14.10.1...v14.11.0) (2023-06-06)
+
+### Added
+- command to generate CRUD functions of an entity has been added
+- added command to generate all system crud
+
+### Changed 
+- default connection has been validated to display the available connections through the terminal (db:show)
+- table format has been modified to display the available web http routes
+
 ## [v14.10.1](https://github.com/Sleon4/Lion-Framework/compare/v14.10.0...v14.10.1) (2023-06-02)
 
 ### Changed
