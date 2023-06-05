@@ -856,12 +856,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Route.git",
-                "reference": "f11e58b5727cca6ed9ee6176b194b833c0abbf5b"
+                "reference": "b70adbc2a3a3efea2e5311b6a7ce40837e504ef6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Route/zipball/f11e58b5727cca6ed9ee6176b194b833c0abbf5b",
-                "reference": "f11e58b5727cca6ed9ee6176b194b833c0abbf5b",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Route/zipball/b70adbc2a3a3efea2e5311b6a7ce40837e504ef6",
+                "reference": "b70adbc2a3a3efea2e5311b6a7ce40837e504ef6",
                 "shasum": ""
             },
             "require": {
@@ -884,7 +884,7 @@
                 "issues": "https://github.com/Sleon4/Lion-Route/issues",
                 "source": "https://github.com/Sleon4/Lion-Route/tree/v8.5.0"
             },
-            "time": "2023-06-05T20:36:17+00:00"
+            "time": "2023-06-05T22:31:42+00:00"
         },
         {
             "name": "lion/security",

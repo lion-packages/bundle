@@ -122,5 +122,5 @@ if (isset($rules[$_SERVER['REQUEST_URI']])) {
 \LionRoute\Request::init(client);
 include_once("../routes/middleware.php");
 include_once("../routes/web.php");
-\LionRoute\Route::get('route-list', fn() => \LionRoute\Route::getRoutes());
+\LionRoute\Route::get('route-list', fn() => \LionRoute\Route::getFullRoutes());
 \LionRoute\Route::dispatch();

@@ -2,7 +2,6 @@
 
 namespace App\Console\Framework\Route;
 
-use LionHelpers\Arr;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Input\InputInterface;
@@ -22,53 +21,58 @@ class RouteListCommand extends Command {
     }
 
     protected function configure() {
-        $this->setDescription("Command to view a list of available web routes");
+        $this
+            ->setDescription("Command to view a list of available web routes");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
         $output->getFormatter()->setStyle('fire', new OutputFormatterStyle('blue'));
-        $routes = (array) json_decode(file_get_contents(env->SERVER_URL . "/route-list"));
+        $routes = fetch("GET", env->SERVER_URL . "/route-list");
         array_pop($routes);
-        $size = Arr::of($routes)->length();
+        $size = arr->of($routes)->length();
         $cont = 0;
         $rows = [];
 
-        foreach ($routes as $key => $route) {
-            $route = (array) $route;
-
-            foreach ($route as $key2 => $info_route) {
-                $info_route = (array) $info_route;
-                $controller = (array) $info_route[0];
-                $middleware = [];
-                $middleware_values = array_values((array) $info_route[1]);
-
-                if (Arr::of($middleware_values)->length() > 0) {
-                    foreach ($middleware_values as $key_values => $midd) {
-                        if (gettype($midd) === "string") {
-                            $middleware[] = $midd;
-                        } else {
-                            foreach ($midd as $key_midd => $value_midd) {
-                                $middleware[] = $value_midd;
-                            }
-                        }
-                    }
+        foreach ($routes as $route => $methods) {
+            foreach ($methods as $keyMethods => $method) {
+                if ($method['handler']['request'] != false) {
+                    $rows[] = [
+                        "<comment>{$keyMethods}</comment>",
+                        str->of("/{$route}")->replace("//", "/")->get(),
+                        '<fg=#E37820>false</>',
+                        '<fg=#E37820>false</>',
+                        "<href={$method['handler']['request']['url']}>[{$method['handler']['request']['url']}]</>"
+                    ];
                 }
 
-                $rows[] = [
-                    "<comment>{$key2}</comment>",
-                    ($key === '' ? '/' : $key),
-                    isset($controller[0]) ? $controller[0] : '',
-                    isset($controller[1]) ? $controller[1] : 'callback'
-                ];
+                if ($method['handler']['callback'] != false) {
+                    $rows[] = [
+                        "<comment>{$keyMethods}</comment>",
+                        str->of("/{$route}")->replace("//", "/")->get(),
+                        '<fg=#E37820>false</>',
+                        '<fg=#E37820>callback</>',
+                        "<fg=#E37820>false</>",
+                    ];
+                }
 
-                if (Arr::of($middleware)->length() > 0) {
+                if ($method['handler']['controller'] != false) {
+                    $rows[] = [
+                        "<comment>{$keyMethods}</comment>",
+                        str->of("/{$route}")->replace("//", "/")->get(),
+                        $method['handler']['controller']['name'],
+                        $method['handler']['controller']['function'],
+                        "<fg=#E37820>false</>"
+                    ];
+                }
+
+                if (arr->of($method['filters'])->length() > 0) {
                     $rows[] = [
                         new TableCell(
                             "<fire>MIDDLEWARE:</fire>",
                             ['colspan' => 1]
                         ),
                         new TableCell(
-                            "<fire>" . Arr::of($middleware)->join(" | ") . "</fire>",
+                            "<fire>" . arr->of($method['filters'])->join(" | ") . "</fire>",
                             ['colspan' => 3]
                         )
                     ];
@@ -77,22 +81,22 @@ class RouteListCommand extends Command {
                 if ($cont < ($size - 1)) {
                     $rows[] = new TableSeparator();
                 }
-            }
 
-            $cont++;
+                $cont++;
+            }
         }
 
         (new Table($output))
             ->setHeaderTitle('<info> ROUTES </info>')
             ->setFooterTitle(
                 $size > 1
-                    ? "<info> Showing [" . $size . "] routes </info>"
-                    : ($size === 1
-                        ? "<info> showing a single route </info>"
-                        : "<info> No routes available </info>"
-                    )
+                ? "<info> Showing [" . $size . "] routes </info>"
+                : ($size === 1
+                    ? "<info> showing a single route </info>"
+                    : "<info> No routes available </info>"
+                )
             )
-            ->setHeaders(['METHOD', 'ROUTE', 'CONTROLLER', 'FUNCTION'])
+            ->setHeaders(['METHOD', 'ROUTE', 'CONTROLLER', 'FUNCTION', 'REQUEST'])
             ->setRows($rows)
             ->render();
 
