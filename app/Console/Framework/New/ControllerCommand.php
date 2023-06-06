@@ -81,7 +81,7 @@ class ControllerCommand extends Command {
         ClassPath::force();
         ClassPath::close();
 
-        $output->writeln("<info>The 'App/Http/Controllers/" . $input->getArgument('controller') . "' controller has been generated</info>");
+        $output->writeln("<info>The '{$list['namespace']}\\{$list['class']}' controller has been generated</info>");
 
         if ($model != null) {
             $output->writeln("");
