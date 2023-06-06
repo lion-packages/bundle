@@ -50,7 +50,7 @@ class FactoryCommand extends Command {
         ClassPath::force();
         ClassPath::close();
 
-        $output->writeln("<info>Factory created successfully</info>");
+        $output->writeln("<info>The '{$list['namespace']}\\{$list['class']}' factory has been generated</info>");
         return Command::SUCCESS;
     }
 
