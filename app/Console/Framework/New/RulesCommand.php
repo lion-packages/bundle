@@ -48,7 +48,7 @@ class RulesCommand extends Command {
         ClassPath::force();
         ClassPath::close();
 
-        $output->writeln("<info>The 'App/Rules/{$input->getArgument('rule')}' rule has been generated</info>");
+        $output->writeln("<info>The '{$list['namespace']}\\{$list['class']}' rule has been generated</info>");
         return Command::SUCCESS;
     }
 
