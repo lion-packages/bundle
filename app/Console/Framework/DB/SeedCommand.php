@@ -45,16 +45,16 @@ class SeedCommand extends Command {
         if (!$run) {
             $output->writeln("<comment>Creating seeder...</comment>");
 
-            $class = ClassPath::export("database/Seeders/", $seed);
-            $url_folder = lcfirst(Str::of($class['namespace'])->replace("\\", "/")->get());
+            $list = ClassPath::export("database/Seeders/", $seed);
+            $url_folder = lcfirst(Str::of($list['namespace'])->replace("\\", "/")->get());
             Store::folder($url_folder);
 
-            ClassPath::create($url_folder, $class['class']);
+            ClassPath::create($url_folder, $list['class']);
             ClassPath::add(Str::of("<?php")->ln()->ln()->get());
-            ClassPath::add(Str::of("namespace ")->concat($class['namespace'])->concat(";")->ln()->ln()->get());
+            ClassPath::add(Str::of("namespace ")->concat($list['namespace'])->concat(";")->ln()->ln()->get());
             ClassPath::add(Str::of("use LionSQL\Drivers\MySQL\MySQL as DB;")->ln()->get());
             ClassPath::add(Str::of("use LionSQL\Drivers\MySQL\Schema;")->ln()->ln()->get());
-            ClassPath::add(Str::of("class ")->concat($class['class'])->concat(" {")->ln()->ln()->get());
+            ClassPath::add(Str::of("class ")->concat($list['class'])->concat(" {")->ln()->ln()->get());
             ClassPath::add("\t/**\n");
             ClassPath::add("\t * ------------------------------------------------------------------------------\n");
             ClassPath::add("\t * Seed the application's database\n");
@@ -64,7 +64,7 @@ class SeedCommand extends Command {
             ClassPath::force();
             ClassPath::close();
 
-            $output->writeln("<info>Seeder created successfully</info>");
+            $output->writeln("<info>The '{$list['namespace']}\\{$list['class']}' seed has been generated</info>");
             return Command::SUCCESS;
         }
 
