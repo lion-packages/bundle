@@ -48,7 +48,7 @@ class ModelCommand extends Command {
         ClassPath::force();
         ClassPath::close();
 
-        $output->writeln("<info>The 'App/Models/" . $input->getArgument('model') . "' rule has been generated</info>");
+        $output->writeln("<info>The 'App/Models/" . $input->getArgument('model') . "' model has been generated</info>");
         return Command::SUCCESS;
     }
 
