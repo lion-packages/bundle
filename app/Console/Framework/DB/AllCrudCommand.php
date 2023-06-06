@@ -35,11 +35,12 @@ class AllCrudCommand extends Command {
 
             foreach ($tables as $key => $table) {
                 $values = arr->of((array) $table)->values()->get();
+                $path = str->of($conn['dbname'])->replace("_", " ")->replace("-", " ")->pascal()->get();
 
                 $this->getApplication()->find('db:crud')->run(
                     new ArrayInput([
                         'entity' => $values[0],
-                        '--path' => $conn['dbname'] . "/",
+                        '--path' =>  $path . "/",
                         '--connection' => $conn['dbname']
                     ]),
                     $output
