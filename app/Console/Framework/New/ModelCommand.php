@@ -48,7 +48,7 @@ class ModelCommand extends Command {
         ClassPath::force();
         ClassPath::close();
 
-        $output->writeln("The '{$list['namespace']}\\{$list['class']}' model has been generated");
+        $output->writeln("<info>The '{$list['namespace']}\\{$list['class']}' model has been generated</info>");
         return Command::SUCCESS;
     }
 
