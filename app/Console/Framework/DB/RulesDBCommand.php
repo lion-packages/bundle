@@ -16,7 +16,7 @@ class RulesDBCommand extends Command {
 	protected static $defaultName = "db:rules";
 
 	protected function initialize(InputInterface $input, OutputInterface $output) {
-        $output->writeln("<comment>Generating rules...</comment>\n");
+
     }
 
     protected function interact(InputInterface $input, OutputInterface $output) {

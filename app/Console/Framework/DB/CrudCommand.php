@@ -17,7 +17,7 @@ class CrudCommand extends Command {
 	protected static $defaultName = "db:crud";
 
 	protected function initialize(InputInterface $input, OutputInterface $output) {
-        $output->writeln("<comment>Generating CRUD...</comment>\n");
+
     }
 
     protected function interact(InputInterface $input, OutputInterface $output) {
@@ -44,6 +44,7 @@ class CrudCommand extends Command {
         $namespace_class = "Database\\Class\\{$main_conn_pascal}\\{$entity_pascal}";
         $list = ClassPath::export("database/class/", "{$main_conn_pascal}/{$entity_pascal}");
 
+        // generate capsule class
         $this->getApplication()->find('db:capsule')->run(
             new ArrayInput([
                 'capsule' => $entity,
@@ -53,6 +54,18 @@ class CrudCommand extends Command {
             $output
         );
 
+        // generate all rules
+        $this->getApplication()->find('db:rules')->run(
+            new ArrayInput([
+                'entity' => $entity,
+                '--connection' => $main_conn
+            ]),
+            $output
+        );
+
+        $output->writeln("");
+
+        // generate controller and model
         $this->getApplication()->find('new:controller')->run(
             new ArrayInput([
                 'controller' => ($path === null ? "" : $path) . "{$entity_pascal}Controller",
@@ -295,7 +308,7 @@ class CrudCommand extends Command {
             }
         }
 
-        $output->writeln("<info>The CRUD for the {$entity} has been generated correctly</info>");
+        $output->writeln("\n\t<question> INFO </question> Crud has been generated for the '{$entity}' entity\n");
         return Command::SUCCESS;
     }
 
