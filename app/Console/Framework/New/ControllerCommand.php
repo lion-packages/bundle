@@ -84,7 +84,7 @@ class ControllerCommand extends Command {
         ClassPath::force();
         ClassPath::close();
 
-        $output->writeln("<info>Controller created successfully</info>");
+        $output->writeln("<info>The 'App/Http/Controllers/" . $input->getArgument('controller') . "' rule has been generated</info>");
 
         if ($model != null) {
             $output->writeln("");
