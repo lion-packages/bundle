@@ -21,11 +21,9 @@ class CommandsCommand extends Command {
 	}
 
 	protected function configure() {
-		$this->setDescription(
-            'Command required for the creation of new Commands'
-        )->addArgument(
-            'new-command', InputArgument::REQUIRED, 'Command name', null
-        );
+		$this
+            ->setDescription('Command required for the creation of new Commands')
+            ->addArgument('new-command', InputArgument::REQUIRED, 'Command name');
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
@@ -50,7 +48,7 @@ class CommandsCommand extends Command {
         ClassPath::force();
         ClassPath::close();
 
-        $output->writeln("<info>Command created successfully</info>");
+        $output->writeln("<info>The '{$list['namespace']}\\{$list['class']}' command has been generated</info>");
         return Command::SUCCESS;
 	}
 
