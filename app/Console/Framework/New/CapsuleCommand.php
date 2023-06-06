@@ -23,11 +23,9 @@ class CapsuleCommand extends Command {
 	}
 
 	protected function configure() {
-		$this->setDescription(
-            "Command required for creating new custom capsules"
-        )->addArgument(
-            'capsule', InputArgument::REQUIRED, 'Capsule name', null
-        );
+		$this
+            ->setDescription("Command required for creating new custom capsules")
+            ->addArgument('capsule', InputArgument::REQUIRED, 'Capsule name');
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
