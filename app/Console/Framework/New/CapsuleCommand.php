@@ -40,7 +40,7 @@ class CapsuleCommand extends Command {
         ClassPath::force();
         ClassPath::close();
 
-        $output->writeln("<info>The '{$list['namespace']}' capsule has been generated</info>");
+        $output->writeln("<info>The '{$list['namespace']}\\{$list['class']}' capsule has been generated</info>");
         return Command::SUCCESS;
 	}
 
