@@ -40,7 +40,7 @@ class TraitCommand extends Command {
         ClassPath::force();
         ClassPath::close();
 
-        $output->writeln("<info>Trait created successfully</info>");
+        $output->writeln("<info>The '{$list['namespace']}\\{$list['class']}' trait has been generated</info>");
         return Command::SUCCESS;
     }
 
