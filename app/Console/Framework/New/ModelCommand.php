@@ -48,7 +48,7 @@ class ModelCommand extends Command {
         ClassPath::force();
         ClassPath::close();
 
-        $output->writeln("<info>The 'App/Models/" . $input->getArgument('model') . "' model has been generated</info>");
+        $output->writeln("The '{$list['namespace']}\\{$list['class']}' model has been generated");
         return Command::SUCCESS;
     }
 
