@@ -22,11 +22,9 @@ class ModelCommand extends Command {
 	}
 
 	protected function configure() {
-		$this->setDescription(
-			'Command required for the creation of new Models'
-		)->addArgument(
-			'model', InputArgument::REQUIRED, 'Model name', null
-		);
+		$this
+            ->setDescription('Command required for the creation of new Models')
+            ->addArgument('model', InputArgument::REQUIRED, 'Model name');
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
@@ -50,7 +48,7 @@ class ModelCommand extends Command {
         ClassPath::force();
         ClassPath::close();
 
-        $output->writeln("<info>Model created successfully</info>");
+        $output->writeln("<info>The 'App/Models/" . $input->getArgument('model') . "' rule has been generated</info>");
         return Command::SUCCESS;
     }
 

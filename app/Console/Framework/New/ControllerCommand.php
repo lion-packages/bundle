@@ -22,13 +22,10 @@ class ControllerCommand extends Command {
     }
 
     protected function configure() {
-        $this->setDescription(
-            'Command required for the creation of new Controllers'
-        )->addArgument(
-            'controller', InputArgument::REQUIRED, 'Controller name', null
-        )->addOption(
-            'model', null, InputOption::VALUE_REQUIRED, 'Do you want to create the model?'
-        );
+        $this
+            ->setDescription('Command required for the creation of new Controllers')
+            ->addArgument('controller', InputArgument::REQUIRED, 'Controller name')
+            ->addOption('model', "m", InputOption::VALUE_REQUIRED, 'Do you want to create the model?');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
