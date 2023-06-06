@@ -64,7 +64,7 @@ class WebSocketsCommand extends Command {
         ClassPath::force();
         ClassPath::close();
 
-        $output->writeln("<info>WebSocket created successfully</info>");
+        $output->writeln("<info>The '{$list['namespace']}\\{$list['class']}' socket has been generated</info>");
         return Command::SUCCESS;
 	}
 
