@@ -21,11 +21,9 @@ class RulesCommand extends Command {
     }
 
     protected function configure() {
-        $this->setDescription(
-            'Command required for rule creation'
-        )->addArgument(
-            'rule', InputArgument::REQUIRED, 'Rule name', null
-        );
+        $this
+            ->setDescription('Command required for rule creation')
+            ->addArgument('rule', InputArgument::REQUIRED, 'Rule name');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {

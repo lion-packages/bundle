@@ -13,7 +13,7 @@ class AllCrudCommand extends Command {
 	protected static $defaultName = "db:all-crud";
 
 	protected function initialize(InputInterface $input, OutputInterface $output) {
-        $output->writeln("<comment>Creating all CRUD...</comment>\n");
+
 	}
 
 	protected function interact(InputInterface $input, OutputInterface $output) {
