@@ -41,7 +41,7 @@ class MiddlewareCommand extends Command {
 		ClassPath::force();
 		ClassPath::close();
 
-		$output->writeln("<info>Middleware created successfully</info>");
+		$output->writeln("The '{$list['namespace']}\\{$list['class']}' middleware has been generated");
 		return Command::SUCCESS;
 	}
 
