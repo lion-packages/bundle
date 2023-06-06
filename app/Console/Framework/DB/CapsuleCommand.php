@@ -145,7 +145,7 @@ class CapsuleCommand extends Command {
         ClassPath::close();
 
         if ($message != null) {
-            $output->writeln("<info>Capsule created successfully</info>\n");
+            $output->writeln("<info>The capsule 'Database/Class/" . ($path . ClassPath::normalizeClass(str->of($table)->replace('`', '')->get())) . "' has been generated</info>\n");
         }
 
         return Command::SUCCESS;
