@@ -54,7 +54,7 @@ class EnumsCommand extends Command {
         ClassPath::force();
         ClassPath::close();
 
-        $output->writeln("<info>Capsule created successfully</info>");
+        $output->writeln("<info>The '{$list['namespace']}\\{$list['class']}' enum has been generated</info>");
         return Command::SUCCESS;
 	}
 
