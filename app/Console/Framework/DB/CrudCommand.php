@@ -54,6 +54,8 @@ class CrudCommand extends Command {
             $output
         );
 
+        $output->writeln("");
+
         // generate all rules
         $this->getApplication()->find('db:rules')->run(
             new ArrayInput([
