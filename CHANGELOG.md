@@ -1,6 +1,13 @@
 # Release Notes
 
-## [v14.11.0](https://github.com/Sleon4/Lion-Framework/compare/v14.10.1...v14.11.0) (2023-06-06)
+## [v14.12.0](https://github.com/Sleon4/Lion-Framework/compare/v14.11.0...v14.12.0) (2023-06-06)
+
+### Added
+- commands have been added to generate rules with the properties of an entity
+- call has been made to generate rules for an entity from the command (db:crud)
+- added information when running local server
+
+## [v14.11.0](https://github.com/Sleon4/Lion-Framework/compare/v14.10.1...v14.11.0) (2023-06-05)
 
 ### Added
 - command to generate CRUD functions of an entity has been added
