@@ -22,13 +22,10 @@ class ServerCommand extends Command {
 	}
 
 	protected function configure() {
-		$this->setDescription(
-            "Created command to start server locally"
-        )->addOption(
-            'port', null, InputOption::VALUE_REQUIRED, 'Do you want to set your own port?'
-        )->addOption(
-            'host', null, InputOption::VALUE_REQUIRED, 'Do you want to set your own host?'
-        );
+		$this
+            ->setDescription("Created command to start server locally")
+            ->addOption('port', "p", InputOption::VALUE_REQUIRED, 'Do you want to set your own port?')
+            ->addOption('host', "s", InputOption::VALUE_REQUIRED, 'Do you want to set your own host?');
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
@@ -44,7 +41,9 @@ class ServerCommand extends Command {
         }
 
         $url = "{$host}:{$port}";
-        $output->writeln("\t<question> INFO </question> Server running on <href=http://{$url}>[http://{$url}]</>\n");
+        $output->writeln("\t<question> INFO </question> Local: Server running on <href=http://{$url}>[http://{$url}]</>\n");
+        $output->writeln("\t<question> INFO </question> Host: use --host to expose</>\n");
+        $output->writeln("\t<question> INFO </question> Port: use --port to expose</>\n");
         $output->writeln("<comment>Press Ctrl+C to stop the server</comment>\n");
         Kernel::getInstance()->execute("php -S {$host}:{$port} -t public");
         return Command::SUCCESS;

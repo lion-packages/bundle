@@ -74,8 +74,8 @@ $socket_commands = include_once("./config/socket-commands.php");
 $kernel = \App\Console\Kernel::getInstance();
 
 $kernel->initialize(
-    commands: [...$commands['framework'], ...$commands['app']],
-    socket_commands: [...$socket_commands['app']]
+    [...$commands['framework'], ...$commands['app']],
+    [...$socket_commands['app']]
 );
 
 $kernel->add();
