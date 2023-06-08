@@ -17,18 +17,7 @@ class NewMigrateCommand extends Command {
     private string $migration;
 
 	protected function initialize(InputInterface $input, OutputInterface $output) {
-        // get migration name and validate that it is not in subfolders
-        $this->migration = $input->getArgument('migration');
-        if (str->of($this->migration)->test("/.*\//")) {
-            $output->writeln("<error>Migration cannot be inside subfolders</error>");
-            return Command::INVALID;
-        }
 
-        // select type of migration
-        $helper = $this->getHelper('question');
-        $question = new ChoiceQuestion("What type of migration do you want to create?", $this->options, 0);
-        $question->setErrorMessage('The selected option is not valid');
-        $this->option = $helper->ask($input, $output, $question);
 	}
 
 	protected function interact(InputInterface $input, OutputInterface $output) {
@@ -42,6 +31,19 @@ class NewMigrateCommand extends Command {
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
+        // get migration name and validate that it is not in subfolders
+        $this->migration = $input->getArgument('migration');
+        if (str->of($this->migration)->test("/.*\//")) {
+            $output->writeln("<error>Migration cannot be inside subfolders</error>");
+            return Command::INVALID;
+        }
+
+        // select type of migration
+        $helper = $this->getHelper('question');
+        $question = new ChoiceQuestion("What type of migration do you want to create?", $this->options, 0);
+        $question->setErrorMessage('The selected option is not valid');
+        $this->option = $helper->ask($input, $output, $question);
+
         $migration = str->of("database/Migrations/")
             ->concat($this->migration)
             ->replace("-", "_")
