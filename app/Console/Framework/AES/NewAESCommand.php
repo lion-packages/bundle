@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Console\Framework\Key;
+namespace App\Console\Framework\AES;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class AESCommand extends Command {
+class NewAESCommand extends Command {
 
-	protected static $defaultName = "key:aes";
+	protected static $defaultName = "aes:new";
 
 	protected function initialize(InputInterface $input, OutputInterface $output) {
         $output->writeln("<comment>Initializing AES service...</comment>");

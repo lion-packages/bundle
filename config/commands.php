@@ -13,6 +13,8 @@ return [
         //
     ],
     'framework' => [
+        \App\Console\Framework\AES\NewAESCommand::class,
+        // -----------------------------------------------------------------------------------------
         \App\Console\Framework\DB\AllCapsulesCommand::class,
         \App\Console\Framework\DB\AllCrudCommand::class,
         \App\Console\Framework\DB\CapsuleCommand::class,
@@ -21,8 +23,6 @@ return [
         \App\Console\Framework\DB\RulesDBCommand::class,
         \App\Console\Framework\DB\SeedCommand::class,
         \App\Console\Framework\DB\ShowDatabasesCommand::class,
-        // -----------------------------------------------------------------------------------------
-        \App\Console\Framework\Key\AESCommand::class,
         // -----------------------------------------------------------------------------------------
         \App\Console\Framework\Migrations\RunMigrationsCommand::class,
         \App\Console\Framework\Migrations\NewMigrateCommand::class,
