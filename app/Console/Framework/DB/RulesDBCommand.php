@@ -25,9 +25,9 @@ class RulesDBCommand extends Command {
 
     protected function configure() {
         $this
-        ->setDescription("Command to generate the rules of an entity")
-        ->addArgument('entity', InputArgument::REQUIRED, 'Entity name')
-        ->addOption('connection', 'c', InputOption::VALUE_REQUIRED, 'Do you want to use a specific connection?');;
+            ->setDescription("Command to generate the rules of an entity")
+            ->addArgument('entity', InputArgument::REQUIRED, 'Entity name')
+            ->addOption('connection', 'c', InputOption::VALUE_REQUIRED, 'Do you want to use a specific connection?');;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
@@ -40,7 +40,7 @@ class RulesDBCommand extends Command {
         $main_conn_pascal = str->of($main_conn)->replace("_", " ")->pascal()->get();
 
 
-        $columns = DB::connection($main_conn)->table($entity)->show()->full()->columns()->getAll();
+        $columns = DB::connection($main_conn)->show()->full()->columns()->from($entity)->getAll();
 
         foreach ($columns as $key => $column) {
             // generate rule name

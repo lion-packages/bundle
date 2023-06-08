@@ -23,17 +23,12 @@ class CapsuleCommand extends Command {
     }
 
     protected function configure() {
-        $this->setDescription(
-            'Command required for the creation of new Capsules'
-        )->addArgument(
-            'capsule', InputArgument::REQUIRED, 'Capsule name', null
-        )->addOption(
-            'path', null, InputOption::VALUE_REQUIRED, 'Do you want to configure your own route?'
-        )->addOption(
-            'connection', null, InputOption::VALUE_REQUIRED, 'Do you want to use a specific connection?'
-        )->addOption(
-            'message', null, InputOption::VALUE_REQUIRED, ''
-        );
+        $this
+            ->setDescription('Command required for the creation of new Capsules')
+            ->addArgument('capsule', InputArgument::REQUIRED, 'Capsule name', null)
+            ->addOption('path', 'p', InputOption::VALUE_REQUIRED, 'Do you want to configure your own route?')
+            ->addOption('connection', 'c', InputOption::VALUE_REQUIRED, 'Do you want to use a specific connection?')
+            ->addOption('message', null, InputOption::VALUE_REQUIRED, '');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
@@ -54,9 +49,9 @@ class CapsuleCommand extends Command {
         }
 
         if ($connection === null) {
-            $columns = DB::table($table)->show()->columns()->getAll();
+            $columns = DB::show()->columns()->from($table)->getAll();
         } else {
-            $columns = DB::connection($connection)->table($table)->show()->columns()->getAll();
+            $columns = DB::connection($connection)->show()->columns()->from($table)->getAll();
         }
 
         $index = 0;

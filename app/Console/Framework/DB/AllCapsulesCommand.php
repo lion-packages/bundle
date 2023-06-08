@@ -23,9 +23,8 @@ class AllCapsulesCommand extends Command {
     }
 
     protected function configure() {
-        $this->setDescription(
-            'Command required for the creation of all new Capsules available from the database'
-        );
+        $this
+            ->setDescription('Command required for the creation of all new Capsules available from the database');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
@@ -34,7 +33,7 @@ class AllCapsulesCommand extends Command {
         $list_all_tables = [];
 
         foreach ($connections_keys as $key => $connection) {
-            $all_tables = DB::connection($connection)->show()->tables()->getAll();
+            $all_tables = DB::connection($connection)->show()->tables()->from($connection)->getAll();
 
             $list_all_tables[] = [
                 'connection' => $connection,

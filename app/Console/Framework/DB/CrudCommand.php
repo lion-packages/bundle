@@ -88,7 +88,7 @@ class CrudCommand extends Command {
         ]);
 
         // modify models
-        $columns = DB::connection($main_conn)->table($entity)->show()->columns()->getAll();
+        $columns = DB::connection($main_conn)->show()->columns()->from($entity)->getAll();
         $path_m = "app/Models/" . ($path === null ? "" : $path) . "{$entity_pascal}Model.php";
         $list_methods = ['create' => "", 'update' => "", 'delete' => ""];
         $methods = ClassPath::generateGetters($columns);

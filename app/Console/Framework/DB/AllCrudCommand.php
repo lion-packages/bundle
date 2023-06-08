@@ -30,7 +30,10 @@ class AllCrudCommand extends Command {
 
         foreach ($connections['connections'] as $key => $conn) {
             $tables = DB::connection($conn['dbname'])
-                ->query("SHOW FULL TABLES WHERE Table_Type = 'BASE TABLE'")
+                ->show()
+                ->full()
+                ->tables()
+                ->where(DB::equalTo("Table_Type"), 'BASE TABLE')
                 ->getAll();
 
             foreach ($tables as $key => $table) {

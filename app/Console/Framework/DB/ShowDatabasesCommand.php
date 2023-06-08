@@ -36,13 +36,13 @@ class ShowDatabasesCommand extends Command {
                 'host' => "<fg=#FFB63E>{$connection['host']}</>",
                 'port' => "<fg=#FFB63E>{$connection['port']}</>",
                 'dbname' => "",
-                'user' => "<fg=#007AE2>{$connection['user']}</>"
+                'user' => $connection['user']
             ];
 
             if ($connection['dbname'] === $connections['default']) {
-                $item['dbname'] = "<fg=#007AE2>{$connection['dbname']}</> <fg=#FFB63E>(default)</>";
+                $item['dbname'] = "{$connection['dbname']} <fg=#FFB63E>(default)</>";
             } else {
-                $item['dbname'] = "<fg=#007AE2>{$connection['dbname']}</>";
+                $item['dbname'] = $connection['dbname'];
             }
 
             $list_connections[] = $item;
