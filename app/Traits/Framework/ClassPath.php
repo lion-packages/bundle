@@ -9,6 +9,86 @@ trait ClassPath {
 
     private static $content;
 
+    public static function getTemplateCreateProcedure(): string {
+        return str->of("<?php")->ln()->ln()
+            ->concat("use App\Traits\Framework\Faker;")->ln()
+            ->concat("use LionSQL\Drivers\MySQL\MySQL as DB;")->ln()
+            ->concat("use LionSQL\Drivers\MySQL\Schema;")->ln()->ln()
+            ->concat("return new class {")->ln()->ln()
+            ->lt()->concat("use Faker;")->ln()->ln()
+            ->lt()->concat('private string $procedure = "procedure";')->ln()->ln()
+            ->lt()->concat("public function getMigration(): array {")->ln()
+            ->lt()->lt()->concat('return ["type" => "PROCEDURE", "name" => $this->procedure];')->ln()
+            ->lt()->concat("}")->ln()->ln()
+            ->lt()->concat("public function execute(): object {")->ln()
+            ->lt()->lt()->concat("return Schema::connection(env->DB_NAME)")->ln()
+            ->lt()->lt()->lt()->concat('->procedure($this->procedure)')->ln()
+            ->lt()->lt()->lt()->concat("->create()")->ln()
+            ->lt()->lt()->lt()->concat('->groupQueryParams(function(Schema $schema) {')->ln()
+            ->lt()->lt()->lt()->lt()->concat('$schema')->ln()
+            ->lt()->lt()->lt()->lt()->lt()->concat("->in()->int('_id', 11)->end(',')")->ln()
+            ->lt()->lt()->lt()->lt()->lt()->concat("->in()->varchar('_name', 45);")->ln()
+            ->lt()->lt()->lt()->concat("})")->ln()
+            ->lt()->lt()->lt()->concat('->groupQueryBegin(function(DB $db) {')->ln()
+            ->lt()->lt()->lt()->lt()->concat('$db->table("table")->insert(["name" => "_name"])->end();')->ln()
+            ->lt()->lt()->lt()->lt()->concat('// $tb->table("table")->update(["name" => "_name"])->where($db->equalTo("id"), "_id")->end();')->ln()
+            ->lt()->lt()->lt()->concat("})")->ln()
+            ->lt()->lt()->lt()->concat("->execute();")->ln()
+            ->lt()->concat("}")->ln()->ln()
+            ->lt()->concat("public function insert(): array {")->ln()
+            ->lt()->lt()->concat("return [];")->ln()
+            ->lt()->concat("}")->ln()->ln()
+            ->concat("};")
+            ->get();
+    }
+
+    public static function getTemplateCreateView(): string {
+        return str->of("<?php")->ln()->ln()
+            ->concat("use LionSQL\Drivers\MySQL\MySQL as DB;")->ln()
+            ->concat("use LionSQL\Drivers\MySQL\Schema;")->ln()->ln()
+            ->concat("return new class {")->ln()->ln()
+            ->lt()->concat("public function getMigration(): array {")->ln()
+            ->lt()->lt()->concat('return ["type" => "VIEW"];')->ln()
+            ->lt()->concat("}")->ln()->ln()
+            ->lt()->concat("public function execute(): object {")->ln()
+            ->lt()->lt()->concat("return Schema::connection(env->DB_NAME)")->ln()
+            ->lt()->lt()->lt()->concat('->view("view")')->ln()
+            ->lt()->lt()->lt()->concat("->create()")->ln()
+            ->lt()->lt()->lt()->concat('->groupQuery(function(DB $db) {')->ln()
+            ->lt()->lt()->lt()->lt()->concat('$db->table("table")->select();')->ln()
+            ->lt()->lt()->lt()->concat("})")->ln()
+            ->lt()->lt()->lt()->concat("->execute();")->ln()
+            ->lt()->concat("}")->ln()->ln()
+            ->concat("};")
+            ->get();
+    }
+
+    public static function getTemplateCreateTable(): string {
+        return str->of("<?php")->ln()->ln()
+            ->concat("use App\Traits\Framework\Faker;")->ln()
+            // ->concat("use LionSQL\Drivers\MySQL\MySQL as DB;")->ln()
+            ->concat("use LionSQL\Drivers\MySQL\Schema;")->ln()->ln()
+            ->concat("return new class {")->ln()->ln()
+            ->lt()->concat("use Faker;")->ln()->ln()
+            ->lt()->concat('private string $table = "table";')->ln()->ln()
+            ->lt()->concat("public function getMigration(): array {")->ln()
+            ->lt()->lt()->concat('return ["type" => "TABLE", "name" => $this->table];')->ln()
+            ->lt()->concat("}")->ln()->ln()
+            ->lt()->concat("public function execute(): object {")->ln()
+            ->lt()->lt()->concat("return Schema::connection(env->DB_NAME)")->ln()
+            ->lt()->lt()->lt()->concat('->table($this->table)')->ln()
+            ->lt()->lt()->lt()->concat("->create()")->ln()
+            ->lt()->lt()->lt()->concat("->column('id', ['type' => 'int', 'primary-key' => true, 'lenght' => 11, 'null' => false, 'auto-increment' => true])")->ln()
+            ->lt()->lt()->lt()->concat("->column('name', ['type' => 'varchar', 'null' => true, 'default' => 'unnamed'])")->ln()
+            ->lt()->lt()->lt()->concat("->execute();")->ln()
+            ->lt()->concat("}")->ln()->ln()
+            ->lt()->concat("public function insert(): array {")->ln()
+            ->lt()->lt()->concat("return [];")->ln()
+            ->lt()->concat("}")->ln()->ln()
+            ->concat("};")
+            ->get();
+    }
+
     public static function generateGetters(array $columns): array {
         $methods = ['create' => [], 'update' => [], 'delete' => []];
 
