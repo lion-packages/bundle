@@ -22,7 +22,6 @@ return [
         \App\Console\Framework\DB\SeedCommand::class,
         \App\Console\Framework\DB\ShowDatabasesCommand::class,
         // -----------------------------------------------------------------------------------------
-        \App\Console\Framework\Key\RSACommand::class,
         \App\Console\Framework\Key\AESCommand::class,
         // -----------------------------------------------------------------------------------------
         \App\Console\Framework\Migrations\RunMigrationsCommand::class,
@@ -40,6 +39,8 @@ return [
         // -----------------------------------------------------------------------------------------
         \App\Console\Framework\Route\RouteListCommand::class,
         \App\Console\Framework\Route\PostmanCollectionCommand::class,
+        // -----------------------------------------------------------------------------------------
+        \App\Console\Framework\RSA\NewRSACommand::class,
         // -----------------------------------------------------------------------------------------
         \App\Console\Framework\Sockets\WebSocketsCommand::class,
         \App\Console\Framework\Sockets\RunWebSocketsCommand::class,
