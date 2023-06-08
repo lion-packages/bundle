@@ -34,7 +34,7 @@ class RunMigrationsCommand extends Command {
     }
 
     protected function configure() {
-        $this->setDescription("Command that runs all migrations");
+        $this->setDescription("Drop all tables and re-run all migrations");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
