@@ -25,6 +25,7 @@ return [
         \App\Console\Framework\Key\RSACommand::class,
         \App\Console\Framework\Key\AESCommand::class,
         // -----------------------------------------------------------------------------------------
+        \App\Console\Framework\Migrations\RunMigrationsCommand::class,
         \App\Console\Framework\Migrations\NewMigrateCommand::class,
         // -----------------------------------------------------------------------------------------
         \App\Console\Framework\New\CapsuleCommand::class,
