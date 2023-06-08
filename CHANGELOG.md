@@ -1,5 +1,19 @@
 # Release Notes
 
+## [v14.13.0](https://github.com/Sleon4/Lion-Framework/compare/v14.12.0...v14.12.0) (2023-06-08)
+
+### Added
+- command to generate migrations has been added
+- added command to run all migrations
+- added default migrations
+
+### Changed
+- commands have been updated with their respective queries
+
+### Refactoring
+- command to generate keys with RSA has been renamed
+- command to generate keys with AES has been renamed
+
 ## [v14.12.0](https://github.com/Sleon4/Lion-Framework/compare/v14.11.0...v14.12.0) (2023-06-06)
 
 ### Added
