@@ -1,6 +1,16 @@
 # Release Notes
 
-## [v14.13.0](https://github.com/Sleon4/Lion-Framework/compare/v14.12.0...v14.12.0) (2023-06-08)
+## [v14.14.0](https://github.com/Sleon4/Lion-Framework/compare/v14.13.0...v14.13.0) (2023-06-09)
+
+### Added
+- new default migration has been added
+- added command to read entities from databases
+- added command to read entity columns
+
+### Changed
+- format to create commands has been modified
+
+## [v14.13.0](https://github.com/Sleon4/Lion-Framework/compare/v14.12.0...v14.13.0) (2023-06-08)
 
 ### Added
 - command to generate migrations has been added
