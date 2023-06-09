@@ -35,7 +35,9 @@ class CommandsCommand extends Command {
         ClassPath::add("<?php\n\n");
         ClassPath::add("namespace {$list['namespace']};\n\n");
         ClassPath::add("use Symfony\Component\Console\Command\Command;\n");
+        ClassPath::add("use Symfony\Component\Console\Input\InputArgument;\n");
         ClassPath::add("use Symfony\Component\Console\Input\InputInterface;\n");
+        ClassPath::add("use Symfony\Component\Console\Input\InputOption;\n");
         ClassPath::add("use Symfony\Component\Console\Output\OutputInterface;\n\n");
         ClassPath::add("class {$list['class']} extends Command {\n\n");
         ClassPath::add("\t" . 'protected static $defaultName = "";' . "\n\n");
