@@ -18,6 +18,7 @@ return [
         \App\Console\Framework\DB\AllCapsulesCommand::class,
         \App\Console\Framework\DB\AllCrudCommand::class,
         \App\Console\Framework\DB\CapsuleCommand::class,
+        \App\Console\Framework\DB\SelectColumnsCommand::class,
         \App\Console\Framework\DB\CrudCommand::class,
         \App\Console\Framework\DB\FactoryCommand::class,
         \App\Console\Framework\DB\RulesDBCommand::class,

@@ -1,0 +1,54 @@
+<?php
+
+namespace App\Console\Framework\DB;
+
+use LionSQL\Drivers\MySQL\MySQL as DB;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+
+class SelectColumnsCommand extends Command {
+
+	protected static $defaultName = "db:columns";
+
+	protected function initialize(InputInterface $input, OutputInterface $output) {
+
+	}
+
+	protected function interact(InputInterface $input, OutputInterface $output) {
+
+	}
+
+	protected function configure() {
+		$this
+            ->setDescription("Command to read the columns of an entity")
+            ->addArgument('entity', InputArgument::REQUIRED, 'Entity name')
+            ->addOption('connection', 'c', InputOption::VALUE_REQUIRED, 'Do you want to use a specific connection?');
+	}
+
+	protected function execute(InputInterface $input, OutputInterface $output) {
+        $entity = $input->getArgument("entity");
+        $connection = $input->getOption("connection");
+
+        $connections = DB::getConnections();
+        $main_conn = $connection === null ? $connections['default'] : $connection;
+        $columns_db = DB::connection($main_conn)
+            ->fetchMode(\PDO::FETCH_ASSOC)
+            ->show()
+            ->columns()
+            ->from($entity)
+            ->getAll();
+
+        (new Table($output))
+            ->setHeaderTitle("<info> TABLE " . str->of($entity)->upper()->get() . " </info>")
+            ->setHeaders(["FIELD", "TYPE", "NULL", "KEY", "DEFAULT", "EXTRA"])
+            ->setRows($columns_db)
+            ->render();
+
+		return Command::SUCCESS;
+	}
+
+}
