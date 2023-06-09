@@ -1,6 +1,6 @@
 # Release Notes
 
-## [v14.14.0](https://github.com/Sleon4/Lion-Framework/compare/v14.13.0...v14.13.0) (2023-06-09)
+## [v14.14.0](https://github.com/Sleon4/Lion-Framework/compare/v14.13.0...v14.14.0) (2023-06-09)
 
 ### Added
 - new default migration has been added
