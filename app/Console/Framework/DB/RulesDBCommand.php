@@ -27,7 +27,7 @@ class RulesDBCommand extends Command {
         $this
             ->setDescription("Command to generate the rules of an entity")
             ->addArgument('entity', InputArgument::REQUIRED, 'Entity name')
-            ->addOption('connection', 'c', InputOption::VALUE_REQUIRED, 'Do you want to use a specific connection?');;
+            ->addOption('connection', 'c', InputOption::VALUE_REQUIRED, 'Do you want to use a specific connection?');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {

@@ -22,6 +22,7 @@ return [
         \App\Console\Framework\DB\FactoryCommand::class,
         \App\Console\Framework\DB\RulesDBCommand::class,
         \App\Console\Framework\DB\SeedCommand::class,
+        \App\Console\Framework\DB\SelectTableCommand::class,
         \App\Console\Framework\DB\ShowDatabasesCommand::class,
         // -----------------------------------------------------------------------------------------
         \App\Console\Framework\Migrations\RunMigrationsCommand::class,

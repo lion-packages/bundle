@@ -22,11 +22,9 @@ class FactoryCommand extends Command {
     }
 
     protected function configure() {
-        $this->setDescription(
-            'Command required for the creation of new factories'
-        )->addArgument(
-            'factory', InputArgument::REQUIRED, 'Factory name'
-        );
+        $this
+            ->setDescription('Command required for the creation of new factories')
+            ->addArgument('factory', InputArgument::REQUIRED, 'Factory name');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {

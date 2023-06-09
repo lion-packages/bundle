@@ -38,8 +38,8 @@ class CrudCommand extends Command {
         $path = $input->getOption("path");
 
         $entity_pascal = str->of($entity)->replace("_", " ")->pascal()->get();
-        $default_connection = DB::getConnections();
-        $main_conn = $connection === null ? $default_connection['default'] : $connection;
+        $connections = DB::getConnections();
+        $main_conn = $connection === null ? $connections['default'] : $connection;
         $main_conn_pascal = str->of($main_conn)->replace("_", " ")->pascal()->get();
         $namespace_class = "Database\\Class\\{$main_conn_pascal}\\{$entity_pascal}";
         $list = ClassPath::export("database/class/", "{$main_conn_pascal}/{$entity_pascal}");
