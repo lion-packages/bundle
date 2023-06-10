@@ -34,8 +34,16 @@ class Kernel {
         return isset($this->socket_commands[$class_name]) ? $this->socket_commands[$class_name] : false;
     }
 
-    public function execute(string $command): void {
-        exec($command);
+    public function execute(string $command, bool $index = true): array {
+        $data = [];
+
+        if (!$index) {
+            exec($command, $data);
+        } else {
+            exec("cd ../ && {$command}", $data);
+        }
+
+        return $data;
     }
 
 }
