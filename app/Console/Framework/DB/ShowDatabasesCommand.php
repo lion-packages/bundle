@@ -22,12 +22,13 @@ class ShowDatabasesCommand extends Command {
 	}
 
 	protected function configure() {
-		$this->setDescription("Command required to display available database connections");
+		$this
+            ->setDescription("Command required to display available database connections");
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
         $connections = DB::getConnections();
-        $size = Arr::of($connections)->length();
+        $size = Arr::of($connections['connections'])->length();
         $list_connections = [];
 
         foreach ($connections['connections'] as $key => $connection) {

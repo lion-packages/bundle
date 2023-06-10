@@ -26,6 +26,8 @@ return [
         \App\Console\Framework\DB\SelectTableCommand::class,
         \App\Console\Framework\DB\ShowDatabasesCommand::class,
         // -----------------------------------------------------------------------------------------
+        \App\Console\Framework\Email\ShowAccountsCommand::class,
+        // -----------------------------------------------------------------------------------------
         \App\Console\Framework\Migrations\RunMigrationsCommand::class,
         \App\Console\Framework\Migrations\NewMigrateCommand::class,
         // -----------------------------------------------------------------------------------------

@@ -61,6 +61,23 @@ if (isError($responseDatabase)) {
 
 /**
  * ------------------------------------------------------------------------------
+ * Start email sending service
+ * ------------------------------------------------------------------------------
+ * enter account access credentials
+ * ------------------------------------------------------------------------------
+ **/
+
+$response_email = \LionMailer\MailService::run(
+    require_once("config/email.php")
+);
+
+if (isError($response_email)) {
+    logger($response_email->message, 'error');
+    finish($response_email);
+}
+
+/**
+ * ------------------------------------------------------------------------------
  * Run The lion Application
  * ------------------------------------------------------------------------------
  * This is where the commands for your application are executed

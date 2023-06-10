@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\SessionController;
+use LionMailer\SettingsMailServices;
 use LionRoute\Route;
 
 /**
@@ -12,7 +13,9 @@ use LionRoute\Route;
  * ------------------------------------------------------------------------------
  **/
 
-Route::get('/', fn() => info("Welcome to the index, access the web: " . env->SERVER_URL_AUD));
+Route::get('/', function() {
+    return info("Welcome to the index, access the web: " . env->SERVER_URL_AUD);
+});
 
 Route::prefix('api', function() {
     Route::prefix('auth', function() {
