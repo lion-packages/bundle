@@ -45,7 +45,7 @@ class ServerCommand extends Command {
         $output->writeln("\t<question> INFO </question> Host: use --host to expose</>\n");
         $output->writeln("\t<question> INFO </question> Port: use --port to expose</>\n");
         $output->writeln("<comment>Press Ctrl+C to stop the server</comment>\n");
-        Kernel::getInstance()->execute("php -S {$host}:{$port} -t public");
+        Kernel::getInstance()->execute("php -S {$host}:{$port} -t public", false);
         return Command::SUCCESS;
 	}
 

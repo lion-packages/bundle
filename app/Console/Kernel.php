@@ -46,4 +46,16 @@ class Kernel {
         return $data;
     }
 
+    public function command(string $command, bool $index = true) {
+        $data = [];
+
+        if (!$index) {
+            exec($command, $data);
+        } else {
+            exec("cd ../ && php lion {$command}", $data);
+        }
+
+        return $data;
+    }
+
 }
