@@ -135,7 +135,10 @@ class GenerateMigrationsCommand extends Command {
                         ClassPath::force();
                         ClassPath::close();
 
-                        $output->writeln("<info>Migration '{$migration_name}' has been generated</info>");
+                        $output->write("\033[1;33m");
+                        $output->write("\t>>");
+                        $output->write("\033[0m");
+                        $output->writeln("  <info>Migration '{$migration_name}' has been generated</info>");
                     }
                 }
             }
