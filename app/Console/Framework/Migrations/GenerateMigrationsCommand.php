@@ -60,7 +60,14 @@ class GenerateMigrationsCommand extends Command {
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
+        $cont = 0;
+
         foreach ($this->connections['connections'] as $keyConnection => $connection) {
+            $output->write("\033[1;33m");
+            $output->write("\t>>");
+            $output->write("\033[0m");
+            $output->writeln("  DATABASE: {$connection['dbname']}");
+
             foreach ($this->list[$keyConnection] as $keyType => $type) {
                 if ($keyType === "tables") {
                     foreach ($type as $key => $table) {
@@ -126,9 +133,11 @@ class GenerateMigrationsCommand extends Command {
                             }
                         }
 
-                        $path = "database/Migrations/{$connection['dbname']}/";
+                        $db_pascal = str->of($connection['dbname'])->replace("-", " ")->replace("_", " ")->pascal()->trim()->get();
+                        $tbl_pascal = str->of($table_name)->replace("-", " ")->replace("_", " ")->pascal()->trim()->get();
+                        $path = "database/Migrations/{$db_pascal}/";
                         Store::folder($path);
-                        $migration_name = str->of($path)->concat($connection['dbname'])->concat("_")->concat($table_name)->replace("-", "_")->replace(" ", "_")->lower()->trim()->get();
+                        $migration_name = str->of($path)->concat("Table")->concat($tbl_pascal)->get();
 
                         ClassPath::new($migration_name, "php");
                         ClassPath::add(str->of(ClassPath::getTemplateCreateTable())->replace('$table = "table"', '$table = "' . $table_name . '"')->replace('env->DB_NAME', "'{$connection['dbname']}'")->replace("\t\t\t->column('id', ['type' => 'int', 'primary-key' => true, 'lenght' => 11, 'null' => false, 'auto-increment' => true])\n", "")->replace("->column('name', ['type' => 'varchar', 'null' => true, 'default' => 'unnamed'])", $columns)->get());
@@ -141,7 +150,20 @@ class GenerateMigrationsCommand extends Command {
                         $output->writeln("  <info>Migration '{$migration_name}' has been generated</info>");
                     }
                 }
+
+                if ($keyType === "views") {
+                    foreach ($type as $key => $table) {
+                        $view_name = $table->{"Tables_in_{$connection['dbname']}"};
+                        // $query = DB::connection($connection['dbname'])->show()->create()->view();
+                    }
+                }
             }
+
+            if ($cont < (arr->of($this->connections['connections'])->length() - 1)) {
+                $output->writeln("");
+            }
+
+            $cont++;
         }
 
 		return Command::SUCCESS;

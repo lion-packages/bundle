@@ -20,8 +20,10 @@ class FreshMigrationsCommand extends Command {
         $this->connections = DB::getConnections();
 
         foreach (arr->of($this->connections['connections'])->keys()->get() as $key => $connection) {
-            if (isSuccess(Store::exist("database/Migrations/{$connection}/"))) {
-                foreach (Store::view("database/Migrations/{$connection}/") as $key => $file) {
+            $db_pascal = str->of($connection)->replace("-", " ")->replace("_", " ")->pascal()->trim()->get();
+
+            if (isSuccess(Store::exist("database/Migrations/{$db_pascal}/"))) {
+                foreach (Store::view("database/Migrations/{$db_pascal}/") as $key => $file) {
                     if (isSuccess(Store::validate([$file], ["php"]))) {
                         $class = require_once($file);
                         $info = $class->getMigration();
@@ -75,7 +77,8 @@ class FreshMigrationsCommand extends Command {
             foreach ($this->files[$keyFiles] as $key => $file) {
                 foreach ($file as $keyFile => $class) {
                     $info = $class['class']->getMigration();
-                    $migration = str->of($class['file'])->replace("database/Migrations/{$info['connection']}/", "")->replace(".php", "")->get();
+                    $db_pascal = str->of($info['connection'])->replace("-", " ")->replace("_", " ")->pascal()->trim()->get();
+                    $migration = str->of($class['file'])->replace("database/Migrations/{$db_pascal}/", "")->replace(".php", "")->get();
 
                     if ($key === "table") {
                         // execute function process execute

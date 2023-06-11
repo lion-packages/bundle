@@ -34,6 +34,14 @@ return [
             'dbname' => 'chats',
             'user' => env->DB_USER,
             'password' => env->DB_PASSWORD
+        ],
+        'solumovil' => [
+            'type' => env->DB_TYPE,
+            'host' => env->DB_HOST,
+            'port' => env->DB_PORT,
+            'dbname' => 'solumovil',
+            'user' => env->DB_USER,
+            'password' => env->DB_PASSWORD
         ]
     ]
 ];

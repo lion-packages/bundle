@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\SessionController;
 use LionRoute\Route;
+use LionSQL\Drivers\MySQL\MySQL as DB;
 
 /**
  * ------------------------------------------------------------------------------
@@ -13,7 +14,8 @@ use LionRoute\Route;
  **/
 
 Route::get('/', function() {
-    return info("Welcome to the index, access the web: " . env->SERVER_URL_AUD);
+    $data = DB::connection("solumovil")->view("read_users")->select()->getAll();
+    // return info("Welcome to the index, access the web: " . env->SERVER_URL_AUD);
 });
 
 Route::prefix('api', function() {
