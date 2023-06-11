@@ -10,7 +10,7 @@ use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class RunMigrationsCommand extends Command {
+class FreshMigrationsCommand extends Command {
 
 	protected static $defaultName = "migrate:fresh";
     private array $connections;

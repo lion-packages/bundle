@@ -28,7 +28,7 @@ return [
         // -----------------------------------------------------------------------------------------
         \App\Console\Framework\Email\ShowAccountsCommand::class,
         // -----------------------------------------------------------------------------------------
-        \App\Console\Framework\Migrations\RunMigrationsCommand::class,
+        \App\Console\Framework\Migrations\FreshMigrationsCommand::class,
         \App\Console\Framework\Migrations\GenerateMigrationsCommand::class,
         \App\Console\Framework\Migrations\NewMigrateCommand::class,
         // -----------------------------------------------------------------------------------------
