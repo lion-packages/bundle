@@ -29,6 +29,7 @@ return [
         \App\Console\Framework\Email\ShowAccountsCommand::class,
         // -----------------------------------------------------------------------------------------
         \App\Console\Framework\Migrations\RunMigrationsCommand::class,
+        \App\Console\Framework\Migrations\GenerateMigrationsCommand::class,
         \App\Console\Framework\Migrations\NewMigrateCommand::class,
         // -----------------------------------------------------------------------------------------
         \App\Console\Framework\New\CapsuleCommand::class,

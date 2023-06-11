@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\SessionController;
-use LionMailer\SettingsMailServices;
 use LionRoute\Route;
 
 /**

@@ -71,7 +71,7 @@ trait ClassPath {
             ->lt()->concat("use Faker;")->ln()->ln()
             ->lt()->concat('private string $table = "table";')->ln()->ln()
             ->lt()->concat("public function getMigration(): array {")->ln()
-            ->lt()->lt()->concat('return ["type" => "TABLE", "table" => $this->table, "connection" => env->DB_NAME];')->ln()
+            ->lt()->lt()->concat('return ["type" => "TABLE", "table" => $this->table, "connection" => env->DB_NAME, "index" => null];')->ln()
             ->lt()->concat("}")->ln()->ln()
             ->lt()->concat("public function execute(): object {")->ln()
             ->lt()->lt()->concat("return Schema::connection(env->DB_NAME)")->ln()

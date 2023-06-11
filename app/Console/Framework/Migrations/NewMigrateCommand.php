@@ -3,6 +3,8 @@
 namespace App\Console\Framework\Migrations;
 
 use App\Traits\Framework\ClassPath;
+use LionFiles\Store;
+use LionSQL\Drivers\MySQL\MySQL as DB;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,8 +15,6 @@ class NewMigrateCommand extends Command {
 
 	protected static $defaultName = "migrate:new";
     private array $options = ["TABLE", 'VIEW', 'PROCEDURE'];
-    private string $option;
-    private string $migration;
 
 	protected function initialize(InputInterface $input, OutputInterface $output) {
 
@@ -32,20 +32,36 @@ class NewMigrateCommand extends Command {
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
         // get migration name and validate that it is not in subfolders
-        $this->migration = $input->getArgument('migration');
-        if (str->of($this->migration)->test("/.*\//")) {
+        $migration = $input->getArgument('migration');
+        if (str->of($migration)->test("/.*\//")) {
             $output->writeln("<error>Migration cannot be inside subfolders</error>");
             return Command::INVALID;
         }
 
         // select type of migration
-        $helper = $this->getHelper('question');
-        $question = new ChoiceQuestion("What type of migration do you want to create?", $this->options, 0);
-        $question->setErrorMessage('The selected option is not valid');
-        $this->option = $helper->ask($input, $output, $question);
+        $option = $this->getHelper('question')->ask(
+            $input,
+            $output,
+            (new ChoiceQuestion("What type of migration do you want to create?", $this->options, 0))
+                ->setErrorMessage('The selected option is not valid')
+        );
 
+        // select connection
+        $connections = DB::getConnections();
+        $connection = $this->getHelper('question')->ask(
+            $input,
+            $output,
+            (new ChoiceQuestion(
+                "Which connection does the migration belong to?",
+                arr->of($connections['connections'])->keys()->get(),
+                0
+            ))->setErrorMessage('The selected option is not valid')
+        );
+
+        Store::folder("database/Migrations/{$connection}/");
         $migration = str->of("database/Migrations/")
-            ->concat($this->migration)
+            ->concat("{$connection}/")
+            ->concat($migration)
             ->replace("-", "_")
             ->replace(" ", "_")
             ->lower()
@@ -53,11 +69,11 @@ class NewMigrateCommand extends Command {
             ->get();
 		ClassPath::new($migration, "php");
 
-        if ($this->option === "TABLE") {
+        if ($option === "TABLE") {
             ClassPath::add(ClassPath::getTemplateCreateTable());
-        } elseif ($this->option === "VIEW") {
+        } elseif ($option === "VIEW") {
             ClassPath::add(ClassPath::getTemplateCreateView());
-        } elseif ($this->option === "PROCEDURE") {
+        } elseif ($option === "PROCEDURE") {
             ClassPath::add(ClassPath::getTemplateCreateProcedure());
         }
 

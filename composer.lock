@@ -925,16 +925,16 @@
         },
         {
             "name": "lion/sql",
-            "version": "v8.3.0",
+            "version": "v8.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-SQL.git",
-                "reference": "8f91e9c8f5947c6fb30ca5922b8a441bba78bb43"
+                "reference": "8f47057d74fdc356a5bfd680b597c8d8e58573a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/8f91e9c8f5947c6fb30ca5922b8a441bba78bb43",
-                "reference": "8f91e9c8f5947c6fb30ca5922b8a441bba78bb43",
+                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/8f47057d74fdc356a5bfd680b597c8d8e58573a4",
+                "reference": "8f47057d74fdc356a5bfd680b597c8d8e58573a4",
                 "shasum": ""
             },
             "require": {
@@ -953,9 +953,9 @@
             "description": "package in charge of generating and executing MySQL processes",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-SQL/issues",
-                "source": "https://github.com/Sleon4/Lion-SQL/tree/v8.3.0"
+                "source": "https://github.com/Sleon4/Lion-SQL/tree/v8.4.0"
             },
-            "time": "2023-06-08T15:15:54+00:00"
+            "time": "2023-06-10T17:24:46+00:00"
         },
         {
             "name": "monolog/monolog",
