@@ -19,29 +19,5 @@ return [
             'user' => env->DB_USER,
             'password' => env->DB_PASSWORD
         ],
-        'basic_crud' => [
-            'type' => env->DB_TYPE,
-            'host' => env->DB_HOST,
-            'port' => env->DB_PORT,
-            'dbname' => 'basic_crud',
-            'user' => env->DB_USER,
-            'password' => env->DB_PASSWORD
-        ],
-        'chats' => [
-            'type' => env->DB_TYPE,
-            'host' => env->DB_HOST,
-            'port' => env->DB_PORT,
-            'dbname' => 'chats',
-            'user' => env->DB_USER,
-            'password' => env->DB_PASSWORD
-        ],
-        'solumovil' => [
-            'type' => env->DB_TYPE,
-            'host' => env->DB_HOST,
-            'port' => env->DB_PORT,
-            'dbname' => 'solumovil',
-            'user' => env->DB_USER,
-            'password' => env->DB_PASSWORD
-        ]
     ]
 ];

@@ -5,8 +5,6 @@ namespace App\Console\Framework\Migrations;
 use LionFiles\Store;
 use LionSQL\Drivers\MySQL\MySQL as DB;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -30,13 +28,15 @@ class FreshMigrationsCommand extends Command {
                         $type = str->of($info['type'])->lower()->get();
 
                         if ($type === "table") {
-                            $this->files[$info['connection']][$type][] = [
+                            $this->files[$info['connection']]["tables"][] = [
                                 'file' => $file,
                                 'index' => $info['index'],
                                 'class' => $class
                             ];
                         } else {
-                            $this->files[$info['connection']][$type][] = [
+                            $this->files[$info['connection']][
+                                ($type === "view" ? "views" : "procedures")
+                            ][] = [
                                 'file' => $file,
                                 'class' => $class
                             ];
@@ -44,20 +44,24 @@ class FreshMigrationsCommand extends Command {
                     }
                 }
             }
+
+            DB::connection($connection)->query("USE `{$connection}`; SET FOREIGN_KEY_CHECKS = 0; SET @tablas = NULL; SELECT GROUP_CONCAT(table_name) INTO @tablas FROM information_schema.tables WHERE table_schema = (SELECT DATABASE()); SET @consulta = CONCAT('DROP TABLE IF EXISTS ', @tablas); PREPARE stmt FROM @consulta; EXECUTE stmt; DEALLOCATE PREPARE stmt; SET FOREIGN_KEY_CHECKS = 1;")->execute();
         }
 
         foreach (arr->of($this->files)->keys()->get() as $index => $key) {
-            usort($this->files[$key]['table'], function($a, $b) {
-                if ($a['index'] === null && $b['index'] === null) {
-                    return 0;
-                } elseif ($a['index'] === null) {
-                    return 1;
-                } elseif ($b['index'] === null) {
-                    return -1;
-                } else {
-                    return $a['index'] - $b['index'];
-                }
-            });
+            if (isset($this->files[$key]['tables'])) {
+                usort($this->files[$key]['tables'], function($a, $b) {
+                    if ($a['index'] === null && $b['index'] === null) {
+                        return 0;
+                    } elseif ($a['index'] === null) {
+                        return 1;
+                    } elseif ($b['index'] === null) {
+                        return -1;
+                    } else {
+                        return $a['index'] - $b['index'];
+                    }
+                });
+            }
         }
     }
 
@@ -71,104 +75,107 @@ class FreshMigrationsCommand extends Command {
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $rows = [];
+        $items = arr->of($this->files)->keys()->get();
 
-        foreach (arr->of($this->files)->keys()->get() as $indexFiles => $keyFiles) {
-            foreach ($this->files[$keyFiles] as $key => $file) {
-                foreach ($file as $keyFile => $class) {
+        foreach ($items as $indexFiles => $keyFiles) {
+            $output->write("\033[1;33m");
+            $output->write("\t>>");
+            $output->write("\033[0m");
+            $output->writeln("  <comment>DATABASE: {$keyFiles}</comment>");
+
+            if (isset($this->files[$keyFiles]["tables"])) {
+                foreach ($this->files[$keyFiles]["tables"] as $key => $class) {
                     $info = $class['class']->getMigration();
                     $db_pascal = str->of($info['connection'])->replace("-", " ")->replace("_", " ")->pascal()->trim()->get();
                     $migration = str->of($class['file'])->replace("database/Migrations/{$db_pascal}/", "")->replace(".php", "")->get();
 
-                    if ($key === "table") {
-                        // execute function process execute
-                        $res = $class['class']->execute();
-                        $rows[] = [
-                            "<fg=#FFB63E>{$info['connection']}</>",
-                            $migration,
-                            "<fg=#FFB63E>" . str->of($key)->upper()->get() . "</>",
-                            '<fg=#FFB63E>execute</>',
-                            $res->status === "success" ? "<info>success</info>" : "<fg=#E37820>database-error</>",
-                            $res->message
-                        ];
+                    $res = $class['class']->execute();
+                    $output->write("\033[1;33m");
+                    $output->write("\t>>");
+                    $output->write("\033[0m");
 
-                        // execute insert function process
-                        $data = $class['class']->insert();
-                        if (arr->of($data['rows'])->length() > 0) {
-                            $res = DB::connection($info['connection'])->table($info['table'])->bulk($data['columns'], $data['rows'])->execute();
-
-                            $rows[] = [
-                                "<fg=#FFB63E>{$info['connection']}</>",
-                                $migration,
-                                "<fg=#FFB63E>" . str->of("BULK {$key}")->upper()->get() . "</>",
-                                '<fg=#FFB63E>insert</>',
-                                $res->status === "success" ? "<info>success</info>" : "<fg=#E37820>database-error</>",
-                                $res->message
-                            ];
-                        }
-
-                        if (isset($this->files[$keyFiles]["view"])) {
-                            if (arr->of($this->files[$keyFiles]["view"])->length() > 0) {
-                                $rows[] = new TableSeparator();
-                            }
-                        }
+                    if (isError($res)) {
+                        $output->writeln("  TABLE: <fg=#E37820>An error occurred while executing the '{$migration}' migration / {$res->message}</>");
+                    } else {
+                        $output->writeln("  TABLE: <info>Migration '{$migration}' has been executed</info>");
                     }
 
-                    if ($key === "view") {
-                        // execute function process execute
-                        $res = $class['class']->execute();
-                        $rows[] = [
-                            "<fg=#FFB63E>{$info['connection']}</>",
-                            $migration,
-                            "<fg=#FFB63E>" . str->of($key)->upper()->get() . "</>",
-                            '<fg=#FFB63E>execute</>',
-                            $res->status === "success" ? "<info>success</info>" : "<fg=#E37820>database-error</>",
-                            $res->message
-                        ];
+                    // execute insert function process
+                    $data = $class['class']->insert();
+                    if (arr->of($data['rows'])->length() > 0) {
+                        $res = DB::connection($info['connection'])->table($info['table'])->bulk($data['columns'], $data['rows'])->execute();
+                        $output->write("\033[1;33m");
+                        $output->write("\t>>");
+                        $output->write("\033[0m");
 
-                        if (isset($this->files[$keyFiles]["procedure"])) {
-                            if (arr->of($this->files["procedure"])->length() > 0) {
-                                $rows[] = new TableSeparator();
-                            }
-                        }
-                    }
-
-                    if ($key === "procedure") {
-                        // execute function process execute
-                        $res = $class['class']->execute();
-                        $rows[] = [
-                            "<fg=#FFB63E>{$info['connection']}</>",
-                            $migration,
-                            "<fg=#FFB63E>" . str->of($key)->upper()->get() . "</>",
-                            '<fg=#FFB63E>execute</>',
-                            $res->status === "success" ? "<info>success</info>" : "<fg=#E37820>database-error</>",
-                            $res->message
-                        ];
-
-                        // execute insert function process
-                        $data = $class['class']->insert();
-                        foreach ($data['rows'] as $keyRow => $row) {
-                            $res = DB::connection($info['connection'])->call($info['procedure'], $row)->execute();
-
-                            $rows[] = [
-                                "<fg=#FFB63E>{$info['connection']}</>",
-                                $migration,
-                                "<fg=#FFB63E>" . str->of("INSERT {$key}")->upper()->get() . "</>",
-                                '<fg=#FFB63E>insert</>',
-                                $res->status === "success" ? "<info>success</info>" : "<fg=#E37820>database-error</>",
-                                $res->message
-                            ];
+                        if (isError($res)) {
+                            $output->writeln("  BULKING: <fg=#E37820>Error executing bulk migration of '{$migration}' / {$res->message}</>");
+                        } else {
+                            $output->writeln("  BULKING: <info>Insert function of '{$migration}' migration executed correctly</info>");
                         }
                     }
                 }
             }
-        }
 
-        (new Table($output))
-            ->setHeaderTitle('<info> MIGRATIONS </info>')
-            ->setHeaders(['DATABASE', 'MIGRATION', 'TYPE', 'METHOD', 'STATUS', 'MESSAGE'])
-            ->setRows($rows)
-            ->render();
+            if (isset($this->files[$keyFiles]["views"])) {
+                foreach ($this->files[$keyFiles]["views"] as $key => $view) {
+                    $info = $view['class']->getMigration();
+                    $db_pascal = str->of($info['connection'])->replace("-", " ")->replace("_", " ")->pascal()->trim()->get();
+                    $migration = str->of($view['file'])->replace("database/Migrations/{$db_pascal}/", "")->replace(".php", "")->get();
+
+                    // execute function process execute
+                    $res = $view['class']->execute();
+                    $output->write("\033[1;33m");
+                    $output->write("\t>>");
+                    $output->write("\033[0m");
+
+                    if (isError($res)) {
+                        $output->writeln("  VIEW: <fg=#E37820>An error occurred while executing the '{$migration}' migration / {$res->message}</>");
+                    } else {
+                        $output->writeln("  VIEW: <info>Migration '{$migration}' has been executed</info>");
+                    }
+                }
+            }
+
+            if (isset($this->files[$keyFiles]["procedures"])) {
+                foreach ($this->files[$keyFiles]["procedures"] as $key => $procedure) {
+                    $info = $procedure['class']->getMigration();
+                    $db_pascal = str->of($info['connection'])->replace("-", " ")->replace("_", " ")->pascal()->trim()->get();
+                    $migration = str->of($procedure['file'])->replace("database/Migrations/{$db_pascal}/", "")->replace(".php", "")->get();
+
+                    // execute function process execute
+                    $res = $procedure['class']->execute();
+                    $output->write("\033[1;33m");
+                    $output->write("\t>>");
+                    $output->write("\033[0m");
+
+                    if (isError($res)) {
+                        $output->writeln("  PROCEDURE: <fg=#E37820>An error occurred while executing the '{$migration}' migration / {$res->message}</>");
+                    } else {
+                        $output->writeln("  PROCEDURE: <info>Migration '{$migration}' has been executed</info>");
+                    }
+
+                    // execute insert function process
+                    $data = $procedure['class']->insert();
+                    foreach ($data['rows'] as $keyRow => $row) {
+                        $res = DB::connection($info['connection'])->call($info['procedure'], $row)->execute();
+                        $output->write("\033[1;33m");
+                        $output->write("\t>>");
+                        $output->write("\033[0m");
+
+                        if (isError($res)) {
+                            $output->writeln("  INSERT: <fg=#E37820>An error occurred while executing the insert function of '{$migration}' migration / {$res->message}</>");
+                        } else {
+                            $output->writeln("  INSERT: <info>Insert function of '{$migration}' migration executed correctly</info>");
+                        }
+                    }
+                }
+            }
+
+            if ($indexFiles < (count($items) - 1)) {
+                $output->writeln("");
+            }
+        }
 
         return Command::SUCCESS;
     }

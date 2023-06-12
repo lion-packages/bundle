@@ -2,14 +2,13 @@
 
 namespace App\Console\Framework\DB;
 
-use App\Enums\Framework\StatusEnum;
 use App\Traits\Framework\ClassPath;
+use LionFiles\Store;
+use LionHelpers\Str;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\{ InputInterface, InputArgument, InputOption };
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\Table;
-use LionFiles\Store;
-use LionHelpers\Str;
 
 class SeedCommand extends Command {
 
@@ -24,13 +23,10 @@ class SeedCommand extends Command {
     }
 
     protected function configure() {
-        $this->setDescription(
-            "Command required for creating new seeds"
-        )->addArgument(
-            'seed', InputArgument::REQUIRED, 'Name or namespace of the Seed'
-        )->addOption(
-            'run', null, InputOption::VALUE_REQUIRED, 'Do you want to run the seeder?'
-        );
+        $this
+            ->setDescription("Command required for creating new seeds")
+            ->addArgument('seed', InputArgument::REQUIRED, 'Name or namespace of the Seed')
+            ->addOption('run', 'r', InputOption::VALUE_REQUIRED, 'Do you want to run the seeder?');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {

@@ -747,16 +747,16 @@
         },
         {
             "name": "lion/helpers",
-            "version": "v2.4.0",
+            "version": "v2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Helpers.git",
-                "reference": "fb89f6f834eb1124236ff60b9bfde8f1ff67317a"
+                "reference": "cfc21f3eaef1067cf6df4cb07ff2fcc9c498633f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Helpers/zipball/fb89f6f834eb1124236ff60b9bfde8f1ff67317a",
-                "reference": "fb89f6f834eb1124236ff60b9bfde8f1ff67317a",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Helpers/zipball/cfc21f3eaef1067cf6df4cb07ff2fcc9c498633f",
+                "reference": "cfc21f3eaef1067cf6df4cb07ff2fcc9c498633f",
                 "shasum": ""
             },
             "require": {
@@ -775,9 +775,9 @@
             "description": "easy to use helpers for any type of use",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Helpers/issues",
-                "source": "https://github.com/Sleon4/Lion-Helpers/tree/v2.4.0"
+                "source": "https://github.com/Sleon4/Lion-Helpers/tree/v2.5.0"
             },
-            "time": "2023-06-07T23:05:03+00:00"
+            "time": "2023-06-11T18:52:06+00:00"
         },
         {
             "name": "lion/mailer",
