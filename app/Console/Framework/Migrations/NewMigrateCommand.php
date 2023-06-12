@@ -58,16 +58,10 @@ class NewMigrateCommand extends Command {
             ))->setErrorMessage('The selected option is not valid')
         );
 
-        Store::folder("database/Migrations/{$connection}/");
-        $migration = str->of("database/Migrations/")
-            ->concat("{$connection}/")
-            ->concat($migration)
-            ->replace("-", "_")
-            ->replace(" ", "_")
-            ->lower()
-            ->trim()
-            ->get();
-		ClassPath::new($migration, "php");
+        $db_pascal = str->of($connection)->replace("-", " ")->replace("_", " ")->pascal()->trim()->get();
+        $migration_pascal = str->of($migration)->replace("-", " ")->replace("_", " ")->pascal()->trim()->get();
+        Store::folder("database/Migrations/{$db_pascal}/");
+		ClassPath::new("database/Migrations/{$db_pascal}/{$migration_pascal}", "php");
 
         if ($option === "TABLE") {
             ClassPath::add(ClassPath::getTemplateCreateTable());
@@ -76,6 +70,11 @@ class NewMigrateCommand extends Command {
         } elseif ($option === "PROCEDURE") {
             ClassPath::add(ClassPath::getTemplateCreateProcedure());
         }
+
+        $output->write("\033[1;33m");
+        $output->write("\t>>");
+        $output->write("\033[0m");
+        $output->writeln("  {$option}: <info>Migration 'database/Migrations/{$db_pascal}/{$migration_pascal}' has been generated</info>");
 
         ClassPath::force();
         ClassPath::close();

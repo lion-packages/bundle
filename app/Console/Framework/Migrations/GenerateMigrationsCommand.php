@@ -21,7 +21,8 @@ class GenerateMigrationsCommand extends Command {
 
         foreach ($this->connections['connections'] as $nameConnection => $connection) {
             // delete migrations
-            $path = "database/Migrations/{$connection['dbname']}/";
+            $db_pascal = str->of($connection['dbname'])->replace("-", " ")->replace("_", " ")->pascal()->trim()->get();
+            $path = "database/Migrations/{$db_pascal}/";
 
             if (isSuccess(Store::exist($path))) {
                 foreach (Store::view($path) as $key => $file) {
