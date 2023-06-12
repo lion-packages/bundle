@@ -1,5 +1,21 @@
 # Release Notes
 
+## [v14.15.0](https://github.com/Sleon4/Lion-Framework/compare/v14.14.0...v14.15.0) (2023-06-12)
+
+### Added
+- added command function in App\Console\Kernel to run lion commands
+- added kernel constant to App\Console\Kernel class to run commands
+- command has been added to see the list of available email accounts
+- command has been added to generate migrations of the connections to available databases
+- command has been added to generate all the rules of all the entities
+
+### Changed
+- creation format for new migrations has been modified
+
+### Refactoring
+- the execute function of the App\Console\Kernel class has been modified to return an array with responses from the terminal
+- command renamed App\Console\Framework\Migrations\RunMigrationsCommand to App\Console\Framework\Migrations\FreshMigrationsCommand
+
 ## [v14.14.0](https://github.com/Sleon4/Lion-Framework/compare/v14.13.0...v14.14.0) (2023-06-09)
 
 ### Added
