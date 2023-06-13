@@ -26,9 +26,7 @@ class GenerateMigrationsCommand extends Command {
 
             if (isSuccess(Store::exist($path))) {
                 foreach (Store::view($path) as $key => $file) {
-                    $validate = Store::validate([$file], ["php"]);
-
-                    if (isSuccess($validate)) {
+                    if (isSuccess(Store::validate([$file], ["php"]))) {
                         Store::remove($file);
                     }
                 }
@@ -37,19 +35,19 @@ class GenerateMigrationsCommand extends Command {
             // add tables
             $tables = DB::connection($nameConnection)->show()->full()->tables()->where(DB::equalTo("Table_Type"), 'BASE TABLE')->getAll();
             if (!isset($tables->status)) {
-                $this->list[$connection['dbname']]['tables'] = $tables;
+                $this->list[$nameConnection]['tables'] = $tables;
             }
 
             // add views
             $views = DB::connection($nameConnection)->show()->full()->tables()->where(DB::equalTo("Table_Type"), 'VIEW')->getAll();
             if (!isset($views->status)) {
-                $this->list[$connection['dbname']]['views'] = $views;
+                $this->list[$nameConnection]['views'] = $views;
             }
 
             // add procedures
             $procedures = DB::connection($nameConnection)->show()->procedure()->status()->where(DB::equalTo("Db"), $connection['dbname'])->getAll();
             if (!isset($procedures->status)) {
-                $this->list[$connection['dbname']]['procedures'] = []; // $procedures;
+                $this->list[$nameConnection]['procedures'] = []; // $procedures;
             }
         }
     }
@@ -79,15 +77,15 @@ class GenerateMigrationsCommand extends Command {
             return $rows_insert;
         };
 
-        foreach ($this->connections['connections'] as $keyConnection => $connection) {
+        foreach ($this->connections['connections'] as $nameConnection => $connection) {
             $output->write("\033[1;33m");
             $output->write("\t>>");
             $output->write("\033[0m");
             $output->writeln("  <comment>DATABASE: {$connection['dbname']}</comment>");
 
-            if (isset($this->list[$keyConnection])) {
-                if (isset($this->list[$keyConnection]['tables'])) {
-                    foreach ($this->list[$keyConnection]['tables'] as $key => $table) {
+            if (isset($this->list[$nameConnection])) {
+                if (isset($this->list[$nameConnection]['tables'])) {
+                    foreach ($this->list[$nameConnection]['tables'] as $key => $table) {
                         $tbl = $table->{"Tables_in_{$connection['dbname']}"};
                         $table_name = str->of($tbl)->test("/-/") ? "`{$tbl}`" : $tbl;
                         $new_table_name = str->of($table_name)->replace("-", "_")->replace("`", "")->lower()->get();
@@ -108,7 +106,6 @@ class GenerateMigrationsCommand extends Command {
                             ->isNotNull()
                             ->getAll();
                         $foreigns = !isset($foreigns->status) ? arr->of($foreigns)->keyBy('COLUMN_NAME') : [];
-
                         $size_columns_db = arr->of($columns_db)->length();
                         $columns = "";
 
@@ -170,11 +167,13 @@ class GenerateMigrationsCommand extends Command {
                             }
                         }
 
+                        $env_var = array_search($connection['dbname'], (array) env);
+
                         ClassPath::new($migration_name, "php");
                         ClassPath::add(
                             str->of(ClassPath::getTemplateCreateTable())
                                 ->replace('$table = "table"', '$table = "' . $new_table_name . '"')
-                                ->replace('env->DB_NAME', "'{$connection['dbname']}'")
+                                ->replace('env->DB_NAME', "env->{$env_var}")
                                 ->replace("\t\t\t->column('id', ['type' => 'int', 'primary-key' => true, 'lenght' => 11, 'null' => false, 'auto-increment' => true])\n", "")
                                 ->replace("->column('name', ['type' => 'varchar', 'null' => true, 'default' => 'unnamed'])", $columns)
                                 ->replace('"columns" => [],', "\n\t\t\t'columns' => [{$columns_insert}\t\t\t],\n")
@@ -191,8 +190,8 @@ class GenerateMigrationsCommand extends Command {
                     }
                 }
 
-                if (isset($this->list[$keyConnection]['views'])) {
-                    foreach ($this->list[$keyConnection]['views'] as $key => $view) {
+                if (isset($this->list[$nameConnection]['views'])) {
+                    foreach ($this->list[$nameConnection]['views'] as $key => $view) {
                         $view_name = $view->{"Tables_in_{$connection['dbname']}"};
                         $query = DB::connection($connection['dbname'])->show()->create()->view($view_name, true, true)->get();
 
@@ -297,7 +296,7 @@ class GenerateMigrationsCommand extends Command {
                         ClassPath::new($migration_name, "php");
                         ClassPath::add(
                             str->of(ClassPath::getTemplateCreateView())
-                                ->replace('env->DB_NAME', "'{$connection['dbname']}'")
+                                ->replace('env->DB_NAME', "env->{$env_var}")
                                 ->replace('"view"', "'{$view_name}'")
                                 ->replace('"table"', (
                                     isset($alias[1])
@@ -318,8 +317,8 @@ class GenerateMigrationsCommand extends Command {
                     }
                 }
 
-                if (isset($this->list[$keyConnection]['procedures'])) {
-                // vd($this->list[$keyConnection]['procedures']);
+                if (isset($this->list[$nameConnection]['procedures'])) {
+                // vd($this->list[$nameConnection]['procedures']);
                 }
             } else {
                 $output->write("\033[1;33m");
