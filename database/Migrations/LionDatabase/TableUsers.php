@@ -10,7 +10,7 @@ return new class {
 	private string $table = "users";
 
 	public function getMigration(): array {
-		return ["type" => "TABLE", "table" => $this->table, "connection" => env->DB_NAME, "index" => null];
+		return ["type" => "TABLE", "table" => $this->table, "connection" => env->DB_NAME, "index" => 2];
 	}
 
 	public function execute(): object {
@@ -18,7 +18,7 @@ return new class {
 			->table($this->table, true)
 			->create()
 			->column('id', ['type' => 'int', 'primary-key' => true, 'lenght' => 11, 'null' => false, 'auto-increment' => true])
-			->column('idroles', ['type' => 'int', 'length' => 11, 'null' => false, 'comment' => '', 'default' => ''])
+			->column('idroles', ['type' => 'int', 'length' => 11, 'null' => false, 'foreign-key' => ['table' => 'roles', 'column' => 'idroles'], 'comment' => '', 'default' => ''])
 			->column('name', ['type' => 'varchar', 'length' => 45, 'null' => false, 'comment' => 'user name', 'default' => ''])
 			->column('lastname', ['type' => 'varchar', 'length' => 45, 'null' => true, 'comment' => 'user lastname', 'default' => ''])
 			->column('email', ['type' => 'varchar', 'length' => 45, 'null' => false, 'unique' => true, 'comment' => 'user email', 'default' => ''])
