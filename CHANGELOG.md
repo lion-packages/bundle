@@ -1,5 +1,11 @@
 # Release Notes
 
+## [v14.16.0](https://github.com/Sleon4/Lion-Framework/compare/v14.15.0...v14.16.0) (2023-06-13)
+
+### Changed
+- format has been modified to insert the name of the connection in the generated migrations
+- view service and procedures to generate migrations have been removed
+
 ## [v14.15.0](https://github.com/Sleon4/Lion-Framework/compare/v14.14.0...v14.15.0) (2023-06-12)
 
 ### Added
