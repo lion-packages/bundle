@@ -33,7 +33,7 @@ return new class {
 		return [
 			'columns' => [
 				'idusers',
-				'idroles',
+				'users_idroles',
 				'users_name',
 				'users_lastname',
 				'users_email',

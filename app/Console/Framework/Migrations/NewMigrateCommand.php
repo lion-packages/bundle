@@ -39,36 +39,32 @@ class NewMigrateCommand extends Command {
         }
 
         // select type of migration
-        $option = $this->getHelper('question')->ask(
-            $input,
-            $output,
+        $option = $this->getHelper('question')->ask($input, $output,
             (new ChoiceQuestion("What type of migration do you want to create?", $this->options, 0))
                 ->setErrorMessage('The selected option is not valid')
         );
 
         // select connection
         $connections = DB::getConnections();
-        $connection = $this->getHelper('question')->ask(
-            $input,
-            $output,
-            (new ChoiceQuestion(
-                "Which connection does the migration belong to?",
-                arr->of($connections['connections'])->keys()->get(),
-                0
-            ))->setErrorMessage('The selected option is not valid')
+        $connections = arr->of($connections['connections'])->keys()->get();
+        $connection = $this->getHelper('question')->ask($input, $output,
+            (new ChoiceQuestion("Which connection does the migration belong to?", $connections, 0))
+                ->setErrorMessage('The selected option is not valid')
         );
 
         $db_pascal = str->of($connection)->replace("-", " ")->replace("_", " ")->pascal()->trim()->get();
         $migration_pascal = str->of($migration)->replace("-", " ")->replace("_", " ")->pascal()->trim()->get();
+        $migration_pascal = str->of($option === "TABLE" ? "Table" : ($option === "VIEW" ? "View" : "Procedure"))->concat($migration_pascal)->get();
+        $env_var = array_search($connection, (array) env);
         Store::folder("database/Migrations/{$db_pascal}/");
 		ClassPath::new("database/Migrations/{$db_pascal}/{$migration_pascal}", "php");
 
         if ($option === "TABLE") {
-            ClassPath::add(ClassPath::getTemplateCreateTable());
+            ClassPath::add(str->of(ClassPath::getTemplateCreateTable())->replace("env->DB_NAME", "env->{$env_var}")->get());
         } elseif ($option === "VIEW") {
-            ClassPath::add(ClassPath::getTemplateCreateView());
+            ClassPath::add(str->of(ClassPath::getTemplateCreateView())->replace("env->DB_NAME", "env->{$env_var}")->get());
         } elseif ($option === "PROCEDURE") {
-            ClassPath::add(ClassPath::getTemplateCreateProcedure());
+            ClassPath::add(str->of(ClassPath::getTemplateCreateProcedure())->replace("env->DB_NAME", "env->{$env_var}")->get());
         }
 
         $output->write("\033[1;33m");

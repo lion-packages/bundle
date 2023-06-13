@@ -95,9 +95,9 @@ class FreshMigrationsCommand extends Command {
                     $output->write("\033[0m");
 
                     if (isError($res)) {
-                        $output->writeln("  TABLE: <fg=#E37820>An error occurred while executing the '{$migration}' migration / {$res->message}</>");
+                        $output->writeln("  TABLE: <fg=#E37820>An error occurred while executing the '{$migration}' migration, {$res->message} \u{2717}</>");
                     } else {
-                        $output->writeln("  TABLE: <info>Migration '{$migration}' has been executed</info>");
+                        $output->writeln("  TABLE: <info>Migration '{$migration}' has been executed \u{2713}</info>");
                     }
 
                     // execute insert function process
@@ -109,9 +109,9 @@ class FreshMigrationsCommand extends Command {
                         $output->write("\033[0m");
 
                         if (isError($res)) {
-                            $output->writeln("  BULKING: <fg=#E37820>Error executing bulk migration of '{$migration}' / {$res->message}</>");
+                            $output->writeln("  BULKING: <fg=#E37820>Error executing bulk migration of '{$migration}', {$res->message} \u{2717}</>");
                         } else {
-                            $output->writeln("  BULKING: <info>Insert function of '{$migration}' migration executed correctly</info>");
+                            $output->writeln("  BULKING: <info>Insert function of '{$migration}' migration executed correctly \u{2713}</info>");
                         }
                     }
                 }
@@ -130,9 +130,9 @@ class FreshMigrationsCommand extends Command {
                     $output->write("\033[0m");
 
                     if (isError($res)) {
-                        $output->writeln("  VIEW: <fg=#E37820>An error occurred while executing the '{$migration}' migration / {$res->message}</>");
+                        $output->writeln("  VIEW: <fg=#E37820>An error occurred while executing the '{$migration}' migration, {$res->message} \u{2717}</>");
                     } else {
-                        $output->writeln("  VIEW: <info>Migration '{$migration}' has been executed</info>");
+                        $output->writeln("  VIEW: <info>Migration '{$migration}' has been executed \u{2713}</info>");
                     }
                 }
             }
@@ -150,9 +150,9 @@ class FreshMigrationsCommand extends Command {
                     $output->write("\033[0m");
 
                     if (isError($res)) {
-                        $output->writeln("  PROCEDURE: <fg=#E37820>An error occurred while executing the '{$migration}' migration / {$res->message}</>");
+                        $output->writeln("  PROCEDURE: <fg=#E37820>An error occurred while executing the '{$migration}' migration, {$res->message} \u{2717}</>");
                     } else {
-                        $output->writeln("  PROCEDURE: <info>Migration '{$migration}' has been executed</info>");
+                        $output->writeln("  PROCEDURE: <info>Migration '{$migration}' has been executed \u{2713}</info>");
                     }
 
                     // execute insert function process
@@ -164,9 +164,9 @@ class FreshMigrationsCommand extends Command {
                         $output->write("\033[0m");
 
                         if (isError($res)) {
-                            $output->writeln("  INSERT: <fg=#E37820>An error occurred while executing the insert function of '{$migration}' migration / {$res->message}</>");
+                            $output->writeln("  INSERT: <fg=#E37820>An error occurred while executing the insert function of '{$migration}' migration, {$res->message} \u{2717}</>");
                         } else {
-                            $output->writeln("  INSERT: <info>Insert function of '{$migration}' migration executed correctly</info>");
+                            $output->writeln("  INSERT: <info>Insert function of '{$migration}' migration executed correctly \u{2713}</info>");
                         }
                     }
                 }
