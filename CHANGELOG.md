@@ -1,5 +1,7 @@
 # Release Notes
 
+## [v14.17.0](https://github.com/Sleon4/Lion-Framework/compare/v14.16.0...v14.17.0) (2023-06-14)
+
 ## [v14.16.0](https://github.com/Sleon4/Lion-Framework/compare/v14.15.0...v14.16.0) (2023-06-13)
 
 ### Changed
