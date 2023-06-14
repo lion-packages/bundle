@@ -26,4 +26,5 @@ RUN a2enmod rewrite
 
 CMD composer install
 CMD php lion serve --host 0.0.0.0 --port 8000
+
 EXPOSE 8000
