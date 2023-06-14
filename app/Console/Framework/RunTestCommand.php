@@ -11,7 +11,10 @@ class RunTestCommand extends Command {
 	protected static $defaultName = "test";
 
 	protected function initialize(InputInterface $input, OutputInterface $output) {
-        $output->writeln("<comment>Running unit tests...</comment>");
+        $output->write("\033[1;33m");
+        $output->write("\t>>");
+        $output->write("\033[0m");
+        $output->writeln("  <comment>Running unit tests...</comment>");
 	}
 
 	protected function interact(InputInterface $input, OutputInterface $output) {
@@ -19,12 +22,14 @@ class RunTestCommand extends Command {
 	}
 
 	protected function configure() {
-		$this->setDescription("Command to create run unit tests");
+		$this
+            ->setDescription("Command to create run unit tests");
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
-		$result = exec('.\vendor\bin\phpunit');
+		$result = exec('./vendor/bin/phpunit');
         $output->writeln($result);
+
         return Command::SUCCESS;
 	}
 

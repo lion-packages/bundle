@@ -2,20 +2,22 @@
 
 namespace App\Console\Framework\New;
 
+use App\Traits\Framework\ClassPath;
+use LionFiles\Store;
+use LionHelpers\Str;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use App\Traits\Framework\ClassPath;
-use LionFiles\Store;
-use LionHelpers\Str;
 
 class EnumsCommand extends Command {
+
+    use ClassPath;
 
 	protected static $defaultName = "new:enum";
 
 	protected function initialize(InputInterface $input, OutputInterface $output) {
-        $output->writeln("<comment>Creating Enum...</comment>");
+
 	}
 
 	protected function interact(InputInterface $input, OutputInterface $output) {
@@ -23,23 +25,22 @@ class EnumsCommand extends Command {
 	}
 
 	protected function configure() {
-		$this->setDescription(
-            "Command required for creating new Enums"
-        )->addArgument(
-            'enum', InputArgument::REQUIRED, 'Enum name', null
-        );
+		$this
+            ->setDescription("Command required for creating new Enums")
+            ->addArgument('enum', InputArgument::OPTIONAL, 'Enum name', "ExampleEnum");
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
-		$list = ClassPath::export("app/Enums/", $input->getArgument('enum'));
+		$enum = $input->getArgument('enum');
+        $list = $this->export("app/Enums/", $enum);
         $url_folder = lcfirst(str_replace("\\", "/", $list['namespace']));
         Store::folder($url_folder);
 
-        ClassPath::create($url_folder, $list['class']);
-        ClassPath::add(Str::of("<?php")->ln()->ln()->get());
-        ClassPath::add(Str::of("namespace ")->concat($list['namespace'])->concat(";")->ln()->ln()->get());
+        $this->create($url_folder, $list['class']);
+        $this->add(Str::of("<?php")->ln()->ln()->get());
+        $this->add(Str::of("namespace ")->concat($list['namespace'])->concat(";")->ln()->ln()->get());
 
-        ClassPath::add(
+        $this->add(
             Str::of("enum ")
                 ->concat($list['class'])
                 ->concat(": string {")->ln()->ln()->lt()
@@ -51,10 +52,12 @@ class EnumsCommand extends Command {
                 ->get()
         );
 
-        ClassPath::force();
-        ClassPath::close();
+        $this->force();
+        $this->close();
 
-        $output->writeln("<info>The '{$list['namespace']}\\{$list['class']}' enum has been generated</info>");
+        $output->writeln("<comment>\t>>  ENUM: {$enum}</comment>");
+        $output->writeln("<info>\t>>  ENUM: The '{$list['namespace']}\\{$list['class']}' enum has been generated</info>");
+
         return Command::SUCCESS;
 	}
 

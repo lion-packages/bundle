@@ -24,11 +24,11 @@ class SelectTableCommand extends Command {
 
 	protected function configure() {
 		$this
-            ->setDescription("command to read the first 10 rows of a table")
+            ->setDescription("Command to read the first 10 rows of a table")
             ->addArgument('entity', InputArgument::REQUIRED, 'Entity name')
-            ->addOption('columns', 'c', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'What columns should you read?')
+            ->addOption('columns', 'l', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'What columns should you read?')
             ->addOption('rows', 'r', InputOption::VALUE_REQUIRED, 'Do you want to specify the number of rows?')
-            ->addOption('connection', 't', InputOption::VALUE_REQUIRED, 'Do you want to use a specific connection?');
+            ->addOption('connection', 'c', InputOption::VALUE_REQUIRED, 'Do you want to use a specific connection?');
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
@@ -46,6 +46,11 @@ class SelectTableCommand extends Command {
         if (arr->of($columns)->length() === 0) {
             $columns_db = DB::connection($main_conn)->show()->columns()->from($entity)->getAll();
 
+            if (isset($columns_db->status)) {
+                $output->writeln("<info>\t>>  {$columns_db->message}</info>");
+                return Command::SUCCESS;
+            }
+
             foreach ($columns_db as $key => $column) {
                 $columns_table[] = $column->Field;
             }
@@ -54,12 +59,12 @@ class SelectTableCommand extends Command {
         }
 
         // read entity
-        $rows_table = DB::connection($main_conn)
-            ->fetchMode(\PDO::FETCH_ASSOC)
-            ->table($entity)
-            ->select(...$columns_table)
-            ->limit(0, ($rows === null ? 10 : (int) $rows))
-            ->getAll();
+        $rows_table = DB::connection($main_conn)->fetchMode(\PDO::FETCH_ASSOC)->table($entity)->select(...$columns_table)->limit(0, ($rows === null ? 10 : (int) $rows))->getAll();
+
+        if (isset($rows_table->status)) {
+            $output->writeln("<info>\t>>  {$rows_table->message}</info>");
+            return Command::SUCCESS;
+        }
 
         (new Table($output))
             ->setHeaderTitle("<info> TABLE " . str->of($entity)->upper()->get() . " </info>")

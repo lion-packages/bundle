@@ -90,28 +90,20 @@ class FreshMigrationsCommand extends Command {
                     $migration = str->of($class['file'])->replace("database/Migrations/{$db_pascal}/", "")->replace(".php", "")->get();
 
                     $res = $class['class']->execute();
-                    $output->write("\033[1;33m");
-                    $output->write("\t>>");
-                    $output->write("\033[0m");
-
                     if (isError($res)) {
-                        $output->writeln("  TABLE: <fg=#E37820>An error occurred while executing the '{$migration}' migration, {$res->message} \u{2717}</>");
+                        $output->writeln("<fg=#E37820>\t>>  TABLE: An error occurred while executing the '{$migration}' migration, {$res->message} \u{2717}</>");
                     } else {
-                        $output->writeln("  TABLE: <info>Migration '{$migration}' has been executed \u{2713}</info>");
+                        $output->writeln("<info>\t>>  TABLE: Migration '{$migration}' has been executed \u{2713}</info>");
                     }
 
                     // execute insert function process
                     $data = $class['class']->insert();
                     if (arr->of($data['rows'])->length() > 0) {
                         $res = DB::connection($info['connection'])->table($info['table'])->bulk($data['columns'], $data['rows'])->execute();
-                        $output->write("\033[1;33m");
-                        $output->write("\t>>");
-                        $output->write("\033[0m");
-
                         if (isError($res)) {
-                            $output->writeln("  BULKING: <fg=#E37820>Error executing bulk migration of '{$migration}', {$res->message} \u{2717}</>");
+                            $output->writeln("<fg=#E37820>\t>>  BULKING: Error executing bulk migration of '{$migration}', {$res->message} \u{2717}</>");
                         } else {
-                            $output->writeln("  BULKING: <info>Insert function of '{$migration}' migration executed correctly \u{2713}</info>");
+                            $output->writeln("<info>\t>>  BULKING: Insert function of '{$migration}' migration executed correctly \u{2713}</info>");
                         }
                     }
                 }
@@ -125,14 +117,10 @@ class FreshMigrationsCommand extends Command {
 
                     // execute function process execute
                     $res = $view['class']->execute();
-                    $output->write("\033[1;33m");
-                    $output->write("\t>>");
-                    $output->write("\033[0m");
-
                     if (isError($res)) {
-                        $output->writeln("  VIEW: <fg=#E37820>An error occurred while executing the '{$migration}' migration, {$res->message} \u{2717}</>");
+                        $output->writeln("<fg=#E37820>\t>>  VIEW: An error occurred while executing the '{$migration}' migration, {$res->message} \u{2717}</>");
                     } else {
-                        $output->writeln("  VIEW: <info>Migration '{$migration}' has been executed \u{2713}</info>");
+                        $output->writeln("<info>\t>>  VIEW: Migration '{$migration}' has been executed \u{2713}</info>");
                     }
                 }
             }
@@ -145,28 +133,20 @@ class FreshMigrationsCommand extends Command {
 
                     // execute function process execute
                     $res = $procedure['class']->execute();
-                    $output->write("\033[1;33m");
-                    $output->write("\t>>");
-                    $output->write("\033[0m");
-
                     if (isError($res)) {
-                        $output->writeln("  PROCEDURE: <fg=#E37820>An error occurred while executing the '{$migration}' migration, {$res->message} \u{2717}</>");
+                        $output->writeln("<fg=#E37820>\t>>  PROCEDURE: An error occurred while executing the '{$migration}' migration, {$res->message} \u{2717}</>");
                     } else {
-                        $output->writeln("  PROCEDURE: <info>Migration '{$migration}' has been executed \u{2713}</info>");
+                        $output->writeln("<info>\t>>  PROCEDURE: Migration '{$migration}' has been executed \u{2713}</info>");
                     }
 
                     // execute insert function process
                     $data = $procedure['class']->insert();
                     foreach ($data['rows'] as $keyRow => $row) {
                         $res = DB::connection($info['connection'])->call($info['procedure'], $row)->execute();
-                        $output->write("\033[1;33m");
-                        $output->write("\t>>");
-                        $output->write("\033[0m");
-
                         if (isError($res)) {
-                            $output->writeln("  INSERT: <fg=#E37820>An error occurred while executing the insert function of '{$migration}' migration, {$res->message} \u{2717}</>");
+                            $output->writeln("<fg=#E37820>\t>>  INSERT: An error occurred while executing the insert function of '{$migration}' migration, {$res->message} \u{2717}</>");
                         } else {
-                            $output->writeln("  INSERT: <info>Insert function of '{$migration}' migration executed correctly \u{2713}</info>");
+                            $output->writeln("<info>\t>>  INSERT: Insert function of '{$migration}' migration executed correctly \u{2713}</info>");
                         }
                     }
                 }

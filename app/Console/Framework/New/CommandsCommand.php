@@ -2,18 +2,20 @@
 
 namespace App\Console\Framework\New;
 
+use App\Traits\Framework\ClassPath;
+use LionFiles\Store;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\{ InputInterface, InputArgument };
 use Symfony\Component\Console\Output\OutputInterface;
-use LionFiles\Store;
-use App\Traits\Framework\ClassPath;
 
 class CommandsCommand extends Command {
+
+    use ClassPath;
 
 	protected static $defaultName = "new:command";
 
 	protected function initialize(InputInterface $input, OutputInterface $output) {
-        $output->writeln("<comment>Creating command...</comment>");
+
 	}
 
 	protected function interact(InputInterface $input, OutputInterface $output) {
@@ -23,34 +25,37 @@ class CommandsCommand extends Command {
 	protected function configure() {
 		$this
             ->setDescription('Command required for the creation of new Commands')
-            ->addArgument('new-command', InputArgument::REQUIRED, 'Command name');
+            ->addArgument('new-command', InputArgument::OPTIONAL, 'Command name', "ExampleCommand");
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
-		$list = ClassPath::export("app/Console/Commands/", $input->getArgument('new-command'));
+        $command = $input->getArgument('new-command');
+		$list = $this->export("app/Console/Commands/", $command);
         $url_folder = lcfirst(str_replace("\\", "/", $list['namespace']));
         Store::folder($url_folder);
 
-        ClassPath::create($url_folder, $list['class']);
-        ClassPath::add("<?php\n\n");
-        ClassPath::add("namespace {$list['namespace']};\n\n");
-        ClassPath::add("use Symfony\Component\Console\Command\Command;\n");
-        ClassPath::add("use Symfony\Component\Console\Input\InputArgument;\n");
-        ClassPath::add("use Symfony\Component\Console\Input\InputInterface;\n");
-        ClassPath::add("use Symfony\Component\Console\Input\InputOption;\n");
-        ClassPath::add("use Symfony\Component\Console\Output\OutputInterface;\n\n");
-        ClassPath::add("class {$list['class']} extends Command {\n\n");
-        ClassPath::add("\t" . 'protected static $defaultName = "";' . "\n\n");
-        ClassPath::add("\t" . 'protected function initialize(InputInterface $input, OutputInterface $output) {' . "\n\n\t}\n\n");
-        ClassPath::add("\t" . 'protected function interact(InputInterface $input, OutputInterface $output) {' . "\n\n\t}\n\n");
-        ClassPath::add("\t" . "protected function configure() {\n\t\t" . '$this->setDescription("");' . "\n\t}\n\n");
-        ClassPath::add("\t" . 'protected function execute(InputInterface $input, OutputInterface $output) {' . "\n");
-        ClassPath::add("\t\t" . '$output->writeln("");' . "\n\t\t" . 'return Command::SUCCESS;' . "\n");
-        ClassPath::add("\t}\n\n}");
-        ClassPath::force();
-        ClassPath::close();
+        $this->create($url_folder, $list['class']);
+        $this->add("<?php\n\n");
+        $this->add("namespace {$list['namespace']};\n\n");
+        $this->add("use Symfony\Component\Console\Command\Command;\n");
+        $this->add("use Symfony\Component\Console\Input\InputArgument;\n");
+        $this->add("use Symfony\Component\Console\Input\InputInterface;\n");
+        $this->add("use Symfony\Component\Console\Input\InputOption;\n");
+        $this->add("use Symfony\Component\Console\Output\OutputInterface;\n\n");
+        $this->add("class {$list['class']} extends Command {\n\n");
+        $this->add("\t" . 'protected static $defaultName = "";' . "\n\n");
+        $this->add("\t" . 'protected function initialize(InputInterface $input, OutputInterface $output) {' . "\n\n\t}\n\n");
+        $this->add("\t" . 'protected function interact(InputInterface $input, OutputInterface $output) {' . "\n\n\t}\n\n");
+        $this->add("\t" . "protected function configure() {\n\t\t" . '$this->setDescription("");' . "\n\t}\n\n");
+        $this->add("\t" . 'protected function execute(InputInterface $input, OutputInterface $output) {' . "\n");
+        $this->add("\t\t" . '$output->writeln("");' . "\n\t\t" . 'return Command::SUCCESS;' . "\n");
+        $this->add("\t}\n\n}");
+        $this->force();
+        $this->close();
 
-        $output->writeln("<info>The '{$list['namespace']}\\{$list['class']}' command has been generated</info>");
+        $output->writeln("<comment>\t>>  COMMAND: {$command}</comment>");
+        $output->writeln("<info>\t>>  COMMAND: The '{$list['namespace']}\\{$list['class']}' command has been generated</info>");
+
         return Command::SUCCESS;
 	}
 

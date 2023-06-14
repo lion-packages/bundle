@@ -11,10 +11,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class TestCommand extends Command {
 
+    use ClassPath;
+
 	protected static $defaultName = 'new:test';
 
 	protected function initialize(InputInterface $input, OutputInterface $output) {
-		$output->writeln("<comment>Creating test...</comment>");
+
 	}
 
 	protected function interact(InputInterface $input, OutputInterface $output) {
@@ -22,24 +24,23 @@ class TestCommand extends Command {
 	}
 
 	protected function configure() {
-		$this->setDescription(
-			'Command required for the creation of new test'
-		)->addArgument(
-			'test', InputArgument::REQUIRED, 'Test name', null
-		);
+		$this
+            ->setDescription('Command required for the creation of new test')
+            ->addArgument('test', InputArgument::OPTIONAL, 'Test name', "ExampleTest");
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
-		$list = ClassPath::export("tests/", $input->getArgument('test'));
+        $test = $input->getArgument('test');
+		$list = $this->export("tests/", $test);
 		$url_folder = lcfirst(str_replace("\\", "/", $list['namespace']));
 		Store::folder($url_folder);
 
-		ClassPath::create($url_folder, $list['class']);
-		ClassPath::add("<?php\n\n");
-		ClassPath::add("namespace {$list['namespace']};\n\n");
-		ClassPath::add("use PHPUnit\Framework\TestCase;\n\n");
+		$this->create($url_folder, $list['class']);
+		$this->add("<?php\n\n");
+		$this->add("namespace {$list['namespace']};\n\n");
+		$this->add("use PHPUnit\Framework\TestCase;\n\n");
 
-        ClassPath::add(
+        $this->add(
             Str::of("class ")
                 ->concat($list['class'])
                 ->concat(" extends TestCase {")->ln()->ln()->lt()
@@ -51,10 +52,12 @@ class TestCommand extends Command {
                 ->get()
         );
 
-        ClassPath::force();
-        ClassPath::close();
+        $this->force();
+        $this->close();
 
-        $output->writeln("<info>The '{$list['namespace']}\\{$list['class']}' test has been generated</info>");
+        $output->writeln("<comment>\t>>  TEST: {$test}</comment>");
+        $output->writeln("<info>\t>>  TEST: The '{$list['namespace']}\\{$list['class']}' test has been generated</info>");
+
         return Command::SUCCESS;
     }
 

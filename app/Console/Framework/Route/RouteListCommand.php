@@ -26,7 +26,7 @@ class RouteListCommand extends Command {
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $output->getFormatter()->setStyle('fire', new OutputFormatterStyle('blue'));
+        $output->getFormatter()->setStyle('lion', new OutputFormatterStyle('blue'));
         $routes = fetch("GET", env->SERVER_URL . "/route-list");
         array_pop($routes);
         $size = arr->of($routes)->length();
@@ -68,12 +68,12 @@ class RouteListCommand extends Command {
                 if (arr->of($method['filters'])->length() > 0) {
                     $rows[] = [
                         new TableCell(
-                            "<fire>MIDDLEWARE:</fire>",
+                            "<lion>MIDDLEWARE:</lion>",
                             ['colspan' => 1]
                         ),
                         new TableCell(
-                            "<fire>" . arr->of($method['filters'])->join(" | ") . "</fire>",
-                            ['colspan' => 3]
+                            "<lion>" . arr->of($method['filters'])->join(" | ") . "</lion>",
+                            ['colspan' => 4]
                         )
                     ];
                 }

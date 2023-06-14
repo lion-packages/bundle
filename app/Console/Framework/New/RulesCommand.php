@@ -2,18 +2,20 @@
 
 namespace App\Console\Framework\New;
 
+use App\Traits\Framework\ClassPath;
+use LionFiles\Store;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\{ InputInterface, InputArgument };
 use Symfony\Component\Console\Output\OutputInterface;
-use LionFiles\Store;
-use App\Traits\Framework\ClassPath;
 
 class RulesCommand extends Command {
+
+    use ClassPath;
 
     protected static $defaultName = "new:rule";
 
     protected function initialize(InputInterface $input, OutputInterface $output) {
-        $output->writeln("<comment>Creating rule...</comment>");
+
     }
 
     protected function interact(InputInterface $input, OutputInterface $output) {
@@ -23,32 +25,35 @@ class RulesCommand extends Command {
     protected function configure() {
         $this
             ->setDescription('Command required for rule creation')
-            ->addArgument('rule', InputArgument::REQUIRED, 'Rule name');
+            ->addArgument('rule', InputArgument::OPTIONAL, 'Rule name', 'ExampleRule');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $list = ClassPath::export("app/Rules/", $input->getArgument('rule'));
+        $rule = $input->getArgument('rule');
+        $list = $this->export("app/Rules/", $rule);
         $url_folder = lcfirst(str_replace("\\", "/", $list['namespace']));
         Store::folder($url_folder);
 
-        ClassPath::create($url_folder, $list['class']);
-        ClassPath::add("<?php\n\n");
-        ClassPath::add("namespace {$list['namespace']};\n\n");
-        ClassPath::add("use App\Traits\Framework\ShowErrors;\n\n");
-        ClassPath::add("class {$list['class']} {\n\n");
-        ClassPath::add("\tuse ShowErrors;\n\n");
-        ClassPath::add("\t" . 'public static string $field = "";' . "\n");
-        ClassPath::add("\t" . 'public static string $desc = "";' . "\n");
-        ClassPath::add("\t" . 'public static string $value = "";' . "\n");
-        ClassPath::add("\t" . 'public static bool $disabled = false;' . "\n\n");
-        ClassPath::add("\tpublic static function passes(): void {\n");
-        ClassPath::add("\t\t" . 'self::validate(function(\Valitron\Validator $validator) {' . "\n");
-        ClassPath::add("\t\t\t" . '$validator->rule("required", self::$field)->message("property is required");' . "\n\t\t});\n");
-        ClassPath::add("\t}\n\n}");
-        ClassPath::force();
-        ClassPath::close();
+        $this->create($url_folder, $list['class']);
+        $this->add("<?php\n\n");
+        $this->add("namespace {$list['namespace']};\n\n");
+        $this->add("use App\Traits\Framework\ShowErrors;\n\n");
+        $this->add("class {$list['class']} {\n\n");
+        $this->add("\tuse ShowErrors;\n\n");
+        $this->add("\t" . 'public static string $field = "";' . "\n");
+        $this->add("\t" . 'public static string $desc = "";' . "\n");
+        $this->add("\t" . 'public static string $value = "";' . "\n");
+        $this->add("\t" . 'public static bool $disabled = false;' . "\n\n");
+        $this->add("\tpublic static function passes(): void {\n");
+        $this->add("\t\t" . 'self::validate(function(\Valitron\Validator $validator) {' . "\n");
+        $this->add("\t\t\t" . '$validator->rule("required", self::$field)->message("property is required");' . "\n\t\t});\n");
+        $this->add("\t}\n\n}");
+        $this->force();
+        $this->close();
 
-        $output->writeln("<info>The '{$list['namespace']}\\{$list['class']}' rule has been generated</info>");
+        $output->writeln("<comment>\t>>  RULE: {$rule}</comment>");
+        $output->writeln("<info>\t>>  RULE: The '{$list['namespace']}\\{$list['class']}' rule has been generated</info>");
+
         return Command::SUCCESS;
     }
 

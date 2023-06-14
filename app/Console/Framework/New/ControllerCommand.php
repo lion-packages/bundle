@@ -11,10 +11,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ControllerCommand extends Command {
 
+    use ClassPath;
+
     protected static $defaultName = 'new:controller';
 
     protected function initialize(InputInterface $input, OutputInterface $output) {
-        $output->writeln("<comment>Creating controller...</comment>");
+
     }
 
     protected function interact(InputInterface $input, OutputInterface $output) {
@@ -24,52 +26,53 @@ class ControllerCommand extends Command {
     protected function configure() {
         $this
             ->setDescription('Command required for the creation of new Controllers')
-            ->addArgument('controller', InputArgument::REQUIRED, 'Controller name')
+            ->addArgument('controller', InputArgument::OPTIONAL, 'Controller name', "ExampleController")
             ->addOption('model', "m", InputOption::VALUE_REQUIRED, 'Do you want to create the model?');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
+        $controller = $input->getArgument('controller');
         $model = $input->getOption('model');
-        $list = ClassPath::export("app/Http/Controllers/", $input->getArgument('controller'));
+        $list = $this->export("app/Http/Controllers/", $controller);
         $list_model = null;
         $url_folder = lcfirst(str_replace("\\", "/", $list['namespace']));
         $camel_class = "";
         Store::folder($url_folder);
 
         if ($model != null) {
-            $list_model = ClassPath::export("app/models/", $model);
+            $list_model = $this->export("app/models/", $model);
         }
 
-        ClassPath::create($url_folder, $list['class']);
-        ClassPath::add("<?php\n\n");
-        ClassPath::add("namespace {$list['namespace']};\n\n");
+        $this->create($url_folder, $list['class']);
+        $this->add("<?php\n\n");
+        $this->add("namespace {$list['namespace']};\n\n");
 
         if ($model != null) {
-            ClassPath::add("use {$list_model['namespace']}\\{$list_model['class']}; \n\n");
+            $this->add("use {$list_model['namespace']}\\{$list_model['class']}; \n\n");
         }
 
-        ClassPath::add("class {$list['class']} {\n\n");
+        $this->add("class {$list['class']} {\n\n");
 
         if ($model != null) {
             $camel_class = Str::of(lcfirst($list_model['class']))->trim()->get();
-            ClassPath::add(Str::of("\tprivate {$list_model['class']} $")->concat($camel_class)->concat(";")->ln()->ln()->get());
-            ClassPath::add("\tpublic function __construct() {\n\t\t" . '$this->' . "{$camel_class} = new {$list_model['class']}();\n\t}\n\n");
+            $this->add(Str::of("\tprivate {$list_model['class']} $")->concat($camel_class)->concat(";")->ln()->ln()->get());
+            $this->add("\tpublic function __construct() {\n\t\t" . '$this->' . "{$camel_class} = new {$list_model['class']}();\n\t}\n\n");
         } else {
-            ClassPath::add("\tpublic function __construct() {\n\n\t}\n\n");
+            $this->add("\tpublic function __construct() {\n\n\t}\n\n");
         }
 
         foreach (["create", "read", "update", "delete"] as $key => $method) {
             if ($model != null) {
-                ClassPath::add(
-                    ClassPath::generateFunctionsController(
+                $this->add(
+                    $this->generateFunctionsController(
                         $method,
                         $list['class'],
                         $camel_class
                     )
                 );
             } else {
-                ClassPath::add(
-                    ClassPath::generateFunctionsController(
+                $this->add(
+                    $this->generateFunctionsController(
                         $method,
                         $list['class']
                     )
@@ -77,15 +80,14 @@ class ControllerCommand extends Command {
             }
         }
 
-        ClassPath::add("}");
-        ClassPath::force();
-        ClassPath::close();
+        $this->add("}");
+        $this->force();
+        $this->close();
 
-        $output->writeln("<info>The '{$list['namespace']}\\{$list['class']}' controller has been generated</info>");
+        $output->writeln("<comment>\t>>  CONTROLLER: {$controller}</comment>");
+        $output->writeln("<info>\t>>  CONTROLLER: The '{$list['namespace']}\\{$list['class']}' controller has been generated</info>");
 
         if ($model != null) {
-            $output->writeln("");
-
             $this->getApplication()->find('new:model')->run(
                 new ArrayInput(['model' => $model]),
                 $output

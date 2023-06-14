@@ -12,6 +12,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class GenerateMigrationsCommand extends Command {
 
+    use ClassPath;
+
 	protected static $defaultName = "migrate:generate";
     private array $connections;
     private array $list = [];
@@ -78,10 +80,7 @@ class GenerateMigrationsCommand extends Command {
         };
 
         foreach ($this->connections['connections'] as $nameConnection => $connection) {
-            $output->write("\033[1;33m");
-            $output->write("\t>>");
-            $output->write("\033[0m");
-            $output->writeln("  <comment>DATABASE: {$connection['dbname']}</comment>");
+            $output->writeln("<comment>\t>>  DATABASE: {$connection['dbname']}</comment>");
 
             if (isset($this->list[$nameConnection])) {
                 if (isset($this->list[$nameConnection]['tables'])) {
@@ -119,8 +118,8 @@ class GenerateMigrationsCommand extends Command {
                             $column_unique = ($column_db->Key === "UNI" ? true : false);
                             $column_options = (isset($type[1]) ? explode(")", $type[1])[0] : "");
                             $column_foreign = is_array($info_foreign)
-                            ? "['table' => '{$info_foreign['REFERENCED_TABLE_NAME']}', 'column' => '{$info_foreign['REFERENCED_COLUMN_NAME']}']"
-                            : null;
+                                ? "['table' => '{$info_foreign['REFERENCED_TABLE_NAME']}', 'column' => '{$info_foreign['REFERENCED_COLUMN_NAME']}']"
+                                : null;
 
                             $array_options = "'type' => '{$column_type}'";
                             $array_options .= ($column_length > 0 ? ", 'length' => {$column_length}" : "");
@@ -168,9 +167,9 @@ class GenerateMigrationsCommand extends Command {
                         }
 
                         $env_var = array_search($connection['dbname'], (array) env);
-                        ClassPath::new($migration_name, "php");
-                        ClassPath::add(
-                            str->of(ClassPath::getTemplateCreateTable())
+                        $this->new($migration_name, "php");
+                        $this->add(
+                            str->of($this->getTemplateCreateTable())
                                 ->replace('$table = "table"', '$table = "' . $new_table_name . '"')
                                 ->replace('env->DB_NAME', "env->{$env_var}")
                                 ->replace("\t\t\t->column('id', ['type' => 'int', 'primary-key' => true, 'lenght' => 11, 'null' => false, 'auto-increment' => true])\n", "")
@@ -179,13 +178,9 @@ class GenerateMigrationsCommand extends Command {
                                 ->replace('"rows" => []', "\t\t\t'rows' => [" . ($rows_insert === "" ? "" : "\n" . str_replace(",],", "],", $rows_insert) . "\t\t\t") . "]\n\t\t")
                                 ->get()
                         );
-                        ClassPath::force();
-                        ClassPath::close();
-
-                        $output->write("\033[1;33m");
-                        $output->write("\t>>");
-                        $output->write("\033[0m");
-                        $output->writeln("  TABLE: <info>Migration '{$migration_name}' has been generated</info>");
+                        $this->force();
+                        $this->close();
+                        $output->writeln("<info>\t>>  TABLE: Migration '{$migration_name}' has been generated</info>");
                     }
                 }
 
@@ -293,9 +288,9 @@ class GenerateMigrationsCommand extends Command {
                 //         $migration_name = str->of($path)->concat("View")->concat($view_pascal)->get();
                 //         $env_var = array_search($connection['dbname'], (array) env);
 
-                //         ClassPath::new($migration_name, "php");
-                //         ClassPath::add(
-                //             str->of(ClassPath::getTemplateCreateView())
+                //         $this->new($migration_name, "php");
+                //         $this->add(
+                //             str->of($this->getTemplateCreateView())
                 //                 ->replace('env->DB_NAME', "env->{$env_var}")
                 //                 ->replace('"view"', "'{$view_name}'")
                 //                 ->replace('"table"', (
@@ -307,8 +302,8 @@ class GenerateMigrationsCommand extends Command {
                 //                 ->replace("\n\t\t\t\t;", ";")
                 //                 ->get()
                 //         );
-                //         ClassPath::force();
-                //         ClassPath::close();
+                //         $this->force();
+                //         $this->close();
 
                 //         $output->write("\033[1;33m");
                 //         $output->write("\t>>");
@@ -321,10 +316,7 @@ class GenerateMigrationsCommand extends Command {
                 //     // vd($this->list[$nameConnection]['procedures']);
                 // }
             } else {
-                $output->write("\033[1;33m");
-                $output->write("\t>>");
-                $output->write("\033[0m");
-                $output->writeln("  <error>NO DATA AVAILABLE</error>");
+                $output->writeln("<fg=#E37820>\t>> NO DATA AVAILABLE</>");
             }
 
             if ($cont < ($size - 1)) {

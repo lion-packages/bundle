@@ -41,11 +41,12 @@ class ServerCommand extends Command {
         }
 
         $url = "{$host}:{$port}";
-        $output->writeln("\t<question> INFO </question> Local: Server running on <href=http://{$url}>[http://{$url}]</>\n");
-        $output->writeln("\t<question> INFO </question> Host: use --host to expose</>\n");
-        $output->writeln("\t<question> INFO </question> Port: use --port to expose</>\n");
-        $output->writeln("<comment>Press Ctrl+C to stop the server</comment>\n");
+        $output->writeln("<comment>\t>>  LOCAL:</comment> Server running on <href=http://{$url}>[http://{$url}]</>");
+        $output->writeln("<comment>\t>>  HOST:</comment> use --host to expose");
+        $output->writeln("<comment>\t>>  PORT:</comment> use --port to expose");
+        $output->writeln("\n<comment>Press Ctrl+C to stop the server</comment>\n");
         Kernel::getInstance()->execute("php -S {$host}:{$port} -t public", false);
+
         return Command::SUCCESS;
 	}
 

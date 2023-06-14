@@ -2,17 +2,17 @@
 
 namespace App\Console\Framework\Token;
 
+use LionSecurity\JWT;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\{ InputInterface, InputArgument };
 use Symfony\Component\Console\Output\OutputInterface;
-use LionSecurity\{ RSA, JWT };
 
 class GenerateJWTCommand extends Command {
 
     protected static $defaultName = "token:jwt";
 
     protected function initialize(InputInterface $input, OutputInterface $output) {
-        $output->writeln("<comment>Generating JWT...</comment>");
+
     }
 
     protected function interact(InputInterface $input, OutputInterface $output) {
@@ -20,24 +20,22 @@ class GenerateJWTCommand extends Command {
     }
 
     protected function configure() {
-        $this->setDescription(
-            "Created command to generate JWT token"
-        )->addArgument(
-            'session', InputArgument::REQUIRED, 'Session must be true or false', null
-        );
+        $this
+            ->setDescription("Created command to generate JWT token")
+            ->addArgument('session', InputArgument::OPTIONAL, 'Session must be true or false', "true");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $output->writeln(
-            JWT::encode([
-                'session' => $input->getArgument('session') === 'true' ? true : false,
-                'system' => "Lion Framework",
-                'autor' => "Sergio Leon",
-                'github' => "https://github.com/Sleon4/Lion-Framework"
-            ])
-        );
+        $jwt = JWT::encode([
+            'session' => $input->getArgument('session') === "true" ? true : false,
+            'system' => "Lion-Framework",
+            'autor' => "Sergio Leon",
+            'github' => "https://github.com/Sleon4"
+        ]);
 
-        $output->writeln("<info>JWT created successfully</info>");
+        $output->writeln("<comment>\t>>  TOKEN: JWT created successfully</comment>");
+        $output->writeln("<info>\t>>  TOKEN: {$jwt}</info>");
+
         return Command::SUCCESS;
     }
 

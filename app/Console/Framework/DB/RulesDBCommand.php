@@ -13,6 +13,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class RulesDBCommand extends Command {
 
+    use ClassPath;
+
 	protected static $defaultName = "db:rules";
 
 	protected function initialize(InputInterface $input, OutputInterface $output) {
@@ -44,13 +46,7 @@ class RulesDBCommand extends Command {
 
         foreach ($columns as $key => $column) {
             // generate rule name
-            $rule_name = str->of($column->Field)
-                ->replace("-", "_")
-                ->replace("_", " ")
-                ->trim()
-                ->pascal()
-                ->concat("Rule")
-                ->get();
+            $rule_name = str->of($column->Field)->replace("-", "_")->replace("_", " ")->trim()->pascal()->concat("Rule")->get();
 
             // generate rule
             $this->getApplication()->find('new:rule')->run(
@@ -62,7 +58,7 @@ class RulesDBCommand extends Command {
 
             // edit rule content
             $path = "app/Rules/{$main_conn_pascal}/{$entity_pascal}/{$rule_name}.php";
-            ClassPath::readFileRows($path, [
+            $this->readFileRows($path, [
                 11 => [
                     'replace' => true,
                     'content' => '"' . $column->Field . '"', 'search' => '""'
@@ -87,10 +83,6 @@ class RulesDBCommand extends Command {
                     ]
                 ]
             ]);
-
-            if ($key < (arr->of($columns)->length() - 1)) {
-                $output->writeln("");
-            }
         }
 
         return Command::SUCCESS;

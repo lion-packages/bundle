@@ -14,6 +14,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CrudCommand extends Command {
 
+    use ClassPath;
+
 	protected static $defaultName = "db:crud";
 
 	protected function initialize(InputInterface $input, OutputInterface $output) {
@@ -42,19 +44,17 @@ class CrudCommand extends Command {
         $main_conn = $connection === null ? $connections['default'] : $connection;
         $main_conn_pascal = str->of($main_conn)->replace("_", " ")->pascal()->get();
         $namespace_class = "Database\\Class\\{$main_conn_pascal}\\{$entity_pascal}";
-        $list = ClassPath::export("database/class/", "{$main_conn_pascal}/{$entity_pascal}");
+        $list = $this->export("database/class/", "{$main_conn_pascal}/{$entity_pascal}");
 
         // generate capsule class
         $this->getApplication()->find('db:capsule')->run(
             new ArrayInput([
-                'capsule' => $entity,
+                'entity' => $entity,
                 '--path' => $main_conn_pascal . "/",
                 '--connection' => $main_conn
             ]),
             $output
         );
-
-        $output->writeln("");
 
         // generate all rules
         $this->getApplication()->find('db:rules')->run(
@@ -64,8 +64,6 @@ class CrudCommand extends Command {
             ]),
             $output
         );
-
-        $output->writeln("");
 
         // generate controller and model
         $this->getApplication()->find('new:controller')->run(
@@ -80,7 +78,7 @@ class CrudCommand extends Command {
         $file_c = "{$entity_pascal}Controller";
         $path_c = "app/Http/Controllers/" . ($path === null ? "" : $path) . "{$file_c}.php";
 
-        ClassPath::readFileRows($path_c, [
+        $this->readFileRows($path_c, [
             6 => ['replace' => false, 'content' => "use {$namespace_class};\n\n"],
             16 => ['replace' => true, 'content' => "(\n\t\t\t{$list['class']}::capsule()\n\t\t)", 'search' => "()"],
             29 => ['replace' => true, 'content' => "(\n\t\t\t{$list['class']}::capsule()\n\t\t)", 'search' => "()"],
@@ -91,21 +89,15 @@ class CrudCommand extends Command {
         $columns = DB::connection($main_conn)->show()->columns()->from($entity)->getAll();
         $path_m = "app/Models/" . ($path === null ? "" : $path) . "{$entity_pascal}Model.php";
         $list_methods = ['create' => "", 'update' => "", 'delete' => ""];
-        $methods = ClassPath::generateGetters($columns);
+        $methods = $this->generateGetters($columns);
 
         foreach ($methods as $key => $method) {
             foreach ($method as $keyMethod => $name) {
-                $list_methods[$key] .= str->of("\t")->lt()->lt()
-                    ->concat('$')
-                    ->concat(lcfirst($entity_pascal))
-                    ->concat("->")
-                    ->concat($name)
-                    ->concat(",")->ln()
-                    ->get();
+                $list_methods[$key] .= str->of("\t")->lt()->lt()->concat('$')->concat(lcfirst($entity_pascal))->concat("->")->concat($name)->concat(",")->ln()->get();
             }
         }
 
-        ClassPath::readFileRows($path_m, [
+        $this->readFileRows($path_m, [
             4 => [ // namespace
                 'replace' => false,
                 'content' => "\nuse {$namespace_class};\n"
@@ -310,7 +302,7 @@ class CrudCommand extends Command {
             }
         }
 
-        $output->writeln("\n\t<question> INFO </question> Crud has been generated for the '{$entity}' entity\n");
+        $output->writeln("<question>\t>>  CRUD: Crud has been generated for the '{$entity}' entity</question>");
         return Command::SUCCESS;
     }
 

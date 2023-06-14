@@ -2,18 +2,21 @@
 
 namespace App\Console\Framework\New;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\{ InputInterface, InputArgument };
-use Symfony\Component\Console\Output\OutputInterface;
-use LionFiles\Store;
 use App\Traits\Framework\ClassPath;
+use LionFiles\Store;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class MiddlewareCommand extends Command {
+
+    use ClassPath;
 
 	protected static $defaultName = 'new:middleware';
 
 	protected function initialize(InputInterface $input, OutputInterface $output) {
-		$output->writeln("<comment>Creating middleware...</comment>");
+
 	}
 
 	protected function interact(InputInterface $input, OutputInterface $output) {
@@ -21,27 +24,28 @@ class MiddlewareCommand extends Command {
 	}
 
 	protected function configure() {
-		$this->setDescription(
-			'Command required for the creation of new Middleware'
-		)->addArgument(
-			'middleware', InputArgument::REQUIRED, 'Middleware name', null
-		);
+		$this
+            ->setDescription('Command required for the creation of new Middleware')
+            ->addArgument('middleware', InputArgument::OPTIONAL, 'Middleware name', "ExampleMiddleware");
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
-		$list = ClassPath::export("app/Http/Middleware/", $input->getArgument('middleware'));
+        $middleware = $input->getArgument('middleware');
+		$list = $this->export("app/Http/Middleware/", $middleware);
 		$url_folder = lcfirst(str_replace("\\", "/", $list['namespace']));
 		Store::folder($url_folder);
 
-		ClassPath::create($url_folder, $list['class']);
-		ClassPath::add("<?php\n\n");
-		ClassPath::add("namespace {$list['namespace']};\n\n");
-		ClassPath::add("class {$list['class']} {\n\n");
-		ClassPath::add("\tpublic function __construct() {\n\n\t}\n\n}");
-		ClassPath::force();
-		ClassPath::close();
+		$this->create($url_folder, $list['class']);
+		$this->add("<?php\n\n");
+		$this->add("namespace {$list['namespace']};\n\n");
+		$this->add("class {$list['class']} {\n\n");
+		$this->add("\tpublic function __construct() {\n\n\t}\n\n}");
+		$this->force();
+		$this->close();
 
-		$output->writeln("The '{$list['namespace']}\\{$list['class']}' middleware has been generated");
+        $output->writeln("<comment>\t>>  MIDDLEWARE: {$middleware}</comment>");
+        $output->writeln("<info>\t>>  MIDDLEWARE: The '{$list['namespace']}\\{$list['class']}' middleware has been generated</info>");
+
 		return Command::SUCCESS;
 	}
 

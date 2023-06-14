@@ -2,20 +2,22 @@
 
 namespace App\Console\Framework\New;
 
+use App\Traits\Framework\ClassPath;
 use LionFiles\Store;
+use LionHelpers\Str;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use App\Traits\Framework\ClassPath;
-use LionHelpers\Str;
 
 class CapsuleCommand extends Command {
+
+    use ClassPath;
 
 	protected static $defaultName = "new:capsule";
 
 	protected function initialize(InputInterface $input, OutputInterface $output) {
-        $output->writeln("<comment>Creating capsule...</comment>");
+
 	}
 
 	protected function interact(InputInterface $input, OutputInterface $output) {
@@ -25,22 +27,25 @@ class CapsuleCommand extends Command {
 	protected function configure() {
 		$this
             ->setDescription("Command required for creating new custom capsules")
-            ->addArgument('capsule', InputArgument::REQUIRED, 'Capsule name');
+            ->addArgument('capsule', InputArgument::OPTIONAL, 'Capsule name', "Example");
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
-		$list = ClassPath::export("database/Class/", $input->getArgument('capsule'));
+        $capsule = $input->getArgument('capsule');
+		$list = $this->export("database/Class/", $capsule);
         $url_folder = lcfirst(str_replace("\\", "/", $list['namespace']));
         Store::folder($url_folder);
 
-        ClassPath::create($url_folder, $list['class']);
-        ClassPath::add(Str::of("<?php")->ln()->ln()->get());
-        ClassPath::add(Str::of("namespace ")->concat($list['namespace'])->concat(";")->ln()->ln()->get());
-        ClassPath::add(Str::of("class ")->concat($list['class'])->concat(" {")->ln()->ln()->concat("}")->get());
-        ClassPath::force();
-        ClassPath::close();
+        $this->create($url_folder, $list['class']);
+        $this->add(str->of("<?php")->ln()->ln()->get());
+        $this->add(str->of("namespace ")->concat($list['namespace'])->concat(";")->ln()->ln()->get());
+        $this->add(str->of("class ")->concat($list['class'])->concat(" {")->ln()->ln()->concat("}")->get());
+        $this->force();
+        $this->close();
 
-        $output->writeln("<info>The '{$list['namespace']}\\{$list['class']}' capsule has been generated</info>");
+        $output->writeln("<comment>\t>>  CAPSULE: {$capsule}</comment>");
+        $output->writeln("<info>\t>>  CAPSULE: The '{$list['namespace']}\\{$list['class']}' capsule has been generated</info>");
+
         return Command::SUCCESS;
 	}
 

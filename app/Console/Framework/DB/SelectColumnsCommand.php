@@ -35,12 +35,12 @@ class SelectColumnsCommand extends Command {
 
         $connections = DB::getConnections();
         $main_conn = $connection === null ? $connections['default'] : $connection;
-        $columns_db = DB::connection($main_conn)
-            ->fetchMode(\PDO::FETCH_ASSOC)
-            ->show()
-            ->columns()
-            ->from($entity)
-            ->getAll();
+        $columns_db = DB::connection($main_conn)->fetchMode(\PDO::FETCH_ASSOC)->show()->columns()->from($entity)->getAll();
+
+        if (isset($columns_db->status)) {
+            $output->writeln("<info>\t>>  {$columns_db->message}</info>");
+            return Command::SUCCESS;
+        }
 
         (new Table($output))
             ->setHeaderTitle("<info> TABLE " . str->of($entity)->upper()->get() . " </info>")

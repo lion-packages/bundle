@@ -2,19 +2,21 @@
 
 namespace App\Console\Framework\Sockets;
 
+use App\Traits\Framework\ClassPath;
+use LionFiles\Store;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use App\Traits\Framework\ClassPath;
-use LionFiles\Store;
 
 class WebSocketsCommand extends Command {
+
+    use ClassPath;
 
 	protected static $defaultName = "socket:new";
 
 	protected function initialize(InputInterface $input, OutputInterface $output) {
-        $output->writeln("<comment>Creating WebSocket...</comment>");
+
 	}
 
 	protected function interact(InputInterface $input, OutputInterface $output) {
@@ -22,49 +24,50 @@ class WebSocketsCommand extends Command {
 	}
 
 	protected function configure() {
-        $this->setDescription(
-            'Command required for creating new WebSockets'
-        )->addArgument(
-            'web-socket', InputArgument::REQUIRED, 'Socket name', null
-        );
+        $this
+            ->setDescription('Command required for creating new WebSockets')
+            ->addArgument('socket', InputArgument::OPTIONAL, 'Socket name', "ExampleSocket");
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
-		$list = ClassPath::export("app/Http/Sockets/", $input->getArgument('web-socket'));
+        $socket = $input->getArgument('socket');
+		$list = $this->export("app/Http/Sockets/", $socket);
         $url_folder = lcfirst(str_replace("\\", "/", $list['namespace']));
         Store::folder($url_folder);
 
-        ClassPath::create($url_folder, $list['class']);
-        ClassPath::add("<?php\n\n");
-        ClassPath::add("namespace {$list['namespace']};\n\n");
-        ClassPath::add("use Ratchet\\ConnectionInterface;\n");
-        ClassPath::add("use Ratchet\\MessageComponentInterface;\n");
-        ClassPath::add("use \SplObjectStorage;\n\n");
-        ClassPath::add("class {$list['class']} implements MessageComponentInterface {\n\n");
-        ClassPath::add("\t" . 'protected SplObjectStorage $clients;' . "\n\n");
-        ClassPath::add("\tpublic function __construct() {\n");
-        ClassPath::add("\t\t" . '$this->clients = new SplObjectStorage();' . "\n");
-        ClassPath::add("\t}\n\n");
-        ClassPath::add("\t" . 'public function onOpen(ConnectionInterface $conn) {' . "\n");
-        ClassPath::add("\t\t" . '$this->clients->attach($conn);' . "\n");
-        ClassPath::add("\t}\n\n");
-        ClassPath::add("\t" . 'public function onMessage(ConnectionInterface $from, $msg) {' . "\n");
-        ClassPath::add("\t\t" . 'foreach ($this->clients as $client) {' . "\n");
-        ClassPath::add("\t\t\t" . 'if ($from !== $client) {' . "\n");
-        ClassPath::add("\t\t\t\t" . '$client->send($msg);' . "\n");
-        ClassPath::add("\t\t\t}\n\t\t}\n");
-        ClassPath::add("\t}\n\n");
-        ClassPath::add("\t" . 'public function onClose(ConnectionInterface $conn) {' . "\n");
-        ClassPath::add("\t\t" . '$this->clients->detach($conn);' . "\n");
-        ClassPath::add("\t}\n\n");
-        ClassPath::add("\t" . 'public function onError(ConnectionInterface $conn, \Exception $e) {' . "\n");
-        ClassPath::add("\t\t" . '$conn->close();' . "\n");
-        ClassPath::add("\t}\n\n");
-        ClassPath::add("}");
-        ClassPath::force();
-        ClassPath::close();
+        $this->create($url_folder, $list['class']);
+        $this->add("<?php\n\n");
+        $this->add("namespace {$list['namespace']};\n\n");
+        $this->add("use Ratchet\\ConnectionInterface;\n");
+        $this->add("use Ratchet\\MessageComponentInterface;\n");
+        $this->add("use \SplObjectStorage;\n\n");
+        $this->add("class {$list['class']} implements MessageComponentInterface {\n\n");
+        $this->add("\t" . 'protected SplObjectStorage $clients;' . "\n\n");
+        $this->add("\tpublic function __construct() {\n");
+        $this->add("\t\t" . '$this->clients = new SplObjectStorage();' . "\n");
+        $this->add("\t}\n\n");
+        $this->add("\t" . 'public function onOpen(ConnectionInterface $conn) {' . "\n");
+        $this->add("\t\t" . '$this->clients->attach($conn);' . "\n");
+        $this->add("\t}\n\n");
+        $this->add("\t" . 'public function onMessage(ConnectionInterface $from, $msg) {' . "\n");
+        $this->add("\t\t" . 'foreach ($this->clients as $client) {' . "\n");
+        $this->add("\t\t\t" . 'if ($from !== $client) {' . "\n");
+        $this->add("\t\t\t\t" . '$client->send($msg);' . "\n");
+        $this->add("\t\t\t}\n\t\t}\n");
+        $this->add("\t}\n\n");
+        $this->add("\t" . 'public function onClose(ConnectionInterface $conn) {' . "\n");
+        $this->add("\t\t" . '$this->clients->detach($conn);' . "\n");
+        $this->add("\t}\n\n");
+        $this->add("\t" . 'public function onError(ConnectionInterface $conn, \Exception $e) {' . "\n");
+        $this->add("\t\t" . '$conn->close();' . "\n");
+        $this->add("\t}\n\n");
+        $this->add("}");
+        $this->force();
+        $this->close();
 
-        $output->writeln("<info>The '{$list['namespace']}\\{$list['class']}' socket has been generated</info>");
+        $output->writeln("<comment>\t>>  SOCKET: {$socket}</comment>");
+        $output->writeln("<info>\t>>  SOCKET: The '{$list['namespace']}\\{$list['class']}' socket has been generated</info>");
+
         return Command::SUCCESS;
 	}
 

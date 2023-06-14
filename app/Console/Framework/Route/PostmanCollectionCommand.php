@@ -2,24 +2,24 @@
 
 namespace App\Console\Framework\Route;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use App\Traits\Framework\ClassPath;
 use App\Traits\Framework\PostmanCollector;
 use LionFiles\Store;
 use LionHelpers\Str;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class PostmanCollectionCommand extends Command {
+
+    use ClassPath, PostmanCollector;
 
 	protected static $defaultName = "route:postman";
     private array $routes;
     private string $json_name;
 
     protected function initialize(InputInterface $input, OutputInterface $output) {
-        $output->writeln("<comment>Exporting collection...</comment>");
-
-        PostmanCollector::init(env->SERVER_URL);
+        $this->init(env->SERVER_URL);
         $this->json_name = Str::of(date('Y-m-d') . "_lion_collection")->lower()->get();
         $this->routes = fetch('GET', env->SERVER_URL . "/route-list");
         array_pop($this->routes);
@@ -34,14 +34,15 @@ class PostmanCollectionCommand extends Command {
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        PostmanCollector::addRoutes($this->routes, rules);
-        PostmanCollector::generateItems();
-        $items = PostmanCollector::getItems();
+        $rules = require_once("./routes/rules.php");
+        $this->addRoutes($this->routes, $rules);
+        $this->generateItems();
+        $items = $this->getItems();
         $path = storage_path("postman/", false);
 
         Store::folder($path);
-        ClassPath::new("{$path}{$this->json_name}", "json");
-        ClassPath::add(json->encode([
+        $this->new("{$path}{$this->json_name}", "json");
+        $this->add(json->encode([
             'variable' => [
                 ['key' => 'base_url', 'value' => env->SERVER_URL, 'type' => "string"]
             ],
@@ -49,13 +50,15 @@ class PostmanCollectionCommand extends Command {
                 'name' => env->APP_NAME,
                 'schema' => 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json'
             ],
-            'item' => PostmanCollector::createCollection($items),
+            'item' => $this->createCollection($items),
             'event' => []
         ]));
-        ClassPath::force();
-        ClassPath::close();
+        $this->force();
+        $this->close();
 
-        $output->writeln("<info>Exported collection: {$path}{$this->json_name}.json</info>");
+        $output->writeln("<comment>\t>>  COLLECTION: {$this->json_name}</comment>");
+        $output->writeln("<info>\t>>  COLLECTION: Exported in {$path}{$this->json_name}.json</info>");
+
         return Command::SUCCESS;
     }
 

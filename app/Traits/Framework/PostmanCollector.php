@@ -229,13 +229,13 @@ trait PostmanCollector {
         }
     }
 
-    public static function addRoutes(array $routes) {
+    public static function addRoutes(array $routes, array $rules) {
         foreach($routes as $key_items => $route) {
             foreach ($route as $key_route => $item) {
                 self::$postman['params']['routes'][] = [
                     'url' => $key_items === "" ? "/" : $key_items,
                     'method' => $key_route,
-                    'params' => isset(rules["/{$key_items}"]) ? rules["/{$key_items}"] : []
+                    'params' => isset($rules["/{$key_items}"]) ? $rules["/{$key_items}"] : []
                 ];
             }
         }

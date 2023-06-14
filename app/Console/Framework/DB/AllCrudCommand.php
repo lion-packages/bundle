@@ -29,12 +29,7 @@ class AllCrudCommand extends Command {
 		$connections = DB::getConnections();
 
         foreach ($connections['connections'] as $key => $conn) {
-            $tables = DB::connection($conn['dbname'])
-                ->show()
-                ->full()
-                ->tables()
-                ->where(DB::equalTo("Table_Type"), 'BASE TABLE')
-                ->getAll();
+            $tables = DB::connection($conn['dbname'])->show()->full()->tables()->where(DB::equalTo("Table_Type"), 'BASE TABLE')->getAll();
 
             foreach ($tables as $key => $table) {
                 $values = arr->of((array) $table)->values()->get();

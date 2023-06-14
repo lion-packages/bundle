@@ -11,7 +11,7 @@ class NewAESCommand extends Command {
 	protected static $defaultName = "aes:new";
 
 	protected function initialize(InputInterface $input, OutputInterface $output) {
-        $output->writeln("<comment>Initializing AES service...</comment>");
+
     }
 
     protected function interact(InputInterface $input, OutputInterface $output) {
@@ -19,7 +19,8 @@ class NewAESCommand extends Command {
     }
 
     protected function configure() {
-        $this->setDescription("Command to create KEY and IV keys for AES");
+        $this
+            ->setDescription("Command to create KEY and IV keys for AES");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
@@ -37,9 +38,9 @@ class NewAESCommand extends Command {
             return $key;
         };
 
-        $output->writeln("\n\t<question> INFO </question> AES KEY: {$generateKeys()}\n");
-        $output->writeln("\t<question> INFO </question> AES IV: {$generateKeys()}\n");
-        $output->writeln("<info>Keys created successfully</info>");
+        $output->writeln("<comment>\t>>  AES KEY: {$generateKeys()}</comment>");
+        $output->writeln("<comment>\t>>  AES IV: {$generateKeys()}</comment>");
+        $output->writeln("<info>\t>>  Keys created successfully</info>");
 
         return Command::SUCCESS;
     }
