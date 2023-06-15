@@ -25,7 +25,6 @@ return new class {
 			->column('password', ['type' => 'blob', 'null' => false, 'comment' => 'user password', 'default' => ''])
 			->column('code', ['type' => 'varchar', 'length' => 45, 'null' => false, 'unique' => true, 'comment' => 'unique user code', 'default' => ''])
 			->column('create_at', ['type' => 'datetime', 'null' => false, 'comment' => 'creation date', 'default' => ''])
-			->column('options', ['type' => 'enum', 'null' => false, 'options' => ['DEV','CUSTOMER'], 'comment' => '', 'default' => ''])
 			->execute();
 	}
 
@@ -33,7 +32,7 @@ return new class {
 		return [
 			'columns' => [
 				'idusers',
-				'users_idroles',
+				'idroles',
 				'users_name',
 				'users_lastname',
 				'users_email',
