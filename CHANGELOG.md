@@ -1,5 +1,10 @@
 # Release Notes
 
+## [v14.17.1](https://github.com/Sleon4/Lion-Framework/compare/v14.17.0...v14.17.1) (2023-06-15)
+
+### Fixed
+- function call from trait has been fixed
+
 ## [v14.17.0](https://github.com/Sleon4/Lion-Framework/compare/v14.16.0...v14.17.0) (2023-06-14)
 
 ### Changed
