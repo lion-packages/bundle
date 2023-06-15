@@ -93,8 +93,8 @@ trait ClassPath {
 
         foreach (['create', 'update', 'delete'] as $keyMethod => $method) {
             foreach ($columns as $keyColumn => $column) {
-                $field = ClassPath::cleanField($column->Field);
-                $getter = "get" . ClassPath::normalizeClass($field) . "()";
+                $field = self::cleanField($column->Field);
+                $getter = "get" . self::normalizeClass($field) . "()";
 
                 if ($method === "create" && $column->Key != "PRI") {
                     $methods[$method][] = $getter;
