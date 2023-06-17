@@ -41,7 +41,6 @@ class RulesDBCommand extends Command {
         $main_conn = ($connection === null) ? $connections['default'] : $connection;
         $main_conn_pascal = str->of($main_conn)->replace("_", " ")->pascal()->get();
 
-
         $columns = DB::connection($main_conn)->show()->full()->columns()->from($entity)->getAll();
 
         foreach ($columns as $key => $column) {

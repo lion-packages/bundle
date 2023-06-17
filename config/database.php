@@ -19,5 +19,13 @@ return [
             'user' => env->DB_USER,
             'password' => env->DB_PASSWORD
         ],
+        "ici_core" => [
+            'type' => "mysql",
+            'host' => "db",
+            'port' => 3306,
+            'dbname' => "ici_core",
+            'user' => "root",
+            'password' => "lion"
+        ],
     ]
 ];

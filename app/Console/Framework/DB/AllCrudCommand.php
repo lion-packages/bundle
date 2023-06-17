@@ -27,23 +27,35 @@ class AllCrudCommand extends Command {
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$connections = DB::getConnections();
+        $cont = 0;
 
         foreach ($connections['connections'] as $key => $conn) {
+            $output->writeln("<question>\t>>  {$conn['dbname']}</question>");
             $tables = DB::connection($conn['dbname'])->show()->full()->tables()->where(DB::equalTo("Table_Type"), 'BASE TABLE')->getAll();
 
             foreach ($tables as $key => $table) {
                 $values = arr->of((array) $table)->values()->get();
                 $path = str->of($conn['dbname'])->replace("_", " ")->replace("-", " ")->pascal()->get();
 
-                $this->getApplication()->find('db:crud')->run(
-                    new ArrayInput([
-                        'entity' => $values[0],
-                        '--path' =>  $path . "/",
-                        '--connection' => $conn['dbname']
-                    ]),
-                    $output
-                );
+                if (in_array(strtolower($values[0]), ["groups", "group", "select"])) {
+                    $output->writeln("\n<error>\t>>  Omitted entity CRUD '{$conn['dbname']}.{$values[0]}', contains reserved names</error>\n");
+                } else {
+                    $this->getApplication()->find('db:crud')->run(
+                        new ArrayInput([
+                            'entity' => $values[0],
+                            '--path' =>  $path . "/",
+                            '--connection' => $conn['dbname']
+                        ]),
+                        $output
+                    );
+                }
             }
+
+            if ($cont < (count($connections['connections']) - 1)) {
+                $output->writeln("");
+            }
+
+            $cont++;
         }
 
 		return Command::SUCCESS;

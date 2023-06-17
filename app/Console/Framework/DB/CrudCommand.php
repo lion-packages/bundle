@@ -223,7 +223,7 @@ class CrudCommand extends Command {
                 $file = str->of($str_file)
                     ->replace("--DATABASE--", $main_conn)
                     ->replace("--VIEW--", "{$method}_{$entity}")
-                    ->replace("--SQL--", $sql->data->sql)
+                    ->replace("--SQL--", $sql->data->sql['query'])
                     ->get();
 
                 DB::connection($main_conn)->query($file)->execute();
