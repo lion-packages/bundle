@@ -45,7 +45,17 @@ class FreshMigrationsCommand extends Command {
                 }
             }
 
-            DB::connection($connection)->query("USE `{$connection}`; SET FOREIGN_KEY_CHECKS = 0; SET @tablas = NULL; SELECT GROUP_CONCAT(table_name) INTO @tablas FROM information_schema.tables WHERE table_schema = (SELECT DATABASE()); SET @consulta = CONCAT('DROP TABLE IF EXISTS ', @tablas); PREPARE stmt FROM @consulta; EXECUTE stmt; DEALLOCATE PREPARE stmt; SET FOREIGN_KEY_CHECKS = 1;")->execute();
+            DB::connection($connection)
+                ->query("USE `{$connection}`;")
+                ->query("SET FOREIGN_KEY_CHECKS = 0;")
+                ->query("SET @tablas = NULL;")
+                ->query("SELECT GROUP_CONCAT(table_name) INTO @tablas FROM information_schema.tables WHERE table_schema = (SELECT DATABASE());")
+                ->query("SET @consulta = CONCAT('DROP TABLE IF EXISTS ', @tablas);")
+                ->query("PREPARE stmt FROM @consulta;")
+                ->query("EXECUTE stmt;")
+                ->query("DEALLOCATE PREPARE stmt;")
+                ->query("SET FOREIGN_KEY_CHECKS = 1;")
+                ->execute();
         }
 
         foreach (arr->of($this->files)->keys()->get() as $index => $key) {

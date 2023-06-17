@@ -1,6 +1,8 @@
 <?php
 
 use App\Traits\Framework\Faker;
+use Carbon\Carbon;
+use LionSecurity\Validation;
 use LionSQL\Drivers\MySQL\Schema;
 
 return new class {
@@ -20,7 +22,7 @@ return new class {
 			->column('id', ['type' => 'int', 'primary-key' => true, 'lenght' => 11, 'null' => false, 'auto-increment' => true])
 			->column('idroles', ['type' => 'int', 'length' => 11, 'null' => false, 'foreign-key' => ['table' => 'roles', 'column' => 'idroles'], 'comment' => '', 'default' => ''])
 			->column('name', ['type' => 'varchar', 'length' => 45, 'null' => false, 'comment' => 'user name', 'default' => ''])
-			->column('lastname', ['type' => 'varchar', 'length' => 45, 'null' => true, 'comment' => 'user lastname', 'default' => ''])
+			->column('lastname', ['type' => 'varchar', 'length' => 45, 'null' => false, 'comment' => 'user lastname', 'default' => ''])
 			->column('email', ['type' => 'varchar', 'length' => 45, 'null' => false, 'unique' => true, 'comment' => 'user email', 'default' => ''])
 			->column('password', ['type' => 'blob', 'null' => false, 'comment' => 'user password', 'default' => ''])
 			->column('code', ['type' => 'varchar', 'length' => 45, 'null' => false, 'unique' => true, 'comment' => 'unique user code', 'default' => ''])
@@ -29,6 +31,9 @@ return new class {
 	}
 
 	public function insert(): array {
+        $password = Validation::passwordHash(Validation::sha256("1212"));
+        $date = Carbon::now()->format("Y-m-d H:i:s");
+
 		return [
 			'columns' => [
 				'idusers',
@@ -39,9 +44,11 @@ return new class {
 				'users_password',
 				'users_code',
 				'users_create_at',
-				'users_options',
 			],
- 			'rows' => []
+ 			'rows' => [
+                [null, 1, "Sergio", "Leon", "sleon@dev.com", $password, uniqid("user-"), $date],
+                [null, 2, "Santiago", "Correa", "saco@dev.com", $password, uniqid("user-"), $date]
+            ]
 		];
 	}
 
