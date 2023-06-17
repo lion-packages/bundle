@@ -26,7 +26,7 @@
         "lion/mailer": "^5.0",
         "lion/route": "^8.2",
         "lion/security": "^6.11",
-        "lion/sql": "^8.0",
+        "lion/sql": "^8.6",
         "monolog/monolog": "^3.3",
         "nesbot/carbon": "^2.66",
         "symfony/console": "^6.2"

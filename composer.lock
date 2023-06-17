@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "74506062daccf373d714f1475ad0a13e",
+    "content-hash": "9ce8dcc2e46bd5db5c687e5d59ad3ef3",
     "packages": [
         {
             "name": "cboden/ratchet",
@@ -925,16 +925,16 @@
         },
         {
             "name": "lion/sql",
-            "version": "v8.5.0",
+            "version": "v8.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-SQL.git",
-                "reference": "7c64ef1d2cf020b0b1dc4ad3d6f9216ef4890522"
+                "reference": "76ca3d7aaf22173b1b348ada9cc0bf3d1707f9d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/7c64ef1d2cf020b0b1dc4ad3d6f9216ef4890522",
-                "reference": "7c64ef1d2cf020b0b1dc4ad3d6f9216ef4890522",
+                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/76ca3d7aaf22173b1b348ada9cc0bf3d1707f9d1",
+                "reference": "76ca3d7aaf22173b1b348ada9cc0bf3d1707f9d1",
                 "shasum": ""
             },
             "require": {
@@ -953,9 +953,9 @@
             "description": "package in charge of generating and executing MySQL processes",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-SQL/issues",
-                "source": "https://github.com/Sleon4/Lion-SQL/tree/v8.5.0"
+                "source": "https://github.com/Sleon4/Lion-SQL/tree/v8.6.0"
             },
-            "time": "2023-06-11T17:23:59+00:00"
+            "time": "2023-06-17T01:49:31+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -2151,16 +2151,16 @@
         },
         {
             "name": "react/stream",
-            "version": "v1.2.0",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/stream.git",
-                "reference": "7a423506ee1903e89f1e08ec5f0ed430ff784ae9"
+                "reference": "6fbc9672905c7d5a885f2da2fc696f65840f4a66"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/stream/zipball/7a423506ee1903e89f1e08ec5f0ed430ff784ae9",
-                "reference": "7a423506ee1903e89f1e08ec5f0ed430ff784ae9",
+                "url": "https://api.github.com/repos/reactphp/stream/zipball/6fbc9672905c7d5a885f2da2fc696f65840f4a66",
+                "reference": "6fbc9672905c7d5a885f2da2fc696f65840f4a66",
                 "shasum": ""
             },
             "require": {
@@ -2170,12 +2170,12 @@
             },
             "require-dev": {
                 "clue/stream-filter": "~1.2",
-                "phpunit/phpunit": "^9.3 || ^5.7 || ^4.8.35"
+                "phpunit/phpunit": "^9.5 || ^5.7 || ^4.8.35"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "React\\Stream\\": "src"
+                    "React\\Stream\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -2217,19 +2217,15 @@
             ],
             "support": {
                 "issues": "https://github.com/reactphp/stream/issues",
-                "source": "https://github.com/reactphp/stream/tree/v1.2.0"
+                "source": "https://github.com/reactphp/stream/tree/v1.3.0"
             },
             "funding": [
                 {
-                    "url": "https://github.com/WyriHaximus",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/clue",
-                    "type": "github"
+                    "url": "https://opencollective.com/reactphp",
+                    "type": "open_collective"
                 }
             ],
-            "time": "2021-07-11T12:37:55+00:00"
+            "time": "2023-06-16T10:52:11+00:00"
         },
         {
             "name": "symfony/console",
