@@ -36,7 +36,6 @@ class SelectColumnsCommand extends Command {
         $connections = DB::getConnections();
         $main_conn = $connection === null ? $connections['default'] : $connection;
         $columns_db = DB::connection($main_conn)->show()->columns()->from($entity)->fetchMode(\PDO::FETCH_ASSOC)->getAll();
-        // vd($columns_db);
 
         if (isset($columns_db->status)) {
             $output->writeln("<info>\t>>  {$columns_db->message}</info>");

@@ -59,7 +59,8 @@ class SelectTableCommand extends Command {
         }
 
         // read entity
-        $rows_table = DB::connection($main_conn)->fetchMode(\PDO::FETCH_ASSOC)->table($entity)->select(...$columns_table)->limit(0, ($rows === null ? 10 : (int) $rows))->getAll();
+        $final_limit = ($rows === null ? 10 : (int) $rows);
+        $rows_table = DB::connection($main_conn)->table($entity)->select(...$columns_table)->limit(0, $final_limit)->fetchMode(\PDO::FETCH_ASSOC)->getAll();
 
         if (isset($rows_table->status)) {
             $output->writeln("<info>\t>>  {$rows_table->message}</info>");
