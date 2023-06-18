@@ -68,15 +68,15 @@ class CrudCommand extends Command {
         // generate controller and model
         $this->getApplication()->find('new:controller')->run(
             new ArrayInput([
-                'controller' => ($path === null ? "" : $path) . "{$entity_pascal}Controller",
-                '--model' => ($path === null ? "" : $path) . "{$entity_pascal}Model"
+                'controller' => ($path === null ? "" : $path) . "{$main_conn_pascal}/{$entity_pascal}Controller",
+                '--model' => ($path === null ? "" : $path) . "{$main_conn_pascal}/{$entity_pascal}Model"
             ]),
             $output
         );
 
         // modify controllers
         $file_c = "{$entity_pascal}Controller";
-        $path_c = "app/Http/Controllers/" . ($path === null ? "" : $path) . "{$file_c}.php";
+        $path_c = "app/Http/Controllers/{$main_conn_pascal}/" . ($path === null ? "" : $path) . "{$file_c}.php";
 
         $this->readFileRows($path_c, [
             6 => ['replace' => false, 'content' => "use {$namespace_class};\n\n"],
@@ -87,7 +87,7 @@ class CrudCommand extends Command {
 
         // modify models
         $columns = DB::connection($main_conn)->show()->columns()->from($entity)->getAll();
-        $path_m = "app/Models/" . ($path === null ? "" : $path) . "{$entity_pascal}Model.php";
+        $path_m = "app/Models/{$main_conn_pascal}/" . ($path === null ? "" : $path) . "{$entity_pascal}Model.php";
         $list_methods = ['create' => "", 'update' => "", 'delete' => ""];
         $methods = $this->generateGetters($columns);
 
