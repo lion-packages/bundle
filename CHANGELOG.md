@@ -1,5 +1,18 @@
 # Release Notes
 
+## [v14.18.0](https://github.com/Sleon4/Lion-Framework/compare/v14.17.1...v14.18.0) (2023-06-18)
+
+### Added
+- added format support for columns of type (blob, varbinary) to generate migrations
+
+### Changed
+- query has been modified to execute fresh migrations
+- table format has been validated to generate crud
+- query has been modified to read columns in command (db:columns)
+- query query has been modified to read tables in command (db:select)
+- configuration in dockerfile has been updated
+- environment variables have been updated
+
 ## [v14.17.1](https://github.com/Sleon4/Lion-Framework/compare/v14.17.0...v14.17.1) (2023-06-15)
 
 ### Fixed
