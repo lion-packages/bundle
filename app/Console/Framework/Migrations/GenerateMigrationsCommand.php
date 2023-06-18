@@ -74,9 +74,9 @@ class GenerateMigrationsCommand extends Command {
 
             foreach ($columns_db as $key => $column) {
                 if (str->of(strtolower($column->Type))->test('/varbinary/i')) {
-                    $rows_insert .=  '"0x' . bin2hex($row[$column->Field]) . '"';
+                    $rows_insert .=  '"0x' . bin2hex($row[$column->Field]) . '",';
                 } elseif (str->of(strtolower($column->Type))->test('/blob/i')) {
-                    $rows_insert .=  '"0x' . bin2hex($row[$column->Field]) . '"';
+                    $rows_insert .=  '"0x' . bin2hex($row[$column->Field]) . '",';
                 } else {
                     $rows_insert .= "'{$row[$column->Field]}',";
                 }
