@@ -929,12 +929,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-SQL.git",
-                "reference": "c8ce13673b52c1361fa75405bf760ab3bbbea553"
+                "reference": "859a32ed97b61d30c93ecffd321b4e4cda5a890c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/c8ce13673b52c1361fa75405bf760ab3bbbea553",
-                "reference": "c8ce13673b52c1361fa75405bf760ab3bbbea553",
+                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/859a32ed97b61d30c93ecffd321b4e4cda5a890c",
+                "reference": "859a32ed97b61d30c93ecffd321b4e4cda5a890c",
                 "shasum": ""
             },
             "require": {
@@ -955,7 +955,7 @@
                 "issues": "https://github.com/Sleon4/Lion-SQL/issues",
                 "source": "https://github.com/Sleon4/Lion-SQL/tree/v8.6.0"
             },
-            "time": "2023-06-18T01:35:34+00:00"
+            "time": "2023-06-18T15:08:15+00:00"
         },
         {
             "name": "monolog/monolog",

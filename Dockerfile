@@ -2,6 +2,7 @@ FROM php:8.2-apache
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update \
+    && apt-get install -y unzip \
     && apt-get install -y sudo \
     && apt-get install -y nano \
     && apt-get install -y cron \

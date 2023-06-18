@@ -12,13 +12,14 @@ services:
         volumes:
             - ./:/var/www/html
         depends_on:
-            - db
+            - db_mysql
         networks:
             - lion
-    db:
+    db_mysql:
         image: mysql
         container_name: lion-framework-mysql
         command: --default-authentication-plugin=mysql_native_password
+        restart: unless-stopped
         environment:
             MYSQL_DATABASE: ${DB_NAME}
             MYSQL_PASSWORD: ${DB_PASSWORD}
@@ -26,14 +27,15 @@ services:
         ports:
             - "3306:3306"
         volumes:
-            - db_data:/var/lib/mysql
+            - mysql_data:/var/lib/mysql
         networks:
             - lion
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
         container_name: lion-framework-phpmyadmin
+        restart: unless-stopped
         links:
-            - db:db
+            - db_mysql:db_mysql
         ports:
             - 8080:80
         environment:
@@ -43,6 +45,6 @@ services:
         networks:
             - lion
 volumes:
-    db_data:
+    mysql_data:
 networks:
     lion:
