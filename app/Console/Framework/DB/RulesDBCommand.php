@@ -39,7 +39,7 @@ class RulesDBCommand extends Command {
         $entity_pascal = str->of($entity)->replace("_", " ")->pascal()->get();
         $connections = DB::getConnections();
         $main_conn = ($connection === null) ? $connections['default'] : $connection;
-        $main_conn_pascal = str->of($main_conn)->replace("_", " ")->pascal()->get();
+        $main_conn_pascal = str->of($main_conn)->replace("_", " ")->replace("-", " ")->pascal()->get();
 
         $columns = DB::connection($main_conn)->show()->full()->columns()->from($entity)->getAll();
 

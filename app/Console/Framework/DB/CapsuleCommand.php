@@ -34,12 +34,16 @@ class CapsuleCommand extends Command {
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $columns = null;
         $table = $input->getArgument('entity');
         $connection = $input->getOption('connection');
         $message = $input->getOption('message');
         $path = $input->getOption('path');
+
+        $columns = null;
         $table = Str::of($table)->test("/-/") ? "`{$table}`" : $table;
+        $connections = DB::getConnections();
+        $main_conn = $connection === null ? $connections['default'] : $connection;
+        $main_conn_pascal = str->of($main_conn)->replace("_", " ")->replace("-", " ")->pascal()->get();
 
         if ($message === null) {
             $message = true;
@@ -50,19 +54,14 @@ class CapsuleCommand extends Command {
             $path = "";
         }
 
-        if ($connection === null) {
-            $columns = DB::show()->columns()->from($table)->getAll();
-        } else {
-            $columns = DB::connection($connection)->show()->columns()->from($table)->getAll();
-        }
-
+        $columns = DB::connection($main_conn)->show()->columns()->from($table)->getAll();
         if (isset($columns->status)) {
             $output->writeln("<fg=#E37820>\t>>  CAPSULE: {$columns->message} \u{2717}</>");
             return Command::FAILURE;
         }
 
         $index = 0;
-        $list = $this->export("Database/Class/", ($path . $this->normalizeClass(Str::of($table)->replace('`', '')->get())));
+        $list = $this->export("Database/Class/{$main_conn_pascal}/", ($path . $this->normalizeClass(Str::of($table)->replace('`', '')->get())));
         $functions_union = "";
         $propierties_union = "";
         $new_object_union = "";
