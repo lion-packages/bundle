@@ -35,7 +35,6 @@ class AllCrudCommand extends Command {
 
             foreach ($tables as $key => $table) {
                 $values = arr->of((array) $table)->values()->get();
-                $path = str->of($conn['dbname'])->replace("_", " ")->replace("-", " ")->pascal()->get();
 
                 if (in_array(strtolower($values[0]), ["groups", "group", "select"])) {
                     $output->writeln("\n<error>\t>>  Omitted entity CRUD '{$conn['dbname']}.{$values[0]}', contains reserved names</error>\n");
@@ -43,8 +42,7 @@ class AllCrudCommand extends Command {
                     $this->getApplication()->find('db:crud')->run(
                         new ArrayInput([
                             'entity' => $values[0],
-                            '--path' =>  $path . "/",
-                            '--connection' => $conn['dbname']
+                            '-c' => $conn['dbname']
                         ]),
                         $output
                     );
