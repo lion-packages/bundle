@@ -69,16 +69,28 @@ class GenerateMigrationsCommand extends Command {
         $limit = $input->getOption("limit");
         $size = arr->of($this->connections['connections'])->length();
 
-        $addRow = function(array $columns_db, array $row): string {
+        $setQuotes = function($str) {
+            $str = str_replace("'", "`", $str);
+            return str_replace('"', "`", $str);
+        };
+
+        $addRow = function(array $columns_db, array $row) use ($setQuotes): string  {
             $rows_insert = "";
 
             foreach ($columns_db as $key => $column) {
-                if (str->of(strtolower($column->Type))->test('/varbinary/i')) {
-                    $rows_insert .=  '"0x' . bin2hex($row[$column->Field]) . '",';
-                } elseif (str->of(strtolower($column->Type))->test('/blob/i')) {
-                    $rows_insert .=  '"0x' . bin2hex($row[$column->Field]) . '",';
+                if ($row[$column->Field] === null) {
+                    $rows_insert .= "null,";
                 } else {
-                    $rows_insert .= "'{$row[$column->Field]}',";
+                    $type = str->of($column->Type)->lower()->get();
+                    $value = $setQuotes($row[$column->Field]);
+
+                    if (str->of($type)->test('/varbinary/i')) {
+                        $rows_insert .=  "'0x" . bin2hex($value) . "',";
+                    } elseif (str->of($type)->test('/blob/i')) {
+                        $rows_insert .=  "'0x" . bin2hex($value) . "',";
+                    } else {
+                        $rows_insert .= "'{$value}',";
+                    }
                 }
             }
 
@@ -114,12 +126,7 @@ class GenerateMigrationsCommand extends Command {
                         $size_columns_db = arr->of($columns_db)->length();
                         $columns = "";
 
-                        $addColumns = function(string $columns, int $key, object $column_db, ?object $info_foreign) use ($new_table_name, $size_columns_db): string {
-                            $setQuotes = function($str) {
-                                $str = str_replace("'", "`", $str);
-                                return str_replace('"', "`", $str);
-                            };
-
+                        $addColumns = function(string $columns, int $key, object $column_db, ?object $info_foreign) use ($setQuotes, $new_table_name, $size_columns_db): string {
                             $column_name = str_replace("{$new_table_name}_", "", str->of($column_db->Field)->lower()->get());
                             $type = explode("(", $column_db->Type);
 

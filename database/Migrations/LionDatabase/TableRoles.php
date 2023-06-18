@@ -19,7 +19,7 @@ return new class {
 			->create()
 			->column('id', ['type' => 'int', 'primary-key' => true, 'lenght' => 11, 'null' => false, 'auto-increment' => true])
 			->column('name', ['type' => 'varchar', 'length' => 45, 'null' => false, 'comment' => '', 'default' => ''])
-			->column('description', ['type' => 'varchar', 'length' => 140, 'null' => true, 'comment' => '', 'default' => ''])
+			->column('description', ['type' => 'varchar', 'length' => 45, 'null' => true, 'comment' => '', 'default' => ''])
 			->execute();
 	}
 
@@ -31,9 +31,9 @@ return new class {
 				'roles_description',
 			],
  			'rows' => [
-                [null, "Administrator", null],
-                [null, "Client", null]
-            ]
+				['1','Administrator',null],
+				['2','Client',null],
+			]
 		];
 	}
 

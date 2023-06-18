@@ -18,12 +18,12 @@ return new class {
 			->table($this->table, true)
 			->create()
 			->column('id', ['type' => 'int', 'primary-key' => true, 'lenght' => 11, 'null' => false, 'auto-increment' => true])
-			->column('idroles', ['type' => 'int', 'length' => 11, 'null' => false, 'foreign-key' => ['table' => 'roles', 'column' => 'idroles'], 'comment' => '', 'default' => ''])
+			->column('idroles', ['type' => 'int', 'null' => false, 'foreign-key' => ['table' => 'roles', 'column' => 'idroles'], 'comment' => '', 'default' => ''])
 			->column('name', ['type' => 'varchar', 'length' => 45, 'null' => false, 'comment' => '', 'default' => ''])
 			->column('lastname', ['type' => 'varchar', 'length' => 45, 'null' => false, 'comment' => '', 'default' => ''])
-			->column('email', ['type' => 'varchar', 'length' => 255, 'null' => false, 'unique' => true, 'comment' => '', 'default' => ''])
+			->column('email', ['type' => 'varchar', 'length' => 45, 'null' => false, 'unique' => true, 'comment' => '', 'default' => ''])
 			->column('password', ['type' => 'blob', 'null' => false, 'comment' => '', 'default' => ''])
-			->column('code', ['type' => 'varchar', 'length' => 19, 'null' => false, 'unique' => true, 'comment' => '', 'default' => ''])
+			->column('code', ['type' => 'varchar', 'length' => 45, 'null' => false, 'unique' => true, 'comment' => '', 'default' => ''])
 			->column('create_at', ['type' => 'datetime', 'null' => false, 'comment' => '', 'default' => ''])
 			->execute();
 	}
@@ -32,7 +32,7 @@ return new class {
 		return [
 			'columns' => [
 				'idusers',
-				'idroles',
+				'users_idroles',
 				'users_name',
 				'users_lastname',
 				'users_email',
