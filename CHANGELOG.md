@@ -1,5 +1,14 @@
 # Release Notes
 
+## [v14.19.0](https://github.com/Sleon4/Lion-Framework/compare/v14.18.0...v14.19.0) (2023-06-19)
+
+### Added
+- added functions to make session variables
+- middleware added to config
+
+### Changed
+- configuration in docker has been updated
+
 ## [v14.18.0](https://github.com/Sleon4/Lion-Framework/compare/v14.17.1...v14.18.0) (2023-06-18)
 
 ### Added
