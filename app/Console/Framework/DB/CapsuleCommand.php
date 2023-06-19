@@ -28,7 +28,6 @@ class CapsuleCommand extends Command {
         $this
             ->setDescription('Command required for the creation of new Capsules')
             ->addArgument('entity', InputArgument::REQUIRED, 'Entity name', null)
-            ->addOption('path', 'p', InputOption::VALUE_REQUIRED, 'Do you want to configure your own route?')
             ->addOption('connection', 'c', InputOption::VALUE_REQUIRED, 'Do you want to use a specific connection?')
             ->addOption('message', null, InputOption::VALUE_REQUIRED, '', null);
     }
@@ -37,7 +36,6 @@ class CapsuleCommand extends Command {
         $table = $input->getArgument('entity');
         $connection = $input->getOption('connection');
         $message = $input->getOption('message');
-        $path = $input->getOption('path');
 
         $columns = null;
         $table = Str::of($table)->test("/-/") ? "`{$table}`" : $table;
@@ -50,10 +48,6 @@ class CapsuleCommand extends Command {
             $output->writeln("<comment>\t>>  CAPSULE: {$table}</comment>");
         }
 
-        if ($path === null) {
-            $path = "";
-        }
-
         $columns = DB::connection($main_conn)->show()->columns()->from($table)->getAll();
         if (isset($columns->status)) {
             $output->writeln("<fg=#E37820>\t>>  CAPSULE: {$columns->message} \u{2717}</>");
@@ -61,7 +55,7 @@ class CapsuleCommand extends Command {
         }
 
         $index = 0;
-        $list = $this->export("Database/Class/{$main_conn_pascal}/", ($path . $this->normalizeClass(Str::of($table)->replace('`', '')->get())));
+        $list = $this->export("Database/Class/{$main_conn_pascal}/", $this->normalizeClass(Str::of($table)->replace('`', '')->get()));
         $functions_union = "";
         $propierties_union = "";
         $new_object_union = "";

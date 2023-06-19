@@ -30,14 +30,12 @@ class CrudCommand extends Command {
         $this
             ->setDescription("command to generate controller and model of an entity with their respective CRUD functions")
             ->addArgument('entity', InputArgument::REQUIRED, 'Entity name')
-            ->addOption('path', 'p', InputOption::VALUE_REQUIRED, 'Save to a specific path?')
             ->addOption('connection', 'c', InputOption::VALUE_REQUIRED, 'Do you want to use a specific connection?');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
         $entity = $input->getArgument("entity");
         $connection = $input->getOption("connection");
-        $path = $input->getOption("path");
 
         $entity_pascal = str->of($entity)->replace("_", " ")->pascal()->get();
         $connections = DB::getConnections();
@@ -48,35 +46,28 @@ class CrudCommand extends Command {
 
         // generate capsule class
         $this->getApplication()->find('db:capsule')->run(
-            new ArrayInput([
-                'entity' => $entity,
-                '--path' => $main_conn_pascal . "/",
-                '--connection' => $main_conn
-            ]),
+            new ArrayInput(['entity' => $entity, '-c' => $main_conn]),
             $output
         );
 
         // generate all rules
         $this->getApplication()->find('db:rules')->run(
-            new ArrayInput([
-                'entity' => $entity,
-                '--connection' => $main_conn
-            ]),
+            new ArrayInput(['entity' => $entity, '-c' => $main_conn]),
             $output
         );
 
         // generate controller and model
         $this->getApplication()->find('new:controller')->run(
             new ArrayInput([
-                'controller' => ($path === null ? "" : $path) . "{$main_conn_pascal}/{$entity_pascal}Controller",
-                '--model' => ($path === null ? "" : $path) . "{$main_conn_pascal}/{$entity_pascal}Model"
+                'controller' => "{$main_conn_pascal}/{$entity_pascal}Controller",
+                '--model' => "{$main_conn_pascal}/{$entity_pascal}Model"
             ]),
             $output
         );
 
         // modify controllers
         $file_c = "{$entity_pascal}Controller";
-        $path_c = "app/Http/Controllers/{$main_conn_pascal}/" . ($path === null ? "" : $path) . "{$file_c}.php";
+        $path_c = "app/Http/Controllers/{$main_conn_pascal}/{$file_c}.php";
 
         $this->readFileRows($path_c, [
             6 => ['replace' => false, 'content' => "use {$namespace_class};\n\n"],
@@ -87,7 +78,7 @@ class CrudCommand extends Command {
 
         // modify models
         $columns = DB::connection($main_conn)->show()->columns()->from($entity)->getAll();
-        $path_m = "app/Models/{$main_conn_pascal}/" . ($path === null ? "" : $path) . "{$entity_pascal}Model.php";
+        $path_m = "app/Models/{$main_conn_pascal}/{$entity_pascal}Model.php";
         $list_methods = ['create' => "", 'update' => "", 'delete' => ""];
         $methods = $this->generateGetters($columns);
 

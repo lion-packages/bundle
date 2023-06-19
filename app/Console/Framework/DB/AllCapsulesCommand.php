@@ -3,12 +3,11 @@
 namespace App\Console\Framework\DB;
 
 use LionHelpers\Arr;
-use LionHelpers\Str;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\{ InputInterface, InputArgument, InputOption, ArrayInput };
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Helper\ProgressBar;
 use LionSQL\Drivers\MySQL\MySQL as DB;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\ArrayInput;
 
 class AllCapsulesCommand extends Command {
 
@@ -33,7 +32,7 @@ class AllCapsulesCommand extends Command {
         $list_all_tables = [];
 
         foreach ($connections_keys as $key => $connection) {
-            $output->writeln("<comment>\t>>  CONNECTION: {$connection}</comment>");
+            $output->writeln("<question>\t>>  CONNECTION: {$connection}</question>");
             $all_tables = DB::connection($connection)->show()->tables()->from($connection)->getAll();
 
             if (!isset($all_tables->status)) {
@@ -48,41 +47,18 @@ class AllCapsulesCommand extends Command {
         }
 
         foreach ($list_all_tables as $key => $table) {
-            $progressBar = new ProgressBar($output, $table['size']);
-            $progressBar->setFormat('debug_nomax');
-            $progressBar->start();
-
             foreach ($table['all-tables'] as $keyTables => $tableDB) {
                 $tableDB = (array) $tableDB;
                 $table_key = array_keys($tableDB);
 
-                if ($keyTables === ($table['size'] - 1)) {
-                    $progressBar->setBarCharacter('<info>=</info>');
-                } else {
-                    $progressBar->setBarCharacter('<comment>=</comment>');
-                }
-
-                $path = Str::of($table['connection'])
-                    ->replace("_", " ")
-                    ->headline()
-                    ->replace(" ", "")
-                    ->get();
-
                 $this->getApplication()->find('db:capsule')->run(
                     new ArrayInput([
                         'entity' => $tableDB[$table_key[0]],
-                        '--path' => $path . "/",
-                        '--connection' => $table['connection'],
-                        '--message' => false
+                        '--connection' => $table['connection']
                     ]),
                     $output
                 );
-
-                $progressBar->advance();
             }
-
-            $progressBar->finish();
-            $output->writeln("\n");
         }
 
         return Command::SUCCESS;
