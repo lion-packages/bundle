@@ -8,11 +8,11 @@
  * ------------------------------------------------------------------------------
  **/
 
-LionRoute\Route::addMiddleware([
+return [
     \App\Http\Middleware\Framework\JWTMiddleware::class => [
         ['name' => "jwt-existence", 'method' => "existence"],
         ['name' => "jwt-authorize", 'method' => "authorize"],
         ['name' => "jwt-not-authorize", 'method' => "notAuthorize"],
         ['name' => "jwt-without-signature", 'method' => "authorizeWithoutSignature"]
     ]
-]);
+];

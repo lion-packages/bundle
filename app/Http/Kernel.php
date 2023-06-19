@@ -8,10 +8,6 @@ class Kernel {
 
     use Singleton;
 
-    public function init() {
-        session_start();
-    }
-
     public function new(string $name, mixed $value = null): Kernel {
         $_SESSION[$name] = $value;
         return $this;

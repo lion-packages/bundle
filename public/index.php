@@ -1,5 +1,6 @@
 <?php
 
+session_start();
 define('LION_START', microtime(true));
 
 /**
@@ -120,7 +121,8 @@ if (isset($rules[$_SERVER['REQUEST_URI']])) {
 \LionRoute\Route::addLog();
 \LionRoute\Route::init();
 \LionRoute\Request::init(client);
-include_once("../routes/middleware.php");
+LionRoute\Route::addMiddleware(require_once("../config/middleware.php"));
 include_once("../routes/web.php");
 \LionRoute\Route::get('route-list', fn() => \LionRoute\Route::getFullRoutes());
+session()->destroy();
 \LionRoute\Route::dispatch();
