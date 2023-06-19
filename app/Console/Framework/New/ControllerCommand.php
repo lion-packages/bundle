@@ -63,20 +63,9 @@ class ControllerCommand extends Command {
 
         foreach (["create", "read", "update", "delete"] as $key => $method) {
             if ($model != null) {
-                $this->add(
-                    $this->generateFunctionsController(
-                        $method,
-                        $list['class'],
-                        $camel_class
-                    )
-                );
+                $this->add($this->generateFunctionsController($method, $list['class'], $camel_class));
             } else {
-                $this->add(
-                    $this->generateFunctionsController(
-                        $method,
-                        $list['class']
-                    )
-                );
+                $this->add($this->generateFunctionsController($method, $list['class']));
             }
         }
 

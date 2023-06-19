@@ -4,7 +4,8 @@ namespace App\Console\Framework\Token;
 
 use LionSecurity\JWT;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\{ InputInterface, InputArgument };
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class GenerateJWTCommand extends Command {
