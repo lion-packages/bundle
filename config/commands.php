@@ -48,7 +48,7 @@ return [
         // -----------------------------------------------------------------------------------------
         \App\Console\Framework\RSA\NewRSACommand::class,
         // -----------------------------------------------------------------------------------------
-        \App\Console\Framework\Sockets\WebSocketsCommand::class,
+        \App\Console\Framework\Sockets\NewSocketCommand::class,
         \App\Console\Framework\Sockets\RunWebSocketsCommand::class,
         // -----------------------------------------------------------------------------------------
         \App\Console\Framework\SSH\SSHFileCommand::class,
