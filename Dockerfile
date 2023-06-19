@@ -25,7 +25,6 @@ COPY . .
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN a2enmod rewrite
 
-CMD composer install
-CMD php lion serve --host 0.0.0.0 --port 8000
+CMD composer install && php lion serve --host 0.0.0.0 --port 8000
 
 EXPOSE 8000
