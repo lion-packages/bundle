@@ -12,7 +12,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class RunWebSocketsCommand extends Command {
+class ServerSocketCommand extends Command {
 
 	protected static $defaultName = "socket:serve";
 
