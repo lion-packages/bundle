@@ -112,6 +112,26 @@ if (isset($rules[$_SERVER['REQUEST_URI']])) {
 
 /**
  * ------------------------------------------------------------------------------
+ * Command usage by url
+ * ------------------------------------------------------------------------------
+ * Use the commands you want for your web application
+ * ------------------------------------------------------------------------------
+ **/
+
+$commands = require_once("../routes/console.php");
+
+if (isset($commands[$_SERVER['REQUEST_URI']])) {
+    $results = [];
+
+    foreach ($commands[$_SERVER['REQUEST_URI']] as $key => $command) {
+        $results[$command] = kernel->command($command);
+    }
+
+    finish($results);
+}
+
+/**
+ * ------------------------------------------------------------------------------
  * Web Routes
  * ------------------------------------------------------------------------------
  * Here is where you can register web routes for your application
