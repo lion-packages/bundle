@@ -42,11 +42,16 @@ class NewSocketCommand extends Command {
         $this->add("use Ratchet\\MessageComponentInterface;\n");
         $this->add("use \SplObjectStorage;\n\n");
         $this->add("class {$list['class']} implements MessageComponentInterface {\n\n");
+        $this->add("\t" . 'protected int $port = 8080;' . "\n");
         $this->add("\t" . 'protected SplObjectStorage $clients;' . "\n\n");
         $this->add("\tpublic function __construct() {\n");
         $this->add("\t\t" . '$this->clients = new SplObjectStorage();' . "\n");
         $this->add("\t}\n\n");
+        $this->add("\tpublic function getPort(): int {\n");
+        $this->add("\t\t" . 'return $this->port;' . "\n");
+        $this->add("\t}\n\n");
         $this->add("\t" . 'public function onOpen(ConnectionInterface $conn) {' . "\n");
+        $this->add("\t\t" . 'echo("New connection! ({$conn->resourceId})\n");' . "\n");
         $this->add("\t\t" . '$this->clients->attach($conn);' . "\n");
         $this->add("\t}\n\n");
         $this->add("\t" . 'public function onMessage(ConnectionInterface $from, $msg) {' . "\n");
