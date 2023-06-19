@@ -199,3 +199,15 @@ if (!function_exists('jwt')) {
         return \LionSecurity\JWT::decode(\LionSecurity\JWT::get());
     }
 }
+
+/**
+ * ------------------------------------------------------------------------------
+ * Return function that allows access to the http kernel methods to generate sessions
+ * ------------------------------------------------------------------------------
+ **/
+
+if (!function_exists('session')) {
+    function session(): App\Http\Kernel {
+        return App\Http\Kernel::getInstance();
+    }
+}
