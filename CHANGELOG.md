@@ -5,6 +5,7 @@
 ### Added
 - added supervisord configuration to run local server services and sockets
 - added helper session to modify session variables with PHP
+- middleware configuration has been added to the config
 
 ### Changed
 - format to generate sockets has been modified
