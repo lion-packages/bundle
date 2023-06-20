@@ -43,12 +43,13 @@ class NewSocketCommand extends Command {
         $this->add("use \SplObjectStorage;\n\n");
         $this->add("class {$list['class']} implements MessageComponentInterface {\n\n");
         $this->add("\t" . 'protected int $port = 8080;' . "\n");
+        $this->add("\t" . 'protected string $host = "127.0.0.1";' . "\n");
         $this->add("\t" . 'protected SplObjectStorage $clients;' . "\n\n");
         $this->add("\tpublic function __construct() {\n");
         $this->add("\t\t" . '$this->clients = new SplObjectStorage();' . "\n");
         $this->add("\t}\n\n");
-        $this->add("\tpublic function getPort(): int {\n");
-        $this->add("\t\t" . 'return $this->port;' . "\n");
+        $this->add("\tpublic function getSocket(): object {\n");
+        $this->add("\t\t" . 'return (object) ["port" => $this->port, "host" => $this->host];' . "\n");
         $this->add("\t}\n\n");
         $this->add("\t" . 'public function onOpen(ConnectionInterface $conn) {' . "\n");
         $this->add("\t\t" . 'echo("New connection! ({$conn->resourceId})\n");' . "\n");

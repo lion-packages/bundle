@@ -2,14 +2,13 @@
 
 namespace App\Console\Framework\Sockets;
 
-use App\Console\Kernel;
 use Ratchet\Http\HttpServer;
 use Ratchet\Server\IoServer;
 use Ratchet\WebSocket\WsServer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
+
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ServerSocketCommand extends Command {
@@ -17,7 +16,7 @@ class ServerSocketCommand extends Command {
 	protected static $defaultName = "socket:serve";
 
     protected function initialize(InputInterface $input, OutputInterface $output) {
-
+        $output->write("\033[2J\033[;H");
     }
 
     protected function interact(InputInterface $input, OutputInterface $output) {
@@ -27,14 +26,12 @@ class ServerSocketCommand extends Command {
     protected function configure() {
         $this
             ->setDescription('Command required to run WebSockets')
-            ->addArgument('socket', InputArgument::OPTIONAL, 'Socket name')
-            ->addOption('port', 'p', InputOption::VALUE_REQUIRED, 'Do you want to set your own port?', 8080);
+            ->addArgument('socket', InputArgument::OPTIONAL, 'Socket name');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $port = $input->getOption('port');
         $socket = $input->getArgument('socket');
-        $class = Kernel::getInstance()->getClass(str->of($socket)->trim()->get());
+        $class = kernel->getClass(str->of($socket)->trim()->get());
 
         if (!$class) {
             $output->writeln("<comment>\t>>  SOCKET: {$socket}</comment>");
@@ -48,13 +45,21 @@ class ServerSocketCommand extends Command {
             return Command::FAILURE;
         }
 
+        $socket_class = new $class();
+        $socket_info = $socket_class->getSocket();
+
         $output->write("\n<info>Lion-Framework</info> ");
         $output->writeln("ready in " . number_format((microtime(true) - LION_START), 3) . " ms\n");
-        $output->writeln("\t<question> INFO </question> WebSocket running on port {$port}\n");
-        $output->writeln("<comment>Press Ctrl+C to stop the WebSocket</comment>\n");
 
-        $server = IoServer::factory(new HttpServer(new WsServer(new $class())), $port);
-        $server->run();
+        $url = "ws://{$socket_info->host}:{$socket_info->port}";
+        $output->writeln("<comment>\t>>  LOCAL:</comment> Socket running on [{$url}]");
+        $output->writeln("<comment>\t>>  Press Ctrl+C to stop the socket</comment>");
+
+        IoServer::factory(
+            new HttpServer(new WsServer($socket_class)),
+            $socket_info->port,
+            $socket_info->host
+        )->run();
 
         return Command::SUCCESS;
     }

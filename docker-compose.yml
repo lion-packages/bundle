@@ -11,8 +11,10 @@ services:
             - "8000:8000"
         volumes:
             - ./:/var/www/html
+            - ./supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
         depends_on:
             - db
+            - phpmyadmin
         networks:
             - lion
     db:
@@ -48,3 +50,4 @@ volumes:
     mysql_data:
 networks:
     lion:
+        driver: bridge
