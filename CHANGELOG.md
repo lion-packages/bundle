@@ -1,5 +1,19 @@
 # Release Notes
 
+## [v14.20.0](https://github.com/Sleon4/Lion-Framework/compare/v14.19.0...v14.20.0) (2023-06-20)
+
+### Added
+- added supervisord configuration to run local server services and sockets
+
+### Changed
+- format to generate sockets has been modified
+- execution of sockets commands has been modified
+- configuration in docker has been modified
+
+### Refactoring
+- class has been renamed to generate sockets
+- class has been renamed to execute sockets
+
 ## [v14.19.0](https://github.com/Sleon4/Lion-Framework/compare/v14.18.0...v14.19.0) (2023-06-19)
 
 ### Added
