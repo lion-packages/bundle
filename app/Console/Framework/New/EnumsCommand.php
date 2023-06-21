@@ -57,7 +57,6 @@ class EnumsCommand extends Command {
 
         $output->writeln("<comment>\t>>  ENUM: {$enum}</comment>");
         $output->writeln("<info>\t>>  ENUM: The '{$list['namespace']}\\{$list['class']}' enum has been generated</info>");
-
         return Command::SUCCESS;
 	}
 
