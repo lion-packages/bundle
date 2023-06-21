@@ -21,7 +21,7 @@ Route::prefix('api', function() {
         Route::post('login', [LoginController::class, 'auth']);
 
         Route::prefix('session', function() {
-            Route::get('refresh', [SessionController::class, 'refresh'], ['jwt-existence']);
+            Route::get('refresh', [SessionController::class, 'refresh'], ['jwt-existence', 'jwt-authorize']);
         });
     });
 });
