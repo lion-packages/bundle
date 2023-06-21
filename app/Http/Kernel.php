@@ -2,11 +2,12 @@
 
 namespace App\Http;
 
+use App\Traits\Framework\HttpTrait;
 use App\Traits\Framework\Singleton;
 
 class Kernel {
 
-    use Singleton;
+    use Singleton, HttpTrait;
 
     public function new(string $name, mixed $value = null): Kernel {
         $_SESSION[$name] = $value;

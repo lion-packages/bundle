@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Kernel;
+
 session_start();
 define('LION_START', microtime(true));
 
@@ -101,12 +103,14 @@ if (isError($response_email)) {
  * ------------------------------------------------------------------------------
  **/
 
-$rules = require_once("../routes/rules.php");
+$all_rules = require_once("../routes/rules.php");
 
-if (isset($rules[$_SERVER['REQUEST_URI']])) {
-    foreach ($rules[$_SERVER['REQUEST_URI']] as $key => $rule) {
-        $rule::passes();
-        $rule::display();
+foreach ($all_rules[$_SERVER['REQUEST_METHOD']] as $uri => $rules) {
+    if (Kernel::getInstance()->checkUrl($uri)) {
+        foreach ($rules as $key => $rule) {
+            $rule::passes();
+            $rule::display();
+        }
     }
 }
 
