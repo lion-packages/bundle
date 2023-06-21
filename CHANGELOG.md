@@ -1,5 +1,11 @@
 # Release Notes
 
+## [v14.21.0](https://github.com/Sleon4/Lion-Framework/compare/v14.20.0...v14.21.0) (2023-06-21)
+
+### Added
+- rules format has been modified allowing the use of dynamic parameters
+- command to generate interfaces has been added
+
 ## [v14.20.0](https://github.com/Sleon4/Lion-Framework/compare/v14.19.0...v14.20.0) (2023-06-20)
 
 ### Added
