@@ -23,6 +23,38 @@ trait PostmanCollector {
         ];
     }
 
+    private static function createQueryParams(array $array_params): array {
+        $query = [];
+        $params = "";
+        $cont = 0;
+
+        $addvalues = function(string $params, string $data, string $key, bool $index = false): string {
+            if ($data === "") {
+                $params .= !$index ? "&{$key}" : "?{$key}";
+            } else {
+                $params .= !$index ? "&{$key}={$data}" : "?{$key}={$data}";
+            }
+
+            return $params;
+        };
+
+        foreach ($array_params as $key => $data) {
+            if ($cont === 0) {
+                $params = $addvalues($params, $data, $key, true);
+                $cont++;
+            } else {
+                $params = $addvalues($params, $data, $key);
+            }
+
+            $query[] = [
+                'key' => $key,
+                'value' => $data === "" ? null : $data
+            ];
+        }
+
+        return ['raw' => $params, 'query' => $query];
+    }
+
     private static function createPort(): void {
         $after_host = Str::of(self::$postman['params']['host']['url'])->after("://");
         $after_host = Str::of($after_host)->after(":");
@@ -57,7 +89,7 @@ trait PostmanCollector {
                     'disabled' => $param::$disabled
                 ];
             } else {
-                $new_params[$param::$field] = "";
+                $new_params[$param::$field] = $param::$value;
             }
         }
 
@@ -96,6 +128,10 @@ trait PostmanCollector {
     }
 
     private static function addGet(string $name, string $route, array $params): array {
+        $array_params = json->decode(json->encode((object) self::addParams("GET", $params)));
+        $create_params = self::createQueryParams($array_params);
+        $new_route = str->of("{{base_url}}/{$route}{$create_params['raw']}")->replace("//", "/")->get();
+
         return [
             'name' => $name,
             'response' => [],
@@ -108,20 +144,12 @@ trait PostmanCollector {
                         'type' => "text"
                     ]
                 ],
-                'body' => [
-                    'mode' => "raw",
-                    'raw' => json->encode((object) self::addParams("GET", $params)),
-                    'options' => [
-                        'raw' => [
-                            'language' => "json"
-                        ]
-                    ]
-                ],
                 'url' => [
-                    ...self::$postman['params']['host']['params'],
-                    'raw' => '{{base_url}}/' . $route,
-                    'path' => [...explode("/", $route)]
-                ]
+                    'raw' => $new_route,
+                    'host' => $route === "/" ? ["{{base_url}}"] : ["{{base_url}}/"],
+                    'path' => $route === "/" ? [""] : explode("/", $route),
+                    'query' => $create_params['query']
+                ],
             ]
         ];
     }
@@ -230,12 +258,18 @@ trait PostmanCollector {
     }
 
     public static function addRoutes(array $routes, array $rules) {
-        foreach($routes as $key_items => $route) {
-            foreach ($route as $key_route => $item) {
+        foreach($routes as $route_url => $all_routes) {
+            foreach ($all_routes as $route_method => $route_info) {
+                $params = [];
+
+                if (isset($rules[$route_method][$route_url])) {
+                    $params = $rules[$route_method][$route_url];
+                }
+
                 self::$postman['params']['routes'][] = [
-                    'url' => $key_items === "" ? "/" : $key_items,
-                    'method' => $key_route,
-                    'params' => isset($rules["/{$key_items}"]) ? $rules["/{$key_items}"] : []
+                    'url' => $route_url,
+                    'method' => $route_method,
+                    'params' => $params
                 ];
             }
         }
@@ -246,7 +280,7 @@ trait PostmanCollector {
             $split_all = null;
 
             if ($route['url'] === "/") {
-                $split_all = ["index"];
+                $split_all = [str->of("index-{$route['method']}")->lower()->get()];
             } else {
                 $split_all = explode('/', $route['url']);
             }
@@ -258,13 +292,11 @@ trait PostmanCollector {
             $last_array = [];
 
             foreach ($reverse as $key_split => $split) {
-                $name = $split === "" ? "index" : $split;
-
                 if ($key_split === 0) {
                     $request = self::addRequest(
-                        $name,
+                        $split,
                         $route['url'],
-                        $route['method'],
+                        $route['method'] === "ANY" ? "GET" : $route['method'],
                         $route['params']
                     );
 
@@ -276,12 +308,12 @@ trait PostmanCollector {
                         $initial = false;
 
                         $last_array = [
-                            'name' => $name,
+                            'name' => $split,
                             'item' => [$request]
                         ];
                     } else {
                         $last_array = [
-                            'name' => $name,
+                            'name' => $split,
                             'item' => [$last_array]
                         ];
                     }

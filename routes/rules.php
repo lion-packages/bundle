@@ -20,5 +20,11 @@ return [
     ],
     'DELETE' => [
         //
+    ],
+    'OPTIONS' => [
+        //
+    ],
+    'PATCH' => [
+        //
     ]
 ];

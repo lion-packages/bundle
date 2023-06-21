@@ -12,7 +12,7 @@ use LionRoute\Route;
  * ------------------------------------------------------------------------------
  **/
 
-Route::get('/', function() {
+Route::any('/', function() {
     return info("Welcome to the index, access the web: " . env->SERVER_URL_AUD);
 });
 
