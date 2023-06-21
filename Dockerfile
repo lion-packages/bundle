@@ -23,7 +23,9 @@ RUN docker-php-ext-install mbstring \
     && docker-php-ext-install gd \
     && docker-php-ext-install pdo_mysql \
     && docker-php-ext-install mysqli \
-    && docker-php-ext-install zip
+    && docker-php-ext-install zip \
+    && docker-php-ext-enable gd \
+    && docker-php-ext-enable zip
 
 COPY . .
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
