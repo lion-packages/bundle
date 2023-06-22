@@ -54,7 +54,7 @@ if (env->RSA_URL_PATH != '') {
  * ------------------------------------------------------------------------------
  **/
 
-foreach (require_once("../config/cors.php") as $key => $header) {
+foreach (require_once(__DIR__ . "/../config/cors.php") as $key => $header) {
     \LionRequest\Request::header($key, $header);
 }
 

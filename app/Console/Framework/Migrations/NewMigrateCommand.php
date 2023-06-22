@@ -8,6 +8,7 @@ use LionSQL\Drivers\MySQL\MySQL as DB;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 
@@ -29,7 +30,9 @@ class NewMigrateCommand extends Command {
 	protected function configure() {
 		$this
             ->setDescription("Command to generate a new migration")
-            ->addArgument('migration', InputArgument::REQUIRED, 'Migration name');
+            ->addArgument('migration', InputArgument::REQUIRED, 'Migration name')
+            ->addArgument('connection', InputArgument::REQUIRED, 'Connection name')
+            ->addOption("type", "t", InputOption::VALUE_OPTIONAL, "Type of migration", "TABLE");
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
@@ -41,18 +44,12 @@ class NewMigrateCommand extends Command {
         }
 
         // select type of migration
-        $option = $this->getHelper('question')->ask($input, $output,
-            (new ChoiceQuestion("What type of migration do you want to create?", $this->options, 0))
-                ->setErrorMessage('The selected option is not valid')
-        );
+        $option = str->of($input->getOption('type'))->upper()->get();
 
         // select connection
         $connections = DB::getConnections();
         $connections = arr->of($connections['connections'])->keys()->get();
-        $connection = $this->getHelper('question')->ask($input, $output,
-            (new ChoiceQuestion("Which connection does the migration belong to?", $connections, 0))
-                ->setErrorMessage('The selected option is not valid')
-        );
+        $connection = $input->getArgument('connection');
 
         $db_pascal = str->of($connection)->replace("-", " ")->replace("_", " ")->pascal()->trim()->get();
         $migration_pascal = str->of($migration)->replace("-", " ")->replace("_", " ")->pascal()->trim()->get();

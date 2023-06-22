@@ -88,10 +88,7 @@ class FreshMigrationsCommand extends Command {
         $items = arr->of($this->files)->keys()->get();
 
         foreach ($items as $indexFiles => $keyFiles) {
-            $output->write("\033[1;33m");
-            $output->write("\t>>");
-            $output->write("\033[0m");
-            $output->writeln("  <comment>DATABASE: {$keyFiles}</comment>");
+            $output->writeln("<comment>\t>>  DATABASE: {$keyFiles}</comment>");
 
             if (isset($this->files[$keyFiles]["tables"])) {
                 foreach ($this->files[$keyFiles]["tables"] as $key => $class) {
