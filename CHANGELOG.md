@@ -1,5 +1,12 @@
 # Release Notes
 
+## [v14.22.0](https://github.com/Sleon4/Lion-Framework/compare/v14.21.0...v14.22.0) (2023-06-22)
+
+### Added
+- added command to generate resources
+- command to execute resources has been added
+- a resource has been added to dynamically access the cli
+
 ## [v14.21.0](https://github.com/Sleon4/Lion-Framework/compare/v14.20.0...v14.21.0) (2023-06-21)
 
 ### Added
