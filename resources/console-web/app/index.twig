@@ -53,6 +53,11 @@
             addOptions(command_list[e.target.value]);
         });
 
+        document.getElementById("btn-clean").addEventListener("click", () => {
+            document.getElementById("content").value = "";
+            document.getElementById("command").value = "";
+        });
+
         document.getElementById("form-commands").addEventListener("submit", (e) => {
             e.preventDefault();
             const command = document.getElementById("command");
@@ -70,9 +75,14 @@
                     "content-Type": "multipart/form-data"
                 }
             }).then(res => {
-                // console.log(res.data);
+                console.log(res.data);
                 command.value = "";
-                content.value = content.value === "" ? (res.data.join("\n")) : (content.value + "\n" + res.data.join("\n"));
+
+                if (content.value === "") {
+                    content.value = res.data.length === 0 ? "\t>>  there is no output for the executed command" : res.data.join("\n");
+                } else {
+                    content.value = res.data.length === 0 ? "\t>>  there is no output for the executed command" : (content.value + "\n" + res.data.join("\n"));
+                }
             });
         });
     </script>
