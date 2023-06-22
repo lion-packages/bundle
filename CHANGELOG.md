@@ -9,6 +9,7 @@
 
 ### Changed
 - docker config updated
+- format for creating sockets has been updated
 
 ## [v14.20.0](https://github.com/Sleon4/Lion-Framework/compare/v14.19.0...v14.20.0) (2023-06-20)
 
