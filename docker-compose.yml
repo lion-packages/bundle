@@ -9,7 +9,7 @@ services:
             - .env
         ports:
             - "8000:8000"
-            - "9000:9000"
+            - "5173:5173"
         volumes:
             - ./:/var/www/html
             - ./supervisord.conf:/etc/supervisor/conf.d/supervisord.conf

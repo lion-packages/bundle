@@ -51,6 +51,7 @@ return [
         \App\Console\Framework\New\TraitCommand::class,
         // RESOURCES -------------------------------------------------------------------------------
         \App\Console\Framework\Resources\NewResourcesCommand::class,
+        \App\Console\Framework\Resources\ServerResourcesCommand::class,
         // ROUTE -----------------------------------------------------------------------------------
         \App\Console\Framework\Route\RouteListCommand::class,
         \App\Console\Framework\Route\PostmanCollectionCommand::class,

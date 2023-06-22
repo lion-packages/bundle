@@ -26,8 +26,8 @@ class NewResourcesCommand extends Command {
 
     protected function configure() {
         $this
-        ->setDescription("Command required to generate a resource")
-        ->addArgument('resource', InputArgument::OPTIONAL, 'Enum name', "example");
+            ->setDescription("Command required to generate a resource")
+            ->addArgument('resource', InputArgument::OPTIONAL, 'Enum name', "example");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
