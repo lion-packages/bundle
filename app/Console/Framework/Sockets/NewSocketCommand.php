@@ -42,8 +42,8 @@ class NewSocketCommand extends Command {
         $this->add("use Ratchet\\MessageComponentInterface;\n");
         $this->add("use \SplObjectStorage;\n\n");
         $this->add("class {$list['class']} implements MessageComponentInterface {\n\n");
-        $this->add("\t" . 'protected int $port = 8080;' . "\n");
-        $this->add("\t" . 'protected string $host = "127.0.0.1";' . "\n");
+        $this->add("\t" . 'protected int $port = 8090;' . "\n");
+        $this->add("\t" . 'protected string $host = "0.0.0.0";' . "\n");
         $this->add("\t" . 'protected SplObjectStorage $clients;' . "\n\n");
         $this->add("\tpublic function __construct() {\n");
         $this->add("\t\t" . '$this->clients = new SplObjectStorage();' . "\n");
