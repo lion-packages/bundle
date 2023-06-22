@@ -13,8 +13,14 @@ return [
         //
     ],
     'framework' => [
+        // AVAILABLE COMMANDS ----------------------------------------------------------------------
+        \App\Console\Framework\InfoCommand::class,
+        \App\Console\Framework\InitCommand::class,
+        \App\Console\Framework\RunTestCommand::class,
+        \App\Console\Framework\ServerCommand::class,
+        // AES -------------------------------------------------------------------------------------
         \App\Console\Framework\AES\NewAESCommand::class,
-        // -----------------------------------------------------------------------------------------
+        // DB --------------------------------------------------------------------------------------
         \App\Console\Framework\DB\AllCapsulesCommand::class,
         \App\Console\Framework\DB\AllCrudCommand::class,
         \App\Console\Framework\DB\AllRulesDBCommand::class,
@@ -26,13 +32,13 @@ return [
         \App\Console\Framework\DB\SeedCommand::class,
         \App\Console\Framework\DB\SelectTableCommand::class,
         \App\Console\Framework\DB\ShowDatabasesCommand::class,
-        // -----------------------------------------------------------------------------------------
+        // EMAIL -----------------------------------------------------------------------------------
         \App\Console\Framework\Email\ShowAccountsCommand::class,
-        // -----------------------------------------------------------------------------------------
+        // MIGRATIONS ------------------------------------------------------------------------------
         \App\Console\Framework\Migrations\FreshMigrationsCommand::class,
         \App\Console\Framework\Migrations\GenerateMigrationsCommand::class,
         \App\Console\Framework\Migrations\NewMigrateCommand::class,
-        // -----------------------------------------------------------------------------------------
+        // NEW -------------------------------------------------------------------------------------
         \App\Console\Framework\New\CapsuleCommand::class,
         \App\Console\Framework\New\CommandsCommand::class,
         \App\Console\Framework\New\ControllerCommand::class,
@@ -43,22 +49,19 @@ return [
         \App\Console\Framework\New\RulesCommand::class,
         \App\Console\Framework\New\TestCommand::class,
         \App\Console\Framework\New\TraitCommand::class,
-        // -----------------------------------------------------------------------------------------
+        // RESOURCES -------------------------------------------------------------------------------
+        \App\Console\Framework\Resources\NewResourcesCommand::class,
+        // ROUTE -----------------------------------------------------------------------------------
         \App\Console\Framework\Route\RouteListCommand::class,
         \App\Console\Framework\Route\PostmanCollectionCommand::class,
-        // -----------------------------------------------------------------------------------------
+        // RSA -------------------------------------------------------------------------------------
         \App\Console\Framework\RSA\NewRSACommand::class,
-        // -----------------------------------------------------------------------------------------
+        // SOCKETS ---------------------------------------------------------------------------------
         \App\Console\Framework\Sockets\NewSocketCommand::class,
         \App\Console\Framework\Sockets\ServerSocketCommand::class,
-        // -----------------------------------------------------------------------------------------
+        // SSH -------------------------------------------------------------------------------------
         \App\Console\Framework\SSH\SSHFileCommand::class,
-        // -----------------------------------------------------------------------------------------
+        // TOKEN -----------------------------------------------------------------------------------
         \App\Console\Framework\Token\GenerateJWTCommand::class,
-        // -----------------------------------------------------------------------------------------
-        \App\Console\Framework\InfoCommand::class,
-        \App\Console\Framework\InitCommand::class,
-        \App\Console\Framework\RunTestCommand::class,
-        \App\Console\Framework\ServerCommand::class
     ]
 ];
