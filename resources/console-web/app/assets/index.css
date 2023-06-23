@@ -11,57 +11,28 @@
     background-color: #111111;
 }
 
-/*jquery*/
-.ui-tabs {
-    position: relative !important;
-    padding: 0 !important;
+/*xterm*/
+.xterm-screen {
+    width: 100% !important;
 }
 
-.ui-tabs .ui-tabs-nav {
-    background-color: #111111 !important;
-    margin: 0;
-    padding: 0.2em 0.2em 0;
+.xterm-rows {
+    height: 100% !important;
 }
 
-.ui-widget-header {
-    border: 1px solid #111111 !important;
-    background: #111111 !important;
+.xterm-rows > div {
+    width: 100% !important;
+    height: 16px !important;
+    line-height: 16px !important;
 }
 
-.ui-widget.ui-widget-content {
-    border: 1px solid #111111 !important;
+.xterm-dom-renderer-owner-1 .xterm-rows span {
+    width: 10px !important;
 }
 
-.ui-tabs .ui-tabs-panel {
-    display: block !important;
-    border-width: 0 !important;
-    padding: 0 !important;
-    background: none !important;
-}
-
-.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br {
-    border-bottom-right-radius: 0px !important;
-}
-
-.ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl {
-    border-bottom-left-radius: 0px !important;
-}
-
-.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr {
-    border-top-right-radius: 0px !important;
-}
-
-.ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl {
-    border-top-left-radius: 0px !important;
-}
-
-.ui-tabs .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor, .ui-tabs .ui-tabs-nav li.ui-state-disabled .ui-tabs-anchor, .ui-tabs .ui-tabs-nav li.ui-tabs-loading .ui-tabs-anchor {
-    cursor: pointer !important;
-}
-
-.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover {
-    border: 1px solid #FF8463 !important;
-    background-color: #FF8463 !important;
+.xterm-dom-renderer-owner-1 .xterm-rows {
+    font-family: 'Ubuntu', sans-serif !important;
+    font-size: 12px !important;
 }
 
 /*terminal*/
@@ -74,16 +45,16 @@
 .terminal-header {
     background-color: #333;
     padding: 10px;
-    /*border-top-left-radius: 8px;
-    border-top-right-radius: 8px;*/
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
     display: flex;
     justify-content: flex-end;
 }
 
 .terminal-button-orange {
     display: inline-block;
-    width: 14px;
-    height: 14px;
+    width: 16px;
+    height: 16px;
     background-color: #FF8463;
     border-radius: 50%;
     margin-left: 5px;
@@ -91,8 +62,8 @@
 
 .terminal-button-yellow {
     display: inline-block;
-    width: 14px;
-    height: 14px;
+    width: 16px;
+    height: 16px;
     background-color: #FFCE9D;
     border-radius: 50%;
     margin-left: 5px;
@@ -101,8 +72,7 @@
 .terminal-body {
     background-color: #000;
     padding: 10px;
-    height: 500px;
-    overflow-y: scroll;
+    height: 500px !important;
     color: #FFFFFF;
     /*border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;*/

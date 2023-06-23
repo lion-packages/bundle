@@ -10,8 +10,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="
     sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    {# jquery #}
-    <link rel="stylesheet" href="https://releases.jquery.com/git/ui/jquery-ui-git.css">
+    {# xterm #}
+    <link href="https://cdn.jsdelivr.net/npm/xterm@5.2.1/css/xterm.min.css" rel="stylesheet">
 </head>
 <body class="bg-dark-web h-100">
     {% include 'extends/content.twig' %}
@@ -20,78 +20,46 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     {# bootstrap 5.3 #}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-    {# jquery #}
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js" integrity="sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0=" crossorigin="anonymous"></script>
+    {# xterm #}
+    <script src="https://cdn.jsdelivr.net/npm/xterm@5.2.1/lib/xterm.min.js"></script>
     {# assets #}
     <script type="text/javascript">
-        let cont = 1;
-        const tabs_list = {};
-        tabs_list[`tab-${cont}`] = { title: `Server ${cont}`, output: [] };
-        const all_console_output = {};
-        const terminal_body = `<div class="terminal"><div class="terminal-header"><span class="me-auto"></span><span class="terminal-button-yellow"></span><span class="terminal-button-yellow"></span><span class="terminal-button-orange"></span></div><div class="terminal-body" id="terminal-output"></div><div class="terminal-input"><span>$</span><input type="text" id="command-input" autocomplete="off" value="php lion " autofocus></div></div>`;
+        const term = new Terminal({ cols: 150 });
+        term.open(document.getElementById('terminal-output'));
 
-        const createTab = (id, title) => {
-            const link = document.createElement("A");
-            link.href = "#" + id;
-            link.textContent = title;
+        const appendOutput = (command, output) => {
+            term.writeln(`\x1b[33m# root:\x1b[0m \x1b[32m${command}\x1b[0m`);
 
-            const li = document.createElement("LI");
-            li.appendChild(link);
+            output
+                .filter((out) => !["", null].includes(out))
+                .forEach((out) => term.writeln(out));
 
-            return li;
-        };
-
-        const createTabBody = (id) => {
-            const div = document.createElement("DIV");
-            div.id = id;
-            div.innerHTML = terminal_body;
-
-            return div;
-        };
-
-        const addTabs = () => {
-            const tabs = document.getElementById("list-tabs");
-            const terminal_tabs = document.getElementById("terminal-tabs");
-
-            Object.entries(tabs_list).forEach(([id, tab]) => {
-                tabs.appendChild(createTab(id, tab.title));
-                terminal_tabs.appendChild(createTabBody(id));
-            });
-
-            tabs.innerHTML = tabs.innerHTML; // `<li><a href="#"><i class="bi bi-plus"></i></a></li>`
-        };
-
-        const appendOutput = (output) => {
             const terminalOutput = document.getElementById('terminal-output');
-            const format = output.filter((out) => !["", null].includes(out)).map((out) => `<pre>${out}</pre>`).join('');
-
-            terminalOutput.innerHTML = terminalOutput.innerHTML + format + "<hr>";
             terminalOutput.scrollTop = terminalOutput.scrollHeight;
-            all_console_output["output-" + cont] = terminalOutput.innerHTML;
         }
 
-        $('#form-terminal').submit(function(e) {
+        document.getElementById("form-terminal").addEventListener("submit", (e) => {
             e.preventDefault();
             const commandInput = document.getElementById('command-input');
 
-            if (![null, ""].includes(commandInput.value)) {
-                const form = new FormData();
-                form.append("command", commandInput.value);
-
-                axios.post("{{ host }}/http.php", form, {
-                    headers: {
-                        "content-Type": "multipart/form-data"
-                    }
-                }).then(res => {
-                    appendOutput(res.data);
-                });
+            if (["cls", "clear"].includes(commandInput.value.trim())) {
+                term.clear();
                 commandInput.value = "php lion ";
+                return false;
             }
-        });
 
-        addTabs();
-        $("#terminal-tabs").tabs();
+            const form = new FormData();
+            form.append("command", commandInput.value.trim());
+
+            axios.post("{{ host }}/http.php", form, {
+                headers: {
+                    "content-Type": "multipart/form-data"
+                }
+            }).then(res => {
+                appendOutput(commandInput.value.trim(), res.data);
+                commandInput.value = "php lion ";
+            });
+        });
     </script>
 </body>
 </html>
