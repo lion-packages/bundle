@@ -1,53 +1,22 @@
 <div class="container">
-    <div class="my-5 text-white">
+    <div class="py-5 text-white">
         <h4>LION-FRAMEWORK CLI</h4>
-
         <hr>
 
-        <form id="form-commands">
-            <div class="mb-3">
-                <label for="command" class="form-label">Command</label>
-
-            </div>
-
-            <div class="row g-3 align-items-center mb-3">
-                <div class="col-auto">
-                    <select id="group" class="form-select" required>
-                        <option value="available-commands">available commands</option>
-                        <option value="aes">aes</option>
-                        <option value="db">db</option>
-                        <option value="email">email</option>
-                        <option value="migrate" selected>migrate</option>
-                        <option value="new">new</option>
-                        <option value="resource">resource</option>
-                        <option value="route">route</option>
-                        <option value="rsa">rsa</option>
-                        <option value="sh">sh</option>
-                        <option value="socket">socket</option>
-                        <option value="token">token</option>
-                    </select>
+        <form id="form-terminal">
+            <div class="terminal">
+                <div class="terminal-header">
+                    <span class="me-auto">Server</span>
+                    <span class="terminal-button-yellow"></span>
+                    <span class="terminal-button-yellow"></span>
+                    <span class="terminal-button-orange"></span>
                 </div>
-
-                <div class="col-auto">
-                    <select id="option" class="form-select" required></select>
-                </div>
-
-                <div class="col-5">
-                    <input type="text" id="command" class="form-control-dark" autocomplete="off" placeholder="arguments and options...">
-                </div>
-
-                <div class="col-auto">
-                    <button type="button" class="btn btn-dark border border-secondary" id="btn-clean">Clean</button>
-                </div>
-
-                <div class="col-auto">
-                    <button type="submit" class="btn btn-dark border border-secondary">Exec</button>
+                <div class="terminal-body" id="terminal-output"></div>
+                <div class="terminal-input border-top border-secondary">
+                    <span>$</span>
+                    <input type="text" id="command-input" autocomplete="off" value="php lion " autofocus>
                 </div>
             </div>
-
-            <hr>
-
-            <textarea class="form-control-dark" id="content" rows="25" placeholder="command output..." readonly></textarea>
         </form>
     </div>
 </div>

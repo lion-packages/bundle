@@ -50,7 +50,7 @@ foreach (require_once(__DIR__ . "/../../config/cors.php") as $key => $header) {
  * ------------------------------------------------------------------------------
  **/
 
-$command = "cd ../.. && php lion " . request->group . ":" . request->option . " " . request->command;
+$command = "cd ../.. && " . request->command;
 $data = [];
 
 exec($command, $data);
