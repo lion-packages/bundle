@@ -3,101 +3,65 @@
 * {
     padding: 0;
     margin: 0;
-    font-size: 14px;
-    font-family: 'Ubuntu', sans-serif;
+    font-size: 14px !important;
+    font-family: 'Ubuntu', sans-serif !important;
 }
 
 .bg-dark-web {
     background-color: #111111;
 }
 
-.bg-dark-gray {
-    background-color: #202529;
+/*jquery*/
+.ui-tabs {
+    position: relative !important;
+    padding: 0 !important;
 }
 
-.bg-yellow {
-    background-color: #FFCE9D;
+.ui-tabs .ui-tabs-nav {
+    background-color: #111111 !important;
+    margin: 0;
+    padding: 0.2em 0.2em 0;
 }
 
-.bg-orange {
-    background-color: #FF8463;
+.ui-widget-header {
+    border: 1px solid #111111 !important;
+    background: #111111 !important;
 }
 
-.text-dark-web {
-    color: #111111;
+.ui-widget.ui-widget-content {
+    border: 1px solid #111111 !important;
 }
 
-.text-dark-gray {
-    color: #202529;
+.ui-tabs .ui-tabs-panel {
+    display: block !important;
+    border-width: 0 !important;
+    padding: 0 !important;
+    background: none !important;
 }
 
-.text-dark-yellow {
-    color: #FFCE9D;
+.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br {
+    border-bottom-right-radius: 0px !important;
 }
 
-.text-dark-orange {
-    color: #FF8463;
+.ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl {
+    border-bottom-left-radius: 0px !important;
 }
 
-.form-control-dark {
-    display: block;
-    width: 100%;
-    padding: 0.375rem 0.75rem;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #FFFFFF;
-    background-color: #272b2e;
-    background-clip: padding-box;
-    border: 1px solid #383d40;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    border-radius: 0.375rem;
-    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr {
+    border-top-right-radius: 0px !important;
 }
 
-.form-control-dark {
-    display: block;
-    width: 100%;
-    padding: 0.375rem 0.75rem;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #FFFFFF;
-    background-color: #272b2e;
-    background-clip: padding-box;
-    border: 1px solid #383d40;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    border-radius: 0.375rem;
-    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+.ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl {
+    border-top-left-radius: 0px !important;
 }
 
-.form-control-dark:active {
-    display: block;
-    width: 100%;
-    padding: 0.375rem 0.75rem;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #FFFFFF;
-    background-color: #272b2e;
-    background-clip: padding-box;
-    border: 1px solid #383d40;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    border-radius: 0.375rem;
-    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+.ui-tabs .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor, .ui-tabs .ui-tabs-nav li.ui-state-disabled .ui-tabs-anchor, .ui-tabs .ui-tabs-nav li.ui-tabs-loading .ui-tabs-anchor {
+    cursor: pointer !important;
 }
 
-.input-group>.form-control-dark {
-    position: relative;
-    flex: 1 1 auto;
-    width: 1%;
-    min-width: 0;
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover {
+    border: 1px solid #FF8463 !important;
+    background-color: #FF8463 !important;
 }
 
 /*terminal*/
@@ -110,16 +74,16 @@
 .terminal-header {
     background-color: #333;
     padding: 10px;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
+    /*border-top-left-radius: 8px;
+    border-top-right-radius: 8px;*/
     display: flex;
     justify-content: flex-end;
 }
 
 .terminal-button-orange {
     display: inline-block;
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
     background-color: #FF8463;
     border-radius: 50%;
     margin-left: 5px;
@@ -127,8 +91,8 @@
 
 .terminal-button-yellow {
     display: inline-block;
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
     background-color: #FFCE9D;
     border-radius: 50%;
     margin-left: 5px;
@@ -137,11 +101,11 @@
 .terminal-body {
     background-color: #000;
     padding: 10px;
-    height: 600px;
+    height: 500px;
     overflow-y: scroll;
-    border-left: 1px solid #333;
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
+    color: #FFFFFF;
+    /*border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;*/
 }
 
 .terminal-input {
