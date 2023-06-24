@@ -88,6 +88,7 @@
             e.preventDefault();
 
             if (["cls", "clear"].includes(commandInput.value.trim())) {
+                commandInput.value = "";
                 term.clear();
                 return false;
             }
