@@ -67,6 +67,7 @@
                     "content-Type": "multipart/form-data"
                 }
             }).then(res => {
+                commandInput.disabled = true;
                 // console.log(res.data)
                 appendOutput(
                     commandInput.value
@@ -79,6 +80,7 @@
 
                 commandInput.value = "php lion ";
                 commandInput.autofocus = true;
+                commandInput.disabled = false;
             });
         };
 
@@ -91,14 +93,9 @@
             }
 
             if (![null, ""].includes(commandInput.value.trim())) {
-                commandInput.disabled = true;
                 handleGit();
                 handleCommand();
-                commandInput.disabled = false;
             }
-
-            commandInput.value = "php lion ";
-            commandInput.autofocus = true;
         });
 
         handleGit();
