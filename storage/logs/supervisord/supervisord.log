@@ -1,6 +1,0 @@
-2023-06-24 15:59:27,602 INFO Set uid to user 0 succeeded
-2023-06-24 15:59:27,607 INFO supervisord started with pid 22
-2023-06-24 15:59:28,612 INFO spawned: 'resource-console-web' with pid 23
-2023-06-24 15:59:28,615 INFO spawned: 'web-server' with pid 24
-2023-06-24 15:59:29,617 INFO success: resource-console-web entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
-2023-06-24 15:59:29,618 INFO success: web-server entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
