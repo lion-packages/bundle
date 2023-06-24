@@ -1,5 +1,10 @@
 # Release Notes
 
+## [v14.23.0](https://github.com/Sleon4/Lion-Framework/compare/v14.22.0...v14.23.0) (2023-06-24)
+
+### Added
+- resource design has been modified to work with the cli
+
 ## [v14.22.0](https://github.com/Sleon4/Lion-Framework/compare/v14.21.0...v14.22.0) (2023-06-22)
 
 ### Added
