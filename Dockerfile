@@ -16,9 +16,8 @@ RUN apt-get update \
     && apt-get install -y libevent-dev \
     && apt-get install -y curl \
     && apt-get install -y libssl-dev \
+    && pecl install ev \
     && rm -rf /var/lib/apt/lists/*
-
-RUN pecl install ev
 
 RUN docker-php-ext-install mbstring \
     && docker-php-ext-install gd \
@@ -34,6 +33,11 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN a2enmod rewrite
 
-CMD composer install && /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+CMD composer install \
+    && touch storage/logs/resources/console-web.log \
+    && touch storage/logs/server/web-server.log \
+    && touch storage/logs/sockets/socket.log \
+    && touch storage/logs/supervisord/supervisord.log \
+    && /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
 
 EXPOSE 8000
