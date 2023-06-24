@@ -4,8 +4,8 @@
 /.vscode
 /vendor/
 /storage/**/*.key
-/storage/**/*.log
 /storage/postman/*.json
+/storage/logs/*.log
 .rnd
 .env
 .phpunit.result.cache

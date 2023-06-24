@@ -24,11 +24,12 @@
     <script src="https://cdn.jsdelivr.net/npm/xterm@5.2.1/lib/xterm.min.js"></script>
     {# assets #}
     <script type="text/javascript">
-        const term = new Terminal({ cols: 150 });
+        const commandInput = document.getElementById('command-input');
+        const term = new Terminal({ cols: 200, rows: 30 });
         term.open(document.getElementById('terminal-output'));
 
         const appendOutput = (command, output) => {
-            term.writeln(`\x1b[33m# root:\x1b[0m \x1b[32m${command}\x1b[0m`);
+            term.writeln(`> \x1b[38;5;81mroot $\x1b[0m \x1b[32m${command}\x1b[0m`);
 
             output
                 .filter((out) => !["", null].includes(out))
@@ -38,16 +39,26 @@
             terminalOutput.scrollTop = terminalOutput.scrollHeight;
         }
 
-        document.getElementById("form-terminal").addEventListener("submit", (e) => {
-            e.preventDefault();
-            const commandInput = document.getElementById('command-input');
+        const handleGit = () => {
+            const command = "git branch --show-current";
+            const form = new FormData();
+            form.append("command", command);
 
-            if (["cls", "clear"].includes(commandInput.value.trim())) {
-                term.clear();
-                commandInput.value = "php lion ";
-                return false;
-            }
+            axios.post("{{ host }}/Git.php", form, {
+                headers: {
+                    "content-Type": "multipart/form-data"
+                }
+            }).then(res => {
+                // console.log(res.data)
+                document.getElementById("git-branch").innerHTML = `
+                    <span class='text-blue'>root<span>
+                    <span class='text-yellow'> git( <span class='text-rose'>${res.data}</span>)</span>
+                    <span class='text-orange'> $</span>
+                `;
+            });
+        };
 
+        const handleCommand = () => {
             const form = new FormData();
             form.append("command", commandInput.value.trim());
 
@@ -56,10 +67,41 @@
                     "content-Type": "multipart/form-data"
                 }
             }).then(res => {
-                appendOutput(commandInput.value.trim(), res.data);
+                // console.log(res.data)
+                appendOutput(
+                    commandInput.value
+                        .replace("php", "\x1b[33mphp\x1b[0m")
+                        .replace("git", "\x1b[33mgit\x1b[0m")
+                        .replace("composer", "\x1b[33mcomposer\x1b[0m")
+                        .trim(),
+                    res.data
+                );
+
                 commandInput.value = "php lion ";
+                commandInput.autofocus = true;
             });
+        };
+
+        document.getElementById("form-terminal").addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            if (["cls", "clear"].includes(commandInput.value.trim())) {
+                term.clear();
+                return false;
+            }
+
+            if (![null, ""].includes(commandInput.value.trim())) {
+                commandInput.disabled = true;
+                handleGit();
+                handleCommand();
+                commandInput.disabled = false;
+            }
+
+            commandInput.value = "php lion ";
+            commandInput.autofocus = true;
         });
+
+        handleGit();
     </script>
 </body>
 </html>

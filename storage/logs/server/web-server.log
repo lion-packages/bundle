@@ -1,0 +1,16 @@
+[2J[;H
+Lion-Framework ready in 1.230 ms
+
+	>>  LOCAL: Server running on [http://0.0.0.0:8000]
+	>>  HOST: use --host to expose
+	>>  PORT: use --port to expose
+
+Press Ctrl+C to stop the server
+
+[Sat Jun 24 15:59:29 2023] PHP 8.2.7 Development Server (http://0.0.0.0:8000) started
+[Sat Jun 24 16:01:12 2023] 172.19.0.1:47648 Accepted
+[Sat Jun 24 16:01:12 2023] 172.19.0.1:47652 Accepted
+[Sat Jun 24 16:01:13 2023] 172.19.0.1:47652 [200]: GET /
+[Sat Jun 24 16:01:13 2023] 172.19.0.1:47652 Closing
+[Sat Jun 24 16:01:14 2023] 172.19.0.1:47648 [404]: GET /favicon.ico - No such file or directory
+[Sat Jun 24 16:01:14 2023] 172.19.0.1:47648 Closing

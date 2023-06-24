@@ -11,9 +11,30 @@
     background-color: #111111;
 }
 
+.text-orange {
+    color: #FF8463;
+}
+
+.text-blue {
+    color: #2EB6D3;
+}
+
+.text-rose {
+    color: #CD8FC9;
+}
+
+.text-yellow {
+    color: #FFCE9D;
+}
+
 /*xterm*/
-.xterm-screen {
+.xterm {
+    height: 100% !important;
+}
+
+.xterm > .xterm-screen {
     width: 100% !important;
+    height: 100% !important;
 }
 
 .xterm-rows {
@@ -85,7 +106,7 @@
 }
 
 .terminal-input span {
-    color: #FF8463;
+    /*color: #FF8463;*/
     margin-right: 5px;
 }
 
