@@ -5,6 +5,9 @@
 ### Added
 - resource design has been modified to work with the cli
 
+### Changed
+- docker configuration has been updated
+
 ## [v14.22.0](https://github.com/Sleon4/Lion-Framework/compare/v14.21.0...v14.22.0) (2023-06-22)
 
 ### Added
