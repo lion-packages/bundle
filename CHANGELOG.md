@@ -1,5 +1,20 @@
 # Release Notes
 
+## [v14.24.1](https://github.com/Sleon4/Lion-Framework/compare/v14.24.0...v14.24.1) (2023-06-25)
+
+### Added
+- the types of migrations have been classified when they are created (migrate:new)
+- command has been modified to run all migrations by type (migrate:fresh)
+- default migrations have been added
+- trait has been added to display colored text for commands
+
+### Changed
+- output format for commands has been modified
+- docker config updated
+
+### Fixed
+- format to generate migrations and add columns with foreign keys has been corrected
+
 ## [v14.24.0](https://github.com/Sleon4/Lion-Framework/compare/v14.23.0...v14.24.0) (2023-06-25)
 
 ### Added
