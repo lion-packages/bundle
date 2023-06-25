@@ -10,6 +10,7 @@ services:
         ports:
             - "8000:8000"
             - "5173:5173"
+            - "5174:5174"
         volumes:
             - ./:/var/www/html
             - ./supervisord.conf:/etc/supervisor/conf.d/supervisord.conf

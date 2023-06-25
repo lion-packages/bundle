@@ -21,9 +21,9 @@ return new class {
 			->column('idroles', ['type' => 'int', 'null' => false, 'foreign-key' => ['table' => 'roles', 'column' => 'idroles'], 'default' => ''])
 			->column('name', ['type' => 'varchar', 'length' => 45, 'null' => false, 'default' => ''])
 			->column('lastname', ['type' => 'varchar', 'length' => 45, 'null' => false, 'default' => ''])
-			->column('email', ['type' => 'varchar', 'length' => 45, 'null' => false, 'unique' => true, 'default' => ''])
+			->column('email', ['type' => 'varchar', 'length' => 255, 'null' => false, 'unique' => true, 'default' => ''])
 			->column('password', ['type' => 'blob', 'null' => false, 'default' => ''])
-			->column('code', ['type' => 'varchar', 'length' => 45, 'null' => false, 'unique' => true, 'default' => ''])
+			->column('code', ['type' => 'varchar', 'length' => 25, 'null' => false, 'unique' => true, 'default' => ''])
 			->column('create_at', ['type' => 'datetime', 'null' => false, 'default' => ''])
 			->execute();
 	}
