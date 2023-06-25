@@ -1,0 +1,152 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.bg-dark-web {
+    background-color: #111111;
+}
+
+.bg-dark-gray {
+    background-color: #202529;
+}
+
+.bg-yellow {
+    background-color: #FFCE9D;
+}
+
+.bg-orange {
+    background-color: #FF8463;
+}
+
+.text-dark-web {
+    color: #111111;
+}
+
+.text-dark-gray {
+    color: #202529;
+}
+
+.text-dark-yellow {
+    color: #FFCE9D;
+}
+
+.text-dark-orange {
+    color: #FF8463;
+}
+
+.text-gradient {
+  font-family: "Montserrat", sans-serif;
+
+  --bg-size: 400%;
+  --color-one: #FFCE9D;
+  --color-two: #FF8463;
+
+  background: linear-gradient(
+      90deg,
+      var(--color-one),
+      var(--color-two),
+      var(--color-one)
+  )
+  0 0 / var(--bg-size) 100%;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: move-bg 5s infinite linear;
+}
+
+.description {
+  font-family: "Montserrat", sans-serif;
+  line-height: 1.5;
+  transition: color 0.5s;
+  font-size: 30px;
+  margin: 24px auto 40px;
+}
+
+@keyframes move-bg {
+  to {
+    background-position: var(--bg-size) 0;
+}
+}
+
+@media (min-width: 0px) and (max-width: 575px) {
+  .text-gradient {
+    font-size: 25px;
+}
+
+.description {
+    font-size: 13px;
+    margin: 18px 0 30px;
+    line-height: 1.2;
+    justify-content: center;
+}
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+  .text-gradient {
+    font-size: 30px;
+}
+
+.description {
+    font-size: 15px;
+    margin: 18px 0 30px;
+    line-height: 1.4;
+    justify-content: center;
+}
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .text-gradient {
+    font-size: 35px;
+}
+
+.description {
+    font-size: 15px;
+    margin: 18px 0 30px;
+    line-height: 1.5;
+    justify-content: center;
+}
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  .text-gradient {
+    font-size: 40px;
+}
+
+.description {
+    font-size: 19px;
+    margin: 18px 0 30px;
+    line-height: 1.5;
+    justify-content: center;
+}
+}
+
+@media (min-width: 1200px) and (max-width: 1399px) {
+  .text-gradient {
+    font-size: 45px;
+}
+
+.description {
+    font-size: 18px;
+    margin: 18px 0 30px;
+    line-height: 1.5;
+    justify-content: center;
+}
+}
+
+@media (min-width: 1400px) {
+  .text-gradient {
+    font-size: 46px;
+}
+
+.description {
+    font-size: 20px;
+    margin: 18px 0 30px;
+    line-height: 1.5;
+    justify-content: center;
+}
+}

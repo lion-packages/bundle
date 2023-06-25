@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html class="vh-100">
 <head>
-    <title>User Registration · Lion-Framework</title>
+    <title>Login · Lion-Framework</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {# bootstrap 5.3 #}
@@ -11,7 +11,7 @@
     {# assets #}
     <link rel="stylesheet" type="text/css" href="{{ host }}/app/assets/index.css">
 </head>
-<body class="bg-dark-web">
+<body class="bg-dark-web h-100">
     {% include 'extends/content.twig' %}
 
     {# bootstrap 5.3 #}
@@ -22,17 +22,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js" integrity="sha512-E8QSvWZ0eCLGk4km3hxSsNmGWbLtSCSUcewDQPQWZF6pEU8GlT8a5fF32wOl1i8ftdMhssTrF/OhyGWwonTcXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     {# assets #}
     <script type="text/javascript">
-        document.getElementById("form-user-registration").addEventListener("submit", (e) => {
+        document.getElementById("form-login").addEventListener("submit", (e) => {
             e.preventDefault();
 
             const form = new FormData();
-            form.append("idroles", document.getElementById("idroles").value);
-            form.append("users_name", document.getElementById("users_name").value);
-            form.append("users_lastname", document.getElementById("users_lastname").value);
             form.append("users_email", document.getElementById("users_email").value);
             form.append("users_password", CryptoJS.SHA256(document.getElementById("users_password").value));
 
-            axios.post("{{ api }}/api/user-registration", form, {
+            axios.post("{{ api }}/api/auth/login", form, {
                 headers: {
                     "content-Type": "multipart/form-data"
                 }
