@@ -2,6 +2,7 @@
 
 namespace App\Console\Framework\Migrations;
 
+use App\Traits\Framework\ConsoleOutput;
 use LionFiles\Store;
 use LionSQL\Drivers\MySQL\MySQL as DB;
 use Symfony\Component\Console\Command\Command;
@@ -9,6 +10,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class FreshMigrationsCommand extends Command {
+
+    use ConsoleOutput;
 
 	protected static $defaultName = "migrate:fresh";
     private array $connections;
@@ -91,7 +94,7 @@ class FreshMigrationsCommand extends Command {
         $items = arr->of($this->files)->keys()->get();
 
         foreach ($items as $indexFiles => $keyFiles) {
-            $output->writeln("<comment>\t>>  DATABASE: {$keyFiles}</comment>");
+            $output->writeln($this->warningOutput("\t>>  DATABASE: {$keyFiles}"));
 
             if (isset($this->files[$keyFiles]["tables"])) {
                 foreach ($this->files[$keyFiles]["tables"] as $key => $class) {
@@ -101,9 +104,9 @@ class FreshMigrationsCommand extends Command {
 
                     $res = $class['class']->execute();
                     if (isError($res)) {
-                        $output->writeln("<fg=#E37820>\t>>  TABLE: An error occurred while executing the '{$migration}' migration, {$res->message} \u{2717}</>");
+                        $output->writeln($this->errorOutput("\t>>  TABLE: An error occurred while executing the '{$migration}' migration, {$res->message} \u{2717}"));
                     } else {
-                        $output->writeln("<info>\t>>  TABLE: Migration '{$migration}' has been executed \u{2713}</info>");
+                        $output->writeln($this->successOutput("\t>>  TABLE: Migration '{$migration}' has been executed \u{2713}"));
                     }
 
                     // execute insert function process
@@ -111,9 +114,9 @@ class FreshMigrationsCommand extends Command {
                     if (arr->of($data['rows'])->length() > 0) {
                         $res = DB::connection($info['connection'])->table($info['table'])->bulk($data['columns'], $data['rows'])->execute();
                         if (isError($res)) {
-                            $output->writeln("<fg=#E37820>\t>>  BULKING: Error executing bulk migration of '{$migration}', {$res->message} \u{2717}</>");
+                            $output->writeln($this->errorOutput("\t>>  BULKING: Error executing bulk migration of '{$migration}', {$res->message} \u{2717}"));
                         } else {
-                            $output->writeln("<info>\t>>  BULKING: Insert function of '{$migration}' migration executed correctly \u{2713}</info>");
+                            $output->writeln($this->successOutput("\t>>  BULKING: Insert function of '{$migration}' migration executed correctly \u{2713}"));
                         }
                     }
                 }
@@ -128,9 +131,9 @@ class FreshMigrationsCommand extends Command {
                     // execute function process execute
                     $res = $view['class']->execute();
                     if (isError($res)) {
-                        $output->writeln("<fg=#E37820>\t>>  VIEW: An error occurred while executing the '{$migration}' migration, {$res->message} \u{2717}</>");
+                        $output->writeln($this->errorOutput("\t>>  VIEW: An error occurred while executing the '{$migration}' migration, {$res->message} \u{2717}"));
                     } else {
-                        $output->writeln("<info>\t>>  VIEW: Migration '{$migration}' has been executed \u{2713}</info>");
+                        $output->writeln($this->successOutput("\t>>  VIEW: Migration '{$migration}' has been executed \u{2713}"));
                     }
                 }
             }
@@ -144,9 +147,9 @@ class FreshMigrationsCommand extends Command {
                     // execute function process execute
                     $res = $procedure['class']->execute();
                     if (isError($res)) {
-                        $output->writeln("<fg=#E37820>\t>>  PROCEDURE: An error occurred while executing the '{$migration}' migration, {$res->message} \u{2717}</>");
+                        $output->writeln($this->errorOutput("\t>>  PROCEDURE: An error occurred while executing the '{$migration}' migration, {$res->message} \u{2717}"));
                     } else {
-                        $output->writeln("<info>\t>>  PROCEDURE: Migration '{$migration}' has been executed \u{2713}</info>");
+                        $output->writeln($this->successOutput("\t>>  PROCEDURE: Migration '{$migration}' has been executed \u{2713}"));
                     }
 
                     // execute insert function process
@@ -154,9 +157,9 @@ class FreshMigrationsCommand extends Command {
                     foreach ($data['rows'] as $keyRow => $row) {
                         $res = DB::connection($info['connection'])->call($info['procedure'], $row)->execute();
                         if (isError($res)) {
-                            $output->writeln("<fg=#E37820>\t>>  INSERT: An error occurred while executing the insert function of '{$migration}' migration, {$res->message} \u{2717}</>");
+                            $output->writeln($this->errorOutput("\t>>  INSERT: An error occurred while executing the insert function of '{$migration}' migration, {$res->message} \u{2717}"));
                         } else {
-                            $output->writeln("<info>\t>>  INSERT: Insert function of '{$migration}' migration executed correctly \u{2713}</info>");
+                            $output->writeln($this->successOutput("\t>>  INSERT: Insert function of '{$migration}' migration executed correctly \u{2713}"));
                         }
                     }
                 }

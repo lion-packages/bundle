@@ -3,6 +3,7 @@
 namespace App\Console\Framework\Migrations;
 
 use App\Traits\Framework\ClassPath;
+use App\Traits\Framework\ConsoleOutput;
 use LionFiles\Store;
 use LionSQL\Drivers\MySQL\MySQL as DB;
 use Symfony\Component\Console\Command\Command;
@@ -12,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class GenerateMigrationsCommand extends Command {
 
-    use ClassPath;
+    use ClassPath, ConsoleOutput;
 
 	protected static $defaultName = "migrate:generate";
     private array $connections;
@@ -100,7 +101,7 @@ class GenerateMigrationsCommand extends Command {
         };
 
         foreach ($this->connections['connections'] as $nameConnection => $connection) {
-            $output->writeln("<comment>\t>>  DATABASE: {$connection['dbname']}</comment>");
+            $output->writeln($this->warningOutput("\t>>  DATABASE: {$connection['dbname']}"));
 
             if (isset($this->list[$nameConnection])) {
                 if (isset($this->list[$nameConnection]['tables'])) {
@@ -177,7 +178,7 @@ class GenerateMigrationsCommand extends Command {
 
                         $db_pascal = str->of($connection['dbname'])->replace("-", " ")->replace("_", " ")->pascal()->trim()->get();
                         $tbl_pascal = str->of($new_table_name)->replace("-", " ")->replace("_", " ")->pascal()->trim()->get();
-                        $path = "database/Migrations/{$db_pascal}/tables/";
+                        $path = "database/Migrations/{$db_pascal}/Tables/";
                         Store::folder($path);
                         $migration_name = str->of($path)->concat("Table")->concat($tbl_pascal)->get();
                         $info_table = DB::connection($connection['dbname'])->fetchMode(\PDO::FETCH_ASSOC)->table($table_name)->select()->limit(0, $limit)->getAll();
@@ -203,7 +204,7 @@ class GenerateMigrationsCommand extends Command {
                         );
                         $this->force();
                         $this->close();
-                        $output->writeln("<info>\t>>  TABLE: Migration '{$migration_name}' has been generated</info>");
+                        $output->writeln($this->successOutput("\t>>  TABLE: Migration '{$migration_name}' has been generated"));
                     }
                 }
 
@@ -339,7 +340,7 @@ class GenerateMigrationsCommand extends Command {
                 //     // vd($this->list[$nameConnection]['procedures']);
                 // }
             } else {
-                $output->writeln("<fg=#E37820>\t>> NO DATA AVAILABLE</>");
+                $output->writeln($this->warningOutput("\t>> NO DATA AVAILABLE"));
             }
 
             if ($cont < ($size - 1)) {
