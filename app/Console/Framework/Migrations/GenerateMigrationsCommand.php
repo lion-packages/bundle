@@ -24,7 +24,7 @@ class GenerateMigrationsCommand extends Command {
         foreach ($this->connections['connections'] as $nameConnection => $connection) {
             // delete migrations
             $db_pascal = str->of($connection['dbname'])->replace("-", " ")->replace("_", " ")->pascal()->trim()->get();
-            $path = "database/Migrations/{$db_pascal}/";
+            $path = "database/Migrations/{$db_pascal}tables/";
 
             if (isSuccess(Store::exist($path))) {
                 foreach (Store::view($path) as $key => $file) {
@@ -135,9 +135,12 @@ class GenerateMigrationsCommand extends Command {
                             $column_null = ($column_db->Null === "NO" ? false : true);
                             $column_unique = ($column_db->Key === "UNI" ? true : false);
                             $column_options = (isset($type[1]) ? explode(")", $type[1])[0] : "");
-                            $column_foreign = is_array($info_foreign)
-                                ? "['table' => '{$info_foreign['REFERENCED_TABLE_NAME']}', 'column' => '{$info_foreign['REFERENCED_COLUMN_NAME']}']"
-                                : null;
+
+                            if ($info_foreign === null) {
+                                $column_foreign = null;
+                            } else {
+                                $column_foreign = "['table' => '{$info_foreign->REFERENCED_TABLE_NAME}', 'column' => '{$info_foreign->REFERENCED_COLUMN_NAME}']";
+                            }
 
                             $array_options = "'type' => '{$column_type}'";
                             $array_options .= ($column_length > 0 ? ", 'length' => {$column_length}" : "");
@@ -160,6 +163,7 @@ class GenerateMigrationsCommand extends Command {
                         $columns_insert = "";
                         foreach ($columns_db as $key => $column_db) {
                             $info_foreign = isset($foreigns[$column_db->Field]) ? $foreigns[$column_db->Field] : null;
+                            vd($info_foreign);
 
                             if ($column_db->Key === "PRI") {
                                 $columns_insert .= "\n\t\t\t\t'{$column_db->Field}',\n";
@@ -172,7 +176,7 @@ class GenerateMigrationsCommand extends Command {
 
                         $db_pascal = str->of($connection['dbname'])->replace("-", " ")->replace("_", " ")->pascal()->trim()->get();
                         $tbl_pascal = str->of($new_table_name)->replace("-", " ")->replace("_", " ")->pascal()->trim()->get();
-                        $path = "database/Migrations/{$db_pascal}/";
+                        $path = "database/Migrations/{$db_pascal}/tables/";
                         Store::folder($path);
                         $migration_name = str->of($path)->concat("Table")->concat($tbl_pascal)->get();
                         $info_table = DB::connection($connection['dbname'])->fetchMode(\PDO::FETCH_ASSOC)->table($table_name)->select()->limit(0, $limit)->getAll();
