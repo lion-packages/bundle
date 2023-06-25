@@ -1,5 +1,14 @@
 # Release Notes
 
+## [v14.24.0](https://github.com/Sleon4/Lion-Framework/compare/v14.23.0...v14.24.0) (2023-06-25)
+
+### Added
+- resource has been added to register users
+- added resource to authenticate users
+
+### Changed
+- lion/sql library has been updated v8.7.1
+
 ## [v14.23.0](https://github.com/Sleon4/Lion-Framework/compare/v14.22.0...v14.23.0) (2023-06-24)
 
 ### Added
