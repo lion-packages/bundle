@@ -16,46 +16,49 @@ class FreshMigrationsCommand extends Command {
 
     protected function initialize(InputInterface $input, OutputInterface $output) {
         $this->connections = DB::getConnections();
+        $folders = ["tables", "views", "procedures"];
 
-        foreach (arr->of($this->connections['connections'])->keys()->get() as $key => $connection) {
-            $db_pascal = str->of($connection)->replace("-", " ")->replace("_", " ")->pascal()->trim()->get();
+        foreach ($folders as $key => $folder) {
+            foreach (arr->of($this->connections['connections'])->keys()->get() as $key => $connection) {
+                $db_pascal = str->of($connection)->replace("-", " ")->replace("_", " ")->pascal()->trim()->get();
 
-            if (isSuccess(Store::exist("database/Migrations/{$db_pascal}/"))) {
-                foreach (Store::view("database/Migrations/{$db_pascal}/") as $key => $file) {
-                    if (isSuccess(Store::validate([$file], ["php"]))) {
-                        $class = require_once($file);
-                        $info = $class->getMigration();
-                        $type = str->of($info['type'])->lower()->get();
+                if (isSuccess(Store::exist("database/Migrations/{$db_pascal}/{$folder}/"))) {
+                    foreach (Store::view("database/Migrations/{$db_pascal}/{$folder}/") as $key => $file) {
+                        if (isSuccess(Store::validate([$file], ["php"]))) {
+                            $class = require_once($file);
+                            $info = $class->getMigration();
+                            $type = str->of($info['type'])->lower()->get();
 
-                        if ($type === "table") {
-                            $this->files[$info['connection']]["tables"][] = [
-                                'file' => $file,
-                                'index' => $info['index'],
-                                'class' => $class
-                            ];
-                        } else {
-                            $this->files[$info['connection']][
-                                ($type === "view" ? "views" : "procedures")
-                            ][] = [
-                                'file' => $file,
-                                'class' => $class
-                            ];
+                            if ($type === "table") {
+                                $this->files[$info['connection']]["tables"][] = [
+                                    'file' => $file,
+                                    'index' => $info['index'],
+                                    'class' => $class
+                                ];
+                            } else {
+                                $this->files[$info['connection']][
+                                    ($type === "view" ? "views" : "procedures")
+                                ][] = [
+                                    'file' => $file,
+                                    'class' => $class
+                                ];
+                            }
                         }
                     }
                 }
-            }
 
-            DB::connection($connection)
-                ->query("USE `{$connection}`;")
-                ->query("SET FOREIGN_KEY_CHECKS = 0;")
-                ->query("SET @tablas = NULL;")
-                ->query("SELECT GROUP_CONCAT(table_name) INTO @tablas FROM information_schema.tables WHERE table_schema = (SELECT DATABASE());")
-                ->query("SET @consulta = CONCAT('DROP TABLE IF EXISTS ', @tablas);")
-                ->query("PREPARE stmt FROM @consulta;")
-                ->query("EXECUTE stmt;")
-                ->query("DEALLOCATE PREPARE stmt;")
-                ->query("SET FOREIGN_KEY_CHECKS = 1;")
-                ->execute();
+                DB::connection($connection)
+                    ->query("USE `{$connection}`;")
+                    ->query("SET FOREIGN_KEY_CHECKS = 0;")
+                    ->query("SET @tablas = NULL;")
+                    ->query("SELECT GROUP_CONCAT(table_name) INTO @tablas FROM information_schema.tables WHERE table_schema = (SELECT DATABASE());")
+                    ->query("SET @consulta = CONCAT('DROP TABLE IF EXISTS ', @tablas);")
+                    ->query("PREPARE stmt FROM @consulta;")
+                    ->query("EXECUTE stmt;")
+                    ->query("DEALLOCATE PREPARE stmt;")
+                    ->query("SET FOREIGN_KEY_CHECKS = 1;")
+                    ->execute();
+            }
         }
 
         foreach (arr->of($this->files)->keys()->get() as $index => $key) {

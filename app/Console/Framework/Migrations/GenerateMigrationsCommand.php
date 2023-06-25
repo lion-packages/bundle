@@ -24,7 +24,7 @@ class GenerateMigrationsCommand extends Command {
         foreach ($this->connections['connections'] as $nameConnection => $connection) {
             // delete migrations
             $db_pascal = str->of($connection['dbname'])->replace("-", " ")->replace("_", " ")->pascal()->trim()->get();
-            $path = "database/Migrations/{$db_pascal}tables/";
+            $path = "database/Migrations/{$db_pascal}/Tables/";
 
             if (isSuccess(Store::exist($path))) {
                 foreach (Store::view($path) as $key => $file) {
@@ -88,6 +88,8 @@ class GenerateMigrationsCommand extends Command {
                         $rows_insert .=  "'0x" . bin2hex($value) . "',";
                     } elseif (str->of($type)->test('/blob/i')) {
                         $rows_insert .=  "'0x" . bin2hex($value) . "',";
+                    } elseif (str->of($type)->test("/^int|bigint/")) {
+                        $rows_insert .= "{$value},";
                     } else {
                         $rows_insert .= "'{$value}',";
                     }
@@ -163,7 +165,6 @@ class GenerateMigrationsCommand extends Command {
                         $columns_insert = "";
                         foreach ($columns_db as $key => $column_db) {
                             $info_foreign = isset($foreigns[$column_db->Field]) ? $foreigns[$column_db->Field] : null;
-                            vd($info_foreign);
 
                             if ($column_db->Key === "PRI") {
                                 $columns_insert .= "\n\t\t\t\t'{$column_db->Field}',\n";

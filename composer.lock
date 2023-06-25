@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e8b5921f9b6169b7f327932ccc77f16a",
+    "content-hash": "64d20aa96365ff64d1940e66e2329ecd",
     "packages": [
         {
             "name": "cboden/ratchet",
@@ -925,16 +925,16 @@
         },
         {
             "name": "lion/sql",
-            "version": "v8.7.1",
+            "version": "v8.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-SQL.git",
-                "reference": "347bf4255d54e0a7a3447a57f7f1a29d48de4043"
+                "reference": "093fd6e303f2ce62bb7b0e175967136476506e30"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/347bf4255d54e0a7a3447a57f7f1a29d48de4043",
-                "reference": "347bf4255d54e0a7a3447a57f7f1a29d48de4043",
+                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/093fd6e303f2ce62bb7b0e175967136476506e30",
+                "reference": "093fd6e303f2ce62bb7b0e175967136476506e30",
                 "shasum": ""
             },
             "require": {
@@ -953,9 +953,9 @@
             "description": "package in charge of generating and executing MySQL processes",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-SQL/issues",
-                "source": "https://github.com/Sleon4/Lion-SQL/tree/v8.7.1"
+                "source": "https://github.com/Sleon4/Lion-SQL/tree/v8.7.2"
             },
-            "time": "2023-06-25T03:52:36+00:00"
+            "time": "2023-06-25T18:04:01+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -4200,16 +4200,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v4.15.5",
+            "version": "v4.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "11e2663a5bc9db5d714eedb4277ee300403b4a9e"
+                "reference": "19526a33fb561ef417e822e85f08a00db4059c17"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/11e2663a5bc9db5d714eedb4277ee300403b4a9e",
-                "reference": "11e2663a5bc9db5d714eedb4277ee300403b4a9e",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/19526a33fb561ef417e822e85f08a00db4059c17",
+                "reference": "19526a33fb561ef417e822e85f08a00db4059c17",
                 "shasum": ""
             },
             "require": {
@@ -4250,9 +4250,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v4.15.5"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v4.16.0"
             },
-            "time": "2023-05-19T20:20:00+00:00"
+            "time": "2023-06-25T14:52:30+00:00"
         },
         {
             "name": "phar-io/manifest",
