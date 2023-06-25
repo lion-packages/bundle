@@ -10,14 +10,12 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ChoiceQuestion;
 
 class NewMigrateCommand extends Command {
 
     use ClassPath;
 
 	protected static $defaultName = "migrate:new";
-    private array $options = ["TABLE", 'VIEW', 'PROCEDURE'];
 
 	protected function initialize(InputInterface $input, OutputInterface $output) {
 
@@ -55,16 +53,24 @@ class NewMigrateCommand extends Command {
         $migration_pascal = str->of($migration)->replace("-", " ")->replace("_", " ")->pascal()->trim()->get();
         $migration_pascal = str->of($option === "TABLE" ? "Table" : ($option === "VIEW" ? "View" : "Procedure"))->concat($migration_pascal)->get();
         $env_var = array_search($connection, (array) env);
-        Store::folder("database/Migrations/{$db_pascal}/");
-		$this->new("database/Migrations/{$db_pascal}/{$migration_pascal}", "php");
 
         if ($option === "TABLE") {
+            Store::folder("database/Migrations/{$db_pascal}/tables/");
+            $this->new("database/Migrations/{$db_pascal}/tables/{$migration_pascal}", "php");
             $this->add(str->of($this->getTemplateCreateTable())->replace("env->DB_NAME", "env->{$env_var}")->get());
         } elseif ($option === "VIEW") {
+            Store::folder("database/Migrations/{$db_pascal}/views/");
+            $this->new("database/Migrations/{$db_pascal}/views/{$migration_pascal}", "php");
             $this->add(str->of($this->getTemplateCreateView())->replace("env->DB_NAME", "env->{$env_var}")->get());
         } elseif ($option === "PROCEDURE") {
+            Store::folder("database/Migrations/{$db_pascal}/procedures/");
+            $this->new("database/Migrations/{$db_pascal}/procedures/{$migration_pascal}", "php");
             $this->add(str->of($this->getTemplateCreateProcedure())->replace("env->DB_NAME", "env->{$env_var}")->get());
+        } else {
+            $output->writeln("<fg=#E37820>\t>>  The selected migration type does not exist</>");
+            return Command::INVALID;
         }
+
         $output->writeln("<info>\t>>  {$option}: Migration 'database/Migrations/{$db_pascal}/{$migration_pascal}' has been generated</info>");
 
         $this->force();
