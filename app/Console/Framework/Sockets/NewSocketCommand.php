@@ -3,6 +3,7 @@
 namespace App\Console\Framework\Sockets;
 
 use App\Traits\Framework\ClassPath;
+use App\Traits\Framework\ConsoleOutput;
 use LionFiles\Store;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -11,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class NewSocketCommand extends Command {
 
-    use ClassPath;
+    use ClassPath, ConsoleOutput;
 
 	protected static $defaultName = "socket:new";
 
@@ -71,8 +72,8 @@ class NewSocketCommand extends Command {
         $this->force();
         $this->close();
 
-        $output->writeln("<comment>\t>>  SOCKET: {$socket}</comment>");
-        $output->writeln("<info>\t>>  SOCKET: The '{$list['namespace']}\\{$list['class']}' socket has been generated</info>");
+        $output->writeln($this->warningOutput("\t>>  SOCKET: {$socket}"));
+        $output->writeln($this->successOutput("\t>>  SOCKET: The '{$list['namespace']}\\{$list['class']}' socket has been generated"));
 
         return Command::SUCCESS;
 	}

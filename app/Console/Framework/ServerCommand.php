@@ -2,7 +2,7 @@
 
 namespace App\Console\Framework;
 
-use App\Console\Kernel;
+use App\Traits\Framework\ConsoleOutput;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -10,11 +10,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ServerCommand extends Command {
 
+    use ConsoleOutput;
+
 	protected static $defaultName = "serve";
 
 	protected function initialize(InputInterface $input, OutputInterface $output) {
         $output->write("\033[2J\033[;H");
-        $output->write("\n<info>Lion-Framework</info> ");
+        $output->write($this->successOutput("\nLion-Framework "));
         $output->writeln("ready in " . number_format((microtime(true) - LION_START), 3) . " ms\n");
 	}
 
@@ -25,8 +27,8 @@ class ServerCommand extends Command {
 	protected function configure() {
 		$this
             ->setDescription("Created command to start server locally")
-            ->addOption('port', "p", InputOption::VALUE_REQUIRED, 'Do you want to set your own port?')
-            ->addOption('host', "s", InputOption::VALUE_REQUIRED, 'Do you want to set your own host?');
+            ->addOption('port', "p", InputOption::VALUE_OPTIONAL, 'Do you want to set your own port?')
+            ->addOption('host', "s", InputOption::VALUE_OPTIONAL, 'Do you want to set your own host?');
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
@@ -42,12 +44,11 @@ class ServerCommand extends Command {
         }
 
         $url = "{$host}:{$port}";
-        $output->writeln("<comment>\t>>  LOCAL:</comment> Server running on <href=http://{$url}>[http://{$url}]</>");
-        $output->writeln("<comment>\t>>  HOST:</comment> use --host to expose");
-        $output->writeln("<comment>\t>>  PORT:</comment> use --port to expose");
-        $output->writeln("\n<comment>Press Ctrl+C to stop the server</comment>\n");
-        Kernel::getInstance()->execute("php -S {$host}:{$port} -t public", false);
-
+        $output->writeln($this->warningOutput("\t>>  LOCAL:</comment> Server running on <href=http://{$url}>[http://{$url}]</>"));
+        $output->writeln($this->warningOutput("\t>>  HOST:</comment> use --host to expose"));
+        $output->writeln($this->warningOutput("\t>>  PORT:</comment> use --port to expose"));
+        $output->writeln($this->warningOutput("\nPress Ctrl+C to stop the server\n"));
+        kernel->execute("php -S {$host}:{$port} -t public", false);
         return Command::SUCCESS;
 	}
 

@@ -3,6 +3,7 @@
 namespace App\Console\Framework\New;
 
 use App\Traits\Framework\ClassPath;
+use App\Traits\Framework\ConsoleOutput;
 use LionFiles\Store;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -11,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CommandsCommand extends Command {
 
-    use ClassPath;
+    use ClassPath, ConsoleOutput;
 
 	protected static $defaultName = "new:command";
 
@@ -38,12 +39,14 @@ class CommandsCommand extends Command {
         $this->create($url_folder, $list['class']);
         $this->add("<?php\n\n");
         $this->add("namespace {$list['namespace']};\n\n");
+        $this->add("use App\Traits\Framework\ConsoleOutput;\n");
         $this->add("use Symfony\Component\Console\Command\Command;\n");
         $this->add("use Symfony\Component\Console\Input\InputArgument;\n");
         $this->add("use Symfony\Component\Console\Input\InputInterface;\n");
         $this->add("use Symfony\Component\Console\Input\InputOption;\n");
         $this->add("use Symfony\Component\Console\Output\OutputInterface;\n\n");
         $this->add("class {$list['class']} extends Command {\n\n");
+        $this->add("\t" . 'use ConsoleOutput;' . "\n\n");
         $this->add("\t" . 'protected static $defaultName = "";' . "\n\n");
         $this->add("\t" . 'protected function initialize(InputInterface $input, OutputInterface $output) {' . "\n\n\t}\n\n");
         $this->add("\t" . 'protected function interact(InputInterface $input, OutputInterface $output) {' . "\n\n\t}\n\n");
@@ -54,8 +57,8 @@ class CommandsCommand extends Command {
         $this->force();
         $this->close();
 
-        $output->writeln("<comment>\t>>  COMMAND: {$command}</comment>");
-        $output->writeln("<info>\t>>  COMMAND: The '{$list['namespace']}\\{$list['class']}' command has been generated</info>");
+        $output->writeln($this->warningOutput("\t>>  COMMAND: {$command}"));
+        $output->writeln($this->successOutput("\t>>  COMMAND: The '{$list['namespace']}\\{$list['class']}' command has been generated"));
 
         return Command::SUCCESS;
 	}

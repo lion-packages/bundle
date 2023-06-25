@@ -3,6 +3,7 @@
 namespace App\Console\Framework\SSH;
 
 use App\Traits\Framework\ClassPath;
+use App\Traits\Framework\ConsoleOutput;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -10,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class SSHFileCommand extends Command {
 
-    use ClassPath;
+    use ClassPath, ConsoleOutput;
 
 	protected static $defaultName = "sh:new";
 
@@ -36,9 +37,8 @@ class SSHFileCommand extends Command {
         $this->force();
         $this->close();
 
-        $output->writeln("<comment>\t>>  SH: {$sh}</comment>");
-        $output->writeln("<info>\t>>  SH: File generated successfully</info>");
-
+        $output->writeln($this->warningOutput("\t>>  SH: {$sh}"));
+        $output->writeln($this->successOutput("\t>>  SH: File generated successfully"));
 		return Command::SUCCESS;
 	}
 

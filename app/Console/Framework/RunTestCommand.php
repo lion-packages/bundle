@@ -2,19 +2,19 @@
 
 namespace App\Console\Framework;
 
+use App\Traits\Framework\ConsoleOutput;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class RunTestCommand extends Command {
 
+    use ConsoleOutput;
+
 	protected static $defaultName = "test";
 
 	protected function initialize(InputInterface $input, OutputInterface $output) {
-        $output->write("\033[1;33m");
-        $output->write("\t>>");
-        $output->write("\033[0m");
-        $output->writeln("  <comment>Running unit tests...</comment>");
+        $output->writeln($this->warningOutput("\t>>  Running unit tests..."));
 	}
 
 	protected function interact(InputInterface $input, OutputInterface $output) {
@@ -28,8 +28,7 @@ class RunTestCommand extends Command {
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$result = exec('./vendor/bin/phpunit');
-        $output->writeln($result);
-
+        $output->writeln($this->warningOutput("\t>>  {$result}"));
         return Command::SUCCESS;
 	}
 

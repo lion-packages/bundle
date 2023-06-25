@@ -3,8 +3,8 @@
 namespace App\Console\Framework\New;
 
 use App\Traits\Framework\ClassPath;
+use App\Traits\Framework\ConsoleOutput;
 use LionFiles\Store;
-use LionHelpers\Str;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class TestCommand extends Command {
 
-    use ClassPath;
+    use ClassPath, ConsoleOutput;
 
 	protected static $defaultName = 'new:test';
 
@@ -42,7 +42,7 @@ class TestCommand extends Command {
 		$this->add("use PHPUnit\Framework\TestCase;\n\n");
 
         $this->add(
-            Str::of("class ")
+            str->of("class ")
                 ->concat($list['class'])
                 ->concat(" extends TestCase {")->ln()->ln()->lt()
                 ->concat("public function setUp(): void {")->ln()->ln()->lt()
@@ -56,9 +56,8 @@ class TestCommand extends Command {
         $this->force();
         $this->close();
 
-        $output->writeln("<comment>\t>>  TEST: {$test}</comment>");
-        $output->writeln("<info>\t>>  TEST: The '{$list['namespace']}\\{$list['class']}' test has been generated</info>");
-
+        $output->writeln($this->warningOutput("\t>>  TEST: {$test}"));
+        $output->writeln($this->successOutput("\t>>  TEST: The '{$list['namespace']}\\{$list['class']}' test has been generated"));
         return Command::SUCCESS;
     }
 

@@ -3,6 +3,7 @@
 namespace App\Console\Framework\DB;
 
 use App\Traits\Framework\ClassPath;
+use App\Traits\Framework\ConsoleOutput;
 use LionFiles\Store;
 use LionSQL\Drivers\MySQL\MySQL as DB;
 use Symfony\Component\Console\Command\Command;
@@ -14,7 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CrudCommand extends Command {
 
-    use ClassPath;
+    use ClassPath, ConsoleOutput;
 
 	protected static $defaultName = "db:crud";
 
@@ -293,7 +294,7 @@ class CrudCommand extends Command {
             }
         }
 
-        $output->writeln("<question>\t>>  CRUD: Crud has been generated for the '{$entity}' entity</question>");
+        $output->writeln($this->infoOutput("\t>>  CRUD: Crud has been generated for the '{$entity}' entity"));
         return Command::SUCCESS;
     }
 

@@ -3,6 +3,7 @@
 namespace App\Console\Framework\New;
 
 use App\Traits\Framework\ClassPath;
+use App\Traits\Framework\ConsoleOutput;
 use LionFiles\Store;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -11,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class RulesCommand extends Command {
 
-    use ClassPath;
+    use ClassPath, ConsoleOutput;
 
     protected static $defaultName = "new:rule";
 
@@ -52,9 +53,8 @@ class RulesCommand extends Command {
         $this->force();
         $this->close();
 
-        $output->writeln("<comment>\t>>  RULE: {$rule}</comment>");
-        $output->writeln("<info>\t>>  RULE: The '{$list['namespace']}\\{$list['class']}' rule has been generated</info>");
-
+        $output->writeln($this->warningOutput("\t>>  RULE: {$rule}"));
+        $output->writeln($this->successOutput("\t>>  RULE: The '{$list['namespace']}\\{$list['class']}' rule has been generated"));
         return Command::SUCCESS;
     }
 

@@ -3,6 +3,7 @@
 namespace App\Console\Framework\New;
 
 use App\Traits\Framework\ClassPath;
+use App\Traits\Framework\ConsoleOutput;
 use LionFiles\Store;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -11,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class TraitCommand extends Command {
 
-    use ClassPath;
+    use ClassPath, ConsoleOutput;
 
 	protected static $defaultName = "new:trait";
 
@@ -42,9 +43,8 @@ class TraitCommand extends Command {
         $this->force();
         $this->close();
 
-        $output->writeln("<comment>\t>>  TRAIT: {$trait}</comment>");
-        $output->writeln("<info>\t>>  TRAIT: The '{$list['namespace']}\\{$list['class']}' trait has been generated</info>");
-
+        $output->writeln($this->warningOutput("\t>>  TRAIT: {$trait}"));
+        $output->writeln($this->successOutput("\t>>  TRAIT: The '{$list['namespace']}\\{$list['class']}' trait has been generated"));
         return Command::SUCCESS;
     }
 

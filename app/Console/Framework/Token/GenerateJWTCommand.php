@@ -2,6 +2,7 @@
 
 namespace App\Console\Framework\Token;
 
+use App\Traits\Framework\ConsoleOutput;
 use LionSecurity\JWT;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -9,6 +10,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class GenerateJWTCommand extends Command {
+
+    use ConsoleOutput;
 
     protected static $defaultName = "token:jwt";
 
@@ -34,9 +37,8 @@ class GenerateJWTCommand extends Command {
             'github' => "https://github.com/Sleon4"
         ]);
 
-        $output->writeln("<comment>\t>>  TOKEN: JWT created successfully</comment>");
-        $output->writeln("<info>\t>>  TOKEN: {$jwt}</info>");
-
+        $output->writeln($this->warningOutput("\t>>  TOKEN: JWT created successfully"));
+        $output->writeln($this->successOutput("\t>>  TOKEN: {$jwt}"));
         return Command::SUCCESS;
     }
 

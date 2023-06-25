@@ -3,8 +3,8 @@
 namespace App\Console\Framework\New;
 
 use App\Traits\Framework\ClassPath;
+use App\Traits\Framework\ConsoleOutput;
 use LionFiles\Store;
-use LionHelpers\Str;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class EnumsCommand extends Command {
 
-    use ClassPath;
+    use ClassPath, ConsoleOutput;
 
 	protected static $defaultName = "new:enum";
 
@@ -37,11 +37,11 @@ class EnumsCommand extends Command {
         Store::folder($url_folder);
 
         $this->create($url_folder, $list['class']);
-        $this->add(Str::of("<?php")->ln()->ln()->get());
-        $this->add(Str::of("namespace ")->concat($list['namespace'])->concat(";")->ln()->ln()->get());
+        $this->add(str->of("<?php")->ln()->ln()->get());
+        $this->add(str->of("namespace ")->concat($list['namespace'])->concat(";")->ln()->ln()->get());
 
         $this->add(
-            Str::of("enum ")
+            str->of("enum ")
                 ->concat($list['class'])
                 ->concat(": string {")->ln()->ln()->lt()
                 ->concat("case EXAMPLE = 'example';")->ln()->ln()->lt()
@@ -55,8 +55,8 @@ class EnumsCommand extends Command {
         $this->force();
         $this->close();
 
-        $output->writeln("<comment>\t>>  ENUM: {$enum}</comment>");
-        $output->writeln("<info>\t>>  ENUM: The '{$list['namespace']}\\{$list['class']}' enum has been generated</info>");
+        $output->writeln($this->warningOutput("\t>>  ENUM: {$enum}"));
+        $output->writeln($this->successOutput("\t>>  ENUM: The '{$list['namespace']}\\{$list['class']}' enum has been generated"));
         return Command::SUCCESS;
 	}
 

@@ -2,11 +2,14 @@
 
 namespace App\Console\Framework\AES;
 
+use App\Traits\Framework\ConsoleOutput;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class NewAESCommand extends Command {
+
+    use ConsoleOutput;
 
 	protected static $defaultName = "aes:new";
 
@@ -38,10 +41,9 @@ class NewAESCommand extends Command {
             return $key;
         };
 
-        $output->writeln("<comment>\t>>  AES KEY: {$generateKeys()}</comment>");
-        $output->writeln("<comment>\t>>  AES IV: {$generateKeys()}</comment>");
-        $output->writeln("<info>\t>>  Keys created successfully</info>");
-
+        $output->writeln($this->warningOutput("\t>>  AES KEY: {$generateKeys()}"));
+        $output->writeln($this->warningOutput("\t>>  AES IV: {$generateKeys()}"));
+        $output->writeln($this->successOutput("\t>>  Keys created successfully"));
         return Command::SUCCESS;
     }
 

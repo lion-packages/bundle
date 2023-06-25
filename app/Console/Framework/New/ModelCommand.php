@@ -3,6 +3,7 @@
 namespace App\Console\Framework\New;
 
 use App\Traits\Framework\ClassPath;
+use App\Traits\Framework\ConsoleOutput;
 use LionFiles\Store;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\{ InputInterface, InputArgument };
@@ -10,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ModelCommand extends Command {
 
-    use ClassPath;
+    use ClassPath, ConsoleOutput;
 
 	protected static $defaultName = 'new:model';
 
@@ -50,9 +51,8 @@ class ModelCommand extends Command {
         $this->force();
         $this->close();
 
-        $output->writeln("<comment>\t>>  MODEL: {$model}</comment>");
-        $output->writeln("<info>\t>>  MODEL: The '{$list['namespace']}\\{$list['class']}' model has been generated</info>");
-
+        $output->writeln($this->warningOutput("\t>>  MODEL: {$model}"));
+        $output->writeln($this->successOutput("\t>>  MODEL: The '{$list['namespace']}\\{$list['class']}' model has been generated"));
         return Command::SUCCESS;
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Console\Framework\RSA;
 
+use App\Traits\Framework\ConsoleOutput;
 use LionFiles\Store;
 use LionSecurity\RSA;
 use Symfony\Component\Console\Command\Command;
@@ -9,6 +10,8 @@ use Symfony\Component\Console\Input\{ InputInterface, InputOption };
 use Symfony\Component\Console\Output\OutputInterface;
 
 class NewRSACommand extends Command {
+
+    use ConsoleOutput;
 
 	protected static $defaultName = "rsa:new";
 
@@ -36,10 +39,9 @@ class NewRSACommand extends Command {
             Store::remove('.rnd');
         }
 
-        $output->writeln("<comment>\t>>  RSA KEYS: public and private</comment>");
-        $output->writeln("<info>\t>>  RSA KEYS: Exported in " . RSA::$url_path . "public.key</info>");
-        $output->writeln("<info>\t>>  RSA KEYS: Exported in " . RSA::$url_path . "private.key</info>");
-
+        $output->writeln($this->warningOutput("\t>>  RSA KEYS: public and private"));
+        $output->writeln($this->successOutput("\t>>  RSA KEYS: Exported in " . RSA::$url_path . "public.key"));
+        $output->writeln($this->successOutput("\t>>  RSA KEYS: Exported in " . RSA::$url_path . "private.key"));
 		return Command::SUCCESS;
 	}
 

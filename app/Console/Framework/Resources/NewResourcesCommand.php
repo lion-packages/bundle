@@ -3,6 +3,7 @@
 namespace App\Console\Framework\Resources;
 
 use App\Traits\Framework\ClassPath;
+use App\Traits\Framework\ConsoleOutput;
 use LionFiles\Store;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -12,7 +13,7 @@ use \ZipArchive;
 
 class NewResourcesCommand extends Command {
 
-    use ClassPath;
+    use ClassPath, ConsoleOutput;
 
     protected static $defaultName = "resource:new";
 
@@ -40,21 +41,24 @@ class NewResourcesCommand extends Command {
         $zip->close();
 
         // rename resource folder
-        $output->writeln("<comment>\t>>  RESOURCES: {$resource}</comment>");
+        $output->writeln($this->warningOutput("\t>>  RESOURCES: {$resource}"));
 
         if (is_dir("resources/example/")) {
             if (isSuccess(Store::exist("resources/{$resource}/"))) {
-                $output->writeln("<fg=#E37820>\t>>  RESOURCES: A resource with this name already exists</>");
+                $output->writeln($this->errorOutput("\t>>  RESOURCES: A resource with this name already exists"));
+                return Command::FAILURE;
             } else {
                 if (rename("resources/example/", "resources/{$resource}/")) {
-                    $output->writeln("<info>\t>>  RESOURCES: The 'resources/{$resource}/' resource has been generated</info>");
+                    $output->writeln($this->successOutput("\t>>  RESOURCES: The 'resources/{$resource}/' resource has been generated"));
+                    return Command::SUCCESS;
                 } else {
-                    $output->writeln("<fg=#E37820>\t>>  RESOURCES: Failed to generate resource</>");
+                    $output->writeln($this->errorOutput("\t>>  RESOURCES: Failed to generate resource"));
+                    return Command::FAILURE;
                 }
             }
         }
 
-        return Command::SUCCESS;
+        return Command::FAILURE;
     }
 
 }

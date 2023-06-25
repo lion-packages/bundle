@@ -3,6 +3,7 @@
 namespace App\Console\Framework\DB;
 
 use App\Traits\Framework\ClassPath;
+use App\Traits\Framework\ConsoleOutput;
 use LionFiles\Store;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\{ InputInterface, InputArgument, InputOption };
@@ -11,7 +12,7 @@ use Symfony\Component\Console\Helper\Table;
 
 class SeedCommand extends Command {
 
-    use ClassPath;
+    use ClassPath, ConsoleOutput;
 
 	protected static $defaultName = "db:seed";
 
@@ -39,7 +40,7 @@ class SeedCommand extends Command {
         }
 
         $run = $run === 'true' ? true : false;
-        $output->writeln("<comment>\t>>  SEED: {$seed}</comment>");
+        $output->writeln($this->warningOutput("\t>>  SEED: {$seed}"));
 
         if (!$run) {
             $list = $this->export("database/Seeders/", $seed);
@@ -61,13 +62,13 @@ class SeedCommand extends Command {
             $this->force();
             $this->close();
 
-            $output->writeln("<info>\t>>  SEED: The '{$list['namespace']}\\{$list['class']}' seed has been generated</info>");
+            $output->writeln($this->infoOutput("\t>>  SEED: The '{$list['namespace']}\\{$list['class']}' seed has been generated"));
             return Command::SUCCESS;
         }
 
         $namespace = str->of($seed)->replace("/", "\\")->get();
         if (!class_exists($namespace)) {
-            $output->writeln("<fg=#E37820>\t>>  SEED: Class does not exist</>");
+            $output->writeln($this->errorOutput("\t>>  SEED: Class does not exist"));
             return Command::INVALID;
         }
 
@@ -76,11 +77,11 @@ class SeedCommand extends Command {
             (new Table($output))->setHeaders($res['columns'])->setRows($res['rows'])->render();
         } else {
             if (isError($res)) {
-                $output->writeln("<fg=#E37820>\t>>  SEED: {$res->message}</>");
+                $output->writeln($this->errorOutput("\t>>  SEED: {$res->message}"));
                 return Command::INVALID;
             }
 
-            $output->writeln("<info>{$res->message}</info>");
+            $output->writeln($this->successOutput($res->message));
         }
 
         return Command::SUCCESS;

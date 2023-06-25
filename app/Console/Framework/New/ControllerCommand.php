@@ -3,6 +3,7 @@
 namespace App\Console\Framework\New;
 
 use App\Traits\Framework\ClassPath;
+use App\Traits\Framework\ConsoleOutput;
 use LionFiles\Store;
 use LionHelpers\Str;
 use Symfony\Component\Console\Command\Command;
@@ -11,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ControllerCommand extends Command {
 
-    use ClassPath;
+    use ClassPath, ConsoleOutput;
 
     protected static $defaultName = 'new:controller';
 
@@ -73,8 +74,8 @@ class ControllerCommand extends Command {
         $this->force();
         $this->close();
 
-        $output->writeln("<comment>\t>>  CONTROLLER: {$controller}</comment>");
-        $output->writeln("<info>\t>>  CONTROLLER: The '{$list['namespace']}\\{$list['class']}' controller has been generated</info>");
+        $output->writeln($this->warningOutput("\t>>  CONTROLLER: {$controller}"));
+        $output->writeln($this->successOutput("\t>>  CONTROLLER: The '{$list['namespace']}\\{$list['class']}' controller has been generated"));
 
         if ($model != null) {
             $this->getApplication()->find('new:model')->run(

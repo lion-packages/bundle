@@ -2,6 +2,7 @@
 
 namespace App\Console\Framework\DB;
 
+use App\Traits\Framework\ConsoleOutput;
 use LionHelpers\Arr;
 use LionSQL\Drivers\MySQL\MySQL as DB;
 use Symfony\Component\Console\Command\Command;
@@ -10,6 +11,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 
 class AllCapsulesCommand extends Command {
+
+    use ConsoleOutput;
 
     protected static $defaultName = "db:all-capsules";
 
@@ -32,7 +35,7 @@ class AllCapsulesCommand extends Command {
         $list_all_tables = [];
 
         foreach ($connections_keys as $key => $connection) {
-            $output->writeln("<question>\t>>  CONNECTION: {$connection}</question>");
+            $output->writeln($this->infoOutput("\t>>  CONNECTION: {$connection}"));
             $all_tables = DB::connection($connection)->show()->tables()->from($connection)->getAll();
 
             if (!isset($all_tables->status)) {
@@ -42,7 +45,7 @@ class AllCapsulesCommand extends Command {
                     'size' => Arr::of($all_tables)->length()
                 ];
             } else {
-                $output->writeln("<info>\t>>  CONNECTION: {$all_tables->message}</info>");
+                $output->writeln($this->successOutput("\t>>  CONNECTION: {$all_tables->message}"));
             }
         }
 

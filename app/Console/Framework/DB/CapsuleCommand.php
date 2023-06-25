@@ -3,8 +3,8 @@
 namespace App\Console\Framework\DB;
 
 use App\Traits\Framework\ClassPath;
+use App\Traits\Framework\ConsoleOutput;
 use LionFiles\Store;
-use LionHelpers\Str;
 use LionSQL\Drivers\MySQL\MySQL as DB;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\{ InputInterface, InputArgument, InputOption };
@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CapsuleCommand extends Command {
 
-    use ClassPath;
+    use ClassPath, ConsoleOutput;
 
 	protected static $defaultName = "db:capsule";
 
@@ -38,36 +38,36 @@ class CapsuleCommand extends Command {
         $message = $input->getOption('message');
 
         $columns = null;
-        $table = Str::of($table)->test("/-/") ? "`{$table}`" : $table;
+        $table = str->of($table)->test("/-/") ? "`{$table}`" : $table;
         $connections = DB::getConnections();
         $main_conn = $connection === null ? $connections['default'] : $connection;
         $main_conn_pascal = str->of($main_conn)->replace("_", " ")->replace("-", " ")->pascal()->get();
 
         if ($message === null) {
             $message = true;
-            $output->writeln("<comment>\t>>  CAPSULE: {$table}</comment>");
+            $output->writeln($this->warningOutput("\t>>  CAPSULE: {$table}"));
         }
 
         $columns = DB::connection($main_conn)->show()->columns()->from($table)->getAll();
         if (isset($columns->status)) {
-            $output->writeln("<fg=#E37820>\t>>  CAPSULE: {$columns->message} \u{2717}</>");
+            $output->writeln($this->errorOutput("\t>>  CAPSULE: {$columns->message} \u{2717}"));
             return Command::FAILURE;
         }
 
         $index = 0;
-        $list = $this->export("Database/Class/{$main_conn_pascal}/", $this->normalizeClass(Str::of($table)->replace('`', '')->get()));
+        $list = $this->export("Database/Class/{$main_conn_pascal}/", $this->normalizeClass(str->of($table)->replace('`', '')->get()));
         $functions_union = "";
         $propierties_union = "";
         $new_object_union = "";
         $object_class = "";
 
-        $url_folder = lcfirst(Str::of($list['namespace'])->replace("\\", "/")->get());
+        $url_folder = lcfirst(str->of($list['namespace'])->replace("\\", "/")->get());
         Store::folder($url_folder);
         $this->create($url_folder, $list['class']);
-        $this->add(Str::of("<?php")->ln()->ln()->get());
-        $this->add(Str::of("namespace ")->concat($list['namespace'])->concat(";\r\n\n")->get());
+        $this->add(str->of("<?php")->ln()->ln()->get());
+        $this->add(str->of("namespace ")->concat($list['namespace'])->concat(";\r\n\n")->get());
         $this->add(
-            Str::of("class ")
+            str->of("class ")
                 ->concat($list['class'])
                 ->concat(" implements \JsonSerializable {")->ln()->ln()
                 ->get()
@@ -77,24 +77,24 @@ class CapsuleCommand extends Command {
         foreach ($columns as $key => $column) {
             if ($index === 0) {
                 $new_object_union = $this->addNewObjectClass($list['class']);
-                $object_class = Str::of('$')->concat(lcfirst($list['class']))->trim()->get();
+                $object_class = str->of('$')->concat(lcfirst($list['class']))->trim()->get();
                 $index++;
             }
 
             $field = $this->cleanField($column->Field);
             $normalize_field = $this->normalizeField($field, true);
-            $prop = Str::of('request->')->concat($normalize_field)->get();
+            $prop = str->of('request->')->concat($normalize_field)->get();
             $propierties_union .= $this->addPropierty($column->Type, $field);
-            $functions_union .= Str::of($this->addSetFunctionIsset($object_class, $field, $prop))->ln()->get();
+            $functions_union .= str->of($this->addSetFunctionIsset($object_class, $field, $prop))->ln()->get();
         }
 
         // Class
         $this->add($propierties_union);
-        $this->add(Str::of("\n\tpublic function __construct() {\n\n")->concat("\t}\n\n")->get());
+        $this->add(str->of("\n\tpublic function __construct() {\n\n")->concat("\t}\n\n")->get());
         $this->add("\tpublic function jsonSerialize(): mixed {\n\t\t" . 'return get_object_vars($this);' . "\n\t}\n\n");
 
         $this->add(
-            Str::of("\tpublic static function capsule(): ")
+            str->of("\tpublic static function capsule(): ")
                 ->concat($list['class'])
                 ->concat(" {")->ln()->lt()->lt()
                 ->concat($new_object_union)
@@ -116,7 +116,7 @@ class CapsuleCommand extends Command {
             $this->add("\n\t}\n\n");
 
             $this->add(
-                Str::of($this->addSetFunction($column->Type, $normalize_field, $list['class']))
+                str->of($this->addSetFunction($column->Type, $normalize_field, $list['class']))
                     ->concat(" {\n")
                     ->concat("\t\t")
                     ->concat('$this->')
@@ -135,7 +135,7 @@ class CapsuleCommand extends Command {
         $this->close();
 
         if ($message != null) {
-            $output->writeln("<info>\t>>  CAPSULE: The '{$list['namespace']}\\{$list['class']}' capsule has been generated</info>");
+            $output->writeln($this->successOutput("\t>>  CAPSULE: The '{$list['namespace']}\\{$list['class']}' capsule has been generated"));
         }
 
         return Command::SUCCESS;

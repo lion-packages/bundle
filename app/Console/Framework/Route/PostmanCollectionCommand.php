@@ -3,16 +3,16 @@
 namespace App\Console\Framework\Route;
 
 use App\Traits\Framework\ClassPath;
+use App\Traits\Framework\ConsoleOutput;
 use App\Traits\Framework\PostmanCollector;
 use LionFiles\Store;
-use LionHelpers\Str;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class PostmanCollectionCommand extends Command {
 
-    use ClassPath, PostmanCollector;
+    use ClassPath, PostmanCollector, ConsoleOutput;
 
 	protected static $defaultName = "route:postman";
     private array $routes;
@@ -20,7 +20,7 @@ class PostmanCollectionCommand extends Command {
 
     protected function initialize(InputInterface $input, OutputInterface $output) {
         $this->init(env->SERVER_URL);
-        $this->json_name = Str::of(date('Y-m-d') . "_lion_collection")->lower()->get();
+        $this->json_name = str->of(date('Y_m_d') . "_lion_collection")->lower()->get();
         $this->routes = fetch('GET', env->SERVER_URL . "/route-list");
         array_pop($this->routes);
     }
@@ -30,7 +30,8 @@ class PostmanCollectionCommand extends Command {
     }
 
     protected function configure() {
-        $this->setDescription("Command required to create postman collections in JSON format");
+        $this
+            ->setDescription("Command required to create postman collections in JSON format");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
@@ -56,9 +57,8 @@ class PostmanCollectionCommand extends Command {
         $this->force();
         $this->close();
 
-        $output->writeln("<comment>\t>>  COLLECTION: {$this->json_name}</comment>");
-        $output->writeln("<info>\t>>  COLLECTION: Exported in {$path}{$this->json_name}.json</info>");
-
+        $output->writeln($this->warningOutput("\t>>  COLLECTION: {$this->json_name}"));
+        $output->writeln($this->successOutput("\t>>  COLLECTION: Exported in {$path}{$this->json_name}.json"));
         return Command::SUCCESS;
     }
 

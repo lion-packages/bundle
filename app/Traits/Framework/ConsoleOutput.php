@@ -16,4 +16,8 @@ trait ConsoleOutput {
         return "\033[0;33m{$message}\033[0m";
     }
 
+    public function infoOutput(string $message = ""): string {
+        return "\033[0;36m{$message}\033[0m";
+    }
+
 }

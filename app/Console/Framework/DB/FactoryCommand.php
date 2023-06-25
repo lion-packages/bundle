@@ -3,6 +3,7 @@
 namespace App\Console\Framework\DB;
 
 use App\Traits\Framework\ClassPath;
+use App\Traits\Framework\ConsoleOutput;
 use LionFiles\Store;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\{ InputInterface, InputArgument, InputOption };
@@ -10,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class FactoryCommand extends Command {
 
-    use ClassPath;
+    use ClassPath, ConsoleOutput;
 
 	protected static $defaultName = "db:factory";
 
@@ -50,8 +51,8 @@ class FactoryCommand extends Command {
         $this->force();
         $this->close();
 
-        $output->writeln("<comment>\t>>  FACTORY: {$factory}</comment>");
-        $output->writeln("<info>\t>>  FACTORY: The '{$list['namespace']}\\{$list['class']}' factory has been generated</info>");
+        $output->writeln($this->warningOutput("\t>>  FACTORY: {$factory}"));
+        $output->writeln($this->successOutput("\t>>  FACTORY: The '{$list['namespace']}\\{$list['class']}' factory has been generated"));
         return Command::SUCCESS;
     }
 

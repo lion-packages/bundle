@@ -3,6 +3,7 @@
 namespace App\Console\Framework\New;
 
 use App\Traits\Framework\ClassPath;
+use App\Traits\Framework\ConsoleOutput;
 use LionFiles\Store;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -11,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CapsuleCommand extends Command {
 
-    use ClassPath;
+    use ClassPath, ConsoleOutput;
 
 	protected static $defaultName = "new:capsule";
 
@@ -42,8 +43,8 @@ class CapsuleCommand extends Command {
         $this->force();
         $this->close();
 
-        $output->writeln("<comment>\t>>  CAPSULE: {$capsule}</comment>");
-        $output->writeln("<info>\t>>  CAPSULE: The '{$list['namespace']}\\{$list['class']}' capsule has been generated</info>");
+        $output->writeln($this->warningOutput("\t>>  CAPSULE: {$capsule}"));
+        $output->writeln($this->successOutput("\t>>  CAPSULE: The '{$list['namespace']}\\{$list['class']}' capsule has been generated"));
 
         return Command::SUCCESS;
 	}

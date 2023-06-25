@@ -2,6 +2,7 @@
 
 namespace App\Console\Framework\DB;
 
+use App\Traits\Framework\ConsoleOutput;
 use LionSQL\Drivers\MySQL\MySQL as DB;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
@@ -11,6 +12,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class SelectTableCommand extends Command {
+
+    use ConsoleOutput;
 
 	protected static $defaultName = "db:select";
 
@@ -47,7 +50,7 @@ class SelectTableCommand extends Command {
             $columns_db = DB::connection($main_conn)->show()->columns()->from($entity)->getAll();
 
             if (isset($columns_db->status)) {
-                $output->writeln("<info>\t>>  {$columns_db->message}</info>");
+                $output->writeln($this->successOutput("\t>>  {$columns_db->message}"));
                 return Command::SUCCESS;
             }
 
@@ -63,7 +66,7 @@ class SelectTableCommand extends Command {
         $rows_table = DB::connection($main_conn)->table($entity)->select(...$columns_table)->limit(0, $final_limit)->fetchMode(\PDO::FETCH_ASSOC)->getAll();
 
         if (isset($rows_table->status)) {
-            $output->writeln("<info>\t>>  {$rows_table->message}</info>");
+            $output->writeln($this->successOutput("\t>>  {$rows_table->message}"));
             return Command::SUCCESS;
         }
 

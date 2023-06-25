@@ -2,6 +2,7 @@
 
 namespace App\Console\Framework\DB;
 
+use App\Traits\Framework\ConsoleOutput;
 use LionSQL\Drivers\MySQL\MySQL as DB;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -9,6 +10,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class AllCrudCommand extends Command {
+
+    use ConsoleOutput;
 
 	protected static $defaultName = "db:all-crud";
 
@@ -30,14 +33,14 @@ class AllCrudCommand extends Command {
         $cont = 0;
 
         foreach ($connections['connections'] as $key => $conn) {
-            $output->writeln("<question>\t>>  {$conn['dbname']}</question>");
+            $output->writeln($this->infoOutput("\t>>  {$conn['dbname']}"));
             $tables = DB::connection($conn['dbname'])->show()->full()->tables()->where(DB::equalTo("Table_Type"), 'BASE TABLE')->getAll();
 
             foreach ($tables as $key => $table) {
                 $values = arr->of((array) $table)->values()->get();
 
                 if (in_array(strtolower($values[0]), ["groups", "group", "select"])) {
-                    $output->writeln("\n<error>\t>>  Omitted entity CRUD '{$conn['dbname']}.{$values[0]}', contains reserved names</error>\n");
+                    $output->writeln($this->errorOutput("\n\t>>  Omitted entity CRUD '{$conn['dbname']}.{$values[0]}', contains reserved names\n"));
                 } else {
                     $this->getApplication()->find('db:crud')->run(
                         new ArrayInput([
