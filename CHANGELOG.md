@@ -1,5 +1,10 @@
 # Release Notes
 
+## [v14.25.0](https://github.com/Sleon4/Lion-Framework/compare/v14.24.1...v14.25.0) (2023-06-26)
+
+### Changed
+- lion/mailer library v5.1.0 has been updated
+
 ## [v14.24.1](https://github.com/Sleon4/Lion-Framework/compare/v14.24.0...v14.24.1) (2023-06-25)
 
 ### Added
