@@ -781,16 +781,16 @@
         },
         {
             "name": "lion/mailer",
-            "version": "v5.0.0",
+            "version": "v5.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Mailer.git",
-                "reference": "437eae63b88e26c7e490c7c3f91b855f1d81c187"
+                "reference": "456665027cb66c9b131414b1abc5780b40a42a72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Mailer/zipball/437eae63b88e26c7e490c7c3f91b855f1d81c187",
-                "reference": "437eae63b88e26c7e490c7c3f91b855f1d81c187",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Mailer/zipball/456665027cb66c9b131414b1abc5780b40a42a72",
+                "reference": "456665027cb66c9b131414b1abc5780b40a42a72",
                 "shasum": ""
             },
             "require": {
@@ -812,9 +812,9 @@
             "description": "Library created to facilitate sending email based on different services",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Mailer/issues",
-                "source": "https://github.com/Sleon4/Lion-Mailer/tree/v5.0.0"
+                "source": "https://github.com/Sleon4/Lion-Mailer/tree/v5.1.0"
             },
-            "time": "2023-05-31T23:47:28+00:00"
+            "time": "2023-06-26T23:53:06+00:00"
         },
         {
             "name": "lion/request",
@@ -2542,16 +2542,16 @@
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v6.3.0",
+            "version": "v6.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "718a97ed430d34e5c568ea2c44eab708c6efbefb"
+                "reference": "e0ad0d153e1c20069250986cd9e9dd1ccebb0d66"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/718a97ed430d34e5c568ea2c44eab708c6efbefb",
-                "reference": "718a97ed430d34e5c568ea2c44eab708c6efbefb",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/e0ad0d153e1c20069250986cd9e9dd1ccebb0d66",
+                "reference": "e0ad0d153e1c20069250986cd9e9dd1ccebb0d66",
                 "shasum": ""
             },
             "require": {
@@ -2599,7 +2599,7 @@
             "description": "Defines an object-oriented layer for the HTTP specification",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/http-foundation/tree/v6.3.0"
+                "source": "https://github.com/symfony/http-foundation/tree/v6.3.1"
             },
             "funding": [
                 {
@@ -2615,7 +2615,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-05-19T12:46:45+00:00"
+            "time": "2023-06-24T11:51:27+00:00"
         },
         {
             "name": "symfony/mailer",
@@ -3435,16 +3435,16 @@
         },
         {
             "name": "symfony/routing",
-            "version": "v6.3.0",
+            "version": "v6.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/routing.git",
-                "reference": "827f59fdc67eecfc4dfff81f9c93bf4d98f0c89b"
+                "reference": "d37ad1779c38b8eb71996d17dc13030dcb7f9cf5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/routing/zipball/827f59fdc67eecfc4dfff81f9c93bf4d98f0c89b",
-                "reference": "827f59fdc67eecfc4dfff81f9c93bf4d98f0c89b",
+                "url": "https://api.github.com/repos/symfony/routing/zipball/d37ad1779c38b8eb71996d17dc13030dcb7f9cf5",
+                "reference": "d37ad1779c38b8eb71996d17dc13030dcb7f9cf5",
                 "shasum": ""
             },
             "require": {
@@ -3497,7 +3497,7 @@
                 "url"
             ],
             "support": {
-                "source": "https://github.com/symfony/routing/tree/v6.3.0"
+                "source": "https://github.com/symfony/routing/tree/v6.3.1"
             },
             "funding": [
                 {
@@ -3513,7 +3513,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-04-28T15:57:00+00:00"
+            "time": "2023-06-05T15:30:22+00:00"
         },
         {
             "name": "symfony/service-contracts",
