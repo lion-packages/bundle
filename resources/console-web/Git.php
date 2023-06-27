@@ -52,4 +52,4 @@ foreach (require_once(__DIR__ . "/../../config/cors.php") as $key => $header) {
 
 $data = [];
 exec(request->command, $data);
-finish($data);
+finish(200, $data);

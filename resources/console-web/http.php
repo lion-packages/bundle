@@ -54,4 +54,4 @@ $command = "cd ../.. && " . request->command;
 $data = [];
 
 exec($command, $data);
-finish($data);
+finish(200, $data);
