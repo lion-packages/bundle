@@ -24,6 +24,7 @@
         "lion/files": "^4.7",
         "lion/helpers": "^2.0",
         "lion/mailer": "^5.0",
+        "lion/request": "^5.4",
         "lion/route": "^8.2",
         "lion/security": "^6.11",
         "lion/sql": "^8.7",
