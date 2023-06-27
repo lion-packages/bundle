@@ -58,8 +58,8 @@ if (!function_exists('storage_path')) {
  **/
 
 if (!function_exists('finish')) {
-    function finish(int $code = 200, mixed $response = null): void {
-        response->code($code)->finish($response === null ? success() : $response);
+    function finish(mixed $response = null): void {
+        response->finish($response === null ? success() : $response);
     }
 }
 

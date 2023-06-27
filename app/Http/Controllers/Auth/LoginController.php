@@ -20,16 +20,16 @@ class LoginController {
 
         $cont = $this->loginModel->authDB($users);
         if ($cont->cont === 0) {
-            return error("email/password is invalid");
+            return error(500, "email/password is invalid");
         }
 
         $session = $this->loginModel->sessionDB($users);
         if (!password_verify($users->getUsersPassword(), $session->users_password)) {
-            return error("email/password is invalid");
+            return error(500, "email/password is invalid");
         }
 
         RSA::$url_path = storage_path("keys/{$session->users_code}/");
-        return success("welcome: {$session->users_name} {$session->users_lastname}", [
+        return success(200, "welcome: {$session->users_name} {$session->users_lastname}", [
             'jwt' => JWT::encode([
                 'session' => true,
                 'idusers' => $session->idusers,

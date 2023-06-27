@@ -10,11 +10,11 @@
 
 return [
     'POST' => [
-        'api/auth/login' => [
+        '/api/auth/login' => [
             \App\Rules\LionDatabase\Users\UsersEmailRule::class,
             \App\Rules\LionDatabase\Users\UsersPasswordRule::class
         ],
-        'api/user-registration' => [
+        '/api/user-registration' => [
             \App\Rules\LionDatabase\Users\IdrolesRule::class,
             \App\Rules\LionDatabase\Users\UsersNameRule::class,
             \App\Rules\LionDatabase\Users\UsersLastnameRule::class,

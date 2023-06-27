@@ -73,7 +73,7 @@ $response_database = \LionSQL\Driver::run(
 
 if (isError($response_database)) {
     logger($response_database->message, 'error');
-    finish(500, $response_database);
+    finish(error(500, $response_database->message));
 }
 
 /**
@@ -90,7 +90,7 @@ $response_email = \LionMailer\MailService::run(
 
 if (isError($response_email)) {
     logger($response_email->message, 'error');
-    finish(500, $response_email);
+    finish(error(500, $response_email->message));
 }
 
 /**

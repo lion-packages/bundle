@@ -19,7 +19,7 @@ trait ShowErrors {
         if (count(self::$validation) > 0) {
             foreach (self::$validation as $keyErrors => $errors) {
                 logger($errors[0], StatusResponseEnum::ERROR->value);
-                finish(error($errors[0]));
+                finish(error(500, $errors[0]));
             }
         }
     }
