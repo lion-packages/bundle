@@ -1,5 +1,11 @@
 # Release Notes
 
+## [v14.26.0](https://github.com/Sleon4/Lion-Framework/compare/v14.25.0...v14.26.0) (2023-06-27)
+
+### Changed
+- lion/files library v4.11.0 has been updated
+- lion/request library v5.4.0 has been updated
+
 ## [v14.25.0](https://github.com/Sleon4/Lion-Framework/compare/v14.24.1...v14.25.0) (2023-06-26)
 
 ### Changed
