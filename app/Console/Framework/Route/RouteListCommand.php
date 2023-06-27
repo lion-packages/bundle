@@ -29,10 +29,10 @@ class RouteListCommand extends Command {
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $output->getFormatter()->setStyle('lion', new OutputFormatterStyle('blue'));
         $routes = fetch("GET", env->SERVER_URL . "/route-list");
         array_pop($routes);
         $rules = require_once("./routes/rules.php");
+        $config_middleware = require_once("./config/middleware.php");
         $size = arr->of($routes)->length();
         $cont = 0;
         $rows = [];
@@ -84,16 +84,30 @@ class RouteListCommand extends Command {
 
                 if (arr->of($method['filters'])->length() > 0) {
                     foreach ($method['filters'] as $key => $filter) {
-                        $rows[] = [
-                            new TableCell(
-                                $this->infoOutput("MIDDLEWARE:"),
-                                ['colspan' => 1]
-                            ),
-                            new TableCell(
-                                $this->infoOutput($filter),
-                                ['colspan' => 1]
-                            )
-                        ];
+                        foreach ($config_middleware as $middlewareClass => $middlewareMethods) {
+                            foreach ($middlewareMethods as $middlewareItem => $item) {
+                                if ($filter === $item['name']) {
+                                    $middleware = "";
+                                    $split = explode("\\", $middlewareClass);
+
+                                    foreach ($split as $key => $value) {
+                                        if ($key < (count($split) - 1)) {
+                                            $middleware .= $this->purpleOutput($value) . "\\";
+                                        } else {
+                                            $middleware .= $value;
+                                        }
+                                    }
+
+                                    $rows[] = [
+                                        $this->infoOutput("MIDDLEWARE:"),
+                                        $this->infoOutput($filter),
+                                        $middleware,
+                                        $this->warningOutput($item['method']),
+                                        $this->errorOutput("false")
+                                    ];
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -101,16 +115,23 @@ class RouteListCommand extends Command {
                     if (isset($rules[$keyMethods][$route_url])) {
                         foreach ($rules[$keyMethods][$route_url] as $key_uri_rule => $class_rule) {
                             $required_param = $class_rule::$disabled === false ? "REQUIRED" : "OPTIONAL";
+                            $class_namespace = "";
+                            $split = explode("\\", $class_rule);
+
+                            foreach ($split as $key => $value) {
+                                if ($key < (count($split) - 1)) {
+                                    $class_namespace .= $this->purpleOutput($value) . "\\";
+                                } else {
+                                    $class_namespace .= $value;
+                                }
+                            }
 
                             $rows[] = [
-                                new TableCell(
-                                    $this->successOutput("PARAM:"),
-                                    ['colspan' => 1]
-                                ),
-                                new TableCell(
-                                    $this->successOutput($class_rule::$field . " ({$required_param})"),
-                                    ['colspan' => 1]
-                                )
+                                $this->successOutput("PARAM:"),
+                                $this->successOutput($class_rule::$field . " ({$required_param})"),
+                                $class_namespace,
+                                $this->warningOutput("passes"),
+                                $this->errorOutput("false")
                             ];
                         }
                     }
@@ -134,7 +155,7 @@ class RouteListCommand extends Command {
                     : $this->successOutput(" no routes available ")
                 )
             )
-            ->setHeaders(['METHOD', 'ROUTE', 'CONTROLLER', 'FUNCTION', 'REQUEST'])
+            ->setHeaders(['METHOD', 'ROUTE', 'CLASS', 'FUNCTION', 'REQUEST'])
             ->setRows($rows)
             ->render();
 
