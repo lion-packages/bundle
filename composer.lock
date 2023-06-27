@@ -818,16 +818,16 @@
         },
         {
             "name": "lion/request",
-            "version": "v5.3.0",
+            "version": "v5.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Request.git",
-                "reference": "e7e8c008537897eb545c663867d248b9f3a90d29"
+                "reference": "dee654c9885ce66519a70eb5df4e70462df13f67"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Request/zipball/e7e8c008537897eb545c663867d248b9f3a90d29",
-                "reference": "e7e8c008537897eb545c663867d248b9f3a90d29",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Request/zipball/dee654c9885ce66519a70eb5df4e70462df13f67",
+                "reference": "dee654c9885ce66519a70eb5df4e70462df13f67",
                 "shasum": ""
             },
             "require": {
@@ -846,9 +846,9 @@
             "description": "Library created to request input data and response requests",
             "support": {
                 "issues": "https://github.com/Sleon4/Lion-Request/issues",
-                "source": "https://github.com/Sleon4/Lion-Request/tree/v5.3.0"
+                "source": "https://github.com/Sleon4/Lion-Request/tree/v5.4.0"
             },
-            "time": "2023-06-01T20:04:02+00:00"
+            "time": "2023-06-27T13:24:20+00:00"
         },
         {
             "name": "lion/route",
