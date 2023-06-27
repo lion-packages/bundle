@@ -4,9 +4,11 @@ namespace App\Console\Framework\Token;
 
 use App\Traits\Framework\ConsoleOutput;
 use LionSecurity\JWT;
+use LionSecurity\RSA;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class GenerateJWTCommand extends Command {
@@ -26,10 +28,14 @@ class GenerateJWTCommand extends Command {
     protected function configure() {
         $this
             ->setDescription("Created command to generate JWT token")
-            ->addArgument('session', InputArgument::OPTIONAL, 'Session must be true or false', "true");
+            ->addArgument('session', InputArgument::OPTIONAL, 'Session must be true or false', "true")
+            ->addOption('path', 'p', InputOption::VALUE_REQUIRED, 'Save to a specific path?');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
+        $path = $input->getOption("path");
+        if ($path != null) RSA::$url_path = $path;
+
         $jwt = JWT::encode([
             'session' => $input->getArgument('session') === "true" ? true : false,
             'system' => "Lion-Framework",
