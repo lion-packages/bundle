@@ -4,7 +4,6 @@ namespace App\Console\Framework\Route;
 
 use App\Traits\Framework\ConsoleOutput;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\{ Table, TableCell, TableSeparator };
@@ -37,6 +36,21 @@ class RouteListCommand extends Command {
         $cont = 0;
         $rows = [];
 
+        $transformNamespace = function(string $namespace): string {
+            $class_new = "";
+            $split = explode("\\", $namespace);
+
+            foreach ($split as $key => $value) {
+                if ($key < (count($split) - 1)) {
+                    $class_new .= $this->purpleOutput($value) . "\\";
+                } else {
+                    $class_new .= $value;
+                }
+            }
+
+            return $class_new;
+        };
+
         foreach ($routes as $route => $methods) {
             foreach ($methods as $keyMethods => $method) {
                 $route_url = str->of("/{$route}")->replace("//", "/")->get();
@@ -62,16 +76,7 @@ class RouteListCommand extends Command {
                 }
 
                 if ($method['handler']['controller'] != false) {
-                    $controller = "";
-                    $split = explode("\\", $method['handler']['controller']['name']);
-
-                    foreach ($split as $key => $value) {
-                        if ($key < (count($split) - 1)) {
-                            $controller .= $this->purpleOutput($value) . "\\";
-                        } else {
-                            $controller .= $value;
-                        }
-                    }
+                    $controller = $transformNamespace($method['handler']['controller']['name']);
 
                     $rows[] = [
                         $this->warningOutput($keyMethods),
@@ -87,16 +92,7 @@ class RouteListCommand extends Command {
                         foreach ($config_middleware as $middlewareClass => $middlewareMethods) {
                             foreach ($middlewareMethods as $middlewareItem => $item) {
                                 if ($filter === $item['name']) {
-                                    $middleware = "";
-                                    $split = explode("\\", $middlewareClass);
-
-                                    foreach ($split as $key => $value) {
-                                        if ($key < (count($split) - 1)) {
-                                            $middleware .= $this->purpleOutput($value) . "\\";
-                                        } else {
-                                            $middleware .= $value;
-                                        }
-                                    }
+                                    $middleware = $transformNamespace($middlewareClass);
 
                                     $rows[] = [
                                         $this->infoOutput("MIDDLEWARE:"),
@@ -115,16 +111,7 @@ class RouteListCommand extends Command {
                     if (isset($rules[$keyMethods][$route_url])) {
                         foreach ($rules[$keyMethods][$route_url] as $key_uri_rule => $class_rule) {
                             $required_param = $class_rule::$disabled === false ? "REQUIRED" : "OPTIONAL";
-                            $class_namespace = "";
-                            $split = explode("\\", $class_rule);
-
-                            foreach ($split as $key => $value) {
-                                if ($key < (count($split) - 1)) {
-                                    $class_namespace .= $this->purpleOutput($value) . "\\";
-                                } else {
-                                    $class_namespace .= $value;
-                                }
-                            }
+                            $class_namespace = $transformNamespace($class_rule);
 
                             $rows[] = [
                                 $this->successOutput("PARAM:"),

@@ -15,7 +15,4 @@ return [
         ['name' => "jwt-not-authorize", 'method' => "notAuthorize"],
         ['name' => "jwt-without-signature", 'method' => "authorizeWithoutSignature"]
     ],
-    \App\Http\Middleware\ExampleMiddleware::class => [
-        ['name' => "test", 'method' => "testMiddleware"]
-    ]
 ];

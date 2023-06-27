@@ -18,7 +18,7 @@ Route::any('/', function() {
 });
 
 Route::prefix('api', function() {
-    Route::post("user-registration", [UsersController::class, 'createUsers'], ['test']);
+    Route::post("user-registration", [UsersController::class, 'createUsers']);
 
     Route::prefix('auth', function() {
         Route::post('login', [LoginController::class, 'auth']);
