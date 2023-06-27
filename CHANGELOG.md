@@ -11,6 +11,7 @@
 - response helpers have been updated
 - output format has been modified to display web routes (route:list)
 - rule generation has been validated so as not to generate duplicate rules (foreign) in commands (db:rules)
+- added option to command (token:jwt) to allow selecting a path where public and private keys can be located
 
 ## [v14.25.0](https://github.com/Sleon4/Lion-Framework/compare/v14.24.1...v14.25.0) (2023-06-26)
 
