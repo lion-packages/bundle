@@ -20,4 +20,8 @@ trait ConsoleOutput {
         return "\033[0;36m{$message}\033[0m";
     }
 
+    public function purpleOutput(string $message = ""): string {
+        return "\033[0;95m{$message}\033[0m";
+    }
+
 }
