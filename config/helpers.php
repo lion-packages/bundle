@@ -58,8 +58,8 @@ if (!function_exists('storage_path')) {
  **/
 
 if (!function_exists('finish')) {
-    function finish(mixed $response): void {
-        response->finish($response);
+    function finish(int $code = 200, mixed $response = null): void {
+        response->code($code)->finish($response === null ? success() : $response);
     }
 }
 
@@ -70,8 +70,8 @@ if (!function_exists('finish')) {
  **/
 
 if (!function_exists('success')) {
-    function success(mixed $response = null, array|object $data = []): object {
-        return response->success($response, $data);
+    function success(int $code = 200, mixed $response = null, mixed $data = null): object {
+        return response->code($code)->success($response, $data);
     }
 }
 
@@ -82,8 +82,8 @@ if (!function_exists('success')) {
  **/
 
 if (!function_exists('error')) {
-    function error(mixed $response = null, array|object $data = []): object {
-        return response->error($response, $data);
+    function error(int $code = 200, mixed $response = null, mixed $data = null): object {
+        return response->code($code)->error($response, $data);
     }
 }
 
@@ -94,8 +94,8 @@ if (!function_exists('error')) {
  **/
 
 if (!function_exists('warning')) {
-    function warning(mixed $response = null, array|object $data = []): object {
-        return response->warning($response, $data);
+    function warning(int $code = 200, mixed $response = null, mixed $data = null): object {
+        return response->code($code)->warning($response, $data);
     }
 }
 
@@ -106,8 +106,8 @@ if (!function_exists('warning')) {
  **/
 
 if (!function_exists('info')) {
-    function info(mixed $response = null, array|object $data = []): object {
-        return response->info($response, $data);
+    function info(int $code = 200, mixed $response = null, mixed $data = null): object {
+        return response->code($code)->info($response, $data);
     }
 }
 

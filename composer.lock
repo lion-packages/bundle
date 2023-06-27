@@ -821,12 +821,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sleon4/Lion-Request.git",
-                "reference": "dee654c9885ce66519a70eb5df4e70462df13f67"
+                "reference": "e7d9b91942c2c7a1f7cd3d4ae4bd88f21146df9c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Request/zipball/dee654c9885ce66519a70eb5df4e70462df13f67",
-                "reference": "dee654c9885ce66519a70eb5df4e70462df13f67",
+                "url": "https://api.github.com/repos/Sleon4/Lion-Request/zipball/e7d9b91942c2c7a1f7cd3d4ae4bd88f21146df9c",
+                "reference": "e7d9b91942c2c7a1f7cd3d4ae4bd88f21146df9c",
                 "shasum": ""
             },
             "require": {
@@ -847,7 +847,7 @@
                 "issues": "https://github.com/Sleon4/Lion-Request/issues",
                 "source": "https://github.com/Sleon4/Lion-Request/tree/v5.4.0"
             },
-            "time": "2023-06-27T13:24:20+00:00"
+            "time": "2023-06-27T14:47:05+00:00"
         },
         {
             "name": "lion/route",

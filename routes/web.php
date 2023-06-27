@@ -14,7 +14,7 @@ use LionRoute\Route;
  **/
 
 Route::any('/', function() {
-    return info("Welcome to the index, access the web: " . env->SERVER_URL_AUD);
+    return info(200, "Welcome to the index, access the web: " . env->SERVER_URL_AUD);
 });
 
 Route::prefix('api', function() {
