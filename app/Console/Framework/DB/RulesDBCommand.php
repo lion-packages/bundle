@@ -42,46 +42,67 @@ class RulesDBCommand extends Command {
         $main_conn_pascal = str->of($main_conn)->replace("_", " ")->replace("-", " ")->pascal()->get();
 
         $columns = DB::connection($main_conn)->show()->full()->columns()->from($entity)->getAll();
+        $foreigns = DB::connection($main_conn)
+            ->table("INFORMATION_SCHEMA.KEY_COLUMN_USAGE", true)
+            ->select("COLUMN_NAME", "REFERENCED_TABLE_NAME", "REFERENCED_COLUMN_NAME")
+            ->where(DB::equalTo("TABLE_SCHEMA"), $main_conn)
+            ->and(DB::equalTo("TABLE_NAME"), $entity)
+            ->and("REFERENCED_TABLE_NAME")
+            ->isNotNull()
+            ->getAll();
 
-        foreach ($columns as $key => $column) {
-            // generate rule name
-            $rule_name = str->of($column->Field)->replace("-", "_")->replace("_", " ")->trim()->pascal()->concat("Rule")->get();
+        foreach ($columns as $keyColumn => $column) {
+            $is_foreign = false;
 
-            // generate rule
-            $this->getApplication()->find('new:rule')->run(
-                new ArrayInput([
-                    'rule' => "{$main_conn_pascal}/{$entity_pascal}/{$rule_name}"
-                ]),
-                $output
-            );
+            if (!isset($foreigns->status)) {
+                foreach ($foreigns as $keyForeign => $foreign) {
+                    if ($column->Field === $foreign->COLUMN_NAME) {
+                        $is_foreign = true;
+                        break;
+                    }
+                }
+            }
 
-            // edit rule content
-            $path = "app/Rules/{$main_conn_pascal}/{$entity_pascal}/{$rule_name}.php";
-            $this->readFileRows($path, [
-                11 => [
-                    'replace' => true,
-                    'content' => '"' . $column->Field . '"', 'search' => '""'
-                ],
-                12 => [
-                    'replace' => true,
-                    'content' => '"' . $column->Comment . '"',
-                    'search' => '""'
-                ],
-                14 => [
-                    'replace' => true,
-                    'content' => ($column->Null === "NO" ? "false" : "true"),
-                    'search' => 'false'
-                ],
-                18 => [
-                    'replace' => true,
-                    'multiple' => [
-                        [
-                            'content' => ($column->Null === "NO" ? "required" : "optional"),
-                            'search' => 'required'
+            if (!$is_foreign) {
+                // generate rule name
+                $rule_name = str->of($column->Field)->replace("-", "_")->replace("_", " ")->trim()->pascal()->concat("Rule")->get();
+
+                // generate rule
+                $this->getApplication()->find('new:rule')->run(
+                    new ArrayInput([
+                        'rule' => "{$main_conn_pascal}/{$entity_pascal}/{$rule_name}"
+                    ]),
+                    $output
+                );
+
+                // edit rule content
+                $path = "app/Rules/{$main_conn_pascal}/{$entity_pascal}/{$rule_name}.php";
+                $this->readFileRows($path, [
+                    11 => [
+                        'replace' => true,
+                        'content' => '"' . $column->Field . '"', 'search' => '""'
+                    ],
+                    12 => [
+                        'replace' => true,
+                        'content' => '"' . $column->Comment . '"',
+                        'search' => '""'
+                    ],
+                    14 => [
+                        'replace' => true,
+                        'content' => ($column->Null === "NO" ? "false" : "true"),
+                        'search' => 'false'
+                    ],
+                    18 => [
+                        'replace' => true,
+                        'multiple' => [
+                            [
+                                'content' => ($column->Null === "NO" ? "required" : "optional"),
+                                'search' => 'required'
+                            ]
                         ]
                     ]
-                ]
-            ]);
+                ]);
+            }
         }
 
         return Command::SUCCESS;
