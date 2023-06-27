@@ -14,7 +14,7 @@ use LionRoute\Route;
  **/
 
 Route::any('/', function() {
-    return info(200, "Welcome to the index, access the web: " . env->SERVER_URL_AUD);
+    return info(200, "Welcome to the index");
 });
 
 Route::prefix('api', function() {
@@ -24,7 +24,9 @@ Route::prefix('api', function() {
         Route::post('login', [LoginController::class, 'auth']);
 
         Route::prefix('session', function() {
-            Route::get('refresh', [SessionController::class, 'refresh'], ['jwt-existence', 'jwt-authorize']);
+            Route::middleware(['jwt-without-signature', 'jwt-authorize'], function() {
+                Route::get('refresh', [SessionController::class, 'refresh']);
+            });
         });
     });
 });
