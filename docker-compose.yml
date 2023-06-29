@@ -12,6 +12,7 @@ services:
             - "5173:5173"
             - "5174:5174"
             - "5175:5175"
+            - "5176:5176"
         volumes:
             - ./:/var/www/html
             - ./supervisord.conf:/etc/supervisor/conf.d/supervisord.conf

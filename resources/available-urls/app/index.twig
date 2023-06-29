@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Route List · Lion-Framework</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {# bootstrap 5.3 #}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="
+    sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.css" integrity="sha512-A81ejcgve91dAWmCGseS60zjrAdohm7PTcAjjiDWtw3Tcj91PNMa1gJ/ImrhG+DbT5V+JQ5r26KT5+kgdVTb5w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {# assets #}
+    <link rel="stylesheet" type="text/css" href="{{ host }}/app/assets/index.css">
+</head>
+<body class="bg-dark-web">
+    {% include 'extends/content.twig' %}
+
+    {# jquery #}
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    {# bootstrap 5.3 #}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js" integrity="sha512-Hyk+1XSRfagqzuSHE8M856g295mX1i5rfSV5yRugcYFlvQiE3BKgg5oFRfX45s7I8qzMYFa8gbFy9xMFbX7Lqw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    {# axios #}
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    {# assets #}
+    <script type="text/javascript">
+        const transformNamespace = (namespace) => {
+            class_new = "";
+            const split = namespace.split("\\");
+            const size = split.length;
+            const parent_label = document.createElement("LABEL");
+
+            split.forEach((str, index) => {
+                const child_label = document.createElement("LABEL");
+
+                if (index < (size - 1)) {
+                    child_label.className = "text-purple";
+                    child_label.textContent = str;
+
+                    const label_separator = document.createElement("LABEL");
+                    label_separator.textContent = "\\";
+
+                    parent_label.appendChild(child_label);
+                    parent_label.appendChild(label_separator);
+                } else {
+                    child_label.textContent = str;
+                    parent_label.appendChild(child_label);
+                }
+            });
+
+            return parent_label.innerHTML;
+        };
+
+        const addMethodColor = (method) => {
+            const colors = {
+                GET: "text-success",
+                POST: "text-warning",
+                PUT: "text-primary",
+                PATCH: "text-purple",
+                DELETE: "text-danger",
+                HEAD: "text-success",
+                OPTIONS: "text-orange"
+            };
+
+            return colors[method] ?? "title-gradient";
+        };
+
+        const addTitleBody = (title_route) => {
+            const body_title = document.createElement("label");
+            body_title.className = "fs-5 text-white me-2";
+
+            const content_type = document.createElement("label");
+            content_type.className = "text-secondary";
+
+            if (title_route.textContent.trim() === "POST") {
+                body_title.textContent = "Body";
+                content_type.textContent = "multipart/form-data";
+            } else if (title_route.textContent.trim() === "PUT") {
+                body_title.textContent = "Raw";
+                content_type.textContent = "application/json";
+            } else if (title_route.textContent.trim() === "DELETE") {
+                body_title.textContent = "Raw";
+                content_type.textContent = "application/json";
+            } else if (title_route.textContent.trim() === "GET") {
+                body_title.textContent = "Query Params";
+                content_type.textContent = "application/json";
+            } else if (title_route.textContent.trim() === "PATCH") {
+                body_title.textContent = "Body | Raw | Query Params";
+                content_type.textContent = "multipart/form-data | application/json";
+            } else if (title_route.textContent.trim() === "OPTIONS") {
+                body_title.textContent = "";
+                content_type.textContent = "";
+            }
+
+            return { body_title: body_title, content_type: content_type };
+        };
+
+        const addTitleMiddleware = () => {
+            const body_title = document.createElement("label");
+            body_title.className = "fs-5 text-white me-2";
+            body_title.textContent = "MIDDLEWARE";
+            return body_title;
+        };
+
+        const addBodyParams = (params, title) => {
+            const row_div = document.createElement("DIV");
+            row_div.className = "col-6";
+            row_div.appendChild(title);
+
+            const ol_list = document.createElement("OL");
+            ol_list.className = "list-group rounded";
+
+            params.forEach(param => {
+                const li_param = document.createElement("LI");
+                li_param.className = "list-group-item";
+
+                const div_child = document.createElement("DIV");
+                div_child.className = "ms-2 me-auto";
+
+                const description_1 = document.createElement("h6");
+                description_1.innerHTML = "NAMESPACE: " + transformNamespace(param.namespace);
+                description_1.className = "mb-0";
+
+                const description_2 = document.createElement("h6");
+                description_2.innerHTML = "NAME: <label class='text-success'>" + param.param + "</label>";
+                description_2.className = "mb-0";
+
+                const description_3 = document.createElement("h6");
+                description_3.innerHTML = "FUNCTION: <label class='text-warning'>" + param.function + "</label>";
+                description_3.className = "mb-0";
+
+                const description_4 = document.createElement("h6");
+                description_4.innerHTML = "REQUIRED: <label class='text-danger'>" + param.required + "</label>";
+                description_4.className = "mb-0";
+
+                div_child.appendChild(description_2);
+                div_child.appendChild(description_3);
+                div_child.appendChild(description_1);
+                div_child.appendChild(description_4);
+                li_param.appendChild(div_child);
+                ol_list.appendChild(li_param);
+            });
+
+            row_div.appendChild(ol_list);
+            return row_div;
+        };
+
+        const addBodyMiddlewares = (middlewares, title) => {
+            const row_div = document.createElement("DIV");
+            row_div.className = "col-6";
+            row_div.appendChild(title);
+
+            const ol_list = document.createElement("OL");
+            ol_list.className = "list-group rounded";
+
+            Object.entries(middlewares).forEach(([namespace, middleware]) => {
+                middleware.forEach(info => {
+                    const li_param = document.createElement("LI");
+                    li_param.className = "list-group-item";
+
+                    const div_child = document.createElement("DIV");
+                    div_child.className = "ms-2 me-auto";
+
+                    const description_1 = document.createElement("h6");
+                    description_1.innerHTML = "NAMESPACE: " + transformNamespace(namespace);
+                    description_1.className = "mb-0";
+
+                    const description_2 = document.createElement("h6");
+                    description_2.innerHTML = "NAME: <label class='text-success'>" + info.name + "</label>";
+                    description_2.className = "mb-0";
+
+                    const description_3 = document.createElement("h6");
+                    description_3.innerHTML = "FUNCTION: <label class='text-warning'>" + info.function + "</label>";
+                    description_3.className = "mb-0";
+
+                    div_child.appendChild(description_2);
+                    div_child.appendChild(description_3);
+                    div_child.appendChild(description_1);
+                    li_param.appendChild(div_child);
+                    ol_list.appendChild(li_param);
+                });
+            });
+
+            row_div.appendChild(ol_list);
+            return row_div;
+        };
+
+        const addRoute = (row) => {
+            const parent_div = document.createElement("DIV");
+            parent_div.className = "p-3 mb-3 bg-dark rounded";
+
+            const title_route = document.createElement("h2");
+
+            const route_input = document.createElement("INPUT");
+            route_input.className = "form-control-dark mb-3";
+            route_input.disabled = true;
+
+            if (row.callback) {
+                title_route.textContent = row.callback.method;
+                title_route.className = addMethodColor(row.callback.method);
+                route_input.value = "{{ api }}" + row.callback.uri;
+            }
+
+            if (row.controller) {
+                title_route.textContent = row.controller.method;
+                title_route.className = addMethodColor(row.controller.method);
+                route_input.value = "{{ api }}" + row.controller.uri;
+            }
+
+            parent_div.appendChild(title_route);
+            parent_div.appendChild(route_input);
+
+            const div_row = document.createElement("DIV");
+            div_row.className = "row";
+
+            if (row.params) {
+                const new_object = addTitleBody(title_route);
+                const body_title = new_object.body_title;
+                const content_type = new_object.content_type;
+
+                const div_title = document.createElement("DIV");
+                div_title.className = "mb-2";
+                div_title.appendChild(body_title);
+                div_title.appendChild(content_type);
+                div_row.appendChild(addBodyParams(row.params, div_title));
+            }
+
+            if (row.middlewares) {
+                const div_title = document.createElement("DIV");
+                div_title.className = "mb-2";
+                div_title.appendChild(addTitleMiddleware());
+                div_row.appendChild(addBodyMiddlewares(row.middlewares, div_title));
+            }
+
+            parent_div.appendChild(div_row);
+            return parent_div;
+        };
+
+        const handleGetFormatRoutes = (routes) => {
+            const form = new FormData();
+            form.append("routes", JSON.stringify(routes));
+
+            axios.post("{{ host }}/Routes.php", form, {
+                headers: {
+                    "content-Type": "multipart/form-data"
+                }
+            }).then(res => {
+                // console.log(res.data.data.routes);
+                const parent = document.getElementById("web-routes");
+
+                Object.entries(res.data.data.routes).forEach(([code, row]) => {
+                    parent.appendChild(addRoute(row));
+                });
+            });
+        };
+
+        (function() {
+            axios.get("{{ api }}/route-list").then(res => {
+                // console.log(res.data);
+                handleGetFormatRoutes(res.data);
+            });
+        })();
+    </script>
+</body>
+</html>

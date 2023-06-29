@@ -42,6 +42,7 @@ CMD chsh -s $(which zsh) \
     && touch storage/logs/resources/console-web.log \
     && touch storage/logs/resources/login.log \
     && touch storage/logs/resources/user-registration.log \
+    && touch storage/logs/resources/available-urls.log \
     && touch storage/logs/server/web-server.log \
     && touch storage/logs/sockets/socket.log \
     && touch storage/logs/supervisord/supervisord.log \

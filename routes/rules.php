@@ -31,10 +31,4 @@ return [
     'DELETE' => [
         //
     ],
-    'OPTIONS' => [
-        //
-    ],
-    'PATCH' => [
-        //
-    ]
 ];
