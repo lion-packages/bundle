@@ -140,7 +140,10 @@ if (!function_exists('logger')) {
                 ($path . $file_name),
                 Monolog\Level::Debug
             )
-        )->$log_type($str, $data);
+        )->$log_type(json->encode([
+            'uri' => $_SERVER['REQUEST_URI'],
+            'data' => json->decode($str)
+        ]), $data);
     }
 }
 
