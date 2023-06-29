@@ -1,5 +1,11 @@
 # Release Notes
 
+## [v14.26.0](https://github.com/Sleon4/Lion-Framework/compare/v14.25.0...v14.26.0) (2023-06-29)
+
+### Added
+- added URI when generating logs in storage/logs/
+- resource has been added to display the available http routes
+
 ## [v14.25.0](https://github.com/Sleon4/Lion-Framework/compare/v14.24.1...v14.25.0) (2023-06-27)
 
 ### Added
