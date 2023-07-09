@@ -66,30 +66,34 @@
         };
 
         const addTitleBody = (title_route) => {
+            const method = title_route.textContent.trim();
             const body_title = document.createElement("label");
             body_title.className = "fs-5 text-white me-2";
 
             const content_type = document.createElement("label");
             content_type.className = "text-secondary";
 
-            if (title_route.textContent.trim() === "POST") {
+            if (method === "POST") {
                 body_title.textContent = "Body";
                 content_type.textContent = "multipart/form-data";
-            } else if (title_route.textContent.trim() === "PUT") {
+            } else if (method === "PUT") {
                 body_title.textContent = "Raw";
                 content_type.textContent = "application/json";
-            } else if (title_route.textContent.trim() === "DELETE") {
+            } else if (method === "DELETE") {
                 body_title.textContent = "Raw";
                 content_type.textContent = "application/json";
-            } else if (title_route.textContent.trim() === "GET") {
+            } else if (method === "GET") {
                 body_title.textContent = "Query Params";
                 content_type.textContent = "application/json";
-            } else if (title_route.textContent.trim() === "PATCH") {
+            } else if (method === "PATCH") {
                 body_title.textContent = "Body | Raw | Query Params";
                 content_type.textContent = "multipart/form-data | application/json";
-            } else if (title_route.textContent.trim() === "OPTIONS") {
+            } else if (method === "OPTIONS") {
                 body_title.textContent = "";
                 content_type.textContent = "";
+            } else if (method === "ANY") {
+                body_title.textContent = "Body | Raw | Query Params";
+                content_type.textContent = "multipart/form-data | application/json";
             }
 
             return { body_title: body_title, content_type: content_type };

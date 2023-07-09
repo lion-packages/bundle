@@ -9,6 +9,9 @@
  **/
 
 return [
+    'ANY' => [
+        //
+    ],
     'POST' => [
         '/api/auth/login' => [
             \App\Rules\LionDatabase\Users\UsersEmailRule::class,
