@@ -42,7 +42,7 @@ echo(
     (new Twig\Environment(new Twig\Loader\FilesystemLoader('app')))
         ->load("index.twig")
         ->render([
-            "host" => "http://127.0.0.1:5174",
+            "host" => "http://127.0.0.1:7003",
             "api" => "http://127.0.0.1:8000",
         ])
 );
