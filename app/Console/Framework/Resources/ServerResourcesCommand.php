@@ -28,7 +28,7 @@ class ServerResourcesCommand extends Command {
         $this
             ->setDescription("Command required to run resources")
             ->addArgument('resource', InputArgument::REQUIRED, 'Resource name')
-            ->addOption('port', "p", InputOption::VALUE_OPTIONAL, 'Do you want to set your own port?', 5173)
+            ->addOption('port', "p", InputOption::VALUE_OPTIONAL, 'Do you want to set your own port?', 7000)
             ->addOption('host', "s", InputOption::VALUE_OPTIONAL, 'Do you want to set your own port?', "127.0.0.1");
     }
 
