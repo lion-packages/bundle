@@ -103,11 +103,13 @@ if (isError($response_email)) {
 
 $all_rules = require_once("../routes/rules.php");
 
-foreach ($all_rules[$_SERVER['REQUEST_METHOD']] as $uri => $rules) {
-    if (App\Http\Kernel::getInstance()->checkUrl($uri)) {
-        foreach ($rules as $key => $rule) {
-            $rule::passes();
-            $rule::display();
+if (isset($all_rules[$_SERVER['REQUEST_METHOD']])) {
+    foreach ($all_rules[$_SERVER['REQUEST_METHOD']] as $uri => $rules) {
+        if (App\Http\Kernel::getInstance()->checkUrl($uri)) {
+            foreach ($rules as $key => $rule) {
+                $rule::passes();
+                $rule::display();
+            }
         }
     }
 }
