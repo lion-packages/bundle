@@ -2,7 +2,7 @@
 
 namespace App\Traits\Framework;
 
-trait HttpTrait {
+trait Http {
 
     public function checkUrl(string $uri): bool {
         $clean_request_uri = explode('?', $_SERVER['REQUEST_URI'])[0];
