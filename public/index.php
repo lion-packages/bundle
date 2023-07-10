@@ -22,7 +22,7 @@ require_once(__DIR__ . "/../vendor/autoload.php");
  * ------------------------------------------------------------------------------
  **/
 
-(\Dotenv\Dotenv::createImmutable(__DIR__ . "/../"))->load();
+\App\Http\Kernel::getInstance()->loadDotEnv(__DIR__ . "/../");
 
 /**
  * ------------------------------------------------------------------------------
@@ -54,9 +54,9 @@ if (env->RSA_URL_PATH != '') {
  * ------------------------------------------------------------------------------
  **/
 
-foreach (require_once(__DIR__ . "/../config/cors.php") as $key => $header) {
-    \LionRequest\Request::header($key, $header);
-}
+\App\Http\Kernel::getInstance()->loadCors(
+    require_once(__DIR__ . "/../config/cors.php")
+);
 
 /**
  * ------------------------------------------------------------------------------
@@ -66,15 +66,9 @@ foreach (require_once(__DIR__ . "/../config/cors.php") as $key => $header) {
  * ------------------------------------------------------------------------------
  **/
 
-\LionSQL\Driver::addLog();
-$response_database = \LionSQL\Driver::run(
+\App\Http\Kernel::getInstance()->loadConnecions(
     require_once("../config/database.php")
 );
-
-if (isError($response_database)) {
-    logger($response_database->message, 'error');
-    finish(error(500, $response_database->message));
-}
 
 /**
  * ------------------------------------------------------------------------------
@@ -84,14 +78,9 @@ if (isError($response_database)) {
  * ------------------------------------------------------------------------------
  **/
 
-$response_email = \LionMailer\MailService::run(
+\App\Http\Kernel::getInstance()->loadAccounts(
     require_once("../config/email.php")
 );
-
-if (isError($response_email)) {
-    logger($response_email->message, 'error');
-    finish(error(500, $response_email->message));
-}
 
 /**
  * ------------------------------------------------------------------------------
@@ -101,18 +90,9 @@ if (isError($response_email)) {
  * ------------------------------------------------------------------------------
  **/
 
-$all_rules = require_once("../routes/rules.php");
-
-if (isset($all_rules[$_SERVER['REQUEST_METHOD']])) {
-    foreach ($all_rules[$_SERVER['REQUEST_METHOD']] as $uri => $rules) {
-        if (App\Http\Kernel::getInstance()->checkUrl($uri)) {
-            foreach ($rules as $key => $rule) {
-                $rule::passes();
-                $rule::display();
-            }
-        }
-    }
-}
+\App\Http\Kernel::getInstance()->validateRules(
+    require_once("../routes/rules.php")
+);
 
 /**
  * ------------------------------------------------------------------------------
@@ -122,11 +102,7 @@ if (isset($all_rules[$_SERVER['REQUEST_METHOD']])) {
  * ------------------------------------------------------------------------------
  **/
 
-\LionRoute\Route::addLog();
-\LionRoute\Route::init();
-\LionRoute\Request::init(client);
-LionRoute\Route::addMiddleware(require_once("../config/middleware.php"));
-include_once("../routes/web.php");
-\LionRoute\Route::get('route-list', fn() => \LionRoute\Route::getFullRoutes());
-session()->destroy();
-\LionRoute\Route::dispatch();
+\App\Http\Kernel::getInstance()->loadRoutes(
+    require_once(__DIR__ . "/../config/middleware.php"),
+    __DIR__ . "/../routes/web.php"
+);
