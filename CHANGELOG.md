@@ -1,5 +1,20 @@
 # Release Notes
 
+## [v14.27.0](https://github.com/Sleon4/Lion-Framework/compare/v14.26.0...v14.27.0) (2023-07-10)
+
+### Added
+- support has been added to display parameters for HTTP routes with the ANY method
+- trait session has been added to modify and create sessions from the Kernel (http)
+- trait Index has been added to initialize modules to the index
+
+### Changed
+- existence of http method for rules has been validated
+
+### Refactoring
+- environment variables (env) have been updated
+- default ports have been updated to execute resources
+- trait HttpTrait has been renamed to Http
+
 ## [v14.26.0](https://github.com/Sleon4/Lion-Framework/compare/v14.25.0...v14.26.0) (2023-06-29)
 
 ### Added
