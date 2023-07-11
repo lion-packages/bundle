@@ -2,7 +2,7 @@
 
 namespace App\Traits\Framework\Database;
 
-use LionSQL\Drivers\MySQL\MySQL as DB;
+use LionDatabase\Drivers\MySQL\MySQL as DB;
 
 trait SoftDeletes {
 

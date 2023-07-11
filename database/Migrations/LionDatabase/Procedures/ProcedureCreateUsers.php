@@ -1,7 +1,7 @@
 <?php
 
-use LionSQL\Drivers\MySQL\MySQL as DB;
-use LionSQL\Drivers\MySQL\Schema;
+use LionDatabase\Drivers\MySQL\MySQL as DB;
+use LionDatabase\Drivers\MySQL\Schema;
 
 return new class {
 

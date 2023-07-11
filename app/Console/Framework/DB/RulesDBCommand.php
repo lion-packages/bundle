@@ -3,7 +3,7 @@
 namespace App\Console\Framework\DB;
 
 use App\Traits\Framework\ClassPath;
-use LionSQL\Drivers\MySQL\MySQL as DB;
+use LionDatabase\Drivers\MySQL\MySQL as DB;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;

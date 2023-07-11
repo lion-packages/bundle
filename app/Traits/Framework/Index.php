@@ -4,11 +4,11 @@ namespace App\Traits\Framework;
 
 use App\Http\Kernel;
 use Dotenv\Dotenv;
+use LionDatabase\Driver;
 use LionMailer\MailService;
 use LionRequest\Request;
 use LionRoute\Request as LionRouteRequest;
 use LionRoute\Route;
-use LionSQL\Driver;
 
 trait Index {
 

@@ -28,14 +28,14 @@ class NewAESCommand extends Command {
 
     protected function execute(InputInterface $input, OutputInterface $output) {
         $generateKeys = function() {
-            $caracteresPermitidos = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@-_/';
+            $items = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@-_/';
             $bytes = random_bytes(16);
-            $longitud = strlen($caracteresPermitidos);
+            $longitud = strlen($items);
             $key = '';
 
             for ($i = 0; $i < 16; $i++) {
                 $indice = ord($bytes[$i]) % $longitud;
-                $key .= $caracteresPermitidos[$indice];
+                $key .= $items[$indice];
             }
 
             return $key;

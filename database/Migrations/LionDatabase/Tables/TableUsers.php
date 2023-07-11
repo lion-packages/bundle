@@ -1,7 +1,7 @@
 <?php
 
 use App\Traits\Framework\Faker;
-use LionSQL\Drivers\MySQL\Schema;
+use LionDatabase\Drivers\MySQL\Schema;
 
 return new class {
 

@@ -51,7 +51,9 @@ if (env->RSA_URL_PATH != '') {
  * ------------------------------------------------------------------------------
  **/
 
-$responseDatabase = LionSQL\Driver::run(include_once("./config/database.php"));
+$responseDatabase = \LionDatabase\Driver::run(
+    include_once("./config/database.php")
+);
 
 if (isError($responseDatabase)) {
     logger($responseDatabase->message, 'error', [], false);

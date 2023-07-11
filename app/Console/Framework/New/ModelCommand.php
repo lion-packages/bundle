@@ -38,8 +38,8 @@ class ModelCommand extends Command {
 		$this->create($url_folder, $list['class']);
 		$this->add("<?php\n\n");
 		$this->add("namespace {$list['namespace']};\n\n");
-		$this->add("use LionSQL\Drivers\MySQL\MySQL as DB;\n");
-        $this->add("use LionSQL\Drivers\MySQL\Schema;\n\n");
+		$this->add("use LionDatabase\Drivers\MySQL\MySQL as DB;\n");
+        $this->add("use LionDatabase\Drivers\MySQL\Schema;\n\n");
 		$this->add("class {$list['class']} {\n\n");
 		$this->add("\tpublic function __construct() {\n\t\t\n\t}\n\n");
 

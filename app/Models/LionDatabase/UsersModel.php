@@ -3,8 +3,8 @@
 namespace App\Models\LionDatabase;
 
 use Database\Class\LionDatabase\Users;
-use LionSQL\Drivers\MySQL\MySQL as DB;
-use LionSQL\Drivers\MySQL\Schema;
+use LionDatabase\Drivers\MySQL\MySQL as DB;
+use LionDatabase\Drivers\MySQL\Schema;
 
 class UsersModel {
 

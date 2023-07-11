@@ -50,8 +50,8 @@ class SeedCommand extends Command {
             $this->create($url_folder, $list['class']);
             $this->add(str->of("<?php")->ln()->ln()->get());
             $this->add(str->of("namespace ")->concat($list['namespace'])->concat(";")->ln()->ln()->get());
-            $this->add(str->of("use LionSQL\Drivers\MySQL\MySQL as DB;")->ln()->get());
-            $this->add(str->of("use LionSQL\Drivers\MySQL\Schema;")->ln()->ln()->get());
+            $this->add(str->of("use LionDatabase\Drivers\MySQL\MySQL as DB;")->ln()->get());
+            $this->add(str->of("use LionDatabase\Drivers\MySQL\Schema;")->ln()->ln()->get());
             $this->add(str->of("class ")->concat($list['class'])->concat(" {")->ln()->ln()->get());
             $this->add("\t/**\n");
             $this->add("\t * ------------------------------------------------------------------------------\n");

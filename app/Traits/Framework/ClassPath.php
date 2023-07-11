@@ -12,8 +12,8 @@ trait ClassPath {
     public static function getTemplateCreateProcedure(): string {
         return str->of("<?php")->ln()->ln()
             ->concat("use App\Traits\Framework\Faker;")->ln()
-            ->concat("use LionSQL\Drivers\MySQL\MySQL as DB;")->ln()
-            ->concat("use LionSQL\Drivers\MySQL\Schema;")->ln()->ln()
+            ->concat("use LionDatabase\Drivers\MySQL\MySQL as DB;")->ln()
+            ->concat("use LionDatabase\Drivers\MySQL\Schema;")->ln()->ln()
             ->concat("return new class {")->ln()->ln()
             ->lt()->concat("use Faker;")->ln()->ln()
             ->lt()->concat('private string $procedure = "procedure";')->ln()->ln()
@@ -44,8 +44,8 @@ trait ClassPath {
 
     public static function getTemplateCreateView(): string {
         return str->of("<?php")->ln()->ln()
-            ->concat("use LionSQL\Drivers\MySQL\MySQL as DB;")->ln()
-            ->concat("use LionSQL\Drivers\MySQL\Schema;")->ln()->ln()
+            ->concat("use LionDatabase\Drivers\MySQL\MySQL as DB;")->ln()
+            ->concat("use LionDatabase\Drivers\MySQL\Schema;")->ln()->ln()
             ->concat("return new class {")->ln()->ln()
             ->lt()->concat("public function getMigration(): array {")->ln()
             ->lt()->lt()->concat('return ["type" => "VIEW", "connection" => env->DB_NAME];')->ln()
@@ -66,7 +66,7 @@ trait ClassPath {
     public static function getTemplateCreateTable(): string {
         return str->of("<?php")->ln()->ln()
             ->concat("use App\Traits\Framework\Faker;")->ln()
-            ->concat("use LionSQL\Drivers\MySQL\Schema;")->ln()->ln()
+            ->concat("use LionDatabase\Drivers\MySQL\Schema;")->ln()->ln()
             ->concat("return new class {")->ln()->ln()
             ->lt()->concat("use Faker;")->ln()->ln()
             ->lt()->concat('private string $table = "table";')->ln()->ln()

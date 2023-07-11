@@ -3,7 +3,7 @@
 namespace App\Console\Framework\DB;
 
 use App\Traits\Framework\ConsoleOutput;
-use LionSQL\Drivers\MySQL\MySQL as DB;
+use LionDatabase\Drivers\MySQL\MySQL as DB;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
@@ -73,7 +73,7 @@ class SelectTableCommand extends Command {
         (new Table($output))
             ->setHeaderTitle("<info> TABLE " . str->of($entity)->upper()->get() . " </info>")
             ->setHeaders($columns_table)
-            ->setRows($rows_table)
+            ->setRows(is_array($rows_table[0]) ? $rows_table : [$rows_table])
             ->render();
 
 		return Command::SUCCESS;
