@@ -58,7 +58,7 @@ trait Index {
         Route::addLog();
         Route::init();
         LionRouteRequest::init(client);
-        Route::addMiddleware($middleware);
+        Route::addMiddleware([...$middleware['framework'], ...$middleware['app']]);
         include_once($routes);
         Route::get('route-list', fn() => Route::getFullRoutes());
         session()->destroy();
