@@ -23,4 +23,4 @@ composer create-project lion/framework
 
 ## License
 
-The Lion-Framework is open-sourced software licensed under the [MIT License](https://github.com/Sleon4/Lion-Framework/blob/main/LICENSE).
+The <strong>framework</strong> is open-sourced software licensed under the [MIT License](https://github.com/Lion-Packages/framework/blob/main/LICENSE).
