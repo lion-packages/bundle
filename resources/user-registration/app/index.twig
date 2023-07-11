@@ -39,6 +39,8 @@
             }).then(res => {
                 // console.log(res.data);
                 alert(`status: ${res.data.status} | message: ${res.data.message}`);
+            }).catch(err => {
+                alert(`status: ${err.response.data.status} | message: ${err.response.data.message}`);
             });
         });
     </script>

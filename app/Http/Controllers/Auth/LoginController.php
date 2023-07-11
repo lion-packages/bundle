@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\Auth\LoginModel;
 use Database\Class\LionDatabase\Users;
+use LionFiles\Store;
 use LionSecurity\JWT;
 use LionSecurity\RSA;
 
@@ -28,7 +29,12 @@ class LoginController {
             return error(500, "email/password is invalid");
         }
 
-        RSA::$url_path = storage_path("keys/{$session->users_code}/");
+        $path = storage_path("keys/{$session->users_code}/");
+        if (isError(Store::exist($path))) {
+            return error(500, "the keys do not exist");
+        }
+
+        RSA::$url_path = $path;
         return success(200, "welcome: {$session->users_name} {$session->users_lastname}", [
             'jwt' => JWT::encode([
                 'session' => true,
