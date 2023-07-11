@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c624e09835d757f1c5e959cb5d46de1a",
+    "content-hash": "c43847a4f6dce6b560cad1946ab7bb48",
     "packages": [
         {
             "name": "cboden/ratchet",
@@ -711,16 +711,50 @@
             "time": "2023-04-17T16:11:26+00:00"
         },
         {
+            "name": "lion/database",
+            "version": "v8.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Lion-Packages/database.git",
+                "reference": "aeba6d06abec29d525368c08debd67f1ef4fc23a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Lion-Packages/database/zipball/aeba6d06abec29d525368c08debd67f1ef4fc23a",
+                "reference": "aeba6d06abec29d525368c08debd67f1ef4fc23a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "LionDatabase\\": "src/LionDatabase/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Package in charge of generating and executing MySQL processes",
+            "support": {
+                "issues": "https://github.com/Lion-Packages/database/issues",
+                "source": "https://github.com/Lion-Packages/database/tree/v8.8.0"
+            },
+            "time": "2023-07-11T16:17:36+00:00"
+        },
+        {
             "name": "lion/files",
             "version": "v4.11.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Sleon4/Lion-Files.git",
+                "url": "https://github.com/Lion-Packages/files.git",
                 "reference": "705499b1c8258835b79248a833cb05618a282c47"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Files/zipball/705499b1c8258835b79248a833cb05618a282c47",
+                "url": "https://api.github.com/repos/Lion-Packages/files/zipball/705499b1c8258835b79248a833cb05618a282c47",
                 "reference": "705499b1c8258835b79248a833cb05618a282c47",
                 "shasum": ""
             },
@@ -739,8 +773,8 @@
             ],
             "description": "Library created with the function of working internal system files.",
             "support": {
-                "issues": "https://github.com/Sleon4/Lion-Files/issues",
-                "source": "https://github.com/Sleon4/Lion-Files/tree/v4.11.0"
+                "issues": "https://github.com/Lion-Packages/files/issues",
+                "source": "https://github.com/Lion-Packages/files/tree/v4.11.0"
             },
             "time": "2023-06-27T14:17:56+00:00"
         },
@@ -749,12 +783,12 @@
             "version": "v2.5.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Sleon4/Lion-Helpers.git",
+                "url": "https://github.com/Lion-Packages/helpers.git",
                 "reference": "cfc21f3eaef1067cf6df4cb07ff2fcc9c498633f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Helpers/zipball/cfc21f3eaef1067cf6df4cb07ff2fcc9c498633f",
+                "url": "https://api.github.com/repos/Lion-Packages/helpers/zipball/cfc21f3eaef1067cf6df4cb07ff2fcc9c498633f",
                 "reference": "cfc21f3eaef1067cf6df4cb07ff2fcc9c498633f",
                 "shasum": ""
             },
@@ -773,8 +807,8 @@
             ],
             "description": "easy to use helpers for any type of use",
             "support": {
-                "issues": "https://github.com/Sleon4/Lion-Helpers/issues",
-                "source": "https://github.com/Sleon4/Lion-Helpers/tree/v2.5.0"
+                "issues": "https://github.com/Lion-Packages/helpers/issues",
+                "source": "https://github.com/Lion-Packages/helpers/tree/v2.5.0"
             },
             "time": "2023-06-11T18:52:06+00:00"
         },
@@ -783,12 +817,12 @@
             "version": "v5.1.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Sleon4/Lion-Mailer.git",
+                "url": "https://github.com/Lion-Packages/mailer.git",
                 "reference": "456665027cb66c9b131414b1abc5780b40a42a72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Mailer/zipball/456665027cb66c9b131414b1abc5780b40a42a72",
+                "url": "https://api.github.com/repos/Lion-Packages/mailer/zipball/456665027cb66c9b131414b1abc5780b40a42a72",
                 "reference": "456665027cb66c9b131414b1abc5780b40a42a72",
                 "shasum": ""
             },
@@ -810,8 +844,8 @@
             ],
             "description": "Library created to facilitate sending email based on different services",
             "support": {
-                "issues": "https://github.com/Sleon4/Lion-Mailer/issues",
-                "source": "https://github.com/Sleon4/Lion-Mailer/tree/v5.1.0"
+                "issues": "https://github.com/Lion-Packages/mailer/issues",
+                "source": "https://github.com/Lion-Packages/mailer/tree/v5.1.0"
             },
             "time": "2023-06-26T23:53:06+00:00"
         },
@@ -820,12 +854,12 @@
             "version": "v5.4.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Sleon4/Lion-Request.git",
+                "url": "https://github.com/Lion-Packages/request.git",
                 "reference": "e7d9b91942c2c7a1f7cd3d4ae4bd88f21146df9c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Request/zipball/e7d9b91942c2c7a1f7cd3d4ae4bd88f21146df9c",
+                "url": "https://api.github.com/repos/Lion-Packages/request/zipball/e7d9b91942c2c7a1f7cd3d4ae4bd88f21146df9c",
                 "reference": "e7d9b91942c2c7a1f7cd3d4ae4bd88f21146df9c",
                 "shasum": ""
             },
@@ -844,8 +878,8 @@
             ],
             "description": "Library created to request input data and response requests",
             "support": {
-                "issues": "https://github.com/Sleon4/Lion-Request/issues",
-                "source": "https://github.com/Sleon4/Lion-Request/tree/v5.4.0"
+                "issues": "https://github.com/Lion-Packages/request/issues",
+                "source": "https://github.com/Lion-Packages/request/tree/v5.4.0"
             },
             "time": "2023-06-27T14:47:05+00:00"
         },
@@ -854,12 +888,12 @@
             "version": "v8.5.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Sleon4/Lion-Route.git",
+                "url": "https://github.com/Lion-Packages/route.git",
                 "reference": "b70adbc2a3a3efea2e5311b6a7ce40837e504ef6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Route/zipball/b70adbc2a3a3efea2e5311b6a7ce40837e504ef6",
+                "url": "https://api.github.com/repos/Lion-Packages/route/zipball/b70adbc2a3a3efea2e5311b6a7ce40837e504ef6",
                 "reference": "b70adbc2a3a3efea2e5311b6a7ce40837e504ef6",
                 "shasum": ""
             },
@@ -880,8 +914,8 @@
             ],
             "description": "This library has a fast router usage with regular expressions.",
             "support": {
-                "issues": "https://github.com/Sleon4/Lion-Route/issues",
-                "source": "https://github.com/Sleon4/Lion-Route/tree/v8.5.0"
+                "issues": "https://github.com/Lion-Packages/route/issues",
+                "source": "https://github.com/Lion-Packages/route/tree/v8.5.0"
             },
             "time": "2023-06-05T22:31:42+00:00"
         },
@@ -890,12 +924,12 @@
             "version": "v6.12.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Sleon4/Lion-Security.git",
+                "url": "https://github.com/Lion-Packages/security.git",
                 "reference": "7d67cec7d1b9519fe085639fddfe89c08d2fbb2b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-Security/zipball/7d67cec7d1b9519fe085639fddfe89c08d2fbb2b",
+                "url": "https://api.github.com/repos/Lion-Packages/security/zipball/7d67cec7d1b9519fe085639fddfe89c08d2fbb2b",
                 "reference": "7d67cec7d1b9519fe085639fddfe89c08d2fbb2b",
                 "shasum": ""
             },
@@ -917,44 +951,10 @@
             ],
             "description": "Library created with the function of implementing AES, RSA and JWT Security functions for PHP.",
             "support": {
-                "issues": "https://github.com/Sleon4/Lion-Security/issues",
-                "source": "https://github.com/Sleon4/Lion-Security/tree/v6.12.0"
+                "issues": "https://github.com/Lion-Packages/security/issues",
+                "source": "https://github.com/Lion-Packages/security/tree/v6.12.0"
             },
             "time": "2023-05-31T21:38:23+00:00"
-        },
-        {
-            "name": "lion/sql",
-            "version": "v8.7.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Sleon4/Lion-SQL.git",
-                "reference": "093fd6e303f2ce62bb7b0e175967136476506e30"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Sleon4/Lion-SQL/zipball/093fd6e303f2ce62bb7b0e175967136476506e30",
-                "reference": "093fd6e303f2ce62bb7b0e175967136476506e30",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "LionSQL\\": "src/LionSQL/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "package in charge of generating and executing MySQL processes",
-            "support": {
-                "issues": "https://github.com/Sleon4/Lion-SQL/issues",
-                "source": "https://github.com/Sleon4/Lion-SQL/tree/v8.7.2"
-            },
-            "time": "2023-06-25T18:04:01+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -1998,23 +1998,24 @@
         },
         {
             "name": "react/promise",
-            "version": "v2.10.0",
+            "version": "v3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/promise.git",
-                "reference": "f913fb8cceba1e6644b7b90c4bfb678ed8a3ef38"
+                "reference": "c86753c76fd3be465d93b308f18d189f01a22be4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/promise/zipball/f913fb8cceba1e6644b7b90c4bfb678ed8a3ef38",
-                "reference": "f913fb8cceba1e6644b7b90c4bfb678ed8a3ef38",
+                "url": "https://api.github.com/repos/reactphp/promise/zipball/c86753c76fd3be465d93b308f18d189f01a22be4",
+                "reference": "c86753c76fd3be465d93b308f18d189f01a22be4",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.4.0"
+                "php": ">=7.1.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^9.5 || ^5.7 || ^4.8.36"
+                "phpstan/phpstan": "1.10.20 || 1.4.10",
+                "phpunit/phpunit": "^9.5 || ^7.5"
             },
             "type": "library",
             "autoload": {
@@ -2058,7 +2059,7 @@
             ],
             "support": {
                 "issues": "https://github.com/reactphp/promise/issues",
-                "source": "https://github.com/reactphp/promise/tree/v2.10.0"
+                "source": "https://github.com/reactphp/promise/tree/v3.0.0"
             },
             "funding": [
                 {
@@ -2066,7 +2067,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2023-05-02T15:15:43+00:00"
+            "time": "2023-07-11T16:12:49+00:00"
         },
         {
             "name": "react/socket",
@@ -4686,16 +4687,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "10.2.3",
+            "version": "10.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "35c8cac1734ede2ae354a6644f7088356ff5b08e"
+                "reference": "68484779b5a2ed711fbdeba6ca01910d87acdff2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/35c8cac1734ede2ae354a6644f7088356ff5b08e",
-                "reference": "35c8cac1734ede2ae354a6644f7088356ff5b08e",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/68484779b5a2ed711fbdeba6ca01910d87acdff2",
+                "reference": "68484779b5a2ed711fbdeba6ca01910d87acdff2",
                 "shasum": ""
             },
             "require": {
@@ -4767,7 +4768,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.2.3"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.2.4"
             },
             "funding": [
                 {
@@ -4783,7 +4784,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-06-30T06:17:38+00:00"
+            "time": "2023-07-10T04:06:08+00:00"
         },
         {
             "name": "sebastian/cli-parser",
