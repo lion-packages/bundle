@@ -1,6 +1,16 @@
 # Release Notes
 
-## [v14.27.0](https://github.com/Sleon4/Lion-Framework/compare/v14.26.0...v14.27.0) (2023-07-10)
+## [v14.28.0](https://github.com/Lion-Packages/framework/compare/v14.27.0...v14.28.0) (2023-07-11)
+
+### Changed
+- lionsql library has been migrated to liondatabase
+- user authentication has been validated
+- middleware structure has been modified in config/
+
+### Refactoring
+- the default http response code for helper error has been modified
+
+## [v14.27.0](https://github.com/Lion-Packages/framework/compare/v14.26.0...v14.27.0) (2023-07-10)
 
 ### Added
 - support has been added to display parameters for HTTP routes with the ANY method
@@ -15,13 +25,13 @@
 - default ports have been updated to execute resources
 - trait HttpTrait has been renamed to Http
 
-## [v14.26.0](https://github.com/Sleon4/Lion-Framework/compare/v14.25.0...v14.26.0) (2023-06-29)
+## [v14.26.0](https://github.com/Lion-Packages/framework/compare/v14.25.0...v14.26.0) (2023-06-29)
 
 ### Added
 - added URI when generating logs in storage/logs/
 - resource has been added to display the available http routes
 
-## [v14.25.0](https://github.com/Sleon4/Lion-Framework/compare/v14.24.1...v14.25.0) (2023-06-27)
+## [v14.25.0](https://github.com/Lion-Packages/framework/compare/v14.24.1...v14.25.0) (2023-06-27)
 
 ### Added
 - rules have been added
@@ -35,7 +45,7 @@
 - rule generation has been validated so as not to generate duplicate rules (foreign) in commands (db:rules)
 - added option to command (token:jwt) to allow selecting a path where public and private keys can be located
 
-## [v14.24.1](https://github.com/Sleon4/Lion-Framework/compare/v14.24.0...v14.24.1) (2023-06-25)
+## [v14.24.1](https://github.com/Lion-Packages/framework/compare/v14.24.0...v14.24.1) (2023-06-25)
 
 ### Added
 - the types of migrations have been classified when they are created (migrate:new)
@@ -50,7 +60,7 @@
 ### Fixed
 - format to generate migrations and add columns with foreign keys has been corrected
 
-## [v14.24.0](https://github.com/Sleon4/Lion-Framework/compare/v14.23.0...v14.24.0) (2023-06-25)
+## [v14.24.0](https://github.com/Lion-Packages/framework/compare/v14.23.0...v14.24.0) (2023-06-25)
 
 ### Added
 - resource has been added to register users
@@ -59,7 +69,7 @@
 ### Changed
 - lion/sql library has been updated v8.7.1
 
-## [v14.23.0](https://github.com/Sleon4/Lion-Framework/compare/v14.22.0...v14.23.0) (2023-06-24)
+## [v14.23.0](https://github.com/Lion-Packages/framework/compare/v14.22.0...v14.23.0) (2023-06-24)
 
 ### Added
 - resource design has been modified to work with the cli
@@ -67,14 +77,14 @@
 ### Changed
 - docker configuration has been updated
 
-## [v14.22.0](https://github.com/Sleon4/Lion-Framework/compare/v14.21.0...v14.22.0) (2023-06-22)
+## [v14.22.0](https://github.com/Lion-Packages/framework/compare/v14.21.0...v14.22.0) (2023-06-22)
 
 ### Added
 - added command to generate resources
 - command to execute resources has been added
 - a resource has been added to dynamically access the cli
 
-## [v14.21.0](https://github.com/Sleon4/Lion-Framework/compare/v14.20.0...v14.21.0) (2023-06-21)
+## [v14.21.0](https://github.com/Lion-Packages/framework/compare/v14.20.0...v14.21.0) (2023-06-21)
 
 ### Added
 - rules format has been modified allowing the use of dynamic parameters
@@ -85,7 +95,7 @@
 - docker config updated
 - format for creating sockets has been updated
 
-## [v14.20.0](https://github.com/Sleon4/Lion-Framework/compare/v14.19.0...v14.20.0) (2023-06-20)
+## [v14.20.0](https://github.com/Lion-Packages/framework/compare/v14.19.0...v14.20.0) (2023-06-20)
 
 ### Added
 - added supervisord configuration to run local server services and sockets
@@ -102,7 +112,7 @@
 - class has been renamed to generate sockets
 - class has been renamed to execute sockets
 
-## [v14.19.0](https://github.com/Sleon4/Lion-Framework/compare/v14.18.0...v14.19.0) (2023-06-19)
+## [v14.19.0](https://github.com/Lion-Packages/framework/compare/v14.18.0...v14.19.0) (2023-06-19)
 
 ### Added
 - added functions to make session variables
@@ -111,7 +121,7 @@
 ### Changed
 - configuration in docker has been updated
 
-## [v14.18.0](https://github.com/Sleon4/Lion-Framework/compare/v14.17.1...v14.18.0) (2023-06-18)
+## [v14.18.0](https://github.com/Lion-Packages/framework/compare/v14.17.1...v14.18.0) (2023-06-18)
 
 ### Added
 - added format support for columns of type (blob, varbinary) to generate migrations
@@ -124,23 +134,23 @@
 - configuration in dockerfile has been updated
 - environment variables have been updated
 
-## [v14.17.1](https://github.com/Sleon4/Lion-Framework/compare/v14.17.0...v14.17.1) (2023-06-15)
+## [v14.17.1](https://github.com/Lion-Packages/framework/compare/v14.17.0...v14.17.1) (2023-06-15)
 
 ### Fixed
 - function call from trait has been fixed
 
-## [v14.17.0](https://github.com/Sleon4/Lion-Framework/compare/v14.16.0...v14.17.0) (2023-06-14)
+## [v14.17.0](https://github.com/Lion-Packages/framework/compare/v14.16.0...v14.17.0) (2023-06-14)
 
 ### Changed
 - output format for commands has been modified
 
-## [v14.16.0](https://github.com/Sleon4/Lion-Framework/compare/v14.15.0...v14.16.0) (2023-06-13)
+## [v14.16.0](https://github.com/Lion-Packages/framework/compare/v14.15.0...v14.16.0) (2023-06-13)
 
 ### Changed
 - format has been modified to insert the name of the connection in the generated migrations
 - view service and procedures to generate migrations have been removed
 
-## [v14.15.0](https://github.com/Sleon4/Lion-Framework/compare/v14.14.0...v14.15.0) (2023-06-12)
+## [v14.15.0](https://github.com/Lion-Packages/framework/compare/v14.14.0...v14.15.0) (2023-06-12)
 
 ### Added
 - added command function in App\Console\Kernel to run lion commands
@@ -156,7 +166,7 @@
 - the execute function of the App\Console\Kernel class has been modified to return an array with responses from the terminal
 - command renamed App\Console\Framework\Migrations\RunMigrationsCommand to App\Console\Framework\Migrations\FreshMigrationsCommand
 
-## [v14.14.0](https://github.com/Sleon4/Lion-Framework/compare/v14.13.0...v14.14.0) (2023-06-09)
+## [v14.14.0](https://github.com/Lion-Packages/framework/compare/v14.13.0...v14.14.0) (2023-06-09)
 
 ### Added
 - new default migration has been added
@@ -166,7 +176,7 @@
 ### Changed
 - format to create commands has been modified
 
-## [v14.13.0](https://github.com/Sleon4/Lion-Framework/compare/v14.12.0...v14.13.0) (2023-06-08)
+## [v14.13.0](https://github.com/Lion-Packages/framework/compare/v14.12.0...v14.13.0) (2023-06-08)
 
 ### Added
 - command to generate migrations has been added
@@ -180,14 +190,14 @@
 - command to generate keys with RSA has been renamed
 - command to generate keys with AES has been renamed
 
-## [v14.12.0](https://github.com/Sleon4/Lion-Framework/compare/v14.11.0...v14.12.0) (2023-06-06)
+## [v14.12.0](https://github.com/Lion-Packages/framework/compare/v14.11.0...v14.12.0) (2023-06-06)
 
 ### Added
 - commands have been added to generate rules with the properties of an entity
 - call has been made to generate rules for an entity from the command (db:crud)
 - added information when running local server
 
-## [v14.11.0](https://github.com/Sleon4/Lion-Framework/compare/v14.10.1...v14.11.0) (2023-06-05)
+## [v14.11.0](https://github.com/Lion-Packages/framework/compare/v14.10.1...v14.11.0) (2023-06-05)
 
 ### Added
 - command to generate CRUD functions of an entity has been added
@@ -197,7 +207,7 @@
 - default connection has been validated to display the available connections through the terminal (db:show)
 - table format has been modified to display the available web http routes
 
-## [v14.10.1](https://github.com/Sleon4/Lion-Framework/compare/v14.10.0...v14.10.1) (2023-06-02)
+## [v14.10.1](https://github.com/Lion-Packages/framework/compare/v14.10.0...v14.10.1) (2023-06-02)
 
 ### Changed
 - lion/sql library has been updated v8.1.1
@@ -205,7 +215,7 @@
 ### Fixed
 - fixed rule validation
 
-## [v14.10.0](https://github.com/Sleon4/Lion-Framework/compare/v14.9.0...v14.10.0) (2023-06-01)
+## [v14.10.0](https://github.com/Lion-Packages/framework/compare/v14.9.0...v14.10.0) (2023-06-01)
 
 ### Added
 - email has been added to the config to configure multiple email accounts
@@ -223,7 +233,7 @@
 - command format to create test has been modified
 - format has been modified to create controllers in command
 
-## [v14.9.0](https://github.com/Sleon4/Lion-Framework/compare/v14.8.0...v14.9.0) (2023-05-30)
+## [v14.9.0](https://github.com/Lion-Packages/framework/compare/v14.8.0...v14.9.0) (2023-05-30)
 
 ### Added
 - added new helper to verify and get JWT token
@@ -236,13 +246,13 @@
 ### Fixed
 - fixed value type that returns helper isError and isSuccess to bool
 
-## [v14.8.0](https://github.com/Sleon4/Lion-Framework/compare/v14.7.0...v14.8.0) (2023-05-27)
+## [v14.8.0](https://github.com/Lion-Packages/framework/compare/v14.7.0...v14.8.0) (2023-05-27)
 
 ### Changed
 - lion/route library has been updated to v8.4.0
 - controller class format has been modified
 
-## [v14.7.0](https://github.com/Sleon4/Lion-Framework/compare/v14.6.0...v14.7.0) (2023-05-25)
+## [v14.7.0](https://github.com/Lion-Packages/framework/compare/v14.6.0...v14.7.0) (2023-05-25)
 
 ### Added
 - middleware has been added to check if the jwt exists
@@ -268,7 +278,7 @@
 - updated validation to refresh JWT token
 - command format to initialize local server has been modified
 
-## [v14.6.0](https://github.com/Sleon4/Lion-Framework/compare/v14.5.0...v14.6.0) (2023-05-17)
+## [v14.6.0](https://github.com/Lion-Packages/framework/compare/v14.5.0...v14.6.0) (2023-05-17)
 
 ### Added
 - command list and socket commands have been relocated
@@ -279,19 +289,19 @@
 - dockerfile has been updated
 - updated path to create commands
 
-## [v14.5.0](https://github.com/Sleon4/Lion-Framework/compare/v14.4.0...v14.5.0) (2023-05-15)
+## [v14.5.0](https://github.com/Lion-Packages/framework/compare/v14.4.0...v14.5.0) (2023-05-15)
 
 ### Added
 - command to create rules and add properties has been modified
 - added value and disabled properties to export data in postman collections
 
-## [v14.4.0](https://github.com/Sleon4/Lion-Framework/compare/v14.3.2...v14.4.0) (2023-05-14)
+## [v14.4.0](https://github.com/Lion-Packages/framework/compare/v14.3.2...v14.4.0) (2023-05-14)
 
 ### Added
 - docker files have been updated to implement cron tasks
 - command to create files with sh extension has been added
 
-## [v14.3.2](https://github.com/Sleon4/Lion-Framework/compare/v14.3.1...v14.3.2) (2023-05-12)
+## [v14.3.2](https://github.com/Lion-Packages/framework/compare/v14.3.1...v14.3.2) (2023-05-12)
 
 ### Changed
 - updated lion/sql library to v8.0.3
@@ -299,7 +309,7 @@
 ### Fixed
 - postman collections has been validated
 
-## [v14.3.1](https://github.com/Sleon4/Lion-Framework/compare/v14.3.0...v14.3.1) (2023-05-10)
+## [v14.3.1](https://github.com/Lion-Packages/framework/compare/v14.3.0...v14.3.1) (2023-05-10)
 
 ### Added
 - values method is added in StatusEnum to obtain the available statuses
@@ -319,7 +329,7 @@
 - classes and attributes have been normalized for capsule classes
 - fixed postman collection export
 
-## [v14.3.0](https://github.com/Sleon4/Lion-Framework/compare/v14.2.0...v14.3.0) (2023-05-06)
+## [v14.3.0](https://github.com/Lion-Packages/framework/compare/v14.2.0...v14.3.0) (2023-05-06)
 
 ### Added
 - session controller has been created to refresh JWT token
@@ -329,7 +339,7 @@
 - validation with enum values have been added
 - sql library has been updated to v8.0.2
 
-## [v14.2.0](https://github.com/Sleon4/Lion-Framework/compare/v14.1.0...v14.2.0) (2023-05-05)
+## [v14.2.0](https://github.com/Lion-Packages/framework/compare/v14.1.0...v14.2.0) (2023-05-05)
 
 ### Added
 - desc property is added to assign a description in postman properties
@@ -341,13 +351,13 @@
 - import for connection to databases has been corrected
 - fixed database import in different commands
 
-## [v14.1.0](https://github.com/Sleon4/Lion-Framework/compare/v14.0.0...v14.1.0) (2023-05-03)
+## [v14.1.0](https://github.com/Lion-Packages/framework/compare/v14.0.0...v14.1.0) (2023-05-03)
 
 ### Changed
 - .env properties have been modified
 - Dockerfile has been updated
 
-## [v14.0.0](https://github.com/Sleon4/Lion-Framework/compare/v13.14.0...v14.0.0) (2023-05-01)
+## [v14.0.0](https://github.com/Lion-Packages/framework/compare/v13.14.0...v14.0.0) (2023-05-01)
 
 ### Added
 - added helper to convert data to json
@@ -355,7 +365,7 @@
 - trait SoftDeletes has been added to perform temporary data deletion
 - necessary files for docker containers have been added
 
-## [v13.14.0](https://github.com/Sleon4/Lion-Framework/compare/v13.13.0...v13.14.0) (2023-04-25)
+## [v13.14.0](https://github.com/Lion-Packages/framework/compare/v13.13.0...v13.14.0) (2023-04-25)
 
 ### Added
 - the visualization of middleware available for each route is added
@@ -364,13 +374,13 @@
 - added properties for editorconfig
 - added properties in gitignore
 
-## [v13.13.0](https://github.com/Sleon4/Lion-Framework/compare/v13.12.0...v13.13.0) (2023-04-24)
+## [v13.13.0](https://github.com/Lion-Packages/framework/compare/v13.12.0...v13.13.0) (2023-04-24)
 
 ### Changed
 - added database visualization when mapping databases in general
 - PSR4 format has been modified to create capsule classes
 
-## [v13.12.0](https://github.com/Sleon4/Lion-Framework/compare/v13.11.0...v13.12.0) (2023-04-18)
+## [v13.12.0](https://github.com/Lion-Packages/framework/compare/v13.11.0...v13.12.0) (2023-04-18)
 
 ### Added
 - property has been added to the command to create controllers
@@ -378,7 +388,7 @@
 ### Changed
 - data properties have been removed for rule response
 
-## [v13.11.0](https://github.com/Sleon4/Lion-Framework/compare/v13.10.0...v13.11.0) (2023-04-16)
+## [v13.11.0](https://github.com/Lion-Packages/framework/compare/v13.10.0...v13.11.0) (2023-04-16)
 
 ### Added
 - added option to create models when creating controllers
@@ -388,7 +398,7 @@
 - seeders and factories format has been standardized
 - property has been modified to set the current database connection
 
-## [v13.10.0](https://github.com/Sleon4/Lion-Framework/compare/v13.9.0...v13.10.0) (2023-04-14)
+## [v13.10.0](https://github.com/Lion-Packages/framework/compare/v13.9.0...v13.10.0) (2023-04-14)
 
 ### Added
 - dynamic parameters have been added to export collections in postman
@@ -398,7 +408,7 @@
 - command to create rules has been modified
 - add default value for environment variables
 
-## [v13.9.0](https://github.com/Sleon4/Lion-Framework/compare/v13.8.1...v13.9.0) (2023-04-10)
+## [v13.9.0](https://github.com/Lion-Packages/framework/compare/v13.8.1...v13.9.0) (2023-04-10)
 
 ### Added
 - added property to set default time zone
@@ -407,7 +417,7 @@
 - capsule class properties have been normalized
 - export for postman collections has been normalized
 
-## [v13.8.1](https://github.com/Sleon4/Lion-Framework/compare/v13.8.0...v13.8.1) (2023-04-10)
+## [v13.8.1](https://github.com/Lion-Packages/framework/compare/v13.8.0...v13.8.1) (2023-04-10)
 
 ### Added
 - added environment variable
@@ -418,7 +428,7 @@
 ### Changed
 - normalized format for naming classes and methods has been corrected
 
-## [v13.8.0](https://github.com/Sleon4/Lion-Framework/compare/v13.7.0...v13.8.0) (2023-04-09)
+## [v13.8.0](https://github.com/Lion-Packages/framework/compare/v13.7.0...v13.8.0) (2023-04-09)
 
 ### Added
 - the config section has been created to create configuration files for the framework
@@ -426,12 +436,12 @@
 ### Fixed
 - fixed route export for postman
 
-## [v13.7.0](https://github.com/Sleon4/Lion-Framework/compare/v13.6.0...v13.7.0) (2023-04-06)
+## [v13.7.0](https://github.com/Lion-Packages/framework/compare/v13.6.0...v13.7.0) (2023-04-06)
 
 ### Changed
 - the export of collections to postman has been restructured
 
-## [v13.6.0](https://github.com/Sleon4/Lion-Framework/compare/v13.5.0...v13.6.0) (2023-04-05)
+## [v13.6.0](https://github.com/Lion-Packages/framework/compare/v13.5.0...v13.6.0) (2023-04-05)
 
 ### Added
 - add command to create enums
@@ -443,13 +453,13 @@
 - basic information of the 'route:postman' command is added
 - properties have been hidden to export the collection in postman
 
-## [v13.5.0](https://github.com/Sleon4/Lion-Framework/compare/v13.4.0...v13.5.0) (2023-03-27)
+## [v13.5.0](https://github.com/Lion-Packages/framework/compare/v13.4.0...v13.5.0) (2023-03-27)
 
 ### Changed
 - rules response format is modified where properties are added to obtain required validation responses for a property
 - sql library updated
 
-## [v13.4.0](https://github.com/Sleon4/Lion-Framework/compare/v13.3.0...v13.4.0) (2023-03-22)
+## [v13.4.0](https://github.com/Lion-Packages/framework/compare/v13.3.0...v13.4.0) (2023-03-22)
 
 ### Added
 - helper has been added to make http requests to get xml
@@ -466,7 +476,7 @@
 - property has been removed in .env.example
 - function called to access storage
 
-## [v13.3.0](https://github.com/Sleon4/Lion-Framework/compare/v13.2.0...v13.3.0) (2023-03-17)
+## [v13.3.0](https://github.com/Lion-Packages/framework/compare/v13.2.0...v13.3.0) (2023-03-17)
 
 ### Added
 - property was added to the response of rules to determine the attribute with error
