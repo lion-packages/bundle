@@ -82,7 +82,7 @@ if (!function_exists('success')) {
  **/
 
 if (!function_exists('error')) {
-    function error(int $code = 200, mixed $response = null, mixed $data = null): object {
+    function error(int $code = 500, mixed $response = null, mixed $data = null): object {
         return response->code($code)->error($response, $data);
     }
 }
