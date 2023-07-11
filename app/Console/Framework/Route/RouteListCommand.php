@@ -6,7 +6,9 @@ use App\Traits\Framework\ConsoleOutput;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Helper\{ Table, TableCell, TableSeparator };
+use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Helper\TableCell;
+use Symfony\Component\Console\Helper\TableSeparator;
 
 class RouteListCommand extends Command {
 
@@ -32,6 +34,7 @@ class RouteListCommand extends Command {
         array_pop($routes);
         $rules = require_once("./routes/rules.php");
         $config_middleware = require_once("./config/middleware.php");
+        $config_middleware = [...$config_middleware['framework'], ...$config_middleware['app']];
         $size = arr->of($routes)->length();
         $cont = 0;
         $rows = [];
@@ -76,12 +79,10 @@ class RouteListCommand extends Command {
                 }
 
                 if ($method['handler']['controller'] != false) {
-                    $controller = $transformNamespace($method['handler']['controller']['name']);
-
                     $rows[] = [
                         $this->warningOutput($keyMethods),
                         $route_url,
-                        $controller,
+                        $transformNamespace($method['handler']['controller']['name']),
                         $this->warningOutput($method['handler']['controller']['function']),
                         $this->errorOutput("false"),
                     ];
@@ -92,12 +93,10 @@ class RouteListCommand extends Command {
                         foreach ($config_middleware as $middlewareClass => $middlewareMethods) {
                             foreach ($middlewareMethods as $middlewareItem => $item) {
                                 if ($filter === $item['name']) {
-                                    $middleware = $transformNamespace($middlewareClass);
-
                                     $rows[] = [
                                         $this->infoOutput("MIDDLEWARE:"),
                                         $this->infoOutput($filter),
-                                        $middleware,
+                                        $transformNamespace($middlewareClass),
                                         $this->warningOutput($item['method']),
                                         $this->errorOutput("false")
                                     ];
@@ -111,12 +110,10 @@ class RouteListCommand extends Command {
                     if (isset($rules[$keyMethods][$route_url])) {
                         foreach ($rules[$keyMethods][$route_url] as $key_uri_rule => $class_rule) {
                             $required_param = $class_rule::$disabled === false ? "REQUIRED" : "OPTIONAL";
-                            $class_namespace = $transformNamespace($class_rule);
-
                             $rows[] = [
                                 $this->successOutput("PARAM:"),
                                 $this->successOutput($class_rule::$field . " ({$required_param})"),
-                                $class_namespace,
+                                $transformNamespace($class_rule),
                                 $this->warningOutput("passes"),
                                 $this->errorOutput("false")
                             ];
@@ -136,7 +133,7 @@ class RouteListCommand extends Command {
             ->setHeaderTitle($this->successOutput('ROUTES'))
             ->setFooterTitle(
                 $size > 1
-                ? $this->successOutput(" showing [" . $size . "] routes ")
+                ? $this->successOutput(" showing [{$size}] routes ")
                 : ($size === 1
                     ? $this->successOutput(" showing a single route ")
                     : $this->successOutput(" no routes available ")
