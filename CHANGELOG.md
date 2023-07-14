@@ -1,5 +1,24 @@
 # Release Notes
 
+## [v14.28.1](https://github.com/Lion-Packages/framework/compare/v14.28.0...v14.28.1) (2023-07-14)
+
+### Added
+- command to export databases (db:export) has been added
+
+### Changed
+- routes have been validated to display routes from the console
+- rules have been updated
+- query has been validated to read tables from command (db:select)
+- query has been validated to read columns from command (db:columns)
+- output format has been modified to create migrations
+- login has been validated
+
+### Fixed
+- objects have been validated to generate crud (db:all-crud)
+
+### Refactoring
+- environment variables have been updated
+
 ## [v14.28.0](https://github.com/Lion-Packages/framework/compare/v14.27.0...v14.28.0) (2023-07-11)
 
 ### Changed
