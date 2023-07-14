@@ -65,11 +65,8 @@ class RulesDBCommand extends Command {
                 } else {
                     if ($column->Field === $foreigns->COLUMN_NAME) {
                         $is_foreign = true;
-                        break;
                     }
                 }
-
-                $is_foreign = true;
             }
 
             if (!$is_foreign) {
