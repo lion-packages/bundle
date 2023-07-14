@@ -27,24 +27,17 @@ class ServerCommand extends Command {
 	protected function configure() {
 		$this
             ->setDescription("Created command to start server locally")
-            ->addOption('port', "p", InputOption::VALUE_OPTIONAL, 'Do you want to set your own port?')
-            ->addOption('host', "s", InputOption::VALUE_OPTIONAL, 'Do you want to set your own host?');
+            ->addOption('port', "p", InputOption::VALUE_OPTIONAL, 'Do you want to set your own port?', 8000)
+            ->addOption('host', "s", InputOption::VALUE_OPTIONAL, 'Do you want to set your own host?', "127.0.0.1");
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$port = $input->getOption('port');
         $host = $input->getOption('host');
-
-        if ($port === null) {
-            $port = 8000;
-        }
-
-        if ($host === null) {
-            $host = "127.0.0.1";
-        }
-
         $url = "{$host}:{$port}";
-        $output->writeln($this->warningOutput("\t>>  LOCAL:</comment> Server running on <href=http://{$url}>[http://{$url}]</>"));
+        $link = "<href=http://{$url}>[http://{$url}]</>";
+
+        $output->writeln($this->warningOutput("\t>>  LOCAL:</comment> Server running on {$link}"));
         $output->writeln($this->warningOutput("\t>>  HOST:</comment> use --host to expose"));
         $output->writeln($this->warningOutput("\t>>  PORT:</comment> use --port to expose"));
         $output->writeln($this->warningOutput("\nPress Ctrl+C to stop the server\n"));

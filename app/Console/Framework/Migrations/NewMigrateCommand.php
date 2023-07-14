@@ -31,7 +31,7 @@ class NewMigrateCommand extends Command {
             ->setDescription("Command to generate a new migration")
             ->addArgument('migration', InputArgument::REQUIRED, 'Migration name')
             ->addArgument('connection', InputArgument::REQUIRED, 'Connection name')
-            ->addOption("type", "t", InputOption::VALUE_OPTIONAL, "Type of migration", "TABLE");
+            ->addOption("type", "t", InputOption::VALUE_OPTIONAL, "Type of migration", "table");
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
@@ -43,7 +43,7 @@ class NewMigrateCommand extends Command {
         }
 
         // select type of migration
-        $option = str->of($input->getOption('type'))->upper()->get();
+        $option = str->of($input->getOption('type'))->lower()->get();
 
         // select connection
         $connections = DB::getConnections();
@@ -52,24 +52,24 @@ class NewMigrateCommand extends Command {
 
         $db_pascal = str->of($connection)->replace("-", " ")->replace("_", " ")->pascal()->trim()->get();
         $migration_pascal = str->of($migration)->replace("-", " ")->replace("_", " ")->pascal()->trim()->get();
-        $migration_pascal = str->of($option === "TABLE" ? "Table" : ($option === "VIEW" ? "View" : "Procedure"))->concat($migration_pascal)->get();
+        $migration_pascal = str->of($option === "table" ? "Table" : ($option === "view" ? "View" : "Procedure"))->concat($migration_pascal)->get();
         $env_var = array_search($connection, (array) env);
 
-        if ($option === "TABLE") {
+        if ($option === "table") {
             Store::folder("database/Migrations/{$db_pascal}/Tables/");
             $this->new("database/Migrations/{$db_pascal}/Tables/{$migration_pascal}", "php");
             $this->add(str->of($this->getTemplateCreateTable())->replace("env->DB_NAME", "env->{$env_var}")->get());
-            $output->writeln($this->successOutput("\t>>  {$option}: Migration 'database/Migrations/{$db_pascal}/Tables/{$migration_pascal}' has been generated"));
-        } elseif ($option === "VIEW") {
+            $output->writeln($this->successOutput("\t>>  TABLE: Migration 'database/Migrations/{$db_pascal}/Tables/{$migration_pascal}' has been generated"));
+        } elseif ($option === "view") {
             Store::folder("database/Migrations/{$db_pascal}/Views/");
             $this->new("database/Migrations/{$db_pascal}/Views/{$migration_pascal}", "php");
             $this->add(str->of($this->getTemplateCreateView())->replace("env->DB_NAME", "env->{$env_var}")->get());
-            $output->writeln($this->successOutput("\t>>  {$option}: Migration 'database/Migrations/{$db_pascal}/Views/{$migration_pascal}' has been generated"));
-        } elseif ($option === "PROCEDURE") {
+            $output->writeln($this->successOutput("\t>>  VIEW: Migration 'database/Migrations/{$db_pascal}/Views/{$migration_pascal}' has been generated"));
+        } elseif ($option === "procedure") {
             Store::folder("database/Migrations/{$db_pascal}/Procedures/");
             $this->new("database/Migrations/{$db_pascal}/Procedures/{$migration_pascal}", "php");
             $this->add(str->of($this->getTemplateCreateProcedure())->replace("env->DB_NAME", "env->{$env_var}")->get());
-            $output->writeln($this->successOutput("\t>>  {$option}: Migration 'database/Migrations/{$db_pascal}/Procedures/{$migration_pascal}' has been generated"));
+            $output->writeln($this->successOutput("\t>>  PROCEDURE: Migration 'database/Migrations/{$db_pascal}/Procedures/{$migration_pascal}' has been generated"));
         } else {
             $output->writeln($this->errorOutput("\t>>  The selected migration type does not exist"));
             return Command::INVALID;
@@ -77,7 +77,6 @@ class NewMigrateCommand extends Command {
 
         $this->force();
         $this->close();
-
 		return Command::SUCCESS;
 	}
 
