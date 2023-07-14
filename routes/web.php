@@ -21,10 +21,8 @@ Route::prefix('api', function() {
     Route::prefix('auth', function() {
         Route::post('login', [LoginController::class, 'auth']);
 
-        Route::prefix('session', function() {
-            Route::middleware(['jwt-without-signature', 'jwt-authorize'], function() {
-                Route::get('refresh', [SessionController::class, 'refresh']);
-            });
+        Route::middleware(['jwt-without-signature', 'jwt-authorize', 'session'], function() {
+            Route::get('refresh', [SessionController::class, 'refresh']);
         });
     });
 });
