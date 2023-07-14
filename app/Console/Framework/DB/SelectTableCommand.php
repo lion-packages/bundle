@@ -70,6 +70,10 @@ class SelectTableCommand extends Command {
             return Command::SUCCESS;
         }
 
+        if (!isset($rows_table[0])) {
+            $rows_table = [$rows_table];
+        }
+
         (new Table($output))
             ->setHeaderTitle("<info> TABLE " . str->of($entity)->upper()->get() . " </info>")
             ->setHeaders($columns_table)
