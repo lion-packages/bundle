@@ -9,14 +9,14 @@ use LionSecurity\Validation;
 
 class UsersController {
 
-    private UsersModel $usersModel;
+	private UsersModel $usersModel;
 
-    public function __construct() {
-        $this->usersModel = new UsersModel();
-    }
+	public function __construct() {
+		$this->usersModel = new UsersModel();
+	}
 
-    public function createUsers() {
-        $code = uniqid("user-");
+	public function createUsers() {
+		$code = uniqid("user-");
         $res_create = $this->usersModel->createUsersDB(
             Users::capsule()
                 ->setUsersPassword(Validation::passwordHash(request->users_password))
@@ -30,6 +30,30 @@ class UsersController {
 
         kernel->command("rsa:new -p keys/{$code}/");
         return success(200, $res_create->message);
-    }
+	}
+
+	public function readUsers() {
+		return $this->usersModel->readUsersDB();
+	}
+
+	public function updateUsers() {
+		$res_update = $this->usersModel->updateUsersDB(
+			Users::capsule()
+		);
+
+		return isError($res_update)
+			? error()
+			: success();
+	}
+
+	public function deleteUsers() {
+		$res_delete = $this->usersModel->deleteUsersDB(
+			Users::capsule()
+		);
+
+		return isError($res_delete)
+			? error()
+			: success();
+	}
 
 }

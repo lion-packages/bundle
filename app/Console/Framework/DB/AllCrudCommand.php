@@ -33,7 +33,7 @@ class AllCrudCommand extends Command {
         $cont = 0;
 
         foreach ($connections['connections'] as $key => $conn) {
-            $output->writeln($this->infoOutput("\t>>  {$conn['dbname']}"));
+            $output->writeln($this->infoOutput("\t>>  DATABASE: {$conn['dbname']}"));
             $tables = DB::connection($conn['dbname'])->show()->full()->tables()->where(DB::equalTo("Table_Type"), 'BASE TABLE')->getAll();
 
             foreach ($tables as $key => $table) {

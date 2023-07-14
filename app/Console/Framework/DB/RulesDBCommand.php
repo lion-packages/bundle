@@ -55,12 +55,21 @@ class RulesDBCommand extends Command {
             $is_foreign = false;
 
             if (!isset($foreigns->status)) {
-                foreach ($foreigns as $keyForeign => $foreign) {
-                    if ($column->Field === $foreign->COLUMN_NAME) {
+                if (is_array($foreigns)) {
+                    foreach ($foreigns as $keyForeign => $foreign) {
+                        if ($column->Field === $foreign->COLUMN_NAME) {
+                            $is_foreign = true;
+                            break;
+                        }
+                    }
+                } else {
+                    if ($column->Field === $foreigns->COLUMN_NAME) {
                         $is_foreign = true;
                         break;
                     }
                 }
+
+                $is_foreign = true;
             }
 
             if (!$is_foreign) {

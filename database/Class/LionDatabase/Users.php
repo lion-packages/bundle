@@ -7,7 +7,7 @@ class Users implements \JsonSerializable {
 	private ?int $idusers = null;
 	private ?int $idroles = null;
 	private ?string $users_name = null;
-	private ?string $users_lastname = null;
+	private ?string $users_last_name = null;
 	private ?string $users_email = null;
 	private ?string $users_password = null;
 	private ?string $users_code = null;
@@ -36,8 +36,8 @@ class Users implements \JsonSerializable {
 			isset(request->users_name) ? request->users_name : null
 		);
 
-		$users->setUsersLastname(
-			isset(request->users_lastname) ? request->users_lastname : null
+		$users->setUsersLastName(
+			isset(request->users_last_name) ? request->users_last_name : null
 		);
 
 		$users->setUsersEmail(
@@ -86,12 +86,12 @@ class Users implements \JsonSerializable {
 		return $this;
 	}
 
-	public function getUsersLastname(): ?string {
-		return $this->users_lastname;
+	public function getUsersLastName(): ?string {
+		return $this->users_last_name;
 	}
 
-	public function setUsersLastname(?string $users_lastname): Users {
-		$this->users_lastname = $users_lastname;
+	public function setUsersLastName(?string $users_last_name): Users {
+		$this->users_last_name = $users_last_name;
 		return $this;
 	}
 

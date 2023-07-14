@@ -20,7 +20,7 @@ return new class {
 			->column('id', ['type' => 'int', 'primary-key' => true, 'lenght' => 11, 'null' => false, 'auto-increment' => true])
 			->column('idroles', ['type' => 'int', 'null' => false, 'foreign-key' => ['table' => 'roles', 'column' => 'idroles'], 'comment' => '', 'default' => ''])
 			->column('name', ['type' => 'varchar', 'length' => 45, 'null' => false, 'comment' => '', 'default' => ''])
-			->column('lastname', ['type' => 'varchar', 'length' => 45, 'null' => false, 'comment' => '', 'default' => ''])
+			->column('last_name', ['type' => 'varchar', 'length' => 45, 'null' => false, 'comment' => '', 'default' => ''])
 			->column('email', ['type' => 'varchar', 'length' => 45, 'null' => false, 'unique' => true, 'comment' => '', 'default' => ''])
 			->column('password', ['type' => 'blob', 'null' => false, 'comment' => '', 'default' => ''])
 			->column('code', ['type' => 'varchar', 'length' => 45, 'null' => false, 'unique' => true, 'comment' => '', 'default' => ''])
@@ -34,7 +34,7 @@ return new class {
 				'idusers',
 				'idroles',
 				'users_name',
-				'users_lastname',
+				'users_last_name',
 				'users_email',
 				'users_password',
 				'users_code',
