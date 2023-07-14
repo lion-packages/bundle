@@ -35,7 +35,7 @@ class LoginController {
         }
 
         RSA::$url_path = $path;
-        return success(200, "welcome: {$session->users_name} {$session->users_lastname}", [
+        return success(200, "Welcome: {$session->users_name} {$session->users_last_name}", [
             'jwt' => JWT::encode([
                 'session' => true,
                 'idusers' => $session->idusers,
