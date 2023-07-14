@@ -45,6 +45,10 @@ class SelectColumnsCommand extends Command {
             return Command::SUCCESS;
         }
 
+        if (!isset($columns_db[0])) {
+            $columns_db = [$columns_db];
+        }
+
         (new Table($output))
             ->setHeaderTitle("<info> TABLE " . str->of($entity)->upper()->get() . " </info>")
             ->setHeaders(["FIELD", "TYPE", "NULL", "KEY", "DEFAULT", "EXTRA"])
