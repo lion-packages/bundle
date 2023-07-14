@@ -27,6 +27,7 @@ return [
         \App\Console\Framework\DB\CapsuleCommand::class,
         \App\Console\Framework\DB\SelectColumnsCommand::class,
         \App\Console\Framework\DB\CrudCommand::class,
+        \App\Console\Framework\DB\ExportDatabaseCommand::class,
         \App\Console\Framework\DB\FactoryCommand::class,
         \App\Console\Framework\DB\RulesDBCommand::class,
         \App\Console\Framework\DB\SeedCommand::class,
