@@ -1,6 +1,6 @@
 # Release Notes
 
-## [v14.28.1](https://github.com/Lion-Packages/framework/compare/v14.28.0...v14.28.1) (2023-07-14)
+## [v14.28.1](https://github.com/Lion-Packages/framework/compare/v14.28.0...v14.28.1) (2023-07-15)
 
 ### Added
 - command to export databases (db:export) has been added
