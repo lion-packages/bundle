@@ -262,16 +262,16 @@
         },
         {
             "name": "firebase/php-jwt",
-            "version": "v6.8.0",
+            "version": "v6.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/firebase/php-jwt.git",
-                "reference": "48b0210c51718d682e53210c24d25c5a10a2299b"
+                "reference": "5dbc8959427416b8ee09a100d7a8588c00fb2e26"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/48b0210c51718d682e53210c24d25c5a10a2299b",
-                "reference": "48b0210c51718d682e53210c24d25c5a10a2299b",
+                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/5dbc8959427416b8ee09a100d7a8588c00fb2e26",
+                "reference": "5dbc8959427416b8ee09a100d7a8588c00fb2e26",
                 "shasum": ""
             },
             "require": {
@@ -319,9 +319,9 @@
             ],
             "support": {
                 "issues": "https://github.com/firebase/php-jwt/issues",
-                "source": "https://github.com/firebase/php-jwt/tree/v6.8.0"
+                "source": "https://github.com/firebase/php-jwt/tree/v6.8.1"
             },
-            "time": "2023-06-20T16:45:35+00:00"
+            "time": "2023-07-14T18:33:00+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -712,16 +712,16 @@
         },
         {
             "name": "lion/database",
-            "version": "v8.8.1",
+            "version": "v8.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/database.git",
-                "reference": "00194eabc8c34c96edb35e1c1e47632ff35c00a5"
+                "reference": "061f4800aabe6b8b139aaf5cbb0759d5877aae8d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/database/zipball/00194eabc8c34c96edb35e1c1e47632ff35c00a5",
-                "reference": "00194eabc8c34c96edb35e1c1e47632ff35c00a5",
+                "url": "https://api.github.com/repos/lion-packages/database/zipball/061f4800aabe6b8b139aaf5cbb0759d5877aae8d",
+                "reference": "061f4800aabe6b8b139aaf5cbb0759d5877aae8d",
                 "shasum": ""
             },
             "require": {
@@ -740,9 +740,9 @@
             "description": "Package in charge of the generation and execution of processes with databases",
             "support": {
                 "issues": "https://github.com/lion-packages/database/issues",
-                "source": "https://github.com/lion-packages/database/tree/v8.8.1"
+                "source": "https://github.com/lion-packages/database/tree/v8.8.2"
             },
-            "time": "2023-07-13T18:18:42+00:00"
+            "time": "2023-07-15T15:44:10+00:00"
         },
         {
             "name": "lion/files",
