@@ -4,6 +4,7 @@
 
 ### Added
 - command to export databases (db:export) has been added
+- migrations have been added
 
 ### Changed
 - routes have been validated to display routes from the console

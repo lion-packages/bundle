@@ -40,7 +40,7 @@ class ExportDatabaseCommand extends Command {
             $file_name = "{$info['dbname']}_{$actual_date}.sql";
             kernel->execute("mysqldump -h {$info['host']} --user='{$info['user']}' --password='{$info['password']}' --routines --triggers --events --add-drop-table --dump-date --hex-blob --order-by-primary --single-transaction --disable-keys --add-drop-database {$info['dbname']} > {$path}{$file_name}");
             $output->writeln($this->successOutput("DATABASE: {$info['dbname']}"));
-            $output->writeln($this->warningOutput("DATABASE: exported database in ./storage/backups/database/{$info['dbname']}_{$actual_date}.sql"));
+            $output->writeln($this->warningOutput("DATABASE: exported database in /storage/backups/database/{$info['dbname']}_{$actual_date}.sql"));
         }
 
 		return Command::SUCCESS;
