@@ -1,5 +1,16 @@
 # Release Notes
 
+## [v14.29.0](https://github.com/Lion-Packages/framework/compare/v14.28.1...v14.29.0) (2023-07-20)
+
+### Changed
+- output format for rules have been modified
+- RSA route settings have been updated
+- resource responses have been modified
+- initialization in lion file has been modified
+
+### Refactoring
+- command has been renamed SSHFileCommand SHFileCommand
+
 ## [v14.28.1](https://github.com/Lion-Packages/framework/compare/v14.28.0...v14.28.1) (2023-07-15)
 
 ### Added
