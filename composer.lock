@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c43847a4f6dce6b560cad1946ab7bb48",
+    "content-hash": "59c8b3685e77e40c882e346005cd3a52",
     "packages": [
         {
             "name": "cboden/ratchet",
@@ -921,16 +921,16 @@
         },
         {
             "name": "lion/security",
-            "version": "v6.12.0",
+            "version": "v7.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Lion-Packages/security.git",
-                "reference": "7d67cec7d1b9519fe085639fddfe89c08d2fbb2b"
+                "url": "https://github.com/lion-packages/security.git",
+                "reference": "4d9e7519263692b314d90573245e8fc46bb9d21a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Lion-Packages/security/zipball/7d67cec7d1b9519fe085639fddfe89c08d2fbb2b",
-                "reference": "7d67cec7d1b9519fe085639fddfe89c08d2fbb2b",
+                "url": "https://api.github.com/repos/lion-packages/security/zipball/4d9e7519263692b314d90573245e8fc46bb9d21a",
+                "reference": "4d9e7519263692b314d90573245e8fc46bb9d21a",
                 "shasum": ""
             },
             "require": {
@@ -951,10 +951,10 @@
             ],
             "description": "Library created with the function of implementing AES, RSA and JWT Security functions for PHP.",
             "support": {
-                "issues": "https://github.com/Lion-Packages/security/issues",
-                "source": "https://github.com/Lion-Packages/security/tree/v6.12.0"
+                "issues": "https://github.com/lion-packages/security/issues",
+                "source": "https://github.com/lion-packages/security/tree/v7.0.0"
             },
-            "time": "2023-05-31T21:38:23+00:00"
+            "time": "2023-07-20T17:01:15+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -4687,16 +4687,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "10.2.5",
+            "version": "10.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "15a89f123d8ca9c1e1598d6d87a56a8bf28c72cd"
+                "reference": "1c17815c129f133f3019cc18e8d0c8622e6d9bcd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/15a89f123d8ca9c1e1598d6d87a56a8bf28c72cd",
-                "reference": "15a89f123d8ca9c1e1598d6d87a56a8bf28c72cd",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/1c17815c129f133f3019cc18e8d0c8622e6d9bcd",
+                "reference": "1c17815c129f133f3019cc18e8d0c8622e6d9bcd",
                 "shasum": ""
             },
             "require": {
@@ -4768,7 +4768,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.2.5"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.2.6"
             },
             "funding": [
                 {
@@ -4784,7 +4784,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-07-14T04:18:47+00:00"
+            "time": "2023-07-17T12:08:28+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -5296,16 +5296,16 @@
         },
         {
             "name": "sebastian/global-state",
-            "version": "6.0.0",
+            "version": "6.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/global-state.git",
-                "reference": "aab257c712de87b90194febd52e4d184551c2d44"
+                "reference": "7ea9ead78f6d380d2a667864c132c2f7b83055e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/global-state/zipball/aab257c712de87b90194febd52e4d184551c2d44",
-                "reference": "aab257c712de87b90194febd52e4d184551c2d44",
+                "url": "https://api.github.com/repos/sebastianbergmann/global-state/zipball/7ea9ead78f6d380d2a667864c132c2f7b83055e4",
+                "reference": "7ea9ead78f6d380d2a667864c132c2f7b83055e4",
                 "shasum": ""
             },
             "require": {
@@ -5345,7 +5345,8 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/global-state/issues",
-                "source": "https://github.com/sebastianbergmann/global-state/tree/6.0.0"
+                "security": "https://github.com/sebastianbergmann/global-state/security/policy",
+                "source": "https://github.com/sebastianbergmann/global-state/tree/6.0.1"
             },
             "funding": [
                 {
@@ -5353,7 +5354,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-02-03T07:07:38+00:00"
+            "time": "2023-07-19T07:19:23+00:00"
         },
         {
             "name": "sebastian/lines-of-code",
