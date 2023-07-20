@@ -43,7 +43,7 @@ class TraitCommand extends Command {
         $this->force();
         $this->close();
 
-        $output->writeln($this->warningOutput("\t>>  TRAIT: {$trait}"));
+        $output->writeln($this->warningOutput("\t>>  TRAIT: {$list['class']}"));
         $output->writeln($this->successOutput("\t>>  TRAIT: The '{$list['namespace']}\\{$list['class']}' trait has been generated"));
         return Command::SUCCESS;
     }
