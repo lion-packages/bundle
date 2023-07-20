@@ -54,6 +54,7 @@ $routes = (array) json_decode(request->routes);
 array_pop($routes);
 $rules = require_once("../../routes/rules.php");
 $config_middleware = require_once("../../config/middleware.php");
+$config_middleware = [...$config_middleware['framework'], ...$config_middleware['app']];
 $rows = [];
 
 foreach ($routes as $route => $methods) {
