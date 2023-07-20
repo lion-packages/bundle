@@ -9,11 +9,11 @@ class SecurityController {
     private object $rsa_data;
 
 	public function __construct() {
-        RSA::$url_path = env->RSA_URL_PATH === "" ? storage_path("keys/") : env->RSA_URL_PATH;
+        RSA::setPath(env->RSA_URL_PATH === "" ? storage_path("keys/") : env->RSA_URL_PATH);
 	}
 
 	public function keys(string $path): SecurityController {
-		RSA::$url_path = storage_path($path);
+		RSA::setPath(storage_path($path));
         return $this;
 	}
 

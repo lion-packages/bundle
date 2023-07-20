@@ -31,7 +31,7 @@
 
             axios.post("{{ api }}/api/auth/login", form, {
                 headers: {
-                    "content-Type": "multipart/form-data"
+                    "Content-Type": "multipart/form-data"
                 }
             }).then(res => {
                 alert(`status: ${res.data.status} | message: ${res.data.message}`);

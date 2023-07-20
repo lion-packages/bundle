@@ -34,7 +34,7 @@
 
             axios.post("{{ api }}/api/user-registration", form, {
                 headers: {
-                    "content-Type": "multipart/form-data"
+                    "Content-Type": "multipart/form-data"
                 }
             }).then(res => {
                 // console.log(res.data);

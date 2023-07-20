@@ -34,17 +34,17 @@ class GenerateJWTCommand extends Command {
 
     protected function execute(InputInterface $input, OutputInterface $output) {
         $path = $input->getOption("path");
-        if ($path != null) RSA::$url_path = $path;
+        if ($path != null) RSA::setPath($path);
 
         $jwt = JWT::encode([
             'session' => $input->getArgument('session') === "true" ? true : false,
             'system' => "Lion-Framework",
             'autor' => "Sergio Leon",
-            'github' => "https://github.com/Sleon4"
+            'github' => "https://github.com/lion-packages"
         ]);
 
         $output->writeln($this->warningOutput("\t>>  TOKEN: JWT created successfully"));
-        $output->writeln($this->successOutput("\t>>  TOKEN: {$jwt}"));
+        $output->writeln($this->successOutput("\t>>  TOKEN: {$jwt->data->jwt}"));
         return Command::SUCCESS;
     }
 

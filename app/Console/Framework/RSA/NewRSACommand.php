@@ -31,8 +31,8 @@ class NewRSACommand extends Command {
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
         $path = $input->getOption('path');
-        RSA::$url_path = $path === null ? RSA::$url_path : storage_path($path, false);
-		Store::folder(RSA::$url_path);
+        RSA::setPath($path === null ? RSA::getPath() : storage_path($path, false));
+		Store::folder(RSA::getPath());
 		RSA::createKeys();
 
         if (isSuccess(Store::exist(".rnd"))) {
@@ -40,8 +40,8 @@ class NewRSACommand extends Command {
         }
 
         $output->writeln($this->warningOutput("\t>>  RSA KEYS: public and private"));
-        $output->writeln($this->successOutput("\t>>  RSA KEYS: Exported in " . RSA::$url_path . "public.key"));
-        $output->writeln($this->successOutput("\t>>  RSA KEYS: Exported in " . RSA::$url_path . "private.key"));
+        $output->writeln($this->successOutput("\t>>  RSA KEYS: Exported in " . RSA::getPath() . "public.key"));
+        $output->writeln($this->successOutput("\t>>  RSA KEYS: Exported in " . RSA::getPath() . "private.key"));
 		return Command::SUCCESS;
 	}
 

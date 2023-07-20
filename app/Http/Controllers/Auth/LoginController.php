@@ -34,7 +34,7 @@ class LoginController {
             return error(500, "the keys do not exist");
         }
 
-        RSA::$url_path = $path;
+        RSA::setPath($path);
         return success(200, "Welcome: {$session->users_name} {$session->users_last_name}", [
             'jwt' => JWT::encode([
                 'session' => true,

@@ -28,7 +28,7 @@ class NewAESCommand extends Command {
 
     protected function execute(InputInterface $input, OutputInterface $output) {
         $generateKeys = function() {
-            $items = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@-_/';
+            $items = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@-_/*{}[].,#$&';
             $bytes = random_bytes(16);
             $longitud = strlen($items);
             $key = '';

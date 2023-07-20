@@ -46,7 +46,7 @@
 
             axios.post("{{ host }}/Git.php", form, {
                 headers: {
-                    "content-Type": "multipart/form-data"
+                    "Content-Type": "multipart/form-data"
                 }
             }).then(res => {
                 // console.log(res.data)
@@ -64,7 +64,7 @@
 
             axios.post("{{ host }}/http.php", form, {
                 headers: {
-                    "content-Type": "multipart/form-data"
+                    "Content-Type": "multipart/form-data"
                 }
             }).then(res => {
                 commandInput.disabled = true;
@@ -86,9 +86,11 @@
 
         document.getElementById("form-terminal").addEventListener("submit", (e) => {
             e.preventDefault();
+            commandInput.disabled = true;
 
             if (["cls", "clear"].includes(commandInput.value.trim())) {
                 commandInput.value = "";
+                commandInput.disabled = false;
                 term.clear();
                 return false;
             }

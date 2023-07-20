@@ -246,7 +246,7 @@
 
             axios.post("{{ host }}/Routes.php", form, {
                 headers: {
-                    "content-Type": "multipart/form-data"
+                    "Content-Type": "multipart/form-data"
                 }
             }).then(res => {
                 // console.log(res.data.data.routes);

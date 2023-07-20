@@ -41,7 +41,7 @@ include_once(__DIR__ . "/../config/helpers.php");
  **/
 
 if (env->RSA_URL_PATH != '') {
-    \LionSecurity\RSA::$url_path = storage_path(env->RSA_URL_PATH);
+    \LionSecurity\RSA::setPath(storage_path(env->RSA_URL_PATH));
 }
 
 /**
