@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Framework\SSH;
+namespace App\Console\Framework\SH;
 
 use App\Traits\Framework\ClassPath;
 use App\Traits\Framework\ConsoleOutput;
@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class SSHFileCommand extends Command {
+class SHFileCommand extends Command {
 
     use ClassPath, ConsoleOutput;
 

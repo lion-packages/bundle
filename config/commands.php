@@ -62,7 +62,7 @@ return [
         \App\Console\Framework\Sockets\NewSocketCommand::class,
         \App\Console\Framework\Sockets\ServerSocketCommand::class,
         // SSH -------------------------------------------------------------------------------------
-        \App\Console\Framework\SSH\SSHFileCommand::class,
+        \App\Console\Framework\SH\SHFileCommand::class,
         // TOKEN -----------------------------------------------------------------------------------
         \App\Console\Framework\Token\GenerateJWTCommand::class,
     ]
