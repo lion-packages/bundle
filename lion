@@ -21,7 +21,7 @@ require_once("vendor/autoload.php");
  * ------------------------------------------------------------------------------
  **/
 
-(Dotenv\Dotenv::createImmutable(__DIR__))->load();
+\App\Http\Kernel::getInstance()->loadDotEnv(__DIR__);
 
 /**
  * ------------------------------------------------------------------------------
@@ -40,7 +40,7 @@ include_once(__DIR__ . "/config/helpers.php");
  **/
 
 if (env->RSA_URL_PATH != '') {
-    LionSecurity\RSA::setPath(storage_path(env->RSA_URL_PATH, false));
+    \LionSecurity\RSA::setPath(storage_path(env->RSA_URL_PATH, false));
 }
 
 /**
@@ -51,14 +51,9 @@ if (env->RSA_URL_PATH != '') {
  * ------------------------------------------------------------------------------
  **/
 
-$responseDatabase = \LionDatabase\Driver::run(
-    include_once("./config/database.php")
+\App\Http\Kernel::getInstance()->loadConnecions(
+    require_once("./config/database.php")
 );
-
-if (isError($responseDatabase)) {
-    logger($responseDatabase->message, 'error', [], false);
-    finish($responseDatabase->message);
-}
 
 /**
  * ------------------------------------------------------------------------------
@@ -68,14 +63,9 @@ if (isError($responseDatabase)) {
  * ------------------------------------------------------------------------------
  **/
 
-$response_email = \LionMailer\MailService::run(
-    require_once("config/email.php")
+\App\Http\Kernel::getInstance()->loadAccounts(
+    require_once("./config/email.php")
 );
-
-if (isError($response_email)) {
-    logger($response_email->message, 'error');
-    finish($response_email);
-}
 
 /**
  * ------------------------------------------------------------------------------
