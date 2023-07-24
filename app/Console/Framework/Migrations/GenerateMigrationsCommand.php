@@ -105,19 +105,21 @@ class GenerateMigrationsCommand extends Command {
                             ->getAll();
 
                         $foreigns = DB::connection($connection['dbname'])
-                            ->fetchMode(\PDO::FETCH_ASSOC)
                             ->table("INFORMATION_SCHEMA.KEY_COLUMN_USAGE", true)
                             ->select("COLUMN_NAME", "REFERENCED_TABLE_NAME", "REFERENCED_COLUMN_NAME")
                             ->where(DB::equalTo("TABLE_SCHEMA"), $connection['dbname'])
                             ->and(DB::equalTo("TABLE_NAME"), $table_name)
                             ->and("REFERENCED_TABLE_NAME")
                             ->isNotNull()
+                            ->fetchMode(\PDO::FETCH_ASSOC)
                             ->getAll();
-                        $foreigns = !isset($foreigns->status) ? arr->of($foreigns)->keyBy('COLUMN_NAME') : [];
+                        $foreigns = !isset($foreigns->status)
+                            ? arr->of(!isset($foreigns[0]) ? [$foreigns] : $foreigns)->keyBy('COLUMN_NAME')
+                            : [];
                         $size_columns_db = arr->of($columns_db)->length();
                         $columns = "";
 
-                        $addColumns = function(string $columns, int $key, object $column_db, ?object $info_foreign) use ($setQuotes, $new_table_name, $size_columns_db): string {
+                        $addColumns = function(string $columns, int $key, object $column_db, ?array $info_foreign) use ($setQuotes, $new_table_name, $size_columns_db): string {
                             $column_name = str_replace("{$new_table_name}_", "", str->of($column_db->Field)->lower()->get());
                             $type = explode("(", $column_db->Type);
 
@@ -130,7 +132,7 @@ class GenerateMigrationsCommand extends Command {
                             if ($info_foreign === null) {
                                 $column_foreign = null;
                             } else {
-                                $column_foreign = "['table' => '{$info_foreign->REFERENCED_TABLE_NAME}', 'column' => '{$info_foreign->REFERENCED_COLUMN_NAME}']";
+                                $column_foreign = "['table' => '{$info_foreign['REFERENCED_TABLE_NAME']}', 'column' => '{$info_foreign['REFERENCED_COLUMN_NAME']}']";
                             }
 
                             $array_options = "'type' => '{$column_type}'";
@@ -169,7 +171,8 @@ class GenerateMigrationsCommand extends Command {
                         $path = "database/Migrations/{$db_pascal}/Tables/";
                         Store::folder($path);
                         $migration_name = str->of($path)->concat("Table")->concat($tbl_pascal)->get();
-                        $info_table = DB::connection($connection['dbname'])->fetchMode(\PDO::FETCH_ASSOC)->table($table_name)->select()->limit(0, $limit)->getAll();
+                        $info_table = DB::connection($connection['dbname'])->table($table_name)->select()->limit(0, $limit)->fetchMode(\PDO::FETCH_ASSOC)->getAll();
+                        $info_table = !isset($info_table[0]) ? [$info_table] : $info_table;
 
                         $rows_insert = "";
                         if (!isset($info_table->status)) {

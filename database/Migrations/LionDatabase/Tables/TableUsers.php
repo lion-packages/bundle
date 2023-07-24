@@ -18,7 +18,7 @@ return new class {
 			->table($this->table, true)
 			->create()
 			->column('id', ['type' => 'int', 'primary-key' => true, 'lenght' => 11, 'null' => false, 'auto-increment' => true])
-			->column('idroles', ['type' => 'int', 'null' => false, 'comment' => '', 'default' => ''])
+			->column('idroles', ['type' => 'int', 'null' => false, 'foreign-key' => ['table' => 'roles', 'column' => 'idroles'], 'comment' => '', 'default' => ''])
 			->column('name', ['type' => 'varchar', 'length' => 45, 'null' => false, 'comment' => '', 'default' => ''])
 			->column('last_name', ['type' => 'varchar', 'length' => 45, 'null' => false, 'comment' => '', 'default' => ''])
 			->column('email', ['type' => 'varchar', 'length' => 45, 'null' => false, 'unique' => true, 'comment' => '', 'default' => ''])
@@ -40,7 +40,9 @@ return new class {
 				'users_code',
 				'users_create_at',
 			],
- 			'rows' => []
+ 			'rows' => [
+				[1,1,'Sergio','Leon','sleon@dev.com','0x24327924313024324f454755714b67356234687975463441337a55522e7874724b6e6f3658716f593269613350596e6c4455346673376b675355546d','user-6497cb44a9251','2023-06-25 00:06:12'],
+			]
 		];
 	}
 

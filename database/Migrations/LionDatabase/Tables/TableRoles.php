@@ -30,7 +30,10 @@ return new class {
 				'roles_name',
 				'roles_description',
 			],
- 			'rows' => []
+ 			'rows' => [
+				[1,'Administrator',null],
+				[2,'Client',null],
+			]
 		];
 	}
 
