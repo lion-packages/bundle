@@ -2,6 +2,9 @@
 
 ## [v14.29.1](https://github.com/Lion-Packages/framework/compare/v14.29.0...v14.29.1) (2023-07-24)
 
+### Added
+- echo function has been added to display data from the terminal with output and store the string in logger
+
 ### Changed
 - output to run migrations has been modified
 
