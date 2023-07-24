@@ -2,7 +2,18 @@
 
 namespace App\Traits\Framework;
 
+use Symfony\Component\Console\Output\OutputInterface;
+
 trait ConsoleOutput {
+
+    public function echo(OutputInterface $output, string $message): void {
+        $output->writeln($message);
+
+        logger($message, "error", [
+            'type' => "Console",
+            'proccess' => $this->getDefaultName()
+        ], false);
+    }
 
     public function errorOutput(string $message = ""): string {
         return "\033[0;31m{$message}\033[0m";

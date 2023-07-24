@@ -131,24 +131,18 @@ if (!function_exists('vd')) {
 
 if (!function_exists('logger')) {
     function logger(string $str, string $log_type = 'info', array $data = [], bool $index = true): void {
-        $file_name = "lion-" . Carbon\Carbon::now()->format("Y-m-d") . ".log";
         $path = storage_path("logs/", $index);
-        LionFiles\Store::folder($path);
+        \LionFiles\Store::folder($path);
 
-        $config = isset($_SERVER['REQUEST_URI']) ? [
+        (new \Monolog\Logger('log'))->pushHandler(
+            new \Monolog\Handler\StreamHandler(
+                ($path . "lion-" . \Carbon\Carbon::now()->format("Y-m-d") . ".log"),
+                \Monolog\Level::Debug
+            )
+        )->$log_type(json->encode(!isset($_SERVER['REQUEST_URI']) ? $str : [
             'uri' => $_SERVER['REQUEST_URI'],
             'data' => json->decode($str)
-        ] : [
-            'system' => $data,
-            'data' => json->decode($str)
-        ];
-
-        (new Monolog\Logger('log'))->pushHandler(
-            new Monolog\Handler\StreamHandler(
-                ($path . $file_name),
-                Monolog\Level::Debug
-            )
-        )->$log_type(json->encode($config), $data);
+        ]), $data);
     }
 }
 

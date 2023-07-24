@@ -22,12 +22,12 @@ trait Index {
         }
     }
 
-    public function loadConnecions(array $connections): void {
+    public function loadConnecions(array $connections, array $data = []): void {
         Driver::addLog();
         $response_database = Driver::run($connections);
 
         if (isError($response_database)) {
-            logger($response_database->message, 'error');
+            logger($response_database->message, 'error', $data);
             finish(error(500, $response_database->message));
         }
     }

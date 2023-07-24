@@ -52,7 +52,10 @@ if (env->RSA_URL_PATH != '') {
  **/
 
 \App\Http\Kernel::getInstance()->loadConnecions(
-    require_once("./config/database.php")
+    require_once("./config/database.php"), [
+        'type' => "Console",
+        'proccess' => 'Connection to databases'
+    ]
 );
 
 /**

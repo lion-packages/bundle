@@ -17,29 +17,17 @@ class JWTMiddleware {
 
     private function validateSession($jwt): void {
         if (isError($jwt)) {
-            finish(
-                response
-                    ->code(500)
-                    ->response("session-error", $jwt->message)
-            );
+            finish(response->code(500)->response("session-error", $jwt->message));
         }
 
         if (!isset($jwt->data->session)) {
-            finish(
-                response
-                    ->code(500)
-                    ->response("session-error", 'undefined session')
-            );
+            finish(response->code(500)->response("session-error", 'undefined session'));
         }
     }
 
     public function existence(): void {
         if (!isset($this->headers['Authorization'])) {
-            finish(
-                response
-                    ->code(500)
-                    ->response("session-error", 'The JWT does not exist')
-            );
+            finish(response->code(500)->response("session-error", 'The JWT does not exist'));
         }
     }
 
@@ -48,35 +36,23 @@ class JWTMiddleware {
         $jwt = explode('.', JWT::get());
 
         if (Arr::of($jwt)->length() != 3) {
-            finish(
-                response
-                    ->code(500)
-                    ->response("session-error", 'Invalid JWT')
-            );
+            finish(response->code(500)->response("session-error", 'Invalid JWT'));
         }
 
-        $data = (object) ((object) json->decode(base64_decode($jwt[1])))->data;
+        // $data = (object) ((object) json->decode(base64_decode($jwt[1])))->data;
 
         // if (!isset($data->users_code)) {
-        //     finish(
-        //         response
-        //             ->code(500)
-        //             ->response("session-error", 'Invalid JWT')
-        //     );
+        //     finish(response->code(500)->response("session-error", 'Invalid JWT'));
         // }
 
         // $path = storage_path("keys/{$data->users_code}/");
         // $response = Store::exist($path);
 
         // if (isError($response)) {
-        //     finish(
-        //         response
-        //             ->code(500)
-        //             ->response("session-error", 'Invalid JWT')
-        //     );
+        //     finish(response->code(500)->response("session-error", 'Invalid JWT'));
         // }
 
-        // RSA::$url_path = storage_path($path);
+        // RSA::setPath(storage_path($path));
     }
 
     public function authorize(): void {
@@ -87,18 +63,10 @@ class JWTMiddleware {
             $this->validateSession($jwt);
 
             if (!$jwt->data->session) {
-                finish(
-                    response
-                        ->code(500)
-                        ->response("session-error", 'User not logged in, you must log in')
-                );
+                finish(response->code(500)->response("session-error", 'User not logged in, you must log in'));
             }
         } else {
-            finish(
-                response
-                    ->code(500)
-                    ->response("session-error", 'Invalid JWT')
-            );
+            finish(response->code(500)->response("session-error", 'Invalid JWT'));
         }
     }
 
@@ -110,18 +78,10 @@ class JWTMiddleware {
             $this->validateSession($jwt);
 
             if ($jwt->data->session) {
-                finish(
-                    response
-                        ->code(500)
-                        ->response("session-error", 'User in session, you must close the session')
-                );
+                finish(response->code(500)->response("session-error", 'User in session, you must close the session'));
             }
         } else {
-            finish(
-                response
-                    ->code(500)
-                    ->response("session-error", 'Invalid JWT')
-            );
+            finish(response->code(500)->response("session-error", 'Invalid JWT'));
         }
     }
 
