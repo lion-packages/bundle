@@ -1,5 +1,15 @@
 # Release Notes
 
+## [v14.29.1](https://github.com/Lion-Packages/framework/compare/v14.29.0...v14.29.1) (2023-07-24)
+
+### Changed
+- output to run migrations has been modified
+
+### Fixed
+- fixed validation to add generated elements in migrations
+- validation to generate logs by system functions has been corrected
+- fixed generation of migrations
+
 ## [v14.29.0](https://github.com/Lion-Packages/framework/compare/v14.28.1...v14.29.0) (2023-07-20)
 
 ### Added
