@@ -135,15 +135,20 @@ if (!function_exists('logger')) {
         $path = storage_path("logs/", $index);
         LionFiles\Store::folder($path);
 
+        $config = isset($_SERVER['REQUEST_URI']) ? [
+            'uri' => $_SERVER['REQUEST_URI'],
+            'data' => json->decode($str)
+        ] : [
+            'system' => $data,
+            'data' => json->decode($str)
+        ];
+
         (new Monolog\Logger('log'))->pushHandler(
             new Monolog\Handler\StreamHandler(
                 ($path . $file_name),
                 Monolog\Level::Debug
             )
-        )->$log_type(json->encode([
-            'uri' => $_SERVER['REQUEST_URI'],
-            'data' => json->decode($str)
-        ]), $data);
+        )->$log_type(json->encode($config), $data);
     }
 }
 
