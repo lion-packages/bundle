@@ -100,7 +100,7 @@ class FreshMigrationsCommand extends Command {
                 foreach ($this->files[$keyFiles]["tables"] as $key => $class) {
                     $info = $class['class']->getMigration();
                     $db_pascal = str->of($info['connection'])->replace("-", " ")->replace("_", " ")->pascal()->trim()->get();
-                    $migration = str->of($class['file'])->replace("database/Migrations/{$db_pascal}/", "")->replace(".php", "")->get();
+                    $migration = str->of($class['file'])->replace("database/Migrations/{$db_pascal}/", "")->replace(".php", "")->replace("tables/", "Tables/")->get();
 
                     $res = $class['class']->execute();
                     if (isError($res)) {
@@ -116,7 +116,7 @@ class FreshMigrationsCommand extends Command {
                         if (isError($res)) {
                             $output->writeln($this->errorOutput("\t>>  BULKING: Error executing bulk migration of '{$migration}', {$res->message} \u{2717}"));
                         } else {
-                            $output->writeln($this->successOutput("\t>>  BULKING: Insert function of '{$migration}' migration executed correctly \u{2713}"));
+                            $output->writeln($this->infoOutput("\t>>  BULKING: Insert function of '{$migration}' migration executed correctly \u{2713}"));
                         }
                     }
                 }
@@ -126,7 +126,7 @@ class FreshMigrationsCommand extends Command {
                 foreach ($this->files[$keyFiles]["views"] as $key => $view) {
                     $info = $view['class']->getMigration();
                     $db_pascal = str->of($info['connection'])->replace("-", " ")->replace("_", " ")->pascal()->trim()->get();
-                    $migration = str->of($view['file'])->replace("database/Migrations/{$db_pascal}/", "")->replace(".php", "")->get();
+                    $migration = str->of($view['file'])->replace("database/Migrations/{$db_pascal}/", "")->replace(".php", "")->replace("views/", "Views/")->get();
 
                     // execute function process execute
                     $res = $view['class']->execute();
@@ -142,7 +142,7 @@ class FreshMigrationsCommand extends Command {
                 foreach ($this->files[$keyFiles]["procedures"] as $key => $procedure) {
                     $info = $procedure['class']->getMigration();
                     $db_pascal = str->of($info['connection'])->replace("-", " ")->replace("_", " ")->pascal()->trim()->get();
-                    $migration = str->of($procedure['file'])->replace("database/Migrations/{$db_pascal}/", "")->replace(".php", "")->get();
+                    $migration = str->of($procedure['file'])->replace("database/Migrations/{$db_pascal}/", "")->replace(".php", "")->replace("procedures/", "Procedures/")->get();
 
                     // execute function process execute
                     $res = $procedure['class']->execute();
@@ -159,7 +159,7 @@ class FreshMigrationsCommand extends Command {
                         if (isError($res)) {
                             $output->writeln($this->errorOutput("\t>>  INSERT: An error occurred while executing the insert function of '{$migration}' migration, {$res->message} \u{2717}"));
                         } else {
-                            $output->writeln($this->successOutput("\t>>  INSERT: Insert function of '{$migration}' migration executed correctly \u{2713}"));
+                            $output->writeln($this->infoOutput("\t>>  INSERT: Insert function of '{$migration}' migration executed correctly \u{2713}"));
                         }
                     }
                 }

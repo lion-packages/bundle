@@ -129,9 +129,8 @@ class GenerateMigrationsCommand extends Command {
                             $column_unique = ($column_db->Key === "UNI" ? true : false);
                             $column_options = (isset($type[1]) ? explode(")", $type[1])[0] : "");
 
-                            if ($info_foreign === null) {
-                                $column_foreign = null;
-                            } else {
+                            $column_foreign = null;
+                            if ($info_foreign != null) {
                                 $column_foreign = "['table' => '{$info_foreign['REFERENCED_TABLE_NAME']}', 'column' => '{$info_foreign['REFERENCED_COLUMN_NAME']}']";
                             }
 
