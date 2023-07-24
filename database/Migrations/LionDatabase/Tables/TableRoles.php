@@ -10,7 +10,7 @@ return new class {
 	private string $table = "roles";
 
 	public function getMigration(): array {
-		return ["type" => "TABLE", "table" => $this->table, "connection" => env->DB_NAME, "index" => 1];
+		return ["type" => "TABLE", "table" => $this->table, "connection" => env->DB_NAME, "index" => null];
 	}
 
 	public function execute(): object {
@@ -30,10 +30,7 @@ return new class {
 				'roles_name',
 				'roles_description',
 			],
- 			'rows' => [
-				[1,'Administrator',null],
-				[2,'Client',null],
-			]
+ 			'rows' => []
 		];
 	}
 
