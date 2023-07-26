@@ -58,9 +58,8 @@ $config_middleware = [...$config_middleware['framework'], ...$config_middleware[
 $rows = [];
 
 foreach ($routes as $route => $methods) {
-    $code = uniqid();
-
     foreach ($methods as $keyMethods => $method) {
+        $code = uniqid();
         $route_url = str->of("/{$route}")->replace("//", "/")->get();
 
         if ($method->handler->request != false) {
