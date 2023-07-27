@@ -43,7 +43,7 @@ class PostmanCollectionCommand extends Command {
 
         Store::folder($path);
         $this->new("{$path}{$this->json_name}", "json");
-        $this->add(json->encode([
+        $this->add(json_encode([
             'variable' => [
                 ['key' => 'base_url', 'value' => env->SERVER_URL, 'type' => "string"]
             ],
@@ -53,7 +53,7 @@ class PostmanCollectionCommand extends Command {
             ],
             'item' => $this->createCollection($items),
             'event' => []
-        ]));
+        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         $this->force();
         $this->close();
 
