@@ -1,12 +1,16 @@
 # Release Notes
 
-## [v14.29.1](https://github.com/Lion-Packages/framework/compare/v14.29.0...v14.29.1) (2023-07-24)
+## [v14.29.1](https://github.com/Lion-Packages/framework/compare/v14.29.0...v14.29.1) (2023-07-27)
 
 ### Added
 - echo function has been added to display data from the terminal with output and store the string in logger
+- multiple requests with the same name for collections in postman have been supported
 
 ### Changed
 - output to run migrations has been modified
+- lion/route library v8.7.0 has been updated
+- resource has been updated to display available routes
+- json output format has been modified to generate postman collections
 
 ### Fixed
 - fixed validation to add generated elements in migrations
