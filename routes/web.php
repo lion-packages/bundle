@@ -19,7 +19,7 @@ Route::prefix('api', function() {
     Route::post("user-registration", [UsersController::class, 'createUsers']);
 
     Route::prefix('auth', function() {
-        Route::post('login', [LoginController::class, 'auth']);
+        Route::match(["get", "post"], 'login', [LoginController::class, 'auth']);
 
         Route::middleware(['jwt-without-signature', 'jwt-authorize', 'session'], function() {
             Route::match(['get', 'post'], 'refresh', [SessionController::class, 'refresh']);

@@ -2,9 +2,6 @@
 
 namespace App\Traits\Framework;
 
-use LionHelpers\Arr;
-use LionHelpers\Str;
-
 trait PostmanCollector {
 
     private static array $postman = [];
@@ -16,7 +13,6 @@ trait PostmanCollector {
             'host' => [
                 'url' => $host,
                 'params' => [
-                    // 'protocol' => "",
                     'host' => ["{{base_url}}"]
                 ]
             ]
@@ -53,27 +49,6 @@ trait PostmanCollector {
         }
 
         return ['raw' => $params, 'query' => $query];
-    }
-
-    private static function createPort(): void {
-        $after_host = Str::of(self::$postman['params']['host']['url'])->after("://");
-        $after_host = Str::of($after_host)->after(":");
-
-        if (preg_match("/^([0-9]+)(\s[0-9]+)*$/", $after_host)) {
-            self::$postman['params']['host']['params']['port'] = $after_host;
-        }
-    }
-
-    private static function createHost(): void {
-        $after_host = Str::of(self::$postman['params']['host']['url'])->after("://");
-        $before_host = Str::of($after_host)->before(":");
-        self::$postman['params']['host']['params']['host'] = explode(".", $before_host);
-    }
-
-    private static function createProtocol(): void {
-        self::$postman['params']['host']['params']['protocol'] = Str::of(
-            self::$postman['params']['host']['url']
-        )->before("://");
     }
 
     private static function addParams(string $method, array $params): array {
@@ -140,13 +115,12 @@ trait PostmanCollector {
                 'header' => [
                     [
                         "key" => "Content-Type",
-                        "value" => "application/json",
-                        'type' => "text"
+                        "value" => "application/json"
                     ]
                 ],
                 'url' => [
+                    ...self::$postman['params']['host']['params'],
                     'raw' => $new_route,
-                    'host' => $route === "/" ? ["{{base_url}}"] : ["{{base_url}}/"],
                     'path' => $route === "/" ? [""] : explode("/", $route),
                     'query' => $create_params['query']
                 ],
@@ -163,8 +137,7 @@ trait PostmanCollector {
                 'header' => [
                     [
                         'key' => "Content-Type",
-                        'value' => "application/json",
-                        'type' => "text"
+                        'value' => "application/json"
                     ]
                 ],
                 'body' => [
@@ -219,8 +192,7 @@ trait PostmanCollector {
                 'header' => [
                     [
                         'key' => "Content-Type",
-                        'value' => "application/json",
-                        'type' => "text"
+                        'value' => "application/json"
                     ]
                 ],
                 'body' => [
@@ -261,9 +233,10 @@ trait PostmanCollector {
         foreach($routes as $route_url => $all_routes) {
             foreach ($all_routes as $route_method => $route_info) {
                 $params = [];
+                $path_route = $route_url === "/" ? "/" : "/{$route_url}";
 
-                if (isset($rules[$route_method][$route_url])) {
-                    $params = $rules[$route_method][$route_url];
+                if (isset($rules[$route_method][$path_route])) {
+                    $params = $rules[$route_method][$path_route];
                 }
 
                 self::$postman['params']['routes'][] = [
@@ -273,9 +246,11 @@ trait PostmanCollector {
                 ];
             }
         }
+
+        self::generateItems();
     }
 
-    public static function generateItems() {
+    private static function generateItems() {
         foreach (self::$postman['params']['routes'] as $key_route => $route) {
             $split_all = null;
 
@@ -342,10 +317,7 @@ trait PostmanCollector {
                         );
                     }
                 } else {
-                    $result[$json['name']] = array_merge_recursive(
-                        $result[$json['name']],
-                        $json
-                    );
+                    $result[] = $json;
                 }
             } else {
                 $result[$json['name']] = $json;
@@ -373,7 +345,7 @@ trait PostmanCollector {
         $new_items = [];
 
         foreach ($items as $key => $route) {
-            $new_items = Arr::of($new_items)->prepend($route);
+            $new_items = arr->of($new_items)->prepend($route);
         }
 
         return $new_items;

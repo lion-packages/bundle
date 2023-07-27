@@ -37,8 +37,6 @@ class PostmanCollectionCommand extends Command {
     protected function execute(InputInterface $input, OutputInterface $output) {
         $rules = require_once("./routes/rules.php");
         $this->addRoutes($this->routes, $rules);
-        $this->generateItems();
-        $items = $this->getItems();
         $path = storage_path("postman/", false);
 
         Store::folder($path);
@@ -51,7 +49,7 @@ class PostmanCollectionCommand extends Command {
                 'name' => env->APP_NAME,
                 'schema' => 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json'
             ],
-            'item' => $this->createCollection($items),
+            'item' => $this->createCollection($this->getItems()),
             'event' => []
         ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         $this->force();
