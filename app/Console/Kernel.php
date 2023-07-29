@@ -34,6 +34,10 @@ class Kernel {
         return isset($this->socket_commands[$class_name]) ? $this->socket_commands[$class_name] : false;
     }
 
+    public function getSockets(): array {
+        return $this->socket_commands;
+    }
+
     public function execute(string $command, bool $index = true): array {
         $data = [];
 

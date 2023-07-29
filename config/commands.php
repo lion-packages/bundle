@@ -60,6 +60,7 @@ return [
         // RSA -------------------------------------------------------------------------------------
         \App\Console\Framework\RSA\NewRSACommand::class,
         // SOCKETS ---------------------------------------------------------------------------------
+        \App\Console\Framework\Sockets\LogsSocket::class,
         \App\Console\Framework\Sockets\NewSocketCommand::class,
         \App\Console\Framework\Sockets\ServerSocketCommand::class,
         // SSH -------------------------------------------------------------------------------------

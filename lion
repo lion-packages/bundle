@@ -80,7 +80,7 @@ if (env->RSA_URL_PATH != '') {
 
 date_default_timezone_set(env->SERVER_DATE_TIMEZONE);
 $commands = include_once("./config/commands.php");
-$socket_commands = include_once("./config/socket-commands.php");
+$socket_commands = include_once("./config/sockets.php");
 
 $kernel = \App\Console\Kernel::getInstance();
 
