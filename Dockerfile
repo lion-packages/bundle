@@ -39,7 +39,9 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 CMD chsh -s $(which zsh) \
     && zsh \
-    && composer install \
     && touch storage/logs/server/web-server.log \
     && touch storage/logs/supervisord/supervisord.log \
+    && php lion socket:logs \
+    && php lion resource:logs \
+    && composer install \
     && /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
