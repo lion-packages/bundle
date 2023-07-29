@@ -40,11 +40,6 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 CMD chsh -s $(which zsh) \
     && zsh \
     && composer install \
-    && touch storage/logs/resources/console-web.log \
-    && touch storage/logs/resources/login.log \
-    && touch storage/logs/resources/user-registration.log \
-    && touch storage/logs/resources/available-urls.log \
     && touch storage/logs/server/web-server.log \
-    && touch storage/logs/sockets/socket.log \
     && touch storage/logs/supervisord/supervisord.log \
     && /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
