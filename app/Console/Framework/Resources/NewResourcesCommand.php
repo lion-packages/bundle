@@ -8,6 +8,7 @@ use LionFiles\Store;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use \ZipArchive;
 
@@ -28,36 +29,111 @@ class NewResourcesCommand extends Command {
     protected function configure() {
         $this
             ->setDescription("Command required to generate a resource")
-            ->addArgument('resource', InputArgument::OPTIONAL, 'Resource name', "example");
+            ->addArgument('resource', InputArgument::OPTIONAL, 'Resource name', "example")
+            ->addOption('type', 't', InputOption::VALUE_OPTIONAL, 'Do you want to create a different resource? (vite/twig)', 'vite')
+            ->addOption('template', 'm', InputOption::VALUE_OPTIONAL, 'Do you want a template? (Vanilla/Vue/React/Preact/Lit/Svelte/Solid/Qwik)', 'react');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $resource = $input->getArgument("resource");
+        $rsc = str->of($input->getArgument("resource"))->trim()->replace("_", "-")->replace(" ", "-")->get();
+        $type = $input->getOption('type');
 
-        // unzip template in zip format
-        $zip = new ZipArchive();
-        $zip->open(storage_path("framework/templates/twig/example.zip", false));
-        $zip->extractTo("resources/");
-        $zip->close();
+        // check if the resource exists before generating it
+        // if (isSuccess(Store::exist("resources/{$rsc}/"))) {
+        //     $output->writeln($this->errorOutput("\t>>  RESOURCE: a resource with this name already exists"));
+        //     return Command::FAILURE;
+        // }
 
-        // rename resource folder
-        $output->writeln($this->warningOutput("\t>>  RESOURCES: {$resource}"));
+        $resources = kernel->getResources();
+        $supervisord = Store::get("supervisord.conf");
+        $conf = [];
+        $info = [];
 
-        if (is_dir("resources/example/")) {
-            if (isSuccess(Store::exist("resources/{$resource}/"))) {
-                $output->writeln($this->errorOutput("\t>>  RESOURCES: A resource with this name already exists"));
-                return Command::FAILURE;
-            } else {
-                if (rename("resources/example/", "resources/{$resource}/")) {
-                    $output->writeln($this->successOutput("\t>>  RESOURCES: The 'resources/{$resource}/' resource has been generated"));
-                    return Command::SUCCESS;
-                } else {
-                    $output->writeln($this->errorOutput("\t>>  RESOURCES: Failed to generate resource"));
+        if ($type === "vite") {
+            $tmp = $input->getOption('template');
+            kernel->execute("cd resources/ && npm init vite@latest {$rsc} -- --template {$tmp} && cd {$rsc}/ && npm i", false);
+
+            $resources['app'][$rsc] = [
+                'type' => 'vite',
+                'host' => '0.0.0.0',
+                'path' => "{$rsc}/"
+            ];
+        } elseif ($type === 'twig') {
+            // unzip template in zip format
+            $zip = new ZipArchive();
+            $zip->open(storage_path("framework/templates/twig/example.zip", false));
+            $zip->extractTo("resources/");
+            $zip->close();
+
+            // rename resource folder
+            $output->writeln($this->warningOutput("\t>>  RESOURCE: {$rsc}"));
+
+            if (is_dir("resources/example/")) {
+                if (!rename("resources/example/", "resources/{$rsc}/")) {
+                    $output->writeln($this->errorOutput("\t>>  RESOURCE: failed to generate resource"));
                     return Command::FAILURE;
                 }
             }
+
+            $resources['app'][$rsc] = [
+                'type' => 'twig',
+                'host' => '0.0.0.0',
+                'port' => 7000,
+                'path' => "{$rsc}/"
+            ];
+        } else {
+            $output->writeln($this->errorOutput("\t>>  RESOURCE: The requested resource does not exist"));
+            return Command::INVALID;
         }
 
+        // add logger
+        $this->new("storage/logs/resources/{$rsc}", "log");
+        $this->force();
+        $this->close();
+
+        // add resources
+        file_put_contents("config/resources.php",
+            str->of("<?php")->ln()->ln()
+            ->concat("/**")->ln()
+            ->concat(" * ------------------------------------------------------------------------------")->ln()
+            ->concat(" * Resources for developing your web application")->ln()
+            ->concat(" * ------------------------------------------------------------------------------")->ln()
+            ->concat(" * List of available resources")->ln()
+            ->concat(" * ------------------------------------------------------------------------------")->ln()
+            ->concat(" **/")->ln()->ln()
+            ->concat("return")
+            ->concat(var_export($resources, true))
+            ->concat(";")
+            ->replace("array", "")
+            ->replace("(", "[")
+            ->replace(")", "]")
+            ->replace("=> \n   [", "=> [")
+            ->replace("=> \n     [", "=> [")
+            ->replace("  '", "    '")
+            ->replace("      '", "        '")
+            ->replace("  ],", "    ],")
+            ->replace("      ],", "        ],")
+            ->replace("          '", "            '")
+            ->get()
+        );
+
+        // add supervisord
+        $conf = [
+            "command=php lion resource:serve {$rsc}",
+            'directory=/var/www/html',
+            'autostart=true',
+            'autorestart=true',
+            'redirect_stderr=true',
+            "stdout_logfile=/var/www/html/storage/logs/resources/{$rsc}.log"
+        ];
+
+        file_put_contents("supervisord.conf",
+            str->of($supervisord)
+            ->replace("; resources", "; resources\n" . arr->of($conf)->join("\n") . "\n")
+            ->get()
+        );
+
+        $output->writeln($this->successOutput("\t>>  RESOURCE: the '{$rsc}/' resource has been generated"));
         return Command::FAILURE;
     }
 

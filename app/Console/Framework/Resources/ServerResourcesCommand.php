@@ -44,8 +44,7 @@ class ServerResourcesCommand extends Command {
             $output->writeln($this->warningOutput("\nPress Ctrl+C to stop the server\n"));
             kernel->execute("php -S {$url} -t {$rsc['path']}", false);
         } elseif ($rsc['type'] === "vite") {
-            $cmd = isset($rsc['command']) ? $rsc['command'] : "npm run dev";
-            kernel->execute("cd {$rsc['path']} && {$cmd}", false);
+            kernel->execute("cd resources/{$rsc['path']} && npm run dev", false);
         } else {
             $output->writeln($this->errorOutput("\t>>  RESOURCE: The requested resource does not exist"));
             return Command::INVALID;
