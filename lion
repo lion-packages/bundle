@@ -79,14 +79,15 @@ if (env->RSA_URL_PATH != '') {
  **/
 
 date_default_timezone_set(env->SERVER_DATE_TIMEZONE);
-$commands = include_once("./config/commands.php");
-$socket_commands = include_once("./config/sockets.php");
-
+$commands = require_once("./config/commands.php");
+$sockets = require_once("./config/sockets.php");
+$resources = require_once("./config/resources.php");
 $kernel = \App\Console\Kernel::getInstance();
 
 $kernel->initialize(
     [...$commands['framework'], ...$commands['app']],
-    [...$socket_commands['app']]
+    [...$sockets['app']],
+    [...$resources['framework'], ...$resources['app']]
 );
 
 $kernel->add();

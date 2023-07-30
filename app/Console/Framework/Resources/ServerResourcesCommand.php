@@ -6,7 +6,6 @@ use App\Traits\Framework\ConsoleOutput;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ServerResourcesCommand extends Command {
@@ -16,8 +15,7 @@ class ServerResourcesCommand extends Command {
 	protected static $defaultName = "resource:serve";
 
 	protected function initialize(InputInterface $input, OutputInterface $output) {
-        $output->write($this->successOutput("\nLion-Framework "));
-        $output->writeln("ready in " . number_format((microtime(true) - LION_START), 3) . " ms\n");
+
 	}
 
 	protected function interact(InputInterface $input, OutputInterface $output) {
@@ -27,22 +25,32 @@ class ServerResourcesCommand extends Command {
 	protected function configure() {
         $this
             ->setDescription("Command required to run resources")
-            ->addArgument('resource', InputArgument::REQUIRED, 'Resource name')
-            ->addOption('port', "p", InputOption::VALUE_OPTIONAL, 'Do you want to set your own port?', 7000)
-            ->addOption('host', "s", InputOption::VALUE_OPTIONAL, 'Do you want to set your own port?', "127.0.0.1");
+            ->addArgument('resource', InputArgument::REQUIRED, 'Resource name');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
         $resource = $input->getArgument("resource");
-        $port = $input->getOption("port");
-        $host = $input->getOption("host");
+        $resources = kernel->getResources();
+        $rsc = $resources[$resource];
 
-        $url = "{$host}:{$port}";
-        $output->writeln($this->warningOutput("\t>>  LOCAL:</comment> Server running on <href=http://{$url}>[http://{$url}]</>"));
-        $output->writeln($this->warningOutput("\t>>  HOST:</comment> use --host to expose"));
-        $output->writeln($this->warningOutput("\t>>  PORT:</comment> use --port to expose"));
-        $output->writeln($this->warningOutput("\nPress Ctrl+C to stop the server\n"));
-        kernel->execute("php -S {$url} -t resources/{$resource}/", false);
+        if ($rsc['type'] === "twig") {
+            $output->write($this->successOutput("\nLion-Framework "));
+            $output->writeln("ready in " . number_format((microtime(true) - LION_START), 3) . " ms\n");
+
+            $url = "{$rsc['host']}:{$rsc['port']}";
+            $output->writeln($this->warningOutput("\t>>  LOCAL: Server running on <href=http://{$url}>[http://{$url}]</>"));
+            $output->writeln($this->warningOutput("\t>>  HOST: use --host to expose"));
+            $output->writeln($this->warningOutput("\t>>  PORT: use --port to expose"));
+            $output->writeln($this->warningOutput("\nPress Ctrl+C to stop the server\n"));
+            kernel->execute("php -S {$url} -t {$rsc['path']}", false);
+        } elseif ($rsc['type'] === "vite") {
+            $cmd = isset($rsc['command']) ? $rsc['command'] : "npm run dev";
+            kernel->execute("cd {$rsc['path']} && {$cmd}", false);
+        } else {
+            $output->writeln($this->errorOutput("\t>>  RESOURCE: The requested resource does not exist"));
+            return Command::INVALID;
+        }
+
         return Command::SUCCESS;
     }
 

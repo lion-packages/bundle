@@ -9,15 +9,16 @@ class Kernel {
 
     use Singleton;
 
-    private array $commands;
-    private array $socket_commands;
-
     private Application $application;
+    private array $commands;
+    private array $sockets;
+    private array $resources;
 
-    public function initialize(array $commands, array $socket_commands): void {
-        $this->commands = $commands;
-        $this->socket_commands = $socket_commands;
+    public function initialize(array $commands, array $sockets, array $resources): void {
         $this->application = new Application(env->APP_NAME);
+        $this->commands = $commands;
+        $this->sockets = $sockets;
+        $this->resources = $resources;
     }
 
     public function add(): void {
@@ -31,11 +32,15 @@ class Kernel {
     }
 
     public function getClass(string $class_name): string {
-        return isset($this->socket_commands[$class_name]) ? $this->socket_commands[$class_name] : false;
+        return isset($this->sockets[$class_name]) ? $this->sockets[$class_name] : false;
     }
 
     public function getSockets(): array {
-        return $this->socket_commands;
+        return $this->sockets;
+    }
+
+    public function getResources(): array {
+        return $this->resources;
     }
 
     public function execute(string $command, bool $index = true): array {
