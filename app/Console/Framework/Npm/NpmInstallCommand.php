@@ -26,7 +26,7 @@ class NpmInstallCommand extends Command {
 		$this
             ->setDescription("Command to install dependencies with npm for a certain resource")
             ->addArgument("resource", InputArgument::REQUIRED, "Resource name")
-            ->addArgument("packages", InputArgument::REQUIRED, "Package name");
+            ->addArgument("packages", InputArgument::OPTIONAL, "Package name", "");
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
