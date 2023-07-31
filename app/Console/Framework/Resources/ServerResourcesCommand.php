@@ -31,7 +31,8 @@ class ServerResourcesCommand extends Command {
     protected function execute(InputInterface $input, OutputInterface $output) {
         $resource = $input->getArgument("resource");
         $resources = kernel->getResources();
-        $rsc = $resources[$resource];
+        $all_resources = [...$resources['framework'], ...$resources['app']];
+        $rsc = $all_resources[$resource];
 
         if ($rsc['type'] === "twig") {
             $output->write($this->successOutput("\nLion-Framework "));
@@ -42,9 +43,7 @@ class ServerResourcesCommand extends Command {
             $output->writeln($this->warningOutput("\t>>  HOST: use --host to expose"));
             $output->writeln($this->warningOutput("\t>>  PORT: use --port to expose"));
             $output->writeln($this->warningOutput("\nPress Ctrl+C to stop the server\n"));
-            kernel->execute("php -S {$url} -t {$rsc['path']}", false);
-        } elseif ($rsc['type'] === "vite") {
-            kernel->execute("cd resources/{$rsc['path']} && npm run dev", false);
+            kernel->execute("php -S {$url} -t resources/{$rsc['path']}", false);
         } else {
             $output->writeln($this->errorOutput("\t>>  RESOURCE: The requested resource does not exist"));
             return Command::INVALID;

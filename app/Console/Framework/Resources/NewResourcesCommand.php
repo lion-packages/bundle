@@ -51,12 +51,24 @@ class NewResourcesCommand extends Command {
 
         if ($type === "vite") {
             $tmp = $input->getOption('template');
-            kernel->execute("cd resources/ && npm init vite@latest {$rsc} -- --template {$tmp} && cd {$rsc}/ && npm i", false);
+            $cmd = kernel->execute("cd resources/ && npm init vite@latest {$rsc} -- --template {$tmp}", false);
+            $output->writeln(arr->of($cmd)->join("\n"));
+            kernel->execute("cd resources/{$rsc}/ && npm install", false);
 
             $resources['app'][$rsc] = [
                 'type' => 'vite',
                 'host' => '0.0.0.0',
                 'path' => "{$rsc}/"
+            ];
+
+            $conf = [
+                "[program:resource-{$rsc}]",
+                "command=npm run dev",
+                "directory=/var/www/html/resources/{$rsc}",
+                'autostart=true',
+                'autorestart=true',
+                'redirect_stderr=true',
+                "stdout_logfile=/var/www/html/storage/logs/resources/{$rsc}.log"
             ];
         } elseif ($type === 'twig') {
             // unzip template in zip format
@@ -80,6 +92,16 @@ class NewResourcesCommand extends Command {
                 'host' => '0.0.0.0',
                 'port' => 7000,
                 'path' => "{$rsc}/"
+            ];
+
+            $conf = [
+                "[program:resource-{$rsc}]",
+                "command=php lion resource:serve {$rsc}",
+                "directory=/var/www/html",
+                'autostart=true',
+                'autorestart=true',
+                'redirect_stderr=true',
+                "stdout_logfile=/var/www/html/storage/logs/resources/{$rsc}.log"
             ];
         } else {
             $output->writeln($this->errorOutput("\t>>  RESOURCE: The requested resource does not exist"));
@@ -118,15 +140,6 @@ class NewResourcesCommand extends Command {
         );
 
         // add supervisord
-        $conf = [
-            "command=php lion resource:serve {$rsc}",
-            'directory=/var/www/html',
-            'autostart=true',
-            'autorestart=true',
-            'redirect_stderr=true',
-            "stdout_logfile=/var/www/html/storage/logs/resources/{$rsc}.log"
-        ];
-
         file_put_contents("supervisord.conf",
             str->of($supervisord)
             ->replace("; resources", "; resources\n" . arr->of($conf)->join("\n") . "\n")

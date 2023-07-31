@@ -2,6 +2,8 @@ FROM php:8.2-apache
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update \
+    && apt-get install -y nodejs \
+    && apt-get install -y npm \
     && apt-get install -y default-mysql-client \
     && apt-get install -y curl \
     && apt-get install -y zsh \
