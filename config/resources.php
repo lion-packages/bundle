@@ -10,6 +10,7 @@
 
 return [
     'app' => [
+        //
     ],
     'framework' => [
         'console-web' => [

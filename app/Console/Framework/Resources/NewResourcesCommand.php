@@ -39,10 +39,10 @@ class NewResourcesCommand extends Command {
         $type = $input->getOption('type');
 
         // check if the resource exists before generating it
-        // if (isSuccess(Store::exist("resources/{$rsc}/"))) {
-        //     $output->writeln($this->errorOutput("\t>>  RESOURCE: a resource with this name already exists"));
-        //     return Command::FAILURE;
-        // }
+        if (isSuccess(Store::exist("resources/{$rsc}/"))) {
+            $output->writeln($this->errorOutput("\t>>  RESOURCE: a resource with this name already exists"));
+            return Command::FAILURE;
+        }
 
         $resources = kernel->getResources();
         $supervisord = Store::get("supervisord.conf");
@@ -133,6 +133,7 @@ class NewResourcesCommand extends Command {
             ->get()
         );
 
+        $output->writeln($this->warningOutput("\t>>  RESOURCE: {$rsc}"));
         $output->writeln($this->successOutput("\t>>  RESOURCE: the '{$rsc}/' resource has been generated"));
         return Command::FAILURE;
     }
