@@ -15,7 +15,6 @@ return [
     'framework' => [
         'lion-dev' => [
             'type' => 'vite',
-            'host' => '0.0.0.0',
             'path' => 'lion-dev/',
         ],
         'console-web' => [

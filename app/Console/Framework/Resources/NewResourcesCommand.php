@@ -57,7 +57,6 @@ class NewResourcesCommand extends Command {
 
             $resources['app'][$rsc] = [
                 'type' => 'vite',
-                'host' => '0.0.0.0',
                 'path' => "{$rsc}/"
             ];
 
