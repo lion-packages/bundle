@@ -8,26 +8,24 @@ import Register from "./pages/Register"
 import NotFound from "./pages/NotFound"
 import Home from "./pages/Home"
 
-function App() {
-    return (
-        <div className="bg-dark">
-            <NavbarNavigation />
+export default function App() {
+  return (
+    <div className="bg-dark">
+      <NavbarNavigation />
 
-            <Routes>
-                <Route path="*" element={<NotFound />} />
-                <Route path="/" element={<Home />} />
+      <Routes>
+        <Route path="*" element={<NotFound />} />
+        <Route path="/" element={<Home />} />
 
-                <Route path="lion">
-                    <Route path="routes" element={<RoutesWeb />} />
-                </Route>
+        <Route path="lion">
+          <Route path="routes" element={<RoutesWeb />} />
+        </Route>
 
-                <Route path="auth">
-                    <Route path="login" element={<Login />} />
-                    <Route path="register" element={<Register />} />
-                </Route>
-            </Routes>
-        </div>
-    )
+        <Route path="auth">
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+        </Route>
+      </Routes>
+    </div>
+  )
 }
-
-export default App
