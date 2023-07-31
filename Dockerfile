@@ -43,7 +43,7 @@ CMD chsh -s $(which zsh) \
     && zsh \
     && touch storage/logs/server/web-server.log \
     && touch storage/logs/supervisord/supervisord.log \
+    && composer install \
     && php lion socket:logs \
     && php lion resource:logs \
-    && composer install \
     && /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
