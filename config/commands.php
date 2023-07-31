@@ -51,6 +51,7 @@ return [
         \App\Console\Framework\New\TestCommand::class,
         \App\Console\Framework\New\TraitCommand::class,
         // NPM -------------------------------------------------------------------------------------
+        \App\Console\Framework\Npm\NpmRunBuildCommand::class,
         \App\Console\Framework\Npm\NpmInstallCommand::class,
         \App\Console\Framework\Npm\NpmUninstallCommand::class,
         \App\Console\Framework\Npm\NpmUpdateCommand::class,
