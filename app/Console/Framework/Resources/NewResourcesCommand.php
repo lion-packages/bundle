@@ -45,15 +45,17 @@ class NewResourcesCommand extends Command {
         }
 
         $resources = kernel->getResources();
-        $supervisord = Store::get("supervisord.conf");
         $conf = [];
         $info = [];
 
         if ($type === "vite") {
             $tmp = $input->getOption('template');
-            $cmd = kernel->execute("cd resources/ && npm init vite@latest {$rsc} -- --template {$tmp}", false);
-            $output->writeln(arr->of($cmd)->join("\n"));
+            $cmd = kernel->execute("cd resources/ && echo | npm init vite@latest {$rsc} -- --template {$tmp}", false);
+            // $output->writeln(arr->of($cmd)->join("\n"));
             kernel->execute("cd resources/{$rsc}/ && npm install", false);
+            $this->new("resources/{$rsc}/", "env");
+            $this->force();
+            $this->close();
 
             $resources['app'][$rsc] = [
                 'type' => 'vite',
@@ -107,6 +109,23 @@ class NewResourcesCommand extends Command {
             return Command::INVALID;
         }
 
+        // add settings
+        if ($type === "vite") {
+            $replace = [
+                'replace' => true,
+                'content' => ",\n  server: {\n    host: true,\n    port: 5173,\n    watch: {\n      usePolling: true\n    }\n  }",
+                'search' => ","
+            ];
+
+            if (isSuccess(Store::exist("resources/{$rsc}/vite.config.js"))) {
+                $this->readFileRows("resources/{$rsc}/vite.config.js", [6 => $replace]);
+            }
+
+            if (isSuccess(Store::exist("resources/{$rsc}/vite.config.ts"))) {
+                $this->readFileRows("resources/{$rsc}/vite.config.ts", [6 => $replace]);
+            }
+        }
+
         // add logger
         $this->new("storage/logs/resources/{$rsc}", "log");
         $this->force();
@@ -115,35 +134,39 @@ class NewResourcesCommand extends Command {
         // add resources
         file_put_contents("config/resources.php",
             str->of("<?php")->ln()->ln()
-            ->concat("/**")->ln()
-            ->concat(" * ------------------------------------------------------------------------------")->ln()
-            ->concat(" * Resources for developing your web application")->ln()
-            ->concat(" * ------------------------------------------------------------------------------")->ln()
-            ->concat(" * List of available resources")->ln()
-            ->concat(" * ------------------------------------------------------------------------------")->ln()
-            ->concat(" **/")->ln()->ln()
-            ->concat("return")
-            ->concat(var_export($resources, true))
-            ->concat(";")
-            ->replace("array", "")
-            ->replace("(", "[")
-            ->replace(")", "]")
-            ->replace("=> \n   [", "=> [")
-            ->replace("=> \n     [", "=> [")
-            ->replace("  '", "    '")
-            ->replace("      '", "        '")
-            ->replace("  ],", "    ],")
-            ->replace("      ],", "        ],")
-            ->replace("          '", "            '")
-            ->get()
+                ->concat("/**")->ln()
+                ->concat(" * ------------------------------------------------------------------------------")->ln()
+                ->concat(" * Resources for developing your web application")->ln()
+                ->concat(" * ------------------------------------------------------------------------------")->ln()
+                ->concat(" * List of available resources")->ln()
+                ->concat(" * ------------------------------------------------------------------------------")->ln()
+                ->concat(" **/")->ln()->ln()
+                ->concat("return")
+                ->concat(var_export($resources, true))
+                ->concat(";")
+                ->replace("array", "")
+                ->replace("(", "[")
+                ->replace(")", "]")
+                ->replace("=> \n   [", "=> [")
+                ->replace("=> \n     [", "=> [")
+                ->replace("  '", "    '")
+                ->replace("      '", "        '")
+                ->replace("  ],", "    ],")
+                ->replace("      ],", "        ],")
+                ->replace("          '", "            '")
+                ->get()
         );
 
         // add supervisord
-        file_put_contents("supervisord.conf",
-            str->of($supervisord)
-            ->replace("; resources", "; resources\n" . arr->of($conf)->join("\n") . "\n")
-            ->get()
-        );
+        $supervisord = Store::get("supervisord.conf");
+
+        if (!str->of($supervisord)->contains(explode("-", "resource-{$rsc}"))) {
+            file_put_contents("supervisord.conf",
+                str->of($supervisord)
+                    ->replace("; resources", "; resources\n\n" . arr->of($conf)->join("\n"))
+                    ->get()
+            );
+        }
 
         $output->writeln($this->warningOutput("\t>>  RESOURCE: {$rsc}"));
         $output->writeln($this->successOutput("\t>>  RESOURCE: the '{$rsc}/' resource has been generated"));

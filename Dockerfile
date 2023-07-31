@@ -22,19 +22,17 @@ RUN apt-get update \
     && apt-get install -y libevent-dev \
     && apt-get install -y libssl-dev \
     && pecl install ev \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN docker-php-ext-install mbstring \
+    && rm -rf /var/lib/apt/lists/* \
+    && docker-php-ext-install mbstring \
     && docker-php-ext-install gd \
     && docker-php-ext-install pdo_mysql \
     && docker-php-ext-install mysqli \
     && docker-php-ext-install zip \
     && docker-php-ext-enable gd \
-    && docker-php-ext-enable zip
-
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-RUN a2enmod rewrite
+    && docker-php-ext-enable zip \
+    && a2enmod rewrite \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+    && sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" \
 
 COPY . .
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
@@ -44,6 +42,7 @@ CMD chsh -s $(which zsh) \
     && touch storage/logs/server/web-server.log \
     && touch storage/logs/supervisord/supervisord.log \
     && composer install \
+    && php lion npm:install lion-dev \
     && php lion socket:logs \
     && php lion resource:logs \
     && /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
