@@ -50,6 +50,8 @@ return [
         \App\Console\Framework\New\RulesCommand::class,
         \App\Console\Framework\New\TestCommand::class,
         \App\Console\Framework\New\TraitCommand::class,
+        // NPM -------------------------------------------------------------------------------------
+        \App\Console\Framework\Npm\NpmInstallCommand::class,
         // RESOURCES -------------------------------------------------------------------------------
         \App\Console\Framework\Resources\LogsResources::class,
         \App\Console\Framework\Resources\NewResourcesCommand::class,
