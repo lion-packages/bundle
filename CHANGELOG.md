@@ -1,5 +1,23 @@
 # Release Notes
 
+## [v15.0.0](https://github.com/Lion-Packages/framework/compare/v14.29.1...v15.0.0) (2023-08-01)
+
+### Added
+- command has been added to generate resource logs
+- added command to generate socket logs
+- support has been given to create resources with vite.js
+- added command to install dependencies with npm for resources
+- added command to uninstall dependencies with npm for a vite type resource
+- added command to update dependencies with npm for a resource of type vite
+- added command to run vite project with build
+
+### Changed
+- configuration in Dockerfile has been updated
+- resource initialization has been modified through the resources configuration file
+
+### Refactoring
+- rules have been modified in editorconfig
+
 ## [v14.29.1](https://github.com/Lion-Packages/framework/compare/v14.29.0...v14.29.1) (2023-07-27)
 
 ### Added
