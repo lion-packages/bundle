@@ -111,11 +111,29 @@ class NewResourcesCommand extends Command {
 
         // add settings
         if ($type === "vite") {
+            $cont_ports = 0;
+
+            foreach ([...$resources['framework'], ...$resources['app']] as $key => $resource) {
+                if ($resource['type'] === 'vite' && $key != $rsc) {
+                    $cont_ports++;
+                }
+            }
+
+            $port = (5173 + $cont_ports);
+
             $replace = [
                 'replace' => true,
-                'content' => ",\n  server: {\n    host: true,\n    port: 5173,\n    watch: {\n      usePolling: true\n    }\n  }",
+                'content' => ",\n  server: {\n    host: true,\n    port: {$port},\n    watch: {\n      usePolling: true\n    }\n  }",
                 'search' => ","
             ];
+
+            // expose port
+            $docker_compose = Store::get("docker-compose.yml");
+            file_put_contents("docker-compose.yml",
+                str->of($docker_compose)
+                    ->replace('"8000:8000"', '"8000:8000"' . "\n            " . '- "' . $port . ":" . $port . '"')
+                    ->get()
+            );
 
             if (isSuccess(Store::exist("resources/{$rsc}/vite.config.js"))) {
                 $this->readFileRows("resources/{$rsc}/vite.config.js", [6 => $replace]);
@@ -160,7 +178,7 @@ class NewResourcesCommand extends Command {
         // add supervisord
         $supervisord = Store::get("supervisord.conf");
 
-        if (!str->of($supervisord)->contains(explode("-", "resource-{$rsc}"))) {
+        if (stripos($supervisord, "program:resource-{$rsc}") !== true) {
             file_put_contents("supervisord.conf",
                 str->of($supervisord)
                     ->replace("; resources", "; resources\n\n" . arr->of($conf)->join("\n"))
