@@ -42,6 +42,7 @@ CMD chsh -s $(which zsh) \
     && touch storage/logs/server/web-server.log \
     && touch storage/logs/supervisord/supervisord.log \
     && composer install \
+    && php lion migrate:fresh \
     && php lion npm:install lion-dev \
     && php lion socket:logs \
     && php lion resource:logs \
