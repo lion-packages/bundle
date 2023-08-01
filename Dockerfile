@@ -32,7 +32,7 @@ RUN apt-get update \
     && docker-php-ext-enable zip \
     && a2enmod rewrite \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
-    && sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" \
+    && sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 COPY . .
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
