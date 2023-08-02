@@ -1,5 +1,13 @@
 # Release Notes
 
+## [v15.0.1](https://github.com/Lion-Packages/framework/compare/v15.0.0...v15.0.1) (2023-08-02)
+
+### Changed
+- docker config updated
+
+### Fixed
+- fixed configuration validation for resources
+
 ## [v15.0.0](https://github.com/Lion-Packages/framework/compare/v14.29.1...v15.0.0) (2023-08-01)
 
 ### Added
