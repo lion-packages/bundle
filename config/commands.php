@@ -54,6 +54,7 @@ return [
         \App\Console\Framework\Npm\NpmInitCommand::class,
         \App\Console\Framework\Npm\NpmRunBuildCommand::class,
         \App\Console\Framework\Npm\NpmInstallCommand::class,
+        \App\Console\Framework\Npm\NpmLogsCommand::class,
         \App\Console\Framework\Npm\NpmUninstallCommand::class,
         \App\Console\Framework\Npm\NpmUpdateCommand::class,
         // RESOURCES -------------------------------------------------------------------------------
