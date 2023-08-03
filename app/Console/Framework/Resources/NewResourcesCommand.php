@@ -51,7 +51,7 @@ class NewResourcesCommand extends Command {
         if ($type === "vite") {
             $tmp = $input->getOption('template');
             $cmd = kernel->execute("cd resources/ && echo | npm init vite@latest {$rsc} -- --template {$tmp}", false);
-            // $output->writeln(arr->of($cmd)->join("\n"));
+            $output->writeln(arr->of($cmd)->join("\n"));
             kernel->execute("cd resources/{$rsc}/ && npm install", false);
             $this->new("resources/{$rsc}/", "env");
             $this->force();
