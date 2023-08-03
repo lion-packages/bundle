@@ -57,10 +57,6 @@ return [
         \App\Console\Framework\Npm\NpmLogsCommand::class,
         \App\Console\Framework\Npm\NpmUninstallCommand::class,
         \App\Console\Framework\Npm\NpmUpdateCommand::class,
-        // RESOURCES -------------------------------------------------------------------------------
-        \App\Console\Framework\Resources\LogsResources::class,
-        \App\Console\Framework\Resources\NewResourcesCommand::class,
-        \App\Console\Framework\Resources\ServerResourcesCommand::class,
         // ROUTE -----------------------------------------------------------------------------------
         \App\Console\Framework\Route\RouteListCommand::class,
         \App\Console\Framework\Route\PostmanCollectionCommand::class,
