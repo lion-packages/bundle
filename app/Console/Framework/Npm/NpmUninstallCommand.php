@@ -24,16 +24,15 @@ class NpmUninstallCommand extends Command {
 
 	protected function configure() {
 		$this
-            ->setDescription("Command to uninstall dependencies with npm for a certain resource")
-            ->addArgument("resource", InputArgument::REQUIRED, "Resource name")
+            ->setDescription("Command to uninstall dependencies with npm from a vite project")
+            ->addArgument("project", InputArgument::REQUIRED, "Project name")
             ->addArgument("packages", InputArgument::REQUIRED, "Package name");
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
-		$rsc = $input->getArgument("resource");
+		$project = $input->getArgument("project");
         $pkg = $input->getArgument("packages");
-
-        $cmd = kernel->execute("cd resources/{$rsc}/ && npm uninstall {$pkg}", false);
+        $cmd = kernel->execute("cd vite/{$project}/ && npm uninstall {$pkg}", false);
         $output->writeln(arr->of($cmd)->join("\n"));
         return Command::SUCCESS;
 	}

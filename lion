@@ -86,7 +86,7 @@ $kernel = \App\Console\Kernel::getInstance();
 $kernel->initialize(
     [...$commands['framework'], ...$commands['app']],
     [...$sockets['app']],
-    require_once("./config/resources.php")
+    require_once("./config/vite.php")
 );
 
 $kernel->add();

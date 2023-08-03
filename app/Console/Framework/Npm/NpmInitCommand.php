@@ -36,23 +36,23 @@ class NpmInitCommand extends Command {
 		$project = str->of($input->getArgument("project"))->trim()->replace("_", "-")->replace(" ", "-")->get();
 
         // check if the resource exists before generating it
-        if (isSuccess(Store::exist("resources/{$project}/"))) {
+        if (isSuccess(Store::exist("vite/{$project}/"))) {
             $output->writeln($this->errorOutput("\t>>  VITE: a resource with this name already exists"));
             return Command::FAILURE;
         }
 
-        $resources = kernel->getResources();
+        $vite = kernel->getViteProjects();
         $conf = [];
 
         $tmp = $input->getOption('template');
-        $cmd = kernel->execute("cd resources/ && echo | npm init vite@latest {$project} -- --template {$tmp}", false);
+        $cmd = kernel->execute("cd vite/ && echo | npm init vite@latest {$project} -- --template {$tmp}", false);
         $output->writeln(arr->of($cmd)->join("\n"));
-        kernel->execute("cd resources/{$project}/ && npm install", false);
-        $this->new("resources/{$project}/", "env");
+        kernel->execute("cd vite/{$project}/ && npm install", false);
+        $this->new("vite/{$project}/", "env");
         $this->force();
         $this->close();
 
-        $resources['app'][$project] = [
+        $vite['app'][$project] = [
             'type' => 'vite',
             'path' => "{$project}/"
         ];
@@ -60,16 +60,16 @@ class NpmInitCommand extends Command {
         $conf = [
             "[program:resource-{$project}]",
             "command=npm run dev",
-            "directory=/var/www/html/resources/{$project}",
+            "directory=/var/www/html/vite/{$project}",
             'autostart=true',
             'autorestart=true',
             'redirect_stderr=true',
-            "stdout_logfile=/var/www/html/storage/logs/resources/{$project}.log"
+            "stdout_logfile=/var/www/html/storage/logs/vite/{$project}.log"
         ];
 
         $cont_ports = 0;
 
-        foreach ([...$resources['framework'], ...$resources['app']] as $key => $resource) {
+        foreach ([...$vite['framework'], ...$vite['app']] as $key => $resource) {
             if ($resource['type'] === 'vite' && $key != $project) {
                 $cont_ports++;
             }
@@ -91,16 +91,16 @@ class NpmInitCommand extends Command {
                 ->get()
         );
 
-        if (isSuccess(Store::exist("resources/{$project}/vite.config.js"))) {
-            $this->readFileRows("resources/{$project}/vite.config.js", [6 => $replace]);
+        if (isSuccess(Store::exist("vite/{$project}/vite.config.js"))) {
+            $this->readFileRows("vite/{$project}/vite.config.js", [6 => $replace]);
         }
 
-        if (isSuccess(Store::exist("resources/{$project}/vite.config.ts"))) {
-            $this->readFileRows("resources/{$project}/vite.config.ts", [6 => $replace]);
+        if (isSuccess(Store::exist("vite/{$project}/vite.config.ts"))) {
+            $this->readFileRows("vite/{$project}/vite.config.ts", [6 => $replace]);
         }
 
         // add logger
-        $this->new("storage/logs/resources/{$project}", "log");
+        $this->new("storage/logs/vite/{$project}", "log");
         $this->force();
         $this->close();
 
@@ -115,7 +115,7 @@ class NpmInitCommand extends Command {
                 ->concat(" * ------------------------------------------------------------------------------")->ln()
                 ->concat(" **/")->ln()->ln()
                 ->concat("return")
-                ->concat(var_export($resources, true))
+                ->concat(var_export($vite, true))
                 ->concat(";")
                 ->replace("array", "")
                 ->replace("(", "[")

@@ -24,13 +24,13 @@ class NpmRunBuildCommand extends Command {
 
 	protected function configure() {
 		$this
-            ->setDescription("Command to generate final dist of a certain vite type resource")
-            ->addArgument("resource", InputArgument::REQUIRED, "Resource name");
+            ->setDescription("Command to generate dist for a vite project")
+            ->addArgument("project", InputArgument::REQUIRED, "Project name");
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
-		$rsc = $input->getArgument("resource");
-        $cmd = kernel->execute("cd resources/{$rsc}/ && npm run build", false);
+		$project = $input->getArgument("project");
+        $cmd = kernel->execute("cd vite/{$project}/ && npm run build", false);
         $output->writeln(arr->of($cmd)->join("\n"));
 		return Command::SUCCESS;
 	}

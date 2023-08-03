@@ -25,20 +25,20 @@ class NpmLogsCommand extends Command {
 
 	protected function configure() {
 		$this
-            ->setDescription("Command to generate the logs of all resources");
+            ->setDescription("Command to generate the logs of all vite projects");
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
-		foreach (Store::view("resources/", false) as $key => $resource) {
-            $rsc = str->of($resource)->replace("resources/", "")->get();
+		foreach (Store::view("vite/", false) as $key => $project) {
+            $pjt = str->of($project)->replace("vite/", "")->get();
 
-            $this->new("storage/logs/resources/{$rsc}", "log");
+            $this->new("storage/logs/vite/{$pjt}", "log");
             $this->add("");
             $this->force();
             $this->close();
 
-            $output->writeln($this->warningOutput("\t>>  LOG: {$rsc}"));
-            $output->writeln($this->successOutput("\t>>  LOG: log has been generated for the 'storage/logs/resources/{$rsc}.log' resource"));
+            $output->writeln($this->warningOutput("\t>>  VITE LOG: {$pjt}"));
+            $output->writeln($this->successOutput("\t>>  VITE LOG: a log has been generated for project 'storage/logs/vite/{$pjt}.log'"));
         }
 
 		return Command::SUCCESS;

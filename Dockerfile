@@ -44,6 +44,6 @@ CMD chsh -s $(which zsh) \
     && composer install \
     && php lion migrate:fresh \
     && php lion npm:install lion-dev \
+    && php lion npm:logs \
     && php lion socket:logs \
-    && php lion resource:logs \
     && /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf

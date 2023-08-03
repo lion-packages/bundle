@@ -24,16 +24,15 @@ class NpmInstallCommand extends Command {
 
 	protected function configure() {
 		$this
-            ->setDescription("Command to install dependencies with npm for a certain resource")
-            ->addArgument("resource", InputArgument::REQUIRED, "Resource name")
+            ->setDescription("Command to install dependencies with npm for a certain vite project")
+            ->addArgument("project", InputArgument::REQUIRED, "Project name")
             ->addArgument("packages", InputArgument::OPTIONAL, "Package name", "");
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
-        $rsc = $input->getArgument("resource");
+        $project = $input->getArgument("project");
         $pkg = $input->getArgument("packages");
-
-		$cmd = kernel->execute("cd resources/{$rsc}/ && npm install {$pkg}", false);
+		$cmd = kernel->execute("cd vite/{$project}/ && npm install {$pkg}", false);
         $output->writeln(arr->of($cmd)->join("\n"));
 		return Command::SUCCESS;
 	}

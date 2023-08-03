@@ -24,13 +24,13 @@ class NpmUpdateCommand extends Command {
 
 	protected function configure() {
 		$this
-            ->setDescription("Command to install dependencies with npm for a certain resource")
-            ->addArgument("resource", InputArgument::REQUIRED, "Resource name");
+            ->setDescription("Command to install dependencies with npm for a vite project")
+            ->addArgument("project", InputArgument::REQUIRED, "Project name");
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
-		$rsc = $input->getArgument("resource");
-        $cmd = kernel->execute("cd resources/{$rsc}/ && npm update", false);
+		$project = $input->getArgument("project");
+        $cmd = kernel->execute("cd vite/{$project}/ && npm update", false);
         $output->writeln(arr->of($cmd)->join("\n"));
 		return Command::SUCCESS;
 	}

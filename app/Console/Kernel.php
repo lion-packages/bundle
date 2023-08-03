@@ -12,13 +12,13 @@ class Kernel {
     private Application $application;
     private array $commands;
     private array $sockets;
-    private array $resources;
+    private array $vite_projects;
 
-    public function initialize(array $commands, array $sockets, array $resources): void {
+    public function initialize(array $commands, array $sockets, array $vite_projects): void {
         $this->application = new Application(env->APP_NAME);
         $this->commands = $commands;
         $this->sockets = $sockets;
-        $this->resources = $resources;
+        $this->vite_projects = $vite_projects;
     }
 
     public function add(): void {
@@ -39,8 +39,8 @@ class Kernel {
         return $this->sockets;
     }
 
-    public function getResources(): array {
-        return $this->resources;
+    public function getViteProjects(): array {
+        return $this->vite_projects;
     }
 
     public function execute(string $command, bool $index = true): array {
