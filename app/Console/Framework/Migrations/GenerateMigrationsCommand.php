@@ -97,12 +97,7 @@ class GenerateMigrationsCommand extends Command {
                         $tbl = $table->{"Tables_in_{$connection['dbname']}"};
                         $table_name = str->of($tbl)->test("/-/") ? "`{$tbl}`" : $tbl;
                         $new_table_name = str->of($table_name)->replace("-", "_")->replace("`", "")->lower()->get();
-                        $columns_db = DB::connection($connection['dbname'])
-                            ->show()
-                            ->full()
-                            ->columns()
-                            ->from($table_name)
-                            ->getAll();
+                        $columns_db = DB::connection($connection['dbname'])->show()->full()->columns()->from($table_name)->getAll();
 
                         $foreigns = DB::connection($connection['dbname'])
                             ->table("INFORMATION_SCHEMA.KEY_COLUMN_USAGE", true)
@@ -113,9 +108,7 @@ class GenerateMigrationsCommand extends Command {
                             ->isNotNull()
                             ->fetchMode(\PDO::FETCH_ASSOC)
                             ->getAll();
-                        $foreigns = !isset($foreigns->status)
-                            ? arr->of(!isset($foreigns[0]) ? [$foreigns] : $foreigns)->keyBy('COLUMN_NAME')
-                            : [];
+                        $foreigns = !isset($foreigns->status) ? arr->of($foreigns)->keyBy('COLUMN_NAME') : [];
                         $size_columns_db = arr->of($columns_db)->length();
                         $columns = "";
 
@@ -171,12 +164,11 @@ class GenerateMigrationsCommand extends Command {
                         Store::folder($path);
                         $migration_name = str->of($path)->concat("Table")->concat($tbl_pascal)->get();
                         $info_table = DB::connection($connection['dbname'])->table($table_name)->select()->limit(0, $limit)->fetchMode(\PDO::FETCH_ASSOC)->getAll();
-                        $info_table = !isset($info_table[0]) ? [$info_table] : $info_table;
 
                         $rows_insert = "";
                         if (!isset($info_table->status)) {
                             foreach ($info_table as $key => $row) {
-                                $rows_insert .= ("\t\t\t\t[" . $addRow($columns_db, (array) $row) . "],\n");
+                                $rows_insert .= ("\t\t\t\t[{$addRow($columns_db, (array) $row)}],\n");
                             }
                         }
 
