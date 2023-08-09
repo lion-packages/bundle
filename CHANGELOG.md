@@ -8,6 +8,7 @@
 
 ### Changed
 - commands have been removed for the resources section
+- data reading has been validated to generate migrations
 
 ### Refactoring
 - resources have been renamed to vite
