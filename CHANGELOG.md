@@ -1,5 +1,10 @@
 # Release Notes
 
+## [v15.1.1](https://github.com/lion-packages/framework/compare/v15.1.0...v15.1.1) (2023-08-20)
+
+### Fixed
+- fixed reading folders to run migrations
+
 ## [v15.1.0](https://github.com/lion-packages/framework/compare/v15.0.1...v15.1.0) (2023-08-08)
 
 ### Added
