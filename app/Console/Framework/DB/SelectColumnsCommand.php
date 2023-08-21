@@ -38,6 +38,19 @@ class SelectColumnsCommand extends Command {
 
         $connections = DB::getConnections();
         $main_conn = $connection === null ? $connections['default'] : $connection;
+
+        // validate table
+        $validate = DB::connection($main_conn)->show()
+            ->tables()
+            ->from($main_conn)
+            ->like($entity)
+            ->get();
+
+        if (isset($validate->status)) {
+            $output->writeln($this->errorOutput("\t>>  the '{$entity}' table or view does not exist"));
+            return Command::INVALID;
+        }
+
         $columns_db = DB::connection($main_conn)->show()->columns()->from($entity)->fetchMode(\PDO::FETCH_ASSOC)->getAll();
 
         if (isset($columns_db->status)) {
