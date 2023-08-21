@@ -19,7 +19,7 @@ class FreshMigrationsCommand extends Command {
 
     protected function initialize(InputInterface $input, OutputInterface $output) {
         $this->connections = DB::getConnections();
-        $folders = ["tables", "views", "procedures"];
+        $folders = ["Tables", "Views", "Procedures"];
 
         foreach ($folders as $key => $folder) {
             foreach (arr->of($this->connections['connections'])->keys()->get() as $key => $connection) {
