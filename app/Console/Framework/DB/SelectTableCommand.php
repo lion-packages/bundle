@@ -4,6 +4,7 @@ namespace App\Console\Framework\DB;
 
 use App\Traits\Framework\ConsoleOutput;
 use LionDatabase\Drivers\MySQL\MySQL as DB;
+use SebastianBergmann\Environment\Console;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
@@ -43,6 +44,18 @@ class SelectTableCommand extends Command {
         $connections = DB::getConnections();
         $main_conn = $connection === null ? $connections['default'] : $connection;
 
+        // validate table
+        $validate = DB::connection($main_conn)->show()
+            ->tables()
+            ->from($main_conn)
+            ->like($entity)
+            ->get();
+
+        if (isset($validate->status)) {
+            $output->writeln($this->errorOutput("\t>>  the '{$entity}' table or view does not exist"));
+            return Command::INVALID;
+        }
+
         // read columns table
         $columns_table = [];
 
@@ -63,7 +76,12 @@ class SelectTableCommand extends Command {
 
         // read entity
         $final_limit = ($rows === null ? 10 : (int) $rows);
-        $rows_table = DB::connection($main_conn)->table($entity)->select(...$columns_table)->limit(0, $final_limit)->fetchMode(\PDO::FETCH_ASSOC)->getAll();
+        $rows_table = DB::connection($main_conn)
+            ->table($entity)
+            ->select(...$columns_table)
+            ->limit(0, $final_limit)
+            ->fetchMode(\PDO::FETCH_ASSOC)
+            ->getAll();
 
         if (isset($rows_table->status)) {
             $output->writeln($this->successOutput("\t>>  {$rows_table->message}"));
