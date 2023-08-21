@@ -1,6 +1,11 @@
 # Release Notes
 
-## [v15.1.1](https://github.com/lion-packages/framework/compare/v15.1.0...v15.1.1) (2023-08-20)
+## [v15.1.1](https://github.com/lion-packages/framework/compare/v15.1.0...v15.1.1) (2023-08-21)
+
+### Changed
+- the db:select command has been validated to select data from an entity
+- the db:columns command has been validated to select data from an entity
+- updated docker-compose configuration
 
 ### Fixed
 - fixed reading folders to run migrations
