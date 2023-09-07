@@ -39,7 +39,8 @@ class LoginController {
             'jwt' => JWT::encode([
                 'session' => true,
                 'idusers' => $session->idusers,
-                'idroles' => $session->idroles
+                'idroles' => $session->idroles,
+                'users_code' => $session->users_code
             ])
         ]);
     }
