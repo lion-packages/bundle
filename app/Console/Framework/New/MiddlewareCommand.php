@@ -41,7 +41,7 @@ class MiddlewareCommand extends Command
 		Store::folder($url_folder);
 
 		$this->create($url_folder, $list['class']);
-		$this->add("<?php\n\n");
+		$this->add("<?php\n\ndeclare(strict_types=1);\n\n");
 		$this->add("namespace {$list['namespace']};\n\n");
 		$this->add("class {$list['class']}\n{\n");
 		$this->add("\tpublic function __construct()\n\t{\n\n\t}\n}\n");
@@ -51,7 +51,7 @@ class MiddlewareCommand extends Command
         $output->writeln($this->warningOutput("\t>>  MIDDLEWARE: {$middleware}"));
 
         $output->writeln(
-        	$this->successOutput("\t>>  MIDDLEWARE: The '{$list['namespace']}\\{$list['class']}' middleware has been generated")
+        	$this->successOutput("\t>>  MIDDLEWARE: the '{$list['namespace']}\\{$list['class']}' middleware has been generated")
         );
 
 		return Command::SUCCESS;

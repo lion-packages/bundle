@@ -40,7 +40,7 @@ class ModelCommand extends Command
 		Store::folder($url_folder);
 
 		$this->create($url_folder, $list['class']);
-		$this->add("<?php\n\n");
+		$this->add("<?php\n\ndeclare(strict_types=1);\n\n");
 		$this->add("namespace {$list['namespace']};\n\n");
 		$this->add("use LionDatabase\Drivers\MySQL\MySQL as DB;\n\n");
 		$this->add("class {$list['class']} \n{\n");

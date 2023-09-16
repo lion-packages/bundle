@@ -44,6 +44,7 @@ class TraitCommand extends Command
 
         $this->add(
             str->of('<?php')->ln()->ln()
+                ->concat('declare(strict_types=1);')->ln()->ln()
                 ->concat('namespace')->spaces(1)
                 ->concat("{$list['namespace']};")->ln()->ln()
                 ->concat('trait')->spaces(1)

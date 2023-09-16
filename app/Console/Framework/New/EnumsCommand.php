@@ -41,17 +41,22 @@ class EnumsCommand extends Command
         Store::folder($url_folder);
 
         $this->create($url_folder, $list['class']);
-        $this->add(str->of("<?php")->ln()->ln()->get());
-        $this->add(str->of("namespace ")->concat($list['namespace'])->concat(";")->ln()->ln()->get());
 
         $this->add(
-            str->of("enum ")
+            str->of("<?php")->ln()->ln()
+                ->concat('declare(strict_types=1);')->ln()->ln()
+                ->concat("namespace")->spaces(1)
+                ->concat($list['namespace'])
+                ->concat(";")->ln()->ln()
+                ->concat("enum")->spaces(1)
                 ->concat($list['class'])
-                ->concat(": string {")->ln()->ln()->lt()
-                ->concat("case EXAMPLE = 'example';")->ln()->ln()->lt()
-                ->concat("public static function values(): array {")->ln()->lt()->lt()
-                ->concat('return array_map(fn($value) => $value->value, self::cases());')->ln()->lt()
-                ->concat("}")->ln()->ln()
+                ->concat(": string")->ln()
+                ->concat('{')->ln()
+                ->lt()->concat("case EXAMPLE = 'example';")->ln()->ln()
+                ->lt()->concat("public static function values(): array")->ln()
+                ->lt()->concat('{')->ln()
+                ->lt()->lt()->concat('return array_map(fn($value) => $value->value, self::cases());')->ln()
+                ->lt()->concat("}")->ln()
                 ->concat("}")
                 ->get()
         );
@@ -62,7 +67,7 @@ class EnumsCommand extends Command
         $output->writeln($this->warningOutput("\t>>  ENUM: {$enum}"));
 
         $output->writeln(
-            $this->successOutput("\t>>  ENUM: The '{$list['namespace']}\\{$list['class']}' enum has been generated")
+            $this->successOutput("\t>>  ENUM: the '{$list['namespace']}\\{$list['class']}' enum has been generated")
         );
 
         return Command::SUCCESS;
