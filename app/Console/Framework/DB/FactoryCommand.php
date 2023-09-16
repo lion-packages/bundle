@@ -41,25 +41,25 @@ class FactoryCommand extends Command
         Store::folder($url_folder);
 
         $this->create($url_folder, $list['class']);
-        $this->add(str->of("<?php\r")->ln()->ln()->get());
+        $this->add(str->of("<?php")->ln()->ln()->concat('declare(strict_types=1);')->ln()->ln()->get());
         $this->add(str->of("namespace ")->concat($list['namespace'])->concat(";")->ln()->ln()->get());
         $this->add(str->of("use App\Traits\Framework\Faker;")->ln()->ln()->get());
-        $this->add(str->of("class ")->concat($list['class'])->concat(" {\r")->ln()->ln()->get());
+        $this->add(str->of("class ")->concat($list['class'])->concat("\n{")->ln()->get());
         $this->add("\tuse Faker;\n\n");
         $this->add("\t/**\n");
         $this->add("\t * ------------------------------------------------------------------------------\n");
         $this->add("\t * Define the model's default state\n");
         $this->add("\t * ------------------------------------------------------------------------------\n");
         $this->add("\t **/\n");
-        $this->add("\tpublic static function definition(): array {\n\t\treturn [self::get()->name()];\n\t}\n\n");
-        $this->add("}");
+        $this->add("\tpublic static function definition(): array\n\t{\n\t\treturn [self::get()->name()];\n\t}\n");
+        $this->add("}\n");
         $this->force();
         $this->close();
 
         $output->writeln($this->warningOutput("\t>>  FACTORY: {$factory}"));
 
         $output->writeln(
-            $this->successOutput("\t>>  FACTORY: The '{$list['namespace']}\\{$list['class']}' factory has been generated")
+            $this->successOutput("\t>>  FACTORY: the '{$list['namespace']}\\{$list['class']}' factory has been generated")
         );
 
         return Command::SUCCESS;
