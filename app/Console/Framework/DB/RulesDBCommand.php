@@ -100,22 +100,22 @@ class RulesDBCommand extends Command
                 // edit rule content
                 $path = "app/Rules/{$main_conn_pascal}/{$entity_pascal}/{$rule_name}.php";
                 $this->readFileRows($path, [
-                    11 => [
+                    14 => [
                         'replace' => true,
                         'content' => '"' . $column->Field . '"',
                         'search' => '""'
                     ],
-                    12 => [
+                    15 => [
                         'replace' => true,
                         'content' => '"' . $column->Comment . '"',
                         'search' => '""'
                     ],
-                    14 => [
+                    16 => [
                         'replace' => true,
                         'content' => ($column->Null === "NO" ? "false" : "true"),
                         'search' => 'false'
                     ],
-                    18 => [
+                    22 => [
                         'replace' => true,
                         'multiple' => [
                             [
