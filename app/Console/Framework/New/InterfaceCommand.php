@@ -41,9 +41,18 @@ class InterfaceCommand extends Command
         Store::folder($url_folder);
 
         $this->create($url_folder, $list['class']);
-        $this->add(str->of("<?php")->ln()->ln()->get());
-        $this->add(str->of("namespace ")->concat($list['namespace'])->concat(";")->ln()->ln()->get());
-        $this->add(str->of("interface ")->concat($list['class'])->concat(" {")->ln()->ln()->concat("}")->get());
+
+       	$this->add(
+        	str->of("<?php")->ln()->ln()
+        		->concat('namespace')->spaces(1)
+        		->concat("{$list['namespace']};")->ln()->ln()
+        		->concat('interface')->spaces(1)
+        		->concat($list['class'])->ln()
+        		->concat('{')->ln()->ln()
+        		->concat("}")->ln()
+        		->get()
+        );
+
         $this->force();
         $this->close();
 
