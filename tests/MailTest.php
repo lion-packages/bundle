@@ -15,6 +15,8 @@ class MailTest extends TestCase
             ->body("<h1>TESTING</h1>")
             ->send();
 
+        $this->assertObjectHasProperty('status', $response);
+        $this->assertObjectHasProperty('message', $response);
         $this->assertEquals("success", $response->status);
     }
 
@@ -25,6 +27,8 @@ class MailTest extends TestCase
             ->body("<h1>TESTING</h1>")
             ->send();
 
+        $this->assertObjectHasProperty('status', $response);
+        $this->assertObjectHasProperty('message', $response);
         $this->assertEquals("success", $response->status);
     }
 
