@@ -43,8 +43,8 @@ class MiddlewareCommand extends Command
 		$this->create($url_folder, $list['class']);
 		$this->add("<?php\n\n");
 		$this->add("namespace {$list['namespace']};\n\n");
-		$this->add("class {$list['class']} {\n\n");
-		$this->add("\tpublic function __construct() {\n\n\t}\n\n}");
+		$this->add("class {$list['class']}\n{\n");
+		$this->add("\tpublic function __construct()\n\t{\n\n\t}\n}\n");
 		$this->force();
 		$this->close();
 
