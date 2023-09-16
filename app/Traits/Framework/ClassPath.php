@@ -12,16 +12,17 @@ trait ClassPath
     public static function getTemplateCreateProcedure(): string
     {
         return str->of("<?php")->ln()->ln()
+            ->concat('declare(strict_types=1);')->ln()->ln()
             ->concat("use App\Traits\Framework\Faker;")->ln()
             ->concat("use LionDatabase\Drivers\MySQL\MySQL as DB;")->ln()
             ->concat("use LionDatabase\Drivers\MySQL\Schema;")->ln()->ln()
-            ->concat("return new class {")->ln()->ln()
+            ->concat("return new class\n{")->ln()
             ->lt()->concat("use Faker;")->ln()->ln()
             ->lt()->concat('private string $procedure = "procedure";')->ln()->ln()
-            ->lt()->concat("public function getMigration(): array {")->ln()
+            ->lt()->concat("public function getMigration(): array\n\t{")->ln()
             ->lt()->lt()->concat('return ["type" => "PROCEDURE", "procedure" => $this->procedure, "connection" => env->DB_NAME];')->ln()
             ->lt()->concat("}")->ln()->ln()
-            ->lt()->concat("public function execute(): object {")->ln()
+            ->lt()->concat("public function execute(): object\n\t{")->ln()
             ->lt()->lt()->concat("return Schema::connection(env->DB_NAME)")->ln()
             ->lt()->lt()->lt()->concat('->procedure($this->procedure)')->ln()
             ->lt()->lt()->lt()->concat("->create()")->ln()
@@ -36,9 +37,9 @@ trait ClassPath
             ->lt()->lt()->lt()->concat("})")->ln()
             ->lt()->lt()->lt()->concat("->execute();")->ln()
             ->lt()->concat("}")->ln()->ln()
-            ->lt()->concat("public function insert(): array {")->ln()
+            ->lt()->concat("public function insert(): array\n\t{")->ln()
             ->lt()->lt()->concat('return ["rows" => []];')->ln()
-            ->lt()->concat("}")->ln()->ln()
+            ->lt()->concat("}")->ln()
             ->concat("};")
             ->get();
     }
@@ -46,13 +47,14 @@ trait ClassPath
     public static function getTemplateCreateView(): string
     {
         return str->of("<?php")->ln()->ln()
+            ->concat('declare(strict_types=1);')->ln()->ln()
             ->concat("use LionDatabase\Drivers\MySQL\MySQL as DB;")->ln()
             ->concat("use LionDatabase\Drivers\MySQL\Schema;")->ln()->ln()
-            ->concat("return new class {")->ln()->ln()
-            ->lt()->concat("public function getMigration(): array {")->ln()
+            ->concat("return new class\n{")->ln()->ln()
+            ->lt()->concat("public function getMigration(): array\n\t{")->ln()
             ->lt()->lt()->concat('return ["type" => "VIEW", "connection" => env->DB_NAME];')->ln()
             ->lt()->concat("}")->ln()->ln()
-            ->lt()->concat("public function execute(): object {")->ln()
+            ->lt()->concat("public function execute(): object\n\t{")->ln()
             ->lt()->lt()->concat("return Schema::connection(env->DB_NAME)")->ln()
             ->lt()->lt()->lt()->concat('->view("view")')->ln()
             ->lt()->lt()->lt()->concat("->create()")->ln()
@@ -60,7 +62,7 @@ trait ClassPath
             ->lt()->lt()->lt()->lt()->concat('$db->table("table")->select();')->ln()
             ->lt()->lt()->lt()->concat("})")->ln()
             ->lt()->lt()->lt()->concat("->execute();")->ln()
-            ->lt()->concat("}")->ln()->ln()
+            ->lt()->concat("}")->ln()
             ->concat("};")
             ->get();
     }
@@ -68,15 +70,16 @@ trait ClassPath
     public static function getTemplateCreateTable(): string
     {
         return str->of("<?php")->ln()->ln()
+            ->concat('declare(strict_types=1);')->ln()->ln()
             ->concat("use App\Traits\Framework\Faker;")->ln()
             ->concat("use LionDatabase\Drivers\MySQL\Schema;")->ln()->ln()
-            ->concat("return new class {")->ln()->ln()
+            ->concat("return new class\n{")->ln()
             ->lt()->concat("use Faker;")->ln()->ln()
             ->lt()->concat('private string $table = "table";')->ln()->ln()
-            ->lt()->concat("public function getMigration(): array {")->ln()
+            ->lt()->concat("public function getMigration(): array\n\t{")->ln()
             ->lt()->lt()->concat('return ["type" => "TABLE", "table" => $this->table, "connection" => env->DB_NAME, "index" => null];')->ln()
             ->lt()->concat("}")->ln()->ln()
-            ->lt()->concat("public function execute(): object {")->ln()
+            ->lt()->concat("public function execute(): object\n\t{")->ln()
             ->lt()->lt()->concat("return Schema::connection(env->DB_NAME)")->ln()
             ->lt()->lt()->lt()->concat('->table($this->table, true)')->ln()
             ->lt()->lt()->lt()->concat("->create()")->ln()
@@ -84,9 +87,9 @@ trait ClassPath
             ->lt()->lt()->lt()->concat("->column('name', ['type' => 'varchar', 'null' => true, 'default' => 'unnamed'])")->ln()
             ->lt()->lt()->lt()->concat("->execute();")->ln()
             ->lt()->concat("}")->ln()->ln()
-            ->lt()->concat("public function insert(): array {")->ln()
+            ->lt()->concat("public function insert(): array\n\t{")->ln()
             ->lt()->lt()->concat('return ["columns" => [], "rows" => []];')->ln()
-            ->lt()->concat("}")->ln()->ln()
+            ->lt()->concat("}")->ln()
             ->concat("};")
             ->get();
     }
