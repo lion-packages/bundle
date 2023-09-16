@@ -228,19 +228,23 @@ trait ClassPath
     public static function generateFunctionsController(
         string $method,
         string $controller,
+        bool $last = false,
         ?string $model = null
     ): string
     {
         if ($model === null) {
-            return str->of("")->lt()
-                ->concat("public function ")
+            return str->of("")
+                ->lt()->concat("public function")->spaces(1)
                 ->concat($method)
                 ->concat($controller)
                 ->replace("Controller", "")
                 ->replace("controller", "")
-                ->concat("() {")->ln()->lt()->lt()
-                ->concat("return success();")->ln()->lt()
-                ->concat("}")->ln()->ln()
+                ->concat((in_array($method, ['update', 'delete']) ? '(string $id): ' : '(): '))
+                ->concat($method === 'read' ? 'array|object' : 'object')->ln()
+                ->lt()->concat('{')->ln()
+                ->lt()->lt()->concat("return success();")->ln()
+                ->lt()->concat("}")->ln()
+                ->concat(!$last ? "\n" : '')
                 ->get();
         }
 
@@ -252,31 +256,37 @@ trait ClassPath
             ->get();
 
         if ($method === "read") {
-            return str->of("")->lt()
-                ->concat("public function ")
+            return str->of("")
+                ->lt()->concat("public function")->spaces(1)
                 ->concat($method)
                 ->concat($controller)
                 ->replace("Controller", "")
                 ->replace("controller", "")
-                ->concat("() {")->ln()->lt()->lt()
-                ->concat('return $this->' . $model . "->")
-                ->concat($model_method)->ln()->lt()
-                ->concat("}")->ln()->ln()
+                ->concat("(): array|object\n\t{")->ln()
+                ->lt()->lt()->concat('return $this->' . $model . '->')
+                ->concat($model_method)->ln()
+                ->lt()->concat("}")->ln()
+                ->concat(!$last ? "\n" : '')
                 ->get();
         } else {
-            return str->of("")->lt()
-                ->concat("public function ")
+            return str->of("")
+                ->lt()->concat("public function ")
                 ->concat($method)
                 ->concat($controller)
                 ->replace("Controller", "")
                 ->replace("controller", "")
-                ->concat("() {")->ln()->lt()->lt()
-                ->concat('$res_' . $method . ' = $this->' . $model . "->")
-                ->concat($model_method)->ln()->ln()->lt()->lt()
-                ->concat('return isError($res_'. $method . ')')->ln()->lt()->lt()->lt()
-                ->concat('? error()')->ln()->lt()->lt()->lt()
-                ->concat(': success();')->ln()->lt()
-                ->concat("}")->ln()->ln()
+                ->concat(
+                    in_array($method, ['update', 'delete'])
+                        ? ('(string $id): object ' . "\n\t{\n")
+                        : ('(): object ' . "\n\t{\n")
+                )
+                ->lt()->lt()->concat('$res_' . $method . ' = $this->' . $model . "->")
+                ->concat($model_method)->ln()->ln()
+                ->lt()->lt()->concat('return isError($res_'. $method . ')')->ln()
+                ->lt()->lt()->lt()->concat('? error()')->ln()
+                ->lt()->lt()->lt()->concat(': success();')->ln()
+                ->lt()->concat("}")->ln()
+                ->concat(!$last ? "\n" : '')
                 ->get();
         }
     }

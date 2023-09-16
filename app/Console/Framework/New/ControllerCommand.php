@@ -49,28 +49,45 @@ class ControllerCommand extends Command
         }
 
         $this->create($url_folder, $list['class']);
-        $this->add("<?php\n\n");
+        $this->add("<?php\n\ndeclare(strict_types=1);\n\n");
         $this->add("namespace {$list['namespace']};\n\n");
 
         if ($model != null) {
-            $this->add("use {$list_model['namespace']}\\{$list_model['class']}; \n\n");
+            $this->add("use {$list_model['namespace']}\\{$list_model['class']};\n\n");
         }
 
-        $this->add("class {$list['class']} {\n\n");
+        $this->add("class {$list['class']}\n{\n");
 
         if ($model != null) {
-            $camel_class = Str::of(lcfirst($list_model['class']))->trim()->get();
-            $this->add(Str::of("\tprivate {$list_model['class']} $")->concat($camel_class)->concat(";")->ln()->ln()->get());
-            $this->add("\tpublic function __construct() {\n\t\t" . '$this->' . "{$camel_class} = new {$list_model['class']}();\n\t}\n\n");
+            $camel_class = str->of(lcfirst($list_model['class']))->trim()->get();
+            $this->add(
+                str->of("\tprivate {$list_model['class']} $")
+                    ->concat($camel_class)
+                    ->concat(";")->ln()->ln()
+                    ->get()
+            );
+
+            $this->add(
+                "\tpublic function __construct()\n\t{\n\t\t" . '$this->' . "{$camel_class} = new {$list_model['class']}();\n\t}\n\n"
+            );
         } else {
-            $this->add("\tpublic function __construct() {\n\n\t}\n\n");
+            $this->add("\tpublic function __construct()\n\t{\n\n\t}\n\n");
         }
 
         foreach (["create", "read", "update", "delete"] as $key => $method) {
             if ($model != null) {
-                $this->add($this->generateFunctionsController($method, $list['class'], $camel_class));
+                $this->add($this->generateFunctionsController(
+                    $method,
+                    $list['class'],
+                    ($method === 'delete' ? true : false),
+                    $camel_class
+                ));
             } else {
-                $this->add($this->generateFunctionsController($method, $list['class']));
+                $this->add($this->generateFunctionsController(
+                    $method,
+                    $list['class'],
+                    ($method === 'delete' ? true : false)
+                ));
             }
         }
 
@@ -79,7 +96,11 @@ class ControllerCommand extends Command
         $this->close();
 
         $output->writeln($this->warningOutput("\t>>  CONTROLLER: {$controller}"));
-        $output->writeln($this->successOutput("\t>>  CONTROLLER: The '{$list['namespace']}\\{$list['class']}' controller has been generated"));
+        $output->writeln(
+            $this->successOutput(
+                "\t>>  CONTROLLER: the '{$list['namespace']}\\{$list['class']}' controller has been generated"
+            )
+        );
 
         if ($model != null) {
             $this->getApplication()->find('new:model')->run(
