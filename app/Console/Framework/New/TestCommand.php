@@ -48,22 +48,24 @@ class TestCommand extends Command
         $this->add(
             str->of("class ")
                 ->concat($list['class'])
-                ->concat(" extends TestCase {")->ln()->ln()->lt()
-                ->concat("public function setUp(): void {")->ln()->ln()->lt()
-                ->concat("}")->ln()->ln()->lt()
-                ->concat("public function testExample() {")->ln()->ln()->lt()
-                ->concat("}")->ln()->ln()
-                ->concat("}")
+                ->concat(' extends TestCase ')->ln()
+                ->concat('{')->ln()
+                ->lt()->concat("public function testExample1(): void ")->ln()
+                ->lt()->concat('{')->ln()->ln()
+                ->lt()->concat("}")->ln()->ln()
+                ->lt()->concat("public function setUp(): void ")->ln()
+                ->lt()->concat('{')->ln()->ln()
+                ->lt()->concat("}")->ln()
+                ->concat("}")->ln()
                 ->get()
         );
 
         $this->force();
         $this->close();
-
         $output->writeln($this->warningOutput("\t>>  TEST: {$test}"));
 
         $output->writeln(
-            $this->successOutput("\t>>  TEST: The '{$list['namespace']}\\{$list['class']}' test has been generated")
+            $this->successOutput("\t>>  TEST: the '{$list['namespace']}\\{$list['class']}' test has been generated")
         );
 
         return Command::SUCCESS;
