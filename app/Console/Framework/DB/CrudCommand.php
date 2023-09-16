@@ -75,10 +75,10 @@ class CrudCommand extends Command
         $path_c = "app/Http/Controllers/{$main_conn_pascal}/{$file_c}.php";
 
         $this->readFileRows($path_c, [
-            6 => ['replace' => false, 'content' => "use {$namespace_class};\n\n"],
-            16 => ['replace' => true, 'content' => "(\n\t\t\t{$list['class']}::capsule()\n\t\t)", 'search' => "()"],
-            29 => ['replace' => true, 'content' => "(\n\t\t\t{$list['class']}::capsule()\n\t\t)", 'search' => "()"],
-            38 => ['replace' => true, 'content' => "(\n\t\t\t{$list['class']}::capsule()\n\t\t)", 'search' => "()"],
+            8 => ['replace' => false, 'content' => "use {$namespace_class};\n\n"],
+            20 => ['replace' => true, 'content' => "({$list['class']}::capsule())", 'search' => "()"],
+            34 => ['replace' => true, 'content' => "({$list['class']}::capsule())", 'search' => "()"],
+            43 => ['replace' => true, 'content' => "({$list['class']}::capsule())", 'search' => "()"],
         ]);
 
         // modify models
@@ -89,34 +89,40 @@ class CrudCommand extends Command
 
         foreach ($methods as $key => $method) {
             foreach ($method as $keyMethod => $name) {
-                $list_methods[$key] .= str->of("\t")->lt()->lt()->concat('$')->concat(lcfirst($entity_pascal))->concat("->")->concat($name)->concat(",")->ln()->get();
+                $list_methods[$key] .= str->of("\t")
+                    ->lt()->lt()->concat('$')
+                    ->concat(lcfirst($entity_pascal))
+                    ->concat("->")
+                    ->concat($name)
+                    ->concat(",")->ln()
+                    ->get();
             }
         }
 
         $this->readFileRows($path_m, [
-            4 => [ // namespace
+            6 => [ // namespace
                 'replace' => false,
                 'content' => "\nuse {$namespace_class};\n"
             ],
-            14 => [ // parameter create entity
+            11 => [ // parameter create entity
                 'replace' => true,
                 'content' => "({$entity_pascal} $" . lcfirst($entity_pascal) . ")", 'search' => '()'
             ],
-            15 => [ // values create entity
+            13 => [ // values create entity
                 'replace' => true,
                 'multiple' => [
                     ['content' => "'create_{$entity}'", 'search' => "''"],
                     ['content' => "[\n{$list_methods['create']}\t\t]", 'search' => '[]']
                 ]
             ],
-            20 => [ // read entity
+            19 => [ // read entity
                 'replace' => true,
                 'multiple' => [
                     // ['content' => "table", 'search' => "view"],
                     ['content' => "'read_{$entity}'", 'search' => "''"]
                 ]
             ],
-            23 => [ // parameter update entity
+            22 => [ // parameter update entity
                 'replace' => true,
                 'content' => "({$entity_pascal} $" . lcfirst($entity_pascal) . ")", 'search' => '()'
             ],
@@ -131,7 +137,7 @@ class CrudCommand extends Command
                 'replace' => true,
                 'content' => "({$entity_pascal} $" . lcfirst($entity_pascal) . ")", 'search' => '()'
             ],
-            29 => [ // values update entity
+            30 => [ // values update entity
                 'replace' => true,
                 'multiple' => [
                     ['content' => "'delete_{$entity}'", 'search' => "''"],
@@ -260,7 +266,7 @@ class CrudCommand extends Command
                 $file = str->of($str_file)
                     ->replace("--DATABASE--", $main_conn)
                     ->replace("--PROCEDURE--", "{$method}_{$entity}")
-                    ->replace("--PARAMS--", arr->of($values['params'])->join(", "))
+                    ->replace("--PARAMS--", arr->of($values['params'])->join(","))
                     ->replace("--SQL--", "UPDATE {$entity} SET {$new_values}")
                     ->get();
 
@@ -274,7 +280,7 @@ class CrudCommand extends Command
                     $file = str->of($str_file)
                         ->replace("--DATABASE--", $main_conn)
                         ->replace("--PROCEDURE--", "{$method}_{$entity}")
-                        ->replace("--PARAMS--", arr->of($values['params'])->join(", "))
+                        ->replace("--PARAMS--", arr->of($values['params'])->join(","))
                         ->replace("--SQL--", "DELETE FROM {$entity} WHERE {$values['columns'][0]}={$values['values'][0]}")
                         ->get();
 
@@ -298,7 +304,7 @@ class CrudCommand extends Command
             }
         }
 
-        $output->writeln($this->infoOutput("\t>>  CRUD: Crud has been generated for the '{$entity}' entity"));
+        $output->writeln($this->infoOutput("\t>>  CRUD: crud has been generated for the '{$entity}' entity"));
         return Command::SUCCESS;
     }
 }

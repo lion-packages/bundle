@@ -91,7 +91,7 @@ class ControllerCommand extends Command
             }
         }
 
-        $this->add("}");
+        $this->add("}\n");
         $this->force();
         $this->close();
 
