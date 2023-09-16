@@ -37,12 +37,13 @@ class ExportDatabaseCommand extends Command
 	{
         $connections = DB::getConnections();
         $info = $connections['connections'][$input->getArgument("connection")];
-        $actual_date = Carbon::now()->format('Y_m_d');
+        $actual_date = Carbon::now()->format('Y_m_d_H_i');
 
         if ($info['type'] === "mysql") {
-            $path = __DIR__ . "/../../../../storage/backups/database/";
+            $path = __DIR__ . "/../../../../storage/backups/database/mysql/";
             $file_name = "{$info['dbname']}_{$actual_date}.sql";
             kernel->execute("mysqldump -h {$info['host']} --user='{$info['user']}' --password='{$info['password']}' --routines --triggers --events --add-drop-table --dump-date --hex-blob --order-by-primary --single-transaction --disable-keys --add-drop-database {$info['dbname']} > {$path}{$file_name}");
+
             $output->writeln($this->successOutput("DATABASE: {$info['dbname']}"));
             $output->writeln($this->warningOutput("DATABASE: exported database in /storage/backups/database/{$info['dbname']}_{$actual_date}.sql"));
         }
