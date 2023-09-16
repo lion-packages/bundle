@@ -59,7 +59,12 @@ class CapsuleCommand extends Command
         }
 
         $index = 0;
-        $list = $this->export("Database/Class/{$main_conn_pascal}/", $this->normalizeClass(str->of($table)->replace('`', '')->get()));
+
+        $list = $this->export(
+            "Database/Class/{$main_conn_pascal}/",
+            $this->normalizeClass(str->of($table)->replace('`', '')->get())
+        );
+
         $functions_union = "";
         $propierties_union = "";
         $new_object_union = "";
@@ -68,12 +73,20 @@ class CapsuleCommand extends Command
         $url_folder = lcfirst(str->of($list['namespace'])->replace("\\", "/")->get());
         Store::folder($url_folder);
         $this->create($url_folder, $list['class']);
-        $this->add(str->of("<?php")->ln()->ln()->get());
-        $this->add(str->of("namespace ")->concat($list['namespace'])->concat(";\r\n\n")->get());
+        $this->add(str->of("<?php")->ln()->ln()->concat('declare(strict_types=1);')->ln()->ln()->get());
+
         $this->add(
-            str->of("class ")
-                ->concat($list['class'])
-                ->concat(" implements \JsonSerializable {")->ln()->ln()
+            str->of("namespace")->spaces(1)
+                ->concat($list['namespace'])
+                ->concat(";")->ln()->ln()
+                ->get()
+        );
+
+        $this->add(
+            str->of('use JsonSerializable;')->ln()->ln()
+                ->concat("class")->spaces(1)
+                ->concat($list['class'])->spaces(1)
+                ->concat("implements JsonSerializable\n{")->ln()
                 ->get()
         );
 
@@ -94,13 +107,13 @@ class CapsuleCommand extends Command
 
         // Class
         $this->add($propierties_union);
-        $this->add(str->of("\n\tpublic function __construct() {\n\n")->concat("\t}\n\n")->get());
-        $this->add("\tpublic function jsonSerialize(): mixed {\n\t\t" . 'return get_object_vars($this);' . "\n\t}\n\n");
+        // $this->add(str->of("\n\tpublic function __construct()\n\t{\n\n")->concat("\t}\n\n")->get());
+        $this->add("\n\tpublic function jsonSerialize(): mixed\n\t{\n\t\t" . 'return get_object_vars($this);' . "\n\t}\n\n");
 
         $this->add(
             str->of("\tpublic static function capsule(): ")
                 ->concat($list['class'])
-                ->concat(" {")->ln()->lt()->lt()
+                ->concat("\n\t{")->ln()->lt()->lt()
                 ->concat($new_object_union)
                 ->concat($functions_union)->lt()->lt()
                 ->concat("return ")
@@ -115,13 +128,13 @@ class CapsuleCommand extends Command
             $field = $this->cleanField($column->Field);
             $normalize_field = $this->normalizeField($field, true);
 
-            $this->add("\tpublic function get" . $this->normalizeClass($field) . "(): ?" . $this->addType($column->Type) . " {\n\t\t");
+            $this->add("\tpublic function get" . $this->normalizeClass($field) . "(): ?" . $this->addType($column->Type) . "\n\t{\n\t\t");
             $this->add('return $this->' . $normalize_field . ";");
             $this->add("\n\t}\n\n");
 
             $this->add(
                 str->of($this->addSetFunction($column->Type, $normalize_field, $list['class']))
-                    ->concat(" {\n")
+                    ->concat("\n\t{\n")
                     ->concat("\t\t")
                     ->concat('$this->')
                     ->concat($normalize_field)
@@ -129,17 +142,18 @@ class CapsuleCommand extends Command
                     ->concat($normalize_field)
                     ->concat(";\n\t\t")
                     ->concat('return $this;')
-                    ->concat("\n\t}\n\n")
+                    ->concat("\n\t}\n")
+                    ->concat((count($columns) - 1) === $key ? '' : "\n")
                     ->get()
             );
         }
 
-        $this->add("}");
+        $this->add("}\n");
         $this->force();
         $this->close();
 
         if ($message != null) {
-            $output->writeln($this->successOutput("\t>>  CAPSULE: The '{$list['namespace']}\\{$list['class']}' capsule has been generated"));
+            $output->writeln($this->successOutput("\t>>  CAPSULE: the '{$list['namespace']}\\{$list['class']}' capsule has been generated"));
         }
 
         return Command::SUCCESS;
