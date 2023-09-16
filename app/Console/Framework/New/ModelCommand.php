@@ -9,27 +9,31 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\{ InputInterface, InputArgument };
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ModelCommand extends Command {
-
+class ModelCommand extends Command
+{
     use ClassPath, ConsoleOutput;
 
 	protected static $defaultName = 'new:model';
 
-	protected function initialize(InputInterface $input, OutputInterface $output) {
+	protected function initialize(InputInterface $input, OutputInterface $output)
+	{
 
 	}
 
-	protected function interact(InputInterface $input, OutputInterface $output) {
+	protected function interact(InputInterface $input, OutputInterface $output)
+	{
 
 	}
 
-	protected function configure() {
+	protected function configure()
+	{
 		$this
             ->setDescription('Command required for the creation of new Models')
             ->addArgument('model', InputArgument::OPTIONAL, 'Model name', "ExampleModel");
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output)
+	{
         $model = $input->getArgument('model');
 		$list = $this->export("app/Models/", $model);
 		$url_folder = lcfirst(str_replace("\\", "/", $list['namespace']));
@@ -52,8 +56,11 @@ class ModelCommand extends Command {
         $this->close();
 
         $output->writeln($this->warningOutput("\t>>  MODEL: {$model}"));
-        $output->writeln($this->successOutput("\t>>  MODEL: The '{$list['namespace']}\\{$list['class']}' model has been generated"));
+
+        $output->writeln(
+        	$this->successOutput("\t>>  MODEL: The '{$list['namespace']}\\{$list['class']}' model has been generated")
+        );
+
         return Command::SUCCESS;
     }
-
 }

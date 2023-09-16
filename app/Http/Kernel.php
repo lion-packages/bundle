@@ -7,8 +7,7 @@ use App\Traits\Framework\Index;
 use App\Traits\Framework\Session;
 use App\Traits\Framework\Singleton;
 
-class Kernel {
-
+class Kernel
+{
     use Singleton, Index, Http, Session;
-
 }

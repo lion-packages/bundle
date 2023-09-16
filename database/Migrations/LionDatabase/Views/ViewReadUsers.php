@@ -3,13 +3,15 @@
 use LionDatabase\Drivers\MySQL\MySQL as DB;
 use LionDatabase\Drivers\MySQL\Schema;
 
-return new class {
-
-	public function getMigration(): array {
+return new class
+{
+	public function getMigration(): array
+    {
 		return ["type" => "VIEW", "connection" => env->DB_NAME];
 	}
 
-	public function execute(): object {
+	public function execute(): object
+    {
 		return Schema::connection(env->DB_NAME)
 			->view("read_users")
 			->create()
@@ -34,5 +36,4 @@ return new class {
 			})
 			->execute();
 	}
-
 };

@@ -6,32 +6,38 @@ use App\Traits\Framework\ClassPath;
 use App\Traits\Framework\ConsoleOutput;
 use LionFiles\Store;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\{ InputInterface, InputArgument, InputOption };
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
-class SeedCommand extends Command {
-
+class SeedCommand extends Command
+{
     use ClassPath, ConsoleOutput;
 
 	protected static $defaultName = "db:seed";
 
-	protected function initialize(InputInterface $input, OutputInterface $output) {
+	protected function initialize(InputInterface $input, OutputInterface $output)
+    {
 
     }
 
-    protected function interact(InputInterface $input, OutputInterface $output) {
+    protected function interact(InputInterface $input, OutputInterface $output)
+    {
 
     }
 
-    protected function configure() {
+    protected function configure()
+    {
         $this
             ->setDescription("Command required for creating new seeds")
             ->addArgument('seed', InputArgument::OPTIONAL, 'Name or namespace of the Seed', 'ExampleSeed')
             ->addOption('run', 'r', InputOption::VALUE_REQUIRED, 'Do you want to run the seeder?');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) {
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $seed = $input->getArgument('seed');
         $run = $input->getOption('run');
 
@@ -86,5 +92,4 @@ class SeedCommand extends Command {
 
         return Command::SUCCESS;
     }
-
 }

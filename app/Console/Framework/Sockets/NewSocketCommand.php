@@ -10,27 +10,31 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class NewSocketCommand extends Command {
-
+class NewSocketCommand extends Command
+{
     use ClassPath, ConsoleOutput;
 
 	protected static $defaultName = "socket:new";
 
-	protected function initialize(InputInterface $input, OutputInterface $output) {
+	protected function initialize(InputInterface $input, OutputInterface $output)
+    {
 
 	}
 
-	protected function interact(InputInterface $input, OutputInterface $output) {
+	protected function interact(InputInterface $input, OutputInterface $output)
+    {
 
 	}
 
-	protected function configure() {
+	protected function configure()
+    {
         $this
             ->setDescription('Command required for creating new WebSockets')
             ->addArgument('socket', InputArgument::OPTIONAL, 'Socket name', "ExampleSocket");
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $socket = $input->getArgument('socket');
 		$list = $this->export("app/Http/Sockets/", $socket);
         $url_folder = lcfirst(str_replace("\\", "/", $list['namespace']));
@@ -73,9 +77,11 @@ class NewSocketCommand extends Command {
         $this->close();
 
         $output->writeln($this->warningOutput("\t>>  SOCKET: {$socket}"));
-        $output->writeln($this->successOutput("\t>>  SOCKET: The '{$list['namespace']}\\{$list['class']}' socket has been generated"));
+
+        $output->writeln(
+            $this->successOutput("\t>>  SOCKET: The '{$list['namespace']}\\{$list['class']}' socket has been generated")
+        );
 
         return Command::SUCCESS;
 	}
-
 }

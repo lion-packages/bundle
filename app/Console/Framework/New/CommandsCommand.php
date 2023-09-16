@@ -10,27 +10,31 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CommandsCommand extends Command {
-
+class CommandsCommand extends Command
+{
     use ClassPath, ConsoleOutput;
 
 	protected static $defaultName = "new:command";
 
-	protected function initialize(InputInterface $input, OutputInterface $output) {
+	protected function initialize(InputInterface $input, OutputInterface $output)
+    {
 
 	}
 
-	protected function interact(InputInterface $input, OutputInterface $output) {
+	protected function interact(InputInterface $input, OutputInterface $output)
+    {
 
 	}
 
-	protected function configure() {
+	protected function configure()
+    {
 		$this
             ->setDescription('Command required for the creation of new Commands')
             ->addArgument('new-command', InputArgument::OPTIONAL, 'Command name', "ExampleCommand");
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $command = $input->getArgument('new-command');
 		$list = $this->export("app/Console/Commands/", $command);
         $url_folder = lcfirst(str_replace("\\", "/", $list['namespace']));
@@ -62,5 +66,4 @@ class CommandsCommand extends Command {
 
         return Command::SUCCESS;
 	}
-
 }

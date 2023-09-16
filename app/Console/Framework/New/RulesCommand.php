@@ -10,27 +10,31 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class RulesCommand extends Command {
-
+class RulesCommand extends Command
+{
     use ClassPath, ConsoleOutput;
 
     protected static $defaultName = "new:rule";
 
-    protected function initialize(InputInterface $input, OutputInterface $output) {
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
 
     }
 
-    protected function interact(InputInterface $input, OutputInterface $output) {
+    protected function interact(InputInterface $input, OutputInterface $output)
+    {
 
     }
 
-    protected function configure() {
+    protected function configure()
+    {
         $this
             ->setDescription('Command required for rule creation')
             ->addArgument('rule', InputArgument::OPTIONAL, 'Rule name', 'ExampleRule');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) {
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $rule = $input->getArgument('rule');
         $list = $this->export("app/Rules/", $rule);
         $url_folder = lcfirst(str_replace("\\", "/", $list['namespace']));
@@ -54,8 +58,11 @@ class RulesCommand extends Command {
         $this->close();
 
         $output->writeln($this->warningOutput("\t>>  RULE: {$list['class']}"));
-        $output->writeln($this->successOutput("\t>>  RULE: The '{$list['namespace']}\\{$list['class']}' rule has been generated"));
+
+        $output->writeln(
+            $this->successOutput("\t>>  RULE: The '{$list['namespace']}\\{$list['class']}' rule has been generated")
+        );
+
         return Command::SUCCESS;
     }
-
 }

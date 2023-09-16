@@ -4,9 +4,10 @@ namespace App\Traits\Framework\Database;
 
 use LionDatabase\Drivers\MySQL\MySQL as DB;
 
-trait SoftDeletes {
-
-    public function softDeletes(array $options) {
+trait SoftDeletes
+{
+    public function softDeletes(array $options)
+    {
         return DB::connection($options['connection'])
             ->table($options['table'])
             ->update(['deleted_at' => $options['value']])
@@ -14,5 +15,4 @@ trait SoftDeletes {
             ->in(...$options['rows'])
             ->execute();
     }
-
 }

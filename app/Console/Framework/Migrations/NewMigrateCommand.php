@@ -12,21 +12,24 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class NewMigrateCommand extends Command {
-
+class NewMigrateCommand extends Command
+{
     use ClassPath, ConsoleOutput;
 
 	protected static $defaultName = "migrate:new";
 
-	protected function initialize(InputInterface $input, OutputInterface $output) {
+	protected function initialize(InputInterface $input, OutputInterface $output)
+    {
 
 	}
 
-	protected function interact(InputInterface $input, OutputInterface $output) {
+	protected function interact(InputInterface $input, OutputInterface $output)
+    {
 
 	}
 
-	protected function configure() {
+	protected function configure()
+    {
 		$this
             ->setDescription("Command to generate a new migration")
             ->addArgument('migration', InputArgument::REQUIRED, 'Migration name')
@@ -34,7 +37,8 @@ class NewMigrateCommand extends Command {
             ->addOption("type", "t", InputOption::VALUE_OPTIONAL, "Type of migration", "table");
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output)
+    {
         // get migration name and validate that it is not in subfolders
         $migration = $input->getArgument('migration');
         if (str->of($migration)->test("/.*\//")) {
@@ -79,5 +83,4 @@ class NewMigrateCommand extends Command {
         $this->close();
 		return Command::SUCCESS;
 	}
-
 }

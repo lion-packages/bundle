@@ -3,17 +3,19 @@
 use App\Traits\Framework\Faker;
 use LionDatabase\Drivers\MySQL\Schema;
 
-return new class {
-
+return new class
+{
 	use Faker;
 
 	private string $table = "users";
 
-	public function getMigration(): array {
+	public function getMigration(): array
+	{
 		return ["type" => "TABLE", "table" => $this->table, "connection" => env->DB_NAME, "index" => 2];
 	}
 
-	public function execute(): object {
+	public function execute(): object
+	{
 		return Schema::connection(env->DB_NAME)
 			->table($this->table, true)
 			->create()
@@ -28,7 +30,8 @@ return new class {
 			->execute();
 	}
 
-	public function insert(): array {
+	public function insert(): array
+	{
 		return [
 			'columns' => [
 				'idusers',
@@ -45,5 +48,4 @@ return new class {
 			]
 		];
 	}
-
 };

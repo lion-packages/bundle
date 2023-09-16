@@ -2,8 +2,8 @@
 
 namespace App\Enums\Framework;
 
-enum StatusResponseEnum: string {
-
+enum StatusResponseEnum: string
+{
     case SUCCESS = "success";
     case ERROR = "error";
     case WARNING = "warning";
@@ -13,8 +13,8 @@ enum StatusResponseEnum: string {
     case ROUTE_ERROR = "route-error";
     case MAIL_ERROR = "mail-error";
 
-    public static function values(): array {
+    public static function values(): array
+    {
         return array_map(fn($value) => $value->value, self::cases());
     }
-
 }

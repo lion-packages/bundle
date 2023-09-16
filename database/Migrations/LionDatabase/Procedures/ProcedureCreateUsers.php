@@ -3,15 +3,17 @@
 use LionDatabase\Drivers\MySQL\MySQL as DB;
 use LionDatabase\Drivers\MySQL\Schema;
 
-return new class {
-
+return new class
+{
 	private string $procedure = "create_users";
 
-	public function getMigration(): array {
+	public function getMigration(): array
+	{
 		return ["type" => "PROCEDURE", "procedure" => $this->procedure, "connection" => env->DB_NAME];
 	}
 
-	public function execute(): object {
+	public function execute(): object
+	{
 		return Schema::connection(env->DB_NAME)
 			->procedure($this->procedure)
 			->create()
@@ -39,8 +41,8 @@ return new class {
 			->execute();
 	}
 
-	public function insert(): array {
+	public function insert(): array
+	{
 		return ["rows" => []];
 	}
-
 };

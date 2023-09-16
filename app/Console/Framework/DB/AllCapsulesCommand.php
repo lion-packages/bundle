@@ -10,26 +10,30 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 
-class AllCapsulesCommand extends Command {
-
+class AllCapsulesCommand extends Command
+{
     use ConsoleOutput;
 
     protected static $defaultName = "db:all-capsules";
 
-    protected function initialize(InputInterface $input, OutputInterface $output) {
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
 
     }
 
-    protected function interact(InputInterface $input, OutputInterface $output) {
+    protected function interact(InputInterface $input, OutputInterface $output)
+    {
 
     }
 
-    protected function configure() {
+    protected function configure()
+    {
         $this
             ->setDescription('Command required for the creation of all new Capsules available from the database');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) {
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $connections = DB::getConnections();
         $connections_keys = array_keys($connections['connections']);
         $list_all_tables = [];
@@ -66,5 +70,4 @@ class AllCapsulesCommand extends Command {
 
         return Command::SUCCESS;
     }
-
 }

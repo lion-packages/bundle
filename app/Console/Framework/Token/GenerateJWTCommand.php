@@ -11,28 +11,32 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class GenerateJWTCommand extends Command {
-
+class GenerateJWTCommand extends Command
+{
     use ConsoleOutput;
 
     protected static $defaultName = "token:jwt";
 
-    protected function initialize(InputInterface $input, OutputInterface $output) {
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
 
     }
 
-    protected function interact(InputInterface $input, OutputInterface $output) {
+    protected function interact(InputInterface $input, OutputInterface $output)
+    {
 
     }
 
-    protected function configure() {
+    protected function configure()
+    {
         $this
             ->setDescription("Created command to generate JWT token")
             ->addArgument('session', InputArgument::OPTIONAL, 'Session must be true or false', "true")
             ->addOption('path', 'p', InputOption::VALUE_REQUIRED, 'Save to a specific path?');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) {
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $path = $input->getOption("path");
         if ($path != null) RSA::setPath($path);
 
@@ -47,5 +51,4 @@ class GenerateJWTCommand extends Command {
         $output->writeln($this->successOutput("\t>>  TOKEN: {$jwt->data->jwt}"));
         return Command::SUCCESS;
     }
-
 }

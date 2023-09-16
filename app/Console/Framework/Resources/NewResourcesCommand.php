@@ -12,21 +12,24 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use \ZipArchive;
 
-class NewResourcesCommand extends Command {
-
+class NewResourcesCommand extends Command
+{
     use ClassPath, ConsoleOutput;
 
     protected static $defaultName = "resource:new";
 
-    protected function initialize(InputInterface $input, OutputInterface $output) {
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
 
     }
 
-    protected function interact(InputInterface $input, OutputInterface $output) {
+    protected function interact(InputInterface $input, OutputInterface $output)
+    {
 
     }
 
-    protected function configure() {
+    protected function configure()
+    {
         $this
             ->setDescription("Command required to generate a resource")
             ->addArgument('resource', InputArgument::OPTIONAL, 'Resource name', "example")
@@ -34,7 +37,8 @@ class NewResourcesCommand extends Command {
             ->addOption('template', 'm', InputOption::VALUE_OPTIONAL, 'Do you want a template? (Vanilla/Vue/React/Preact/Lit/Svelte/Solid/Qwik)', 'react');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) {
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $rsc = str->of($input->getArgument("resource"))->trim()->replace("_", "-")->replace(" ", "-")->get();
         $type = $input->getOption('type');
 
@@ -190,5 +194,4 @@ class NewResourcesCommand extends Command {
         $output->writeln($this->successOutput("\t>>  RESOURCE: the '{$rsc}/' resource has been generated"));
         return Command::FAILURE;
     }
-
 }

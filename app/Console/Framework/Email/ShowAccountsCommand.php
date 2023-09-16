@@ -8,24 +8,28 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ShowAccountsCommand extends Command {
-
+class ShowAccountsCommand extends Command
+{
 	protected static $defaultName = "email:show";
 
-	protected function initialize(InputInterface $input, OutputInterface $output) {
+	protected function initialize(InputInterface $input, OutputInterface $output)
+    {
 
 	}
 
-	protected function interact(InputInterface $input, OutputInterface $output) {
+	protected function interact(InputInterface $input, OutputInterface $output)
+    {
 
 	}
 
-	protected function configure() {
+	protected function configure()
+    {
 		$this
             ->setDescription("Command required to display available email accounts");
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output)
+    {
 		$accounts = SettingsMailServices::getAccounts();
         $size = arr->of($accounts['accounts'])->length();
         $list_accounts = [];
@@ -66,5 +70,4 @@ class ShowAccountsCommand extends Command {
 
 		return Command::SUCCESS;
 	}
-
 }

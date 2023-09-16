@@ -10,21 +10,24 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\{ InputInterface, InputArgument, InputOption };
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CapsuleCommand extends Command {
-
+class CapsuleCommand extends Command
+{
     use ClassPath, ConsoleOutput;
 
 	protected static $defaultName = "db:capsule";
 
-    protected function initialize(InputInterface $input, OutputInterface $output) {
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
 
     }
 
-    protected function interact(InputInterface $input, OutputInterface $output) {
+    protected function interact(InputInterface $input, OutputInterface $output)
+    {
 
     }
 
-    protected function configure() {
+    protected function configure()
+    {
         $this
             ->setDescription('Command required for the creation of new Capsules')
             ->addArgument('entity', InputArgument::REQUIRED, 'Entity name', null)
@@ -32,7 +35,8 @@ class CapsuleCommand extends Command {
             ->addOption('message', null, InputOption::VALUE_REQUIRED, '', null);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) {
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $table = $input->getArgument('entity');
         $connection = $input->getOption('connection');
         $message = $input->getOption('message');
@@ -140,5 +144,4 @@ class CapsuleCommand extends Command {
 
         return Command::SUCCESS;
     }
-
 }

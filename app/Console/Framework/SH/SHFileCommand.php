@@ -9,27 +9,31 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class SHFileCommand extends Command {
-
+class SHFileCommand extends Command
+{
     use ClassPath, ConsoleOutput;
 
 	protected static $defaultName = "sh:new";
 
-	protected function initialize(InputInterface $input, OutputInterface $output) {
+	protected function initialize(InputInterface $input, OutputInterface $output)
+	{
 
 	}
 
-	protected function interact(InputInterface $input, OutputInterface $output) {
+	protected function interact(InputInterface $input, OutputInterface $output)
+	{
 
 	}
 
-	protected function configure() {
+	protected function configure()
+	{
 		$this
             ->setDescription("Command to create files with extension sh")
             ->addArgument("sh", InputArgument::OPTIONAL, 'SH name', "Example");
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output)
+	{
         $sh = $input->getArgument("sh");
 
         $this->new("storage/cron/{$sh}", "sh");
@@ -41,5 +45,4 @@ class SHFileCommand extends Command {
         $output->writeln($this->successOutput("\t>>  SH: File generated successfully"));
 		return Command::SUCCESS;
 	}
-
 }

@@ -6,9 +6,30 @@ use LionMailer\Services\PHPMailer\Mail as PHPMail;
 use LionMailer\Services\Symfony\Mail as SymfMail;
 use PHPUnit\Framework\TestCase;
 
-class MailTest extends TestCase {
+class MailTest extends TestCase
+{
+    public function testPHPMailer(): void
+    {
+        $response = PHPMail::address($_ENV['MAIL_ACCOUNT'], $_ENV['MAIL_NAME'])
+            ->subject("TESTING")
+            ->body("<h1>TESTING</h1>")
+            ->send();
 
-    public function setUp(): void {
+        $this->assertEquals("success", $response->status);
+    }
+
+    public function testSymfonyMailer(): void
+    {
+        $response = SymfMail::address($_ENV['MAIL_ACCOUNT'], $_ENV['MAIL_NAME'])
+            ->subject("TESTING")
+            ->body("<h1>TESTING</h1>")
+            ->send();
+
+        $this->assertEquals("success", $response->status);
+    }
+
+    public function setUp(): void
+    {
         (\Dotenv\Dotenv::createImmutable(__DIR__ . "/../"))->load();
 
         \LionMailer\MailService::run([
@@ -27,23 +48,4 @@ class MailTest extends TestCase {
             ],
         ]);
     }
-
-    public function testPHPMailer() {
-        $response = PHPMail::address($_ENV['MAIL_ACCOUNT'], $_ENV['MAIL_NAME'])
-            ->subject("TESTING")
-            ->body("<h1>TESTING</h1>")
-            ->send();
-
-        $this->assertEquals("success", $response->status);
-    }
-
-    public function testSymfonyMailer() {
-        $response = SymfMail::address($_ENV['MAIL_ACCOUNT'], $_ENV['MAIL_NAME'])
-            ->subject("TESTING")
-            ->body("<h1>TESTING</h1>")
-            ->send();
-
-        $this->assertEquals("success", $response->status);
-    }
-
 }

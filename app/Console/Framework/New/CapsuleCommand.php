@@ -10,27 +10,31 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CapsuleCommand extends Command {
-
+class CapsuleCommand extends Command
+{
     use ClassPath, ConsoleOutput;
 
 	protected static $defaultName = "new:capsule";
 
-	protected function initialize(InputInterface $input, OutputInterface $output) {
+	protected function initialize(InputInterface $input, OutputInterface $output)
+    {
 
 	}
 
-	protected function interact(InputInterface $input, OutputInterface $output) {
+	protected function interact(InputInterface $input, OutputInterface $output)
+    {
 
 	}
 
-	protected function configure() {
+	protected function configure()
+    {
 		$this
             ->setDescription("Command required for creating new custom capsules")
             ->addArgument('capsule', InputArgument::OPTIONAL, 'Capsule name', "Example");
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $capsule = $input->getArgument('capsule');
 		$list = $this->export("database/Class/", $capsule);
         $url_folder = lcfirst(str_replace("\\", "/", $list['namespace']));
@@ -48,5 +52,4 @@ class CapsuleCommand extends Command {
 
         return Command::SUCCESS;
 	}
-
 }

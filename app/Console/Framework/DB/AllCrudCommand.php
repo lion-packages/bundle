@@ -9,26 +9,30 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class AllCrudCommand extends Command {
-
+class AllCrudCommand extends Command
+{
     use ConsoleOutput;
 
 	protected static $defaultName = "db:all-crud";
 
-	protected function initialize(InputInterface $input, OutputInterface $output) {
+	protected function initialize(InputInterface $input, OutputInterface $output)
+    {
 
 	}
 
-	protected function interact(InputInterface $input, OutputInterface $output) {
+	protected function interact(InputInterface $input, OutputInterface $output)
+    {
 
 	}
 
-	protected function configure() {
+	protected function configure()
+    {
 		$this
             ->setDescription("command to generate all the controllers and models of the entities with their respective CRUD functions");
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output)
+    {
 		$connections = DB::getConnections();
         $cont = 0;
 
@@ -61,5 +65,4 @@ class AllCrudCommand extends Command {
 
 		return Command::SUCCESS;
 	}
-
 }

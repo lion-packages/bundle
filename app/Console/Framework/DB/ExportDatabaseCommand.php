@@ -10,27 +10,31 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ExportDatabaseCommand extends Command {
-
+class ExportDatabaseCommand extends Command
+{
 	use ConsoleOutput;
 
 	protected static $defaultName = "db:export";
 
-	protected function initialize(InputInterface $input, OutputInterface $output) {
+	protected function initialize(InputInterface $input, OutputInterface $output)
+	{
 
 	}
 
-	protected function interact(InputInterface $input, OutputInterface $output) {
+	protected function interact(InputInterface $input, OutputInterface $output)
+	{
 
 	}
 
-	protected function configure() {
+	protected function configure()
+	{
 		$this
             ->setDescription("Command to export copies of databases established in the config")
             ->addArgument('connection', InputArgument::REQUIRED, 'Do you want to use a specific connection?');
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output)
+	{
         $connections = DB::getConnections();
         $info = $connections['connections'][$input->getArgument("connection")];
         $actual_date = Carbon::now()->format('Y_m_d');
@@ -45,5 +49,4 @@ class ExportDatabaseCommand extends Command {
 
 		return Command::SUCCESS;
 	}
-
 }

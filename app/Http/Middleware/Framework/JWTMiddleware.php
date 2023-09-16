@@ -7,15 +7,17 @@ use LionHelpers\Arr;
 use LionSecurity\JWT;
 use LionSecurity\RSA;
 
-class JWTMiddleware {
-
+class JWTMiddleware
+{
     private array $headers;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->headers = apache_request_headers();
     }
 
-    private function validateSession($jwt): void {
+    private function validateSession($jwt): void
+    {
         if (isError($jwt)) {
             finish(response->code(500)->response("session-error", $jwt->message));
         }
@@ -25,13 +27,15 @@ class JWTMiddleware {
         }
     }
 
-    public function existence(): void {
+    public function existence(): void
+    {
         if (!isset($this->headers['Authorization'])) {
             finish(response->code(500)->response("session-error", 'The JWT does not exist'));
         }
     }
 
-    public function authorizeWithoutSignature() {
+    public function authorizeWithoutSignature(): void
+    {
         $this->existence();
         $jwt = explode('.', JWT::get());
 
@@ -54,7 +58,8 @@ class JWTMiddleware {
         RSA::setPath(storage_path($path));
     }
 
-    public function authorize(): void {
+    public function authorize(): void
+    {
         $this->existence();
         $jwt = jwt();
         $this->validateSession($jwt);
@@ -64,7 +69,8 @@ class JWTMiddleware {
         }
     }
 
-    public function notAuthorize(): void {
+    public function notAuthorize(): void
+    {
         $this->existence();
         $jwt = jwt();
         $this->validateSession($jwt);
@@ -73,5 +79,4 @@ class JWTMiddleware {
             finish(response->code(500)->response("session-error", 'User in session, you must close the session'));
         }
     }
-
 }

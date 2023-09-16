@@ -2,9 +2,10 @@
 
 namespace App\Traits\Framework;
 
-trait Http {
-
-    public function checkUrl(string $uri): bool {
+trait Http
+{
+    public function checkUrl(string $uri): bool
+    {
         $clean_request_uri = explode('?', $_SERVER['REQUEST_URI'])[0];
         $array_uri = explode('/', $uri);
         $arrayurl = explode('/', $clean_request_uri);
@@ -18,5 +19,4 @@ trait Http {
 
         return implode('/', $array_uri) === implode('/', $arrayurl);
     }
-
 }

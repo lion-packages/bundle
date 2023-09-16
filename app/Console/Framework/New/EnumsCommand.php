@@ -10,27 +10,31 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class EnumsCommand extends Command {
-
+class EnumsCommand extends Command
+{
     use ClassPath, ConsoleOutput;
 
 	protected static $defaultName = "new:enum";
 
-	protected function initialize(InputInterface $input, OutputInterface $output) {
+	protected function initialize(InputInterface $input, OutputInterface $output)
+    {
 
 	}
 
-	protected function interact(InputInterface $input, OutputInterface $output) {
+	protected function interact(InputInterface $input, OutputInterface $output)
+    {
 
 	}
 
-	protected function configure() {
+	protected function configure()
+    {
 		$this
             ->setDescription("Command required for creating new Enums")
             ->addArgument('enum', InputArgument::OPTIONAL, 'Enum name', "ExampleEnum");
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output)
+    {
 		$enum = $input->getArgument('enum');
         $list = $this->export("app/Enums/", $enum);
         $url_folder = lcfirst(str_replace("\\", "/", $list['namespace']));
@@ -56,8 +60,11 @@ class EnumsCommand extends Command {
         $this->close();
 
         $output->writeln($this->warningOutput("\t>>  ENUM: {$enum}"));
-        $output->writeln($this->successOutput("\t>>  ENUM: The '{$list['namespace']}\\{$list['class']}' enum has been generated"));
+
+        $output->writeln(
+            $this->successOutput("\t>>  ENUM: The '{$list['namespace']}\\{$list['class']}' enum has been generated")
+        );
+
         return Command::SUCCESS;
 	}
-
 }

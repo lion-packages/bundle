@@ -22,7 +22,8 @@ require_once(__DIR__ . "/../vendor/autoload.php");
  * ------------------------------------------------------------------------------
  **/
 
-\App\Http\Kernel::getInstance()->loadDotEnv(__DIR__ . "/../");
+\App\Http\Kernel::getInstance()
+    ->loadDotEnv(__DIR__ . "/../");
 
 /**
  * ------------------------------------------------------------------------------
@@ -54,9 +55,8 @@ if (env->RSA_URL_PATH != '') {
  * ------------------------------------------------------------------------------
  **/
 
-\App\Http\Kernel::getInstance()->loadCors(
-    require_once(__DIR__ . "/../config/cors.php")
-);
+\App\Http\Kernel::getInstance()
+    ->loadCors(require_once(__DIR__ . "/../config/cors.php"));
 
 /**
  * ------------------------------------------------------------------------------
@@ -66,9 +66,8 @@ if (env->RSA_URL_PATH != '') {
  * ------------------------------------------------------------------------------
  **/
 
-\App\Http\Kernel::getInstance()->loadConnecions(
-    require_once("../config/database.php")
-);
+\App\Http\Kernel::getInstance()
+    ->loadConnecions(require_once("../config/database.php"));
 
 /**
  * ------------------------------------------------------------------------------
@@ -78,9 +77,8 @@ if (env->RSA_URL_PATH != '') {
  * ------------------------------------------------------------------------------
  **/
 
-\App\Http\Kernel::getInstance()->loadAccounts(
-    require_once("../config/email.php")
-);
+\App\Http\Kernel::getInstance()
+    ->loadAccounts(require_once("../config/email.php"));
 
 /**
  * ------------------------------------------------------------------------------
@@ -90,9 +88,8 @@ if (env->RSA_URL_PATH != '') {
  * ------------------------------------------------------------------------------
  **/
 
-\App\Http\Kernel::getInstance()->validateRules(
-    require_once("../routes/rules.php")
-);
+\App\Http\Kernel::getInstance()
+    ->validateRules(require_once("../routes/rules.php"));
 
 /**
  * ------------------------------------------------------------------------------
@@ -102,7 +99,5 @@ if (env->RSA_URL_PATH != '') {
  * ------------------------------------------------------------------------------
  **/
 
-\App\Http\Kernel::getInstance()->loadRoutes(
-    require_once(__DIR__ . "/../config/middleware.php"),
-    __DIR__ . "/../routes/web.php"
-);
+\App\Http\Kernel::getInstance()
+    ->loadRoutes(require_once(__DIR__ . "/../config/middleware.php"), __DIR__ . "/../routes/web.php");

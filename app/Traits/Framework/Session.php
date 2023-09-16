@@ -2,18 +2,21 @@
 
 namespace App\Traits\Framework;
 
-trait Session {
-
-    public function new(string $name, mixed $value = null): static {
+trait Session
+{
+    public function new(string $name, mixed $value = null): static
+    {
         $_SESSION[$name] = $value;
         return $this;
     }
 
-    public function get(mixed $key = null): mixed {
+    public function get(mixed $key = null): mixed
+    {
         return $key === null ? $_SESSION : $_SESSION[$key];
     }
 
-    public function destroy(mixed $key = null): static {
+    public function destroy(mixed $key = null): static
+    {
         if ($key === null) {
             session_unset();
             session_destroy();
@@ -23,5 +26,4 @@ trait Session {
 
         return $this;
     }
-
 }

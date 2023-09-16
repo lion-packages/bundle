@@ -10,27 +10,31 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class InterfaceCommand extends Command {
-
+class InterfaceCommand extends Command
+{
     use ClassPath, ConsoleOutput;
 
 	protected static $defaultName = "new:interface";
 
-	protected function initialize(InputInterface $input, OutputInterface $output) {
+	protected function initialize(InputInterface $input, OutputInterface $output)
+	{
 
 	}
 
-	protected function interact(InputInterface $input, OutputInterface $output) {
+	protected function interact(InputInterface $input, OutputInterface $output)
+	{
 
 	}
 
-	protected function configure() {
+	protected function configure()
+	{
 		$this
             ->setDescription("Command required for interface creation")
             ->addArgument('interface', InputArgument::OPTIONAL, 'Interface name', "ExampleInterface");
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output)
+	{
 		$interface = $input->getArgument('interface');
         $list = $this->export("app/Interfaces/", $interface);
         $url_folder = lcfirst(str_replace("\\", "/", $list['namespace']));
@@ -44,8 +48,11 @@ class InterfaceCommand extends Command {
         $this->close();
 
         $output->writeln($this->warningOutput("\t>>  INTERFACE: {$interface}"));
-        $output->writeln($this->successOutput("\t>>  INTERFACE: The '{$list['namespace']}\\{$list['class']}' interface has been generated"));
+
+        $output->writeln(
+        	$this->successOutput("\t>>  INTERFACE: The '{$list['namespace']}\\{$list['class']}' interface has been generated")
+        );
+
 		return Command::SUCCESS;
 	}
-
 }

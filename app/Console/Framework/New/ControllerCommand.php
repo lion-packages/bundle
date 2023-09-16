@@ -10,28 +10,32 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\{ArrayInput, InputInterface, InputArgument, InputOption};
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ControllerCommand extends Command {
-
+class ControllerCommand extends Command
+{
     use ClassPath, ConsoleOutput;
 
     protected static $defaultName = 'new:controller';
 
-    protected function initialize(InputInterface $input, OutputInterface $output) {
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
 
     }
 
-    protected function interact(InputInterface $input, OutputInterface $output) {
+    protected function interact(InputInterface $input, OutputInterface $output)
+    {
 
     }
 
-    protected function configure() {
+    protected function configure()
+    {
         $this
             ->setDescription('Command required for the creation of new Controllers')
             ->addArgument('controller', InputArgument::OPTIONAL, 'Controller name', "ExampleController")
             ->addOption('model', "m", InputOption::VALUE_REQUIRED, 'Do you want to create the model?');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) {
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $controller = $input->getArgument('controller');
         $model = $input->getOption('model');
         $list = $this->export("app/Http/Controllers/", $controller);
@@ -86,5 +90,4 @@ class ControllerCommand extends Command {
 
         return Command::SUCCESS;
     }
-
 }

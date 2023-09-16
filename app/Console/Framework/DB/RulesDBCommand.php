@@ -11,28 +11,32 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class RulesDBCommand extends Command {
-
+class RulesDBCommand extends Command
+{
     use ClassPath;
 
 	protected static $defaultName = "db:rules";
 
-	protected function initialize(InputInterface $input, OutputInterface $output) {
+	protected function initialize(InputInterface $input, OutputInterface $output)
+    {
 
     }
 
-    protected function interact(InputInterface $input, OutputInterface $output) {
+    protected function interact(InputInterface $input, OutputInterface $output)
+    {
 
     }
 
-    protected function configure() {
+    protected function configure()
+    {
         $this
             ->setDescription("Command to generate the rules of an entity")
             ->addArgument('entity', InputArgument::REQUIRED, 'Entity name')
             ->addOption('connection', 'c', InputOption::VALUE_REQUIRED, 'Do you want to use a specific connection?');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) {
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $entity = $input->getArgument("entity");
         $connection = $input->getOption("connection");
 
@@ -113,5 +117,4 @@ class RulesDBCommand extends Command {
 
         return Command::SUCCESS;
     }
-
 }

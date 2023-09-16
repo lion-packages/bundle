@@ -10,27 +10,31 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class TestCommand extends Command {
-
+class TestCommand extends Command
+{
     use ClassPath, ConsoleOutput;
 
 	protected static $defaultName = 'new:test';
 
-	protected function initialize(InputInterface $input, OutputInterface $output) {
+	protected function initialize(InputInterface $input, OutputInterface $output)
+    {
 
 	}
 
-	protected function interact(InputInterface $input, OutputInterface $output) {
+	protected function interact(InputInterface $input, OutputInterface $output)
+    {
 
 	}
 
-	protected function configure() {
+	protected function configure()
+    {
 		$this
             ->setDescription('Command required for the creation of new test')
             ->addArgument('test', InputArgument::OPTIONAL, 'Test name', "ExampleTest");
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $test = $input->getArgument('test');
 		$list = $this->export("tests/", $test);
 		$url_folder = lcfirst(str_replace("\\", "/", $list['namespace']));
@@ -57,8 +61,11 @@ class TestCommand extends Command {
         $this->close();
 
         $output->writeln($this->warningOutput("\t>>  TEST: {$test}"));
-        $output->writeln($this->successOutput("\t>>  TEST: The '{$list['namespace']}\\{$list['class']}' test has been generated"));
+
+        $output->writeln(
+            $this->successOutput("\t>>  TEST: The '{$list['namespace']}\\{$list['class']}' test has been generated")
+        );
+
         return Command::SUCCESS;
     }
-
 }

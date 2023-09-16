@@ -13,28 +13,32 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CrudCommand extends Command {
-
+class CrudCommand extends Command
+{
     use ClassPath, ConsoleOutput;
 
 	protected static $defaultName = "db:crud";
 
-	protected function initialize(InputInterface $input, OutputInterface $output) {
+	protected function initialize(InputInterface $input, OutputInterface $output)
+    {
 
     }
 
-    protected function interact(InputInterface $input, OutputInterface $output) {
+    protected function interact(InputInterface $input, OutputInterface $output)
+    {
 
     }
 
-    protected function configure() {
+    protected function configure()
+    {
         $this
             ->setDescription("command to generate controller and model of an entity with their respective CRUD functions")
             ->addArgument('entity', InputArgument::REQUIRED, 'Entity name')
             ->addOption('connection', 'c', InputOption::VALUE_REQUIRED, 'Do you want to use a specific connection?');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) {
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $entity = $input->getArgument("entity");
         $connection = $input->getOption("connection");
 
@@ -297,5 +301,4 @@ class CrudCommand extends Command {
         $output->writeln($this->infoOutput("\t>>  CRUD: Crud has been generated for the '{$entity}' entity"));
         return Command::SUCCESS;
     }
-
 }
