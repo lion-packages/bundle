@@ -45,7 +45,13 @@ class RulesDBCommand extends Command
         $main_conn = ($connection === null) ? $connections['default'] : $connection;
         $main_conn_pascal = str->of($main_conn)->replace("_", " ")->replace("-", " ")->pascal()->get();
 
-        $columns = DB::connection($main_conn)->show()->full()->columns()->from($entity)->getAll();
+        $columns = DB::connection($main_conn)
+            ->show()
+            ->full()
+            ->columns()
+            ->from($entity)
+            ->getAll();
+
         $foreigns = DB::connection($main_conn)
             ->table("INFORMATION_SCHEMA.KEY_COLUMN_USAGE", true)
             ->select("COLUMN_NAME", "REFERENCED_TABLE_NAME", "REFERENCED_COLUMN_NAME")
@@ -75,7 +81,13 @@ class RulesDBCommand extends Command
 
             if (!$is_foreign) {
                 // generate rule name
-                $rule_name = str->of($column->Field)->replace("-", "_")->replace("_", " ")->trim()->pascal()->concat("Rule")->get();
+                $rule_name = str->of($column->Field)
+                    ->replace("-", "_")
+                    ->replace("_", " ")
+                    ->trim()
+                    ->pascal()
+                    ->concat("Rule")
+                    ->get();
 
                 // generate rule
                 $this->getApplication()->find('new:rule')->run(
@@ -90,7 +102,8 @@ class RulesDBCommand extends Command
                 $this->readFileRows($path, [
                     11 => [
                         'replace' => true,
-                        'content' => '"' . $column->Field . '"', 'search' => '""'
+                        'content' => '"' . $column->Field . '"',
+                        'search' => '""'
                     ],
                     12 => [
                         'replace' => true,
