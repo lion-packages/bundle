@@ -45,41 +45,40 @@ class NewSocketCommand extends Command
         $this->add("namespace {$list['namespace']};\n\n");
         $this->add("use Ratchet\\ConnectionInterface;\n");
         $this->add("use Ratchet\\MessageComponentInterface;\n");
-        $this->add("use \SplObjectStorage;\n\n");
-        $this->add("class {$list['class']} implements MessageComponentInterface {\n\n");
+        $this->add("use SplObjectStorage;\n\n");
+        $this->add("class {$list['class']} implements MessageComponentInterface\n{\n");
         $this->add("\t" . 'protected int $port = 8090;' . "\n");
         $this->add("\t" . 'protected string $host = "0.0.0.0";' . "\n");
         $this->add("\t" . 'protected SplObjectStorage $clients;' . "\n\n");
-        $this->add("\tpublic function __construct() {\n");
+        $this->add("\tpublic function __construct()\n\t{\n");
         $this->add("\t\t" . '$this->clients = new SplObjectStorage();' . "\n");
         $this->add("\t}\n\n");
-        $this->add("\tpublic function getSocket(): object {\n");
+        $this->add("\tpublic function getSocket(): object\n\t{\n");
         $this->add("\t\t" . 'return (object) ["port" => $this->port, "host" => $this->host];' . "\n");
         $this->add("\t}\n\n");
-        $this->add("\t" . 'public function onOpen(ConnectionInterface $conn) {' . "\n");
+        $this->add("\t" . 'public function onOpen(ConnectionInterface $conn): void' . "\n\t" . '{' . "\n");
         $this->add("\t\t" . 'echo("New connection! ({$conn->resourceId})\n");' . "\n");
         $this->add("\t\t" . '$this->clients->attach($conn);' . "\n");
         $this->add("\t}\n\n");
-        $this->add("\t" . 'public function onMessage(ConnectionInterface $from, $msg) {' . "\n");
+        $this->add("\t" . 'public function onMessage(ConnectionInterface $from, $msg): void' . "\n\t" . '{' . "\n");
         $this->add("\t\t" . 'foreach ($this->clients as $client) {' . "\n");
         $this->add("\t\t\t" . 'if ($from !== $client) {' . "\n");
         $this->add("\t\t\t\t" . '$client->send($msg);' . "\n");
         $this->add("\t\t\t}\n\t\t}\n");
         $this->add("\t}\n\n");
-        $this->add("\t" . 'public function onClose(ConnectionInterface $conn) {' . "\n");
+        $this->add("\t" . 'public function onClose(ConnectionInterface $conn): void' . "\n\t" . '{' . "\n");
         $this->add("\t\t" . '$this->clients->detach($conn);' . "\n");
         $this->add("\t}\n\n");
-        $this->add("\t" . 'public function onError(ConnectionInterface $conn, \Exception $e) {' . "\n");
+        $this->add("\t" . 'public function onError(ConnectionInterface $conn, \Exception $e): void' . "\n\t" . '{' . "\n");
         $this->add("\t\t" . '$conn->close();' . "\n");
-        $this->add("\t}\n\n");
-        $this->add("}");
+        $this->add("\t}\n}\n");
         $this->force();
         $this->close();
 
         $output->writeln($this->warningOutput("\t>>  SOCKET: {$socket}"));
 
         $output->writeln(
-            $this->successOutput("\t>>  SOCKET: The '{$list['namespace']}\\{$list['class']}' socket has been generated")
+            $this->successOutput("\t>>  SOCKET: the '{$list['namespace']}\\{$list['class']}' socket has been generated")
         );
 
         return Command::SUCCESS;
