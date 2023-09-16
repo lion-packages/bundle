@@ -194,7 +194,7 @@ trait ClassPath
         }
     }
 
-    public static function generateFunctionsModel(string $method, string $model): string
+    public static function generateFunctionsModel(string $method, string $model, bool $last = false): string
     {
         if ($method === "read") {
             return str->of("")->lt()
@@ -204,22 +204,24 @@ trait ClassPath
                 ->replace("Model", "")
                 ->replace("model", "")
                 ->concat("DB")
-                ->concat("() {")->ln()->lt()->lt()
-                ->concat("return DB::view('')->select()->getAll();")->ln()->lt()
-                ->concat("}")->ln()->ln()
+                ->concat("(): array|object\n\t{")->ln()
+                ->lt()->lt()->concat("return DB::view('')->select()->getAll();")->ln()
+                ->lt()->concat("}")->ln()
+                ->concat(!$last ? "\n" : '')
                 ->get();
         }
 
-        return str->of("")->lt()
-            ->concat("public function ")
+        return str->of("")
+            ->lt()->concat("public function ")
             ->concat($method)
             ->concat($model)
             ->replace("Model", "")
             ->replace("model", "")
             ->concat("DB")
-            ->concat("() {")->ln()->lt()->lt()
-            ->concat("return DB::call('', [])->execute();")->ln()->lt()
-            ->concat("}")->ln()->ln()
+            ->concat("(): object\n\t{")->ln()
+            ->lt()->lt()->concat("return DB::call('', [])->execute();")->ln()
+            ->lt()->concat("}")->ln()
+            ->concat(!$last ? "\n" : '')
             ->get();
     }
 

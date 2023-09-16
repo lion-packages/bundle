@@ -61,7 +61,7 @@ class RulesCommand extends Command
         $output->writeln($this->warningOutput("\t>>  RULE: {$list['class']}"));
 
         $output->writeln(
-            $this->successOutput("\t>>  RULE: The '{$list['namespace']}\\{$list['class']}' rule has been generated")
+            $this->successOutput("\t>>  RULE: the '{$list['namespace']}\\{$list['class']}' rule has been generated")
         );
 
         return Command::SUCCESS;

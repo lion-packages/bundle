@@ -42,13 +42,15 @@ class ModelCommand extends Command
 		$this->create($url_folder, $list['class']);
 		$this->add("<?php\n\n");
 		$this->add("namespace {$list['namespace']};\n\n");
-		$this->add("use LionDatabase\Drivers\MySQL\MySQL as DB;\n");
-        $this->add("use LionDatabase\Drivers\MySQL\Schema;\n\n");
-		$this->add("class {$list['class']} {\n\n");
-		$this->add("\tpublic function __construct() {\n\t\t\n\t}\n\n");
+		$this->add("use LionDatabase\Drivers\MySQL\MySQL as DB;\n\n");
+		$this->add("class {$list['class']} \n{\n");
 
         foreach (["create", "read", "update", "delete"] as $key => $method) {
-            $this->add($this->generateFunctionsModel($method, $list['class']));
+            $this->add($this->generateFunctionsModel(
+            	$method,
+            	$list['class'],
+            	($method === 'delete' ? true : false)
+            ));
         }
 
         $this->add("}");
@@ -58,7 +60,7 @@ class ModelCommand extends Command
         $output->writeln($this->warningOutput("\t>>  MODEL: {$model}"));
 
         $output->writeln(
-        	$this->successOutput("\t>>  MODEL: The '{$list['namespace']}\\{$list['class']}' model has been generated")
+        	$this->successOutput("\t>>  MODEL: the '{$list['namespace']}\\{$list['class']}' model has been generated")
         );
 
         return Command::SUCCESS;
