@@ -41,9 +41,18 @@ class TraitCommand extends Command
         Store::folder($url_folder);
 
         $this->create($url_folder, $list['class']);
-        $this->add("<?php\n\n");
-        $this->add("namespace {$list['namespace']};\n\n");
-        $this->add("trait {$list['class']} {\n\n}");
+
+        $this->add(
+            str->of('<?php')->ln()->ln()
+                ->concat('namespace')->spaces(1)
+                ->concat("{$list['namespace']};")->ln()->ln()
+                ->concat('trait')->spaces(1)
+                ->concat($list['class'])->spaces(1)->ln()
+                ->concat('{')->ln()->ln()
+                ->concat('}')->ln()
+                ->get()
+        );
+
         $this->force();
         $this->close();
 
