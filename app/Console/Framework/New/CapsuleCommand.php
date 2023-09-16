@@ -41,9 +41,20 @@ class CapsuleCommand extends Command
         Store::folder($url_folder);
 
         $this->create($url_folder, $list['class']);
-        $this->add(str->of("<?php")->ln()->ln()->get());
-        $this->add(str->of("namespace ")->concat($list['namespace'])->concat(";")->ln()->ln()->get());
-        $this->add(str->of("class ")->concat($list['class'])->concat(" {")->ln()->ln()->concat("}")->get());
+
+        $this->add(
+            str->of("<?php")->ln()->ln()
+                ->concat('declare(strict_types=1);')->ln()->ln()
+                ->concat("namespace")->spaces(1)
+                ->concat($list['namespace'])
+                ->concat(";")->ln()->ln()
+                ->concat("class")->spaces(1)
+                ->concat($list['class'])->spaces(1)->ln()
+                ->concat("{")->ln()->ln()
+                ->concat("}")
+                ->get()
+        );
+
         $this->force();
         $this->close();
 
