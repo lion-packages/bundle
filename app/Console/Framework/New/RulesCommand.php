@@ -43,17 +43,18 @@ class RulesCommand extends Command
         $this->create($url_folder, $list['class']);
         $this->add("<?php\n\n");
         $this->add("namespace {$list['namespace']};\n\n");
-        $this->add("use App\Traits\Framework\ShowErrors;\n\n");
-        $this->add("class {$list['class']} {\n\n");
+        $this->add("use App\Traits\Framework\ShowErrors;\n");
+        $this->add("use Valitron\Validator;\n\n");
+        $this->add("class {$list['class']} \n{\n");
         $this->add("\tuse ShowErrors;\n\n");
         $this->add("\t" . 'public static string $field = "";' . "\n");
         $this->add("\t" . 'public static string $desc = "";' . "\n");
         $this->add("\t" . 'public static string $value = "";' . "\n");
         $this->add("\t" . 'public static bool $disabled = false;' . "\n\n");
-        $this->add("\tpublic static function passes(): void {\n");
-        $this->add("\t\t" . 'self::validate(function(\Valitron\Validator $validator) {' . "\n");
+        $this->add("\tpublic static function passes(): void \n\t{\n");
+        $this->add("\t\t" . 'self::validate(function(Validator $validator) {' . "\n");
         $this->add("\t\t\t" . '$validator->rule("required", self::$field)->message("property is required");' . "\n\t\t});\n");
-        $this->add("\t}\n\n}");
+        $this->add("\t}\n}");
         $this->force();
         $this->close();
 
