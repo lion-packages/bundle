@@ -16,6 +16,7 @@ class RunTestCommand extends Command
 
 	protected function initialize(InputInterface $input, OutputInterface $output)
 	{
+		$output->write("\033[2J\033[;H");
         $output->writeln($this->successOutput("\t>>  Running unit tests...\n\t>>  "));
 	}
 
