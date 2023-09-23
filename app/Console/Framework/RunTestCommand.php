@@ -16,7 +16,7 @@ class RunTestCommand extends Command
 
 	protected function initialize(InputInterface $input, OutputInterface $output)
 	{
-        $output->writeln($this->warningOutput("\t>>  Running unit tests..."));
+        $output->writeln($this->successOutput("\t>>  Running unit tests...\n\t>>  "));
 	}
 
 	protected function interact(InputInterface $input, OutputInterface $output)
@@ -29,7 +29,8 @@ class RunTestCommand extends Command
 		$this
             ->setDescription("Command to create run unit tests")
             ->addOption('class', 'c', InputOption::VALUE_OPTIONAL, 'Do you want to run a specific class?', false)
-            ->addOption('method', 'm', InputOption::VALUE_OPTIONAL, 'Do you want to filter a specific method?', false);
+            ->addOption('method', 'm', InputOption::VALUE_OPTIONAL, 'Do you want to filter a specific method?', false)
+            ->addOption('suite', 's', InputOption::VALUE_OPTIONAL, 'Do you want to test a specific directory?', 'All-Testing');
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output)
@@ -37,20 +38,24 @@ class RunTestCommand extends Command
 		$result = '';
 		$class = $input->getOption('class');
 		$method = $input->getOption('method');
+		$suite = $input->getOption('suite');
 
 		if (!$class && !$method) {
-			$result = exec('./vendor/bin/phpunit');
+			$result = kernel->execute("./vendor/bin/phpunit --testsuite {$suite}", false);
 		}
 
 		if ($class && !$method) {
-			$result = exec("./vendor/bin/phpunit tests/{$class}.php");
+			$result = kernel->execute("./vendor/bin/phpunit tests/{$class}.php --testsuite {$suite}", false);
 		}
 
 		if ($class && $method) {
-			$result = exec("./vendor/bin/phpunit tests/{$class}.php --filter {$method}");
+			$result = kernel->execute(
+				"./vendor/bin/phpunit tests/{$class}.php --filter {$method} --testsuite {$suite}",
+				false
+			);
 		}
 
-        $output->writeln($this->warningOutput("\t>>  {$result}"));
+		$output->writeln($this->warningOutput("\t>>  " . arr->of($result)->join("\n\t>>  ")));
         return Command::SUCCESS;
 	}
 }

@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
-	colors="true"
-	backupGlobals="false"
-    backupStaticAttributes="false"
-    convertErrorsToExceptions="true"
-    convertNoticesToExceptions="true"
-    convertWarningsToExceptions="true"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    cacheDirectory="false"
+    cacheResult="false"
+    colors="true"
+    columns="100"
+    backupGlobals="false"
     processIsolation="false"
     stopOnFailure="true"
     bootstrap="vendor/autoload.php"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.3/phpunit.xsd"
+    backupStaticProperties="false"
 >
-	<testsuites>
-		<testsuite name="Tests">
-			<directory suffix=".php">tests</directory>
-		</testsuite>
-	</testsuites>
+    <testsuites>
+        <testsuite name="All-Testing">
+            <directory>tests/</directory>
+        </testsuite>
 
-	<php>
-        <env name="APP_ENV" value="testing" />
+        <testsuite name="Framework">
+            <directory>tests/Framework/</directory>
+        </testsuite>
+    </testsuites>
+
+    <php>
+        <env name="APP_ENV" value="testing"/>
     </php>
 </phpunit>
