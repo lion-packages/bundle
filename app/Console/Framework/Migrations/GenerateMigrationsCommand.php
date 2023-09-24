@@ -11,15 +11,16 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class GenerateMigrationsCommand extends Command {
-
+class GenerateMigrationsCommand extends Command
+{
     use ClassPath, ConsoleOutput;
 
 	protected static $defaultName = "migrate:generate";
     private array $connections;
     private array $list = [];
 
-    protected function initialize(InputInterface $input, OutputInterface $output) {
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
         $this->connections = DB::getConnections();
 
         foreach ($this->connections['connections'] as $nameConnection => $connection) {
@@ -43,17 +44,20 @@ class GenerateMigrationsCommand extends Command {
         }
     }
 
-    protected function interact(InputInterface $input, OutputInterface $output) {
+    protected function interact(InputInterface $input, OutputInterface $output)
+    {
 
     }
 
-    protected function configure() {
+    protected function configure()
+    {
         $this
             ->setDescription("Command required to generate migrations of an existing database")
             ->addOption('limit', 'l', InputOption::VALUE_REQUIRED, 'Do you want to set a query limit?', 1200);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) {
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $cont = 0;
         $limit = $input->getOption("limit");
         $size = arr->of($this->connections['connections'])->length();
@@ -202,5 +206,4 @@ class GenerateMigrationsCommand extends Command {
 
         return Command::SUCCESS;
     }
-
 }

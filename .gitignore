@@ -8,5 +8,4 @@
 /storage/postman/*.json
 .rnd
 .env
-.phpunit.result.cache
 supervisord.pid

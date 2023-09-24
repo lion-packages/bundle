@@ -9,26 +9,30 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class NpmLogsCommand extends Command {
-
+class NpmLogsCommand extends Command
+{
 	use ConsoleOutput, ClassPath;
 
 	protected static $defaultName = "npm:logs";
 
-	protected function initialize(InputInterface $input, OutputInterface $output) {
+	protected function initialize(InputInterface $input, OutputInterface $output)
+	{
 
 	}
 
-	protected function interact(InputInterface $input, OutputInterface $output) {
+	protected function interact(InputInterface $input, OutputInterface $output)
+	{
 
 	}
 
-	protected function configure() {
+	protected function configure()
+	{
 		$this
             ->setDescription("Command to generate the logs of all vite projects");
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output)
+	{
 		foreach (Store::view("vite/", false) as $key => $project) {
             $pjt = str->of($project)->replace("vite/", "")->get();
 
@@ -43,5 +47,4 @@ class NpmLogsCommand extends Command {
 
 		return Command::SUCCESS;
 	}
-
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Auth;
 
 use App\Models\Auth\LoginModel;
@@ -8,15 +10,17 @@ use LionFiles\Store;
 use LionSecurity\JWT;
 use LionSecurity\RSA;
 
-class LoginController {
-
+class LoginController
+{
     private LoginModel $loginModel;
 
-	public function __construct() {
+	public function __construct()
+    {
         $this->loginModel = new LoginModel();
 	}
 
-    public function auth() {
+    public function auth(): array|object
+    {
         $users = Users::capsule();
 
         $cont = $this->loginModel->authDB($users);
@@ -44,5 +48,4 @@ class LoginController {
             ])
         ]);
     }
-
 }

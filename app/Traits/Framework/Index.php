@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Traits\Framework;
 
 use App\Http\Kernel;
@@ -10,19 +12,22 @@ use LionRequest\Request;
 use LionRoute\Request as LionRouteRequest;
 use LionRoute\Route;
 
-trait Index {
-
-    public function loadDotEnv(string $path): void {
+trait Index
+{
+    public function loadDotEnv(string $path): void
+    {
         (Dotenv::createImmutable($path))->load();
     }
 
-    public function loadCors(array $cors): void {
+    public function loadCors(array $cors): void
+    {
         foreach ($cors as $key => $header) {
             Request::header($key, $header);
         }
     }
 
-    public function loadConnecions(array $connections, array $data = []): void {
+    public function loadConnecions(array $connections, array $data = []): void
+    {
         Driver::addLog();
         $response_database = Driver::run($connections);
 
@@ -32,7 +37,8 @@ trait Index {
         }
     }
 
-    public function loadAccounts(array $accounts): void {
+    public function loadAccounts(array $accounts): void
+    {
         $response_email = MailService::run($accounts);
 
         if (isError($response_email)) {
@@ -41,7 +47,8 @@ trait Index {
         }
     }
 
-    public function validateRules(array $all_rules): void {
+    public function validateRules(array $all_rules): void
+    {
         if (isset($all_rules[$_SERVER['REQUEST_METHOD']])) {
             foreach ($all_rules[$_SERVER['REQUEST_METHOD']] as $uri => $rules) {
                 if (Kernel::getInstance()->checkUrl($uri)) {
@@ -54,7 +61,8 @@ trait Index {
         }
     }
 
-    public function loadRoutes(array $middleware, string $routes): void {
+    public function loadRoutes(array $middleware, string $routes): void
+    {
         Route::addLog();
         Route::init();
         LionRouteRequest::init(client);
@@ -64,5 +72,4 @@ trait Index {
         session()->destroy();
         Route::dispatch();
     }
-
 }

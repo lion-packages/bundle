@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\LionDatabase;
 
 use App\Models\LionDatabase\UsersModel;
@@ -7,16 +9,19 @@ use Carbon\Carbon;
 use Database\Class\LionDatabase\Users;
 use LionSecurity\Validation;
 
-class UsersController {
-
+class UsersController
+{
 	private UsersModel $usersModel;
 
-	public function __construct() {
+	public function __construct()
+	{
 		$this->usersModel = new UsersModel();
 	}
 
-	public function createUsers() {
+	public function createUsers(): array|object
+	{
 		$code = uniqid("user-");
+
         $res_create = $this->usersModel->createUsersDB(
             Users::capsule()
                 ->setUsersPassword(Validation::passwordHash(request->users_password))
@@ -32,11 +37,13 @@ class UsersController {
         return success(200, $res_create->message);
 	}
 
-	public function readUsers() {
+	public function readUsers(): array|object
+	{
 		return $this->usersModel->readUsersDB();
 	}
 
-	public function updateUsers() {
+	public function updateUsers(): array|object
+	{
 		$res_update = $this->usersModel->updateUsersDB(
 			Users::capsule()
 		);
@@ -46,7 +53,8 @@ class UsersController {
 			: success();
 	}
 
-	public function deleteUsers() {
+	public function deleteUsers(): array|object
+	{
 		$res_delete = $this->usersModel->deleteUsersDB(
 			Users::capsule()
 		);
@@ -55,5 +63,4 @@ class UsersController {
 			? error()
 			: success();
 	}
-
 }

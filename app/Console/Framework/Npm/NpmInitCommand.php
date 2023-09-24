@@ -11,28 +11,32 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class NpmInitCommand extends Command {
-
+class NpmInitCommand extends Command
+{
 	use ConsoleOutput, ClassPath;
 
 	protected static $defaultName = "npm:init";
 
-	protected function initialize(InputInterface $input, OutputInterface $output) {
+	protected function initialize(InputInterface $input, OutputInterface $output)
+    {
 
 	}
 
-	protected function interact(InputInterface $input, OutputInterface $output) {
+	protected function interact(InputInterface $input, OutputInterface $output)
+    {
 
 	}
 
-	protected function configure() {
+	protected function configure()
+    {
 		$this
             ->setDescription("Command to create Javascript projects with Vite.JS (Vanilla/Vue/React/Preact/Lit/Svelte/Solid/Qwik)")
             ->addArgument('project', InputArgument::OPTIONAL, 'Project name', "example")
             ->addOption('template', 't', InputOption::VALUE_OPTIONAL, 'Do you want a template? (Vanilla/Vue/React/Preact/Lit/Svelte/Solid/Qwik)', 'react');
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output)
+    {
 		$project = str->of($input->getArgument("project"))->trim()->replace("_", "-")->replace(" ", "-")->get();
 
         // check if the resource exists before generating it
@@ -146,5 +150,4 @@ class NpmInitCommand extends Command {
 
 		return Command::SUCCESS;
 	}
-
 }

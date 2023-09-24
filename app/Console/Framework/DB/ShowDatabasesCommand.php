@@ -9,24 +9,28 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ShowDatabasesCommand extends Command {
-
+class ShowDatabasesCommand extends Command
+{
 	protected static $defaultName = "db:show";
 
-	protected function initialize(InputInterface $input, OutputInterface $output) {
+	protected function initialize(InputInterface $input, OutputInterface $output)
+    {
 
 	}
 
-	protected function interact(InputInterface $input, OutputInterface $output) {
+	protected function interact(InputInterface $input, OutputInterface $output)
+    {
 
 	}
 
-	protected function configure() {
+	protected function configure()
+    {
 		$this
             ->setDescription("Command required to display available database connections");
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $connections = DB::getConnections();
         $size = Arr::of($connections['connections'])->length();
         $list_connections = [];
@@ -65,5 +69,4 @@ class ShowDatabasesCommand extends Command {
 
 		return Command::SUCCESS;
 	}
-
 }

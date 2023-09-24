@@ -4,15 +4,11 @@ namespace App\Models\LionDatabase;
 
 use Database\Class\LionDatabase\Users;
 use LionDatabase\Drivers\MySQL\MySQL as DB;
-use LionDatabase\Drivers\MySQL\Schema;
 
-class UsersModel {
-
-	public function __construct() {
-		
-	}
-
-	public function createUsersDB(Users $users) {
+class UsersModel
+{
+	public function createUsersDB(Users $users): array|object
+	{
 		return DB::call('create_users', [
 			$users->getIdroles(),
 			$users->getUsersName(),
@@ -24,11 +20,13 @@ class UsersModel {
 		])->execute();
 	}
 
-	public function readUsersDB() {
+	public function readUsersDB(): array|object
+	{
 		return DB::view('read_users')->select()->getAll();
 	}
 
-	public function updateUsersDB(Users $users) {
+	public function updateUsersDB(Users $users): array|object
+	{
 		return DB::call('update_users', [
 			$users->getIdroles(),
 			$users->getUsersName(),
@@ -41,10 +39,10 @@ class UsersModel {
 		])->execute();
 	}
 
-	public function deleteUsersDB(Users $users) {
+	public function deleteUsersDB(Users $users): array|object
+	{
 		return DB::call('delete_users', [
 			$users->getIdusers(),
 		])->execute();
 	}
-
 }

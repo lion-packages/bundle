@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Traits\Framework;
 
-trait AES {
-
-    public function generateKeys(): string {
+trait AES
+{
+    public function generateKeys(): string
+    {
         $items = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@-_/*{}[].,#$&';
         $bytes = random_bytes(16);
         $longitud = strlen($items);
@@ -17,5 +20,4 @@ trait AES {
 
         return $key;
     }
-
 }

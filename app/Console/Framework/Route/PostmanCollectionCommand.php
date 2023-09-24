@@ -10,31 +10,35 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class PostmanCollectionCommand extends Command {
-
+class PostmanCollectionCommand extends Command
+{
     use ClassPath, PostmanCollector, ConsoleOutput;
 
 	protected static $defaultName = "route:postman";
     private array $routes;
     private string $json_name;
 
-    protected function initialize(InputInterface $input, OutputInterface $output) {
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
         $this->init(env->SERVER_URL);
         $this->json_name = str->of(date('Y_m_d') . "_lion_collection")->lower()->get();
         $this->routes = fetch('GET', env->SERVER_URL . "/route-list");
         array_pop($this->routes);
     }
 
-    protected function interact(InputInterface $input, OutputInterface $output) {
+    protected function interact(InputInterface $input, OutputInterface $output)
+    {
 
     }
 
-    protected function configure() {
+    protected function configure()
+    {
         $this
             ->setDescription("Command required to create postman collections in JSON format");
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) {
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $rules = require_once("./routes/rules.php");
         $this->addRoutes($this->routes, $rules);
         $path = storage_path("postman/", false);
@@ -59,5 +63,4 @@ class PostmanCollectionCommand extends Command {
         $output->writeln($this->successOutput("\t>>  COLLECTION: Exported in {$path}{$this->json_name}.json"));
         return Command::SUCCESS;
     }
-
 }

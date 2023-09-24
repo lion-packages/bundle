@@ -7,29 +7,32 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Helper\TableCell;
 use Symfony\Component\Console\Helper\TableSeparator;
 
-class RouteListCommand extends Command {
-
+class RouteListCommand extends Command
+{
     use ConsoleOutput;
 
 	protected static $defaultName = "route:list";
 
-	protected function initialize(InputInterface $input, OutputInterface $output) {
+	protected function initialize(InputInterface $input, OutputInterface $output)
+    {
 
     }
 
-    protected function interact(InputInterface $input, OutputInterface $output) {
+    protected function interact(InputInterface $input, OutputInterface $output)
+    {
 
     }
 
-    protected function configure() {
+    protected function configure()
+    {
         $this
             ->setDescription("Command to view a list of available web routes");
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) {
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $routes = fetch("GET", env->SERVER_URL . "/route-list");
         array_pop($routes);
         $rules = require_once("./routes/rules.php");
@@ -145,5 +148,4 @@ class RouteListCommand extends Command {
 
         return Command::SUCCESS;
     }
-
 }

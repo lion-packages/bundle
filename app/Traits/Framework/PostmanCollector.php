@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Traits\Framework;
 
-trait PostmanCollector {
-
+trait PostmanCollector
+{
     private static array $postman = [];
 
-    public static function init(string $host) {
+    public static function init(string $host)
+    {
         self::$postman['params'] = [
             'routes' => [],
             'items' => [],
@@ -19,12 +22,14 @@ trait PostmanCollector {
         ];
     }
 
-    private static function createQueryParams(array $array_params): array {
+    private static function createQueryParams(array $array_params): array
+    {
         $query = [];
         $params = "";
         $cont = 0;
 
-        $addvalues = function(string $params, string $data, string $key, bool $index = false): string {
+        $addvalues = function(string $params, string $data, string $key, bool $index = false): string
+        {
             if ($data === "") {
                 $params .= !$index ? "&{$key}" : "?{$key}";
             } else {
@@ -51,7 +56,8 @@ trait PostmanCollector {
         return ['raw' => $params, 'query' => $query];
     }
 
-    private static function addParams(string $method, array $params): array {
+    private static function addParams(string $method, array $params): array
+    {
         $new_params = [];
 
         foreach ($params as $key => $param) {
@@ -71,7 +77,8 @@ trait PostmanCollector {
         return $new_params;
     }
 
-    private static function addPatch(string $name, string $route, $params): array {
+    private static function addPatch(string $name, string $route, $params): array
+    {
         return [
             'name' => $name,
             'response' => [],
@@ -102,7 +109,8 @@ trait PostmanCollector {
         ];
     }
 
-    private static function addGet(string $name, string $route, array $params): array {
+    private static function addGet(string $name, string $route, array $params): array
+    {
         $array_params = json->decode(json->encode((object) self::addParams("GET", $params)));
         $create_params = self::createQueryParams($array_params);
         $new_route = str->of("{{base_url}}/{$route}{$create_params['raw']}")->replace("//", "/")->get();
@@ -128,7 +136,8 @@ trait PostmanCollector {
         ];
     }
 
-    private static function addDelete(string $name, string $route, array $params): array {
+    private static function addDelete(string $name, string $route, array $params): array
+    {
         return [
             'name' => $name,
             'response' => [],
@@ -158,7 +167,8 @@ trait PostmanCollector {
         ];
     }
 
-    private static function addPost(string $name, string $route, array $params): array {
+    private static function addPost(string $name, string $route, array $params): array
+    {
         return [
             'name' => $name,
             'response' => [],
@@ -183,7 +193,8 @@ trait PostmanCollector {
         ];
     }
 
-    private static function addPut(string $name, string $route, array $params): array {
+    private static function addPut(string $name, string $route, array $params): array
+    {
         return [
             'name' => $name,
             'response' => [],
@@ -213,7 +224,8 @@ trait PostmanCollector {
         ];
     }
 
-    private static function addRequest($name, $route, $method, $params) {
+    private static function addRequest($name, $route, $method, $params)
+    {
         if ($method === "POST") {
             return self::addPost($name, $route, $params);
         } elseif ($method === "GET") {
@@ -229,7 +241,8 @@ trait PostmanCollector {
         }
     }
 
-    public static function addRoutes(array $routes, array $rules) {
+    public static function addRoutes(array $routes, array $rules)
+    {
         foreach($routes as $route_url => $all_routes) {
             foreach ($all_routes as $route_method => $route_info) {
                 $params = [];
@@ -250,7 +263,8 @@ trait PostmanCollector {
         self::generateItems();
     }
 
-    private static function generateItems() {
+    private static function generateItems()
+    {
         foreach (self::$postman['params']['routes'] as $key_route => $route) {
             $split_all = null;
 
@@ -304,7 +318,8 @@ trait PostmanCollector {
         }
     }
 
-    public static function createCollection(array $items): array {
+    public static function createCollection(array $items): array
+    {
         $result = [];
 
         foreach ($items as $json) {
@@ -333,15 +348,18 @@ trait PostmanCollector {
         return array_values($result);
     }
 
-    public static function getRoutes(): array {
+    public static function getRoutes(): array
+    {
         return self::$postman['params']['routes'];
     }
 
-    public static function getItems(): array {
+    public static function getItems(): array
+    {
         return self::$postman['params']['items'];
     }
 
-    public static function reverseArray(array $items): array {
+    public static function reverseArray(array $items): array
+    {
         $new_items = [];
 
         foreach ($items as $key => $route) {
@@ -350,5 +368,4 @@ trait PostmanCollector {
 
         return $new_items;
     }
-
 }

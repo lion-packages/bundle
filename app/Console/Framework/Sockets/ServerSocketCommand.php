@@ -9,30 +9,33 @@ use Ratchet\WebSocket\WsServer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ServerSocketCommand extends Command {
-
+class ServerSocketCommand extends Command
+{
     use ConsoleOutput;
 
 	protected static $defaultName = "socket:serve";
 
-    protected function initialize(InputInterface $input, OutputInterface $output) {
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
 
     }
 
-    protected function interact(InputInterface $input, OutputInterface $output) {
+    protected function interact(InputInterface $input, OutputInterface $output)
+    {
 
     }
 
-    protected function configure() {
+    protected function configure()
+    {
         $this
             ->setDescription('Command required to run WebSockets')
             ->addArgument('socket', InputArgument::OPTIONAL, 'Socket name');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) {
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $socket = $input->getArgument('socket');
         $class = kernel->getClass(str->of($socket)->trim()->get());
         $output->writeln($this->warningOutput("\t>>  SOCKET: {$socket}"));
@@ -60,5 +63,4 @@ class ServerSocketCommand extends Command {
         IoServer::factory(new HttpServer(new WsServer($socket_class)), $socket_info->port, $socket_info->host)->run();
         return Command::SUCCESS;
     }
-
 }

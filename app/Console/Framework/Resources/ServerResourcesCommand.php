@@ -8,27 +8,31 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ServerResourcesCommand extends Command {
-
+class ServerResourcesCommand extends Command
+{
     use ConsoleOutput;
 
 	protected static $defaultName = "resource:serve";
 
-	protected function initialize(InputInterface $input, OutputInterface $output) {
+	protected function initialize(InputInterface $input, OutputInterface $output)
+    {
 
 	}
 
-	protected function interact(InputInterface $input, OutputInterface $output) {
+	protected function interact(InputInterface $input, OutputInterface $output)
+    {
 
 	}
 
-	protected function configure() {
+	protected function configure()
+    {
         $this
             ->setDescription("Command required to run resources")
             ->addArgument('resource', InputArgument::REQUIRED, 'Resource name');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) {
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $resource = $input->getArgument("resource");
         $resources = kernel->getResources();
         $all_resources = [...$resources['framework'], ...$resources['app']];
@@ -51,5 +55,4 @@ class ServerResourcesCommand extends Command {
 
         return Command::SUCCESS;
     }
-
 }

@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Rules\LionDatabase\Users;
 
 use App\Traits\Framework\ShowErrors;
+use Valitron\Validator;
 
-class IdusersRule {
-
+class IdusersRule
+{
 	use ShowErrors;
 
 	public static string $field = "idusers";
@@ -13,10 +16,10 @@ class IdusersRule {
 	public static string $value = "";
 	public static bool $disabled = false;
 
-	public static function passes(): void {
-		self::validate(function(\Valitron\Validator $validator) {
+	public static function passes(): void
+	{
+		self::validate(function(Validator $validator) {
 			$validator->rule("required", self::$field)->message("property is required");
 		});
 	}
-
 }

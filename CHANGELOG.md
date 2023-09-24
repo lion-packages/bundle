@@ -1,5 +1,40 @@
 # Release Notes
 
+## [v15.3.0](https://github.com/lion-packages/framework/compare/v15.2.0...v15.3.0) (2023-09-24)
+
+### Added
+- PSR standards have been applied to existing files
+- options have been added to the test command to run specific tests
+- added configuration to run test blocks from test command
+- test has been added to check helpers in config
+- added test to check StatusResponseEnum in Enums
+- PSR standards have been applied for creating files in the new:test command
+- PSR standards have been applied for creating files in the new:trait command
+- PSR standards have been applied for creating files in the new:rule command
+- PSR standards have been applied for creating files in the new:model command
+- PSR standards have been applied for creating files in the new:middleware command
+- PSR standards have been applied for creating files in the new:interface command
+- PSR standards have been applied for creating files in the new:enum command
+- PSR standards have been applied for creating files in the new:controller command
+- PSR standards have been applied for creating files in the new:command command
+- PSR standards have been applied for creating files in the new:capsule command
+- PSR standards have been applied for creating files in the socket:new command
+- PSR standards have been applied for creating files in the migrate:new command
+- PSR standards have been applied for creating files in the db:seed command
+- PSR standards have been applied for creating files in the db:factory command
+- PSR standards have been applied for creating files in the db:rules command
+- PSR standards have been applied for creating files in the db:capsule command
+- PSR standards have been applied for creating files in the db:crud command
+
+### Refactoring
+- file name has been changed for exporting mysql databases
+- changed http status codes for JWTMiddleware
+
+## [v15.2.0](https://github.com/lion-packages/framework/compare/v15.1.1...v15.2.0) (2023-09-11)
+
+### Changed
+- middleware validation has been modified
+
 ## [v15.1.1](https://github.com/lion-packages/framework/compare/v15.1.0...v15.1.1) (2023-08-21)
 
 ### Changed

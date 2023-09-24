@@ -4,7 +4,6 @@ namespace App\Console\Framework\DB;
 
 use App\Traits\Framework\ConsoleOutput;
 use LionDatabase\Drivers\MySQL\MySQL as DB;
-use SebastianBergmann\Environment\Console;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
@@ -12,21 +11,24 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class SelectTableCommand extends Command {
-
+class SelectTableCommand extends Command
+{
     use ConsoleOutput;
 
 	protected static $defaultName = "db:select";
 
-	protected function initialize(InputInterface $input, OutputInterface $output) {
+	protected function initialize(InputInterface $input, OutputInterface $output)
+    {
 
 	}
 
-	protected function interact(InputInterface $input, OutputInterface $output) {
+	protected function interact(InputInterface $input, OutputInterface $output)
+    {
 
 	}
 
-	protected function configure() {
+	protected function configure()
+    {
 		$this
             ->setDescription("Command to read the first 10 rows of a table")
             ->addArgument('entity', InputArgument::REQUIRED, 'Entity name')
@@ -35,7 +37,8 @@ class SelectTableCommand extends Command {
             ->addOption('connection', 'c', InputOption::VALUE_REQUIRED, 'Do you want to use a specific connection?');
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output)
+    {
 		$entity = $input->getArgument("entity");
         $columns = $input->getOption("columns");
         $rows = $input->getOption("rows");
@@ -100,5 +103,4 @@ class SelectTableCommand extends Command {
 
 		return Command::SUCCESS;
 	}
-
 }

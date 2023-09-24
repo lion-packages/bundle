@@ -22,7 +22,8 @@ define('kernel', App\Console\Kernel::getInstance());
  **/
 
 if (!function_exists('fetch')) {
-    function fetch(string $method, string $uri, array $options = []): array {
+    function fetch(string $method, string $uri, array $options = []): array
+    {
         return json->decode(client->request($method, $uri, $options)->getBody());
     }
 }
@@ -34,7 +35,8 @@ if (!function_exists('fetch')) {
  **/
 
 if (!function_exists('fetchXML')) {
-    function fetchXML(string $method, string $uri, array $options = []): string {
+    function fetchXML(string $method, string $uri, array $options = []): string
+    {
         return client->request($method, $uri, $options)->getBody()->getContents();
     }
 }
@@ -46,7 +48,8 @@ if (!function_exists('fetchXML')) {
  **/
 
 if (!function_exists('storage_path')) {
-    function storage_path(string $path = "", bool $index = true): string {
+    function storage_path(string $path = "", bool $index = true): string
+    {
         return !$index ? "storage/{$path}" : "../storage/{$path}";
     }
 }
@@ -58,7 +61,8 @@ if (!function_exists('storage_path')) {
  **/
 
 if (!function_exists('finish')) {
-    function finish(mixed $response = null): void {
+    function finish(mixed $response = null): void
+    {
         response->finish($response === null ? success() : $response);
     }
 }
@@ -70,7 +74,8 @@ if (!function_exists('finish')) {
  **/
 
 if (!function_exists('success')) {
-    function success(int $code = 200, mixed $response = null, mixed $data = null): object {
+    function success(int $code = 200, mixed $response = null, mixed $data = null): object
+    {
         return response->code($code)->success($response, $data);
     }
 }
@@ -82,7 +87,8 @@ if (!function_exists('success')) {
  **/
 
 if (!function_exists('error')) {
-    function error(int $code = 500, mixed $response = null, mixed $data = null): object {
+    function error(int $code = 500, mixed $response = null, mixed $data = null): object
+    {
         return response->code($code)->error($response, $data);
     }
 }
@@ -94,7 +100,8 @@ if (!function_exists('error')) {
  **/
 
 if (!function_exists('warning')) {
-    function warning(int $code = 200, mixed $response = null, mixed $data = null): object {
+    function warning(int $code = 200, mixed $response = null, mixed $data = null): object
+    {
         return response->code($code)->warning($response, $data);
     }
 }
@@ -106,7 +113,8 @@ if (!function_exists('warning')) {
  **/
 
 if (!function_exists('info')) {
-    function info(int $code = 200, mixed $response = null, mixed $data = null): object {
+    function info(int $code = 200, mixed $response = null, mixed $data = null): object
+    {
         return response->code($code)->info($response, $data);
     }
 }
@@ -118,7 +126,8 @@ if (!function_exists('info')) {
  **/
 
 if (!function_exists('vd')) {
-    function vd(mixed $response): void {
+    function vd(mixed $response): void
+    {
         var_dump($response);
     }
 }
@@ -130,7 +139,8 @@ if (!function_exists('vd')) {
  **/
 
 if (!function_exists('logger')) {
-    function logger(string $str, string $log_type = 'info', array $data = [], bool $index = true): void {
+    function logger(string $str, string $log_type = 'info', array $data = [], bool $index = true): void
+    {
         $path = storage_path("logs/", $index);
         \LionFiles\Store::folder($path);
 
@@ -153,7 +163,8 @@ if (!function_exists('logger')) {
  **/
 
 if (!function_exists('json')) {
-    function json(mixed $value): string {
+    function json(mixed $value): string
+    {
         return json->encode($value);
     }
 }
@@ -165,7 +176,8 @@ if (!function_exists('json')) {
  **/
 
 if (!function_exists('isError')) {
-    function isError(object $res): bool {
+    function isError(object $res): bool
+    {
         return in_array($res->status, [
             \App\Enums\Framework\StatusResponseEnum::ERROR->value,
             \App\Enums\Framework\StatusResponseEnum::DATABASE_ERROR->value,
@@ -183,7 +195,8 @@ if (!function_exists('isError')) {
  **/
 
 if (!function_exists('isSuccess')) {
-    function isSuccess(object $res): bool {
+    function isSuccess(object $res): bool
+    {
         return in_array($res->status, [
             \App\Enums\Framework\StatusResponseEnum::SUCCESS->value
         ]);
@@ -197,7 +210,8 @@ if (!function_exists('isSuccess')) {
  **/
 
 if (!function_exists('jwt')) {
-    function jwt(): object {
+    function jwt(): object
+    {
         return \LionSecurity\JWT::decode(\LionSecurity\JWT::get());
     }
 }
@@ -209,7 +223,8 @@ if (!function_exists('jwt')) {
  **/
 
 if (!function_exists('session')) {
-    function session(): App\Http\Kernel {
+    function session(): App\Http\Kernel
+    {
         return App\Http\Kernel::getInstance();
     }
 }

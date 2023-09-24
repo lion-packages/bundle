@@ -11,28 +11,32 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class RulesDBCommand extends Command {
-
+class RulesDBCommand extends Command
+{
     use ClassPath;
 
 	protected static $defaultName = "db:rules";
 
-	protected function initialize(InputInterface $input, OutputInterface $output) {
+	protected function initialize(InputInterface $input, OutputInterface $output)
+    {
 
     }
 
-    protected function interact(InputInterface $input, OutputInterface $output) {
+    protected function interact(InputInterface $input, OutputInterface $output)
+    {
 
     }
 
-    protected function configure() {
+    protected function configure()
+    {
         $this
             ->setDescription("Command to generate the rules of an entity")
             ->addArgument('entity', InputArgument::REQUIRED, 'Entity name')
             ->addOption('connection', 'c', InputOption::VALUE_REQUIRED, 'Do you want to use a specific connection?');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) {
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $entity = $input->getArgument("entity");
         $connection = $input->getOption("connection");
 
@@ -41,7 +45,13 @@ class RulesDBCommand extends Command {
         $main_conn = ($connection === null) ? $connections['default'] : $connection;
         $main_conn_pascal = str->of($main_conn)->replace("_", " ")->replace("-", " ")->pascal()->get();
 
-        $columns = DB::connection($main_conn)->show()->full()->columns()->from($entity)->getAll();
+        $columns = DB::connection($main_conn)
+            ->show()
+            ->full()
+            ->columns()
+            ->from($entity)
+            ->getAll();
+
         $foreigns = DB::connection($main_conn)
             ->table("INFORMATION_SCHEMA.KEY_COLUMN_USAGE", true)
             ->select("COLUMN_NAME", "REFERENCED_TABLE_NAME", "REFERENCED_COLUMN_NAME")
@@ -71,7 +81,13 @@ class RulesDBCommand extends Command {
 
             if (!$is_foreign) {
                 // generate rule name
-                $rule_name = str->of($column->Field)->replace("-", "_")->replace("_", " ")->trim()->pascal()->concat("Rule")->get();
+                $rule_name = str->of($column->Field)
+                    ->replace("-", "_")
+                    ->replace("_", " ")
+                    ->trim()
+                    ->pascal()
+                    ->concat("Rule")
+                    ->get();
 
                 // generate rule
                 $this->getApplication()->find('new:rule')->run(
@@ -84,21 +100,22 @@ class RulesDBCommand extends Command {
                 // edit rule content
                 $path = "app/Rules/{$main_conn_pascal}/{$entity_pascal}/{$rule_name}.php";
                 $this->readFileRows($path, [
-                    11 => [
+                    14 => [
                         'replace' => true,
-                        'content' => '"' . $column->Field . '"', 'search' => '""'
+                        'content' => '"' . $column->Field . '"',
+                        'search' => '""'
                     ],
-                    12 => [
+                    15 => [
                         'replace' => true,
                         'content' => '"' . $column->Comment . '"',
                         'search' => '""'
                     ],
-                    14 => [
+                    16 => [
                         'replace' => true,
                         'content' => ($column->Null === "NO" ? "false" : "true"),
                         'search' => 'false'
                     ],
-                    18 => [
+                    22 => [
                         'replace' => true,
                         'multiple' => [
                             [
@@ -113,5 +130,4 @@ class RulesDBCommand extends Command {
 
         return Command::SUCCESS;
     }
-
 }

@@ -8,25 +8,29 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class InfoCommand extends Command {
-
+class InfoCommand extends Command
+{
     use ConsoleOutput;
 
 	protected static $defaultName = "info";
 
-	protected function initialize(InputInterface $input, OutputInterface $output) {
+	protected function initialize(InputInterface $input, OutputInterface $output)
+    {
 
 	}
 
-	protected function interact(InputInterface $input, OutputInterface $output) {
+	protected function interact(InputInterface $input, OutputInterface $output)
+    {
 
 	}
 
-	protected function configure() {
+	protected function configure()
+    {
 		$this->setDescription("Command to display basic project information and libraries");
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $composer_json = json->decode(file_get_contents("composer.json"));
         $homepage = "https://lion-client.vercel.app";
         $libraries = [];
@@ -85,5 +89,4 @@ class InfoCommand extends Command {
 
 		return Command::SUCCESS;
 	}
-
 }

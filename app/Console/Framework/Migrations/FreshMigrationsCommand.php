@@ -9,15 +9,16 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class FreshMigrationsCommand extends Command {
-
+class FreshMigrationsCommand extends Command
+{
     use ConsoleOutput;
 
 	protected static $defaultName = "migrate:fresh";
     private array $connections;
     private array $files = [];
 
-    protected function initialize(InputInterface $input, OutputInterface $output) {
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
         $this->connections = DB::getConnections();
         $folders = ["Tables", "Views", "Procedures"];
 
@@ -81,16 +82,19 @@ class FreshMigrationsCommand extends Command {
         }
     }
 
-    protected function interact(InputInterface $input, OutputInterface $output) {
+    protected function interact(InputInterface $input, OutputInterface $output)
+    {
 
     }
 
-    protected function configure() {
+    protected function configure()
+    {
         $this
             ->setDescription("Drop all tables and re-run all migrations");
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) {
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $items = arr->of($this->files)->keys()->get();
 
         foreach ($items as $indexFiles => $keyFiles) {
@@ -172,5 +176,4 @@ class FreshMigrationsCommand extends Command {
 
         return Command::SUCCESS;
     }
-
 }

@@ -12,21 +12,24 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class NewMigrateCommand extends Command {
-
+class NewMigrateCommand extends Command
+{
     use ClassPath, ConsoleOutput;
 
 	protected static $defaultName = "migrate:new";
 
-	protected function initialize(InputInterface $input, OutputInterface $output) {
+	protected function initialize(InputInterface $input, OutputInterface $output)
+    {
 
 	}
 
-	protected function interact(InputInterface $input, OutputInterface $output) {
+	protected function interact(InputInterface $input, OutputInterface $output)
+    {
 
 	}
 
-	protected function configure() {
+	protected function configure()
+    {
 		$this
             ->setDescription("Command to generate a new migration")
             ->addArgument('migration', InputArgument::REQUIRED, 'Migration name')
@@ -34,11 +37,12 @@ class NewMigrateCommand extends Command {
             ->addOption("type", "t", InputOption::VALUE_OPTIONAL, "Type of migration", "table");
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output)
+    {
         // get migration name and validate that it is not in subfolders
         $migration = $input->getArgument('migration');
         if (str->of($migration)->test("/.*\//")) {
-            $output->writeln($this->errorOutput("Migration cannot be inside subfolders"));
+            $output->writeln($this->errorOutput("migration cannot be inside subfolders"));
             return Command::INVALID;
         }
 
@@ -59,19 +63,19 @@ class NewMigrateCommand extends Command {
             Store::folder("database/Migrations/{$db_pascal}/Tables/");
             $this->new("database/Migrations/{$db_pascal}/Tables/{$migration_pascal}", "php");
             $this->add(str->of($this->getTemplateCreateTable())->replace("env->DB_NAME", "env->{$env_var}")->get());
-            $output->writeln($this->successOutput("\t>>  TABLE: Migration 'database/Migrations/{$db_pascal}/Tables/{$migration_pascal}' has been generated"));
+            $output->writeln($this->successOutput("\t>>  TABLE: migration 'database/Migrations/{$db_pascal}/Tables/{$migration_pascal}' has been generated"));
         } elseif ($option === "view") {
             Store::folder("database/Migrations/{$db_pascal}/Views/");
             $this->new("database/Migrations/{$db_pascal}/Views/{$migration_pascal}", "php");
             $this->add(str->of($this->getTemplateCreateView())->replace("env->DB_NAME", "env->{$env_var}")->get());
-            $output->writeln($this->successOutput("\t>>  VIEW: Migration 'database/Migrations/{$db_pascal}/Views/{$migration_pascal}' has been generated"));
+            $output->writeln($this->successOutput("\t>>  VIEW: migration 'database/Migrations/{$db_pascal}/Views/{$migration_pascal}' has been generated"));
         } elseif ($option === "procedure") {
             Store::folder("database/Migrations/{$db_pascal}/Procedures/");
             $this->new("database/Migrations/{$db_pascal}/Procedures/{$migration_pascal}", "php");
             $this->add(str->of($this->getTemplateCreateProcedure())->replace("env->DB_NAME", "env->{$env_var}")->get());
-            $output->writeln($this->successOutput("\t>>  PROCEDURE: Migration 'database/Migrations/{$db_pascal}/Procedures/{$migration_pascal}' has been generated"));
+            $output->writeln($this->successOutput("\t>>  PROCEDURE: migration 'database/Migrations/{$db_pascal}/Procedures/{$migration_pascal}' has been generated"));
         } else {
-            $output->writeln($this->errorOutput("\t>>  The selected migration type does not exist"));
+            $output->writeln($this->errorOutput("\t>>  the selected migration type does not exist"));
             return Command::INVALID;
         }
 
@@ -79,5 +83,4 @@ class NewMigrateCommand extends Command {
         $this->close();
 		return Command::SUCCESS;
 	}
-
 }

@@ -9,26 +9,30 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class AllRulesDBCommand extends Command {
-
+class AllRulesDBCommand extends Command
+{
     use ConsoleOutput;
 
 	protected static $defaultName = "db:all-rules";
 
-	protected function initialize(InputInterface $input, OutputInterface $output) {
+	protected function initialize(InputInterface $input, OutputInterface $output)
+    {
 
 	}
 
-	protected function interact(InputInterface $input, OutputInterface $output) {
+	protected function interact(InputInterface $input, OutputInterface $output)
+    {
 
 	}
 
-	protected function configure() {
+	protected function configure()
+    {
 		$this
             ->setDescription("Command to generate all rules for all entities");
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output)
+    {
         $connections = DB::getConnections();
 
         foreach ($connections['connections'] as $keyConnection => $connection) {
@@ -50,5 +54,4 @@ class AllRulesDBCommand extends Command {
 
 		return Command::SUCCESS;
 	}
-
 }
