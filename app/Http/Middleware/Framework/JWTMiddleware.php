@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Middleware\Framework;
 
 use LionFiles\Store;
-use LionHelpers\Arr;
 use LionSecurity\JWT;
 use LionSecurity\RSA;
 
