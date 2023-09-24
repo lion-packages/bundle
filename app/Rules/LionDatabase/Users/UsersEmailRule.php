@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Rules\LionDatabase\Users;
 
 use App\Traits\Framework\ShowErrors;
+use Valitron\Validator;
 
 class UsersEmailRule
 {
@@ -15,7 +18,7 @@ class UsersEmailRule
 
 	public static function passes(): void
 	{
-		self::validate(function(\Valitron\Validator $validator) {
+		self::validate(function(Validator $validator) {
 			$validator->rule("required", self::$field)->message("property is required");
 		});
 	}

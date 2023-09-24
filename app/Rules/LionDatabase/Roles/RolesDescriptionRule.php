@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Rules\LionDatabase\Roles;
 
 use App\Traits\Framework\ShowErrors;
+use Valitron\Validator;
 
 class RolesDescriptionRule
 {
@@ -15,7 +18,7 @@ class RolesDescriptionRule
  
 	public static function passes(): void
 	{
-		self::validate(function(\Valitron\Validator $validator) {
+		self::validate(function(Validator $validator) {
 			$validator->rule("optional", self::$field)->message("property is optional");
 		});
 	}

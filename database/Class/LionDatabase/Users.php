@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Class\LionDatabase;
 
-class Users implements \JsonSerializable
+use JsonSerializable;
+
+class Users implements JsonSerializable
 {
 	private ?int $idusers = null;
 	private ?int $idroles = null;
@@ -12,11 +16,6 @@ class Users implements \JsonSerializable
 	private ?string $users_password = null;
 	private ?string $users_code = null;
 	private ?string $users_create_at = null;
-
-	public function __construct()
-	{
-
-	}
 
 	public function jsonSerialize(): mixed
 	{
@@ -149,5 +148,4 @@ class Users implements \JsonSerializable
 		$this->users_create_at = $users_create_at;
 		return $this;
 	}
-
 }

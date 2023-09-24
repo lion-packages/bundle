@@ -4,15 +4,9 @@ namespace App\Models\LionDatabase;
 
 use Database\Class\LionDatabase\Users;
 use LionDatabase\Drivers\MySQL\MySQL as DB;
-use LionDatabase\Drivers\MySQL\Schema;
 
 class UsersModel
 {
-	public function __construct()
-	{
-		
-	}
-
 	public function createUsersDB(Users $users): array|object
 	{
 		return DB::call('create_users', [

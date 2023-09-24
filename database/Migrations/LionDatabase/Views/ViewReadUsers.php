@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use LionDatabase\Drivers\MySQL\MySQL as DB;
 use LionDatabase\Drivers\MySQL\Schema;
 
