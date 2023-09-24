@@ -1,5 +1,10 @@
 # Release Notes
 
+## [v15.2.0](https://github.com/lion-packages/framework/compare/v15.1.1...v15.2.0) (2023-09-11)
+
+### Changed
+- middleware validation has been modified
+
 ## [v15.1.1](https://github.com/lion-packages/framework/compare/v15.1.0...v15.1.1) (2023-08-21)
 
 ### Changed
