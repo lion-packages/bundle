@@ -26,6 +26,9 @@
 - PSR standards have been applied for creating files in the db:capsule command
 - PSR standards have been applied for creating files in the db:crud command
 
+### Fixed
+- corrected data type for cors configuration file
+
 ### Refactoring
 - file name has been changed for exporting mysql databases
 - changed http status codes for JWTMiddleware

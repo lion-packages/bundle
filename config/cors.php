@@ -13,9 +13,9 @@
 date_default_timezone_set(env->SERVER_DATE_TIMEZONE);
 
 return [
-    'Access-Control-Allow-Origin' => "*",
+    'Access-Control-Allow-Origin' => '*',
     'Content-Type' => 'application/json; charset=UTF-8',
-    'Access-Control-Max-Age' => 0,
+    'Access-Control-Max-Age' => '0',
     'Allow' => 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
     'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
     'Access-Control-Allow-Headers' => 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
