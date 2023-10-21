@@ -109,7 +109,7 @@ class NpmInitCommand extends Command
         $this->close();
 
         // add resources
-        file_put_contents("config/resources.php",
+        file_put_contents("config/vite.php",
             str->of("<?php")->ln()->ln()
                 ->concat("/**")->ln()
                 ->concat(" * ------------------------------------------------------------------------------")->ln()
