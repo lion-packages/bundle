@@ -1,7 +1,7 @@
 version: "3.8"
 services:
     app:
-        container_name: lion-framework-app
+        container_name: framework-app
         build:
             context: .
             dockerfile: Dockerfile
@@ -20,7 +20,7 @@ services:
             - lion
     db:
         image: mysql
-        container_name: lion-framework-mysql
+        container_name: framework-mysql
         restart: unless-stopped
         environment:
             MYSQL_DATABASE: ${DB_NAME}
@@ -34,7 +34,7 @@ services:
             - lion
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
-        container_name: lion-framework-phpmyadmin
+        container_name: framework-phpmyadmin
         restart: unless-stopped
         links:
             - db:db
