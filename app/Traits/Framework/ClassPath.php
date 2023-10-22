@@ -9,7 +9,6 @@ use LionHelpers\Str;
 
 trait ClassPath
 {
-    private static string $file_name;
     private static $content;
 
     public static function getTemplateCreateProcedure(): string
@@ -383,13 +382,11 @@ trait ClassPath
 
     public static function new(string $file_name, string $ext): void
     {
-        self::$file_name = "{$file_name}.{$ext}";
         self::$content = fopen("{$file_name}.{$ext}", "w+b");
     }
 
     public static function create($url_folder, $class): void
     {
-        self::$file_name = "{$url_folder}/{$class}.php";
         self::$content = fopen("{$url_folder}/{$class}.php", "w+b");
     }
 
@@ -406,6 +403,5 @@ trait ClassPath
     public static function close(): void
     {
         fclose(self::$content);
-        chmod(self::$file_name, 0666);
     }
 }
