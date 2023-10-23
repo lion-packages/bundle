@@ -74,7 +74,7 @@ if (!function_exists('finish')) {
  **/
 
 if (!function_exists('success')) {
-    function success(int $code = 200, mixed $response = null, mixed $data = null): object
+    function success(mixed $response = null, int $code = 200, mixed $data = null): object
     {
         return response->code($code)->success($response, $data);
     }
@@ -87,7 +87,7 @@ if (!function_exists('success')) {
  **/
 
 if (!function_exists('error')) {
-    function error(int $code = 500, mixed $response = null, mixed $data = null): object
+    function error(mixed $response = null, int $code = 500, mixed $data = null): object
     {
         return response->code($code)->error($response, $data);
     }
@@ -100,7 +100,7 @@ if (!function_exists('error')) {
  **/
 
 if (!function_exists('warning')) {
-    function warning(int $code = 200, mixed $response = null, mixed $data = null): object
+    function warning(mixed $response = null, int $code = 200, mixed $data = null): object
     {
         return response->code($code)->warning($response, $data);
     }
@@ -113,7 +113,7 @@ if (!function_exists('warning')) {
  **/
 
 if (!function_exists('info')) {
-    function info(int $code = 200, mixed $response = null, mixed $data = null): object
+    function info(mixed $response = null, int $code = 200, mixed $data = null): object
     {
         return response->code($code)->info($response, $data);
     }

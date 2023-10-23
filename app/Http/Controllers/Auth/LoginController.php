@@ -25,21 +25,21 @@ class LoginController
 
         $cont = $this->loginModel->authDB($users);
         if ($cont->cont === 0) {
-            return error(500, "email/password is invalid");
+            return error("email/password is invalid");
         }
 
         $session = $this->loginModel->sessionDB($users);
         if (!password_verify($users->getUsersPassword(), $session->users_password)) {
-            return error(500, "email/password is invalid");
+            return error("email/password is invalid");
         }
 
         $path = storage_path("keys/{$session->users_code}/");
         if (isError(Store::exist($path))) {
-            return error(500, "the keys do not exist");
+            return error("the keys do not exist");
         }
 
         RSA::setPath($path);
-        return success(200, "Welcome: {$session->users_name} {$session->users_last_name}", [
+        return success("Welcome: {$session->users_name} {$session->users_last_name}", 200, [
             'jwt' => JWT::encode([
                 'session' => true,
                 'idusers' => $session->idusers,

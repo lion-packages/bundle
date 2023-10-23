@@ -13,7 +13,7 @@ use LionRoute\Route;
  * ------------------------------------------------------------------------------
  **/
 
-Route::any('/', fn() => info(200, '[index]'));
+Route::any('/', fn() => info('[index]'));
 
 Route::prefix('api', function() {
     Route::post('user-registration', [UsersController::class, 'createUsers']);
