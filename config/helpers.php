@@ -69,6 +69,19 @@ if (!function_exists('finish')) {
 
 /**
  * ------------------------------------------------------------------------------
+ * Function to display a custom response
+ * ------------------------------------------------------------------------------
+ **/
+
+if (!function_exists('response')) {
+    function response(string $status = 'custom', mixed $response = null, int $code = 200, mixed $data = null): object
+    {
+        return response->code($code)->response($status, $response, $data);
+    }
+}
+
+/**
+ * ------------------------------------------------------------------------------
  * Function to display a success response
  * ------------------------------------------------------------------------------
  **/
