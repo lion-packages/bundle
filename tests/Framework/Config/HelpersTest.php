@@ -84,6 +84,19 @@ class HelpersTest extends TestCase
 		$this->assertSame(null, $response->message);
 	}
 
+    public function testResponse(): void
+    {
+        $response = response();
+
+        $this->assertIsObject($response);
+        $this->assertObjectHasProperty('code', $response);
+        $this->assertObjectHasProperty('status', $response);
+        $this->assertObjectHasProperty('message', $response);
+        $this->assertSame(200, $response->code);
+        $this->assertSame('custom', $response->status);
+        $this->assertSame(null, $response->message);
+    }
+
 	public function testError(): void
 	{
 		$response = error();
