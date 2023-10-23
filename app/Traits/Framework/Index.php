@@ -33,7 +33,7 @@ trait Index
 
         if (isError($response_database)) {
             logger($response_database->message, 'error', $data);
-            finish(error(500, $response_database->message));
+            finish(error($response_database->message));
         }
     }
 
@@ -43,7 +43,7 @@ trait Index
 
         if (isError($response_email)) {
             logger($response_email->message, 'error');
-            finish(error(500, $response_email->message));
+            finish(error($response_email->message));
         }
     }
 

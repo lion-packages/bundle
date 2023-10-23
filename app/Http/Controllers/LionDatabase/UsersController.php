@@ -30,11 +30,11 @@ class UsersController
         );
 
         if (isError($res_create)) {
-            return error(500, $res_create->message);
+            return error($res_create->message);
         }
 
         kernel->command("rsa:new -p keys/{$code}/");
-        return success(200, $res_create->message);
+        return success($res_create->message);
 	}
 
 	public function readUsers(): array|object

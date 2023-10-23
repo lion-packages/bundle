@@ -18,10 +18,10 @@ class SessionController
         return $jwt = jwt();
 
         if (isset($jwt->refresh) && $jwt->refresh >= 3) {
-            return error(500, "you have exceeded the maximum amount of session refresh");
+            return error("you have exceeded the maximum amount of session refresh");
         }
 
-        return success(200, "refreshed session token", [
+        return success("refreshed session token", 200, [
             'jwt' => JWT::encode([
                 'refresh' => isset($jwt->refresh) ? (((int) $jwt->refresh) + 1) : 1,
                 ...((array) $jwt)
