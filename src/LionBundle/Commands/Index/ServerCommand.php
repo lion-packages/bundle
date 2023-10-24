@@ -1,6 +1,6 @@
 <?php
 
-namespace LionBundle\Commands;
+namespace LionBundle\Commands\Index;
 
 use App\Traits\Framework\ConsoleOutput;
 use Symfony\Component\Console\Command\Command;
