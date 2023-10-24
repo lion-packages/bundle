@@ -1,10 +1,14 @@
 {
-    "name": "lion/framework",
-    "description": "The Lion-Framework",
-    "type": "project",
+    "name": "lion/bundle",
+    "description": "lion-framework configuration and initialization package",
+    "type": "library",
     "homepage": "https://lion-client.vercel.app/",
-    "keywords": ["lion", "framework", "lion-framework"],
+    "keywords": ["lion", "bundle", "lion-bundle"],
     "license": "MIT",
+    "support": {
+        "issues": "https://github.com/lion-packages/framework/issues",
+        "source": "https://github.com/lion-packages/framework"
+    },
     "autoload": {
         "psr-4": {
             "App\\": "app/",
@@ -20,6 +24,13 @@
     },
     "require": {
         "php": ">=8.1",
+        "ext-ctype": "*",
+        "ext-filter": "*",
+        "ext-hash": "*",
+        "ext-mbstring": "*",
+        "ext-openssl": "*",
+        "ext-session": "*",
+        "ext-tokenizer": "*",
         "cboden/ratchet": "^0.4.4",
         "lion/database": "^8.8",
         "lion/files": "^4.7",
