@@ -11,10 +11,7 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "app/",
-            "Database\\Class\\": "database/Class/",
-            "Database\\Factories\\": "database/Factories/",
-            "Database\\Seeders\\": "database/Seeders/"
+            "LionBundle\\": "src/LionBundle/"
         }
     },
     "autoload-dev": {
