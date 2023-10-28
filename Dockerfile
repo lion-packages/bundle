@@ -15,9 +15,7 @@ RUN a2enmod rewrite \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 COPY . .
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 CMD composer install \
-    && touch storage/logs/server/web-server.log storage/logs/supervisord/supervisord.log \
-    && php lion migrate:fresh && php lion npm:install lion-dev && php lion npm:logs && php lion socket:logs \
-    && /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+    && touch storage/web-server.log \
+    && php -S 0.0.0.0:8000

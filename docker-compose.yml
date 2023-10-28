@@ -1,7 +1,7 @@
 version: "3.8"
 services:
     app:
-        container_name: framework-app
+        container_name: bundle-app
         build:
             context: .
             dockerfile: Dockerfile
@@ -9,18 +9,16 @@ services:
             - .env
         ports:
             - "8000:8000"
-            - "5173:5173"
         volumes:
             - ./:/var/www/html
-            - ./supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
         depends_on:
-            - db
+            - mysql
             - phpmyadmin
         networks:
             - lion
-    db:
+    mysql:
         image: mysql
-        container_name: framework-mysql
+        container_name: bundle-mysql
         restart: unless-stopped
         environment:
             MYSQL_DATABASE: ${DB_NAME}
@@ -34,10 +32,10 @@ services:
             - lion
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
-        container_name: framework-phpmyadmin
+        container_name: bundle-phpmyadmin
         restart: unless-stopped
         links:
-            - db:db
+            - mysql:mysql
         ports:
             - 8080:80
         environment:
