@@ -73,10 +73,7 @@ class NewSocketCommand extends Command
             ->close();
 
         $output->writeln($this->warningOutput("\t>>  SOCKET: {$socket}"));
-
-        $output->writeln(
-            $this->successOutput("\t>>  SOCKET: the '{$listFactory['namespace']}\\{$listFactory['class']}' socket has been generated")
-        );
+        $output->writeln($this->successOutput("\t>>  SOCKET: the '{$listFactory['namespace']}\\{$listFactory['class']}' socket has been generated"));
 
         return Command::SUCCESS;
 	}

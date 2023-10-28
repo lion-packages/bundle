@@ -1,31 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LionBundle\Commands\Sockets;
 
-use App\Traits\Framework\ConsoleOutput;
+use LionCommand\Command;
 use Ratchet\Http\HttpServer;
 use Ratchet\Server\IoServer;
 use Ratchet\WebSocket\WsServer;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ServerSocketCommand extends Command
 {
-    use ConsoleOutput;
-
 	protected static $defaultName = "socket:serve";
-
-    protected function initialize(InputInterface $input, OutputInterface $output)
-    {
-
-    }
-
-    protected function interact(InputInterface $input, OutputInterface $output)
-    {
-
-    }
 
     protected function configure()
     {
