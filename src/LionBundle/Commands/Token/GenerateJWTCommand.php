@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class GenerateJWTCommand extends Command
 {
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('token:jwt')
@@ -22,7 +22,7 @@ class GenerateJWTCommand extends Command
             ->addOption('session', 's', InputOption::VALUE_OPTIONAL, 'Session must be true or false', true);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $path = $input->getOption("path");
         RSA::setPath($path != null ? $path : RSA::getPath());

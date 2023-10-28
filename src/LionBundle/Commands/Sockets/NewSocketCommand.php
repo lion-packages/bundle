@@ -1,84 +1,81 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LionBundle\Commands\Sockets;
 
-use App\Traits\Framework\ClassPath;
-use App\Traits\Framework\ConsoleOutput;
+use LionBundle\Helpers\Commands\ClassFactory;
+use LionCommand\Command;
 use LionFiles\Store;
-use Symfony\Component\Console\Command\Command;
+use LionHelpers\Str;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class NewSocketCommand extends Command
 {
-    use ClassPath, ConsoleOutput;
-
-	protected static $defaultName = "socket:new";
-
-	protected function initialize(InputInterface $input, OutputInterface $output)
-    {
-
-	}
-
-	protected function interact(InputInterface $input, OutputInterface $output)
-    {
-
-	}
-
-	protected function configure()
+	protected function configure(): void
     {
         $this
+            ->setName('socket:new')
             ->setDescription('Command required for creating new WebSockets')
-            ->addArgument('socket', InputArgument::OPTIONAL, 'Socket name', "ExampleSocket");
+            ->addArgument('socket', InputArgument::OPTIONAL, 'Socket name', 'ExampleSocket');
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output)
+	protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $socket = $input->getArgument('socket');
-		$list = $this->export("app/Http/Sockets/", $socket);
-        $url_folder = lcfirst(str_replace("\\", "/", $list['namespace']));
+        $classFactory = new ClassFactory();
+
+        $listFactory = $classFactory->classFactory('app/Http/Sockets/', $socket);
+        $url_folder = lcfirst(str_replace("\\", "/", $listFactory['namespace']));
         Store::folder($url_folder);
 
-        $this->create($url_folder, $list['class']);
-        $this->add("<?php\n\n");
-        $this->add("namespace {$list['namespace']};\n\n");
-        $this->add("use Ratchet\\ConnectionInterface;\n");
-        $this->add("use Ratchet\\MessageComponentInterface;\n");
-        $this->add("use SplObjectStorage;\n\n");
-        $this->add("class {$list['class']} implements MessageComponentInterface\n{\n");
-        $this->add("\t" . 'protected int $port = 8090;' . "\n");
-        $this->add("\t" . 'protected string $host = "0.0.0.0";' . "\n");
-        $this->add("\t" . 'protected SplObjectStorage $clients;' . "\n\n");
-        $this->add("\tpublic function __construct()\n\t{\n");
-        $this->add("\t\t" . '$this->clients = new SplObjectStorage();' . "\n");
-        $this->add("\t}\n\n");
-        $this->add("\tpublic function getSocket(): object\n\t{\n");
-        $this->add("\t\t" . 'return (object) ["port" => $this->port, "host" => $this->host];' . "\n");
-        $this->add("\t}\n\n");
-        $this->add("\t" . 'public function onOpen(ConnectionInterface $conn): void' . "\n\t" . '{' . "\n");
-        $this->add("\t\t" . 'echo("New connection! ({$conn->resourceId})\n");' . "\n");
-        $this->add("\t\t" . '$this->clients->attach($conn);' . "\n");
-        $this->add("\t}\n\n");
-        $this->add("\t" . 'public function onMessage(ConnectionInterface $from, $msg): void' . "\n\t" . '{' . "\n");
-        $this->add("\t\t" . 'foreach ($this->clients as $client) {' . "\n");
-        $this->add("\t\t\t" . 'if ($from !== $client) {' . "\n");
-        $this->add("\t\t\t\t" . '$client->send($msg);' . "\n");
-        $this->add("\t\t\t}\n\t\t}\n");
-        $this->add("\t}\n\n");
-        $this->add("\t" . 'public function onClose(ConnectionInterface $conn): void' . "\n\t" . '{' . "\n");
-        $this->add("\t\t" . '$this->clients->detach($conn);' . "\n");
-        $this->add("\t}\n\n");
-        $this->add("\t" . 'public function onError(ConnectionInterface $conn, \Exception $e): void' . "\n\t" . '{' . "\n");
-        $this->add("\t\t" . '$conn->close();' . "\n");
-        $this->add("\t}\n}\n");
-        $this->force();
-        $this->close();
+        $classFactory
+            ->create($listFactory['class'], 'php', "{$url_folder}/")
+            ->add(
+                Str::of('<?php')->ln()->ln()
+                    ->concat('namespace')->spaces(1)->concat($listFactory['namespace'])->concat(';')->ln()->ln()
+                    ->concat('use Exception;')->ln()
+                    ->concat('use Ratchet\\ConnectionInterface;')->ln()
+                    ->concat('use Ratchet\\MessageComponentInterface;')->ln()
+                    ->concat('use SplObjectStorage;')->ln()->ln()
+                    ->concat('class')->spaces(1)->concat($listFactory['class'])->spaces(1)->concat('implements')
+                    ->spaces()->concat('MessageComponentInterface')->ln()->concat('{')->ln()
+                    ->lt()->concat('protected SplObjectStorage $clients;')->ln()
+                    ->lt()->concat('protected int $port = 9000;')->ln()
+                    ->lt()->concat('protected string $host =')->concat("'0.0.0.0';")->ln()->ln()
+                    ->lt()->concat('public function __construct()')->ln()->lt()->concat('{')->ln()
+                    ->lt()->lt()->concat('$this->clients = new SplObjectStorage();')->ln()
+                    ->lt()->concat('}')->ln()->ln()
+                    ->lt()->concat('public function getSocket(): object')->ln()->lt()->concat('{')->ln()
+                    ->lt()->lt()->concat('return (object) ["port" => $this->port, "host" => $this->host];')->ln()
+                    ->lt()->concat('}')->ln()->ln()
+                    ->lt()->concat('public function onOpen(ConnectionInterface $conn): void')->ln()->lt()->concat('{')
+                    ->ln()->lt()->lt()->concat('echo("New connection! ({$conn->resourceId})\n");')->ln()
+                    ->lt()->lt()->concat('$this->clients->attach($conn);')->ln()
+                    ->lt()->concat('}')->ln()->ln()
+                    ->lt()->concat('public function onMessage(ConnectionInterface $from, $msg): void')->ln()->lt()
+                    ->concat('{')->ln()->lt()->lt()->concat('foreach ($this->clients as $client) {')->ln()
+                    ->lt()->lt()->lt()->concat('if ($from !== $client) {')->ln()
+                    ->lt()->lt()->lt()->lt()->concat('$client->send($msg);')->ln()
+                    ->lt()->lt()->lt()->concat('}')->ln()
+                    ->lt()->lt()->concat('}')->ln()
+                    ->lt()->concat('}')->ln()->ln()
+                    ->lt()->concat('public function onClose(ConnectionInterface $conn): void')->ln()->lt()->concat('{')
+                    ->ln()->lt()->lt()->concat('$this->clients->detach($conn);')->ln()
+                    ->lt()->concat('}')->ln()->ln()
+                    ->lt()->concat('public function onError(ConnectionInterface $conn, Exception $e): void')->ln()
+                    ->lt()->concat('{')->ln()->lt()->lt()->concat('$conn->close();')->ln()->lt()->concat('}')->ln()
+                    ->concat('}')->ln()
+                    ->get()
+            )
+            ->close();
 
         $output->writeln($this->warningOutput("\t>>  SOCKET: {$socket}"));
 
         $output->writeln(
-            $this->successOutput("\t>>  SOCKET: the '{$list['namespace']}\\{$list['class']}' socket has been generated")
+            $this->successOutput("\t>>  SOCKET: the '{$listFactory['namespace']}\\{$listFactory['class']}' socket has been generated")
         );
 
         return Command::SUCCESS;
