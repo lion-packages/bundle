@@ -6,6 +6,7 @@
 /storage/**/*.key
 /storage/**/*.log
 /storage/postman/*.json
+/vite/
 .rnd
 .env
 supervisord.pid
