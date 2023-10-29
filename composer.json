@@ -39,6 +39,7 @@
         "lion/security": "^7.0",
         "monolog/monolog": "^3.3",
         "nesbot/carbon": "^2.66",
+        "predis/predis": "^2.2",
         "symfony/console": "^6.2",
         "twig/twig": "^3.6"
     },
