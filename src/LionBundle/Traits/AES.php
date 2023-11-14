@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Traits\Framework;
+namespace LionBundle\Traits;
 
 trait AES
 {
@@ -10,12 +10,10 @@ trait AES
     {
         $items = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@-_/*{}[].,#$&';
         $bytes = random_bytes(16);
-        $longitud = strlen($items);
         $key = '';
 
         for ($i = 0; $i < 16; $i++) {
-            $indice = ord($bytes[$i]) % $longitud;
-            $key .= $items[$indice];
+            $key .= $items[(ord($bytes[$i]) % strlen($items))];
         }
 
         return $key;

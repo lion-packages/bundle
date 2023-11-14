@@ -1,33 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LionBundle\Commands\AES;
 
-use App\Traits\Framework\AES;
-use App\Traits\Framework\ConsoleOutput;
-use Symfony\Component\Console\Command\Command;
+use LionBundle\Traits\AES;
+use LionCommand\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class NewAESCommand extends Command
 {
-    use ConsoleOutput, AES;
-
-	protected static $defaultName = "aes:new";
-
-	protected function initialize(InputInterface $input, OutputInterface $output)
-    {
-
-    }
-
-    protected function interact(InputInterface $input, OutputInterface $output)
-    {
-
-    }
+    use AES;
 
     protected function configure()
     {
         $this
-            ->setDescription("Command to create KEY and IV keys for AES");
+            ->setName('aes:new')
+            ->setDescription('Command to create KEY and IV keys for AES');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -35,7 +25,7 @@ class NewAESCommand extends Command
         $output->writeln($this->warningOutput("\t>>  AES KEY: {$this->generateKeys()}"));
         $output->writeln($this->warningOutput("\t>>  AES IV: {$this->generateKeys()}"));
         $output->writeln($this->successOutput("\t>>  Keys created successfully"));
+
         return Command::SUCCESS;
     }
-
 }
