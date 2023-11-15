@@ -23,13 +23,15 @@ require_once("vendor/autoload.php");
  * ------------------------------------------------------------------------------
  **/
 
-$kernel = new LionCommand\Kernel();
+$kernel = new \LionCommand\Kernel();
 
 $kernel->commands([
+    // All
+    \LionBundle\Commands\InfoCommand::class,
+    //  AES
+    \LionBundle\Commands\AES\NewAESCommand::class,
     // Sockets
-    LionBundle\Commands\Sockets\NewSocketCommand::class,
-    // Token
-    LionBundle\Commands\Token\GenerateJWTCommand::class
+    \LionBundle\Commands\Sockets\NewSocketCommand::class
 ]);
 
 $kernel->run();

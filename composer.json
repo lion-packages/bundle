@@ -31,17 +31,16 @@
         "cboden/ratchet": "^0.4.4",
         "lion/command": "^3.0",
         "lion/database": "^8.8",
-        "lion/files": "^4.7",
+        "lion/files": "^5.0",
         "lion/helpers": "^2.0",
         "lion/mailer": "^5.0",
         "lion/request": "^6.0",
         "lion/route": "^8.2",
-        "lion/security": "^7.0",
+        "lion/security": "^8.0",
         "monolog/monolog": "^3.3",
         "nesbot/carbon": "^2.66",
         "predis/predis": "^2.2",
-        "symfony/console": "^6.2",
-        "twig/twig": "^3.6"
+        "symfony/console": "^6.3"
     },
     "require-dev": {
         "fakerphp/faker": "^1.20",
