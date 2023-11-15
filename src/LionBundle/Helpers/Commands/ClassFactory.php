@@ -154,4 +154,20 @@ class ClassFactory
 
         return $setter;
     }
+
+    public function getCustomMethod(
+        string $name,
+        string $type = 'object',
+        string $params = '',
+        string $content = 'return;',
+        string $visibility = 'public',
+        int $lineBreak = 2
+    ): string
+    {
+        $method = "\t{$visibility} function {$name}({$params})" . ($type === '' ? '' : ": {$type}");
+        $method .= "\n\t{\n\t\t{$content}\n\t}";
+        $method .= str_repeat("\n", $lineBreak);
+
+        return $method;
+    }
 }

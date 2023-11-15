@@ -1,67 +1,73 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LionBundle\Commands\New;
 
-use App\Traits\Framework\ClassPath;
-use App\Traits\Framework\ConsoleOutput;
+use LionBundle\Helpers\Commands\ClassFactory;
+use LionCommand\Command;
 use LionFiles\Store;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\{ InputInterface, InputArgument };
+use LionHelpers\Str;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ModelCommand extends Command
 {
-    use ClassPath, ConsoleOutput;
+    const METHODS = ['create', 'read', 'update', 'delete'];
 
-	protected static $defaultName = 'new:model';
+    private ClassFactory $classFactory;
+    private Store $store;
 
-	protected function initialize(InputInterface $input, OutputInterface $output)
+	protected function initialize(InputInterface $input, OutputInterface $output): void
 	{
-
+        $this->classFactory = new ClassFactory();
+        $this->store = new Store();
 	}
 
-	protected function interact(InputInterface $input, OutputInterface $output)
-	{
-
-	}
-
-	protected function configure()
+	protected function configure(): void
 	{
 		$this
+            ->setName('new:model')
             ->setDescription('Command required for the creation of new Models')
             ->addArgument('model', InputArgument::OPTIONAL, 'Model name', "ExampleModel");
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output)
+	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
         $model = $input->getArgument('model');
-		$list = $this->export("app/Models/", $model);
-		$url_folder = lcfirst(str_replace("\\", "/", $list['namespace']));
-		Store::folder($url_folder);
 
-		$this->create($url_folder, $list['class']);
-		$this->add("<?php\n\ndeclare(strict_types=1);\n\n");
-		$this->add("namespace {$list['namespace']};\n\n");
-		$this->add("use LionDatabase\Drivers\MySQL\MySQL as DB;\n\n");
-		$this->add("class {$list['class']} \n{\n");
+        $this->classFactory->classFactory('app/Models/', $model);
+        $folder = $this->classFactory->getFolder();
+        $class = $this->classFactory->getClass();
+        $namespace = $this->classFactory->getNamespace();
 
-        foreach (["create", "read", "update", "delete"] as $key => $method) {
-            $this->add($this->generateFunctionsModel(
-            	$method,
-            	$list['class'],
-            	($method === 'delete' ? true : false)
-            ));
+        $this->store->folder($folder);
+
+		$this->classFactory
+            ->create($class, 'php', $folder)
+            ->add("<?php\n\ndeclare(strict_types=1);\n\n")
+            ->add("namespace {$namespace};\n\n")
+            ->add("use LionDatabase\Drivers\MySQL\MySQL as DB;\n\n")
+            ->add("class {$class}\n{\n");
+
+        foreach (self::METHODS as $key => $method) {
+            $customMethod = $this->classFactory->getCustomMethod(
+                Str::of($method . $class)->replace('Model', '')->replace('model', '')->concat('DB')->get(),
+                $method === 'read' ? 'array|object' : 'object',
+                '',
+                $method === 'read' ? "return DB::view('')->select()->getAll();" : "return DB::call('', [])->execute();",
+                'public',
+                $method === 'delete' ? 1 : 2
+            );
+
+            $this->classFactory->add($customMethod);
         }
 
-        $this->add("}\n");
-        $this->force();
-        $this->close();
+        $this->classFactory->add("}\n")->close();
 
         $output->writeln($this->warningOutput("\t>>  MODEL: {$model}"));
-
-        $output->writeln(
-        	$this->successOutput("\t>>  MODEL: the '{$list['namespace']}\\{$list['class']}' model has been generated")
-        );
+        $output->writeln($this->successOutput("\t>>  MODEL: the '{$namespace}\\{$class}' model has been generated"));
 
         return Command::SUCCESS;
     }
