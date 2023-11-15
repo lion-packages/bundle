@@ -37,6 +37,7 @@ $kernel->commands([
     \LionBundle\Commands\New\ModelCommand::class,
     \LionBundle\Commands\New\EnumsCommand::class,
     \LionBundle\Commands\New\InterfaceCommand::class,
+    \LionBundle\Commands\New\TestCommand::class,
     // Sockets
     \LionBundle\Commands\Sockets\NewSocketCommand::class
 ]);

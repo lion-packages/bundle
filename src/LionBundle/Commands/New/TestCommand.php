@@ -1,72 +1,70 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LionBundle\Commands\New;
 
-use App\Traits\Framework\ClassPath;
-use App\Traits\Framework\ConsoleOutput;
+use LionBundle\Helpers\Commands\ClassFactory;
+use LionCommand\Command;
 use LionFiles\Store;
-use Symfony\Component\Console\Command\Command;
+use LionHelpers\Str;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class TestCommand extends Command
 {
-    use ClassPath, ConsoleOutput;
+    private ClassFactory $classFactory;
+    private Store $store;
 
-	protected static $defaultName = 'new:test';
-
-	protected function initialize(InputInterface $input, OutputInterface $output)
+	protected function initialize(InputInterface $input, OutputInterface $output): void
     {
-
+        $this->classFactory = new ClassFactory();
+        $this->store = new Store();
 	}
 
-	protected function interact(InputInterface $input, OutputInterface $output)
-    {
-
-	}
-
-	protected function configure()
+	protected function configure(): void
     {
 		$this
+            ->setName('new:test')
             ->setDescription('Command required for the creation of new test')
-            ->addArgument('test', InputArgument::OPTIONAL, 'Test name', "ExampleTest");
+            ->addArgument('test', InputArgument::OPTIONAL, 'Test name', 'ExampleTest');
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output)
     {
         $test = $input->getArgument('test');
-		$list = $this->export("tests/", $test);
-		$url_folder = lcfirst(str_replace("\\", "/", $list['namespace']));
-		Store::folder($url_folder);
 
-		$this->create($url_folder, $list['class']);
-		$this->add("<?php\n\ndeclare(strict_types=1);\n\n");
-		$this->add("namespace {$list['namespace']};\n\n");
-		$this->add("use PHPUnit\Framework\TestCase;\n\n");
+        $this->classFactory->classFactory('tests/', $test);
+        $folder = $this->classFactory->getFolder();
+        $class = $this->classFactory->getClass();
+        $namespace = $this->classFactory->getNamespace();
 
-        $this->add(
-            str->of("class ")
-                ->concat($list['class'])
-                ->concat(' extends TestCase ')->ln()
-                ->concat('{')->ln()
-                ->lt()->concat("public function testExample1(): void ")->ln()
-                ->lt()->concat('{')->ln()->ln()
-                ->lt()->concat("}")->ln()->ln()
-                ->lt()->concat("public function setUp(): void ")->ln()
-                ->lt()->concat('{')->ln()->ln()
-                ->lt()->concat("}")->ln()
-                ->concat("}")->ln()
-                ->get()
-        );
+		$this->store->folder($folder);
 
-        $this->force();
-        $this->close();
+		$this->classFactory
+            ->create($class, 'php', $folder)
+            ->add("<?php\n\ndeclare(strict_types=1);\n\n")
+            ->add("namespace {$namespace};\n\n")
+            ->add("use PHPUnit\Framework\TestCase;\n\n")
+            ->add(
+                Str::of("class ")
+                    ->concat($class)
+                    ->concat(' extends TestCase ')->ln()
+                    ->concat('{')->ln()
+                    ->lt()->concat("public function setUp(): void ")->ln()
+                    ->lt()->concat('{')->ln()->ln()
+                    ->lt()->concat("}")->ln()->ln()
+                    ->lt()->concat("public function tearDown(): void ")->ln()
+                    ->lt()->concat('{')->ln()->ln()
+                    ->lt()->concat("}")->ln()
+                    ->concat("}")->ln()
+                    ->get()
+            )
+            ->close();
+
         $output->writeln($this->warningOutput("\t>>  TEST: {$test}"));
-
-        $output->writeln(
-            $this->successOutput("\t>>  TEST: the '{$list['namespace']}\\{$list['class']}' test has been generated")
-        );
+        $output->writeln($this->successOutput("\t>>  TEST: the '{$namespace}\\{$class}' test has been generated"));
 
         return Command::SUCCESS;
     }
