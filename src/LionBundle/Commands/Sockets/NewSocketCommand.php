@@ -14,6 +14,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class NewSocketCommand extends Command
 {
+    private ClassFactory $classFactory;
+    private Store $store;
+
+    protected function initialize(InputInterface $input, OutputInterface $output): void
+    {
+        $this->classFactory = new ClassFactory();
+        $this->store = new Store();
+    }
+
 	protected function configure(): void
     {
         $this
@@ -25,16 +34,15 @@ class NewSocketCommand extends Command
 	protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $socket = $input->getArgument('socket');
-        $classFactory = new ClassFactory();
+        $listFactory = $this->classFactory->classFactory('app/Http/Sockets/', $socket);
+        $urlFolder = lcfirst(str_replace("\\", "/", $listFactory['namespace']));
+        $this->store->folder($urlFolder);
 
-        $listFactory = $classFactory->classFactory('app/Http/Sockets/', $socket);
-        $url_folder = lcfirst(str_replace("\\", "/", $listFactory['namespace']));
-        Store::folder($url_folder);
-
-        $classFactory
-            ->create($listFactory['class'], 'php', "{$url_folder}/")
+        $this->classFactory
+            ->create($listFactory['class'], 'php', "{$urlFolder}/")
             ->add(
                 Str::of('<?php')->ln()->ln()
+                    ->concat('declare(strict_types=1);')->ln()->ln()
                     ->concat('namespace')->spaces(1)->concat($listFactory['namespace'])->concat(';')->ln()->ln()
                     ->concat('use Exception;')->ln()
                     ->concat('use Ratchet\\ConnectionInterface;')->ln()
