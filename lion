@@ -30,6 +30,8 @@ $kernel->commands([
     \LionBundle\Commands\InfoCommand::class,
     //  AES
     \LionBundle\Commands\AES\NewAESCommand::class,
+    // NEW
+    \LionBundle\Commands\New\CapsuleCommand::class,
     // Sockets
     \LionBundle\Commands\Sockets\NewSocketCommand::class
 ]);

@@ -9,6 +9,7 @@
 /vite/
 /config/
 /app/
+/database/
 .rnd
 .env
 supervisord.pid
