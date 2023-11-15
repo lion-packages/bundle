@@ -125,7 +125,7 @@ class ClassFactory
 
     public function getFolder(): string
     {
-        return lcfirst(str_replace("\\", "/", $this->namespace));
+        return lcfirst(str_replace("\\", "/", $this->namespace)) . '/';
     }
 
     private function getGetter(string $name, string $type = 'string'): string

@@ -97,7 +97,7 @@ class CapsuleCommand extends Command
         }
 
         $contentFile = $str->concat("}")->get();
-        $this->classFactory->create($class, 'php', "{$folder}/")->add($contentFile)->close();
+        $this->classFactory->create($class, 'php', $folder)->add($contentFile)->close();
 
         $output->writeln($this->warningOutput("\t>>  CAPSULE: {$capsule}"));
         $output->writeln($this->successOutput("\t>>  CAPSULE: the '{$namespace}\\{$class}' capsule has been generated"));
