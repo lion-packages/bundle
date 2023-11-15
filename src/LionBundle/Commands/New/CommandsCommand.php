@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LionBundle\Commands\New;
 
 use LionBundle\Helpers\Commands\ClassFactory;
