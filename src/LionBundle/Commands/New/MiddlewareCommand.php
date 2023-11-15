@@ -1,57 +1,58 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LionBundle\Commands\New;
 
-use App\Traits\Framework\ClassPath;
-use App\Traits\Framework\ConsoleOutput;
+use LionBundle\Helpers\Commands\ClassFactory;
+use LionCommand\Command;
 use LionFiles\Store;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class MiddlewareCommand extends Command
 {
-    use ClassPath, ConsoleOutput;
+    private ClassFactory $classFactory;
+    private Store $store;
 
-	protected static $defaultName = 'new:middleware';
-
-	protected function initialize(InputInterface $input, OutputInterface $output)
+	protected function initialize(InputInterface $input, OutputInterface $output): void
 	{
-
+        $this->classFactory = new ClassFactory();
+        $this->store = new Store();
 	}
 
-	protected function interact(InputInterface $input, OutputInterface $output)
-	{
-
-	}
-
-	protected function configure()
+	protected function configure(): void
 	{
 		$this
+            ->setName('new:middleware')
             ->setDescription('Command required for the creation of new Middleware')
-            ->addArgument('middleware', InputArgument::OPTIONAL, 'Middleware name', "ExampleMiddleware");
+            ->addArgument('middleware', InputArgument::OPTIONAL, 'Middleware name', 'ExampleMiddleware');
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output)
+	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
         $middleware = $input->getArgument('middleware');
-		$list = $this->export("app/Http/Middleware/", $middleware);
-		$url_folder = lcfirst(str_replace("\\", "/", $list['namespace']));
-		Store::folder($url_folder);
 
-		$this->create($url_folder, $list['class']);
-		$this->add("<?php\n\ndeclare(strict_types=1);\n\n");
-		$this->add("namespace {$list['namespace']};\n\n");
-		$this->add("class {$list['class']}\n{\n");
-		$this->add("\tpublic function __construct()\n\t{\n\n\t}\n}\n");
-		$this->force();
-		$this->close();
+        $this->classFactory->classFactory('app/Http/Middleware/', $middleware);
+        $folder = $this->classFactory->getFolder();
+        $class = $this->classFactory->getClass();
+        $namespace = $this->classFactory->getNamespace();
+
+        $this->store->folder($folder);
+
+		$this->classFactory
+            ->create($class, 'php', $folder)
+            ->add("<?php\n\ndeclare(strict_types=1);\n\n")
+            ->add("namespace {$namespace};\n\n")
+            ->add("class {$class}\n{\n")
+            ->add("\tpublic function __construct()\n\t{\n\n\t}\n}\n")
+            ->close();
 
         $output->writeln($this->warningOutput("\t>>  MIDDLEWARE: {$middleware}"));
 
         $output->writeln(
-        	$this->successOutput("\t>>  MIDDLEWARE: the '{$list['namespace']}\\{$list['class']}' middleware has been generated")
+        	$this->successOutput("\t>>  MIDDLEWARE: the '{$namespace}\\{$class}' middleware has been generated")
         );
 
 		return Command::SUCCESS;

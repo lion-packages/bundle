@@ -39,6 +39,7 @@ $kernel->commands([
     \LionBundle\Commands\New\InterfaceCommand::class,
     \LionBundle\Commands\New\TestCommand::class,
     \LionBundle\Commands\New\TraitCommand::class,
+    \LionBundle\Commands\New\MiddlewareCommand::class,
     // Sockets
     \LionBundle\Commands\Sockets\NewSocketCommand::class
 ]);
