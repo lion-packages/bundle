@@ -40,6 +40,7 @@ $kernel->commands([
     \LionBundle\Commands\New\TestCommand::class,
     \LionBundle\Commands\New\TraitCommand::class,
     \LionBundle\Commands\New\MiddlewareCommand::class,
+    \LionBundle\Commands\New\RulesCommand::class,
     // Sockets
     \LionBundle\Commands\Sockets\NewSocketCommand::class
 ]);
