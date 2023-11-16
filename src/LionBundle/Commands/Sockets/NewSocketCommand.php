@@ -34,21 +34,25 @@ class NewSocketCommand extends Command
 	protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $socket = $input->getArgument('socket');
-        $listFactory = $this->classFactory->classFactory('app/Http/Sockets/', $socket);
-        $urlFolder = lcfirst(str_replace("\\", "/", $listFactory['namespace']));
-        $this->store->folder($urlFolder);
+
+        $this->classFactory->classFactory('app/Http/Sockets/', $socket);
+        $folder = $this->classFactory->getFolder();
+        $class = $this->classFactory->getClass();
+        $namespace = $this->classFactory->getNamespace();
+
+        $this->store->folder($folder);
 
         $this->classFactory
-            ->create($listFactory['class'], 'php', "{$urlFolder}/")
+            ->create($class, 'php', $folder)
             ->add(
                 Str::of('<?php')->ln()->ln()
                     ->concat('declare(strict_types=1);')->ln()->ln()
-                    ->concat('namespace')->spaces(1)->concat($listFactory['namespace'])->concat(';')->ln()->ln()
+                    ->concat('namespace')->spaces(1)->concat($namespace)->concat(';')->ln()->ln()
                     ->concat('use Exception;')->ln()
                     ->concat('use Ratchet\\ConnectionInterface;')->ln()
                     ->concat('use Ratchet\\MessageComponentInterface;')->ln()
                     ->concat('use SplObjectStorage;')->ln()->ln()
-                    ->concat('class')->spaces(1)->concat($listFactory['class'])->spaces(1)->concat('implements')
+                    ->concat('class')->spaces(1)->concat($class)->spaces(1)->concat('implements')
                     ->spaces()->concat('MessageComponentInterface')->ln()->concat('{')->ln()
                     ->lt()->concat('protected SplObjectStorage $clients;')->ln()
                     ->lt()->concat('protected int $port = 9000;')->ln()
@@ -81,7 +85,7 @@ class NewSocketCommand extends Command
             ->close();
 
         $output->writeln($this->warningOutput("\t>>  SOCKET: {$socket}"));
-        $output->writeln($this->successOutput("\t>>  SOCKET: the '{$listFactory['namespace']}\\{$listFactory['class']}' socket has been generated"));
+        $output->writeln($this->successOutput("\t>>  SOCKET: the '{$namespace}\\{$class}' socket has been generated"));
 
         return Command::SUCCESS;
 	}
