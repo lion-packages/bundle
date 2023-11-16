@@ -8,6 +8,7 @@
 /storage/postman/*.json
 /vite/
 /config/
+/public/
 /app/
 /database/
 .rnd

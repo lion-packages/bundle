@@ -28,6 +28,7 @@ $kernel = new \LionCommand\Kernel();
 $kernel->commands([
     // All
     \LionBundle\Commands\InfoCommand::class,
+    \LionBundle\Commands\ServerCommand::class,
     // AES
     \LionBundle\Commands\AES\NewAESCommand::class,
     // NEW
