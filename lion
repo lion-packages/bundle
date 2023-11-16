@@ -42,6 +42,8 @@ $kernel->commands([
     \LionBundle\Commands\New\TraitCommand::class,
     \LionBundle\Commands\New\MiddlewareCommand::class,
     \LionBundle\Commands\New\RulesCommand::class,
+    // SH
+    \LionBundle\Commands\SH\SHFileCommand::class,
     // Sockets
     \LionBundle\Commands\Sockets\NewSocketCommand::class
 ]);

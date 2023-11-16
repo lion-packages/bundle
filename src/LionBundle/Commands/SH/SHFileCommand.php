@@ -1,48 +1,44 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LionBundle\Commands\SH;
 
-use App\Traits\Framework\ClassPath;
-use App\Traits\Framework\ConsoleOutput;
-use Symfony\Component\Console\Command\Command;
+use LionBundle\Helpers\Commands\ClassFactory;
+use LionCommand\Command;
+use LionFiles\Store;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class SHFileCommand extends Command
 {
-    use ClassPath, ConsoleOutput;
+    private ClassFactory $classFactory;
+    private Store $store;
 
-	protected static $defaultName = "sh:new";
+    protected function initialize(InputInterface $input, OutputInterface $output): void
+    {
+        $this->classFactory = new ClassFactory();
+        $this->store = new Store();
+    }
 
-	protected function initialize(InputInterface $input, OutputInterface $output)
-	{
-
-	}
-
-	protected function interact(InputInterface $input, OutputInterface $output)
-	{
-
-	}
-
-	protected function configure()
+	protected function configure(): void
 	{
 		$this
-            ->setDescription("Command to create files with extension sh")
-            ->addArgument("sh", InputArgument::OPTIONAL, 'SH name', "Example");
+            ->setName('sh:new')
+            ->setDescription('Command to create files with extension sh')
+            ->addArgument('sh', InputArgument::OPTIONAL, 'SH name', 'Example');
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output)
 	{
         $sh = $input->getArgument("sh");
-
-        $this->new("storage/cron/{$sh}", "sh");
-        $this->add("# Add the instructions you want to execute \n");
-        $this->force();
-        $this->close();
+        $this->store->folder('storage/sh/');
+        $this->classFactory->create($sh, 'sh', 'storage/sh/')->add("#!/bin/bash\n")->close();
 
         $output->writeln($this->warningOutput("\t>>  SH: {$sh}"));
         $output->writeln($this->successOutput("\t>>  SH: File generated successfully"));
+
 		return Command::SUCCESS;
 	}
 }
