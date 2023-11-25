@@ -9,9 +9,8 @@ declare(strict_types=1);
  **/
 
 define('client', new \GuzzleHttp\Client());
-// define('request', LionRequest\Request::getInstance()->capture());
+define('request', (new \LionRequest\Request())->capture());
 define('response', new LionRequest\Response());
 define('env', (object) $_ENV);
 define('str', new \LionHelpers\Str());
 define('arr', new \LionHelpers\Arr());
-// define('kernel', App\Console\Kernel::getInstance());
