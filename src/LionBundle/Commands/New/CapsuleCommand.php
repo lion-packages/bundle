@@ -29,8 +29,8 @@ class CapsuleCommand extends Command
     {
 		$this
             ->setName('new:capsule')
-            ->setDescription("Command required for creating new custom capsules")
-            ->addArgument('capsule', InputArgument::OPTIONAL, 'Capsule name', "Example")
+            ->setDescription('Command required for creating new custom capsules')
+            ->addArgument('capsule', InputArgument::OPTIONAL, 'Capsule name', 'Example')
             ->addOption(
                 'propierties',
                 'p',

@@ -66,8 +66,8 @@ class ClassFactory
         $newName = lcfirst($newName);
 
         return (object) [
-            'name' => '$' . "{$newName};",
-            'type' => "{$type} $" . "{$newName};",
+            'name' => '$' . "{$newName} = null;",
+            'type' => "?{$type} $" . "{$newName} = null;",
             'reference' => '$this->' . "{$newName};",
             'getter' => $this->getGetter($name, $type),
             'setter' => $this->getSetter($name, $type, $capsule)
