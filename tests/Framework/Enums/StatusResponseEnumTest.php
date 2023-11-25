@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Framework\Enums;
 
-use App\Enums\Framework\StatusResponseEnum;
-use PHPUnit\Framework\TestCase;
+use LionBundle\Enums\StatusResponseEnum;
+use LionTest\Test;
 
-class StatusResponseEnumTest extends TestCase 
+class StatusResponseEnumTest extends Test
 {
 	public function testValues(): void
 	{
@@ -36,10 +36,5 @@ class StatusResponseEnumTest extends TestCase
 		];
 
 		$this->assertSame($values, StatusResponseEnum::errors());
-	}
-
-	public function setUp(): void 
-	{
-
 	}
 }

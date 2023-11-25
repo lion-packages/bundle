@@ -15,10 +15,6 @@
         <testsuite name="All-Testing">
             <directory>tests/</directory>
         </testsuite>
-
-        <testsuite name="Framework">
-            <directory>tests/Framework/</directory>
-        </testsuite>
     </testsuites>
 
     <php>
