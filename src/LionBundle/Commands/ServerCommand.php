@@ -12,11 +12,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ServerCommand extends Command
 {
+    private string|float $start;
 	protected function initialize(InputInterface $input, OutputInterface $output): void
     {
-        $output->write("\033[2J\033[;H");
-        $output->write($this->successOutput("\nLion-Framework "));
-        $output->writeln("ready in " . number_format((microtime(true) - LION_START), 3) . " ms\n");
+        $this->start = microtime(true);
 	}
 
 	protected function configure(): void
@@ -36,6 +35,9 @@ class ServerCommand extends Command
         $url = "{$host}:{$port}";
         $link = "<href=http://{$url}>[http://{$url}]</>";
 
+        $output->write("\033[2J\033[;H");
+        $output->write($this->successOutput("\nLion-Framework "));
+        $output->writeln("ready in " . number_format((microtime(true) - $this->start), 3) . " ms\n");
         $output->writeln($this->warningOutput("\t>>  LOCAL:</comment> Server running on {$link}"));
         $output->writeln($this->warningOutput("\t>>  HOST:</comment> use --host to expose"));
         $output->writeln($this->warningOutput("\t>>  PORT:</comment> use --port to expose"));
