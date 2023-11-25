@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Framework\Enums;
+namespace Tests\Enums;
 
 use LionBundle\Enums\StatusResponseEnum;
 use LionTest\Test;
