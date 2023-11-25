@@ -12,7 +12,7 @@ Request::init(client);
 // -----------------------------------------------------------------------------
 Route::addMiddleware([]);
 // -----------------------------------------------------------------------------
-Route::get('/', fn() => success('[index]'));
+Route::get('/', fn() => info('[index]'));
 // Route::get('controller', [ExampleController::class, 'createExample']);
 Route::get('route-list', fn() => Route::getFullRoutes());
 // -----------------------------------------------------------------------------

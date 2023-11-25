@@ -152,12 +152,12 @@ if (!function_exists('vd')) {
  * -----------------------------------------------------------------------------
  **/
 
-// if (!function_exists('json')) {
-//     function json(mixed $value): string
-//     {
-//         return json->encode($value);
-//     }
-// }
+if (!function_exists('json')) {
+    function json(mixed $value): string
+    {
+        return json_encode($value);
+    }
+}
 
 /**
  * -----------------------------------------------------------------------------
