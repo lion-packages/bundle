@@ -5,30 +5,31 @@ declare(strict_types=1);
 define('LION_START', microtime(true));
 
 /**
- * ------------------------------------------------------------------------------
+ * -----------------------------------------------------------------------------
  * Register The Auto Loader
- * ------------------------------------------------------------------------------
+ * -----------------------------------------------------------------------------
  * Composer provides a convenient, automatically generated class loader for
  * this application
- * ------------------------------------------------------------------------------
+ * -----------------------------------------------------------------------------
  **/
 
-require_once("vendor/autoload.php");
+require_once('./vendor/autoload.php');
 
 /**
- * ------------------------------------------------------------------------------
- * initialization of predefined constants and functions
- * ------------------------------------------------------------------------------
- **/
+ * -----------------------------------------------------------------------------
+ * Initialize Http parameters (Middleware/Rules)
+ * -----------------------------------------------------------------------------
+ * */
 
-include_once(__DIR__ . "/src/LionBundle/Helpers/Bundle/config.php");
+include_once('./routes/rules.php');
+include_once('./routes/middleware.php');
 
 /**
- * ------------------------------------------------------------------------------
+ * -----------------------------------------------------------------------------
  * Run The lion Application
- * ------------------------------------------------------------------------------
+ * -----------------------------------------------------------------------------
  * This is where the commands for your application are executed
- * ------------------------------------------------------------------------------
+ * -----------------------------------------------------------------------------
  **/
 
 $kernel = new \LionCommand\Kernel();
@@ -51,6 +52,8 @@ $kernel->commands([
     \LionBundle\Commands\New\TraitCommand::class,
     \LionBundle\Commands\New\MiddlewareCommand::class,
     \LionBundle\Commands\New\RulesCommand::class,
+    // Route
+    \LionBundle\Commands\Route\RouteListCommand::class,
     // RSA
     \LionBundle\Commands\RSA\NewRSACommand::class,
     // SH

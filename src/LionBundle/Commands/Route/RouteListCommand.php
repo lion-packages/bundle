@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LionBundle\Commands\Route;
 
-use App\Traits\Framework\ConsoleOutput;
-use Symfony\Component\Console\Command\Command;
+use LionBundle\Helpers\Http\Routes;
+use LionCommand\Command;
+use LionHelpers\Str;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\Table;
@@ -11,60 +14,40 @@ use Symfony\Component\Console\Helper\TableSeparator;
 
 class RouteListCommand extends Command
 {
-    use ConsoleOutput;
+    private array $routes = [];
+    private array $rules = [];
+    private array $configMiddleware = [];
 
-	protected static $defaultName = "route:list";
-
-	protected function initialize(InputInterface $input, OutputInterface $output)
+	protected function initialize(InputInterface $input, OutputInterface $output): void
     {
-
+        $this->routes = json_decode(fetch("GET", env->SERVER_URL . "/route-list")->getBody()->getContents(), true);
+        $this->rules = Routes::getRules();
+        $this->configMiddleware = Routes::getMiddleware();
     }
 
-    protected function interact(InputInterface $input, OutputInterface $output)
-    {
-
-    }
-
-    protected function configure()
+    protected function configure(): void
     {
         $this
+            ->setName('route:list')
             ->setDescription("Command to view a list of available web routes");
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $routes = fetch("GET", env->SERVER_URL . "/route-list");
-        array_pop($routes);
-        $rules = require_once("./routes/rules.php");
-        $config_middleware = require_once("./config/middleware.php");
-        $config_middleware = [...$config_middleware['framework'], ...$config_middleware['app']];
-        $size = arr->of($routes)->length();
+        array_pop($this->routes);
+        $this->configMiddleware = [...$this->configMiddleware['framework'], ...$this->configMiddleware['app']];
+        $size = arr->of($this->routes)->length();
         $cont = 0;
         $rows = [];
 
-        $transformNamespace = function(string $namespace): string {
-            $class_new = "";
-            $split = explode("\\", $namespace);
-
-            foreach ($split as $key => $value) {
-                if ($key < (count($split) - 1)) {
-                    $class_new .= $this->purpleOutput($value) . "\\";
-                } else {
-                    $class_new .= $value;
-                }
-            }
-
-            return $class_new;
-        };
-
-        foreach ($routes as $route => $methods) {
+        foreach ($this->routes as $route => $methods) {
             foreach ($methods as $keyMethods => $method) {
-                $route_url = str->of("/{$route}")->replace("//", "/")->get();
+                $routeUrl = Str::of("/{$route}")->replace("//", "/")->get();
 
                 if ($method['handler']['request'] != false) {
                     $rows[] = [
                         $this->warningOutput($keyMethods),
-                        $route_url,
+                        $routeUrl,
                         $this->errorOutput("false"),
                         $this->errorOutput("false"),
                         "<href={$method['handler']['request']['url']}>[{$method['handler']['request']['url']}]</>"
@@ -74,7 +57,7 @@ class RouteListCommand extends Command
                 if ($method['handler']['callback'] != false) {
                     $rows[] = [
                         $this->warningOutput($keyMethods),
-                        $route_url,
+                        $routeUrl,
                         $this->errorOutput("false"),
                         $this->errorOutput("callback"),
                         $this->errorOutput("false"),
@@ -84,8 +67,8 @@ class RouteListCommand extends Command
                 if ($method['handler']['controller'] != false) {
                     $rows[] = [
                         $this->warningOutput($keyMethods),
-                        $route_url,
-                        $transformNamespace($method['handler']['controller']['name']),
+                        $routeUrl,
+                        $this->transformNamespace($method['handler']['controller']['name']),
                         $this->warningOutput($method['handler']['controller']['function']),
                         $this->errorOutput("false"),
                     ];
@@ -93,13 +76,13 @@ class RouteListCommand extends Command
 
                 if (arr->of($method['filters'])->length() > 0) {
                     foreach ($method['filters'] as $key => $filter) {
-                        foreach ($config_middleware as $middlewareClass => $middlewareMethods) {
+                        foreach ($this->configMiddleware as $middlewareClass => $middlewareMethods) {
                             foreach ($middlewareMethods as $middlewareItem => $item) {
                                 if ($filter === $item['name']) {
                                     $rows[] = [
                                         $this->infoOutput("MIDDLEWARE:"),
                                         $this->infoOutput($filter),
-                                        $transformNamespace($middlewareClass),
+                                        $this->transformNamespace($middlewareClass),
                                         $this->warningOutput($item['method']),
                                         $this->errorOutput("false")
                                     ];
@@ -109,14 +92,15 @@ class RouteListCommand extends Command
                     }
                 }
 
-                if (isset($rules[$keyMethods])) {
-                    if (isset($rules[$keyMethods][$route_url])) {
-                        foreach ($rules[$keyMethods][$route_url] as $key_uri_rule => $class_rule) {
-                            $required_param = $class_rule::$disabled === false ? "REQUIRED" : "OPTIONAL";
+                if (isset($this->rules[$keyMethods])) {
+                    if (isset($this->rules[$keyMethods][$routeUrl])) {
+                        foreach ($this->rules[$keyMethods][$routeUrl] as $keyUriRule => $classRule) {
+                            $required_param = $classRule::$disabled === false ? "REQUIRED" : "OPTIONAL";
+
                             $rows[] = [
                                 $this->successOutput("PARAM:"),
-                                $this->successOutput($class_rule::$field . " ({$required_param})"),
-                                $transformNamespace($class_rule),
+                                $this->successOutput($classRule::$field . " ({$required_param})"),
+                                $this->transformNamespace($classRule),
                                 $this->warningOutput("passes"),
                                 $this->errorOutput("false")
                             ];
@@ -147,5 +131,21 @@ class RouteListCommand extends Command
             ->render();
 
         return Command::SUCCESS;
+    }
+
+    private function transformNamespace(string $namespace): string
+    {
+        $classNew = "";
+        $split = explode("\\", $namespace);
+
+        foreach ($split as $key => $value) {
+            if ($key < (count($split) - 1)) {
+                $classNew .= $this->purpleOutput($value) . "\\";
+            } else {
+                $classNew .= $value;
+            }
+        }
+
+        return $classNew;
     }
 }

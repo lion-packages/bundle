@@ -1,0 +1,25 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * ------------------------------------------------------------------------------
+ * Web middleware
+ * ------------------------------------------------------------------------------
+ * This is where you can register web middleware for your application
+ * ------------------------------------------------------------------------------
+ **/
+
+\LionBundle\Helpers\Http\Routes::setMiddleware([
+    'app' => [
+        //
+    ],
+    'framework' => [
+        // \App\Http\Middleware\Framework\JWTMiddleware::class => [
+        //     ['name' => "jwt-existence", 'method' => "existence"],
+        //     ['name' => "jwt-authorize", 'method' => "authorize"],
+        //     ['name' => "jwt-not-authorize", 'method' => "notAuthorize"],
+        //     ['name' => "jwt-without-signature", 'method' => "authorizeWithoutSignature"]
+        // ]
+    ],
+]);

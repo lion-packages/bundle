@@ -2,20 +2,8 @@
 
 declare(strict_types=1);
 
-/**
- * -----------------------------------------------------------------------------
- * framework level predefined constants
- * -----------------------------------------------------------------------------
- **/
-
-define('client', new GuzzleHttp\Client());
-// define('request', LionRequest\Request::getInstance()->capture());
-// define('response', LionRequest\Response::getInstance());
-// define('json', LionRequest\Json::getInstance());
-define('env', (object) $_ENV);
-define('str', new LionHelpers\Str());
-define('arr', new LionHelpers\Arr());
-// define('kernel', App\Console\Kernel::getInstance());
+use GuzzleHttp\Psr7\Response;
+use LionBundle\Enums\StatusResponseEnum;
 
 /**
  * -----------------------------------------------------------------------------
@@ -23,25 +11,12 @@ define('arr', new LionHelpers\Arr());
  * -----------------------------------------------------------------------------
  **/
 
-// if (!function_exists('fetch')) {
-//     function fetch(string $method, string $uri, array $options = []): array
-//     {
-//         return json->decode(client->request($method, $uri, $options)->getBody());
-//     }
-// }
-
-/**
- * -----------------------------------------------------------------------------
- * Function to make HTTP requests with guzzlehttp
- * -----------------------------------------------------------------------------
- **/
-
-// if (!function_exists('fetchXML')) {
-//     function fetchXML(string $method, string $uri, array $options = []): string
-//     {
-//         return client->request($method, $uri, $options)->getBody()->getContents();
-//     }
-// }
+if (!function_exists('fetch')) {
+    function fetch(string $method, string $uri, array $options = []): Response
+    {
+        return client->request($method, $uri, $options);
+    }
+}
 
 /**
  * -----------------------------------------------------------------------------
@@ -75,12 +50,12 @@ if (!function_exists('storage_path')) {
  * -----------------------------------------------------------------------------
  **/
 
-// if (!function_exists('response')) {
-//     function response(string $status = 'custom', mixed $response = null, int $code = 200, mixed $data = null): object
-//     {
-//         return response->code($code)->response($status, $response, $data);
-//     }
-// }
+if (!function_exists('response')) {
+    function response(string $status = 'custom', mixed $response = null, int $code = 200, mixed $data = null): object
+    {
+        return response->custom($status, $response, $code, $data);
+    }
+}
 
 /**
  * -----------------------------------------------------------------------------
@@ -88,12 +63,12 @@ if (!function_exists('storage_path')) {
  * -----------------------------------------------------------------------------
  **/
 
-// if (!function_exists('success')) {
-//     function success(mixed $response = null, int $code = 200, mixed $data = null): object
-//     {
-//         return response->code($code)->success($response, $data);
-//     }
-// }
+if (!function_exists('success')) {
+    function success(mixed $response = null, int $code = 200, mixed $data = null): object
+    {
+        return response->success($response, $code, $data);
+    }
+}
 
 /**
  * -----------------------------------------------------------------------------
@@ -101,12 +76,12 @@ if (!function_exists('storage_path')) {
  * -----------------------------------------------------------------------------
  **/
 
-// if (!function_exists('error')) {
-//     function error(mixed $response = null, int $code = 500, mixed $data = null): object
-//     {
-//         return response->code($code)->error($response, $data);
-//     }
-// }
+if (!function_exists('error')) {
+    function error(mixed $response = null, int $code = 500, mixed $data = null): object
+    {
+        return response->error($response, $code, $data);
+    }
+}
 
 /**
  * -----------------------------------------------------------------------------
@@ -114,12 +89,12 @@ if (!function_exists('storage_path')) {
  * -----------------------------------------------------------------------------
  **/
 
-// if (!function_exists('warning')) {
-//     function warning(mixed $response = null, int $code = 200, mixed $data = null): object
-//     {
-//         return response->code($code)->warning($response, $data);
-//     }
-// }
+if (!function_exists('warning')) {
+    function warning(mixed $response = null, int $code = 200, mixed $data = null): object
+    {
+        return response->warning($response, $code, $data);
+    }
+}
 
 /**
  * -----------------------------------------------------------------------------
@@ -127,12 +102,12 @@ if (!function_exists('storage_path')) {
  * -----------------------------------------------------------------------------
  **/
 
-// if (!function_exists('info')) {
-//     function info(mixed $response = null, int $code = 200, mixed $data = null): object
-//     {
-//         return response->code($code)->info($response, $data);
-//     }
-// }
+if (!function_exists('info')) {
+    function info(mixed $response = null, int $code = 200, mixed $data = null): object
+    {
+        return response->info($response, $code, $data);
+    }
+}
 
 /**
  * -----------------------------------------------------------------------------
@@ -193,7 +168,7 @@ if (!function_exists('vd')) {
 if (!function_exists('isError')) {
     function isError(object $res): bool
     {
-        return in_array($res->status, \LionBundle\Enums\StatusResponseEnum::errors());
+        return in_array($res->status, StatusResponseEnum::errors());
     }
 }
 
@@ -206,9 +181,7 @@ if (!function_exists('isError')) {
 if (!function_exists('isSuccess')) {
     function isSuccess(object $res): bool
     {
-        return in_array($res->status, [
-            \LionBundle\Enums\StatusResponseEnum::SUCCESS->value
-        ]);
+        return in_array($res->status, [StatusResponseEnum::SUCCESS->value], true);
     }
 }
 
