@@ -66,6 +66,7 @@ class ClassFactory
         $newName = lcfirst($newName);
 
         return (object) [
+            'format' => $newName,
             'name' => '$' . "{$newName} = null;",
             'type' => "?{$type} $" . "{$newName} = null;",
             'reference' => '$this->' . "{$newName};",
@@ -79,6 +80,7 @@ class ClassFactory
         $propierty = $this->getPropierty($name, $capsule, $type);
 
         return (object) [
+            'format' => $propierty->format,
             'name' => "public {$propierty->name}",
             'type' => "public {$propierty->type}",
             'reference' => $propierty->reference,
@@ -92,6 +94,7 @@ class ClassFactory
         $propierty = $this->getPropierty($name, $capsule, $type);
 
         return (object) [
+            'format' => $propierty->format,
             'name' => "private {$propierty->name}",
             'type' => "private {$propierty->type}",
             'reference' => $propierty->reference,
@@ -105,6 +108,7 @@ class ClassFactory
         $propierty = $this->getPropierty($name, $capsule, $type);
 
         return (object) [
+            'format' => $propierty->format,
             'name' => "protected {$propierty->name}",
             'type' => "protected {$propierty->type}",
             'reference' => $propierty->reference,
@@ -128,7 +132,7 @@ class ClassFactory
         return lcfirst(str_replace("\\", "/", $this->namespace)) . '/';
     }
 
-    private function getGetter(string $name, string $type = 'string'): string
+    private function getGetter(string $name, string $type = 'string'): object
     {
         $newName = str_replace(' ', '_', $name);
         $newName = str_replace('-', '_', $newName);
@@ -138,10 +142,10 @@ class ClassFactory
         $getter = "\tpublic function get{$newName}(): ?{$type}\n\t{\n\t\treturn " . '$this->' . lcfirst($newName);
         $getter .= ";\n\t}";
 
-        return $getter;
+        return (object) ['name' => "get{$newName}", 'method' => $getter];
     }
 
-    private function getSetter(string $name, string $type, string $capsule): string
+    private function getSetter(string $name, string $type, string $capsule): object
     {
         $newName = str_replace(' ', '_', $name);
         $newName = str_replace('-', '_', $newName);
@@ -152,7 +156,7 @@ class ClassFactory
         $setter = "\tpublic function set{$newName}(?{$type} $" . $camelName . "): {$capsule}\n\t{\n";
         $setter .= "\t\t" . '$this->' . "{$camelName} = $" . $camelName . ";\n\n\t\treturn " . '$this' . ";\n\t}";
 
-        return $setter;
+        return (object) ['name' => "set{$newName}", 'method' => $setter];
     }
 
     public function getCustomMethod(
