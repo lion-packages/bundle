@@ -60,12 +60,12 @@ class CapsuleCommand extends Command
                 $data = $this->classFactory->getPrivatePropierty($split[0], $class, $split[1]);
 
                 $listPropierties[] = $data->type;
-                $listMethods[] = ['getter' => $data->getter, 'setter' => $data->setter];
+                $listMethods[] = ['getter' => $data->getter->method, 'setter' => $data->setter->method];
             } else {
                 $data = $this->classFactory->getPrivatePropierty($split[0], $class);
 
                 $listPropierties[] = $data->type;
-                $listMethods[] = ['getter' => $data->getter, 'setter' => $data->setter];
+                $listMethods[] = ['getter' => $data->getter->method, 'setter' => $data->setter->method];
             }
         }
 
