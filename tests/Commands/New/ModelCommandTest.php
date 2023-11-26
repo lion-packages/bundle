@@ -45,7 +45,6 @@ class ModelCommandTest extends Test
 
         require_once(self::URL_PATH . self::FILE_NAME);
         $objClass = new (self::OBJECT_NAME)();
-        $this->initReflection($objClass);
 
         $this->assertIsObject($objClass);
         $this->assertInstanceOf(self::OBJECT_NAME, $objClass);
