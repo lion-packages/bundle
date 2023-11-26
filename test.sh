@@ -1,9 +1,10 @@
 #!/bin/bash
 
-
+echo -e "\n\033[0;36m\t>>  Set Time Zone \033[0m"
 export TZ=America/Bogota
+echo -e "\033[0;36m\t>>  America/Bogota \033[0m"
 start_time=$(date +"%Y-%m-%d %H:%M:%S")
-
+echo -e "\033[0;31m \n// ----------------------------------------------------------------------------------- \n\033[0m";
 
 echo -e "\033[0;36m\t>>  Install Dependencies \033[0m"
 rm -rf vendor/
