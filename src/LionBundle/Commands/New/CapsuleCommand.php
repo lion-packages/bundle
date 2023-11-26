@@ -76,12 +76,24 @@ class CapsuleCommand extends Command
             ->concat("namespace")->spaces(1)
             ->concat($namespace)
             ->concat(";")->ln()->ln()
+            ->concat('use JsonSerializable;')->ln()->ln()
             ->concat("class")->spaces(1)
-            ->concat($class)->ln()
+            ->concat($class)->spaces(1)
+            ->concat('implements JsonSerializable')->ln()
             ->concat("{")->ln();
 
         if (count($propierties) > 0) {
             $str->lt()->concat(Arr::of($listPropierties)->join("\n\t"))->ln()->ln();
+        }
+
+        $str
+            ->lt()->concat('public function jsonSerialize(): array')->ln()
+            ->lt()->concat('{')->ln()
+            ->lt()->lt()->concat('return get_object_vars($this);')->ln()
+            ->lt()->concat('}');
+
+        if (count($propierties) > 0) {
+            $str->ln()->ln();
 
             foreach ($listMethods as $key => $method) {
                 if ($key === (count($listMethods) - 1)) {

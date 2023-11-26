@@ -43,7 +43,7 @@
         "ext-tokenizer": "*",
         "cboden/ratchet": "^0.4.4",
         "lion/command": "^3.0",
-        "lion/database": "^8.8",
+        "lion/database": "^8.9",
         "lion/files": "^5.0",
         "lion/helpers": "^2.0",
         "lion/mailer": "^5.0",

@@ -174,4 +174,26 @@ class ClassFactory
 
         return $method;
     }
+
+    public function getClassFormat(string $className): string
+    {
+        $className = str_replace('_', ' ', $className);
+        $className = str_replace('-', ' ', $className);
+        $className = str_replace(':', ' ', $className);
+        $className = str_replace('.', ' ', $className);
+        $className = str_replace(',', ' ', $className);
+
+        return trim(str_replace(' ', '', ucwords($className)));
+    }
+
+    public static function getDBType(string $type): string
+    {
+        if (preg_match("/^int|bigint/", $type)) {
+            return "int";
+        } elseif (preg_match("/^float/", $type)) {
+            return "float";
+        } else {
+            return "string";
+        }
+    }
 }
