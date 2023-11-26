@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Traits\Framework;
+namespace LionBundle\Traits;
 
-use App\Enums\Framework\StatusResponseEnum;
 use \Closure;
+use LionBundle\Enums\StatusResponseEnum;
 use LionSecurity\Validation;
 
 trait ShowErrors
@@ -14,7 +14,7 @@ trait ShowErrors
 
     public static function validate(Closure $validate_function): void
     {
-        $response = Validation::validate((array) request, $validate_function);
+        $response = (new Validation())->validate((array) request, $validate_function);
         self::$validation = isError($response) ? $response->messages : [];
     }
 
@@ -22,8 +22,8 @@ trait ShowErrors
     {
         if (count(self::$validation) > 0) {
             foreach (self::$validation as $keyErrors => $errors) {
-                logger($errors[0], StatusResponseEnum::ERROR->value);
-                finish(error($errors[0]));
+                // logger($errors[0], StatusResponseEnum::ERROR->value);
+                // finish(error($errors[0]));
             }
         }
     }

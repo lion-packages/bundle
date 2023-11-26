@@ -45,7 +45,7 @@ class RulesCommand extends Command
             ->create($class, 'php', $folder)
             ->add("<?php\n\ndeclare(strict_types=1);\n\n")
             ->add("namespace {$namespace};\n\n")
-            ->add("use App\Traits\Framework\ShowErrors;\n")
+            ->add("use LionBundle\Traits\ShowErrors;\n")
             ->add("use Valitron\Validator;\n\n")
             ->add("class {$class} \n{\n")
             ->add("\tuse ShowErrors;\n\n")
