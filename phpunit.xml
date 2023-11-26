@@ -1,23 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    cacheResult="false"
+    defaultTestSuite="All-Test"
+    testdox="false"
+    cacheResult="true"
     colors="true"
-    columns="100"
+    columns="80"
     backupGlobals="false"
     processIsolation="false"
+    stopOnDefect="true"
+    stopOnError="true"
     stopOnFailure="true"
+    stopOnWarning="true"
     bootstrap="vendor/autoload.php"
     xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.3/phpunit.xsd"
     backupStaticProperties="false"
+    displayDetailsOnIncompleteTests="true"
+    displayDetailsOnSkippedTests="true"
+    displayDetailsOnTestsThatTriggerDeprecations="true"
+    displayDetailsOnTestsThatTriggerErrors="true"
+    displayDetailsOnTestsThatTriggerNotices="true"
+    displayDetailsOnTestsThatTriggerWarnings="true"
 >
+    <php>
+        <env name="APP_ENV" value="testing" />
+        <ini name="date.timezone" value="America/Bogota" />
+        <ini name="intl.default_locale" value="C.UTF-8" />
+        <ini name="memory_limit" value="2048M" />
+    </php>
+
     <testsuites>
-        <testsuite name="All-Testing">
+        <testsuite name="All-Test">
             <directory>tests/</directory>
         </testsuite>
-    </testsuites>
 
-    <php>
-        <env name="APP_ENV" value="testing"/>
-    </php>
+        <testsuite name="Commands">
+            <directory>tests/Commands/</directory>
+        </testsuite>
+
+        <testsuite name="Enums">
+            <directory>tests/Enums/</directory>
+        </testsuite>
+
+        <testsuite name="Helpers">
+            <directory>tests/Helpers/</directory>
+        </testsuite>
+    </testsuites>
 </phpunit>
