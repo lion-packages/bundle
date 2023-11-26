@@ -30,7 +30,7 @@ class ModelCommand extends Command
 		$this
             ->setName('new:model')
             ->setDescription('Command required for the creation of new Models')
-            ->addArgument('model', InputArgument::OPTIONAL, 'Model name', "ExampleModel");
+            ->addArgument('model', InputArgument::OPTIONAL, 'Model name', 'ExampleModel');
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int
