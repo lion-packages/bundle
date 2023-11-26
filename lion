@@ -64,7 +64,8 @@ $kernel->commands([
     // DB
     ...[
         // MySQL
-        \LionBundle\Commands\DB\MySQL\DBCapsuleCommand::class
+        \LionBundle\Commands\DB\MySQL\DBCapsuleCommand::class,
+        \LionBundle\Commands\DB\MySQL\DBCapsulesCommand::class
     ],
     // NEW
     \LionBundle\Commands\New\CapsuleCommand::class,
