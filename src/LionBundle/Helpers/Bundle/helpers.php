@@ -6,9 +6,7 @@ use GuzzleHttp\Psr7\Response;
 use LionBundle\Enums\StatusResponseEnum;
 
 /**
- * -----------------------------------------------------------------------------
  * Function to make HTTP requests with guzzlehttp
- * -----------------------------------------------------------------------------
  **/
 
 if (!function_exists('fetch')) {
@@ -19,9 +17,7 @@ if (!function_exists('fetch')) {
 }
 
 /**
- * -----------------------------------------------------------------------------
  * Function to get the path of the storage directory
- * -----------------------------------------------------------------------------
  **/
 
 if (!function_exists('storage_path')) {
@@ -32,22 +28,18 @@ if (!function_exists('storage_path')) {
 }
 
 /**
- * -----------------------------------------------------------------------------
  * Function to display a response and end the execution of processes
- * -----------------------------------------------------------------------------
  **/
 
-// if (!function_exists('finish')) {
-//     function finish(mixed $response = null): void
-//     {
-//         response->finish($response === null ? success() : $response);
-//     }
-// }
+if (!function_exists('finish')) {
+    function finish(mixed $response = null): void
+    {
+        response->finish(null === $response ? success() : $response);
+    }
+}
 
 /**
- * -----------------------------------------------------------------------------
  * Function to display a custom response
- * -----------------------------------------------------------------------------
  **/
 
 if (!function_exists('response')) {
@@ -58,9 +50,7 @@ if (!function_exists('response')) {
 }
 
 /**
- * -----------------------------------------------------------------------------
  * Function to display a success response
- * -----------------------------------------------------------------------------
  **/
 
 if (!function_exists('success')) {
@@ -71,9 +61,7 @@ if (!function_exists('success')) {
 }
 
 /**
- * -----------------------------------------------------------------------------
  * Function to display a error response
- * -----------------------------------------------------------------------------
  **/
 
 if (!function_exists('error')) {
@@ -84,9 +72,7 @@ if (!function_exists('error')) {
 }
 
 /**
- * -----------------------------------------------------------------------------
  * Function to display a warning response
- * -----------------------------------------------------------------------------
  **/
 
 if (!function_exists('warning')) {
@@ -97,9 +83,7 @@ if (!function_exists('warning')) {
 }
 
 /**
- * -----------------------------------------------------------------------------
  * Function to display a info response
- * -----------------------------------------------------------------------------
  **/
 
 if (!function_exists('info')) {
@@ -110,9 +94,7 @@ if (!function_exists('info')) {
 }
 
 /**
- * -----------------------------------------------------------------------------
  * Function to perform a var_dump
- * -----------------------------------------------------------------------------
  **/
 
 if (!function_exists('vd')) {
@@ -123,33 +105,29 @@ if (!function_exists('vd')) {
 }
 
 /**
- * -----------------------------------------------------------------------------
  * Function to add a line to the log file
- * -----------------------------------------------------------------------------
  **/
 
-// if (!function_exists('logger')) {
-//     function logger(string $str, string $log_type = 'info', array $data = [], bool $index = true): void
-//     {
-//         $path = storage_path("logs/", $index);
-//         \LionFiles\Store::folder($path);
+if (!function_exists('logger')) {
+    function logger(string $str, string $logType = 'info', array $data = [], bool $index = true): void
+    {
+        $path = storage_path("logs/monolog/", $index);
+        $fileName = "{$path}lion-" . \Carbon\Carbon::now()->format("Y-m-d") . ".log";
+        (new \LionFiles\Store())->folder($path);
 
-//         (new \Monolog\Logger('log'))->pushHandler(
-//             new \Monolog\Handler\StreamHandler(
-//                 ($path . "lion-" . \Carbon\Carbon::now()->format("Y-m-d") . ".log"),
-//                 \Monolog\Level::Debug
-//             )
-//         )->$log_type(json->encode(!isset($_SERVER['REQUEST_URI']) ? $str : [
-//             'uri' => $_SERVER['REQUEST_URI'],
-//             'data' => json->decode($str)
-//         ]), $data);
-//     }
-// }
+        $logger = new \Monolog\Logger('log');
+        $logger->pushHandler(new \Monolog\Handler\StreamHandler($fileName, \Monolog\Level::Info));
+
+        if (!isset($_SERVER['REQUEST_URI'])) {
+            $logger->$logType(json_encode($str), $data);
+        } else {
+            $logger->$logType(json_encode(['uri' => $_SERVER['REQUEST_URI'], 'data' => json_decode($str)]), $data);
+        }
+    }
+}
 
 /**
- * -----------------------------------------------------------------------------
  * Function to convert data to json
- * -----------------------------------------------------------------------------
  **/
 
 if (!function_exists('json')) {
@@ -160,9 +138,7 @@ if (!function_exists('json')) {
 }
 
 /**
- * -----------------------------------------------------------------------------
  * Function to check if a response object comes with errors
- * -----------------------------------------------------------------------------
  **/
 
 if (!function_exists('isError')) {
@@ -173,9 +149,7 @@ if (!function_exists('isError')) {
 }
 
 /**
- * -----------------------------------------------------------------------------
  * Function to check if a response object is successful
- * -----------------------------------------------------------------------------
  **/
 
 if (!function_exists('isSuccess')) {
@@ -186,28 +160,14 @@ if (!function_exists('isSuccess')) {
 }
 
 /**
- * -----------------------------------------------------------------------------
  * Function that returns JWT token if it exists
- * -----------------------------------------------------------------------------
  **/
 
-// if (!function_exists('jwt')) {
-//     function jwt(): object
-//     {
-//         return \LionSecurity\JWT::decode(\LionSecurity\JWT::get());
-//     }
-// }
+if (!function_exists('jwt')) {
+    function jwt(): object
+    {
+        $jwt = new \LionSecurity\JWT();
 
-/**
- * -----------------------------------------------------------------------------
- * Return function that allows access to the http kernel methods
- * to generate sessions
- * -----------------------------------------------------------------------------
- **/
-
-// if (!function_exists('session')) {
-//     function session(): App\Http\Kernel
-//     {
-//         return App\Http\Kernel::getInstance();
-//     }
-// }
+        return $jwt->decode($jwt->getJWT())->get();
+    }
+}

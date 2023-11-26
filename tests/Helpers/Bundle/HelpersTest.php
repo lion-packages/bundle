@@ -23,6 +23,7 @@ class HelpersTest extends Test
     const INFO = 'info';
     const STATUS_200 = 200;
     const STATUS_500 = 500;
+    const LOGGER_CONTENT = 'test-logger';
 
 	public function testFetch(): void
     {
@@ -103,6 +104,15 @@ class HelpersTest extends Test
         $this->assertSame(self::INFO, $response->status);
         $this->assertSame(null, $response->message);
     }
+
+    // public function testLogger(): void
+    // {
+    //     $path = storage_path("logs/monolog/", false);
+    //     $fileName = "{$path}lion-" . \Carbon\Carbon::now()->format("Y-m-d") . ".log";
+    //     logger(self::LOGGER_CONTENT, 'info', ['user' => 'Sleon'], false);
+
+    //     $this->assertFileExists($fileName);
+    // }
 
     public function testJson(): void
     {

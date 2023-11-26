@@ -18,9 +18,6 @@ class RunTestCommand extends Command
 	protected function initialize(InputInterface $input, OutputInterface $output): void
 	{
         $this->kernel = new Kernel();
-
-		$output->write("\033[2J\033[;H");
-        $output->writeln($this->successOutput("\t>>  Running unit tests...\n\t>>  "));
 	}
 
 	protected function configure(): void
@@ -39,6 +36,8 @@ class RunTestCommand extends Command
 		$class = $input->getOption('class');
 		$method = $input->getOption('method');
 		$suite = $input->getOption('suite');
+
+        $output->writeln($this->successOutput("\t>>  Running unit tests...\n\t>>  "));
 
 		if (!$class && !$method) {
 			$result = $this->kernel->execute("./vendor/bin/phpunit --testsuite {$suite}", false);
