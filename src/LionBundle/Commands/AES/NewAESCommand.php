@@ -13,14 +13,14 @@ class NewAESCommand extends Command
 {
     use AES;
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('aes:new')
             ->setDescription('Command to create KEY and IV keys for AES');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln($this->warningOutput("\t>>  AES KEY: {$this->generateKeys()}"));
         $output->writeln($this->warningOutput("\t>>  AES IV: {$this->generateKeys()}"));
