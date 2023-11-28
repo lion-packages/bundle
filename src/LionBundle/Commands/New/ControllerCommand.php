@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LionBundle\Commands\New;
 
-use LionBundle\Helpers\Commands\ClassFactory;
+use LionBundle\Helpers\Commands\ClassCommandFactory;
 use LionCommand\Command;
 use LionFiles\Store;
 use LionHelpers\Str;
@@ -17,17 +17,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ControllerCommand extends Command
 {
     const METHODS = ['create', 'read', 'update', 'delete'];
-
-    private ClassFactory $classFactory;
-    private ClassFactory $classFactoryModel;
-    private Store $store;
-
-    protected function initialize(InputInterface $input, OutputInterface $output): void
-    {
-        $this->classFactory = new ClassFactory();
-        $this->classFactoryModel = new ClassFactory();
-        $this->store = new Store();
-    }
+    const PATH_CONTROLLER = 'app/Http/Controllers/';
+    const PATH_MODEL = 'app/models/';
 
     protected function configure(): void
     {
@@ -35,111 +26,121 @@ class ControllerCommand extends Command
             ->setName('new:controller')
             ->setDescription('Command required for the creation of new Controllers')
             ->addArgument('controller', InputArgument::OPTIONAL, 'Controller name', 'ExampleController')
-            ->addOption('model', 'm', InputOption::VALUE_REQUIRED, 'Do you want to create the model?');
+            ->addOption('model', 'm', InputOption::VALUE_OPTIONAL, 'Do you want to create the model?', 'none');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $controller = $input->getArgument('controller');
-        $model = $input->getOption('model');
+        $factory = (new ClassCommandFactory(['controller', 'model']));
 
-        $this->classFactory->classFactory('app/Http/Controllers/', $controller);
-        $folder = $this->classFactory->getFolder();
-        $class = $this->classFactory->getClass();
-        $namespace = $this->classFactory->getNamespace();
+        return $factory->execute(function(ClassCommandFactory $classFactory, Store $store) use ($input, $output) {
+            $controller = $input->getArgument('controller');
+            $model = $input->getOption('model');
 
-        $camelModelClass = "";
-        $dataModel = [];
-
-        if ($model != null) {
-            $this->classFactoryModel->classFactory('app/models/', $model);
-            $dataModel['folder'] = $this->classFactoryModel->getFolder();
-            $dataModel['class'] = $this->classFactoryModel->getClass();
-            $dataModel['namespace'] = $this->classFactoryModel->getNamespace();
-        }
-
-        $this->store->folder($folder);
-
-        $this->classFactory
-            ->create($class, 'php', $folder)
-            ->add("<?php\n\ndeclare(strict_types=1);\n\n")
-            ->add("namespace {$namespace};\n\n");
-
-        if ($model != null) {
-            $this->classFactory->add("use {$dataModel['namespace']}\\{$dataModel['class']};\n\n");
-        }
-
-        $this->classFactory->add("class {$class}\n{\n");
-
-        if ($model != null) {
-            $camelModelClass = Str::of(lcfirst($dataModel['class']))->trim()->get();
-
-            $this->classFactory->add(
-                Str::of("\tprivate {$dataModel['class']} $")
-                    ->concat($camelModelClass)
-                    ->concat(";")->ln()->ln()
-                    ->get()
-            );
-
-            $this->classFactory->add(
-                $this->classFactory->getCustomMethod(
-                    '__construct',
-                    '',
-                    '',
-                    '$this->' . "{$camelModelClass} = new {$dataModel['class']}();",
-                    'public'
-                )
-            );
-        } else {
-            $this->classFactory->add($this->classFactory->getCustomMethod('__construct', '', '', '', 'public'));
-        }
-
-        foreach (self::METHODS as $key => $method) {
-            $customMethod = '';
-
-            if ($model != null) {
-                $modelMethod = Str::of('return ')->concat('$this->')->concat($camelModelClass)->concat('->')->get();
-
-                $modelMethod .= Str::of($method . $dataModel['class'])
-                    ->replace('Model', '')
-                    ->replace('model', '')
-                    ->concat('DB();')
+            if (null === $model) {
+                $model = Str::of($model)
+                    ->concat($controller)
+                    ->replace('Controller', '')
+                    ->replace('controller', '')
+                    ->concat('Model')
                     ->get();
-
-                $customMethod = $this->classFactory->getCustomMethod(
-                    Str::of($method . $class)->replace('Controller', '')->replace('controller', '')->get(),
-                    $method === 'read' ? 'array|object' : 'object',
-                    in_array($method, ['update', 'delete'], true) ? 'string $id' : '',
-                    $modelMethod,
-                    'public',
-                    $method === 'delete' ? 1 : 2
-                );
-            } else {
-                $customMethod = $this->classFactory->getCustomMethod(
-                    Str::of($method . $class)->replace('Controller', '')->replace('controller', '')->get(),
-                    $method === 'read' ? 'array|object' : 'object',
-                    in_array($method, ['update', 'delete'], true) ? 'string $id' : '',
-                    $method === 'read' ? "return [];" : "return success();",
-                    'public',
-                    $method === 'delete' ? 1 : 2
-                );
             }
 
-            $this->classFactory->add($customMethod);
-        }
+            $factoryController = $classFactory->getFactory('controller');
+            $factoryModel = $classFactory->getFactory('model');
 
-        $this->classFactory->add("}\n")->close();
+            $dataController = $classFactory->getData($factoryController, [
+                'path' => self::PATH_CONTROLLER,
+                'class' => $controller
+            ]);
 
-        $output->writeln($this->warningOutput("\t>>  CONTROLLER: {$controller}"));
+            $dataModel = $classFactory->getData($factoryModel, [
+                'path' => self::PATH_MODEL,
+                'class' => $model
+            ]);
 
-        $output->writeln(
-            $this->successOutput("\t>>  CONTROLLER: the '{$namespace}\\{$class}' controller has been generated")
-        );
+            $camelModelClass = lcfirst($dataModel->class);
+            $store->folder($dataController->folder);
 
-        if ($model != null) {
-            $this->getApplication()->find('new:model')->run(new ArrayInput(['model' => $model]), $output);
-        }
+            $factoryController
+                ->create($dataController->class, 'php', $dataController->folder)
+                ->add("<?php\n\ndeclare(strict_types=1);\n\n")
+                ->add("namespace {$dataController->namespace};\n\n");
 
-        return Command::SUCCESS;
+            if ('none' != $model) {
+                $factoryController->add("use {$dataModel->namespace}\\{$dataModel->class};\n\n");
+            }
+
+            $factoryController->add("class {$dataController->class}\n{\n");
+
+            if ('none' != $model) {
+                $factoryController->add(
+                    Str::of("\tprivate {$dataModel->class} $")
+                        ->concat($camelModelClass)
+                        ->concat(";")->ln()->ln()
+                        ->get()
+                );
+
+                $factoryController->add(
+                    $factoryController->getCustomMethod(
+                        '__construct',
+                        '',
+                        '',
+                        '$this->' . "{$camelModelClass} = new {$dataModel->class}();",
+                        'public'
+                    )
+                );
+            } else {
+                $factoryController->add($factoryController->getCustomMethod('__construct', '', '', '', 'public'));
+            }
+
+            foreach (self::METHODS as $key => $method) {
+                $customMethod = '';
+
+                if ('none' != $model) {
+                    $modelMethod = Str::of('return ')->concat('$this->')->concat($camelModelClass)->concat('->')->get();
+
+                    $modelMethod .= Str::of($method . $dataModel->class)
+                        ->replace('Model', '')
+                        ->replace('model', '')
+                        ->concat('DB();')
+                        ->get();
+
+                    $customMethod = $factoryController->getCustomMethod(
+                        Str::of($method . $dataController->class)->replace('Controller', '')->replace('controller', '')->get(),
+                        $method === 'read' ? 'array|object' : 'object',
+                        in_array($method, ['update', 'delete'], true) ? 'string $id' : '',
+                        $modelMethod,
+                        'public',
+                        $method === 'delete' ? 1 : 2
+                    );
+                } else {
+                    $customMethod = $factoryController->getCustomMethod(
+                        Str::of($method . $dataController->class)->replace('Controller', '')->replace('controller', '')->get(),
+                        $method === 'read' ? 'array|object' : 'object',
+                        in_array($method, ['update', 'delete'], true) ? 'string $id' : '',
+                        $method === 'read' ? "return [];" : "return success();",
+                        'public',
+                        $method === 'delete' ? 1 : 2
+                    );
+                }
+
+                $factoryController->add($customMethod);
+            }
+
+            $factoryController->add("}\n")->close();
+
+            $output->writeln($this->warningOutput("\t>>  CONTROLLER: {$dataController->class}"));
+
+            $output->writeln(
+                $this->successOutput("\t>>  CONTROLLER: the '{$dataController->namespace}\\{$dataController->class}' controller has been generated")
+            );
+
+            if ('none' != $model) {
+                $this->getApplication()->find('new:model')->run(new ArrayInput(['model' => $model]), $output);
+            }
+
+            return Command::SUCCESS;
+        });
     }
 }
