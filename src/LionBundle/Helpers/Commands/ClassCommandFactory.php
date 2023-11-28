@@ -10,9 +10,9 @@ use LionFiles\Store;
 
 class ClassCommandFactory
 {
-    private ?array $factories = null;
+    private array $factories;
 
-    public function __construct(array $classFactoryCommands)
+    public function __construct(array $classFactoryCommands = [])
     {
         $this->addClassFactory($classFactoryCommands);
     }
@@ -29,14 +29,14 @@ class ClassCommandFactory
         return $process($this, new Store());
     }
 
-    public function getFactories(): ?array
+    public function getFactories(): array
     {
         return $this->factories;
     }
 
-    public function setFactories(?array $factories): void
+    public function setFactories(array $factories): void
     {
-        $this->factories = $factories;
+        $this->addClassFactory($factories);
     }
 
     public function getFactory(string $factory): ClassFactory
