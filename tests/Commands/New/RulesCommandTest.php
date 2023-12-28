@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Commands\New;
 
 use LionBundle\Commands\New\RulesCommand;
+use LionBundle\Helpers\Commands\Container;
 use LionCommand\Kernel;
 use LionTest\Test;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -19,14 +20,13 @@ class RulesCommandTest extends Test
     const OUTPUT_MESSAGE = 'rule has been generated';
     const METHOD = 'passes';
 
-    private Kernel $kernel;
     private CommandTester $commandTester;
 
 	protected function setUp(): void 
 	{
-        $this->kernel = new Kernel();
-        $this->kernel->commands([RulesCommand::class]);
-        $this->commandTester = new CommandTester($this->kernel->getApplication()->find('new:rule'));
+        $application = (new Kernel())->getApplication();
+        $application->add((new Container())->injectDependencies(new RulesCommand()));
+        $this->commandTester = new CommandTester($application->find('new:rule'));
 
         $this->createDirectory(self::URL_PATH);
 	}

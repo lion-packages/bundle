@@ -24,6 +24,18 @@ class InfoCommand extends Command
         'ext-tokenizer'
     ];
 
+    private Arr $arr;
+
+    /**
+     * @required
+     * */
+    public function setArr(Arr $arr): InfoCommand
+    {
+        $this->arr = $arr;
+
+        return $this;
+    }
+
     protected function configure(): void
     {
         $this
@@ -35,8 +47,7 @@ class InfoCommand extends Command
     {
         $composerJson = json_decode(file_get_contents("composer.json"));
         $libraries = (new ComposerFactory($composerJson, self::EXTENSIONS))->getLibraries();
-
-        $size = Arr::of($libraries)->length();
+        $size = $this->arr->of($libraries)->length();
 
         (new Table($output))
             ->setHeaderTitle($this->successOutput(' LIBRARIES '))

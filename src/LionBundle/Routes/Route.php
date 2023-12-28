@@ -46,7 +46,10 @@ class Route
         self::$uri = explode('?', $_SERVER['REQUEST_URI'] ?? '')[0];
         self::$index = $index;
         self::$router = new RouteCollector();
-        self::$routerResolver = new RouterResolver((new ContainerBuilder())->useAutowiring(true)->build());
+
+        self::$routerResolver = new RouterResolver(
+            (new ContainerBuilder())->useAutowiring(true)->useAttributes(true)->build()
+        );
     }
 
     /**

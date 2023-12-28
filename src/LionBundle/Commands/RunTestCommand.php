@@ -14,11 +14,27 @@ use Symfony\Component\Console\Output\OutputInterface;
 class RunTestCommand extends Command
 {
     private Kernel $kernel;
+    private Arr $arr;
 
-	protected function initialize(InputInterface $input, OutputInterface $output): void
-	{
-        $this->kernel = new Kernel();
-	}
+    /**
+     * @required
+     * */
+    public function setKernel(Kernel $kernel): RunTestCommand
+    {
+        $this->kernel = $kernel;
+
+        return $this;
+    }
+
+    /**
+     * @required
+     * */
+    public function setArr(Arr $arr): RunTestCommand
+    {
+        $this->arr = $arr;
+
+        return $this;
+    }
 
 	protected function configure(): void
 	{
@@ -27,7 +43,7 @@ class RunTestCommand extends Command
             ->setDescription('Command to create run unit tests')
             ->addOption('class', 'c', InputOption::VALUE_OPTIONAL, 'Do you want to run a specific class?', false)
             ->addOption('method', 'm', InputOption::VALUE_OPTIONAL, 'Do you want to filter a specific method?', false)
-            ->addOption('suite', 's', InputOption::VALUE_OPTIONAL, 'Do you want to test a specific directory?', 'All-Testing');
+            ->addOption('suite', 's', InputOption::VALUE_OPTIONAL, 'Do you want to test a specific directory?', 'All-Test');
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output)
@@ -54,7 +70,7 @@ class RunTestCommand extends Command
 			);
 		}
 
-		$output->writeln($this->warningOutput("\t>>  " . Arr::of($result)->join("\n\t>>  ")));
+		$output->writeln($this->warningOutput("\t>>  " . $this->arr->of($result)->join("\n\t>>  ")));
 
         return Command::SUCCESS;
 	}

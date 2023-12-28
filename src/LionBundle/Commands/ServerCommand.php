@@ -12,7 +12,19 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ServerCommand extends Command
 {
+    private Kernel $kernel;
     private string|float $start;
+
+    /**
+     * @required
+     * */
+    public function setKernel(Kernel $kernel): ServerCommand
+    {
+        $this->kernel = $kernel;
+
+        return $this;
+    }
+
 	protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         $this->start = microtime(true);
@@ -43,7 +55,7 @@ class ServerCommand extends Command
         $output->writeln($this->warningOutput("\t>>  PORT:</comment> use --port to expose"));
         $output->writeln($this->warningOutput("\nPress Ctrl+C to stop the server\n"));
 
-        (new Kernel())->execute("php -S {$host}:{$port} -t public", false);
+        $this->kernel->execute("php -S {$host}:{$port} -t public", false);
 
         return Command::SUCCESS;
 	}

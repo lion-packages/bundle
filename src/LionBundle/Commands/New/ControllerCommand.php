@@ -20,6 +20,18 @@ class ControllerCommand extends Command
     const PATH_CONTROLLER = 'app/Http/Controllers/';
     const PATH_MODEL = 'app/models/';
 
+    private Str $str;
+
+    /**
+     * @required
+     * */
+    public function setStr(Str $str): ControllerCommand
+    {
+        $this->str = $str;
+
+        return $this;
+    }
+
     protected function configure(): void
     {
         $this
@@ -38,7 +50,7 @@ class ControllerCommand extends Command
             $model = $input->getOption('model');
 
             if (null === $model) {
-                $model = Str::of($model)
+                $model = $this->str->of($model)
                     ->concat($controller)
                     ->replace('Controller', '')
                     ->replace('controller', '')
@@ -75,7 +87,7 @@ class ControllerCommand extends Command
 
             if ('none' != $model) {
                 $factoryController->add(
-                    Str::of("\tprivate {$dataModel->class} $")
+                    $this->str->of("\tprivate {$dataModel->class} $")
                         ->concat($camelModelClass)
                         ->concat(";")->ln()->ln()
                         ->get()
@@ -98,16 +110,16 @@ class ControllerCommand extends Command
                 $customMethod = '';
 
                 if ('none' != $model) {
-                    $modelMethod = Str::of('return ')->concat('$this->')->concat($camelModelClass)->concat('->')->get();
+                    $modelMethod = $this->str->of('return ')->concat('$this->')->concat($camelModelClass)->concat('->')->get();
 
-                    $modelMethod .= Str::of($method . $dataModel->class)
+                    $modelMethod .= $this->str->of($method . $dataModel->class)
                         ->replace('Model', '')
                         ->replace('model', '')
                         ->concat('DB();')
                         ->get();
 
                     $customMethod = $factoryController->getCustomMethod(
-                        Str::of($method . $dataController->class)->replace('Controller', '')->replace('controller', '')->get(),
+                        $this->str->of($method . $dataController->class)->replace('Controller', '')->replace('controller', '')->get(),
                         $method === 'read' ? 'array|object' : 'object',
                         in_array($method, ['update', 'delete'], true) ? 'string $id' : '',
                         $modelMethod,
@@ -116,7 +128,7 @@ class ControllerCommand extends Command
                     );
                 } else {
                     $customMethod = $factoryController->getCustomMethod(
-                        Str::of($method . $dataController->class)->replace('Controller', '')->replace('controller', '')->get(),
+                        $this->str->of($method . $dataController->class)->replace('Controller', '')->replace('controller', '')->get(),
                         $method === 'read' ? 'array|object' : 'object',
                         in_array($method, ['update', 'delete'], true) ? 'string $id' : '',
                         $method === 'read' ? "return [];" : "return success();",

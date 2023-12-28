@@ -2,15 +2,21 @@
 
 declare(strict_types=1);
 
+use GuzzleHttp\Client;
+use LionHelpers\Arr;
+use LionHelpers\Str;
+use LionRequest\Request;
+use LionRequest\Response;
+
 /**
  * -----------------------------------------------------------------------------
  * framework level predefined constants
  * -----------------------------------------------------------------------------
  **/
 
-define('client', new \GuzzleHttp\Client());
-define('request', (new \LionRequest\Request())->capture());
-define('response', new LionRequest\Response());
+define('client', new Client());
+define('request', (new Request())->capture());
+define('response', new Response());
 define('env', (object) $_ENV);
-define('str', new \LionHelpers\Str());
-define('arr', new \LionHelpers\Arr());
+define('str', new Str());
+define('arr', new Arr());

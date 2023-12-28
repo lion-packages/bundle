@@ -6,6 +6,7 @@ namespace Tests\Commands\New;
 
 use LionBundle\Commands\New\ControllerCommand;
 use LionBundle\Commands\New\ModelCommand;
+use LionBundle\Helpers\Commands\Container;
 use LionCommand\Kernel;
 use LionTest\Test;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -28,14 +29,16 @@ class ControllerCommandTest extends Test
     const OUTPUT_MESSAGE_MODEL = 'model has been generated';
     const MODEL_METHODS = ['createTestDB', 'readTestDB', 'updateTestDB', 'deleteTestDB'];
 
-    private Kernel $kernel;
     private CommandTester $commandTester;
 
 	protected function setUp(): void 
 	{
-        $this->kernel = new Kernel();
-        $this->kernel->commands([ControllerCommand::class, ModelCommand::class]);
-        $this->commandTester = new CommandTester($this->kernel->getApplication()->find('new:controller'));
+        $container = new Container();
+        $application = (new Kernel())->getApplication();
+        $application->add($container->injectDependencies(new ControllerCommand()));
+        $application->add($container->injectDependencies(new ModelCommand()));
+
+        $this->commandTester = new CommandTester($application->find('new:controller'));
 
         $this->createDirectory(self::URL_PATH);
         $this->createDirectory(self::URL_PATH_MODEL);

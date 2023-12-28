@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace LionBundle\Commands\New;
 
 use LionBundle\Helpers\Commands\ClassCommandFactory;
-use LionBundle\Helpers\Commands\ClassFactoryCollection;
 use LionCommand\Command;
 use LionFiles\Store;
 use LionHelpers\Str;
@@ -15,6 +14,18 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class InterfaceCommand extends Command
 {
+    private Str $str;
+
+    /**
+     * @required
+     * */
+    public function setStr(Str $str): InterfaceCommand
+    {
+        $this->str = $str;
+
+        return $this;
+    }
+
 	protected function configure(): void
 	{
 		$this
@@ -37,7 +48,7 @@ class InterfaceCommand extends Command
             $factoryInterface
                 ->create($data->class, 'php', $data->folder)
                 ->add(
-                    Str::of("<?php")->ln()->ln()
+                    $this->str->of("<?php")->ln()->ln()
                         ->concat('declare(strict_types=1);')->ln()->ln()
                         ->concat('namespace')->spaces(1)
                         ->concat("{$data->namespace};")->ln()->ln()

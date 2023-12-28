@@ -18,12 +18,48 @@ class CapsuleCommand extends Command
 {
     private ClassFactory $classFactory;
     private Store $store;
+    private Str $str;
+    private Arr $arr;
 
-	protected function initialize(InputInterface $input, OutputInterface $output): void
+    /**
+     * @required
+     * */
+    public function setClassFactory(ClassFactory $classFactory): CapsuleCommand
     {
-        $this->classFactory = new ClassFactory();
-        $this->store = new Store();
-	}
+        $this->classFactory = $classFactory;
+
+        return $this;
+    }
+
+    /**
+     * @required
+     * */
+    public function setStore(Store $store): CapsuleCommand
+    {
+        $this->store = $store;
+
+        return $this;
+    }
+
+    /**
+     * @required
+     * */
+    public function setStr(Str $str): CapsuleCommand
+    {
+        $this->str = $str;
+
+        return $this;
+    }
+
+    /**
+     * @required
+     * */
+    public function setArr(Arr $arr): CapsuleCommand
+    {
+        $this->arr = $arr;
+
+        return $this;
+    }
 
 	protected function configure(): void
     {
@@ -71,7 +107,7 @@ class CapsuleCommand extends Command
 
         $this->store->folder($folder);
 
-        $str = Str::of("<?php")->ln()->ln()
+        $str = $this->str->of("<?php")->ln()->ln()
             ->concat('declare(strict_types=1);')->ln()->ln()
             ->concat("namespace")->spaces(1)
             ->concat($namespace)
@@ -83,7 +119,7 @@ class CapsuleCommand extends Command
             ->concat("{")->ln();
 
         if (count($propierties) > 0) {
-            $str->lt()->concat(Arr::of($listPropierties)->join("\n\t"))->ln()->ln();
+            $str->lt()->concat($this->arr->of($listPropierties)->join("\n\t"))->ln()->ln();
         }
 
         $str

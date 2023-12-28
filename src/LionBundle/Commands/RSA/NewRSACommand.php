@@ -16,11 +16,25 @@ class NewRSACommand extends Command
     private RSA $rsa;
     private Store $store;
 
-	protected function initialize(InputInterface $input, OutputInterface $output): void
-	{
-        $this->rsa = new RSA();
-        $this->store = new Store();
-	}
+    /**
+     * @required
+     * */
+    public function setRSA(RSA $rsa): NewRSACommand
+    {
+        $this->rsa = $rsa;
+
+        return $this;
+    }
+
+    /**
+     * @required
+     * */
+    public function setStore(Store $store): NewRSACommand
+    {
+        $this->store = $store;
+
+        return $this;
+    }
 
 	protected function configure(): void
 	{

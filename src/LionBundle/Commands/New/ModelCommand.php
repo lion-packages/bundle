@@ -18,12 +18,37 @@ class ModelCommand extends Command
 
     private ClassFactory $classFactory;
     private Store $store;
+    private Str $str;
 
-	protected function initialize(InputInterface $input, OutputInterface $output): void
-	{
-        $this->classFactory = new ClassFactory();
-        $this->store = new Store();
-	}
+    /**
+     * @required
+     * */
+    public function setClassFactory(ClassFactory $classFactory): ModelCommand
+    {
+        $this->classFactory = $classFactory;
+
+        return $this;
+    }
+
+    /**
+     * @required
+     * */
+    public function setStore(Store $store): ModelCommand
+    {
+        $this->store = $store;
+
+        return $this;
+    }
+
+    /**
+     * @required
+     * */
+    public function setStr(Str $str): ModelCommand
+    {
+        $this->str = $str;
+
+        return $this;
+    }
 
 	protected function configure(): void
 	{
@@ -53,7 +78,7 @@ class ModelCommand extends Command
 
         foreach (self::METHODS as $key => $method) {
             $customMethod = $this->classFactory->getCustomMethod(
-                Str::of($method . $class)->replace('Model', '')->replace('model', '')->concat('DB')->get(),
+                $this->str->of($method . $class)->replace('Model', '')->replace('model', '')->concat('DB')->get(),
                 $method === 'read' ? 'array|object' : 'object',
                 '',
                 $method === 'read' ? "return DB::view('')->select()->getAll();" : "return DB::call('', [])->execute();",

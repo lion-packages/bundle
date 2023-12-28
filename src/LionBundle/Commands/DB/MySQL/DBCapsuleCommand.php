@@ -17,11 +17,27 @@ use Symfony\Component\Console\Output\OutputInterface;
 class DBCapsuleCommand extends Command
 {
     private ClassFactory $classFactory;
+    private Str $str;
     private array $connections;
 
-    protected function initialize(InputInterface $input, OutputInterface $output): void
+    /**
+     * @required
+     * */
+    public function setClassFactory(ClassFactory $classFactory): DBCapsuleCommand
     {
         $this->classFactory = new ClassFactory();
+
+        return $this;
+    }
+
+    /**
+     * @required
+     * */
+    public function setStr(Str $str): DBCapsuleCommand
+    {
+        $this->str = $str;
+
+        return $this;
     }
 
     protected function configure(): void
@@ -46,7 +62,7 @@ class DBCapsuleCommand extends Command
         $entity = $input->getArgument('entity');
         $connection = $input->getOption('connection');
 
-        $entity = Str::of($entity)->test("/-/") ? "`{$entity}`" : $entity;
+        $entity = $this->str->of($entity)->test("/-/") ? "`{$entity}`" : $entity;
         $columns = DB::connection($connection)->show()->columns()->from($entity)->getAll();
         $columns = count($columns) > 1 ? $columns : reset($columns);
 
@@ -63,7 +79,7 @@ class DBCapsuleCommand extends Command
         }
 
         $connPascal = $this->classFactory->getClassFormat($connection);
-        $className = $this->classFactory->getClassFormat(Str::of($entity)->replace('`', '')->get());
+        $className = $this->classFactory->getClassFormat($this->str->of($entity)->replace('`', '')->get());
 
         $this->getApplication()
             ->find('new:capsule')

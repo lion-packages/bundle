@@ -8,11 +8,13 @@ use LionHelpers\Arr;
 
 class ComposerFactory
 {
+    private Arr $arr;
     private object $composerJson;
     private array $libraries = [];
 
     public function __construct(object $composerJson, array $extensions)
     {
+        $this->arr = new Arr();
         $this->composerJson = $composerJson;
 
         $this->libraries($extensions);
@@ -25,7 +27,7 @@ class ComposerFactory
             if (!in_array($key, $extensions, true)) {
                 $exec = [];
                 exec("composer show {$key} --direct --format=json", $exec);
-                $json = json_decode(Arr::of($exec)->join(" "));
+                $json = json_decode($this->arr->of($exec)->join(' '));
 
                 $this->libraries[] = [
                     $key,
@@ -44,7 +46,7 @@ class ComposerFactory
             if (!in_array($key, $extensions, true)) {
                 $execResponse = [];
                 exec("composer show {$key} --direct --format=json", $execResponse);
-                $json = json_decode(Arr::of($execResponse)->join(" "));
+                $json = json_decode($this->arr->of($execResponse)->join(' '));
 
                 $this->libraries[] = [
                     $key,

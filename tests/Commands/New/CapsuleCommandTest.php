@@ -6,6 +6,7 @@ namespace Tests\Commands\New;
 
 use LionBundle\Commands\New\CapsuleCommand;
 use LionBundle\Helpers\Commands\ClassFactory;
+use LionBundle\Helpers\Commands\Container;
 use LionCommand\Kernel;
 use LionTest\Test;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -20,16 +21,16 @@ class CapsuleCommandTest extends Test
     const OUTPUT_MESSAGE = 'capsule has been generated';
     const PROPIERTIES = ['idusers:int', 'users_name:string', 'users_last_name'];
 
-    private Kernel $kernel;
     private CommandTester $commandTester;
     private ClassFactory $classFactory;
 
 	protected function setUp(): void
     {
         $this->classFactory = new ClassFactory();
-        $this->kernel = new Kernel();
-        $this->kernel->commands([CapsuleCommand::class]);
-        $this->commandTester = new CommandTester($this->kernel->getApplication()->find('new:capsule'));
+
+        $application = (new Kernel())->getApplication();
+        $application->add((new Container())->injectDependencies(new CapsuleCommand()));
+        $this->commandTester = new CommandTester($application->find('new:capsule'));
 
         $this->createDirectory(self::URL_PATH);
     }
@@ -53,7 +54,7 @@ class CapsuleCommandTest extends Test
         $this->assertIsObject($objClass);
         $this->assertInstanceOf(self::OBJECT_NAME, $objClass);
 
-        foreach (self::PROPIERTIES as $key => $propierty) {
+        foreach (self::PROPIERTIES as $propierty) {
             $split = explode(':', $propierty);
             $type = !empty($split[1]) ? $split[1] : 'string';
             $dataPropierty = $this->classFactory->getPropierty($split[0], self::CLASS_NAME, $type);
