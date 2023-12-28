@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace LionBundle\Commands\DB\MySQL;
 
 use LionCommand\Command;
-use LionDatabase\Drivers\MySQL\MySQL as DB;
+use LionDatabase\Drivers\MySQL as DB;
 use PDO;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

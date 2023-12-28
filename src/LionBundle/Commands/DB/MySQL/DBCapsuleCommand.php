@@ -6,7 +6,7 @@ namespace LionBundle\Commands\DB\MySQL;
 
 use LionBundle\Helpers\Commands\ClassFactory;
 use LionCommand\Command;
-use LionDatabase\Drivers\MySQL\MySQL as DB;
+use LionDatabase\Drivers\MySQL as DB;
 use LionHelpers\Str;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;

@@ -1,14 +1,19 @@
 <?php
 
 declare(strict_types=1);
+
+// -----------------------------------------------------------------------------
+// require_once('../app/Http/Controllers/ExampleController.php');
+// require_once('../app/Http/Controllers/UsersController.php');
 // -----------------------------------------------------------------------------
 // use App\Http\Controllers\ExampleController;
-use LionRoute\Route;
-use LionRoute\Request;
+// use LionRoute\Route;
+use LionBundle\Routes\Route;
+// Inyection -------------------------------------------------------------------
+// $container = new Container();
+// $container->load()->get(ExampleController::class);
 // -----------------------------------------------------------------------------
-Route::addLog();
 Route::init();
-Request::init(client);
 // -----------------------------------------------------------------------------
 Route::addMiddleware([]);
 // -----------------------------------------------------------------------------

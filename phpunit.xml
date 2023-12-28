@@ -45,5 +45,9 @@
         <testsuite name="Helpers">
             <directory>tests/Helpers/</directory>
         </testsuite>
+
+        <testsuite name="Routes">
+            <directory>tests/Routes/</directory>
+        </testsuite>
     </testsuites>
 </phpunit>

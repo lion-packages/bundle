@@ -13,29 +13,29 @@ rm -rf vendor/
 composer install
 echo -e "\n\033[0;31m>> -------------------------------------------------------------------------------------- << \n\033[0m";
 
-
 echo -e "\033[0;36m\t>>  Dump Autoload \033[0m"
 composer dump-autoload
 echo -e "\n\033[0;31m>> -------------------------------------------------------------------------------------- << \n\033[0m";
 
+# echo -e "\033[0;36m\t>>  Suite All-Test \033[0m"
+# php vendor/bin/phpunit --testsuite All-Test
+# echo -e "\n\033[0;31m>> -------------------------------------------------------------------------------------- << \n\033[0m";
 
 echo -e "\033[0;36m\t>>  Suite Commands \033[0m"
-php lion test --suite Commands
-# php vendor/bin/phpunit --testsuite Commands
+php vendor/bin/phpunit --testsuite Commands
 echo -e "\n\033[0;31m>> -------------------------------------------------------------------------------------- << \n\033[0m";
-
 
 echo -e "\033[0;36m\t>>  Suite Enums \033[0m"
-php lion test --suite Enums
-# php vendor/bin/phpunit --testsuite Enums
+php vendor/bin/phpunit --testsuite Enums
 echo -e "\n\033[0;31m>> -------------------------------------------------------------------------------------- << \n\033[0m";
-
 
 echo -e "\033[0;36m\t>>  Suite Helpers \033[0m"
-php lion test --suite Helpers
-# php vendor/bin/phpunit --testsuite Helpers
+php vendor/bin/phpunit --testsuite Helpers
 echo -e "\n\033[0;31m>> -------------------------------------------------------------------------------------- << \n\033[0m";
 
+echo -e "\033[0;36m\t>>  Suite Routes \033[0m"
+php vendor/bin/phpunit --testsuite Routes
+echo -e "\n\033[0;31m>> -------------------------------------------------------------------------------------- << \n\033[0m";
 
 end_time=$(date +"%Y-%m-%d %H:%M:%S")
 start_seconds=$(date -d "$start_time" +%s)
@@ -43,7 +43,6 @@ end_seconds=$(date -d "$end_time" +%s)
 time_diff=$((end_seconds - start_seconds))
 minutes=$((time_diff / 60))
 seconds=$((time_diff % 60))
-
 
 echo -e "\033[0;36m\t>>  Start date and time: ${start_time} \033[0m"
 echo -e "\033[0;36m\t>>  End date and time: ${end_time} \033[0m"

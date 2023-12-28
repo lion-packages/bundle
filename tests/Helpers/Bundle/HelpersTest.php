@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Helpers\Bundle;
 
+use LionRoute\Route;
 use LionTest\Test;
 
 class HelpersTest extends Test
@@ -27,7 +28,9 @@ class HelpersTest extends Test
 
 	public function testFetch(): void
     {
-        $this->assertSame(self::RESPONSE, json_decode(fetch('GET', env->SERVER_URL)->getBody()->getContents(), true));
+        $response = json_decode(fetch(Route::GET, env->SERVER_URL)->getBody()->getContents(), true);
+
+        $this->assertSame(self::RESPONSE, $response);
     }
 
     public function testStoragePathForRoot(): void
