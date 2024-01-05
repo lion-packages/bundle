@@ -16,12 +16,37 @@ class TestCommand extends Command
 {
     private ClassFactory $classFactory;
     private Store $store;
+    private Str $str;
 
-	protected function initialize(InputInterface $input, OutputInterface $output): void
+	/**
+     * @required
+     * */
+    public function setClassFactory(ClassFactory $classFactory): TestCommand
     {
-        $this->classFactory = new ClassFactory();
-        $this->store = new Store();
-	}
+        $this->classFactory = $classFactory;
+
+        return $this;
+    }
+
+    /**
+     * @required
+     * */
+    public function setStore(Store $store): TestCommand
+    {
+        $this->store = $store;
+
+        return $this;
+    }
+
+    /**
+     * @required
+     * */
+    public function setStr(Str $str): TestCommand
+    {
+        $this->str = $str;
+
+        return $this;
+    }
 
 	protected function configure(): void
     {
@@ -48,7 +73,7 @@ class TestCommand extends Command
             ->add("namespace {$namespace};\n\n")
             ->add("use LionTest\\Test;\n\n")
             ->add(
-                Str::of("class ")
+                $this->str->of("class ")
                     ->concat($class)
                     ->concat(' extends Test')->ln()
                     ->concat('{')->ln()
