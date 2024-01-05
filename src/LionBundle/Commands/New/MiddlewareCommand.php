@@ -16,11 +16,25 @@ class MiddlewareCommand extends Command
     private ClassFactory $classFactory;
     private Store $store;
 
-	protected function initialize(InputInterface $input, OutputInterface $output): void
-	{
-        $this->classFactory = new ClassFactory();
-        $this->store = new Store();
-	}
+	/**
+     * @required
+     * */
+    public function setClassFactory(ClassFactory $classFactory): MiddlewareCommand
+    {
+        $this->classFactory = $classFactory;
+
+        return $this;
+    }
+
+    /**
+     * @required
+     * */
+    public function setStore(Store $store): MiddlewareCommand
+    {
+        $this->store = $store;
+
+        return $this;
+    }
 
 	protected function configure(): void
 	{

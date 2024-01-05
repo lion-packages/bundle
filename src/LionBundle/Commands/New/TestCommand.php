@@ -88,7 +88,7 @@ class TestCommand extends Command
             )
             ->close();
 
-        $output->writeln($this->warningOutput("\t>>  TEST: {$test}"));
+        $output->writeln($this->warningOutput("\t>>  TEST: {$class}"));
         $output->writeln($this->successOutput("\t>>  TEST: the '{$namespace}\\{$class}' test has been generated"));
 
         return Command::SUCCESS;
