@@ -18,7 +18,6 @@ class CommandsCommandTest extends Test
     const OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
     const FILE_NAME = self::CLASS_NAME . '.php';
     const OUTPUT_MESSAGE = 'command has been generated';
-    const MODEL_METHODS = ['initialize', 'interact', 'configure', 'execute'];
 
     private CommandTester $commandTester;
 
