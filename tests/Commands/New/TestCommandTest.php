@@ -6,6 +6,7 @@ namespace Tests\Commands\New;
 
 use LionBundle\Commands\New\TestCommand;
 use LionBundle\Helpers\Commands\Container;
+use LionCommand\Command;
 use LionCommand\Kernel;
 use LionFiles\Store;
 use LionTest\Test;
@@ -36,8 +37,7 @@ class TestCommandTest extends Test
 
     public function testExecute(): void
     {
-        $this->commandTester->execute(['test' => self::CLASS_NAME]);
-
+        $this->assertSame(Command::SUCCESS, $this->commandTester->execute(['test' => self::CLASS_NAME]));
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH . self::FILE_NAME);
     }

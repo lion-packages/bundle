@@ -1,46 +1,49 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LionBundle\Commands\DB;
 
+use LionCommand\Command;
 use LionHelpers\Arr;
-use LionDatabase\Drivers\MySQL\MySQL as DB;
-use Symfony\Component\Console\Command\Command;
+use LionDatabase\Drivers\MySQL as DB;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ShowDatabasesCommand extends Command
 {
-	protected static $defaultName = "db:show";
+    private Arr $arr;
 
-	protected function initialize(InputInterface $input, OutputInterface $output)
+    /**
+     * @required
+     * */
+    public function setArr(Arr $arr): ShowDatabasesCommand
     {
+        $this->arr = $arr;
 
-	}
+        return $this;
+    }
 
-	protected function interact(InputInterface $input, OutputInterface $output)
-    {
-
-	}
-
-	protected function configure()
+	protected function configure(): void
     {
 		$this
-            ->setDescription("Command required to display available database connections");
+            ->setName('db:show')
+            ->setDescription('Command required to display available database connections');
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output)
+	protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $connections = DB::getConnections();
-        $size = Arr::of($connections['connections'])->length();
-        $list_connections = [];
+        $size = $this->arr->of($connections['connections'])->length();
+        $listConnections = [];
 
-        foreach ($connections['connections'] as $key => $connection) {
+        foreach ($connections['connections'] as $connection) {
             $item = [
                 'type' => "<fg=#FFB63E>{$connection['type']}</>",
-                'host' => "<fg=#FFB63E>{$connection['host']}</>",
-                'port' => "<fg=#FFB63E>{$connection['port']}</>",
-                'dbname' => "",
+                'host' => $connection['host'],
+                'port' => $connection['port'],
+                'dbname' => '',
                 'user' => $connection['user']
             ];
 
@@ -50,7 +53,7 @@ class ShowDatabasesCommand extends Command
                 $item['dbname'] = $connection['dbname'];
             }
 
-            $list_connections[] = $item;
+            $listConnections[] = $item;
         }
 
         (new Table($output))
@@ -60,11 +63,11 @@ class ShowDatabasesCommand extends Command
                 $size > 1
                     ? "<info> Showing [" . $size . "] connections </info>"
                     : ($size === 1
-                        ? "<info> showing a single connection </info>"
-                        : "<info> No connections available </info>"
+                        ? '<info> showing a single connection </info>'
+                        : '<info> No connections available </info>'
                     )
             )
-            ->setRows($list_connections)
+            ->setRows($listConnections)
             ->render();
 
 		return Command::SUCCESS;

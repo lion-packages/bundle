@@ -6,6 +6,7 @@ namespace Tests\Commands\New;
 
 use LionBundle\Commands\New\EnumCommand;
 use LionBundle\Helpers\Commands\Container;
+use LionCommand\Command;
 use LionCommand\Kernel;
 use LionTest\Test;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -38,8 +39,7 @@ class EnumCommandTest extends Test
 
     public function testExecute(): void
     {
-        $this->commandTester->execute(['enum' => self::CLASS_NAME]);
-
+        $this->assertSame(Command::SUCCESS, $this->commandTester->execute(['enum' => self::CLASS_NAME]));
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH . self::FILE_NAME);
     }

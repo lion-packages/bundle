@@ -7,6 +7,7 @@ namespace Tests\Commands\New;
 use LionBundle\Commands\New\ControllerCommand;
 use LionBundle\Commands\New\ModelCommand;
 use LionBundle\Helpers\Commands\Container;
+use LionCommand\Command;
 use LionCommand\Kernel;
 use LionTest\Test;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -51,8 +52,12 @@ class ControllerCommandTest extends Test
 
     public function testExecute(): void
     {
-        $this->commandTester->execute(['controller' => self::CLASS_NAME, '--model' => self::CLASS_NAME_MODEL]);
+        $commandExecute = $this->commandTester->execute([
+            'controller' => self::CLASS_NAME,
+            '--model' => self::CLASS_NAME_MODEL
+        ]);
 
+        $this->assertSame(Command::SUCCESS, $commandExecute);
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertStringContainsString(self::OUTPUT_MESSAGE_MODEL, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH . self::FILE_NAME);

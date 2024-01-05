@@ -57,7 +57,7 @@ $commands = [
     \LionBundle\Commands\InfoCommand::class,
     \LionBundle\Commands\RunTestCommand::class,
     \LionBundle\Commands\ServerCommand::class,
-    // // AES
+    // AES
     \LionBundle\Commands\AES\NewAESCommand::class,
     // DB
     ...[
@@ -71,7 +71,8 @@ $commands = [
             // Seed
             \LionBundle\Commands\DB\Seed\NewSeedCommand::class,
             \LionBundle\Commands\DB\Seed\RunSeedCommand::class
-        ]
+        ],
+        \LionBundle\Commands\DB\ShowDatabasesCommand::class
     ],
     // NEW
     \LionBundle\Commands\New\CapsuleCommand::class,

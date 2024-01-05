@@ -7,6 +7,7 @@ namespace Tests\Commands\DB\Seed;
 use LionBundle\Commands\DB\Seed\NewSeedCommand;
 use LionBundle\Commands\DB\Seed\RunSeedCommand;
 use LionBundle\Helpers\Commands\Container;
+use LionCommand\Command;
 use LionCommand\Kernel;
 use LionTest\Test;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -48,8 +49,7 @@ class RunSeedCommandTest extends Test
 
     public function testExecute(): void
     {
-        $this->commandTesterNewSeed->execute(['seed' => self::CLASS_NAME]);
-
+        $this->assertSame(Command::SUCCESS, $this->commandTesterNewSeed->execute(['seed' => self::CLASS_NAME]));
         $this->assertStringContainsString(self::OUTPUT_MESSAGE_NEW_SEED, $this->commandTesterNewSeed->getDisplay());
         $this->assertFileExists(self::URL_PATH . self::FILE_NAME);
 

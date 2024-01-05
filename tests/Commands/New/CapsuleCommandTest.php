@@ -7,6 +7,7 @@ namespace Tests\Commands\New;
 use LionBundle\Commands\New\CapsuleCommand;
 use LionBundle\Helpers\Commands\ClassFactory;
 use LionBundle\Helpers\Commands\Container;
+use LionCommand\Command;
 use LionCommand\Kernel;
 use LionTest\Test;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -42,8 +43,12 @@ class CapsuleCommandTest extends Test
 
     public function testExecute(): void
     {
-        $this->commandTester->execute(['capsule' => self::CLASS_NAME, '--propierties' => self::PROPIERTIES]);
+        $commandExecute = $this->commandTester->execute([
+            'capsule' => self::CLASS_NAME,
+            '--propierties' => self::PROPIERTIES
+        ]);
 
+        $this->assertSame(Command::SUCCESS, $commandExecute);
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH . self::FILE_NAME);
 
