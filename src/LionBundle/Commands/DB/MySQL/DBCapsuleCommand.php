@@ -25,7 +25,7 @@ class DBCapsuleCommand extends Command
      * */
     public function setClassFactory(ClassFactory $classFactory): DBCapsuleCommand
     {
-        $this->classFactory = new ClassFactory();
+        $this->classFactory = $classFactory;
 
         return $this;
     }

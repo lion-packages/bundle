@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Helpers\Bundle;
 
+use Faker\Generator;
 use LionRoute\Route;
 use LionTest\Test;
 
@@ -132,5 +133,10 @@ class HelpersTest extends Test
     {
         $this->assertTrue(isSuccess(success()));
         $this->assertFalse(isSuccess(warning()));
+    }
+
+    public function testFake(): void
+    {
+        $this->assertInstanceOf(Generator::class, fake());
     }
 }

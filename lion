@@ -64,7 +64,8 @@ $commands = [
         ...[
             // MySQL
             \LionBundle\Commands\DB\MySQL\DBCapsuleCommand::class,
-            \LionBundle\Commands\DB\MySQL\DBCapsulesCommand::class
+            \LionBundle\Commands\DB\MySQL\DBCapsulesCommand::class,
+            \LionBundle\Commands\DB\MySQL\FactoryCommand::class
         ]
     ],
     // NEW

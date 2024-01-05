@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Faker\Factory;
+use Faker\Generator;
 use GuzzleHttp\Psr7\Response;
 use LionBundle\Enums\StatusResponseEnum;
 
@@ -169,5 +171,16 @@ if (!function_exists('jwt')) {
         $jwt = new \LionSecurity\JWT();
 
         return $jwt->decode($jwt->getJWT())->get();
+    }
+}
+
+/**
+ * Function that generates a Generator object to obtain fake data
+ **/
+
+if (!function_exists('fake')) {
+    function fake(string $locale = Factory::DEFAULT_LOCALE): Generator
+    {
+        return Factory::create($locale);
     }
 }

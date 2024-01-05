@@ -76,7 +76,7 @@ class ModelCommand extends Command
             ->add("use LionDatabase\Drivers\MySQL\MySQL as DB;\n\n")
             ->add("class {$class}\n{\n");
 
-        foreach (self::METHODS as $key => $method) {
+        foreach (self::METHODS as $method) {
             $customMethod = $this->classFactory->getCustomMethod(
                 $this->str->of($method . $class)->replace('Model', '')->replace('model', '')->concat('DB')->get(),
                 $method === 'read' ? 'array|object' : 'object',

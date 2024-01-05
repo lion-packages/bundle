@@ -5,11 +5,6 @@
     "homepage": "https://lion-client.vercel.app/",
     "keywords": ["lion", "bundle", "lion-bundle"],
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Sergio León"
-        }
-    ],
     "support": {
         "issues": "https://github.com/lion-packages/framework/issues",
         "source": "https://github.com/lion-packages/framework"
@@ -62,12 +57,21 @@
         "lion/test": "^1.1",
         "phpunit/phpunit": "^10.1"
     },
+    "suggest": {
+        "ext-gd": "Required to use LionSpreadsheet.",
+        "ext-pdo": "Required to use all database features.",
+        "ext-redis": "Required to use the Redis cache.",
+        "fakerphp/faker": "Required to use the factory builder.",
+        "guzzlehttp/guzzle": "Requerido para usar el cliente HTTP.",
+        "phpunit/phpunit": "Required to use assertions and run tests.",
+        "predis/predis": "Required to use the predis connector."
+    },
     "scripts": {
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
-            "@php lion init-project"
+            "@php lion migrate:fresh"
         ]
     },
     "config": {
