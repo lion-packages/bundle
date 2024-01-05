@@ -15,7 +15,9 @@
             "src/LionBundle/Helpers/Bundle/helpers.php"
         ],
         "psr-4": {
-            "LionBundle\\": "src/LionBundle/"
+            "LionBundle\\": "src/LionBundle/",
+            "Database\\Factory\\": "database/Factory/",
+            "Database\\Seed\\": "database/Seed/"
         }
     },
     "autoload-dev": {

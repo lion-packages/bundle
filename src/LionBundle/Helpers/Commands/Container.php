@@ -6,16 +6,19 @@ namespace LionBundle\Helpers\Commands;
 
 use DI\Container as DIContainer;
 use DI\ContainerBuilder;
+use LionHelpers\Str;
 use ReflectionClass;
 use ReflectionParameter;
 
 class Container
 {
     private DIContainer $container;
+    private Str $str;
 
     public function __construct()
     {
         $this->container = (new ContainerBuilder())->useAutowiring(true)->useAttributes(true)->build();
+        $this->str = new Str();
     }
 
     public function getFiles(string $folder): array
@@ -36,6 +39,13 @@ class Container
         }
 
         return $files;
+    }
+
+    public function getNamespace(string $file, string $namespace, string $split): string
+    {
+        $splitFile = explode($split, $file);
+
+        return $this->str->of("{$namespace}{$splitFile[1]}")->replace("/", "\\")->replace('.php', '')->trim()->get();
     }
 
     public function injectDependencies(object $object): object

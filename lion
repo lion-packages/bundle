@@ -69,7 +69,8 @@ $commands = [
         ],
         ...[
             // Seed
-            \LionBundle\Commands\DB\Seed\NewSeedCommand::class
+            \LionBundle\Commands\DB\Seed\NewSeedCommand::class,
+            \LionBundle\Commands\DB\Seed\RunSeedCommand::class
         ]
     ],
     // NEW
