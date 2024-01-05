@@ -66,6 +66,10 @@ $commands = [
             \LionBundle\Commands\DB\MySQL\DBCapsuleCommand::class,
             \LionBundle\Commands\DB\MySQL\DBCapsulesCommand::class,
             \LionBundle\Commands\DB\MySQL\FactoryCommand::class
+        ],
+        ...[
+            // Seed
+            \LionBundle\Commands\DB\Seed\NewSeedCommand::class
         ]
     ],
     // NEW
