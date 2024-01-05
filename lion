@@ -74,6 +74,8 @@ $commands = [
         ],
         \LionBundle\Commands\DB\ShowDatabasesCommand::class
     ],
+    // MIGRATIONS
+    \LionBundle\Commands\Migrations\NewMigrateCommand::class,
     // NEW
     \LionBundle\Commands\New\CapsuleCommand::class,
     \LionBundle\Commands\New\CommandsCommand::class,
