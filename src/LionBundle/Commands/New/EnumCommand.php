@@ -12,16 +12,41 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class EnumsCommand extends Command
+class EnumCommand extends Command
 {
     private ClassFactory $classFactory;
     private Store $store;
+    private Str $str;
 
-	protected function initialize(InputInterface $input, OutputInterface $output): void
+	/**
+     * @required
+     * */
+    public function setClassFactory(ClassFactory $classFactory): EnumCommand
     {
-        $this->classFactory = new ClassFactory();
-        $this->store = new Store();
-	}
+        $this->classFactory = $classFactory;
+
+        return $this;
+    }
+
+    /**
+     * @required
+     * */
+    public function setStore(Store $store): EnumCommand
+    {
+        $this->store = $store;
+
+        return $this;
+    }
+
+    /**
+     * @required
+     * */
+    public function setStr(Str $str): EnumCommand
+    {
+        $this->str = $str;
+
+        return $this;
+    }
 
 	protected function configure(): void
     {
@@ -45,7 +70,7 @@ class EnumsCommand extends Command
         $this->classFactory
             ->create($class, 'php', $folder)
             ->add(
-                Str::of("<?php")->ln()->ln()
+                $this->str->of("<?php")->ln()->ln()
                     ->concat('declare(strict_types=1);')->ln()->ln()
                     ->concat("namespace")->spaces(1)
                     ->concat($namespace)

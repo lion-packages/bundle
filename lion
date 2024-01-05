@@ -72,7 +72,7 @@ $commands = [
     \LionBundle\Commands\New\CommandsCommand::class,
     \LionBundle\Commands\New\ControllerCommand::class,
     \LionBundle\Commands\New\ModelCommand::class,
-    \LionBundle\Commands\New\EnumsCommand::class,
+    \LionBundle\Commands\New\EnumCommand::class,
     \LionBundle\Commands\New\InterfaceCommand::class,
     \LionBundle\Commands\New\TestCommand::class,
     \LionBundle\Commands\New\TraitCommand::class,
