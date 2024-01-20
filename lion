@@ -15,13 +15,17 @@ define('LION_START', microtime(true));
 
 require_once('./vendor/autoload.php');
 
+use Lion\Command\Kernel;
+use Lion\Database\Driver;
+use Lion\DependencyInjection\Container;
+
 /**
  * -----------------------------------------------------------------------------
  * Database initialization
  * -----------------------------------------------------------------------------
  * */
 
-\Lion\Database\Driver::run([
+Driver::run([
     'default' => env->DB_NAME,
     'connections' => [
         env->DB_NAME => [
@@ -75,7 +79,7 @@ $commands = [
         \Lion\Bundle\Commands\DB\ShowDatabasesCommand::class
     ],
     // MIGRATIONS
-    \Lion\Bundle\Commands\Migrations\NewMigrateCommand::class,
+    \Lion\Bundle\Commands\Migrations\NewMigrationCommand::class,
     // NEW
     \Lion\Bundle\Commands\New\CapsuleCommand::class,
     \Lion\Bundle\Commands\New\CommandsCommand::class,
@@ -97,8 +101,8 @@ $commands = [
     \Lion\Bundle\Commands\Sockets\NewSocketCommand::class
 ];
 
-$kernel = new \Lion\Command\Kernel();
-$container = new \Lion\DependencyInjection\Container();
+$kernel = new Kernel();
+$container = new Container();
 $application = $kernel->getApplication();
 
 foreach ($commands as $command) {
@@ -106,3 +110,15 @@ foreach ($commands as $command) {
 }
 
 $kernel->setApplication($application)->run();
+
+// $container = new Container();
+// $commands = [];
+
+// foreach ($container->getFiles('./src/LionBundle/Commands/') as $file) {
+//     $class = $container->getNamespace($file, 'Lion\\Bundle\\Commands\\', 'Commands/');
+//     $commands[] = $container->injectDependencies(new $class());
+// }
+
+// $kernel = new Kernel();
+// $kernel->commands($commands);
+// $kernel->run();

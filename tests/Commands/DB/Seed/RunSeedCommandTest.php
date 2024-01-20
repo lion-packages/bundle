@@ -44,7 +44,7 @@ class RunSeedCommandTest extends Test
 
 	protected function tearDown(): void 
 	{
-        $this->rmdirRecursively('./app/');
+        $this->rmdirRecursively('./database/');
 	}
 
     public function testExecute(): void
