@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LionBundle\Enums;
+namespace Lion\Bundle\Enums;
 
 enum StatusResponseEnum: string
 {

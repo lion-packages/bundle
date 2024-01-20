@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace LionBundle\Commands\New;
+namespace Lion\Bundle\Commands\New;
 
-use LionBundle\Helpers\Commands\ClassFactory;
-use LionCommand\Command;
-use LionFiles\Store;
+use Lion\Bundle\Helpers\Commands\ClassFactory;
+use Lion\Command\Command;
+use Lion\Files\Store;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -63,7 +63,7 @@ class MiddlewareCommand extends Command
             ->add("\tpublic function __construct()\n\t{\n\n\t}\n}\n")
             ->close();
 
-        $output->writeln($this->warningOutput("\t>>  MIDDLEWARE: {$middleware}"));
+        $output->writeln($this->warningOutput("\t>>  MIDDLEWARE: {$class}"));
 
         $output->writeln(
         	$this->successOutput("\t>>  MIDDLEWARE: the '{$namespace}\\{$class}' middleware has been generated")

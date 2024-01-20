@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace LionBundle\Commands\RSA;
+namespace Lion\Bundle\Commands\RSA;
 
-use LionCommand\Command;
-use LionFiles\Store;
-use LionSecurity\RSA;
+use Lion\Command\Command;
+use Lion\Files\Store;
+use Lion\Security\RSA;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace LionBundle\Traits;
+namespace Lion\Bundle\Traits;
 
-use \Closure;
-use LionBundle\Enums\StatusResponseEnum;
-use LionSecurity\Validation;
+use Closure;
+use Lion\Bundle\Enums\StatusResponseEnum;
+use Lion\Security\Validation;
 
 trait ShowErrors
 {

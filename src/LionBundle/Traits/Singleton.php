@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Traits\Framework;
+namespace Lion\Bundle\Traits;
 
 trait Singleton
 {
@@ -13,7 +13,7 @@ trait Singleton
         $this->init();
     }
 
-    final public static function getInstance()
+    final public static function getInstance(): object
     {
         if (self::$singleton === false) {
             self::$singleton = new self();
@@ -22,7 +22,7 @@ trait Singleton
         return self::$singleton;
     }
 
-    protected function init()
+    protected function init(): void
     {
 
     }

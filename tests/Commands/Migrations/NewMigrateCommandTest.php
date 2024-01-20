@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Commands\Migrations;
 
-use LionBundle\Commands\Migrations\NewMigrateCommand;
-use LionBundle\Helpers\Commands\Container;
-use LionCommand\Command;
-use LionCommand\Kernel;
-use LionTest\Test;
+use Lion\Bundle\Commands\Migrations\NewMigrateCommand;
+use Lion\Command\Command;
+use Lion\Command\Kernel;
+use Lion\DependencyInjection\Container;
+use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class NewMigrateCommandTest extends Test

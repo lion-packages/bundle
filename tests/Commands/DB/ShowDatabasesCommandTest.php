@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Tests\Commands\DB;
 
-use LionBundle\Commands\DB\ShowDatabasesCommand;
-use LionBundle\Helpers\Commands\Container;
-use LionCommand\Command;
-use LionCommand\Kernel;
-use LionTest\Test;
+use Lion\Bundle\Commands\DB\ShowDatabasesCommand;
+use Lion\Command\Command;
+use Lion\Command\Kernel;
+use Lion\DependencyInjection\Container;
+use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
-use Tests\ConnectionTrait;
+use Tests\Providers\ConnectionProviderTrait;
 
 class ShowDatabasesCommandTest extends Test
 {
-    use ConnectionTrait;
+    use ConnectionProviderTrait;
 
     const MYSQL = 'mysql';
     const DB = 'db';

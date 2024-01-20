@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace LionBundle\Commands\AES;
+namespace Lion\Bundle\Commands\AES;
 
-use LionBundle\Traits\AES;
-use LionCommand\Command;
+use Lion\Bundle\Traits\AES;
+use Lion\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 

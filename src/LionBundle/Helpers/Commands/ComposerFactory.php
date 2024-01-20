@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LionBundle\Helpers\Commands;
+namespace Lion\Bundle\Helpers\Commands;
 
-use LionHelpers\Arr;
+use Lion\Helpers\Arr;
 
 class ComposerFactory
 {

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace LionBundle\Commands\New;
+namespace Lion\Bundle\Commands\New;
 
-use LionBundle\Helpers\Commands\ClassFactory;
-use LionCommand\Command;
-use LionFiles\Store;
-use LionHelpers\Str;
+use Lion\Bundle\Helpers\Commands\ClassFactory;
+use Lion\Command\Command;
+use Lion\Files\Store;
+use Lion\Helpers\Str;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -56,7 +56,7 @@ class TestCommand extends Command
             ->addArgument('test', InputArgument::OPTIONAL, 'Test name', 'ExampleTest');
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output)
+	protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $test = $input->getArgument('test');
 
@@ -71,7 +71,7 @@ class TestCommand extends Command
             ->create($class, 'php', $folder)
             ->add("<?php\n\ndeclare(strict_types=1);\n\n")
             ->add("namespace {$namespace};\n\n")
-            ->add("use LionTest\\Test;\n\n")
+            ->add("use Lion\Test\Test;\n\n")
             ->add(
                 $this->str->of("class ")
                     ->concat($class)

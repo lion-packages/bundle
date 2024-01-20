@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace LionBundle\Commands\DB\MySQL;
+namespace Lion\Bundle\Commands\DB\MySQL;
 
-use LionBundle\Helpers\Commands\ClassFactory;
-use LionCommand\Command;
-use LionDatabase\Drivers\MySQL as DB;
-use LionHelpers\Str;
+use Lion\Bundle\Helpers\Commands\ClassFactory;
+use Lion\Command\Command;
+use Lion\Database\Drivers\MySQL as DB;
+use Lion\Helpers\Str;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

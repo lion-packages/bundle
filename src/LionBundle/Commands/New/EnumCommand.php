@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace LionBundle\Commands\New;
+namespace Lion\Bundle\Commands\New;
 
-use LionBundle\Helpers\Commands\ClassFactory;
-use LionCommand\Command;
-use LionFiles\Store;
-use LionHelpers\Str;
+use Lion\Bundle\Helpers\Commands\ClassFactory;
+use Lion\Command\Command;
+use Lion\Files\Store;
+use Lion\Helpers\Str;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -89,7 +89,7 @@ class EnumCommand extends Command
             )
             ->close();
 
-        $output->writeln($this->warningOutput("\t>>  ENUM: {$enum}"));
+        $output->writeln($this->warningOutput("\t>>  ENUM: {$class}"));
         $output->writeln($this->successOutput("\t>>  ENUM: the '{$namespace}\\{$class}' enum has been generated"));
 
         return Command::SUCCESS;

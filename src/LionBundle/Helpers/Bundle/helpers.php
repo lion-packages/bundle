@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Faker\Factory;
 use Faker\Generator;
 use GuzzleHttp\Psr7\Response;
-use LionBundle\Enums\StatusResponseEnum;
+use Lion\Bundle\Enums\StatusResponseEnum;
 
 /**
  * Function to make HTTP requests with guzzlehttp

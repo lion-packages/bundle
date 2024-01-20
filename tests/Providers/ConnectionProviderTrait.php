@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tests;
+namespace Tests\Providers;
 
-use LionDatabase\Driver;
+use Lion\Database\Driver;
 
-trait ConnectionTrait
+trait ConnectionProviderTrait
 {
     private function runDatabaseConnections(): void
     {

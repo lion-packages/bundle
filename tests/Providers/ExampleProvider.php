@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Providers;
 
-use LionHelpers\Arr;
+use Lion\Helpers\Arr;
 
 class ExampleProvider
 {

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace LionBundle\Commands\Migrations;
+namespace Lion\Bundle\Commands\Migrations;
 
-use LionCommand\Command;
-use LionDatabase\Drivers\MySQL as DB;
-use LionFiles\Store;
+use Lion\Command\Command;
+use Lion\Database\Drivers\MySQL as DB;
+use Lion\Files\Store;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;

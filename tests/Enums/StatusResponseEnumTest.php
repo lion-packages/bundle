@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Enums;
 
-use LionBundle\Enums\StatusResponseEnum;
-use LionTest\Test;
+use Lion\Bundle\Enums\StatusResponseEnum;
+use Lion\Test\Test;
 
 class StatusResponseEnumTest extends Test
 {

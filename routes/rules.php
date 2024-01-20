@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Lion\Bundle\Helpers\Http\Routes;
+
 /**
  * ------------------------------------------------------------------------------
  * Rules
@@ -10,6 +12,6 @@ declare(strict_types=1);
  * ------------------------------------------------------------------------------
  **/
 
-\LionBundle\Helpers\Http\Routes::setRules([
+Routes::setRules([
     'POST' => []
 ]);

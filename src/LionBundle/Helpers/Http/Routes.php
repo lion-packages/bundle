@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LionBundle\Helpers\Http;
+namespace Lion\Bundle\Helpers\Http;
 
 class Routes
 {

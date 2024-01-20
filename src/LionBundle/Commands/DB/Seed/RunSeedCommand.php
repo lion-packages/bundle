@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace LionBundle\Commands\DB\Seed;
+namespace Lion\Bundle\Commands\DB\Seed;
 
-use LionBundle\Helpers\Commands\Container;
-use LionCommand\Command;
-use LionFiles\Store;
+use Lion\Command\Command;
+use Lion\DependencyInjection\Container;
+use Lion\Files\Store;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;

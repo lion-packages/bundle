@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace LionBundle\Commands;
+namespace Lion\Bundle\Commands;
 
-use LionCommand\Command;
-use LionCommand\Kernel;
+use Lion\Command\Command;
+use Lion\Command\Kernel;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -13,7 +13,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ServerCommand extends Command
 {
     private Kernel $kernel;
-    private string|float $start;
 
     /**
      * @required
@@ -24,11 +23,6 @@ class ServerCommand extends Command
 
         return $this;
     }
-
-	protected function initialize(InputInterface $input, OutputInterface $output): void
-    {
-        $this->start = microtime(true);
-	}
 
 	protected function configure(): void
     {
@@ -49,7 +43,7 @@ class ServerCommand extends Command
 
         $output->write("\033[2J\033[;H");
         $output->write($this->successOutput("\nLion-Framework "));
-        $output->writeln("ready in " . number_format((microtime(true) - $this->start), 3) . " ms\n");
+        $output->writeln("ready in " . number_format((microtime(true) - LION_START), 3) . " ms\n");
         $output->writeln($this->warningOutput("\t>>  LOCAL:</comment> Server running on {$link}"));
         $output->writeln($this->warningOutput("\t>>  HOST:</comment> use --host to expose"));
         $output->writeln($this->warningOutput("\t>>  PORT:</comment> use --port to expose"));

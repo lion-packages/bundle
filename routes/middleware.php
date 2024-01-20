@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Lion\Bundle\Helpers\Http\Routes;
+
 /**
  * ------------------------------------------------------------------------------
  * Web middleware
@@ -10,7 +12,7 @@ declare(strict_types=1);
  * ------------------------------------------------------------------------------
  **/
 
-\LionBundle\Helpers\Http\Routes::setMiddleware([
+Routes::setMiddleware([
     'app' => [
         //
     ],

@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 use GuzzleHttp\Client;
-use LionHelpers\Arr;
-use LionHelpers\Str;
-use LionRequest\Request;
-use LionRequest\Response;
+use Lion\Helpers\Arr;
+use Lion\Helpers\Str;
+use Lion\Request\Request;
+use Lion\Request\Response;
 
 /**
  * -----------------------------------------------------------------------------

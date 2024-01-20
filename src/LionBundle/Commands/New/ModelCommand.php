@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace LionBundle\Commands\New;
+namespace Lion\Bundle\Commands\New;
 
-use LionBundle\Helpers\Commands\ClassFactory;
-use LionCommand\Command;
-use LionFiles\Store;
-use LionHelpers\Str;
+use Lion\Bundle\Helpers\Commands\ClassFactory;
+use Lion\Command\Command;
+use Lion\Files\Store;
+use Lion\Helpers\Str;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -73,7 +73,7 @@ class ModelCommand extends Command
             ->create($class, 'php', $folder)
             ->add("<?php\n\ndeclare(strict_types=1);\n\n")
             ->add("namespace {$namespace};\n\n")
-            ->add("use LionDatabase\Drivers\MySQL\MySQL as DB;\n\n")
+            ->add("use Lion\Database\Drivers\MySQL\MySQL as DB;\n\n")
             ->add("class {$class}\n{\n");
 
         foreach (self::METHODS as $method) {
@@ -91,7 +91,7 @@ class ModelCommand extends Command
 
         $this->classFactory->add("}\n")->close();
 
-        $output->writeln($this->warningOutput("\t>>  MODEL: {$model}"));
+        $output->writeln($this->warningOutput("\t>>  MODEL: {$class}"));
         $output->writeln($this->successOutput("\t>>  MODEL: the '{$namespace}\\{$class}' model has been generated"));
 
         return Command::SUCCESS;

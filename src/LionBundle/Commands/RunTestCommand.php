@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace LionBundle\Commands;
+namespace Lion\Bundle\Commands;
 
-use LionCommand\Command;
-use LionCommand\Kernel;
-use LionHelpers\Arr;
+use Lion\Command\Command;
+use Lion\Command\Kernel;
+use Lion\Helpers\Arr;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -46,7 +46,7 @@ class RunTestCommand extends Command
             ->addOption('suite', 's', InputOption::VALUE_OPTIONAL, 'Do you want to test a specific directory?', 'All-Test');
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output)
+	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		$result = '';
 		$class = $input->getOption('class');

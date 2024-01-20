@@ -21,7 +21,7 @@ require_once('./vendor/autoload.php');
  * -----------------------------------------------------------------------------
  * */
 
-\LionDatabase\Driver::run([
+\Lion\Database\Driver::run([
     'default' => env->DB_NAME,
     'connections' => [
         env->DB_NAME => [
@@ -54,51 +54,51 @@ include_once('./routes/middleware.php');
 
 $commands = [
     // All
-    \LionBundle\Commands\InfoCommand::class,
-    \LionBundle\Commands\RunTestCommand::class,
-    \LionBundle\Commands\ServerCommand::class,
+    \Lion\Bundle\Commands\InfoCommand::class,
+    \Lion\Bundle\Commands\RunTestCommand::class,
+    \Lion\Bundle\Commands\ServerCommand::class,
     // AES
-    \LionBundle\Commands\AES\NewAESCommand::class,
+    \Lion\Bundle\Commands\AES\NewAESCommand::class,
     // DB
     ...[
         ...[
             // MySQL
-            \LionBundle\Commands\DB\MySQL\DBCapsuleCommand::class,
-            \LionBundle\Commands\DB\MySQL\DBCapsulesCommand::class,
-            \LionBundle\Commands\DB\MySQL\FactoryCommand::class
+            \Lion\Bundle\Commands\DB\MySQL\DBCapsuleCommand::class,
+            \Lion\Bundle\Commands\DB\MySQL\DBCapsulesCommand::class,
+            \Lion\Bundle\Commands\DB\MySQL\FactoryCommand::class
         ],
         ...[
             // Seed
-            \LionBundle\Commands\DB\Seed\NewSeedCommand::class,
-            \LionBundle\Commands\DB\Seed\RunSeedCommand::class
+            \Lion\Bundle\Commands\DB\Seed\NewSeedCommand::class,
+            \Lion\Bundle\Commands\DB\Seed\RunSeedCommand::class
         ],
-        \LionBundle\Commands\DB\ShowDatabasesCommand::class
+        \Lion\Bundle\Commands\DB\ShowDatabasesCommand::class
     ],
     // MIGRATIONS
-    \LionBundle\Commands\Migrations\NewMigrateCommand::class,
+    \Lion\Bundle\Commands\Migrations\NewMigrateCommand::class,
     // NEW
-    \LionBundle\Commands\New\CapsuleCommand::class,
-    \LionBundle\Commands\New\CommandsCommand::class,
-    \LionBundle\Commands\New\ControllerCommand::class,
-    \LionBundle\Commands\New\ModelCommand::class,
-    \LionBundle\Commands\New\EnumCommand::class,
-    \LionBundle\Commands\New\InterfaceCommand::class,
-    \LionBundle\Commands\New\TestCommand::class,
-    \LionBundle\Commands\New\TraitCommand::class,
-    \LionBundle\Commands\New\MiddlewareCommand::class,
-    \LionBundle\Commands\New\RulesCommand::class,
+    \Lion\Bundle\Commands\New\CapsuleCommand::class,
+    \Lion\Bundle\Commands\New\CommandsCommand::class,
+    \Lion\Bundle\Commands\New\ControllerCommand::class,
+    \Lion\Bundle\Commands\New\ModelCommand::class,
+    \Lion\Bundle\Commands\New\EnumCommand::class,
+    \Lion\Bundle\Commands\New\InterfaceCommand::class,
+    \Lion\Bundle\Commands\New\TestCommand::class,
+    \Lion\Bundle\Commands\New\TraitCommand::class,
+    \Lion\Bundle\Commands\New\MiddlewareCommand::class,
+    \Lion\Bundle\Commands\New\RulesCommand::class,
     // Route
-    \LionBundle\Commands\Route\RouteListCommand::class,
+    \Lion\Bundle\Commands\Route\RouteListCommand::class,
     // RSA
-    \LionBundle\Commands\RSA\NewRSACommand::class,
+    \Lion\Bundle\Commands\RSA\NewRSACommand::class,
     // SH
-    \LionBundle\Commands\SH\SHFileCommand::class,
+    \Lion\Bundle\Commands\SH\SHFileCommand::class,
     // Sockets
-    \LionBundle\Commands\Sockets\NewSocketCommand::class
+    \Lion\Bundle\Commands\Sockets\NewSocketCommand::class
 ];
 
-$kernel = new \LionCommand\Kernel();
-$container = new \LionBundle\Helpers\Commands\Container();
+$kernel = new \Lion\Command\Kernel();
+$container = new \Lion\DependencyInjection\Container();
 $application = $kernel->getApplication();
 
 foreach ($commands as $command) {

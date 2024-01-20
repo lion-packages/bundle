@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace LionBundle\Commands;
+namespace Lion\Bundle\Commands;
 
-use LionBundle\Helpers\Commands\ComposerFactory;
-use LionCommand\Command;
-use LionHelpers\Arr;
+use Lion\Bundle\Helpers\Commands\ComposerFactory;
+use Lion\Command\Command;
+use Lion\Helpers\Arr;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -54,7 +54,7 @@ class InfoCommand extends Command
             ->setHeaders(['LIBRARY', 'VERSION', 'LICENSE', 'DEV', 'DESCRIPTION'])
             ->setFooterTitle(
                 $size > 1
-                    ? $this->successOutput(" Showing [" . $size . "] libraries ")
+                    ? $this->successOutput(" Showing [{$size}] libraries ")
                     : ($size === 1
                         ? $this->successOutput(" showing a single library ")
                         : $this->successOutput(" No libraries available ")

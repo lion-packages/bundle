@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace LionBundle\Commands\Sockets;
+namespace Lion\Bundle\Commands\Sockets;
 
-use LionCommand\Command;
+use Lion\Command\Command;
+use Lion\Command\Kernel;
 use Ratchet\Http\HttpServer;
 use Ratchet\Server\IoServer;
 use Ratchet\WebSocket\WsServer;
@@ -14,16 +15,27 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ServerSocketCommand extends Command
 {
-	protected static $defaultName = "socket:serve";
+    private Kernel $kernel;
 
-    protected function configure()
+    /**
+     * @required
+     * */
+    public function setKernel(Kernel $kernel): ServerSocketCommand
+    {
+        $this->kernel = $kernel;
+
+        return $this;
+    }
+
+    protected function configure(): void
     {
         $this
+            ->setName('socket:serve')
             ->setDescription('Command required to run WebSockets')
             ->addArgument('socket', InputArgument::OPTIONAL, 'Socket name');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $socket = $input->getArgument('socket');
         $class = kernel->getClass(str->of($socket)->trim()->get());

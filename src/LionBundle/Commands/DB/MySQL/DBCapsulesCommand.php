@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace LionBundle\Commands\DB\MySQL;
+namespace Lion\Bundle\Commands\DB\MySQL;
 
-use LionCommand\Command;
-use LionDatabase\Drivers\MySQL as DB;
+use Lion\Command\Command;
+use Lion\Database\Drivers\MySQL as DB;
 use PDO;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -45,11 +45,10 @@ class DBCapsulesCommand extends Command
         foreach ($listAllTables as $table) {
             foreach ($table['all-tables'] as $tableDB) {
                 $values = array_values($tableDB);
-                $tblValue = reset($values);
 
                 $this->getApplication()
                     ->find('db:mysql:capsule')
-                    ->run(new ArrayInput(['entity' => $tblValue, '--connection' => $table['connection']]), $output);
+                    ->run(new ArrayInput(['entity' => reset($values), '--connection' => $table['connection']]), $output);
             }
         }
 

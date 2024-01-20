@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace LionBundle\Commands\New;
+namespace Lion\Bundle\Commands\New;
 
-use LionBundle\Helpers\Commands\ClassFactory;
-use LionCommand\Command;
-use LionFiles\Store;
-use LionHelpers\Arr;
-use LionHelpers\Str;
+use Lion\Bundle\Helpers\Commands\ClassFactory;
+use Lion\Command\Command;
+use Lion\Files\Store;
+use Lion\Helpers\Arr;
+use Lion\Helpers\Str;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -147,7 +147,7 @@ class CapsuleCommand extends Command
         $contentFile = $str->concat("}")->get();
         $this->classFactory->create($class, 'php', $folder)->add($contentFile)->close();
 
-        $output->writeln($this->warningOutput("\t>>  CAPSULE: {$capsule}"));
+        $output->writeln($this->warningOutput("\t>>  CAPSULE: {$class}"));
         $output->writeln($this->successOutput("\t>>  CAPSULE: the '{$namespace}\\{$class}' capsule has been generated"));
 
         return Command::SUCCESS;

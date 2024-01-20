@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Tests\Helpers\Bundle;
 
 use GuzzleHttp\Client;
-use LionHelpers\Arr;
-use LionHelpers\Str;
-use LionRequest\Response;
-use LionTest\Test;
+use Lion\Helpers\Arr;
+use Lion\Helpers\Str;
+use Lion\Request\Response;
+use Lion\Test\Test;
 
 class ConstansTest extends Test
 {

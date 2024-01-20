@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Tests\Commands\DB\Seed;
 
-use LionBundle\Commands\DB\Seed\NewSeedCommand;
-use LionBundle\Commands\DB\Seed\RunSeedCommand;
-use LionBundle\Helpers\Commands\Container;
-use LionCommand\Command;
-use LionCommand\Kernel;
-use LionTest\Test;
+use Lion\Bundle\Commands\DB\Seed\NewSeedCommand;
+use Lion\Bundle\Commands\DB\Seed\RunSeedCommand;
+use Lion\Command\Command;
+use Lion\Command\Kernel;
+use Lion\DependencyInjection\Container;
+use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
-use Tests\ConnectionTrait;
+use Tests\Providers\ConnectionProviderTrait;
 
 class RunSeedCommandTest extends Test
 {
-    use ConnectionTrait;
+    use ConnectionProviderTrait;
 
     const URL_PATH = './database/Seed/';
     const NAMESPACE_CLASS = 'Database\\Seed\\';

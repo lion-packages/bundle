@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Commands\DB\MySQL;
 
-use LionBundle\Commands\DB\MySQL\FactoryCommand;
-use LionBundle\Helpers\Commands\Container;
-use LionCommand\Command;
-use LionCommand\Kernel;
-use LionTest\Test;
+use Lion\Bundle\Commands\DB\MySQL\FactoryCommand;
+use Lion\Command\Command;
+use Lion\Command\Kernel;
+use Lion\DependencyInjection\Container;
+use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class FactoryCommandTest extends Test

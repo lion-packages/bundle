@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace LionBundle\Commands\Route;
+namespace Lion\Bundle\Commands\Route;
 
-use LionBundle\Helpers\Http\Routes;
-use LionCommand\Command;
-use LionHelpers\Arr;
-use LionHelpers\Str;
-use LionRoute\Route;
+use Lion\Bundle\Helpers\Http\Routes;
+use Lion\Command\Command;
+use Lion\Helpers\Arr;
+use Lion\Helpers\Str;
+use Lion\Route\Route;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\Table;
@@ -54,7 +54,7 @@ class RouteListCommand extends Command
     {
         $this
             ->setName('route:list')
-            ->setDescription("Command to view a list of available web routes");
+            ->setDescription('Command to view a list of available web routes');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace LionBundle\Helpers\Commands;
+namespace Lion\Bundle\Helpers\Commands;
 
 use Closure;
-use LionBundle\Helpers\Commands\ClassFactory;
-use LionFiles\Store;
+use Lion\Bundle\Helpers\Commands\ClassFactory;
+use Lion\Files\Store;
 
 class ClassCommandFactory
 {

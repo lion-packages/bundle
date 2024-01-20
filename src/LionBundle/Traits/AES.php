@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LionBundle\Traits;
+namespace Lion\Bundle\Traits;
 
 trait AES
 {

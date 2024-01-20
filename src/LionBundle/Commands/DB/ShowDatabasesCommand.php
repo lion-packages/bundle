@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace LionBundle\Commands\DB;
+namespace Lion\Bundle\Commands\DB;
 
-use LionCommand\Command;
-use LionHelpers\Arr;
-use LionDatabase\Drivers\MySQL as DB;
+use Lion\Command\Command;
+use Lion\Helpers\Arr;
+use Lion\Database\Drivers\MySQL as DB;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

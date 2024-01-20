@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Commands\New;
 
-use LionBundle\Commands\New\TestCommand;
-use LionBundle\Helpers\Commands\Container;
-use LionCommand\Command;
-use LionCommand\Kernel;
-use LionFiles\Store;
-use LionTest\Test;
+use Lion\Bundle\Commands\New\TestCommand;
+use Lion\Command\Command;
+use Lion\Command\Kernel;
+use Lion\DependencyInjection\Container;
+use Lion\Files\Store;
+use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class TestCommandTest extends Test

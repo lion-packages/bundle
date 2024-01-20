@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace LionBundle\Commands\DB\Seed;
+namespace Lion\Bundle\Commands\DB\Seed;
 
-use LionBundle\Helpers\Commands\ClassFactory;
-use LionCommand\Command;
-use LionFiles\Store;
-use LionHelpers\Str;
+use Lion\Bundle\Helpers\Commands\ClassFactory;
+use Lion\Command\Command;
+use Lion\Files\Store;
+use Lion\Helpers\Str;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -56,7 +56,7 @@ class NewSeedCommand extends Command
             ->addArgument('seed', InputArgument::OPTIONAL, 'Name seed', 'ExampleSeed');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->classFactory->classFactory('database/Seed/', $input->getArgument('seed'));
         $folder = $this->classFactory->getFolder();
@@ -69,7 +69,7 @@ class NewSeedCommand extends Command
             ->create($class, 'php', $folder)
             ->add($this->str->of("<?php")->ln()->ln()->concat('declare(strict_types=1);')->ln()->ln()->get())
             ->add($this->str->of("namespace ")->concat($namespace)->concat(";")->ln()->ln()->get())
-            ->add($this->str->of("use LionDatabase\Drivers\MySQL as DB;")->ln()->ln()->get())
+            ->add($this->str->of("use Lion\Database\Drivers\MySQL as DB;")->ln()->ln()->get())
             ->add($this->str->of("class ")->concat($class)->ln()->concat("{")->ln()->get())
             ->add("\t/**\n")
             ->add("\t * Seed the application's database\n")

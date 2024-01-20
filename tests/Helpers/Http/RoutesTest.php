@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Helpers\Http;
 
-use LionBundle\Helpers\Http\Routes;
-use LionTest\Test;
+use Lion\Bundle\Helpers\Http\Routes;
+use Lion\Test\Test;
 
 class RoutesTest extends Test
 {

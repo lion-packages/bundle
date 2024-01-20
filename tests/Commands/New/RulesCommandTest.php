@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Commands\New;
 
-use LionBundle\Commands\New\RulesCommand;
-use LionBundle\Helpers\Commands\Container;
-use LionCommand\Command;
-use LionCommand\Kernel;
-use LionTest\Test;
+use Lion\Bundle\Commands\New\RulesCommand;
+use Lion\Command\Command;
+use Lion\Command\Kernel;
+use Lion\DependencyInjection\Container;
+use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class RulesCommandTest extends Test
