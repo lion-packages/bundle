@@ -15,8 +15,7 @@ class ClassFactory
         string $extension = 'php',
         string $path = '',
         string $filePermissions = 'w+b'
-    ): ClassFactory
-    {
+    ): ClassFactory {
         $this->content = fopen("{$path}{$fileName}.{$extension}", $filePermissions);
 
         return $this;
@@ -166,8 +165,7 @@ class ClassFactory
         string $content = 'return;',
         string $visibility = 'public',
         int $lineBreak = 2
-    ): string
-    {
+    ): string {
         $method = "\t{$visibility} function {$name}({$params})" . ($type === '' ? '' : ": {$type}");
         $method .= "\n\t{\n\t\t{$content}\n\t}";
         $method .= str_repeat("\n", $lineBreak);

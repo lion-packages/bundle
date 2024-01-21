@@ -110,7 +110,12 @@ class ControllerCommand extends Command
                 $customMethod = '';
 
                 if ('none' != $model) {
-                    $modelMethod = $this->str->of('return ')->concat('$this->')->concat($camelModelClass)->concat('->')->get();
+                    $modelMethod = $this->str
+                        ->of('return ')
+                        ->concat('$this->')
+                        ->concat($camelModelClass)
+                        ->concat('->')
+                        ->get();
 
                     $modelMethod .= $this->str->of($method . $dataModel->class)
                         ->replace('Model', '')
@@ -119,7 +124,11 @@ class ControllerCommand extends Command
                         ->get();
 
                     $customMethod = $factoryController->getCustomMethod(
-                        $this->str->of($method . $dataController->class)->replace('Controller', '')->replace('controller', '')->get(),
+                        $this->str
+                            ->of($method . $dataController->class)
+                            ->replace('Controller', '')
+                            ->replace('controller', '')
+                            ->get(),
                         $method === 'read' ? 'array|object' : 'object',
                         in_array($method, ['update', 'delete'], true) ? 'string $id' : '',
                         $modelMethod,
@@ -128,7 +137,11 @@ class ControllerCommand extends Command
                     );
                 } else {
                     $customMethod = $factoryController->getCustomMethod(
-                        $this->str->of($method . $dataController->class)->replace('Controller', '')->replace('controller', '')->get(),
+                        $this->str
+                            ->of($method . $dataController->class)
+                            ->replace('Controller', '')
+                            ->replace('controller', '')
+                            ->get(),
                         $method === 'read' ? 'array|object' : 'object',
                         in_array($method, ['update', 'delete'], true) ? 'string $id' : '',
                         $method === 'read' ? "return [];" : "return success();",
