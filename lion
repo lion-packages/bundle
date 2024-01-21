@@ -80,6 +80,7 @@ $commands = [
     ],
     // MIGRATIONS
     \Lion\Bundle\Commands\Migrations\NewMigrationCommand::class,
+    \Lion\Bundle\Commands\Migrations\FreshMigrationsCommand::class,
     // NEW
     \Lion\Bundle\Commands\New\CapsuleCommand::class,
     \Lion\Bundle\Commands\New\CommandsCommand::class,

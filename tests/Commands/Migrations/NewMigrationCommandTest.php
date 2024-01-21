@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\Commands\Migrations;
 
 use Lion\Bundle\Commands\Migrations\NewMigrationCommand;
-use Lion\Bundle\Interface\MigrationRunInterface;
 use Lion\Bundle\Interface\MigrationUpInterface;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
@@ -55,7 +54,6 @@ class NewMigrationCommandTest extends Test
 
         $objClass = include_once(self::URL_PATH_TABLE . self::FILE_NAME);
 
-        $this->assertInstanceOf(MigrationRunInterface::class, $objClass);
         $this->assertInstanceOf(MigrationUpInterface::class, $objClass);
     }
 
