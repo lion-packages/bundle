@@ -6,23 +6,23 @@ namespace Lion\Bundle\Commands\Migrations;
 
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\Migrations\Migration;
+use Lion\Bundle\Helpers\Commands\SelectedDatabaseConnection;
 use Lion\Command\Command;
-use Lion\Database\Drivers\MySQL as DB;
 use Lion\Files\Store;
 use Lion\Helpers\Arr;
 use Lion\Helpers\Str;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 
-class NewMigrationCommand extends Command
+class NewMigrationCommand extends SelectedDatabaseConnection
 {
     const OPTIONS = ['Table', 'View', 'Store-Procedure'];
 
     private ClassFactory $classFactory;
     private Store $store;
-    private Arr $arr;
     private Str $str;
     private Migration $migration;
 
@@ -42,16 +42,6 @@ class NewMigrationCommand extends Command
     public function setStore(Store $store): NewMigrationCommand
     {
         $this->store = $store;
-
-        return $this;
-    }
-
-    /**
-     * @required
-     * */
-    public function setArr(Arr $arr): NewMigrationCommand
-    {
-        $this->arr = $arr;
 
         return $this;
     }
@@ -97,23 +87,7 @@ class NewMigrationCommand extends Command
         /** @var QuestionHelper $helper */
         $helper = $this->getHelper('question');
 
-        $connections = DB::getConnections();
-        $selectedConnection = '';
-
-        if ($this->arr->of($connections['connections'])->length() > 1) {
-            $selectedConnection = $helper->ask(
-                $input,
-                $output,
-                new ChoiceQuestion(
-                    'Select a connection ' . $this->warningOutput("(default: {$connections['default']})"),
-                    $this->arr->of($connections['connections'])->keys()->get(),
-                    0
-                )
-            );
-        } else {
-            $output->writeln($this->warningOutput("default connection: ({$connections['default']})"));
-            $selectedConnection = $connections['default'];
-        }
+        $selectedConnection = $this->selectConnection($input, $output, $helper);
 
         $selectedType = $helper->ask(
             $input,

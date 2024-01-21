@@ -1,132 +1,137 @@
 <?php
 
-namespace LionBundle\Commands\DB;
+declare(strict_types=1);
 
-use App\Traits\Framework\ClassPath;
-use LionDatabase\Drivers\MySQL\MySQL as DB;
-use Symfony\Component\Console\Command\Command;
+namespace Lion\Bundle\Commands\DB;
+
+use Lion\Bundle\Helpers\Commands\SelectedDatabaseConnection;
+use Lion\Bundle\Helpers\FileWriter;
+use Lion\Command\Command;
+use Lion\Database\Drivers\MySQL as DB;
+use Lion\Helpers\Str;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class RulesDBCommand extends Command
+class RulesDBCommand extends SelectedDatabaseConnection
 {
-    use ClassPath;
+    private Str $str;
+    private FileWriter $fileWriter;
 
-	protected static $defaultName = "db:rules";
-
-	protected function initialize(InputInterface $input, OutputInterface $output)
+    /**
+     * @required
+     * */
+    public function setStr(Str $str): RulesDBCommand
     {
+        $this->str = $str;
 
+        return $this;
     }
 
-    protected function interact(InputInterface $input, OutputInterface $output)
+    /**
+     * @required
+     * */
+    public function setFileWriter(FileWriter $fileWriter): RulesDBCommand
     {
+        $this->fileWriter = $fileWriter;
 
+        return $this;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
-            ->setDescription("Command to generate the rules of an entity")
-            ->addArgument('entity', InputArgument::REQUIRED, 'Entity name')
-            ->addOption('connection', 'c', InputOption::VALUE_REQUIRED, 'Do you want to use a specific connection?');
+            ->setName('db:rules')
+            ->setDescription('Command to generate the rules of an entity')
+            ->addArgument('entity', InputArgument::REQUIRED, 'Entity name');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $entity = $input->getArgument("entity");
-        $connection = $input->getOption("connection");
+        /** @var QuestionHelper $helper */
+        $helper = $this->getHelper('question');
 
-        $entity_pascal = str->of($entity)->replace("_", " ")->pascal()->get();
-        $connections = DB::getConnections();
-        $main_conn = ($connection === null) ? $connections['default'] : $connection;
-        $main_conn_pascal = str->of($main_conn)->replace("_", " ")->replace("-", " ")->pascal()->get();
+        $selectedConnection = $this->selectConnection($input, $output, $helper);
+        $entity = $input->getArgument('entity');
 
-        $columns = DB::connection($main_conn)
-            ->show()
-            ->full()
-            ->columns()
-            ->from($entity)
+        $entityPascal = $this->str->of($entity)->replace('_', ' ')->replace('-', ' ')->pascal()->get();
+        $ConnectionPascal = $this->str->of($selectedConnection)->replace('_', ' ')->replace('-', ' ')->pascal()->get();
+
+        $columns = DB::connection($selectedConnection)->show()->full()->columns()->from($entity)->getAll();
+
+        $foreigns = DB::connection($selectedConnection)
+            ->table('INFORMATION_SCHEMA.KEY_COLUMN_USAGE', false)
+            ->select('COLUMN_NAME', 'REFERENCED_TABLE_NAME', 'REFERENCED_COLUMN_NAME')
+            ->where()->equalTo('TABLE_SCHEMA', $selectedConnection)
+            ->and()->equalTo('TABLE_NAME', $entity)
+            ->and('REFERENCED_TABLE_NAME')->isNotNull()
             ->getAll();
 
-        $foreigns = DB::connection($main_conn)
-            ->table("INFORMATION_SCHEMA.KEY_COLUMN_USAGE", true)
-            ->select("COLUMN_NAME", "REFERENCED_TABLE_NAME", "REFERENCED_COLUMN_NAME")
-            ->where(DB::equalTo("TABLE_SCHEMA"), $main_conn)
-            ->and(DB::equalTo("TABLE_NAME"), $entity)
-            ->and("REFERENCED_TABLE_NAME")
-            ->isNotNull()
-            ->getAll();
-
-        foreach ($columns as $keyColumn => $column) {
-            $is_foreign = false;
-
+        foreach ($columns as $column) {
             if (!isset($foreigns->status)) {
                 if (is_array($foreigns)) {
-                    foreach ($foreigns as $keyForeign => $foreign) {
+                    foreach ($foreigns as $foreign) {
                         if ($column->Field === $foreign->COLUMN_NAME) {
-                            $is_foreign = true;
-                            break;
+                            continue;
                         }
                     }
                 } else {
                     if ($column->Field === $foreigns->COLUMN_NAME) {
-                        $is_foreign = true;
+                        continue;
                     }
                 }
             }
 
-            if (!$is_foreign) {
-                // generate rule name
-                $rule_name = str->of($column->Field)
-                    ->replace("-", "_")
-                    ->replace("_", " ")
-                    ->trim()
-                    ->pascal()
-                    ->concat("Rule")
-                    ->get();
+            $ruleName = $this->str
+                ->of($column->Field)
+                ->replace('-', '_')
+                ->replace('_', ' ')
+                ->trim()
+                ->pascal()
+                ->concat('Rule')
+                ->get();
 
-                // generate rule
-                $this->getApplication()->find('new:rule')->run(
-                    new ArrayInput([
-                        'rule' => "{$main_conn_pascal}/{$entity_pascal}/{$rule_name}"
-                    ]),
-                    $output
-                );
+            $this->getApplication()->find('new:rule')->run(
+                new ArrayInput([
+                    'rule' => "{$ConnectionPascal}/{$entityPascal}/{$ruleName}"
+                ]),
+                $output
+            );
 
-                // edit rule content
-                $path = "app/Rules/{$main_conn_pascal}/{$entity_pascal}/{$rule_name}.php";
-                $this->readFileRows($path, [
-                    14 => [
+            $this->fileWriter->readFileRows(
+                "app/Rules/{$ConnectionPascal}/{$entityPascal}/{$ruleName}.php",
+                [
+                    12 => [
                         'replace' => true,
-                        'content' => '"' . $column->Field . '"',
-                        'search' => '""'
+                        'content' => "'{$column->Field}'",
+                        'search' => "''"
+                    ],
+                    13 => [
+                        'replace' => true,
+                        'content' => "'{$column->Comment}'",
+                        'search' => "''"
                     ],
                     15 => [
                         'replace' => true,
-                        'content' => '"' . $column->Comment . '"',
-                        'search' => '""'
-                    ],
-                    16 => [
-                        'replace' => true,
-                        'content' => ($column->Null === "NO" ? "false" : "true"),
+                        'content' => ($column->Null === 'NO' ? 'false' : 'true'),
                         'search' => 'false'
                     ],
-                    22 => [
+                    20 => [
                         'replace' => true,
                         'multiple' => [
                             [
-                                'content' => ($column->Null === "NO" ? "required" : "optional"),
+                                'content' => ($column->Null === 'NO' ? 'required' : 'optional'),
                                 'search' => 'required'
                             ]
                         ]
                     ]
-                ]);
-            }
+                ]
+            );
         }
+
+        $output->writeln($this->infoOutput("\n\t>> Rules executed successfully"));
 
         return Command::SUCCESS;
     }

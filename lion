@@ -76,6 +76,7 @@ $commands = [
             \Lion\Bundle\Commands\DB\Seed\NewSeedCommand::class,
             \Lion\Bundle\Commands\DB\Seed\RunSeedCommand::class
         ],
+        \Lion\Bundle\Commands\DB\RulesDBCommand::class,
         \Lion\Bundle\Commands\DB\ShowDatabasesCommand::class
     ],
     // MIGRATIONS

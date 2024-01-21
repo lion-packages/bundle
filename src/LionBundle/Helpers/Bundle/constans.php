@@ -14,9 +14,32 @@ use Lion\Request\Response;
  * -----------------------------------------------------------------------------
  **/
 
+/**
+ * @var Client client
+ * */
 define('client', new Client());
+
+/**
+ * @var object request
+ * */
 define('request', (new Request())->capture());
+
+/**
+ * @var Response response
+ * */
 define('response', new Response());
+
+/**
+ * @var object env
+ * */
 define('env', (object) $_ENV);
+
+/**
+ * @var Str str
+ * */
 define('str', new Str());
+
+/**
+ * @var Arr arr
+ * */
 define('arr', new Arr());

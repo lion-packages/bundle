@@ -74,7 +74,7 @@ class NewSeedCommand extends Command
             ->add("\t/**\n")
             ->add("\t * Seed the application's database\n")
             ->add("\t **/\n")
-            ->add("\tpublic function run(): object\n\t{\n\t\treturn DB::call('stored_procedure', [])->execute();\n\t}\n}\n")
+            ->add("\tpublic function run(): object\n\t{\n\t\treturn success('run seed');\n\t}\n}\n")
             ->close();
 
         $output->writeln($this->warningOutput("\t>>  SEED: {$class}"));
