@@ -20,7 +20,7 @@ class ControllerCommandTest extends Test
     const OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
     const FILE_NAME = self::CLASS_NAME . '.php';
     const OUTPUT_MESSAGE = 'controller has been generated';
-    const CONTROLLER_METHODS = ['__construct', 'createTest', 'readTest', 'updateTest', 'deleteTest'];
+    const CONTROLLER_METHODS = ['createTest', 'readTest', 'updateTest', 'deleteTest'];
 
     const URL_PATH_MODEL = './app/Models/';
     const NAMESPACE_CLASS_MODEL = 'App\\Models\\';

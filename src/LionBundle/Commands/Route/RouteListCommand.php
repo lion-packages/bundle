@@ -74,8 +74,7 @@ class RouteListCommand extends Command
                         $this->warningOutput($keyMethods),
                         $routeUrl,
                         $this->errorOutput('false'),
-                        $this->errorOutput('false'),
-                        "<href={$method['handler']['request']['url']}>[{$method['handler']['request']['url']}]</>"
+                        $this->errorOutput('false')
                     ];
                 }
 
@@ -84,8 +83,7 @@ class RouteListCommand extends Command
                         $this->warningOutput($keyMethods),
                         $routeUrl,
                         $this->errorOutput('false'),
-                        $this->errorOutput('callback'),
-                        $this->errorOutput('false'),
+                        $this->errorOutput('callback')
                     ];
                 }
 
@@ -94,8 +92,7 @@ class RouteListCommand extends Command
                         $this->warningOutput($keyMethods),
                         $routeUrl,
                         $this->transformNamespace($method['handler']['controller']['name']),
-                        $this->warningOutput($method['handler']['controller']['function']),
-                        $this->errorOutput('false'),
+                        $this->warningOutput($method['handler']['controller']['function'])
                     ];
                 }
 
@@ -108,8 +105,7 @@ class RouteListCommand extends Command
                                         $this->infoOutput('MIDDLEWARE:'),
                                         $this->infoOutput($filter),
                                         $this->transformNamespace($middlewareClass),
-                                        $this->warningOutput($item['method']),
-                                        $this->errorOutput('false')
+                                        $this->warningOutput($item['method'])
                                     ];
                                 }
                             }
@@ -126,8 +122,7 @@ class RouteListCommand extends Command
                                 $this->successOutput('PARAM:'),
                                 $this->successOutput($classRule::$field . " ({$required_param})"),
                                 $this->transformNamespace($classRule),
-                                $this->warningOutput('passes'),
-                                $this->errorOutput('false')
+                                $this->warningOutput('passes')
                             ];
                         }
                     }
@@ -151,7 +146,7 @@ class RouteListCommand extends Command
                     : $this->successOutput(' no routes available ')
                 )
             )
-            ->setHeaders(['METHOD', 'ROUTE', 'CLASS', 'FUNCTION', 'REQUEST'])
+            ->setHeaders(['METHOD', 'ROUTE', 'CLASS', 'FUNCTION'])
             ->setRows($rows)
             ->render();
 
