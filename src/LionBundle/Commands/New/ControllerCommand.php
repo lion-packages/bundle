@@ -50,7 +50,8 @@ class ControllerCommand extends Command
             $model = $input->getOption('model');
 
             if (null === $model) {
-                $model = $this->str->of($model)
+                $model = $this->str
+                    ->of($model)
                     ->concat($controller)
                     ->replace('Controller', '')
                     ->replace('controller', '')

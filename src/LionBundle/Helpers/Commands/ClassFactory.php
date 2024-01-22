@@ -43,13 +43,17 @@ class ClassFactory
         $size = count($separate);
 
         foreach ($separate as $key => $part) {
+            $part = str_replace('-', ' ', $part);
+            $part = str_replace('_', ' ', $part);
+            $part = str_replace(' ', '', ucwords($part));
+
             if ($key === ($size - 1)) {
                 $this->namespace = $namespace;
-                $this->class = ucwords($part);
+                $this->class = $part;
             } elseif ($key === ($size - 2)) {
-                $namespace.= ucwords("$part");
+                $namespace.= $part;
             } else {
-                $namespace.= ucwords("$part\\");
+                $namespace.= "$part\\";
             }
         }
 

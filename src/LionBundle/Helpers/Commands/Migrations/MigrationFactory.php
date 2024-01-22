@@ -6,7 +6,7 @@ namespace Lion\Bundle\Helpers\Commands\Migrations;
 
 use Lion\Helpers\Str;
 
-class Migration
+class MigrationFactory
 {
     private Str $str;
 

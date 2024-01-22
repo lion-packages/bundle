@@ -11,40 +11,7 @@ trait ClassPath
 {
     private static $content;
 
-    public static function generateGetters(array $columns): array
-    {
-        $methods = ['create' => [], 'update' => [], 'delete' => []];
 
-        foreach (['create', 'update', 'delete'] as $keyMethod => $method) {
-            foreach ($columns as $keyColumn => $column) {
-                $field = self::cleanField($column->Field);
-                $getter = "get" . self::normalizeClass($field) . "()";
-
-                if ($method === "create" && $column->Key != "PRI") {
-                    $methods[$method][] = $getter;
-                }
-
-                if ($method === "update") {
-                    $methods[$method][] = $getter;
-                }
-
-                if ($method === "delete" && $column->Key === "PRI") {
-                    $methods[$method][] = $getter;
-                }
-            }
-        }
-
-        foreach ($columns as $key => $column) {
-            if ($column->Key === "PRI") {
-                $methods['update'] = [
-                    ...arr->of($methods['update'])->where(fn($value, $key) => $key != 0),
-                    $methods['update'][0]
-                ];
-            }
-        }
-
-        return $methods;
-    }
 
     public static function generateFunctionsModel(string $method, string $model, bool $last = false): string
     {

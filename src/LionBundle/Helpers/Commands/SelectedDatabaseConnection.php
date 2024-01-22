@@ -26,8 +26,16 @@ class SelectedDatabaseConnection extends Command
         return $this;
     }
 
-    protected function selectConnection(InputInterface $input, OutputInterface $output, QuestionHelper $helper): mixed
-    {
+    protected function selectConnection(
+        InputInterface $input,
+        OutputInterface $output,
+        ?QuestionHelper $helper = null
+    ): mixed {
+        if (null === $helper) {
+            /** @var QuestionHelper $helper */
+            $helper = $this->getHelper('question');
+        }
+
         $connections = DB::getConnections();
         $selectedConnection = null;
 
@@ -46,6 +54,20 @@ class SelectedDatabaseConnection extends Command
             $selectedConnection = $connections['default'];
         }
 
+        $_ENV['SELECTED_CONNECTION'] = $selectedConnection;
+
         return $selectedConnection;
+    }
+
+    protected function selectConnectionByEnviroment(
+        InputInterface $input,
+        OutputInterface $output,
+        ?QuestionHelper $helper = null
+    ): string {
+        if (empty($_ENV['SELECTED_CONNECTION'])) {
+            return $this->selectConnection($input, $output, $helper);
+        } else {
+            return $_ENV['SELECTED_CONNECTION'];
+        }
     }
 }

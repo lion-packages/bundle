@@ -15,9 +15,20 @@ define('LION_START', microtime(true));
 
 require_once('./vendor/autoload.php');
 
+use Dotenv\Dotenv;
 use Lion\Command\Kernel;
 use Lion\Database\Driver;
 use Lion\DependencyInjection\Container;
+
+/**
+ * ------------------------------------------------------------------------------
+ * Register environment variable loader automatically
+ * ------------------------------------------------------------------------------
+ * .dotenv provides an easy way to access environment variables with $_ENV
+ * ------------------------------------------------------------------------------
+ **/
+
+Dotenv::createImmutable(__DIR__)->load();
 
 /**
  * -----------------------------------------------------------------------------
@@ -76,6 +87,7 @@ $commands = [
             \Lion\Bundle\Commands\DB\Seed\NewSeedCommand::class,
             \Lion\Bundle\Commands\DB\Seed\RunSeedCommand::class
         ],
+        \Lion\Bundle\Commands\DB\CrudCommand::class,
         \Lion\Bundle\Commands\DB\RulesDBCommand::class,
         \Lion\Bundle\Commands\DB\ShowDatabasesCommand::class
     ],

@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace Lion\Bundle\Commands\Migrations;
 
 use Lion\Bundle\Helpers\Commands\ClassFactory;
-use Lion\Bundle\Helpers\Commands\Migrations\Migration;
+use Lion\Bundle\Helpers\Commands\Migrations\MigrationFactory;
 use Lion\Bundle\Helpers\Commands\SelectedDatabaseConnection;
 use Lion\Command\Command;
 use Lion\Files\Store;
-use Lion\Helpers\Arr;
 use Lion\Helpers\Str;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
@@ -24,7 +23,7 @@ class NewMigrationCommand extends SelectedDatabaseConnection
     private ClassFactory $classFactory;
     private Store $store;
     private Str $str;
-    private Migration $migration;
+    private MigrationFactory $migrationFactory;
 
     /**
      * @required
@@ -59,9 +58,9 @@ class NewMigrationCommand extends SelectedDatabaseConnection
     /**
      * @required
      * */
-    public function setMigration(Migration $migration): NewMigrationCommand
+    public function setMigration(MigrationFactory $migrationFactory): NewMigrationCommand
     {
-        $this->migration = $migration;
+        $this->migrationFactory = $migrationFactory;
 
         return $this;
     }
@@ -105,7 +104,7 @@ class NewMigrationCommand extends SelectedDatabaseConnection
         if ('Table' === $selectedType) {
             $this->store->folder("database/Migrations/{$dbPascal}/Tables/");
             $this->classFactory->classFactory("database/Migrations/{$dbPascal}/Tables/", $migrationPascal);
-            $body = $this->migration->getTableBody();
+            $body = $this->migrationFactory->getTableBody();
 
             $this->classFactory
                 ->create($this->classFactory->getClass(), 'php', $this->classFactory->getFolder())
@@ -116,7 +115,7 @@ class NewMigrationCommand extends SelectedDatabaseConnection
         if ('View' === $selectedType) {
             $this->store->folder("database/Migrations/{$dbPascal}/Views/");
             $this->classFactory->classFactory("database/Migrations/{$dbPascal}/Views/", $migrationPascal);
-            $body = $this->migration->getViewBody();
+            $body = $this->migrationFactory->getViewBody();
 
             $this->classFactory
                 ->create($this->classFactory->getClass(), 'php', $this->classFactory->getFolder())
@@ -127,7 +126,7 @@ class NewMigrationCommand extends SelectedDatabaseConnection
         if ('Store-Procedure' === $selectedType) {
             $this->store->folder("database/Migrations/{$dbPascal}/StoreProcedures/");
             $this->classFactory->classFactory("database/Migrations/{$dbPascal}/StoreProcedures/", $migrationPascal);
-            $body = $this->migration->getStoreProcedureBody();
+            $body = $this->migrationFactory->getStoreProcedureBody();
 
             $this->classFactory
                 ->create($this->classFactory->getClass(), 'php', $this->classFactory->getFolder())

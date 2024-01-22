@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lion\Bundle\Commands\DB\MySQL;
 
 use Lion\Bundle\Helpers\Commands\ClassFactory;
+use Lion\Bundle\Helpers\Commands\SelectedDatabaseConnection;
 use Lion\Command\Command;
 use Lion\Database\Drivers\MySQL as DB;
 use Lion\Helpers\Str;
@@ -14,11 +15,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class DBCapsuleCommand extends Command
+class DBCapsuleCommand extends SelectedDatabaseConnection
 {
     private ClassFactory $classFactory;
     private Str $str;
-    private array $connections;
 
     /**
      * @required
@@ -42,28 +42,19 @@ class DBCapsuleCommand extends Command
 
     protected function configure(): void
     {
-        $this->connections = DB::getConnections();
-
         $this
             ->setName('db:mysql:capsule')
             ->setDescription('Command required for the creation of new Capsules')
-            ->addArgument('entity', InputArgument::REQUIRED, 'Entity name', null)
-            ->addOption(
-                'connection',
-                'c',
-                InputOption::VALUE_OPTIONAL,
-                'Do you want to use a specific connection?',
-                $this->connections['default']
-            );
+            ->addArgument('entity', InputArgument::REQUIRED, 'Entity name', null);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $entity = $input->getArgument('entity');
-        $connection = $input->getOption('connection');
+        $selectedConnection = $this->selectConnectionByEnviroment($input, $output);
 
         $entity = $this->str->of($entity)->test("/-/") ? "`{$entity}`" : $entity;
-        $columns = DB::connection($connection)->show()->columns()->from($entity)->getAll();
+        $columns = DB::connection($selectedConnection)->show()->columns()->from($entity)->getAll();
         $columns = count($columns) > 1 ? $columns : reset($columns);
 
         if (!empty($columns->status)) {
@@ -78,7 +69,7 @@ class DBCapsuleCommand extends Command
             $propierties[] = "{$column->Field}:{$this->classFactory->getDBType($column->Type)}";
         }
 
-        $connPascal = $this->classFactory->getClassFormat($connection);
+        $connPascal = $this->classFactory->getClassFormat($selectedConnection);
         $className = $this->classFactory->getClassFormat($this->str->of($entity)->replace('`', '')->get());
 
         $this->getApplication()

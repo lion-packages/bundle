@@ -20,11 +20,10 @@ class RulesDBCommandTest extends Test
 
     const ENTITY = 'users';
     const RULES = [
-        'App\\Rules\\LionDatabase\\Users\\IdRule' => './app/Rules/LionDatabase/Users/IdRule.php',
-        'App\\Rules\\LionDatabase\\Users\\NameRule' => './app/Rules/LionDatabase/Users/NameRule.php',
-        'App\\Rules\\LionDatabase\\Users\\LastNameRule' => './app/Rules/LionDatabase/Users/LastNameRule.php'
+        'App\\Rules\\LionDatabase\\MySQL\\Users\\IdRule' => 'app/Rules/LionDatabase/MySQL/Users/IdRule.php',
+        'App\\Rules\\LionDatabase\\MySQL\\Users\\NameRule' => 'app/Rules/LionDatabase/MySQL/Users/NameRule.php',
+        'App\\Rules\\LionDatabase\\MySQL\\Users\\LastNameRule' => 'app/Rules/LionDatabase/MySQL/Users/LastNameRule.php'
     ];
-    const OUTPUT_MESSAGE = 'Rules executed successfully';
 
     private CommandTester $commandTester;
 
@@ -54,8 +53,6 @@ class RulesDBCommandTest extends Test
         $this->assertSame(Command::SUCCESS, $this->commandTester->execute(['entity' => self::ENTITY]));
 
         $display = $this->commandTester->getDisplay();
-
-        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $display);
 
         foreach (self::RULES as $namespace => $path) {
             $this->assertFileExists($path);

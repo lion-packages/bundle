@@ -29,11 +29,8 @@ class DBCapsulesCommand extends Command
             $output->writeln($this->infoOutput("\t>>  CONNECTION: {$connection}"));
 
             $allTables = DB::connection($connection)
-                ->show()
-                ->tables()
-                ->from($connection)
-                ->fetchMode(PDO::FETCH_ASSOC)
-                ->getAll();
+                ->show()->tables()->from($connection)
+                ->fetchMode(PDO::FETCH_ASSOC)->getAll();
 
             if (!isset($allTables->status)) {
                 $listAllTables[] = ['connection' => $connection, 'all-tables' => $allTables];
@@ -46,9 +43,10 @@ class DBCapsulesCommand extends Command
             foreach ($table['all-tables'] as $tableDB) {
                 $values = array_values($tableDB);
 
-                $this->getApplication()
+                $this
+                    ->getApplication()
                     ->find('db:mysql:capsule')
-                    ->run(new ArrayInput(['entity' => reset($values), '--connection' => $table['connection']]), $output);
+                    ->run(new ArrayInput(['entity' => reset($values)]), $output);
             }
         }
 

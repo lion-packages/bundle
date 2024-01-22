@@ -9,7 +9,6 @@ use Lion\Bundle\Helpers\FileWriter;
 use Lion\Command\Command;
 use Lion\Database\Drivers\MySQL as DB;
 use Lion\Helpers\Str;
-use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -50,14 +49,11 @@ class RulesDBCommand extends SelectedDatabaseConnection
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        /** @var QuestionHelper $helper */
-        $helper = $this->getHelper('question');
-
-        $selectedConnection = $this->selectConnection($input, $output, $helper);
         $entity = $input->getArgument('entity');
+        $selectedConnection = $this->selectConnectionByEnviroment($input, $output);
 
         $entityPascal = $this->str->of($entity)->replace('_', ' ')->replace('-', ' ')->pascal()->get();
-        $ConnectionPascal = $this->str->of($selectedConnection)->replace('_', ' ')->replace('-', ' ')->pascal()->get();
+        $connectionPascal = $this->str->of($selectedConnection)->replace('_', ' ')->replace('-', ' ')->pascal()->get();
 
         $columns = DB::connection($selectedConnection)->show()->full()->columns()->from($entity)->getAll();
 
@@ -93,15 +89,13 @@ class RulesDBCommand extends SelectedDatabaseConnection
                 ->concat('Rule')
                 ->get();
 
-            $this->getApplication()->find('new:rule')->run(
-                new ArrayInput([
-                    'rule' => "{$ConnectionPascal}/{$entityPascal}/{$ruleName}"
-                ]),
-                $output
-            );
+            $this
+                ->getApplication()
+                ->find('new:rule')
+                ->run(new ArrayInput(['rule' => "{$connectionPascal}/MySQL/{$entityPascal}/{$ruleName}"]), $output);
 
             $this->fileWriter->readFileRows(
-                "app/Rules/{$ConnectionPascal}/{$entityPascal}/{$ruleName}.php",
+                "app/Rules/{$connectionPascal}/MySQL/{$entityPascal}/{$ruleName}.php",
                 [
                     12 => [
                         'replace' => true,
@@ -130,8 +124,6 @@ class RulesDBCommand extends SelectedDatabaseConnection
                 ]
             );
         }
-
-        $output->writeln($this->infoOutput("\n\t>> Rules executed successfully"));
 
         return Command::SUCCESS;
     }
