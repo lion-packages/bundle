@@ -106,6 +106,7 @@ $commands = [
     \Lion\Bundle\Commands\New\MiddlewareCommand::class,
     \Lion\Bundle\Commands\New\RulesCommand::class,
     // Route
+    \Lion\Bundle\Commands\Route\PostmanCollectionCommand::class,
     \Lion\Bundle\Commands\Route\RouteListCommand::class,
     // RSA
     \Lion\Bundle\Commands\RSA\NewRSACommand::class,

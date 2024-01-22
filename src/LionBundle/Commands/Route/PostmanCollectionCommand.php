@@ -1,66 +1,115 @@
 <?php
 
-namespace LionBundle\Commands\Route;
+declare(strict_types=1);
 
-use App\Traits\Framework\ClassPath;
-use App\Traits\Framework\ConsoleOutput;
-use App\Traits\Framework\PostmanCollector;
-use LionFiles\Store;
-use Symfony\Component\Console\Command\Command;
+namespace Lion\Bundle\Commands\Route;
+
+use Lion\Bundle\Helpers\Commands\ClassFactory;
+use Lion\Bundle\Helpers\Commands\PostmanCollection;
+use Lion\Bundle\Helpers\Http\Routes;
+use Lion\Command\Command;
+use Lion\Files\Store;
+use Lion\Helpers\Str;
+use Lion\Route\Route;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class PostmanCollectionCommand extends Command
 {
-    use ClassPath, PostmanCollector, ConsoleOutput;
+    private ClassFactory $classFactory;
+    private PostmanCollection $postmanCollection;
+    private Store $store;
+    private Str $str;
 
-	protected static $defaultName = "route:postman";
     private array $routes;
     private string $json_name;
 
-    protected function initialize(InputInterface $input, OutputInterface $output)
+    /**
+     * @required
+     * */
+    public function setClassFactory(ClassFactory $classFactory): PostmanCollectionCommand
     {
-        $this->init(env->SERVER_URL);
-        $this->json_name = str->of(date('Y_m_d') . "_lion_collection")->lower()->get();
-        $this->routes = fetch('GET', env->SERVER_URL . "/route-list");
-        array_pop($this->routes);
+        $this->classFactory = $classFactory;
+
+        return $this;
     }
 
-    protected function interact(InputInterface $input, OutputInterface $output)
+    /**
+     * @required
+     * */
+    public function setPostmanCollection(PostmanCollection $postmanCollection): PostmanCollectionCommand
     {
+        $this->postmanCollection = $postmanCollection;
 
+        return $this;
     }
 
-    protected function configure()
+    /**
+     * @required
+     * */
+    public function setStore(Store $store): PostmanCollectionCommand
+    {
+        $this->store = $store;
+
+        return $this;
+    }
+
+    /**
+     * @required
+     * */
+    public function setStr(Str $str): PostmanCollectionCommand
+    {
+        $this->str = $str;
+
+        return $this;
+    }
+
+    protected function configure(): void
     {
         $this
-            ->setDescription("Command required to create postman collections in JSON format");
+            ->setName('route:postman')
+            ->setDescription('Command required to create postman collections in JSON format');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $rules = require_once("./routes/rules.php");
-        $this->addRoutes($this->routes, $rules);
-        $path = storage_path("postman/", false);
+        $this->fetchRoutes();
+        $this->postmanCollection->addRoutes($this->routes, Routes::getRules());
+        $path = storage_path('postman/', false);
+        $this->store->folder($path);
 
-        Store::folder($path);
-        $this->new("{$path}{$this->json_name}", "json");
-        $this->add(json_encode([
+        $jsonData = [
             'variable' => [
-                ['key' => 'base_url', 'value' => env->SERVER_URL, 'type' => "string"]
+                [
+                    'key' => 'base_url',
+                    'value' => env->SERVER_URL,
+                    'type' => 'string'
+                ]
             ],
             'info' => [
                 'name' => env->APP_NAME,
                 'schema' => 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json'
             ],
-            'item' => $this->createCollection($this->getItems()),
+            'item' => $this->postmanCollection->createCollection($this->postmanCollection->getItems()),
             'event' => []
-        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-        $this->force();
-        $this->close();
+        ];
+
+        $this->classFactory
+            ->create($this->json_name, 'json', $path)
+            ->add(json_encode($jsonData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES))
+            ->close();
 
         $output->writeln($this->warningOutput("\t>>  COLLECTION: {$this->json_name}"));
         $output->writeln($this->successOutput("\t>>  COLLECTION: Exported in {$path}{$this->json_name}.json"));
+
         return Command::SUCCESS;
+    }
+
+    private function fetchRoutes(): void
+    {
+        $this->postmanCollection->init(env->SERVER_URL);
+        $this->json_name = $this->str->of(date('Y_m_d'))->concat('_lion_collection')->lower()->get();
+        $this->routes = json_decode(fetch(Route::GET, env->SERVER_URL . '/route-list')->getBody()->getContents(), true);
+        array_pop($this->routes);
     }
 }
