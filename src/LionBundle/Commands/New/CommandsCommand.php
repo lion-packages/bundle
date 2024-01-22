@@ -65,9 +65,9 @@ class CommandsCommand extends Command
             ->add("class {$class} extends Command\n{\n")
             ->add("\t" . 'protected function initialize(InputInterface $input, OutputInterface $output): void' . "\n\t" . '{' . "\n\n\t}\n\n")
             ->add("\t" . 'protected function interact(InputInterface $input, OutputInterface $output): void' . "\n\t" . '{'. "\n\n\t}\n\n")
-            ->add("\t" . "protected function configure(): void\n\t{\n\t\t" . '$this->setName("example:command")->setDescription("");' . "\n\t}\n\n")
+            ->add("\t" . "protected function configure(): void\n\t{\n\t\t" . '$this->setName(' . "'example:command'" . ')->setDescription(' . "''" . ');' . "\n\t}\n\n")
             ->add("\t" . 'protected function execute(InputInterface $input, OutputInterface $output): int' . "\n\t" . '{'. "\n")
-            ->add("\t\t" . '$output->writeln("");' . "\n\n\t\t" . 'return Command::SUCCESS;' . "\n")
+            ->add("\t\t" . '$output->writeln(' . "''" . ');' . "\n\n\t\t" . 'return Command::SUCCESS;' . "\n")
             ->add("\t}\n}")
             ->close();
 

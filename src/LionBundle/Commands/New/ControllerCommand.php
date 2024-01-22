@@ -85,39 +85,14 @@ class ControllerCommand extends Command
 
             $factoryController->add("class {$dataController->class}\n{\n");
 
-            if ('none' != $model) {
-                $factoryController->add(
-                    $this->str->of("\tprivate {$dataModel->class} $")
-                        ->concat($camelModelClass)
-                        ->concat(";")->ln()->ln()
-                        ->get()
-                );
-
-                $factoryController->add(
-                    $factoryController->getCustomMethod(
-                        '__construct',
-                        '',
-                        '',
-                        '$this->' . "{$camelModelClass} = new {$dataModel->class}();",
-                        'public'
-                    )
-                );
-            } else {
-                $factoryController->add($factoryController->getCustomMethod('__construct', '', '', '', 'public'));
-            }
-
-            foreach (self::METHODS as $key => $method) {
+            foreach (self::METHODS as $method) {
                 $customMethod = '';
 
                 if ('none' != $model) {
-                    $modelMethod = $this->str
-                        ->of('return ')
-                        ->concat('$this->')
-                        ->concat($camelModelClass)
-                        ->concat('->')
-                        ->get();
+                    $modelMethod = $this->str->of('return ')->concat('$')->concat($camelModelClass)->concat('->')->get();
 
-                    $modelMethod .= $this->str->of($method . $dataModel->class)
+                    $modelMethod .= $this->str
+                        ->of($method . $dataModel->class)
                         ->replace('Model', '')
                         ->replace('model', '')
                         ->concat('DB();')
@@ -130,7 +105,11 @@ class ControllerCommand extends Command
                             ->replace('controller', '')
                             ->get(),
                         $method === 'read' ? 'array|object' : 'object',
-                        in_array($method, ['update', 'delete'], true) ? 'string $id' : '',
+                        (
+                            in_array($method, ['update', 'delete'], true)
+                                ? ($dataModel->class . ' $' . $camelModelClass . ', string $id')
+                                : ($dataModel->class . ' $' . $camelModelClass)
+                        ),
                         $modelMethod,
                         'public',
                         $method === 'delete' ? 1 : 2
@@ -143,7 +122,11 @@ class ControllerCommand extends Command
                             ->replace('controller', '')
                             ->get(),
                         $method === 'read' ? 'array|object' : 'object',
-                        in_array($method, ['update', 'delete'], true) ? 'string $id' : '',
+                        (
+                            in_array($method, ['update', 'delete'], true)
+                                ? ($dataModel->class . ' $' . $camelModelClass . ', string $id')
+                                : ($dataModel->class . ' $' . $camelModelClass)
+                        ),
                         $method === 'read' ? "return [];" : "return success();",
                         'public',
                         $method === 'delete' ? 1 : 2

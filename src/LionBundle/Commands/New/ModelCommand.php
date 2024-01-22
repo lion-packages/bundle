@@ -73,7 +73,7 @@ class ModelCommand extends Command
             ->create($class, 'php', $folder)
             ->add("<?php\n\ndeclare(strict_types=1);\n\n")
             ->add("namespace {$namespace};\n\n")
-            ->add("use Lion\Database\Drivers\MySQL\MySQL as DB;\n\n")
+            ->add("use Lion\Database\Drivers\MySQL as DB;\n\n")
             ->add("class {$class}\n{\n");
 
         foreach (self::METHODS as $method) {
