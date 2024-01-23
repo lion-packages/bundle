@@ -15,6 +15,7 @@
             "src/LionBundle/Helpers/Bundle/helpers.php"
         ],
         "psr-4": {
+            "App\\": "app/",
             "Lion\\Bundle\\": "src/LionBundle/",
             "Database\\Class\\": "database/Factory/",
             "Database\\Factory\\": "database/Factory/",

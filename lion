@@ -113,7 +113,8 @@ $commands = [
     // SH
     \Lion\Bundle\Commands\SH\SHFileCommand::class,
     // Sockets
-    \Lion\Bundle\Commands\Sockets\NewSocketCommand::class
+    \Lion\Bundle\Commands\Sockets\NewSocketCommand::class,
+    \Lion\Bundle\Commands\Sockets\ServerSocketCommand::class
 ];
 
 $kernel = new Kernel();

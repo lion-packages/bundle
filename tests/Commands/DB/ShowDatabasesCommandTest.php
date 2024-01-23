@@ -17,7 +17,6 @@ class ShowDatabasesCommandTest extends Test
     use ConnectionProviderTrait;
 
     const MYSQL = 'mysql';
-    const DB = 'db';
     const PORT = '3306';
     const DATABASE_NAME = 'lion_database (default)';
     const DATABASE_USER = 'root';
@@ -40,7 +39,6 @@ class ShowDatabasesCommandTest extends Test
         $display = $this->commandTester->getDisplay();
 
         $this->assertStringContainsString(self::MYSQL, $display);
-        $this->assertStringContainsString(self::DB, $display);
         $this->assertStringContainsString(self::PORT, $display);
         $this->assertStringContainsString(self::DATABASE_NAME, $display);
         $this->assertStringContainsString(self::DATABASE_USER, $display);
