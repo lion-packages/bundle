@@ -11,6 +11,7 @@ services:
             - "8000:8000"
             - "8001:8001"
             - "9000:9000"
+            - "5173:5173"
         volumes:
             - ./:/var/www/html
         depends_on:
@@ -24,10 +25,11 @@ services:
         container_name: bundle-redis
         restart: always
         ports:
-            - "6379:6379"
+            - "${REDIS_PORT}:${REDIS_PORT}"
         volumes:
             - redis_data:/var/lib/redis
         environment:
+            REDIS_HOST: ${REDIS_HOST}
             REDIS_PASSWORD: ${REDIS_PASSWORD}
             REDIS_DATABASES: ${REDIS_DATABASES}
         networks:
@@ -37,7 +39,7 @@ services:
         container_name: database-mysql
         command: --default-authentication-plugin=mysql_native_password
         ports:
-            - "3306:3306"
+            - "${DB_PORT}:${DB_PORT}"
         environment:
             MYSQL_DATABASE: ${DB_NAME}
             MYSQL_PASSWORD: ${DB_PASSWORD}

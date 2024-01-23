@@ -31,6 +31,10 @@ echo -e "\033[0;36m\t>>  Suite Helpers \033[0m"
 php vendor/bin/phpunit --testsuite Helpers
 echo -e "\n\033[0;31m>> -------------------------------------------------------------------------------------- << \n\033[0m";
 
+echo -e "\033[0;36m\t>>  Suite Redis-Client \033[0m"
+php vendor/bin/phpunit tests/RedisConnectionTest.php
+echo -e "\n\033[0;31m>> -------------------------------------------------------------------------------------- << \n\033[0m";
+
 end_time=$(date +"%Y-%m-%d %H:%M:%S")
 start_seconds=$(date -d "$start_time" +%s)
 end_seconds=$(date -d "$end_time" +%s)

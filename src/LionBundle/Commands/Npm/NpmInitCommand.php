@@ -1,153 +1,153 @@
 <?php
 
-namespace LionBundle\Commands\Npm;
+declare(strict_types=1);
 
-use App\Traits\Framework\ClassPath;
-use App\Traits\Framework\ConsoleOutput;
-use LionFiles\Store;
-use Symfony\Component\Console\Command\Command;
+namespace Lion\Bundle\Commands\Npm;
+
+use Lion\Bundle\Helpers\Commands\ClassFactory;
+use Lion\Bundle\Helpers\FileWriter;
+use Lion\Bundle\Helpers\RedisClient;
+use Lion\Command\Command;
+use Lion\Command\Kernel;
+use Lion\Files\Store;
+use Lion\Helpers\Arr;
+use Lion\Helpers\Str;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ChoiceQuestion;
 
 class NpmInitCommand extends Command
 {
-	use ConsoleOutput, ClassPath;
+    const TEMPLATES = ['Vanilla', 'Vue', 'React', 'Preact', 'Lit', 'Svelte', 'Solid', 'Qwik'];
+    const TYPES = ['js', 'ts'];
 
-	protected static $defaultName = "npm:init";
+    private Store $store;
+    private FileWriter $fileWriter;
+    private Kernel $kernel;
+    private Arr $arr;
+    private Str $str;
+    private ClassFactory $classFactory;
+    private RedisClient $redisClient;
 
-	protected function initialize(InputInterface $input, OutputInterface $output)
-    {
+    /**
+     * @required
+     * */
+    public function setInject(
+        Store $store,
+        FileWriter $fileWriter,
+        Kernel $kernel,
+        Arr $arr,
+        Str $str,
+        ClassFactory $classFactory,
+        RedisClient $redisClient
+    ): NpmInitCommand {
+        $this->store = $store;
+        $this->fileWriter = $fileWriter;
+        $this->kernel = $kernel;
+        $this->arr = $arr;
+        $this->str = $str;
+        $this->classFactory = $classFactory;
+        $this->redisClient = $redisClient;
 
-	}
+        return $this;
+    }
 
-	protected function interact(InputInterface $input, OutputInterface $output)
-    {
-
-	}
-
-	protected function configure()
+	protected function configure(): void
     {
 		$this
-            ->setDescription("Command to create Javascript projects with Vite.JS (Vanilla/Vue/React/Preact/Lit/Svelte/Solid/Qwik)")
-            ->addArgument('project', InputArgument::OPTIONAL, 'Project name', "example")
-            ->addOption('template', 't', InputOption::VALUE_OPTIONAL, 'Do you want a template? (Vanilla/Vue/React/Preact/Lit/Svelte/Solid/Qwik)', 'react');
+            ->setName('npm:init')
+            ->setDescription(
+                'Command to create Javascript projects with Vite.JS (Vanilla/Vue/React/Preact/Lit/Svelte/Solid/Qwik)'
+            )
+            ->addArgument('project', InputArgument::OPTIONAL, 'Project name', 'example');
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output)
+	protected function execute(InputInterface $input, OutputInterface $output): int
     {
-		$project = str->of($input->getArgument("project"))->trim()->replace("_", "-")->replace(" ", "-")->get();
+		$project = str->of($input->getArgument('project'))->trim()->replace('_', '-')->replace(' ', '-')->get();
 
-        // check if the resource exists before generating it
-        if (isSuccess(Store::exist("vite/{$project}/"))) {
-            $output->writeln($this->errorOutput("\t>>  VITE: a resource with this name already exists"));
+        if (isSuccess($this->store->exist("vite/{$project}/"))) {
+            $output->writeln($this->warningOutput("\t>>  VITE: a resource with this name already exists"));
+
             return Command::FAILURE;
         }
 
-        $vite = kernel->getViteProjects();
-        $conf = [];
+        /** @var QuestionHelper $helper */
+        $helper = $this->getHelper('question');
 
-        $tmp = $input->getOption('template');
-        $cmd = kernel->execute("cd vite/ && echo | npm init vite@latest {$project} -- --template {$tmp}", false);
-        $output->writeln(arr->of($cmd)->join("\n"));
-        kernel->execute("cd vite/{$project}/ && npm install", false);
-        $this->new("vite/{$project}/", "env");
-        $this->force();
-        $this->close();
+        $template = $this->str->of($this->selectedTemplate($input, $output, $helper))->lower()->get();
+        $type = $this->selectedTypes($input, $output, $helper);
 
-        $vite['app'][$project] = [
-            'type' => 'vite',
-            'path' => "{$project}/"
-        ];
+        $this->redisClient
+            ->getClient()
+            ->hmset('vite', [$project => json_encode(['template' => $template, 'type' => $type])]);
 
-        $conf = [
-            "[program:resource-{$project}]",
-            "command=npm run dev",
-            "directory=/var/www/html/vite/{$project}",
-            'autostart=true',
-            'autorestart=true',
-            'redirect_stderr=true',
-            "stdout_logfile=/var/www/html/storage/logs/vite/{$project}.log"
-        ];
+        $this->store->folder('./vite/');
 
-        $cont_ports = 0;
-
-        foreach ([...$vite['framework'], ...$vite['app']] as $key => $resource) {
-            if ($resource['type'] === 'vite' && $key != $project) {
-                $cont_ports++;
-            }
-        }
-
-        $port = (5173 + $cont_ports);
-
-        $replace = [
-            'replace' => true,
-            'content' => ",\n  server: {\n    host: true,\n    port: {$port},\n    watch: {\n      usePolling: true\n    }\n  }",
-            'search' => ","
-        ];
-
-        // expose port
-        $docker_compose = Store::get("docker-compose.yml");
-        file_put_contents("docker-compose.yml",
-            str->of($docker_compose)
-                ->replace('"8000:8000"', '"8000:8000"' . "\n            " . '- "' . $port . ":" . $port . '"')
-                ->get()
+        $this->kernel->execute(
+            ("cd ./vite && echo | npm init vite {$project} -- --template {$template}" . ('js' === $type ? '' : '-ts')),
+            false
         );
 
-        if (isSuccess(Store::exist("vite/{$project}/vite.config.js"))) {
-            $this->readFileRows("vite/{$project}/vite.config.js", [6 => $replace]);
-        }
+        $cmdOutput = $this->kernel->execute("cd ./vite/{$project}/ && npm install", false);
 
-        if (isSuccess(Store::exist("vite/{$project}/vite.config.ts"))) {
-            $this->readFileRows("vite/{$project}/vite.config.ts", [6 => $replace]);
-        }
+        $output->writeln($this->arr->of($cmdOutput)->join("\n"));
 
-        // add logger
-        $this->new("storage/logs/vite/{$project}", "log");
-        $this->force();
-        $this->close();
+        $this->setViteConfig($project);
 
-        // add resources
-        file_put_contents("config/vite.php",
-            str->of("<?php")->ln()->ln()
-                ->concat("/**")->ln()
-                ->concat(" * ------------------------------------------------------------------------------")->ln()
-                ->concat(" * Resources for developing your web application")->ln()
-                ->concat(" * ------------------------------------------------------------------------------")->ln()
-                ->concat(" * List of available resources")->ln()
-                ->concat(" * ------------------------------------------------------------------------------")->ln()
-                ->concat(" **/")->ln()->ln()
-                ->concat("return")
-                ->concat(var_export($vite, true))
-                ->concat(";")
-                ->replace("array", "")
-                ->replace("(", "[")
-                ->replace(")", "]")
-                ->replace("=> \n   [", "=> [")
-                ->replace("=> \n     [", "=> [")
-                ->replace("  '", "    '")
-                ->replace("      '", "        '")
-                ->replace("  ],", "    ],")
-                ->replace("      ],", "        ],")
-                ->replace("          '", "            '")
-                ->get()
-        );
-
-        // add supervisord
-        $supervisord = Store::get("supervisord.conf");
-
-        if (stripos($supervisord, "program:resource-{$project}") !== true) {
-            file_put_contents("supervisord.conf",
-                str->of($supervisord)
-                    ->replace("; resources", "; resources\n\n" . arr->of($conf)->join("\n"))
-                    ->get()
-            );
-        }
-
-        $output->writeln($this->warningOutput("\t>>  VITE: {$project}"));
-        $output->writeln($this->successOutput("\t>>  VITE: the '{$project}/' resource has been generated"));
+        $output->writeln($this->warningOutput("\n\t>>  VITE: {$project}"));
+        $output->writeln($this->successOutput("\t>>  VITE: vite '{$project}' project has been generated successfully"));
 
 		return Command::SUCCESS;
 	}
+
+    private function selectedTemplate(InputInterface $input, OutputInterface $output, QuestionHelper $helper): string
+    {
+        return $helper->ask(
+            $input,
+            $output,
+            new ChoiceQuestion(
+                'Select the type of template ' . $this->warningOutput('(default: React)'),
+                self::TEMPLATES,
+                2
+            )
+        );
+    }
+
+    private function selectedTypes(InputInterface $input, OutputInterface $output, QuestionHelper $helper): string
+    {
+        return $helper->ask(
+            $input,
+            $output,
+            new ChoiceQuestion(
+                'Select type ' . $this->warningOutput('(default: js)'),
+                self::TYPES,
+                0
+            )
+        );
+    }
+
+    private function setViteConfig(string $project): void
+    {
+        $this->classFactory
+            ->create('', 'env', "./vite/{$project}/")
+            ->add('VITE_SERVER_URL="' . env->SERVER_URL_AUD . '"')
+            ->close();
+
+        $replace = [
+            'replace' => true,
+            'content' => ",\n  server: {\n    host: true,\n    port: 5173,\n    watch: {\n      usePolling: true\n    }\n  }",
+            'search' => ","
+        ];
+
+        if (isSuccess($this->store->exist("vite/{$project}/vite.config.js"))) {
+            $this->fileWriter->readFileRows("vite/{$project}/vite.config.js", [6 => $replace]);
+        }
+
+        if (isSuccess($this->store->exist("vite/{$project}/vite.config.ts"))) {
+            $this->fileWriter->readFileRows("vite/{$project}/vite.config.ts", [6 => $replace]);
+        }
+    }
 }
