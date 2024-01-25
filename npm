@@ -52,15 +52,6 @@ Driver::run([
 
 /**
  * -----------------------------------------------------------------------------
- * Initialize Http parameters (Middleware/Rules)
- * -----------------------------------------------------------------------------
- * */
-
-include_once('./routes/rules.php');
-include_once('./routes/middleware.php');
-
-/**
- * -----------------------------------------------------------------------------
  * Run The lion Application
  * -----------------------------------------------------------------------------
  * This is where the commands for your application are executed
@@ -72,8 +63,8 @@ $kernel = new Kernel();
 $application = $kernel->getApplication();
 $commands = [];
 
-foreach ($container->getFiles('./src/LionBundle/Commands/Lion/') as $file) {
-    $class = $container->getNamespace($file, 'Lion\\Bundle\\Commands\\Lion\\', 'Lion/');
+foreach ($container->getFiles('./src/LionBundle/Commands/Npm/') as $file) {
+    $class = $container->getNamespace($file, 'Lion\\Bundle\\Commands\\Npm\\', 'Npm/');
     $application->add($container->injectDependencies(new $class()));
 }
 
