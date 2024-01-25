@@ -61,7 +61,6 @@ Driver::run([
 $container = new Container();
 $kernel = new Kernel();
 $application = $kernel->getApplication();
-$commands = [];
 
 foreach ($container->getFiles('./src/LionBundle/Commands/Npm/') as $file) {
     $class = $container->getNamespace($file, 'Lion\\Bundle\\Commands\\Npm\\', 'Npm/');

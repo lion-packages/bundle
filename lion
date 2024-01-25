@@ -70,7 +70,6 @@ include_once('./routes/middleware.php');
 $container = new Container();
 $kernel = new Kernel();
 $application = $kernel->getApplication();
-$commands = [];
 
 foreach ($container->getFiles('./src/LionBundle/Commands/Lion/') as $file) {
     $class = $container->getNamespace($file, 'Lion\\Bundle\\Commands\\Lion\\', 'Lion/');
