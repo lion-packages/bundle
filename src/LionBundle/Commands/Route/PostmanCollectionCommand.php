@@ -22,7 +22,7 @@ class PostmanCollectionCommand extends Command
     private Str $str;
 
     private array $routes;
-    private string $json_name;
+    private string $jsonName;
 
     /**
      * @required
@@ -95,12 +95,12 @@ class PostmanCollectionCommand extends Command
         ];
 
         $this->classFactory
-            ->create($this->json_name, 'json', $path)
+            ->create($this->jsonName, 'json', $path)
             ->add(json_encode($jsonData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES))
             ->close();
 
-        $output->writeln($this->warningOutput("\t>>  COLLECTION: {$this->json_name}"));
-        $output->writeln($this->successOutput("\t>>  COLLECTION: Exported in {$path}{$this->json_name}.json"));
+        $output->writeln($this->warningOutput("\t>>  COLLECTION: {$this->jsonName}"));
+        $output->writeln($this->successOutput("\t>>  COLLECTION: Exported in {$path}{$this->jsonName}.json"));
 
         return Command::SUCCESS;
     }
@@ -108,8 +108,9 @@ class PostmanCollectionCommand extends Command
     private function fetchRoutes(): void
     {
         $this->postmanCollection->init(env->SERVER_URL);
-        $this->json_name = $this->str->of(date('Y_m_d'))->concat('_lion_collection')->lower()->get();
+        $this->jsonName = $this->str->of(date('Y_m_d'))->concat('_lion_collection')->lower()->get();
         $this->routes = json_decode(fetch(Route::GET, env->SERVER_URL . '/route-list')->getBody()->getContents(), true);
+
         array_pop($this->routes);
     }
 }

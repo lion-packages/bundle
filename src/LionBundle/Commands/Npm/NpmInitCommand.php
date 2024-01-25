@@ -80,10 +80,6 @@ class NpmInitCommand extends Command
         $template = $this->str->of($this->selectedTemplate($input, $output, $helper))->lower()->get();
         $type = $this->selectedTypes($input, $output, $helper);
 
-        $this->redisClient
-            ->getClient()
-            ->hmset('vite', [$project => json_encode(['template' => $template, 'type' => $type])]);
-
         $this->store->folder('./vite/');
 
         $this->kernel->execute(
@@ -98,7 +94,7 @@ class NpmInitCommand extends Command
         $this->setViteConfig($project);
 
         $output->writeln($this->warningOutput("\n\t>>  VITE: {$project}"));
-        $output->writeln($this->successOutput("\t>>  VITE: vite '{$project}' project has been generated successfully"));
+        $output->writeln($this->successOutput("\t>>  VITE: vite 'vite/{$project}' project has been generated successfully"));
 
 		return Command::SUCCESS;
 	}

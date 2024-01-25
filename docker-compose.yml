@@ -65,6 +65,7 @@ services:
 volumes:
     mysql_data:
     redis_data:
+        driver: local
 networks:
     lion:
         driver: bridge

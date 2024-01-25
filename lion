@@ -108,6 +108,7 @@ $commands = [
     // NPM
     \Lion\Bundle\Commands\Npm\NpmInitCommand::class,
     \Lion\Bundle\Commands\Npm\NpmRunBuildCommand::class,
+    \Lion\Bundle\Commands\Npm\NpmInstallCommand::class,
     // Route
     \Lion\Bundle\Commands\Route\PostmanCollectionCommand::class,
     \Lion\Bundle\Commands\Route\RouteListCommand::class,
