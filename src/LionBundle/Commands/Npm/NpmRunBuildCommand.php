@@ -7,7 +7,9 @@ namespace Lion\Bundle\Commands\Npm;
 use Lion\Bundle\Helpers\RedisClient;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
+use Lion\Files\Store;
 use Lion\Helpers\Arr;
+use Lion\Helpers\Str;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -16,35 +18,26 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 class NpmRunBuildCommand extends Command
 {
     private RedisClient $redisClient;
-    private Arr $arr;
     private Kernel $kernel;
+    private Store $store;
+    private Arr $arr;
+    private Str $str;
 
     /**
      * @required
      * */
-    public function setRedisClient(RedisClient $redisClient): NpmRunBuildCommand
-    {
+    public function setInject(
+        RedisClient $redisClient,
+        Kernel $kernel,
+        Store $store,
+        Arr $arr,
+        Str $str
+    ): NpmRunBuildCommand {
         $this->redisClient = $redisClient;
-
-        return $this;
-    }
-
-    /**
-     * @required
-     * */
-    public function setArr(Arr $arr): NpmRunBuildCommand
-    {
-        $this->arr = $arr;
-
-        return $this;
-    }
-
-    /**
-     * @required
-     * */
-    public function setKernel(Kernel $kernel): NpmRunBuildCommand
-    {
         $this->kernel = $kernel;
+        $this->store = $store;
+        $this->arr = $arr;
+        $this->str = $str;
 
         return $this;
     }
@@ -67,8 +60,21 @@ class NpmRunBuildCommand extends Command
 		return Command::SUCCESS;
 	}
 
-    private function selectedProject(InputInterface $input, OutputInterface $output, array $projects): string
+    private function selectedProject(InputInterface $input, OutputInterface $output): string
     {
+        $projects = [];
+
+        foreach ($this->store->view('./vite/') as $folder) {
+            $split = $this->str->of($folder)->split('vite/');
+            $projects[] = end($split);
+        }
+
+        if (count($projects) <= 1) {
+            $output->writeln($this->warningOutput('(default: ' . reset($projects) . ')'));
+
+            return reset($projects);
+        }
+
         /** @var QuestionHelper $helper */
         $helper = $this->getHelper('question');
 
