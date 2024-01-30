@@ -96,55 +96,92 @@ class CapsuleCommand extends Command
                 $data = $this->classFactory->getPrivatePropierty($split[0], $class, $split[1]);
 
                 $listPropierties[] = $data->type;
-                $listMethods[] = ['getter' => $data->getter->method, 'setter' => $data->setter->method];
+
+                $listMethods[] = [
+                    'getter' => $data->getter->method,
+                    'setter' => $data->setter->method,
+                    'config' => $data
+                ];
             } else {
                 $data = $this->classFactory->getPrivatePropierty($split[0], $class);
 
                 $listPropierties[] = $data->type;
-                $listMethods[] = ['getter' => $data->getter->method, 'setter' => $data->setter->method];
+
+                $listMethods[] = [
+                    'getter' => $data->getter->method,
+                    'setter' => $data->setter->method,
+                    'config' => $data
+                ];
             }
         }
 
         $this->store->folder($folder);
 
-        $str = $this->str->of("<?php")->ln()->ln()
+        $this->str->of("<?php")->ln()->ln()
             ->concat('declare(strict_types=1);')->ln()->ln()
             ->concat("namespace")->spaces(1)
             ->concat($namespace)
             ->concat(";")->ln()->ln()
-            ->concat('use JsonSerializable;')->ln()->ln()
+            ->concat('use JsonSerializable;')->ln()
+            ->concat('use Lion\Bundle\Interface\CapsuleInterface;')->ln()->ln()
             ->concat("class")->spaces(1)
             ->concat($class)->spaces(1)
-            ->concat('implements JsonSerializable')->ln()
+            ->concat('implements CapsuleInterface, JsonSerializable')->ln()
             ->concat("{")->ln();
 
         if (count($propierties) > 0) {
-            $str->lt()->concat($this->arr->of($listPropierties)->join("\n\t"))->ln()->ln();
+            $this->str->lt()->concat($this->arr->of($listPropierties)->join("\n\t"))->ln()->ln();
         }
 
-        $str
+        $this->str
             ->lt()->concat('public function jsonSerialize(): array')->ln()
             ->lt()->concat('{')->ln()
             ->lt()->lt()->concat('return get_object_vars($this);')->ln()
-            ->lt()->concat('}');
+            ->lt()->concat('}')->ln()->ln();
+
+        if ($this->arr->of($propierties)->length() > 0) {
+            $this->str
+                ->lt()->concat("/**\n\t * {@inheritdoc}\n\t * */")->ln()
+                ->lt()->concat("public function capsule(): {$class}")->ln()
+                ->lt()->concat('{')->ln()
+                ->lt()->lt()->concat('$this')->ln();
+
+            foreach ($listMethods as $key => $method) {
+                $this->str
+                    ->lt()->lt()->lt()->concat('->')
+                    ->concat($method['config']->setter->name)
+                    ->concat('(request->' . $method['config']->format . ' ?? null)')
+                    ->concat($key === (count($listMethods) - 1) ? ';' : '')->ln();
+            }
+
+            $this->str->ln()->lt()->lt()->concat('return $this;')->ln()
+                ->lt()->concat('}');
+        } else {
+            $this->str
+                ->lt()->concat("/**\n\t * {@inheritdoc}\n\t * */")->ln()
+                ->lt()->concat("public function capsule(): {$class}")->ln()
+                ->lt()->concat('{')->ln()
+                ->lt()->lt()->concat('return $this;')->ln()
+                ->lt()->concat('}');
+        }
 
         if (count($propierties) > 0) {
-            $str->ln()->ln();
+            $this->str->ln()->ln();
 
             foreach ($listMethods as $key => $method) {
                 if ($key === (count($listMethods) - 1)) {
-                    $str->concat($method['getter'])->ln()->ln();
-                    $str->concat($method['setter'])->ln();
+                    $this->str->concat($method['getter'])->ln()->ln();
+                    $this->str->concat($method['setter'])->ln();
                 } else {
-                    $str->concat($method['getter'])->ln()->ln();
-                    $str->concat($method['setter'])->ln()->ln();
+                    $this->str->concat($method['getter'])->ln()->ln();
+                    $this->str->concat($method['setter'])->ln()->ln();
                 }
             }
         } else {
-            $str->ln();
+            $this->str->ln();
         }
 
-        $contentFile = $str->concat("}")->get();
+        $contentFile = $this->str->concat("}")->get();
         $this->classFactory->create($class, 'php', $folder)->add($contentFile)->close();
 
         $output->writeln($this->warningOutput("\t>>  CAPSULE: {$class}"));

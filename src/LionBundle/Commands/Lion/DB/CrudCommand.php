@@ -71,15 +71,16 @@ class CrudCommand extends SelectedDatabaseConnection
         $connectionPascal = $this->str->of($selectedConnection)->replace('_', ' ')->replace('-', ' ')->pascal()->get();
         $entityPascal = $this->str->of($entity)->replace('_', ' ')->replace('-', ' ')->pascal()->get();
         $namespacePascal = "Database\\Class\\{$connectionPascal}\\MySQL\\{$entityPascal}";
+        $columns = DB::connection($selectedConnection)->show()->columns()->from($entity)->getAll();
 
         $this->addDBRules($entity, $output);
 
         $this->addControllerAndModel(
-            $selectedConnection,
             $entityPascal,
             $connectionPascal,
             $namespacePascal,
             $entity,
+            $columns,
             $output
         );
 
@@ -99,11 +100,11 @@ class CrudCommand extends SelectedDatabaseConnection
     }
 
     private function addControllerAndModel(
-        string $selectedConnection,
         string $entityPascal,
         string $connectionPascal,
         string $namespacePascal,
         string $entity,
+        array $columns,
         OutputInterface $output
     ): void {
         $this
@@ -111,8 +112,8 @@ class CrudCommand extends SelectedDatabaseConnection
             ->find('new:controller')
             ->run(
                 new ArrayInput([
-                    'controller' => "{$selectedConnection}/MySQL/{$entityPascal}Controller",
-                    '--model' => "{$selectedConnection}/MySQL/{$entityPascal}Model"
+                    'controller' => "{$connectionPascal}/MySQL/{$entityPascal}Controller",
+                    '--model' => "{$connectionPascal}/MySQL/{$entityPascal}Model"
                 ]),
                 $output
             );
@@ -122,7 +123,7 @@ class CrudCommand extends SelectedDatabaseConnection
             ->find('new:test')
             ->run(
                 new ArrayInput([
-                    'test' => "Controllers/{$selectedConnection}/MySQL/{$entityPascal}ControllerTest",
+                    'test' => "Controllers/{$connectionPascal}/MySQL/{$entityPascal}ControllerTest",
                 ]),
                 $output
             );
@@ -130,7 +131,7 @@ class CrudCommand extends SelectedDatabaseConnection
         $this
             ->getApplication()
             ->find('new:test')
-            ->run(new ArrayInput(['test' => "Models/{$selectedConnection}/MySQL/{$entityPascal}ModelTest",]), $output);
+            ->run(new ArrayInput(['test' => "Models/{$connectionPascal}/MySQL/{$entityPascal}ModelTest",]), $output);
 
         $fileC = "{$entityPascal}Controller";
         $pathC = "app/Http/Controllers/{$connectionPascal}/MySQL/{$fileC}.php";
@@ -172,7 +173,6 @@ class CrudCommand extends SelectedDatabaseConnection
             ],
         ]);
 
-        $columns = DB::connection($selectedConnection)->show()->columns()->from($entity)->getAll();
         $pathM = "app/Models/{$connectionPascal}/MySQL/{$entityPascal}Model.php";
         $gettersCallModel = $this->generateCallGettersModel($entityPascal, $columns);
         $listGettersCallModel = ['create' => '', 'update' => '', 'delete' => ''];

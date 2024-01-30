@@ -69,6 +69,7 @@ class ClassFactory
         $newName = lcfirst($newName);
 
         return (object) [
+            'variable' => '$' . $newName,
             'format' => $newName,
             'name' => '$' . "{$newName} = null;",
             'type' => "?{$type} $" . "{$newName} = null;",
@@ -83,6 +84,7 @@ class ClassFactory
         $propierty = $this->getPropierty($name, $capsule, $type);
 
         return (object) [
+            'variable' => '$' . $propierty->format,
             'format' => $propierty->format,
             'name' => "public {$propierty->name}",
             'type' => "public {$propierty->type}",
@@ -97,6 +99,7 @@ class ClassFactory
         $propierty = $this->getPropierty($name, $capsule, $type);
 
         return (object) [
+            'variable' => '$' . $propierty->format,
             'format' => $propierty->format,
             'name' => "private {$propierty->name}",
             'type' => "private {$propierty->type}",
@@ -111,6 +114,7 @@ class ClassFactory
         $propierty = $this->getPropierty($name, $capsule, $type);
 
         return (object) [
+            'variable' => '$' . $propierty->format,
             'format' => $propierty->format,
             'name' => "protected {$propierty->name}",
             'type' => "protected {$propierty->type}",
