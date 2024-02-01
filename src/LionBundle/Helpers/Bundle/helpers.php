@@ -115,7 +115,7 @@ if (!function_exists('logger')) {
     {
         $path = storage_path("logs/monolog/", $index);
         $fileName = "{$path}lion-" . \Carbon\Carbon::now()->format("Y-m-d") . ".log";
-        (new \LionFiles\Store())->folder($path);
+        (new \Lion\Files\Store())->folder($path);
 
         $logger = new \Monolog\Logger('log');
         $logger->pushHandler(new \Monolog\Handler\StreamHandler($fileName, \Monolog\Level::Info));
@@ -166,9 +166,9 @@ if (!function_exists('isSuccess')) {
  **/
 
 if (!function_exists('jwt')) {
-    function jwt(): object
+    function jwt(): array|object|string
     {
-        $jwt = new \LionSecurity\JWT();
+        $jwt = new \Lion\Security\JWT();
 
         return $jwt->decode($jwt->getJWT())->get();
     }

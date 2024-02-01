@@ -44,19 +44,6 @@ class HelpersTest extends Test
         $this->assertSame(self::PATH_URL_INDEX . self::CUSTOM_FOLDER, storage_path(self::CUSTOM_FOLDER));
     }
 
-    public function testSuccess(): void
-    {
-        $response = success();
-
-        $this->assertIsObject($response);
-        $this->assertObjectHasProperty(self::CODE, $response);
-        $this->assertObjectHasProperty(self::STATUS, $response);
-        $this->assertObjectHasProperty(self::MESSAGE, $response);
-        $this->assertSame(self::STATUS_200, $response->code);
-        $this->assertSame(self::SUCCESS, $response->status);
-        $this->assertSame(null, $response->message);
-    }
-
     public function testResponse(): void
     {
         $response = response();
@@ -67,7 +54,20 @@ class HelpersTest extends Test
         $this->assertObjectHasProperty(self::MESSAGE, $response);
         $this->assertSame(self::STATUS_200, $response->code);
         $this->assertSame(self::CUSTOM, $response->status);
-        $this->assertSame(null, $response->message);
+        $this->assertNull($response->message);
+    }
+
+    public function testSuccess(): void
+    {
+        $response = success();
+
+        $this->assertIsObject($response);
+        $this->assertObjectHasProperty(self::CODE, $response);
+        $this->assertObjectHasProperty(self::STATUS, $response);
+        $this->assertObjectHasProperty(self::MESSAGE, $response);
+        $this->assertSame(self::STATUS_200, $response->code);
+        $this->assertSame(self::SUCCESS, $response->status);
+        $this->assertNull($response->message);
     }
 
     public function testError(): void
@@ -80,7 +80,7 @@ class HelpersTest extends Test
         $this->assertObjectHasProperty(self::MESSAGE, $response);
         $this->assertSame(self::STATUS_500, $response->code);
         $this->assertSame(self::ERROR, $response->status);
-        $this->assertSame(null, $response->message);
+        $this->assertNull($response->message);
     }
 
     public function testWarning(): void
@@ -93,7 +93,7 @@ class HelpersTest extends Test
         $this->assertObjectHasProperty(self::MESSAGE, $response);
         $this->assertSame(self::STATUS_200, $response->code);
         $this->assertSame(self::WARNING, $response->status);
-        $this->assertSame(null, $response->message);
+        $this->assertNull($response->message);
     }
 
     public function testInfo(): void
@@ -106,17 +106,26 @@ class HelpersTest extends Test
         $this->assertObjectHasProperty(self::MESSAGE, $response);
         $this->assertSame(self::STATUS_200, $response->code);
         $this->assertSame(self::INFO, $response->status);
-        $this->assertSame(null, $response->message);
+        $this->assertNull($response->message);
     }
 
-    // public function testLogger(): void
-    // {
-    //     $path = storage_path("logs/monolog/", false);
-    //     $fileName = "{$path}lion-" . \Carbon\Carbon::now()->format("Y-m-d") . ".log";
-    //     logger(self::LOGGER_CONTENT, 'info', ['user' => 'Sleon'], false);
+    public function testVd(): void
+    {
+        ob_start();
+        vd('Testing');
+        $output = ob_get_clean();
 
-    //     $this->assertFileExists($fileName);
-    // }
+        $this->assertStringContainsString('Testing', $output);
+    }
+
+    public function testLogger(): void
+    {
+        $path = storage_path('logs/monolog/', false);
+        $fileName = "{$path}lion-" . \Carbon\Carbon::now()->format('Y-m-d') . '.log';
+        logger(self::LOGGER_CONTENT, 'info', ['user' => 'Sleon'], false);
+
+        $this->assertFileExists($fileName);
+    }
 
     public function testJson(): void
     {
