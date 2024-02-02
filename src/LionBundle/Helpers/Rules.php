@@ -8,13 +8,13 @@ use Closure;
 use Lion\Bundle\Enums\StatusResponseEnum;
 use Lion\Security\Validation;
 
-class Rules
+abstract class Rules
 {
     protected array $validation;
 
-    public function validate(Closure $validate_function): void
+    protected function validate(Closure $validateFunction): void
     {
-        $response = (new Validation())->validate((array) request, $validate_function);
+        $response = (new Validation())->validate((array) request, $validateFunction);
         $this->validation = isError($response) ? $response->messages : [];
     }
 
