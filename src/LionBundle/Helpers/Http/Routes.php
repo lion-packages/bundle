@@ -14,9 +14,11 @@ class Routes
         return self::$rules;
     }
 
-    public static function setRules(array $rules): void
+    public static function setRules(array $rules): Routes
     {
         self::$rules = $rules;
+
+        return new static;
     }
 
     public static function getMiddleware(): array
@@ -24,8 +26,10 @@ class Routes
         return self::$middleware;
     }
 
-    public static function setMiddleware(array $middleware): void
+    public static function setMiddleware(array $middleware): Routes
     {
         self::$middleware = $middleware;
+
+        return new static;
     }
 }

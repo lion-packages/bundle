@@ -12,17 +12,36 @@ class RoutesTest extends Test
     const RULES = ['POST' => []];
     const MIDDLEWARE = ['app' => [], 'framework' => []];
 
+    private Routes $routes;
+
+    protected function setUp(): void
+    {
+        $this->routes = new Routes();
+    }
+
     public function testGetRules(): void
     {
-        Routes::setRules(self::RULES);
+        $this->routes->setRules(self::RULES);
 
-        $this->assertSame(self::RULES, Routes::getRules());
+        $this->assertSame(self::RULES, $this->routes->getRules());
+    }
+
+    public function testSetRules(): void
+    {
+        $this->assertInstanceOf(Routes::class, $this->routes->setRules(self::RULES));
+        $this->assertSame(self::RULES, $this->routes->getRules());
     }
 
     public function testGetMiddleware(): void
     {
-        Routes::setMiddleware(self::MIDDLEWARE);
+        $this->routes->setMiddleware(self::MIDDLEWARE);
 
-        $this->assertSame(self::MIDDLEWARE, Routes::getMiddleware());
+        $this->assertSame(self::MIDDLEWARE, $this->routes->getMiddleware());
+    }
+
+    public function testSetMiddleware(): void
+    {
+        $this->assertInstanceOf(Routes::class, $this->routes->setMiddleware(self::MIDDLEWARE));
+        $this->assertSame(self::MIDDLEWARE, $this->routes->getMiddleware());
     }
 }
