@@ -53,9 +53,10 @@ class NpmRunBuildCommand extends Command
 	{
         $projects = $this->arr->of($this->redisClient->getClient()->hgetall('vite'))->keys()->get();
         $project = $this->selectedProject($input, $output, $projects);
+        $this->kernel->execute("cd vite/{$project}/ && npm run build", false);
 
-        $cmdOutput = $this->kernel->execute("cd vite/{$project}/ && npm run build", false);
-        $output->writeln($this->arr->of($cmdOutput)->join("\n"));
+        $output->writeln($this->warningOutput("\n\t>>  VITE: {$project}"));
+        $output->writeln($this->successOutput("\t>>  VITE: project dist has been generated: ./vite/{$project}/"));
 
 		return Command::SUCCESS;
 	}

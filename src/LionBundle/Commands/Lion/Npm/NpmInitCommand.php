@@ -87,7 +87,7 @@ class NpmInitCommand extends Command
 
         $output->writeln($this->warningOutput("\n\t>>  VITE: {$project}"));
         $output->writeln($this->successOutput(
-            "\t>>  VITE: vite 'vite/{$project}' project has been generated successfully"
+            "\t>>  VITE: vite 'vite/{$project}/' project has been generated successfully"
         ));
 
 		return Command::SUCCESS;
