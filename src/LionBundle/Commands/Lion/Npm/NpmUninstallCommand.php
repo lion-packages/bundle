@@ -72,10 +72,17 @@ class NpmUninstallCommand extends Command
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
         $project = $this->selectedProject($input, $output);
-        $pkg = $input->getArgument('packages');
+        $packages = $input->getArgument('packages');
 
-        $cmd = $this->kernel->execute("cd vite/{$project}/ && npm uninstall {$pkg}", false);
-        $output->writeln($this->arr->of($cmd)->join("\n"));
+        $this->kernel->execute(
+            "cd vite/{$project}/ && npm uninstall {$packages} > /dev/null 2>&1 || npm uninstall {$packages} > nul 2>&1",
+            false
+        );
+
+        $output->writeln($this->warningOutput("\n\t>>  VITE: {$project}"));
+        $output->writeln($this->successOutput(
+            "\t>>  VITE: dependencies have been uninstalled: {$this->arr->of(explode(' ', $packages))->join(', ', ' and ')}"
+        ));
 
         return Command::SUCCESS;
 	}
