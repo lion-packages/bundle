@@ -46,7 +46,7 @@ class SHFileCommand extends Command
 
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
-        $sh = $input->getArgument("sh");
+        $sh = $input->getArgument('sh');
 
         $this->store->folder('storage/sh/');
         $this->classFactory->create($sh, 'sh', 'storage/sh/')->add("#!/bin/bash\n")->close();
