@@ -7,6 +7,7 @@ namespace Lion\Bundle\Commands\Lion\Npm;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\Files\Store;
+use Lion\Helpers\Arr;
 use Lion\Helpers\Str;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,6 +17,7 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 class NpmInstallCommand extends Command
 {
     private Str $str;
+    private Arr $arr;
     private Kernel $kernel;
     private Store $store;
 
@@ -25,6 +27,16 @@ class NpmInstallCommand extends Command
     public function setStr(Str $str): NpmInstallCommand
     {
         $this->str = $str;
+
+        return $this;
+    }
+
+    /**
+     * @required
+     * */
+    public function setArr(Arr $arr): NpmInstallCommand
+    {
+        $this->arr = $arr;
 
         return $this;
     }
@@ -60,9 +72,19 @@ class NpmInstallCommand extends Command
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
         $project = $this->selectedProject($input, $output);
+        $packages = $input->getArgument('packages');
 
-		$cmd = $this->kernel->execute("cd vite/{$project}/ && npm install {$input->getArgument('packages')}", false);
-        $output->writeln(arr->of($cmd)->join("\n"));
+		$this->kernel->execute(
+            "cd vite/{$project}/ && npm install {$packages} > /dev/null 2>&1 || npm install {$packages} > nul 2>&1",
+            false
+        );
+
+        if ('' != $packages) {
+            $output->writeln($this->warningOutput("\n\t>>  VITE: {$project}"));
+            $output->writeln($this->successOutput(
+                "\t>>  VITE: dependencies have been installed: {$this->arr->of(explode(' ', $packages))->join(', ', ' and ')}"
+            ));
+        }
 
 		return Command::SUCCESS;
 	}
