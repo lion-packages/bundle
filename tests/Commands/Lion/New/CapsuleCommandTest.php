@@ -52,7 +52,6 @@ class CapsuleCommandTest extends Test
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH . self::FILE_NAME);
 
-        require_once(self::URL_PATH . self::FILE_NAME);
         $objClass = new (self::OBJECT_NAME)();
         $this->initReflection($objClass);
 

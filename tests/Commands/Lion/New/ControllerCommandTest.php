@@ -63,15 +63,14 @@ class ControllerCommandTest extends Test
         $this->assertFileExists(self::URL_PATH . self::FILE_NAME);
         $this->assertFileExists(self::URL_PATH_MODEL . self::FILE_NAME_MODEL);
 
-        require_once(self::URL_PATH_MODEL . self::FILE_NAME_MODEL);
-        require_once(self::URL_PATH . self::FILE_NAME);
-
         $objClass = new (self::OBJECT_NAME)();
-        $objModelClass = new (self::OBJECT_NAME_MODEL)();
 
         $this->assertIsObject($objClass);
         $this->assertInstanceOf(self::OBJECT_NAME, $objClass);
         $this->assertSame(self::CONTROLLER_METHODS, get_class_methods($objClass));
+
+        $objModelClass = new (self::OBJECT_NAME_MODEL)();
+
         $this->assertIsObject($objModelClass);
         $this->assertInstanceOf(self::OBJECT_NAME_MODEL, $objModelClass);
         $this->assertSame(self::MODEL_METHODS, get_class_methods($objModelClass));
