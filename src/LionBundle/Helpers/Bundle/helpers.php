@@ -23,7 +23,7 @@ if (!function_exists('fetch')) {
  **/
 
 if (!function_exists('storage_path')) {
-    function storage_path(string $path = "", bool $index = true): string
+    function storage_path(string $path = '', bool $index = true): string
     {
         return !$index ? "storage/{$path}" : "../storage/{$path}";
     }
