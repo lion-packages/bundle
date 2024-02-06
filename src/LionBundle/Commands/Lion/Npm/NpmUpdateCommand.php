@@ -7,7 +7,6 @@ namespace Lion\Bundle\Commands\Lion\Npm;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\Files\Store;
-use Lion\Helpers\Arr;
 use Lion\Helpers\Str;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,7 +16,6 @@ class NpmUpdateCommand extends Command
 {
     private Kernel $kernel;
     private Store $store;
-    private Arr $arr;
     private Str $str;
 
     /**
@@ -43,16 +41,6 @@ class NpmUpdateCommand extends Command
     /**
      * @required
      * */
-    public function setArr(Arr $arr): NpmUpdateCommand
-    {
-        $this->arr = $arr;
-
-        return $this;
-    }
-
-    /**
-     * @required
-     * */
     public function setStr(Str $str): NpmUpdateCommand
     {
         $this->str = $str;
@@ -70,8 +58,10 @@ class NpmUpdateCommand extends Command
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		$project = $this->selectedProject($input, $output);
-        $cmd = $this->kernel->execute("cd vite/{$project}/ && npm update", false);
-        $output->writeln($this->arr->of($cmd)->join("\n"));
+        $this->kernel->execute("cd vite/{$project}/ && npm update > /dev/null 2>&1 || npm update > nul 2>&1", false);
+
+        $output->writeln($this->warningOutput("\n\t>>  VITE: {$project}"));
+        $output->writeln($this->successOutput("\t>>  VITE: dependencies have been updated"));
 
 		return Command::SUCCESS;
 	}
