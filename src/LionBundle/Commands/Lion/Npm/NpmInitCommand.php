@@ -9,7 +9,6 @@ use Lion\Bundle\Helpers\FileWriter;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\Files\Store;
-use Lion\Helpers\Arr;
 use Lion\Helpers\Str;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
@@ -25,7 +24,6 @@ class NpmInitCommand extends Command
     private Store $store;
     private FileWriter $fileWriter;
     private Kernel $kernel;
-    private Arr $arr;
     private Str $str;
     private ClassFactory $classFactory;
 
@@ -36,14 +34,12 @@ class NpmInitCommand extends Command
         Store $store,
         FileWriter $fileWriter,
         Kernel $kernel,
-        Arr $arr,
         Str $str,
         ClassFactory $classFactory
     ): NpmInitCommand {
         $this->store = $store;
         $this->fileWriter = $fileWriter;
         $this->kernel = $kernel;
-        $this->arr = $arr;
         $this->str = $str;
         $this->classFactory = $classFactory;
 
@@ -75,7 +71,6 @@ class NpmInitCommand extends Command
 
         $template = $this->str->of($this->selectedTemplate($input, $output, $helper))->lower()->get();
         $type = $this->selectedTypes($input, $output, $helper);
-
         $this->store->folder('./vite/');
 
         $this->kernel->execute(
@@ -83,14 +78,17 @@ class NpmInitCommand extends Command
             false
         );
 
-        $cmdOutput = $this->kernel->execute("cd ./vite/{$project}/ && npm install", false);
-
-        $output->writeln($this->arr->of($cmdOutput)->join("\n"));
+        $this->kernel->execute(
+            "cd ./vite/{$project}/ && npm install > /dev/null 2>&1 || npm install > nul 2>&1",
+            false
+        );
 
         $this->setViteConfig($project);
 
         $output->writeln($this->warningOutput("\n\t>>  VITE: {$project}"));
-        $output->writeln($this->successOutput("\t>>  VITE: vite 'vite/{$project}' project has been generated successfully"));
+        $output->writeln($this->successOutput(
+            "\t>>  VITE: vite 'vite/{$project}' project has been generated successfully"
+        ));
 
 		return Command::SUCCESS;
 	}
@@ -129,17 +127,19 @@ class NpmInitCommand extends Command
             ->close();
 
         $replace = [
-            'replace' => true,
-            'content' => ",\n  server: {\n    host: true,\n    port: 5173,\n    watch: {\n      usePolling: true\n    }\n  }",
-            'search' => ","
+            6 => [
+                'replace' => true,
+                'content' => ",\n  server: {\n    host: true,\n    port: 5173,\n    watch: {\n      usePolling: true\n    }\n  }",
+                'search' => ','
+            ]
         ];
 
         if (isSuccess($this->store->exist("vite/{$project}/vite.config.js"))) {
-            $this->fileWriter->readFileRows("vite/{$project}/vite.config.js", [6 => $replace]);
+            $this->fileWriter->readFileRows("vite/{$project}/vite.config.js", $replace);
         }
 
         if (isSuccess($this->store->exist("vite/{$project}/vite.config.ts"))) {
-            $this->fileWriter->readFileRows("vite/{$project}/vite.config.ts", [6 => $replace]);
+            $this->fileWriter->readFileRows("vite/{$project}/vite.config.ts", $replace);
         }
     }
 }

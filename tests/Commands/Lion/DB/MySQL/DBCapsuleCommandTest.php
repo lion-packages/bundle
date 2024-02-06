@@ -45,7 +45,7 @@ class DBCapsuleCommandTest extends Test
 
 	protected function tearDown(): void 
 	{
-        Schema::dropTable(self::ENTITY);
+        Schema::dropTable(self::ENTITY)->execute();
         $this->rmdirRecursively('./database/');
 	}
 
