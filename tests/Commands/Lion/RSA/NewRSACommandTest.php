@@ -23,8 +23,6 @@ class NewRSACommandTest extends Test
         $application = (new Kernel())->getApplication();
         $application->add((new Container())->injectDependencies(new NewRSACommand()));
         $this->commandTester = new CommandTester($application->find('rsa:new'));
-
-        $this->createDirectory(self::URL_PATH);
     }
 
     protected function tearDown(): void

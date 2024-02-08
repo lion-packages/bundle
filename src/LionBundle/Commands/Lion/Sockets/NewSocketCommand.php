@@ -58,9 +58,7 @@ class NewSocketCommand extends Command
 
 	protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $socket = $input->getArgument('socket');
-
-        $this->classFactory->classFactory('app/Http/Sockets/', $socket);
+        $this->classFactory->classFactory('app/Http/Sockets/', $input->getArgument('socket'));
         $folder = $this->classFactory->getFolder();
         $class = $this->classFactory->getClass();
         $namespace = $this->classFactory->getNamespace();
