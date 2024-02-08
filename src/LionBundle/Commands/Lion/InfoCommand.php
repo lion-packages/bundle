@@ -40,7 +40,7 @@ class InfoCommand extends Command
     {
         $this
             ->setName('info')
-            ->setDescription("Command to display basic project information and libraries");
+            ->setDescription('Command to display basic project information and libraries');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
