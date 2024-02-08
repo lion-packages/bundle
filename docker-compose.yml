@@ -1,7 +1,7 @@
 version: "3.8"
 services:
     app:
-        container_name: framework-app
+        container_name: bundle-app
         build:
             context: .
             dockerfile: Dockerfile
@@ -9,38 +9,54 @@ services:
             - .env
         ports:
             - "8000:8000"
+            - "8001:8001"
+            - "9000:9000"
             - "5173:5173"
         volumes:
             - ./:/var/www/html
-            - ./supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
         depends_on:
-            - db
+            - mysql
             - phpmyadmin
+            - redis
         networks:
             - lion
-    db:
+    redis:
+        image: redis
+        container_name: bundle-redis
+        restart: always
+        ports:
+            - "${REDIS_PORT}:${REDIS_PORT}"
+        volumes:
+            - redis_data:/var/lib/redis
+        environment:
+            REDIS_HOST: ${REDIS_HOST}
+            REDIS_PASSWORD: ${REDIS_PASSWORD}
+            REDIS_DATABASES: ${REDIS_DATABASES}
+        networks:
+            - lion
+    mysql:
         image: mysql
-        container_name: framework-mysql
-        restart: unless-stopped
+        container_name: database-mysql
+        command: --default-authentication-plugin=mysql_native_password
+        ports:
+            - "${DB_PORT}:${DB_PORT}"
         environment:
             MYSQL_DATABASE: ${DB_NAME}
             MYSQL_PASSWORD: ${DB_PASSWORD}
             MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-        ports:
-            - "3306:3306"
         volumes:
             - mysql_data:/var/lib/mysql
         networks:
             - lion
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
-        container_name: framework-phpmyadmin
-        restart: unless-stopped
+        container_name: database-phpmyadmin
         links:
-            - db:db
+            - mysql:mysql
         ports:
             - 8080:80
         environment:
+            PMA_HOST: ${DB_HOST}
             MYSQL_USER: ${DB_USER}
             MYSQL_PASSWORD: ${DB_PASSWORD}
             MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
@@ -48,6 +64,8 @@ services:
             - lion
 volumes:
     mysql_data:
+    redis_data:
+        driver: local
 networks:
     lion:
         driver: bridge

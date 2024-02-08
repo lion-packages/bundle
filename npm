@@ -1,0 +1,60 @@
+<?php
+
+declare(strict_types=1);
+
+define('LION_START', microtime(true));
+
+/**
+ * -----------------------------------------------------------------------------
+ * Register The Auto Loader
+ * -----------------------------------------------------------------------------
+ * Composer provides a convenient, automatically generated class loader for
+ * this application
+ * -----------------------------------------------------------------------------
+ **/
+
+require_once('./vendor/autoload.php');
+
+use Dotenv\Dotenv;
+use Lion\Bundle\Commands\CommandHandler;
+use Lion\Database\Driver;
+
+/**
+ * ------------------------------------------------------------------------------
+ * Register environment variable loader automatically
+ * ------------------------------------------------------------------------------
+ * .dotenv provides an easy way to access environment variables with $_ENV
+ * ------------------------------------------------------------------------------
+ **/
+
+Dotenv::createImmutable(__DIR__)->load();
+
+/**
+ * -----------------------------------------------------------------------------
+ * Database initialization
+ * -----------------------------------------------------------------------------
+ * */
+
+Driver::run([
+    'default' => env->DB_NAME,
+    'connections' => [
+        env->DB_NAME => [
+            'type' => env->DB_TYPE,
+            'host' => env->DB_HOST,
+            'port' => env->DB_PORT,
+            'dbname' => env->DB_NAME,
+            'user' => env->DB_USER,
+            'password' => env->DB_PASSWORD
+        ]
+    ]
+]);
+
+/**
+ * -----------------------------------------------------------------------------
+ * Run The lion Application
+ * -----------------------------------------------------------------------------
+ * This is where the commands for your application are executed
+ * -----------------------------------------------------------------------------
+ **/
+
+(new CommandHandler(true))->getApplication()->run();

@@ -1,3 +1,4 @@
+
 <p align="center">
   <a href="https://lion-client.vercel.app/" target="_blank">
     <img 
@@ -18,9 +19,9 @@
 ## Install
 
 ```shell
-composer create-project lion/framework
+composer require lion/bundle
 ```
 
 ## License
 
-The <strong>framework</strong> is open-sourced software licensed under the [MIT License](https://github.com/Lion-Packages/framework/blob/main/LICENSE).
+The <strong>bundle</strong> is open-sourced software licensed under the [MIT License](https://github.com/lion-packages/bundle/blob/main/LICENSE).

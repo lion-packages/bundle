@@ -1,5 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
+use Lion\Bundle\Helpers\Http\Routes;
+use Lion\Route\Route;
+
 /**
  * ------------------------------------------------------------------------------
  * Rules
@@ -8,30 +13,6 @@
  * ------------------------------------------------------------------------------
  **/
 
-return [
-    'ANY' => [
-        //
-    ],
-    'POST' => [
-        '/api/auth/login' => [
-            \App\Rules\LionDatabase\Users\UsersEmailRule::class,
-            \App\Rules\LionDatabase\Users\UsersPasswordRule::class
-        ],
-        '/api/user-registration' => [
-            App\Rules\LionDatabase\Roles\IdrolesRule::class,
-            \App\Rules\LionDatabase\Users\UsersNameRule::class,
-            \App\Rules\LionDatabase\Users\UsersLastNameRule::class,
-            \App\Rules\LionDatabase\Users\UsersEmailRule::class,
-            \App\Rules\LionDatabase\Users\UsersPasswordRule::class
-        ]
-    ],
-    'GET' => [
-        //
-    ],
-    'PUT' => [
-        //
-    ],
-    'DELETE' => [
-        //
-    ],
-];
+Routes::setRules([
+    Route::POST => []
+]);

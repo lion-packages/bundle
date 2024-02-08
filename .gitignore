@@ -6,6 +6,11 @@
 /storage/**/*.key
 /storage/**/*.log
 /storage/postman/*.json
+/vite/
+/app/
+/database/
 .rnd
+.phpunit.result.cache
 .env
+test.txt
 supervisord.pid

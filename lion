@@ -1,17 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 define('LION_START', microtime(true));
 
 /**
- * ------------------------------------------------------------------------------
+ * -----------------------------------------------------------------------------
  * Register The Auto Loader
- * ------------------------------------------------------------------------------
+ * -----------------------------------------------------------------------------
  * Composer provides a convenient, automatically generated class loader for
  * this application
- * ------------------------------------------------------------------------------
+ * -----------------------------------------------------------------------------
  **/
 
-require_once("vendor/autoload.php");
+require_once('./vendor/autoload.php');
+
+use Dotenv\Dotenv;
+use Lion\Bundle\Commands\CommandHandler;
+use Lion\Database\Driver;
 
 /**
  * ------------------------------------------------------------------------------
@@ -21,73 +27,43 @@ require_once("vendor/autoload.php");
  * ------------------------------------------------------------------------------
  **/
 
-\App\Http\Kernel::getInstance()->loadDotEnv(__DIR__);
+Dotenv::createImmutable(__DIR__)->load();
 
 /**
- * ------------------------------------------------------------------------------
- * initialization of predefined constants and functions
- * ------------------------------------------------------------------------------
- **/
+ * -----------------------------------------------------------------------------
+ * Database initialization
+ * -----------------------------------------------------------------------------
+ * */
 
-include_once(__DIR__ . "/config/helpers.php");
-
-/**
- * ------------------------------------------------------------------------------
- * Import route for RSA
- * ------------------------------------------------------------------------------
- * Load default route for RSA
- * ------------------------------------------------------------------------------
- **/
-
-if (env->RSA_URL_PATH != '') {
-    \LionSecurity\RSA::setPath(storage_path(env->RSA_URL_PATH, false));
-}
-
-/**
- * ------------------------------------------------------------------------------
- * Start database service
- * ------------------------------------------------------------------------------
- * Upload data to establish a connection
- * ------------------------------------------------------------------------------
- **/
-
-\App\Http\Kernel::getInstance()->loadConnecions(
-    require_once("./config/database.php"), [
-        'type' => "Console",
-        'proccess' => 'Connection to databases'
+Driver::run([
+    'default' => env->DB_NAME,
+    'connections' => [
+        env->DB_NAME => [
+            'type' => env->DB_TYPE,
+            'host' => env->DB_HOST,
+            'port' => env->DB_PORT,
+            'dbname' => env->DB_NAME,
+            'user' => env->DB_USER,
+            'password' => env->DB_PASSWORD
+        ]
     ]
-);
+]);
 
 /**
- * ------------------------------------------------------------------------------
- * Start email sending service
- * ------------------------------------------------------------------------------
- * enter account access credentials
- * ------------------------------------------------------------------------------
- **/
+ * -----------------------------------------------------------------------------
+ * Initialize Http parameters (Middleware/Rules)
+ * -----------------------------------------------------------------------------
+ * */
 
-\App\Http\Kernel::getInstance()->loadAccounts(
-    require_once("./config/email.php")
-);
+include_once('./routes/rules.php');
+include_once('./routes/middleware.php');
 
 /**
- * ------------------------------------------------------------------------------
+ * -----------------------------------------------------------------------------
  * Run The lion Application
- * ------------------------------------------------------------------------------
+ * -----------------------------------------------------------------------------
  * This is where the commands for your application are executed
- * ------------------------------------------------------------------------------
+ * -----------------------------------------------------------------------------
  **/
 
-date_default_timezone_set(env->SERVER_DATE_TIMEZONE);
-$commands = require_once("./config/commands.php");
-$sockets = require_once("./config/sockets.php");
-$kernel = \App\Console\Kernel::getInstance();
-
-$kernel->initialize(
-    [...$commands['framework'], ...$commands['app']],
-    [...$sockets['app']],
-    require_once("./config/vite.php")
-);
-
-$kernel->add();
-$kernel->run();
+(new CommandHandler(false))->getApplication()->run();

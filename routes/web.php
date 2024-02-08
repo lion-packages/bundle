@@ -1,28 +1,24 @@
 <?php
 
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\SessionController;
-use App\Http\Controllers\LionDatabase\UsersController;
-use LionRoute\Route;
+declare(strict_types=1);
 
-/**
- * ------------------------------------------------------------------------------
- * Web Routes
- * ------------------------------------------------------------------------------
- * Here is where you can register web routes for your application
- * ------------------------------------------------------------------------------
- **/
+use Lion\Route\Route;
+use Tests\Providers\ExampleProvider;
 
-Route::any('/', fn() => info('[index]'));
+Route::init();
+Route::addMiddleware([]);
+// -----------------------------------------------------------------------------
+Route::get('/', fn() => info('[index]'));
 
-Route::prefix('api', function() {
-    Route::post('user-registration', [UsersController::class, 'createUsers']);
+Route::get('logger', function() {
+    logger('test-logger', 'info', ['user' => 'Sleon'], true);
 
-    Route::prefix('auth', function() {
-        Route::post('login', [LoginController::class, 'auth']);
-
-        Route::middleware(['jwt-without-signature', 'jwt-authorize', 'session'], function() {
-            Route::get('refresh', [SessionController::class, 'refresh']);
-        });
-    });
+    return success();
 });
+
+Route::get('inject', [ExampleProvider::class, 'getArrExample']);
+// Route::get('controller', [ExampleController::class, 'createExample']);
+
+Route::get('route-list', fn() => Route::getFullRoutes());
+// -----------------------------------------------------------------------------
+Route::dispatch();
