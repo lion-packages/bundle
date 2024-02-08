@@ -1,4 +1,3 @@
-
 <p align="center">
   <a href="https://lion-client.vercel.app/" target="_blank">
     <img 
@@ -10,10 +9,10 @@
 </p>
 
 <p align="center">
-  <img src="http://poser.pugx.org/lion/framework/v" alt="Latest Stable Version">
-  <img src="http://poser.pugx.org/lion/framework/downloads" alt="Total Downloads">
-  <img src="http://poser.pugx.org/lion/framework/license" alt="License">
-  <img src="http://poser.pugx.org/lion/framework/require/php" alt="PHP Version Require">
+  <img src="http://poser.pugx.org/lion/bundle/v" alt="Latest Stable Version">
+  <img src="http://poser.pugx.org/lion/bundle/downloads" alt="Total Downloads">
+  <img src="http://poser.pugx.org/lion/bundle/license" alt="License">
+  <img src="http://poser.pugx.org/lion/bundle/require/php" alt="PHP Version Require">
 </p>
 
 ## Install
