@@ -69,11 +69,6 @@
         "phpunit/phpunit": "Required to use assertions and run tests.",
         "predis/predis": "Required to use the predis connector."
     },
-    "scripts": {
-        "post-root-package-install": [
-            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
-        ]
-    },
     "config": {
         "sort-packages": true,
         "allow-plugins": {

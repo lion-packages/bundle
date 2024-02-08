@@ -16,9 +16,8 @@ define('LION_START', microtime(true));
 require_once('./vendor/autoload.php');
 
 use Dotenv\Dotenv;
-use Lion\Command\Kernel;
+use Lion\Bundle\Commands\CommandHandler;
 use Lion\Database\Driver;
-use Lion\DependencyInjection\Container;
 
 /**
  * ------------------------------------------------------------------------------
@@ -58,13 +57,4 @@ Driver::run([
  * -----------------------------------------------------------------------------
  **/
 
-$container = new Container();
-$kernel = new Kernel();
-$application = $kernel->getApplication();
-
-foreach ($container->getFiles('./src/LionBundle/Commands/Npm/') as $file) {
-    $class = $container->getNamespace($file, 'Lion\\Bundle\\Commands\\Npm\\', 'Npm/');
-    $application->add($container->injectDependencies(new $class()));
-}
-
-$application->run();
+(new CommandHandler(true))->getApplication()->run();

@@ -5,7 +5,6 @@ declare(strict_types=1);
 use Lion\Route\Route;
 use Tests\Providers\ExampleProvider;
 
-
 Route::init();
 Route::addMiddleware([]);
 // -----------------------------------------------------------------------------
