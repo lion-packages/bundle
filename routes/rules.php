@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Lion\Bundle\Helpers\Http\Routes;
+use Lion\Route\Route;
 
 /**
  * ------------------------------------------------------------------------------
@@ -13,5 +14,5 @@ use Lion\Bundle\Helpers\Http\Routes;
  **/
 
 Routes::setRules([
-    'POST' => []
+    Route::POST => []
 ]);

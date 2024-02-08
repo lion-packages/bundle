@@ -60,7 +60,7 @@ class RouteListCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         array_pop($this->routes);
-        $this->configMiddleware = [...$this->configMiddleware['framework'], ...$this->configMiddleware['app']];
+        $this->configMiddleware = [...$this->configMiddleware['app']];
         $size = $this->arr->of($this->routes)->length();
         $cont = 0;
         $rows = [];
