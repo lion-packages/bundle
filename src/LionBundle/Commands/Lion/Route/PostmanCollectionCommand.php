@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\Route;
 
+use Carbon\Carbon;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\PostmanCollection;
 use Lion\Bundle\Helpers\Http\Routes;
@@ -108,7 +109,7 @@ class PostmanCollectionCommand extends Command
     private function fetchRoutes(): void
     {
         $this->postmanCollection->init(env->SERVER_URL);
-        $this->jsonName = $this->str->of(date('Y_m_d'))->concat('_lion_collection')->lower()->get();
+        $this->jsonName = $this->str->of(Carbon::now()->format('Y_m_d'))->concat('_lion_collection')->lower()->get();
         $this->routes = json_decode(fetch(Route::GET, env->SERVER_URL . '/route-list')->getBody()->getContents(), true);
 
         array_pop($this->routes);
