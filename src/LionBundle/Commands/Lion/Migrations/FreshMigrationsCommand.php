@@ -7,12 +7,14 @@ namespace Lion\Bundle\Commands\Lion\Migrations;
 use Lion\Bundle\Interface\MigrationUpInterface;
 use Lion\Command\Command;
 use Lion\DependencyInjection\Container;
+use Lion\Files\Store;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class FreshMigrationsCommand extends Command
 {
     private Container $container;
+    private Store $store;
 
     /**
      * @required
@@ -20,6 +22,16 @@ class FreshMigrationsCommand extends Command
     public function setContainer(Container $container): FreshMigrationsCommand
     {
         $this->container = $container;
+
+        return $this;
+    }
+
+    /**
+     * @required
+     * */
+    public function setStore(Store $store): FreshMigrationsCommand
+    {
+        $this->store = $store;
 
         return $this;
     }
@@ -36,8 +48,10 @@ class FreshMigrationsCommand extends Command
         $files = [];
 
         foreach ($this->container->getFiles('./database/Migrations/') as $file) {
-            $namespace = $this->container->getNamespace($file, 'Database\\Migrations\\', 'Migrations/');
-            $files[$namespace] = include_once($file);
+            if (isSuccess($this->store->validate([$file], ['php']))) {
+                $namespace = $this->container->getNamespace($file, 'Database\\Migrations\\', 'Migrations/');
+                $files[$namespace] = include_once($file);
+            }
         }
 
         foreach ($this->orderList($files) as $namespace => $classObject) {
