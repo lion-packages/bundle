@@ -6,17 +6,20 @@ namespace Lion\Bundle\Commands;
 
 use Lion\Command\Kernel;
 use Lion\DependencyInjection\Container;
+use Lion\Files\Store;
 use Symfony\Component\Console\Application;
 
 class CommandHandler
 {
     private Application $application;
     private Container $container;
+    private Store $store;
 
     public function __construct()
     {
-        $this->container = new Container();
         $this->application = (new Kernel)->getApplication();
+        $this->container = new Container();
+        $this->store = new Store();
     }
 
     private function add(array $commands): void
@@ -31,8 +34,10 @@ class CommandHandler
         $commands = [];
 
         foreach ($this->container->getFiles($pathCommands) as $file) {
-            $class = $this->container->getNamespace($file, $namespace, $pathSplit);
-            $commands[] = $this->container->injectDependencies(new $class());
+            if (isSuccess($this->store->validate([$file], ['php']))) {
+                $class = $this->container->getNamespace($file, $namespace, $pathSplit);
+                $commands[] = $this->container->injectDependencies(new $class());
+            }
         }
 
         return $commands;

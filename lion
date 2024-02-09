@@ -66,4 +66,7 @@ include_once('./routes/middleware.php');
  * -----------------------------------------------------------------------------
  **/
 
-(new CommandHandler(false))->getApplication()->run();
+(new CommandHandler)
+    ->registerCommands('./src/LionBundle/Commands/Lion/', 'Lion\\Bundle\\Commands\\Lion\\', 'Commands/Lion/')
+    ->getApplication()
+    ->run();
