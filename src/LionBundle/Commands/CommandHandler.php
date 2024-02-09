@@ -13,16 +13,10 @@ class CommandHandler
     private Application $application;
     private Container $container;
 
-    public function __construct(bool $isNpmCommands = false)
+    public function __construct()
     {
         $this->container = new Container();
         $this->application = (new Kernel)->getApplication();
-
-        $this->add(
-            !$isNpmCommands
-                ? $this->getCommands('./src/LionBundle/Commands/Lion/', 'Lion\\Bundle\\Commands\\Lion\\', 'Lion/')
-                : $this->getCommands('./src/LionBundle/Commands/Npm/', 'Lion\\Bundle\\Commands\\Npm\\', 'Npm/')
-        );
     }
 
     private function add(array $commands): void
@@ -44,9 +38,11 @@ class CommandHandler
         return $commands;
     }
 
-    public function registerCommands(string $pathCommands, string $namespace, string $pathSplit): void
+    public function registerCommands(string $pathCommands, string $namespace, string $pathSplit): CommandHandler
     {
         $this->add($this->getCommands($pathCommands, $namespace, $pathSplit));
+
+        return $this;
     }
 
     public function getApplication(): Application
