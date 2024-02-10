@@ -82,7 +82,7 @@ class NpmInstallCommand extends Command
         if ('' != $packages) {
             $output->writeln($this->warningOutput("\n\t>>  VITE: {$project}"));
             $output->writeln($this->successOutput(
-                "\t>>  VITE: dependencies have been installed: {$this->arr->of(explode(' ', $packages))->join(', ', ' and ')}"
+                "\t>>  VITE: dependencies have been installed: {$this->arr->of(explode(' ', $packages))->join(', ')}"
             ));
         }
 

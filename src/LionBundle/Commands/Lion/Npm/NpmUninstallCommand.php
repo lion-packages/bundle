@@ -81,7 +81,7 @@ class NpmUninstallCommand extends Command
 
         $output->writeln($this->warningOutput("\n\t>>  VITE: {$project}"));
         $output->writeln($this->successOutput(
-            "\t>>  VITE: dependencies have been uninstalled: {$this->arr->of(explode(' ', $packages))->join(', ', ' and ')}"
+            "\t>>  VITE: dependencies have been uninstalled: {$this->arr->of(explode(' ', $packages))->join(', ')}"
         ));
 
         return Command::SUCCESS;

@@ -24,7 +24,7 @@ class MigrationFactory
             ->concat("use Lion\Database\Drivers\Schema\MySQL as DB;")->ln()->ln()
             ->concat("return new class implements MigrationUpInterface\n{")->ln()
             ->lt()->concat('use Migration;')->ln()->ln()
-            ->lt()->concat('CONST INDEX = null;')->ln()->ln()
+            ->lt()->concat('const INDEX = null;')->ln()->ln()
             ->lt()->concat("/**\n\t * {@inheritdoc}\n\t * */")->ln()
             ->lt()->concat("public function up(): object\n\t{")->ln()
             ->lt()->lt()->concat("return DB::connection('--CONNECTION--')")->ln()
