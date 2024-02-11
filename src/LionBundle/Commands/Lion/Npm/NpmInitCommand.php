@@ -5,43 +5,49 @@ declare(strict_types=1);
 namespace Lion\Bundle\Commands\Lion\Npm;
 
 use Lion\Bundle\Helpers\Commands\ClassFactory;
+use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Bundle\Helpers\FileWriter;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
-use Lion\Files\Store;
-use Lion\Helpers\Str;
-use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ChoiceQuestion;
 
-class NpmInitCommand extends Command
+class NpmInitCommand extends MenuCommand
 {
     const TEMPLATES = ['Vanilla', 'Vue', 'React', 'Preact', 'Lit', 'Svelte', 'Solid', 'Qwik'];
     const TYPES = ['js', 'ts'];
 
-    private Store $store;
+    private ClassFactory $classFactory;
     private FileWriter $fileWriter;
     private Kernel $kernel;
-    private Str $str;
-    private ClassFactory $classFactory;
 
     /**
      * @required
      * */
-    public function setInject(
-        Store $store,
-        FileWriter $fileWriter,
-        Kernel $kernel,
-        Str $str,
-        ClassFactory $classFactory
-    ): NpmInitCommand {
-        $this->store = $store;
-        $this->fileWriter = $fileWriter;
-        $this->kernel = $kernel;
-        $this->str = $str;
+    public function setClassFactory(ClassFactory $classFactory): NpmInitCommand
+    {
         $this->classFactory = $classFactory;
+
+        return $this;
+    }
+
+    /**
+     * @required
+     * */
+    public function setFileWriter(FileWriter $fileWriter): NpmInitCommand
+    {
+        $this->fileWriter = $fileWriter;
+
+        return $this;
+    }
+
+    /**
+     * @required
+     * */
+    public function setKernel(Kernel $kernel): NpmInitCommand
+    {
+        $this->kernel = $kernel;
 
         return $this;
     }
@@ -66,11 +72,8 @@ class NpmInitCommand extends Command
             return Command::FAILURE;
         }
 
-        /** @var QuestionHelper $helper */
-        $helper = $this->getHelper('question');
-
-        $template = $this->str->of($this->selectedTemplate($input, $output, $helper))->lower()->get();
-        $type = $this->selectedTypes($input, $output, $helper);
+        $template = $this->str->of($this->selectedTemplate($input, $output, self::TEMPLATES))->lower()->get();
+        $type = $this->selectedTypes($input, $output, self::TYPES);
         $this->store->folder('./vite/');
 
         $this->kernel->execute(
@@ -92,32 +95,6 @@ class NpmInitCommand extends Command
 
 		return Command::SUCCESS;
 	}
-
-    private function selectedTemplate(InputInterface $input, OutputInterface $output, QuestionHelper $helper): string
-    {
-        return $helper->ask(
-            $input,
-            $output,
-            new ChoiceQuestion(
-                'Select the type of template ' . $this->warningOutput('(default: React)'),
-                self::TEMPLATES,
-                2
-            )
-        );
-    }
-
-    private function selectedTypes(InputInterface $input, OutputInterface $output, QuestionHelper $helper): string
-    {
-        return $helper->ask(
-            $input,
-            $output,
-            new ChoiceQuestion(
-                'Select type ' . $this->warningOutput('(default: js)'),
-                self::TYPES,
-                0
-            )
-        );
-    }
 
     private function setViteConfig(string $project): void
     {

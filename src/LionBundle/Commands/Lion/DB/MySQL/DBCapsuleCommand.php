@@ -5,19 +5,17 @@ declare(strict_types=1);
 namespace Lion\Bundle\Commands\Lion\DB\MySQL;
 
 use Lion\Bundle\Helpers\Commands\ClassFactory;
-use Lion\Bundle\Helpers\Commands\SelectedDatabaseConnection;
+use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Command\Command;
 use Lion\Database\Drivers\MySQL as DB;
-use Lion\Helpers\Str;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class DBCapsuleCommand extends SelectedDatabaseConnection
+class DBCapsuleCommand extends MenuCommand
 {
     private ClassFactory $classFactory;
-    private Str $str;
 
     /**
      * @required
@@ -25,16 +23,6 @@ class DBCapsuleCommand extends SelectedDatabaseConnection
     public function setClassFactory(ClassFactory $classFactory): DBCapsuleCommand
     {
         $this->classFactory = $classFactory;
-
-        return $this;
-    }
-
-    /**
-     * @required
-     * */
-    public function setStr(Str $str): DBCapsuleCommand
-    {
-        $this->str = $str;
 
         return $this;
     }
@@ -54,7 +42,6 @@ class DBCapsuleCommand extends SelectedDatabaseConnection
 
         $entity = $this->str->of($entity)->test("/-/") ? "`{$entity}`" : $entity;
         $columns = DB::connection($selectedConnection)->show()->columns()->from($entity)->getAll();
-        $columns = count($columns) > 1 ? $columns : reset($columns);
 
         if (!empty($columns->status)) {
             $output->writeln($this->errorOutput("\t>>  CAPSULE: {$columns->message}"));

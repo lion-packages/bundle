@@ -37,13 +37,13 @@ class DBCapsulesCommandTest extends Test
         $this->createDirectory(self::URL_PATH);
 
         Schema::createTable(self::TEST_ENTITY, function() {
-            Schema::int('id', 11)->notNull()->autoIncrement()->primaryKey()
-                ->varchar('name', 25)->notNull();
+            Schema::int('id', 11)->notNull()->autoIncrement()->primaryKey();
+            Schema::varchar('name', 25)->notNull();
         })->execute();
 
         Schema::createTable(self::USERS_ENTITY, function() {
-            Schema::int('id', 11)->notNull()->autoIncrement()->primaryKey()
-                ->varchar('name', 25)->notNull();
+            Schema::int('id', 11)->notNull()->autoIncrement()->primaryKey();
+            Schema::varchar('name', 25)->notNull();
         })->execute();
 
         $application = (new Kernel())->getApplication();

@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "carbonphp/carbon-doctrine-types",
-            "version": "3.1.0",
+            "version": "3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CarbonPHP/carbon-doctrine-types.git",
-                "reference": "a31d3358a2a5d6ae947df1691d1f321418a5f3d5"
+                "reference": "18ba5ddfec8976260ead6e866180bd5d2f71aa1d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CarbonPHP/carbon-doctrine-types/zipball/a31d3358a2a5d6ae947df1691d1f321418a5f3d5",
-                "reference": "a31d3358a2a5d6ae947df1691d1f321418a5f3d5",
+                "url": "https://api.github.com/repos/CarbonPHP/carbon-doctrine-types/zipball/18ba5ddfec8976260ead6e866180bd5d2f71aa1d",
+                "reference": "18ba5ddfec8976260ead6e866180bd5d2f71aa1d",
                 "shasum": ""
             },
             "require": {
@@ -57,7 +57,7 @@
             ],
             "support": {
                 "issues": "https://github.com/CarbonPHP/carbon-doctrine-types/issues",
-                "source": "https://github.com/CarbonPHP/carbon-doctrine-types/tree/3.1.0"
+                "source": "https://github.com/CarbonPHP/carbon-doctrine-types/tree/3.2.0"
             },
             "funding": [
                 {
@@ -73,7 +73,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-12-10T15:33:53+00:00"
+            "time": "2024-02-09T16:56:22+00:00"
         },
         {
             "name": "cboden/ratchet",
@@ -943,16 +943,16 @@
         },
         {
             "name": "lion/database",
-            "version": "v9.1.0",
+            "version": "v9.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/database.git",
-                "reference": "a930f1b7e4dd10726d337f91d7eb5e459b4502f5"
+                "reference": "f5157c64b6a3a598219c355122c3065286b6a166"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/database/zipball/a930f1b7e4dd10726d337f91d7eb5e459b4502f5",
-                "reference": "a930f1b7e4dd10726d337f91d7eb5e459b4502f5",
+                "url": "https://api.github.com/repos/lion-packages/database/zipball/f5157c64b6a3a598219c355122c3065286b6a166",
+                "reference": "f5157c64b6a3a598219c355122c3065286b6a166",
                 "shasum": ""
             },
             "require": {
@@ -976,9 +976,9 @@
             "description": "package in charge of the generation and execution of processes with databases",
             "support": {
                 "issues": "https://github.com/lion-packages/database/issues",
-                "source": "https://github.com/lion-packages/database/tree/v9.1.0"
+                "source": "https://github.com/lion-packages/database/tree/v9.1.1"
             },
-            "time": "2024-01-15T16:17:15+00:00"
+            "time": "2024-02-10T20:31:59+00:00"
         },
         {
             "name": "lion/dependency-injection",
