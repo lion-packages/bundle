@@ -5,33 +5,21 @@ declare(strict_types=1);
 namespace Lion\Bundle\Commands\Lion\DB;
 
 use Lion\Bundle\Helpers\Commands\ClassFactory;
-use Lion\Bundle\Helpers\Commands\SelectedDatabaseConnection;
+use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Bundle\Helpers\FileWriter;
 use Lion\Command\Command;
 use Lion\Database\Drivers\MySQL as DB;
-use Lion\Helpers\Str;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CrudCommand extends SelectedDatabaseConnection
+class CrudCommand extends MenuCommand
 {
     const METHODS = ['create', 'update', 'delete'];
 
-    private Str $str;
     private FileWriter $fileWriter;
     private ClassFactory $classFactory;
-
-    /**
-     * @required
-     * */
-    public function setStr(Str $str): CrudCommand
-    {
-        $this->str = $str;
-
-        return $this;
-    }
 
     /**
      * @required
