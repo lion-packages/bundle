@@ -30,7 +30,8 @@ class DBCapsulesCommand extends Command
 
             $allTables = DB::connection($connection)
                 ->show()->tables()->from($connection)
-                ->fetchMode(PDO::FETCH_ASSOC)->getAll();
+                ->fetchMode(PDO::FETCH_ASSOC)
+                ->getAll();
 
             if (!isset($allTables->status)) {
                 $listAllTables[] = ['connection' => $connection, 'all-tables' => $allTables];

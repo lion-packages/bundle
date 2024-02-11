@@ -54,7 +54,6 @@ class DBCapsuleCommand extends SelectedDatabaseConnection
 
         $entity = $this->str->of($entity)->test("/-/") ? "`{$entity}`" : $entity;
         $columns = DB::connection($selectedConnection)->show()->columns()->from($entity)->getAll();
-        $columns = count($columns) > 1 ? $columns : reset($columns);
 
         if (!empty($columns->status)) {
             $output->writeln($this->errorOutput("\t>>  CAPSULE: {$columns->message}"));
