@@ -54,63 +54,63 @@ class RulesDBCommand extends MenuCommand
             ->getAll();
 
         foreach ($columns as $column) {
+            $isForeign = false;
+
             if (!isset($foreigns->status)) {
-                if (is_array($foreigns)) {
-                    foreach ($foreigns as $foreign) {
-                        if ($column->Field === $foreign->COLUMN_NAME) {
-                            continue;
-                        }
-                    }
-                } else {
-                    if ($column->Field === $foreigns->COLUMN_NAME) {
-                        continue;
+                foreach ($foreigns as $foreign) {
+                    if ($column->Field === $foreign->COLUMN_NAME) {
+                        $isForeign = true;
                     }
                 }
             }
 
-            $ruleName = $this->str
-                ->of($column->Field)
-                ->replace('-', '_')
-                ->replace('_', ' ')
-                ->trim()
-                ->pascal()
-                ->concat('Rule')
-                ->get();
+            if (!$isForeign) {
+                $ruleName = $this->str
+                    ->of($column->Field)
+                    ->replace('-', '_')
+                    ->replace('_', ' ')
+                    ->trim()
+                    ->pascal()
+                    ->concat('Rule')
+                    ->get();
 
-            $this
-                ->getApplication()
-                ->find('new:rule')
-                ->run(new ArrayInput(['rule' => "{$connectionPascal}/MySQL/{$entityPascal}/{$ruleName}"]), $output);
+                $this
+                    ->getApplication()
+                    ->find('new:rule')
+                    ->run(new ArrayInput(['rule' => "{$connectionPascal}/MySQL/{$entityPascal}/{$ruleName}"]), $output);
 
-            $this->fileWriter->readFileRows(
-                "app/Rules/{$connectionPascal}/MySQL/{$entityPascal}/{$ruleName}.php",
-                [
-                    12 => [
-                        'replace' => true,
-                        'content' => "'" . strtolower($column->Field) . "'",
-                        'search' => "''"
-                    ],
-                    13 => [
-                        'replace' => true,
-                        'content' => "'{$column->Comment}'",
-                        'search' => "''"
-                    ],
-                    15 => [
-                        'replace' => true,
-                        'content' => ($column->Null === 'NO' ? 'false' : 'true'),
-                        'search' => 'false'
-                    ],
-                    20 => [
-                        'replace' => true,
-                        'multiple' => [
-                            [
-                                'content' => ($column->Null === 'NO' ? 'required' : 'optional'),
-                                'search' => 'required'
+                $this->fileWriter->readFileRows(
+                    "app/Rules/{$connectionPascal}/MySQL/{$entityPascal}/{$ruleName}.php",
+                    [
+                        12 => [
+                            'replace' => true,
+                            'content' => "'" . strtolower($column->Field) . "'",
+                            'search' => "''"
+                        ],
+                        13 => [
+                            'replace' => true,
+                            'content' => "'{$column->Comment}'",
+                            'search' => "''"
+                        ],
+                        15 => [
+                            'replace' => true,
+                            'content' => ($column->Null === 'NO' ? 'false' : 'true'),
+                            'search' => 'false'
+                        ],
+                        20 => [
+                            'replace' => true,
+                            'multiple' => [
+                                [
+                                    'content' => ($column->Null === 'NO' ? 'required' : 'optional'),
+                                    'search' => 'required'
+                                ]
                             ]
                         ]
                     ]
-                ]
-            );
+                );
+            } else {
+                $output->writeln($this->infoOutput("\t>>  RULE: the rule for '{$column->Field}' property has been omitted, it is a foreign"));
+            }
         }
 
         return Command::SUCCESS;

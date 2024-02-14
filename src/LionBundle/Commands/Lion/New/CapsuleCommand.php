@@ -94,7 +94,7 @@ class CapsuleCommand extends Command
 
             if (!empty($split[1])) {
                 $data = $this->classFactory->getProperty($split[0], $class, $split[1], ClassFactory::PRIVATE_PROPERTY);
-                $listProperties[] = $data->variable->type->camel;
+                $listProperties[] = $data->variable->type->snake;
 
                 $listMethods[] = [
                     'getter' => $data->getter->method,
@@ -103,7 +103,7 @@ class CapsuleCommand extends Command
                 ];
             } else {
                 $data = $this->classFactory->getProperty($split[0], $class, 'string', ClassFactory::PRIVATE_PROPERTY);
-                $listProperties[] = $data->variable->type->camel;
+                $listProperties[] = $data->variable->type->snake;
 
                 $listMethods[] = [
                     'getter' => $data->getter->method,
@@ -148,7 +148,7 @@ class CapsuleCommand extends Command
                 $this->str
                     ->lt()->lt()->lt()->concat('->')
                     ->concat($method['config']->setter->name)
-                    ->concat('(request->' . $method['config']->format->camel . ' ?? null)')
+                    ->concat('(request->' . $method['config']->format->snake . ' ?? null)')
                     ->concat($key === (count($listMethods) - 1) ? ';' : '')->ln();
             }
 
