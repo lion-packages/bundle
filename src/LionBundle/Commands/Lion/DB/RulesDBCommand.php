@@ -87,7 +87,7 @@ class RulesDBCommand extends MenuCommand
                 [
                     12 => [
                         'replace' => true,
-                        'content' => "'{$column->Field}'",
+                        'content' => "'" . strtolower($column->Field) . "'",
                         'search' => "''"
                     ],
                     13 => [
