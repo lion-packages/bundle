@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Lion\Route\Route;
-use Tests\Providers\ExampleProvider;
 
 Route::init();
 Route::addMiddleware([]);
@@ -16,8 +15,12 @@ Route::get('logger', function() {
     return success();
 });
 
-Route::get('inject', [ExampleProvider::class, 'getArrExample']);
-// Route::get('controller', [ExampleController::class, 'createExample']);
+Route::prefix('api', function() {
+    Route::post('test', fn() => success('test-response'));
+    Route::get('test', fn() => success('test-response'));
+    Route::put('test/{id:i}', fn(string $id) => success('test-response: ' . $id));
+    Route::delete('test/{id:i}', fn(string $id) => success('test-response: ' . $id));
+});
 
 Route::get('route-list', fn() => Route::getFullRoutes());
 // -----------------------------------------------------------------------------

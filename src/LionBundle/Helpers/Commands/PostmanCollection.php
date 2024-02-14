@@ -26,7 +26,7 @@ class PostmanCollection
         $this->str = new Str();
     }
 
-    public function init(string $host)
+    public function init(string $host): void
     {
         $this->postman['params'] = [
             'routes' => [],
@@ -71,22 +71,12 @@ class PostmanCollection
         return ['raw' => $params, 'query' => $query];
     }
 
-    private function addParams(string $method, array $params): array
+    private function addParams(array $params): array
     {
         $newParams = [];
 
         foreach ($params as $param) {
-            if ('POST' === $method) {
-                $newParams[] = [
-                    'key' => $param::$field,
-                    'value' => $param::$value,
-                    'description' => $param::$desc,
-                    'type' => 'text',
-                    'disabled' => $param::$disabled
-                ];
-            } else {
-                $newParams[$param::$field] = $param::$value;
-            }
+            $newParams[$param::$field] = $param::$value;
         }
 
         return $newParams;
@@ -102,7 +92,7 @@ class PostmanCollection
                 'header' => [self::HEADERS],
                 'body' => [
                     'mode' => 'raw',
-                    'raw' => json_encode((object) $this->addParams(Route::PATCH, $params)),
+                    'raw' => json_encode($this->addParams($params)),
                     'options' => [
                         'raw' => [
                             'language' => 'json'
@@ -120,7 +110,7 @@ class PostmanCollection
 
     private function addGet(string $name, string $route, array $params): array
     {
-        $arrayParams = json_decode(json_encode((object) $this->addParams(Route::GET, $params)), true);
+        $arrayParams = json_decode(json_encode($this->addParams($params)), true);
         $createParams = self::createQueryParams($arrayParams);
         $newRoute = $this->str->of("{{base_url}}/{$route}{$createParams['raw']}")->replace("//", '/')->get();
 
@@ -150,7 +140,7 @@ class PostmanCollection
                 'header' => [self::HEADERS],
                 'body' => [
                     'mode' => 'raw',
-                    'raw' => json_encode((object) $this->addParams(Route::DELETE, $params)),
+                    'raw' => json_encode($this->addParams($params)),
                     'options' => [
                         'raw' => [
                             'language' => 'json'
@@ -175,8 +165,13 @@ class PostmanCollection
                 'method' => Route::POST,
                 'header' => [self::HEADERS],
                 'body' => [
-                    'mode' => "formdata",
-                    'formdata' => $this->addParams(Route::POST, $params)
+                    'mode' => 'raw',
+                    'raw' => json_encode($this->addParams($params)),
+                    'options' => [
+                        'raw' => [
+                            'language' => 'json'
+                        ]
+                    ]
                 ],
                 'url' => [
                     ...$this->postman['params']['host']['params'],
@@ -196,8 +191,8 @@ class PostmanCollection
                 'method' => Route::PUT,
                 'header' => [self::HEADERS],
                 'body' => [
-                    'mode' => "raw",
-                    'raw' => json_encode((object) $this->addParams(Route::PUT, $params)),
+                    'mode' => 'raw',
+                    'raw' => json_encode($this->addParams($params)),
                     'options' => [
                         'raw' => [
                             'language' => 'json'
@@ -216,18 +211,18 @@ class PostmanCollection
     private function addRequest(string $name, string $route, string $method, array $params): array
     {
         if (Route::POST === $method) {
-            return self::addPost($name, $route, $params);
+            return $this->addPost($name, $route, $params);
         } elseif (Route::GET === $method) {
-            return self::addGet($name, $route, $params);
+            return $this->addGet($name, $route, $params);
         } elseif (Route::PUT === $method) {
-            return self::addPut($name, $route, $params);
+            return $this->addPut($name, $route, $params);
         } elseif (Route::DELETE === $method) {
-            return self::addDelete($name, $route, $params);
+            return $this->addDelete($name, $route, $params);
         } elseif (Route::PATCH === $method) {
-            return self::addPatch($name, $route, $params);
+            return $this->addPatch($name, $route, $params);
+        } else {
+            return $this->addGet($name, $route, $params);
         }
-
-        return self::addGet($name, $route, $params);
     }
 
     public function addRoutes(array $routes, array $rules): void
@@ -269,8 +264,8 @@ class PostmanCollection
             $initial = true;
             $lastArray = [];
 
-            foreach ($reverse as $key_split => $split) {
-                if ($key_split === 0) {
+            foreach ($reverse as $keySplit => $split) {
+                if ($keySplit === 0) {
                     $request = $this->addRequest(
                         $split,
                         $route['url'],
@@ -278,7 +273,7 @@ class PostmanCollection
                         $route['params']
                     );
 
-                    if ($key_split === $size) {
+                    if ($keySplit === $size) {
                         $this->postman['params']['items'][] = $request;
                     }
                 } else {
@@ -289,7 +284,7 @@ class PostmanCollection
                         $lastArray = ['name' => $split, 'item' => [$lastArray]];
                     }
 
-                    if ($key_split === $size) {
+                    if ($keySplit === $size) {
                         $this->postman['params']['items'][] = $lastArray;
                     }
                 }
@@ -300,34 +295,32 @@ class PostmanCollection
         }
     }
 
-    public function createCollection(array $items): array
+    public function createCollection(array $items, &$result = null): array
     {
-        $result = [];
+        if ($result === null) {
+            $result = [];
+        }
 
         foreach ($items as $json) {
-            if (isset($result[$json['name']])) {
+            $name = $json['name'];
+            $lastIndex = count($result) - 1;
+
+            while ($lastIndex >= 0 && $result[$lastIndex]['name'] !== $name) {
+                $lastIndex--;
+            }
+
+            if ($lastIndex >= 0 && isset($result[$lastIndex]['item'])) {
                 if (isset($json['item'])) {
-                    if (isset($result[$json['name']]['item'])) {
-                        $result[$json['name']]['item'] = array_merge(
-                            $result[$json['name']]['item'],
-                            $json['item']
-                        );
-                    }
+                    $this->createCollection($json['item'], $result[$lastIndex]['item']);
                 } else {
-                    $result[] = $json;
+                    $result[$lastIndex]['item'][] = $json;
                 }
             } else {
-                $result[$json['name']] = $json;
+                $result[] = $json;
             }
         }
 
-        foreach ($result as &$item) {
-            if (isset($item['item'])) {
-                $item['item'] = $this->createCollection($item['item']);
-            }
-        }
-
-        return array_values($result);
+        return $result;
     }
 
     public function getRoutes(): array

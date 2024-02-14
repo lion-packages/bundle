@@ -23,13 +23,16 @@ class PostmanCollectionCommandTest extends Test
     const OUTPUT_MESSAGE = 'Exported in';
 
     private CommandTester $commandTester;
+    private Store $store;
 
     protected function setUp(): void
     {
         $this->loadEnviroment();
         $this->createDirectory(self::URL_PATH);
 
+        $this->store = new Store();
         $application = (new Kernel)->getApplication();
+
         $application->add((new Container)->injectDependencies(new PostmanCollectionCommand()));
         $this->commandTester = new CommandTester($application->find('route:postman'));
     }
@@ -48,14 +51,9 @@ class PostmanCollectionCommandTest extends Test
         $this->assertSame(Command::SUCCESS, $this->commandTester->execute([]));
         $this->assertFileExists($file);
 
-        $json = json_decode(
-            (new Store)->get(self::URL_PATH . Carbon::now()->format('Y_m_d') . '_lion_collection.json'),
-            true
-        );
+        $jsonCollection = $this->store->get(self::URL_PATH . Carbon::now()->format('Y_m_d') . '_lion_collection.json');
+        $jsonProvider = $this->store->get('./tests/Providers/PostmanProvider.json');
 
-        $this->assertIsArray($json);
-        $this->assertArrayHasKey('variable', $json);
-        $this->assertArrayHasKey('info', $json);
-        $this->assertArrayHasKey('item', $json);
+        $this->assertSame($jsonProvider, $jsonCollection);
     }
 }
