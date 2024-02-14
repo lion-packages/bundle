@@ -68,7 +68,7 @@ class CapsuleCommand extends Command
             ->setDescription('Command required for creating new custom capsules')
             ->addArgument('capsule', InputArgument::OPTIONAL, 'Capsule name', 'Example')
             ->addOption(
-                'propierties',
+                'properties',
                 'p',
                 InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
                 'Defined properties for the capsule',
@@ -79,23 +79,22 @@ class CapsuleCommand extends Command
 	protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $capsule = $input->getArgument('capsule');
-        $propierties = $input->getOption('propierties');
+        $properties = $input->getOption('properties');
 
         $this->classFactory->classFactory('database/Class/', $capsule);
         $folder = $this->classFactory->getFolder();
         $namespace = $this->classFactory->getNamespace();
         $class = $this->classFactory->getClass();
 
-        $listPropierties = [];
+        $listProperties = [];
         $listMethods = [];
 
-        foreach ($propierties as $key => $propierty) {
+        foreach ($properties as $key => $propierty) {
             $split = explode(':', $propierty);
 
             if (!empty($split[1])) {
-                $data = $this->classFactory->getPrivatePropierty($split[0], $class, $split[1]);
-
-                $listPropierties[] = $data->type;
+                $data = $this->classFactory->getProperty($split[0], $class, $split[1], ClassFactory::PRIVATE_PROPERTY);
+                $listProperties[] = $data->variable->type->camel;
 
                 $listMethods[] = [
                     'getter' => $data->getter->method,
@@ -103,9 +102,8 @@ class CapsuleCommand extends Command
                     'config' => $data
                 ];
             } else {
-                $data = $this->classFactory->getPrivatePropierty($split[0], $class);
-
-                $listPropierties[] = $data->type;
+                $data = $this->classFactory->getProperty($split[0], $class, 'string', ClassFactory::PRIVATE_PROPERTY);
+                $listProperties[] = $data->variable->type->camel;
 
                 $listMethods[] = [
                     'getter' => $data->getter->method,
@@ -129,8 +127,8 @@ class CapsuleCommand extends Command
             ->concat('implements CapsuleInterface, JsonSerializable')->ln()
             ->concat("{")->ln();
 
-        if (count($propierties) > 0) {
-            $this->str->lt()->concat($this->arr->of($listPropierties)->join("\n\t"))->ln()->ln();
+        if (count($properties) > 0) {
+            $this->str->lt()->concat($this->arr->of($listProperties)->join("\n\t"))->ln()->ln();
         }
 
         $this->str
@@ -139,7 +137,7 @@ class CapsuleCommand extends Command
             ->lt()->lt()->concat('return get_object_vars($this);')->ln()
             ->lt()->concat('}')->ln()->ln();
 
-        if ($this->arr->of($propierties)->length() > 0) {
+        if ($this->arr->of($properties)->length() > 0) {
             $this->str
                 ->lt()->concat("/**\n\t * {@inheritdoc}\n\t * */")->ln()
                 ->lt()->concat("public function capsule(): {$class}")->ln()
@@ -150,7 +148,7 @@ class CapsuleCommand extends Command
                 $this->str
                     ->lt()->lt()->lt()->concat('->')
                     ->concat($method['config']->setter->name)
-                    ->concat('(request->' . $method['config']->format . ' ?? null)')
+                    ->concat('(request->' . $method['config']->format->camel . ' ?? null)')
                     ->concat($key === (count($listMethods) - 1) ? ';' : '')->ln();
             }
 
@@ -165,7 +163,7 @@ class CapsuleCommand extends Command
                 ->lt()->concat('}');
         }
 
-        if (count($propierties) > 0) {
+        if (count($properties) > 0) {
             $this->str->ln()->ln();
 
             foreach ($listMethods as $key => $method) {
@@ -185,7 +183,10 @@ class CapsuleCommand extends Command
         $this->classFactory->create($class, 'php', $folder)->add($contentFile)->close();
 
         $output->writeln($this->warningOutput("\t>>  CAPSULE: {$class}"));
-        $output->writeln($this->successOutput("\t>>  CAPSULE: the '{$namespace}\\{$class}' capsule has been generated"));
+
+        $output->writeln(
+            $this->successOutput("\t>>  CAPSULE: the '{$namespace}\\{$class}' capsule has been generated")
+        );
 
         return Command::SUCCESS;
 	}

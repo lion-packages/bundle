@@ -49,10 +49,10 @@ class DBCapsuleCommand extends MenuCommand
             return Command::FAILURE;
         }
 
-        $propierties = [];
+        $properties = [];
 
         foreach ($columns as $column) {
-            $propierties[] = "{$column->Field}:{$this->classFactory->getDBType($column->Type)}";
+            $properties[] = "{$column->Field}:{$this->classFactory->getDBType($column->Type)}";
         }
 
         $connPascal = $this->classFactory->getClassFormat($selectedConnection);
@@ -61,7 +61,7 @@ class DBCapsuleCommand extends MenuCommand
         $this->getApplication()
             ->find('new:capsule')
             ->run(
-                new ArrayInput(['capsule' => "{$connPascal}/MySQL/{$className}", '--propierties' => $propierties]),
+                new ArrayInput(['capsule' => "{$connPascal}/MySQL/{$className}", '--properties' => $properties]),
                 $output
             );
 

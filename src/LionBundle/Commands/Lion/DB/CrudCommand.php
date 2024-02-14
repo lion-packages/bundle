@@ -264,7 +264,7 @@ class CrudCommand extends MenuCommand
 
         foreach (['create', 'update', 'delete'] as $method) {
             foreach ($columns as $column) {
-                $getter = $this->classFactory->getPropierty(
+                $getter = $this->classFactory->getProperty(
                     $column->Field,
                     $entityPascal,
                     $this->classFactory->getDBType($column->Type)
