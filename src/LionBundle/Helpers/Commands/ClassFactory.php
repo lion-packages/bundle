@@ -6,6 +6,10 @@ namespace Lion\Bundle\Helpers\Commands;
 
 class ClassFactory
 {
+    const PUBLIC_PROPERTY = 'public';
+    const PRIVATE_PROPERTY = 'private';
+    const PROTECTED_PROPERTY = 'protected';
+
     private $content;
     private string $namespace;
     private string $class;
@@ -60,67 +64,41 @@ class ClassFactory
         return $this;
     }
 
-    public function getPropierty(string $name, string $capsule, string $type = 'string'): object
-    {
-        $newName = str_replace(' ', '_', $name);
-        $newName = str_replace('-', '_', $newName);
-        $newName = str_replace('_', ' ', $newName);
-        $newName = str_replace(' ', '', ucwords($newName));
-        $newName = lcfirst($newName);
+    public function getProperty(
+        string $name,
+        string $capsule,
+        string $type = 'string',
+        ?string $visibility = null
+    ): object {
+        $availableVisibility = [self::PUBLIC_PROPERTY, self::PRIVATE_PROPERTY, self::PROTECTED_PROPERTY];
+        $finalVisibility = in_array($visibility, $availableVisibility, true) ? "{$visibility} " : '';
+        $snake = trim(str_replace('-', '_', str_replace(' ', '_', $name)));
+
+        $camel = str_replace('_', ' ', str_replace('-', ' ', $name));
+        $camel = lcfirst(str_replace(' ', '', ucwords($camel)));
 
         return (object) [
-            'variable' => '$' . $newName,
-            'format' => $newName,
-            'name' => '$' . "{$newName} = null;",
-            'type' => "?{$type} $" . "{$newName} = null;",
-            'reference' => '$this->' . "{$newName};",
-            'getter' => $this->getGetter($name, $type),
-            'setter' => $this->getSetter($name, $type, $capsule)
-        ];
-    }
-
-    public function getPublicPropierty(string $name, string $capsule, string $type = 'string'): object
-    {
-        $propierty = $this->getPropierty($name, $capsule, $type);
-
-        return (object) [
-            'variable' => '$' . $propierty->format,
-            'format' => $propierty->format,
-            'name' => "public {$propierty->name}",
-            'type' => "public {$propierty->type}",
-            'reference' => $propierty->reference,
-            'getter' => $propierty->getter,
-            'setter' => $propierty->setter
-        ];
-    }
-
-    public function getPrivatePropierty(string $name, string $capsule, string $type = 'string'): object
-    {
-        $propierty = $this->getPropierty($name, $capsule, $type);
-
-        return (object) [
-            'variable' => '$' . $propierty->format,
-            'format' => $propierty->format,
-            'name' => "private {$propierty->name}",
-            'type' => "private {$propierty->type}",
-            'reference' => $propierty->reference,
-            'getter' => $propierty->getter,
-            'setter' => $propierty->setter
-        ];
-    }
-
-    public function getProtectedPropierty(string $name, string $capsule, string $type = 'string'): object
-    {
-        $propierty = $this->getPropierty($name, $capsule, $type);
-
-        return (object) [
-            'variable' => '$' . $propierty->format,
-            'format' => $propierty->format,
-            'name' => "protected {$propierty->name}",
-            'type' => "protected {$propierty->type}",
-            'reference' => $propierty->reference,
-            'getter' => $propierty->getter,
-            'setter' => $propierty->setter
+            'format' => (object) [
+                'camel' => $camel,
+                'snake' => $snake
+            ],
+            'getter' => $this->getGetter($snake, $type),
+            'setter' => $this->getSetter($snake, $type, $capsule),
+            'variable' => (object) [
+                'reference' => '$this->' . "{$camel};",
+                'name' => (object) [
+                    'camel' => ($finalVisibility . '$' . $camel),
+                    'snake' => ($finalVisibility . '$' . $snake)
+                ],
+                'type' => (object) [
+                    'camel' => ($finalVisibility . "?{$type} $" . "{$camel} = null;"),
+                    'snake' => ($finalVisibility . "?{$type} $" . "{$snake} = null;")
+                ],
+                'initialize' => (object) [
+                    'camel' => ($finalVisibility . '$' . "{$camel} = null"),
+                    'snake' => ($finalVisibility . '$' . "{$snake} = null")
+                ]
+            ]
         ];
     }
 
@@ -146,7 +124,7 @@ class ClassFactory
         $newName = str_replace('_', ' ', $newName);
         $newName = trim(str_replace(' ', '', ucwords($newName)));
 
-        $getter = "\tpublic function get{$newName}(): ?{$type}\n\t{\n\t\treturn " . '$this->' . lcfirst($newName);
+        $getter = "\tpublic function get{$newName}(): ?{$type}\n\t{\n\t\treturn " . '$this->' . $name;
         $getter .= ";\n\t}";
 
         return (object) ['name' => "get{$newName}", 'method' => $getter];
@@ -158,10 +136,9 @@ class ClassFactory
         $newName = str_replace('-', '_', $newName);
         $newName = str_replace('_', ' ', $newName);
         $newName = trim(str_replace(' ', '', ucwords($newName)));
-        $camelName = lcfirst($newName);
 
-        $setter = "\tpublic function set{$newName}(?{$type} $" . $camelName . "): {$capsule}\n\t{\n";
-        $setter .= "\t\t" . '$this->' . "{$camelName} = $" . $camelName . ";\n\n\t\treturn " . '$this' . ";\n\t}";
+        $setter = "\tpublic function set{$newName}(?{$type} $" . $name . "): {$capsule}\n\t{\n";
+        $setter .= "\t\t" . '$this->' . "{$name} = $" . $name . ";\n\n\t\treturn " . '$this' . ";\n\t}";
 
         return (object) ['name' => "set{$newName}", 'method' => $setter];
     }
@@ -195,11 +172,11 @@ class ClassFactory
     public static function getDBType(string $type): string
     {
         if (preg_match("/^int|bigint/", $type)) {
-            return "int";
+            return 'int';
         } elseif (preg_match("/^float/", $type)) {
-            return "float";
-        } else {
-            return "string";
+            return 'float';
         }
+
+        return 'string';
     }
 }

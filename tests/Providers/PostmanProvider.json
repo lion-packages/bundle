@@ -1,0 +1,200 @@
+{
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://127.0.0.1:8000",
+            "type": "string"
+        }
+    ],
+    "info": {
+        "name": "lion-bundle",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "index-get",
+            "response": [],
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "url": {
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "raw": "{{base_url}}/",
+                    "path": [
+                        ""
+                    ],
+                    "query": []
+                }
+            }
+        },
+        {
+            "name": "logger",
+            "response": [],
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "url": {
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "raw": "{{base_url}}/logger",
+                    "path": [
+                        "logger"
+                    ],
+                    "query": []
+                }
+            }
+        },
+        {
+            "name": "api",
+            "item": [
+                {
+                    "name": "test",
+                    "response": [],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "raw": "{{base_url}}/api/test",
+                            "path": [
+                                "api",
+                                "test"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "test",
+                    "response": [],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "raw": "{{base_url}}/api/test",
+                            "path": [
+                                "api",
+                                "test"
+                            ],
+                            "query": []
+                        }
+                    }
+                },
+                {
+                    "name": "test",
+                    "item": [
+                        {
+                            "name": "{id:i}",
+                            "response": [],
+                            "request": {
+                                "method": "PUT",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "[]",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "raw": "{{base_url}}/api/test/{id:i}",
+                                    "path": [
+                                        "api",
+                                        "test",
+                                        "{id:i}"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "{id:i}",
+                            "response": [],
+                            "request": {
+                                "method": "DELETE",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json",
+                                        "type": "text"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "[]",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "raw": "{{base_url}}/api/test/{id:i}",
+                                    "path": [
+                                        "api",
+                                        "test",
+                                        "{id:i}"
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "event": []
+}

@@ -45,7 +45,7 @@ class CapsuleCommandTest extends Test
     {
         $commandExecute = $this->commandTester->execute([
             'capsule' => self::CLASS_NAME,
-            '--propierties' => self::PROPIERTIES
+            '--properties' => self::PROPIERTIES
         ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
@@ -60,10 +60,15 @@ class CapsuleCommandTest extends Test
 
         foreach (self::PROPIERTIES as $propierty) {
             $split = explode(':', $propierty);
-            $type = !empty($split[1]) ? $split[1] : 'string';
-            $dataPropierty = $this->classFactory->getPropierty($split[0], self::CLASS_NAME, $type);
 
-            $this->assertNull($this->getPrivateProperty($dataPropierty->format));
+            $dataPropierty = $this->classFactory->getProperty(
+                $split[0],
+                self::CLASS_NAME,
+                (!empty($split[1]) ? $split[1] : 'string'),
+                ClassFactory::PRIVATE_PROPERTY
+            );
+
+            $this->assertNull($this->getPrivateProperty($dataPropierty->format->snake));
 
             $getter = $dataPropierty->getter->name;
             $setter = $dataPropierty->setter->name;

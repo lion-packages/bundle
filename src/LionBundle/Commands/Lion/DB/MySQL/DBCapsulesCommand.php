@@ -26,8 +26,6 @@ class DBCapsulesCommand extends Command
         $listAllTables = [];
 
         foreach ($connectionsKeys as $connection) {
-            $output->writeln($this->infoOutput("\t>>  CONNECTION: {$connection}"));
-
             $allTables = DB::connection($connection)
                 ->show()->tables()->from($connection)
                 ->fetchMode(PDO::FETCH_ASSOC)

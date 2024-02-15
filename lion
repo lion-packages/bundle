@@ -45,6 +45,14 @@ Driver::run([
             'dbname' => env->DB_NAME,
             'user' => env->DB_USER,
             'password' => env->DB_PASSWORD
+        ],
+        env->DB_NAME_TEST => [
+            'type' => env->DB_TYPE_TEST,
+            'host' => env->DB_HOST_TEST,
+            'port' => env->DB_PORT_TEST,
+            'dbname' => env->DB_NAME,
+            'user' => env->DB_USER_TEST,
+            'password' => env->DB_PASSWORD_TEST
         ]
     ]
 ]);

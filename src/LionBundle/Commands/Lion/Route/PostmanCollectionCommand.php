@@ -98,6 +98,7 @@ class PostmanCollectionCommand extends Command
         $this->classFactory
             ->create($this->jsonName, 'json', $path)
             ->add(json_encode($jsonData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES))
+            ->add("\n")
             ->close();
 
         $output->writeln($this->warningOutput("\t>>  COLLECTION: {$this->jsonName}"));

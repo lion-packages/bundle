@@ -8,9 +8,9 @@
 /storage/postman/*.json
 /vite/
 /app/
-/database/
 .rnd
 .phpunit.result.cache
 .env
+/database/
 test.txt
 supervisord.pid
