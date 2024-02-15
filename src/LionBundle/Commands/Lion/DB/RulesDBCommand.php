@@ -42,8 +42,13 @@ class RulesDBCommand extends MenuCommand
 
         $entityPascal = $this->str->of($entity)->replace('_', ' ')->replace('-', ' ')->pascal()->get();
         $connectionPascal = $this->str->of($selectedConnection)->replace('_', ' ')->replace('-', ' ')->pascal()->get();
-
         $columns = DB::connection($selectedConnection)->show()->full()->columns()->from($entity)->getAll();
+
+        if (isset($columns->status)) {
+            $output->writeln($this->errorOutput($columns->message));
+
+            return Command::FAILURE;
+        }
 
         $foreigns = DB::connection($selectedConnection)
             ->table('INFORMATION_SCHEMA.KEY_COLUMN_USAGE', false)
