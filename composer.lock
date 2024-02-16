@@ -1060,16 +1060,16 @@
         },
         {
             "name": "lion/helpers",
-            "version": "v3.1.0",
+            "version": "v3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/helpers.git",
-                "reference": "34799142861db5292263e0d6ca5728b581a7973c"
+                "reference": "5ccb8bee5a466be868ead096c594beb7a43f7be1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/helpers/zipball/34799142861db5292263e0d6ca5728b581a7973c",
-                "reference": "34799142861db5292263e0d6ca5728b581a7973c",
+                "url": "https://api.github.com/repos/lion-packages/helpers/zipball/5ccb8bee5a466be868ead096c594beb7a43f7be1",
+                "reference": "5ccb8bee5a466be868ead096c594beb7a43f7be1",
                 "shasum": ""
             },
             "require": {
@@ -1092,9 +1092,9 @@
             "description": "easy to use helpers for any type of use",
             "support": {
                 "issues": "https://github.com/lion-packages/helpers/issues",
-                "source": "https://github.com/lion-packages/helpers/tree/v3.1.0"
+                "source": "https://github.com/lion-packages/helpers/tree/v3.1.1"
             },
-            "time": "2024-01-19T02:47:44+00:00"
+            "time": "2024-02-13T14:48:04+00:00"
         },
         {
             "name": "lion/mailer",
@@ -4534,16 +4534,16 @@
     "packages-dev": [
         {
             "name": "lion/test",
-            "version": "v1.4.0",
+            "version": "v1.5.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/lion-packages/test.git",
-                "reference": "c0eed0c33478b27a521258c94b053dd68d8e7bbc"
+                "url": "https://github.com/Sleon4/test.git",
+                "reference": "b087d55b4a18eb4e50afe52d4a747122e7d9f933"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/test/zipball/c0eed0c33478b27a521258c94b053dd68d8e7bbc",
-                "reference": "c0eed0c33478b27a521258c94b053dd68d8e7bbc",
+                "url": "https://api.github.com/repos/Sleon4/test/zipball/b087d55b4a18eb4e50afe52d4a747122e7d9f933",
+                "reference": "b087d55b4a18eb4e50afe52d4a747122e7d9f933",
                 "shasum": ""
             },
             "require": {
@@ -4564,10 +4564,10 @@
             ],
             "description": "library to implement testing with helpers that allow easy testing with PHPUnit",
             "support": {
-                "issues": "https://github.com/lion-packages/test/issues",
-                "source": "https://github.com/lion-packages/test/tree/v1.4.0"
+                "issues": "https://github.com/Sleon4/test/issues",
+                "source": "https://github.com/Sleon4/test/tree/v1.5.0"
             },
-            "time": "2024-01-09T14:44:37+00:00"
+            "time": "2024-02-13T21:08:53+00:00"
         },
         {
             "name": "myclabs/deep-copy",

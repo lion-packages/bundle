@@ -60,7 +60,6 @@ class RouteListCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         array_pop($this->routes);
-        $this->configMiddleware = [...$this->configMiddleware['app']];
         $size = $this->arr->of($this->routes)->length();
         $cont = 0;
         $rows = [];
@@ -68,16 +67,6 @@ class RouteListCommand extends Command
         foreach ($this->routes as $route => $methods) {
             foreach ($methods as $keyMethods => $method) {
                 $routeUrl = $this->str->of("/{$route}")->replace("//", "/")->get();
-
-                if ($method['handler']['request'] != false) {
-                    $rows[] = [
-                        $this->warningOutput($keyMethods),
-                        $routeUrl,
-                        $this->errorOutput('false'),
-                        $this->errorOutput('false')
-                    ];
-                }
-
                 if ($method['handler']['callback'] != false) {
                     $rows[] = [
                         $this->warningOutput($keyMethods),
@@ -116,12 +105,17 @@ class RouteListCommand extends Command
                 if (isset($this->rules[$keyMethods])) {
                     if (isset($this->rules[$keyMethods][$routeUrl])) {
                         foreach ($this->rules[$keyMethods][$routeUrl] as $keyUriRule => $classRule) {
-                            $required_param = $classRule::$disabled === false ? 'REQUIRED' : 'OPTIONAL';
+                            $objectClassRule = new $classRule();
+                            $requiredParam = $objectClassRule->disabled === false ? 'REQUIRED' : 'OPTIONAL';
 
                             $rows[] = [
                                 $this->successOutput('PARAM:'),
-                                $this->successOutput($classRule::$field . " ({$required_param})"),
-                                $this->transformNamespace($classRule),
+                                (
+                                    empty($objectClassRule->field)
+                                        ? $this->successOutput('(NAMELESS)')
+                                        : $this->successOutput($objectClassRule->field . " ({$requiredParam})")
+                                ),
+                                $this->transformNamespace($objectClassRule::class),
                                 $this->warningOutput('passes')
                             ];
                         }
