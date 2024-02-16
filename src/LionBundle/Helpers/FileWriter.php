@@ -15,18 +15,9 @@ class FileWriter
         $this->str = new Str();
     }
 
-    private function increment(array $row, int $increment): int
-    {
-        if ($this->str->of($row['content'])->contains(["\n"]) !== false) {
-            $increment += (substr_count($row['content'], "\n") - 1);
-        }
-
-        return $increment;
-    }
-
     private function replaceContent(array $row, string $modifiedLine, string $originalLine): string
     {
-        if ($row['search'] === '--all-elem--') {
+        if ('--all-elem--' === $row['search']) {
             $modifiedLine = str_pad($row['content'], strlen($originalLine));
         } else {
             $newLine = $this->str->of($originalLine)->replace($row['search'], $row['content'])->get();
@@ -38,48 +29,46 @@ class FileWriter
 
     public function readFileRows(string $path, array $rows): void
     {
-        $increment = 0;
+        $file = fopen($path, 'r+');
+        $rowsFile = file($path);
 
         foreach ($rows as $key => $row) {
-            $file = fopen($path, 'r+');
-            $rowsFile = file($path);
-
             if ($key >= 1 && $key <= count($rowsFile)) {
-                $total = ($key - 1) + $increment;
-                $originalLine = $rowsFile[$total];
-                $modifiedLine = '';
-
-                if ($row['replace'] === false) {
-                    $modifiedLine = str_pad($row['content'], strlen($originalLine));
-                    $increment = $this->increment($row, $increment);
-                } else {
-                    if (isset($row['multiple'])) {
-                        foreach ($row['multiple'] as $key => $content) {
-                            $modifiedLine = $this->replaceContent(
-                                $content,
-                                $modifiedLine,
-                                ($key === 0 ? $originalLine : $modifiedLine)
-                            );
-
-                            $increment = $this->increment($content, $increment);
-                        }
-                    } else {
-                        $modifiedLine = $this->replaceContent($row, $modifiedLine, $originalLine);
-                        $increment = $this->increment($row, $increment);
-                    }
-                }
-
                 fseek($file, 0);
-                for ($i = 0; $i < count($rowsFile); $i++) {
-                    if ($i == $total) {
-                        fwrite($file, $modifiedLine);
+
+                if (isset($row['remove'])) {
+                    $total = $key - 1;
+                    unset($rowsFile[$total]);
+                } else {
+                    $total = $key - 1;
+                    $originalLine = $rowsFile[$total];
+                    $modifiedLine = '';
+
+                    if ($row['replace'] === false) {
+                        $modifiedLine = str_pad($row['content'], strlen($originalLine));
                     } else {
-                        fwrite($file, $rowsFile[$i]);
+                        if (isset($row['multiple'])) {
+                            foreach ($row['multiple'] as $key => $content) {
+                                $originalLine = $this->replaceContent(
+                                    $content,
+                                    ($key === 0 ? $originalLine : $modifiedLine),
+                                    $originalLine
+                                );
+                            }
+
+                            $modifiedLine = $originalLine;
+                        } else {
+                            $modifiedLine = $this->replaceContent($row, $modifiedLine, $originalLine);
+                        }
                     }
+
+                    $rowsFile[$total] = $modifiedLine;
                 }
             }
-
-            fclose($file);
         }
+
+        ftruncate($file, 0);
+        fwrite($file, implode('', $rowsFile));
+        fclose($file);
     }
 }

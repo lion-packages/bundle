@@ -151,9 +151,31 @@ class ClassFactory
         string $visibility = 'public',
         int $lineBreak = 2
     ): string {
-        $method = "\t{$visibility} function {$name}({$params})" . ($type === '' ? '' : ": {$type}");
-        $method .= "\n\t{\n\t\t{$content}\n\t}";
-        $method .= str_repeat("\n", $lineBreak);
+        $method = '';
+        $allCount = 16;
+        $allCountWithType = 18;
+
+        $countContentFunction = strlen($visibility) + strlen($name) + strlen($params);
+        $countContentFunction += '' === $type ? 0 : strlen($type);
+        $countContentFunction += '' === $type ? $allCount : $allCountWithType;
+
+        if ($countContentFunction > 120) {
+            $splitParams = explode(',', $params);
+            $implodeParams = '';
+
+            foreach ($splitParams as $key => $param) {
+                $param = trim($param);
+                $implodeParams .= $key === (count($splitParams) - 1) ? "\n\t\t{$param}" : "\n\t\t{$param},";
+            }
+
+            $method .= "\t{$visibility} function {$name}({$implodeParams}\n\t)". ($type === '' ? '' : ": {$type}");
+            $method .=  " {\n\t\t{$content}\n\t}";
+            $method .= str_repeat("\n", $lineBreak);
+        } else {
+            $method .= "\t{$visibility} function {$name}({$params})" . ($type === '' ? '' : ": {$type}");
+            $method .= "\n\t{\n\t\t{$content}\n\t}";
+            $method .= str_repeat("\n", $lineBreak);
+        }
 
         return $method;
     }
