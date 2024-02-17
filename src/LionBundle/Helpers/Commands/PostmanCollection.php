@@ -71,12 +71,14 @@ class PostmanCollection
         return ['raw' => $params, 'query' => $query];
     }
 
-    private function addParams(array $params): array
+    private function addParams(array $rules): array
     {
         $newParams = [];
 
-        foreach ($params as $param) {
-            $newParams[$param::$field] = $param::$value;
+        foreach ($rules as $rule) {
+            $objectRuleClass = new $rule();
+
+            $newParams[$objectRuleClass->field] = $objectRuleClass->value;
         }
 
         return $newParams;

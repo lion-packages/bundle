@@ -59,15 +59,6 @@ Driver::run([
 
 /**
  * -----------------------------------------------------------------------------
- * Initialize Http parameters (Middleware/Rules)
- * -----------------------------------------------------------------------------
- * */
-
-include_once('./routes/rules.php');
-include_once('./routes/middleware.php');
-
-/**
- * -----------------------------------------------------------------------------
  * Run The lion Application
  * -----------------------------------------------------------------------------
  * This is where the commands for your application are executed

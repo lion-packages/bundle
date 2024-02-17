@@ -12,8 +12,4 @@ use Lion\Bundle\Helpers\Http\Routes;
  * ------------------------------------------------------------------------------
  **/
 
-Routes::setMiddleware([
-    'app' => [
-        //
-    ]
-]);
+Routes::setMiddleware([]);
