@@ -1178,16 +1178,16 @@
         },
         {
             "name": "lion/route",
-            "version": "v10.0.0",
+            "version": "v10.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/route.git",
-                "reference": "458a1cfcf4b376f7bbb154ff66386cd4c386d971"
+                "reference": "7c214ff1d105cc9373f539b1eac4a03dda80bfe2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/route/zipball/458a1cfcf4b376f7bbb154ff66386cd4c386d971",
-                "reference": "458a1cfcf4b376f7bbb154ff66386cd4c386d971",
+                "url": "https://api.github.com/repos/lion-packages/route/zipball/7c214ff1d105cc9373f539b1eac4a03dda80bfe2",
+                "reference": "7c214ff1d105cc9373f539b1eac4a03dda80bfe2",
                 "shasum": ""
             },
             "require": {
@@ -1214,9 +1214,9 @@
             "description": "This library has quick router usage with regular expressions.",
             "support": {
                 "issues": "https://github.com/lion-packages/route/issues",
-                "source": "https://github.com/lion-packages/route/tree/v10.0.0"
+                "source": "https://github.com/lion-packages/route/tree/v10.1.0"
             },
-            "time": "2024-01-20T00:15:43+00:00"
+            "time": "2024-02-17T16:31:48+00:00"
         },
         {
             "name": "lion/security",

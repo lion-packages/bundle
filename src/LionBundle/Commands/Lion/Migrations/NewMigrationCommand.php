@@ -14,7 +14,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class NewMigrationCommand extends MenuCommand
 {
-    const OPTIONS = ['Table', 'View', 'Store-Procedure'];
+    const TABLE = 'Table';
+    const VIEW = 'View';
+    const STORE_PROCEDURE = 'Store-Procedure';
+    const OPTIONS = [self::TABLE, self::VIEW, self::STORE_PROCEDURE];
 
     private ClassFactory $classFactory;
     private MigrationFactory $migrationFactory;
@@ -58,13 +61,12 @@ class NewMigrationCommand extends MenuCommand
         }
 
         $selectedConnection = $this->selectConnection($input, $output);
-
         $selectedType = $this->selectMigrationType($input, $output, self::OPTIONS);
 
         $migrationPascal = $this->str->of($migration)->replace('-', ' ')->replace('_', ' ')->pascal()->trim()->get();
         $dbPascal = $this->str->of($selectedConnection)->replace('-', ' ')->replace('_', ' ')->pascal()->trim()->get();
 
-        if ('Table' === $selectedType) {
+        if (self::TABLE === $selectedType) {
             $this->store->folder("database/Migrations/{$dbPascal}/Tables/");
             $this->classFactory->classFactory("database/Migrations/{$dbPascal}/Tables/", $migrationPascal);
             $body = $this->migrationFactory->getTableBody();
@@ -75,7 +77,7 @@ class NewMigrationCommand extends MenuCommand
                 ->close();
         }
 
-        if ('View' === $selectedType) {
+        if (self::VIEW === $selectedType) {
             $this->store->folder("database/Migrations/{$dbPascal}/Views/");
             $this->classFactory->classFactory("database/Migrations/{$dbPascal}/Views/", $migrationPascal);
             $body = $this->migrationFactory->getViewBody();
@@ -86,7 +88,7 @@ class NewMigrationCommand extends MenuCommand
                 ->close();
         }
 
-        if ('Store-Procedure' === $selectedType) {
+        if (self::STORE_PROCEDURE === $selectedType) {
             $this->store->folder("database/Migrations/{$dbPascal}/StoreProcedures/");
             $this->classFactory->classFactory("database/Migrations/{$dbPascal}/StoreProcedures/", $migrationPascal);
             $body = $this->migrationFactory->getStoreProcedureBody();
