@@ -59,8 +59,7 @@ class MiddlewareCommand extends Command
             ->create($class, 'php', $folder)
             ->add("<?php\n\ndeclare(strict_types=1);\n\n")
             ->add("namespace {$namespace};\n\n")
-            ->add("class {$class}\n{\n")
-            ->add("\tpublic function __construct()\n\t{\n\n\t}\n}\n")
+            ->add("class {$class}\n{\n}\n")
             ->close();
 
         $output->writeln($this->warningOutput("\t>>  MIDDLEWARE: {$class}"));
