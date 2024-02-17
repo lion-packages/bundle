@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Tests\Commands\Lion\Route;
 
 use Carbon\Carbon;
+use Lion\Bundle\Commands\Lion\New\RulesCommand;
 use Lion\Bundle\Commands\Lion\Route\PostmanCollectionCommand;
 use Lion\Bundle\Helpers\Http\Routes;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\DependencyInjection\Container;
 use Lion\Files\Store;
+use Lion\Route\Route;
 use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tests\Providers\EnviromentProviderTrait;
@@ -21,8 +23,11 @@ class PostmanCollectionCommandTest extends Test
 
     const URL_PATH = './storage/postman/';
     const OUTPUT_MESSAGE = 'Exported in';
+    const NAMESPACE_RULE = 'App\\Rules\\UsersNameRule';
+    const CLASS_NAME_RULE = 'UsersNameRule';
 
     private CommandTester $commandTester;
+    private CommandTester $commandTesterRule;
     private Store $store;
 
     protected function setUp(): void
@@ -33,22 +38,35 @@ class PostmanCollectionCommandTest extends Test
         $this->store = new Store();
         $application = (new Kernel)->getApplication();
 
+        $application->add((new Container)->injectDependencies(new RulesCommand()));
         $application->add((new Container)->injectDependencies(new PostmanCollectionCommand()));
+
         $this->commandTester = new CommandTester($application->find('route:postman'));
+        $this->commandTesterRule = new CommandTester($application->find('new:rule'));
     }
 
     protected function tearDown(): void
     {
         $this->rmdirRecursively(self::URL_PATH);
+        $this->rmdirRecursively('./app/');
     }
 
     public function testExecute(): void
     {
-        $file = self::URL_PATH . Carbon::now()->format('Y_m_d') . '_lion_collection.json';
+        $this->assertSame(Command::SUCCESS, $this->commandTesterRule->execute(['rule' => self::CLASS_NAME_RULE]));
 
-        Routes::setRules(['POST' => []]);
+        Routes::setRules([
+            Route::POST => [
+                '/api/test' => [
+                    self::NAMESPACE_RULE
+                ]
+            ]
+        ]);
 
         $this->assertSame(Command::SUCCESS, $this->commandTester->execute([]));
+
+        $file = self::URL_PATH . Carbon::now()->format('Y_m_d') . '_lion_collection.json';
+
         $this->assertFileExists($file);
 
         $jsonCollection = $this->store->get(self::URL_PATH . Carbon::now()->format('Y_m_d') . '_lion_collection.json');
