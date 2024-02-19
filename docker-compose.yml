@@ -34,6 +34,15 @@ services:
             REDIS_DATABASES: ${REDIS_DATABASES}
         networks:
             - lion
+    mailhog:
+        image: mailhog/mailhog
+        container_name: bundle-mailhog
+        restart: unless-stopped
+        ports:
+            - "8025:8025"
+            - "1025:1025"
+        networks:
+            - lion
     mysql:
         image: mysql
         container_name: bundle-mysql
