@@ -36,7 +36,7 @@ class NewMigrationCommandTest extends Test
 
 	protected function tearDown(): void
 	{
-        $this->rmdirRecursively('./database/');
+        // $this->rmdirRecursively('./database/');
 	}
 
     public function testExecuteIsInvalid(): void
@@ -46,7 +46,7 @@ class NewMigrationCommandTest extends Test
 
     public function testExecuteForTable(): void
     {
-        $commandExecute = $this->commandTester->setInputs(['0'])->execute(['migration' => self::MIGRATION_NAME]);
+        $commandExecute = $this->commandTester->setInputs(['0', '0'])->execute(['migration' => self::MIGRATION_NAME]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
@@ -59,7 +59,7 @@ class NewMigrationCommandTest extends Test
 
     public function testExecuteForView(): void
     {
-        $commandExecute = $this->commandTester->setInputs(['1'])->execute(['migration' => self::MIGRATION_NAME]);
+        $commandExecute = $this->commandTester->setInputs(['0', '1'])->execute(['migration' => self::MIGRATION_NAME]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
@@ -72,7 +72,7 @@ class NewMigrationCommandTest extends Test
 
     public function testExecuteForStoreProcedure(): void
     {
-        $commandExecute = $this->commandTester->setInputs(['2'])->execute(['migration' => self::MIGRATION_NAME]);
+        $commandExecute = $this->commandTester->setInputs(['0', '2'])->execute(['migration' => self::MIGRATION_NAME]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
