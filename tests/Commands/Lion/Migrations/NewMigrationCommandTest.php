@@ -36,7 +36,7 @@ class NewMigrationCommandTest extends Test
 
 	protected function tearDown(): void
 	{
-        // $this->rmdirRecursively('./database/');
+        $this->rmdirRecursively('./database/');
 	}
 
     public function testExecuteIsInvalid(): void

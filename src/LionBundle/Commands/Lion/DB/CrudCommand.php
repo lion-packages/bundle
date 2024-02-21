@@ -131,39 +131,30 @@ class CrudCommand extends MenuCommand
             ],
             11 => [
                 'replace' => true,
-                'multiple' => [
-                    [
-                        'content' => "\n\t): object {",
-                        'search' => '): object'
-                    ],
-                    [
-                        'content' => ("{$entityPascal}(\n\t\t{$entityPascal} " . '$' . lcfirst($entityPascal) . ",\n\t\t"),
-                        'search' => "{$entityPascal}("
-                    ]
-                ],
+                'content' => ("{$entityPascal}({$entityPascal} " . '$' . lcfirst($entityPascal) . ', '),
+                'search' => "{$entityPascal}("
             ],
-            12 => ['remove' => true],
             13 => [
                 'replace' => true,
                 'content' => '($' . lcfirst($entityPascal) . ')',
                 'search' => '()'
             ],
-            22 => [
+            21 => [
                 'replace' => true,
-                'content' => ("{$entityPascal}(\n\t\t{$entityPascal} " . '$' . lcfirst($entityPascal) . ','),
+                'content' => ("{$entityPascal}({$entityPascal} " . '$' . lcfirst($entityPascal) . ', '),
                 'search' => "{$entityPascal}("
             ],
-            26 => [
+            23 => [
                 'replace' => true,
                 'content' => '($' . lcfirst($entityPascal) . ')',
                 'search' => '()'
             ],
-            29 => [
+            26 => [
                 'replace' => true,
-                'content' => ("{$entityPascal}(\n\t\t{$entityPascal} " . '$' . lcfirst($entityPascal) . ','),
+                'content' => ("{$entityPascal}({$entityPascal} " . '$' . lcfirst($entityPascal) . ','),
                 'search' => "{$entityPascal}("
             ],
-            33 => [
+            28 => [
                 'replace' => true,
                 'content' => '($' . lcfirst($entityPascal) . ')',
                 'search' => '()'
