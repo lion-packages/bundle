@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Enums;
 
 use Lion\Bundle\Enums\StatusResponseEnum;
+use Lion\Request\Response;
 use Lion\Test\Test;
 
 class StatusResponseEnumTest extends Test
@@ -12,14 +13,15 @@ class StatusResponseEnumTest extends Test
 	public function testValues(): void
 	{
 		$values = [
-			'success',
-			'error',
-			'warning',
-			'info',
-			'database-error',
-			'session-error',
-			'route-error',
-			'mail-error'
+			Response::SUCCESS,
+			Response::ERROR,
+			Response::WARNING,
+			Response::INFO,
+			Response::DATABASE_ERROR,
+			Response::SESSION_ERROR,
+			Response::ROUTE_ERROR,
+            Response::FILE_ERROR,
+			Response::MAIL_ERROR
 		];
 
 		$this->assertSame($values, StatusResponseEnum::values());
@@ -27,14 +29,6 @@ class StatusResponseEnumTest extends Test
 
 	public function testErrors(): void
 	{
-		$values = [
-			'error',
-			'database-error',
-			'session-error',
-			'route-error',
-			'mail-error'
-		];
-
-		$this->assertSame($values, StatusResponseEnum::errors());
+		$this->assertSame((new Response)->getErrors(), StatusResponseEnum::errors());
 	}
 }
