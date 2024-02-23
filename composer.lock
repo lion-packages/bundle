@@ -904,16 +904,16 @@
         },
         {
             "name": "lion/command",
-            "version": "v3.1.0",
+            "version": "v3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/command.git",
-                "reference": "c2e812c9884df5f8c831a6c45105d935008b454d"
+                "reference": "0c7cfcbc9bcb824a4dc7c2779335b68b218fd216"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/command/zipball/c2e812c9884df5f8c831a6c45105d935008b454d",
-                "reference": "c2e812c9884df5f8c831a6c45105d935008b454d",
+                "url": "https://api.github.com/repos/lion-packages/command/zipball/0c7cfcbc9bcb824a4dc7c2779335b68b218fd216",
+                "reference": "0c7cfcbc9bcb824a4dc7c2779335b68b218fd216",
                 "shasum": ""
             },
             "require": {
@@ -937,9 +937,9 @@
             "description": "library created with the function of executing commands from PHP.",
             "support": {
                 "issues": "https://github.com/lion-packages/command/issues",
-                "source": "https://github.com/lion-packages/command/tree/v3.1.0"
+                "source": "https://github.com/lion-packages/command/tree/v3.2.0"
             },
-            "time": "2024-01-09T16:14:54+00:00"
+            "time": "2024-02-23T02:24:32+00:00"
         },
         {
             "name": "lion/database",
@@ -1140,16 +1140,16 @@
         },
         {
             "name": "lion/request",
-            "version": "v6.1.0",
+            "version": "v6.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/request.git",
-                "reference": "d92a062865a447fffed2a81058196b5e5bc6e30b"
+                "reference": "3f6937b0044cd67ef81391072c05d129ad23348b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/request/zipball/d92a062865a447fffed2a81058196b5e5bc6e30b",
-                "reference": "d92a062865a447fffed2a81058196b5e5bc6e30b",
+                "url": "https://api.github.com/repos/lion-packages/request/zipball/3f6937b0044cd67ef81391072c05d129ad23348b",
+                "reference": "3f6937b0044cd67ef81391072c05d129ad23348b",
                 "shasum": ""
             },
             "require": {
@@ -1172,9 +1172,9 @@
             "description": "library created to request input data and response requests",
             "support": {
                 "issues": "https://github.com/lion-packages/request/issues",
-                "source": "https://github.com/lion-packages/request/tree/v6.1.0"
+                "source": "https://github.com/lion-packages/request/tree/v6.2.0"
             },
-            "time": "2024-01-15T17:49:13+00:00"
+            "time": "2024-02-23T16:34:49+00:00"
         },
         {
             "name": "lion/route",
@@ -1220,16 +1220,16 @@
         },
         {
             "name": "lion/security",
-            "version": "v9.0.0",
+            "version": "v9.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/security.git",
-                "reference": "202c377d8311b5e0dc9cec0e64b9dd29514f70d0"
+                "reference": "b95c33304fc76d0e69039b82081d7974526da385"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/security/zipball/202c377d8311b5e0dc9cec0e64b9dd29514f70d0",
-                "reference": "202c377d8311b5e0dc9cec0e64b9dd29514f70d0",
+                "url": "https://api.github.com/repos/lion-packages/security/zipball/b95c33304fc76d0e69039b82081d7974526da385",
+                "reference": "b95c33304fc76d0e69039b82081d7974526da385",
                 "shasum": ""
             },
             "require": {
@@ -1255,9 +1255,9 @@
             "description": "library created with the function of implementing AES, RSA and JWT Security functions for PHP.",
             "support": {
                 "issues": "https://github.com/lion-packages/security/issues",
-                "source": "https://github.com/lion-packages/security/tree/v9.0.0"
+                "source": "https://github.com/lion-packages/security/tree/v9.0.1"
             },
-            "time": "2024-01-20T00:19:58+00:00"
+            "time": "2024-02-23T01:32:34+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -4630,16 +4630,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v5.0.0",
+            "version": "v5.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "4a21235f7e56e713259a6f76bf4b5ea08502b9dc"
+                "reference": "2218c2252c874a4624ab2f613d86ac32d227bc69"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/4a21235f7e56e713259a6f76bf4b5ea08502b9dc",
-                "reference": "4a21235f7e56e713259a6f76bf4b5ea08502b9dc",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/2218c2252c874a4624ab2f613d86ac32d227bc69",
+                "reference": "2218c2252c874a4624ab2f613d86ac32d227bc69",
                 "shasum": ""
             },
             "require": {
@@ -4682,9 +4682,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v5.0.0"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v5.0.1"
             },
-            "time": "2024-01-07T17:17:35+00:00"
+            "time": "2024-02-21T19:24:10+00:00"
         },
         {
             "name": "phar-io/manifest",
