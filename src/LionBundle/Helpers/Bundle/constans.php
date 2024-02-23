@@ -15,31 +15,43 @@ use Lion\Request\Response;
  **/
 
 /**
- * @var Client client
+ * [Object of the GuzzleHttp Client class]
+ *
+ * @var Client
  * */
 define('client', new Client());
 
 /**
- * @var object request
+ * [Object with properties captured in an HTTP request]
+ *
+ * @var object
  * */
 define('request', (new Request())->capture());
 
 /**
- * @var Response response
+ * [Object of Response class to generate response objects]
+ *
+ * @var Response
  * */
 define('response', new Response());
 
 /**
- * @var object env
+ * [Object with the properties defined in the environment]
+ *
+ * @var object
  * */
 define('env', (object) $_ENV);
 
 /**
- * @var Str str
+ * Object of class Str
+ *
+ * @var Str
  * */
 define('str', new Str());
 
 /**
- * @var Arr arr
+ * Object of class Arr
+ *
+ * @var Arr
  * */
 define('arr', new Arr());
