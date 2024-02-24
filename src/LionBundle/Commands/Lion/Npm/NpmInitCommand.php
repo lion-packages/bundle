@@ -100,7 +100,7 @@ class NpmInitCommand extends MenuCommand
     {
         $this->classFactory
             ->create('', 'env', "./vite/{$project}/")
-            ->add('VITE_SERVER_URL="' . env->SERVER_URL_AUD . '"')
+            ->add('VITE_SERVER_URL="' . $_ENV['SERVER_URL_AUD'] . '"')
             ->close();
 
         $replace = [

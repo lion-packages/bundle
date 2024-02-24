@@ -10,28 +10,28 @@
         "source": "https://github.com/lion-packages/framework"
     },
     "autoload": {
-        "files": [
-            "routes/rules.php",
-            "routes/middleware.php",
-            "src/LionBundle/Helpers/Bundle/constans.php",
-            "src/LionBundle/Helpers/Bundle/helpers.php"
-        ],
         "psr-4": {
             "App\\": "app/",
             "Lion\\Bundle\\": "src/LionBundle/",
             "Database\\Class\\": "database/Class/",
             "Database\\Factory\\": "database/Factory/",
             "Database\\Seed\\": "database/Seed/"
-        }
+        },
+        "files": [
+            "routes/rules.php",
+            "routes/middleware.php",
+            "src/LionBundle/Helpers/Bundle/constans.php",
+            "src/LionBundle/Helpers/Bundle/helpers.php"
+        ]
     },
     "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        },
         "files": [
             "src/LionBundle/Helpers/Bundle/constans.php",
             "src/LionBundle/Helpers/Bundle/helpers.php"
-        ],
-        "psr-4": {
-            "Tests\\": "tests/"
-        }
+        ]
     },
     "require": {
         "php": ">=8.2",

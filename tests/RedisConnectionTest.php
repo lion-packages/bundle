@@ -7,20 +7,25 @@ namespace Tests;
 use Lion\Test\Test;
 use Predis\Client;
 use Predis\Response\Status;
+use Tests\Providers\EnviromentProviderTrait;
 
 class RedisConnectionTest extends Test
 {
+    use EnviromentProviderTrait;
+
     private Client $client;
 
     protected function setUp(): void
     {
+        $this->loadEnviroment();
+
         $this->client = new Client([
-            'scheme' => env->REDIS_SCHEME,
-            'host' => env->REDIS_HOST,
-            'port' => env->REDIS_PORT,
+            'scheme' => $_ENV['REDIS_SCHEME'],
+            'host' => $_ENV['REDIS_HOST'],
+            'port' => $_ENV['REDIS_PORT'],
             'parameters' => [
-                'password' => env->REDIS_PASSWORD,
-                'database' => env->REDIS_DATABASES
+                'password' => $_ENV['REDIS_PASSWORD'],
+                'database' => $_ENV['REDIS_DATABASES']
             ]
         ]);
     }

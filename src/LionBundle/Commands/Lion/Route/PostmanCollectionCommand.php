@@ -83,12 +83,12 @@ class PostmanCollectionCommand extends Command
             'variable' => [
                 [
                     'key' => 'base_url',
-                    'value' => env->SERVER_URL,
+                    'value' => $_ENV['SERVER_URL'],
                     'type' => 'string'
                 ]
             ],
             'info' => [
-                'name' => env->APP_NAME,
+                'name' => $_ENV['APP_NAME'],
                 'schema' => 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json'
             ],
             'item' => $this->postmanCollection->createCollection($this->postmanCollection->getItems()),
@@ -109,9 +109,17 @@ class PostmanCollectionCommand extends Command
 
     private function fetchRoutes(): void
     {
-        $this->postmanCollection->init(env->SERVER_URL);
+        $this->postmanCollection->init($_ENV['SERVER_URL']);
         $this->jsonName = $this->str->of(Carbon::now()->format('Y_m_d'))->concat('_lion_collection')->lower()->get();
-        $this->routes = json_decode(fetch(Route::GET, env->SERVER_URL . '/route-list')->getBody()->getContents(), true);
+
+        $this->routes = json_decode(
+            fetch(Route::GET, ($_ENV['SERVER_URL'] . '/route-list'), [
+                'headers' => [
+                    'Lion-Auth' => $_ENV['SERVER_HASH']
+                ]
+            ])->getBody()->getContents(),
+            true
+        );
 
         array_pop($this->routes);
     }

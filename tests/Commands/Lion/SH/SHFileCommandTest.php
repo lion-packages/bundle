@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Commands\Lion\SH;
 
-use Lion\Bundle\Commands\Lion\SH\SHFileCommand;
+use Lion\Bundle\Commands\Lion\New\SHFileCommand;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\DependencyInjection\Container;
@@ -24,7 +24,7 @@ class SHFileCommandTest extends Test
     {
         $application = (new Kernel())->getApplication();
         $application->add((new Container())->injectDependencies(new SHFileCommand()));
-        $this->commandTester = new CommandTester($application->find('sh:new'));
+        $this->commandTester = new CommandTester($application->find('new:sh'));
 
         $this->createDirectory(self::URL_PATH);
     }

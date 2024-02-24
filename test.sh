@@ -15,20 +15,16 @@ echo -e "\033[0;36m\t>>  Dump Autoload \033[0m"
 composer dump-autoload
 echo -e "\n\033[0;31m>> -------------------------------------------------------------------------------------- << \n\033[0m";
 
-# echo -e "\033[0;36m\t>>  Suite All-Test \033[0m"
-# php vendor/bin/phpunit --testsuite All-Test
-# echo -e "\n\033[0;31m>> -------------------------------------------------------------------------------------- << \n\033[0m";
-
-echo -e "\033[0;36m\t>>  Suite Enums \033[0m"
-php vendor/bin/phpunit --testsuite Enums
-echo -e "\n\033[0;31m>> -------------------------------------------------------------------------------------- << \n\033[0m";
-
 echo -e "\033[0;36m\t>>  Suite Helpers \033[0m"
 php vendor/bin/phpunit --testsuite Helpers
 echo -e "\n\033[0;31m>> -------------------------------------------------------------------------------------- << \n\033[0m";
 
-echo -e "\033[0;36m\t>>  Suite Services (Redis-Client/Mailhog) \033[0m"
+echo -e "\033[0;36m\t>>  Suite Services (Redis/Mailhog) \033[0m"
 php vendor/bin/phpunit tests/RedisConnectionTest.php tests/MailhogTest.php
+echo -e "\n\033[0;31m>> -------------------------------------------------------------------------------------- << \n\033[0m";
+
+echo -e "\033[0;36m\t>>  Suite Enums \033[0m"
+php vendor/bin/phpunit --testsuite Enums
 echo -e "\n\033[0;31m>> -------------------------------------------------------------------------------------- << \n\033[0m";
 
 echo -e "\033[0;36m\t>>  Suite Commands \033[0m"
