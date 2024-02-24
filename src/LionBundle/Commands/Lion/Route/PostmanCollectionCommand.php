@@ -113,7 +113,11 @@ class PostmanCollectionCommand extends Command
         $this->jsonName = $this->str->of(Carbon::now()->format('Y_m_d'))->concat('_lion_collection')->lower()->get();
 
         $this->routes = json_decode(
-            fetch(Route::GET, ($_ENV['SERVER_URL'] . '/route-list'))->getBody()->getContents(),
+            fetch(Route::GET, ($_ENV['SERVER_URL'] . '/route-list'), [
+                'headers' => [
+                    'Lion-Auth' => $_ENV['SERVER_HASH']
+                ]
+            ])->getBody()->getContents(),
             true
         );
 
