@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lion\Bundle\Commands\Lion\SH;
+namespace Lion\Bundle\Commands\Lion\New;
 
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
@@ -39,7 +39,7 @@ class SHFileCommand extends Command
 	protected function configure(): void
 	{
 		$this
-            ->setName('sh:new')
+            ->setName('new:sh')
             ->setDescription('Command to create files with extension sh')
             ->addArgument('sh', InputArgument::OPTIONAL, 'SH name', 'Example');
 	}
