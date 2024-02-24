@@ -4,32 +4,38 @@ declare(strict_types=1);
 
 namespace Tests\Helpers\Bundle;
 
+use Carbon\Carbon;
 use Faker\Generator;
+use Lion\Bundle\Enums\LogTypeEnum;
+use Lion\Request\Request;
+use Lion\Request\Response;
 use Lion\Route\Route;
 use Lion\Test\Test;
+use Tests\Providers\EnviromentProviderTrait;
 
 class HelpersTest extends Test
 {
+    use EnviromentProviderTrait;
+
     const PATH_URL = 'storage/';
     const PATH_URL_INDEX = '../storage/';
     const CUSTOM_FOLDER = 'example/';
-    const RESPONSE = ['code' => 200, 'status' => 'info', 'message' => '[index]'];
+    const RESPONSE = ['code' => Request::HTTP_OK, 'status' => Response::INFO, 'message' => '[index]'];
     const JSON_RESPONSE = '{"name":"Sleon"}';
     const CODE = 'code';
     const STATUS = 'status';
     const MESSAGE = 'message';
     const CUSTOM = 'custom';
-    const SUCCESS = 'success';
-    const ERROR = 'error';
-    const WARNING = 'warning';
-    const INFO = 'info';
-    const STATUS_200 = 200;
-    const STATUS_500 = 500;
     const LOGGER_CONTENT = 'test-logger';
+
+    protected function setUp(): void
+    {
+        $this->loadEnviroment();
+    }
 
 	public function testFetch(): void
     {
-        $response = json_decode(fetch(Route::GET, env->SERVER_URL)->getBody()->getContents(), true);
+        $response = json_decode(fetch(Route::GET, $_ENV['SERVER_URL'])->getBody()->getContents(), true);
 
         $this->assertSame(self::RESPONSE, $response);
     }
@@ -52,7 +58,7 @@ class HelpersTest extends Test
         $this->assertObjectHasProperty(self::CODE, $response);
         $this->assertObjectHasProperty(self::STATUS, $response);
         $this->assertObjectHasProperty(self::MESSAGE, $response);
-        $this->assertSame(self::STATUS_200, $response->code);
+        $this->assertSame(Request::HTTP_OK, $response->code);
         $this->assertSame(self::CUSTOM, $response->status);
         $this->assertNull($response->message);
     }
@@ -65,8 +71,8 @@ class HelpersTest extends Test
         $this->assertObjectHasProperty(self::CODE, $response);
         $this->assertObjectHasProperty(self::STATUS, $response);
         $this->assertObjectHasProperty(self::MESSAGE, $response);
-        $this->assertSame(self::STATUS_200, $response->code);
-        $this->assertSame(self::SUCCESS, $response->status);
+        $this->assertSame(Request::HTTP_OK, $response->code);
+        $this->assertSame(Response::SUCCESS, $response->status);
         $this->assertNull($response->message);
     }
 
@@ -78,8 +84,8 @@ class HelpersTest extends Test
         $this->assertObjectHasProperty(self::CODE, $response);
         $this->assertObjectHasProperty(self::STATUS, $response);
         $this->assertObjectHasProperty(self::MESSAGE, $response);
-        $this->assertSame(self::STATUS_500, $response->code);
-        $this->assertSame(self::ERROR, $response->status);
+        $this->assertSame(Request::HTTP_INTERNAL_SERVER_ERROR, $response->code);
+        $this->assertSame(Response::ERROR, $response->status);
         $this->assertNull($response->message);
     }
 
@@ -91,8 +97,8 @@ class HelpersTest extends Test
         $this->assertObjectHasProperty(self::CODE, $response);
         $this->assertObjectHasProperty(self::STATUS, $response);
         $this->assertObjectHasProperty(self::MESSAGE, $response);
-        $this->assertSame(self::STATUS_200, $response->code);
-        $this->assertSame(self::WARNING, $response->status);
+        $this->assertSame(Request::HTTP_OK, $response->code);
+        $this->assertSame(Response::WARNING, $response->status);
         $this->assertNull($response->message);
     }
 
@@ -104,8 +110,8 @@ class HelpersTest extends Test
         $this->assertObjectHasProperty(self::CODE, $response);
         $this->assertObjectHasProperty(self::STATUS, $response);
         $this->assertObjectHasProperty(self::MESSAGE, $response);
-        $this->assertSame(self::STATUS_200, $response->code);
-        $this->assertSame(self::INFO, $response->status);
+        $this->assertSame(Request::HTTP_OK, $response->code);
+        $this->assertSame(Response::INFO, $response->status);
         $this->assertNull($response->message);
     }
 
@@ -121,8 +127,8 @@ class HelpersTest extends Test
     public function testLogger(): void
     {
         $path = storage_path('logs/monolog/', false);
-        $fileName = "{$path}lion-" . \Carbon\Carbon::now()->format('Y-m-d') . '.log';
-        logger(self::LOGGER_CONTENT, 'info', ['user' => 'Sleon'], false);
+        $fileName = "{$path}lion-" . Carbon::now()->format('Y-m-d') . '.log';
+        logger(self::LOGGER_CONTENT, LogTypeEnum::INFO->value, ['user' => 'Sleon'], false);
 
         $this->assertFileExists($fileName);
     }

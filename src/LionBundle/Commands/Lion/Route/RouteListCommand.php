@@ -43,13 +43,6 @@ class RouteListCommand extends Command
         return $this;
     }
 
-	protected function initialize(InputInterface $input, OutputInterface $output): void
-    {
-        $this->routes = json_decode(fetch(Route::GET, env->SERVER_URL . '/route-list')->getBody()->getContents(), true);
-        $this->rules = Routes::getRules();
-        $this->configMiddleware = Routes::getMiddleware();
-    }
-
     protected function configure(): void
     {
         $this
@@ -59,7 +52,8 @@ class RouteListCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        array_pop($this->routes);
+        $this->fetchRoutes();
+
         $size = $this->arr->of($this->routes)->length();
         $cont = 0;
         $rows = [];
@@ -161,5 +155,18 @@ class RouteListCommand extends Command
         }
 
         return $classNew;
+    }
+
+    private function fetchRoutes(): void
+    {
+        $this->routes = json_decode(
+            fetch(Route::GET, $_ENV['SERVER_URL'] . '/route-list')->getBody()->getContents(),
+            true
+        );
+
+        array_pop($this->routes);
+
+        $this->rules = Routes::getRules();
+        $this->configMiddleware = Routes::getMiddleware();
     }
 }

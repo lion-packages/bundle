@@ -11,12 +11,12 @@ class RedisClient
     public function getClient(?array $options = null): Client
     {
         $defaultOptions = [
-            'scheme' => env->REDIS_SCHEME,
-            'host' => env->REDIS_HOST,
-            'port' => env->REDIS_PORT,
+            'scheme' => $_ENV['REDIS_SCHEME'],
+            'host' => $_ENV['REDIS_HOST'],
+            'port' => $_ENV['REDIS_PORT'],
             'parameters' => [
-                'password' => env->REDIS_PASSWORD,
-                'database' => env->REDIS_DATABASES
+                'password' => $_ENV['REDIS_PASSWORD'],
+                'database' => $_ENV['REDIS_DATABASES']
             ]
         ];
 

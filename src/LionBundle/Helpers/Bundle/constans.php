@@ -9,12 +9,6 @@ use Lion\Request\Request;
 use Lion\Request\Response;
 
 /**
- * -----------------------------------------------------------------------------
- * framework level predefined constants
- * -----------------------------------------------------------------------------
- **/
-
-/**
  * [Object of the GuzzleHttp Client class]
  *
  * @var Client
@@ -34,13 +28,6 @@ define('request', (new Request())->capture());
  * @var Response
  * */
 define('response', new Response());
-
-/**
- * [Object with the properties defined in the environment]
- *
- * @var object
- * */
-define('env', (object) $_ENV);
 
 /**
  * Object of class Str

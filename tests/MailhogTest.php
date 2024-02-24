@@ -12,8 +12,8 @@ use Tests\Providers\EnviromentProviderTrait;
 
 class MailhogTest extends Test
 {
-    use EnviromentProviderTrait;
     use EmailProviderTrait;
+    use EnviromentProviderTrait;
 
     protected function setUp(): void
     {
@@ -24,7 +24,7 @@ class MailhogTest extends Test
     public function testMail(): void
     {
         $this->assertTrue(
-            Mailer::account(env->MAIL_NAME)
+            Mailer::account($_ENV['MAIL_NAME'])
                 ->subject('Test Priority')
                 ->from('sleon@dev.com', 'Sleon')
                 ->addAddress('jjerez@dev.com', 'Jjerez')
@@ -37,7 +37,7 @@ class MailhogTest extends Test
     public function testMailSupp(): void
     {
         $this->assertTrue(
-            Mailer::account(env->MAIL_NAME_SUPP)
+            Mailer::account($_ENV['MAIL_NAME_SUPP'])
                 ->subject('Test Priority')
                 ->from('sleon@dev.com', 'Sleon')
                 ->addAddress('jjerez@dev.com', 'Jjerez')
