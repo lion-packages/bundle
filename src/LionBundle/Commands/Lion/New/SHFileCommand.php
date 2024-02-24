@@ -51,6 +51,8 @@ class SHFileCommand extends Command
         $this->store->folder('storage/sh/');
         $this->classFactory->create($sh, 'sh', 'storage/sh/')->add("#!/bin/bash\n")->close();
 
+        chmod("storage/sh/{$sh}.sh", 0755);
+
         $output->writeln($this->warningOutput("\t>>  SH: {$sh}"));
         $output->writeln($this->successOutput("\t>>  SH: File generated successfully"));
 

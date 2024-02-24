@@ -3,7 +3,7 @@ FROM php:8.2-apache
 RUN useradd -m lion && echo 'lion:lion' | chpasswd && usermod -aG sudo lion && usermod -s /bin/bash lion
 
 RUN apt-get update -y \
-    && apt-get install -y nano git npm default-mysql-client curl wget unzip cron sendmail libpng-dev libzip-dev \
+    && apt-get install -y sudo nano git npm default-mysql-client curl wget unzip cron sendmail libpng-dev libzip-dev \
     && apt-get install -y zlib1g-dev libonig-dev supervisor libevent-dev libssl-dev \
     && rm -rf /var/lib/apt/lists/*
 
