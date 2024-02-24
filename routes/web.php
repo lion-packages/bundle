@@ -2,10 +2,46 @@
 
 declare(strict_types=1);
 
+define('LION_START', microtime(true));
+
+/**
+ * -----------------------------------------------------------------------------
+ * Register The Auto Loader
+ * -----------------------------------------------------------------------------
+ * Composer provides a convenient, automatically generated class loader for
+ * this application
+ * -----------------------------------------------------------------------------
+ **/
+
+require_once(__DIR__ . '/../vendor/autoload.php');
+
+use Lion\Bundle\Middleware\RouteMiddleware;
+use Lion\Route\Middleware;
 use Lion\Route\Route;
+use Dotenv\Dotenv;
+
+/**
+ * -----------------------------------------------------------------------------
+ * Register environment variable loader automatically
+ * -----------------------------------------------------------------------------
+ * .dotenv provides an easy way to access environment variables with $_ENV
+ * -----------------------------------------------------------------------------
+ **/
+
+Dotenv::createImmutable(__DIR__ . '/../')->load();
+
+/**
+ * -----------------------------------------------------------------------------
+ * Web Routes
+ * -----------------------------------------------------------------------------
+ * Here is where you can register web routes for your application
+ * -----------------------------------------------------------------------------
+ **/
 
 Route::init();
-Route::addMiddleware([]);
+Route::addMiddleware([
+    new Middleware('protect-route-list', RouteMiddleware::class, 'protectRouteList')
+]);
 // -----------------------------------------------------------------------------
 Route::get('/', fn() => info('[index]'));
 
@@ -25,6 +61,6 @@ Route::prefix('api', function() {
     });
 });
 
-Route::get('route-list', fn() => Route::getFullRoutes());
+Route::get('route-list', fn() => Route::getFullRoutes(), ['protect-route-list']);
 // -----------------------------------------------------------------------------
 Route::dispatch();
