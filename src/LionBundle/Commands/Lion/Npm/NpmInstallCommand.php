@@ -39,7 +39,7 @@ class NpmInstallCommand extends MenuCommand
         $packages = $input->getArgument('packages');
 
 		$this->kernel->execute(
-            "cd vite/{$project}/ && npm install {$packages} > /dev/null 2>&1 || npm install {$packages} > nul 2>&1",
+            "cd {$this->store->normalizePath("vite/{$project}/")} && npm install {$packages}",
             false
         );
 

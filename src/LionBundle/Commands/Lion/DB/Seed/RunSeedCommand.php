@@ -48,11 +48,18 @@ class RunSeedCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        /**
+         * @var array<string> $listSeed
+         */
         $listSeed = [];
 
-        foreach ($this->container->getFiles('./database/Seed/') as $seed) {
-            if ($seed !== '.' && $seed !== '..' && isSuccess($this->store->validate([$seed], ['php']))) {
-                $listSeed[] = $this->container->getNamespace($seed, 'Database\\Seed\\', 'Seed/');
+        foreach ($this->container->getFiles($this->container->normalizePath('./database/Seed/')) as $seed) {
+            if (isSuccess($this->store->validate([$seed], ['php']))) {
+                $listSeed[] = $this->container->getNamespace(
+                    $seed,
+                    'Database\\Seed\\',
+                    $this->container->normalizePath('Seed/')
+                );
             }
         }
 

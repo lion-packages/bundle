@@ -49,7 +49,12 @@ class FreshMigrationsCommand extends Command
 
         foreach ($this->container->getFiles('./database/Migrations/') as $file) {
             if (isSuccess($this->store->validate([$file], ['php']))) {
-                $namespace = $this->container->getNamespace($file, 'Database\\Migrations\\', 'Migrations/');
+                $namespace = $this->container->getNamespace(
+                    strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? str_replace('\\', '/', $file) : $file,
+                    'Database\\Migrations\\',
+                    'Migrations/'
+                );
+
                 $files[$namespace] = include_once($file);
             }
         }

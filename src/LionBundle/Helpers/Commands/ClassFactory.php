@@ -4,15 +4,32 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Helpers\Commands;
 
+use Lion\Files\Store;
+
 class ClassFactory
 {
     const PUBLIC_PROPERTY = 'public';
     const PRIVATE_PROPERTY = 'private';
     const PROTECTED_PROPERTY = 'protected';
 
+    /**
+     * [Object of class Store]
+     *
+     * @var Store $store
+     */
+    private Store $store;
+
     private $content;
     private string $namespace;
     private string $class;
+
+    /**
+     * Class constructor
+     */
+    public function __construct()
+    {
+        $this->store = new Store();
+    }
 
     public function create(
         string $fileName,
@@ -20,7 +37,7 @@ class ClassFactory
         string $path = '',
         string $filePermissions = 'w+b'
     ): ClassFactory {
-        $this->content = fopen("{$path}{$fileName}.{$extension}", $filePermissions);
+        $this->content = fopen($this->store->normalizePath("{$path}{$fileName}.{$extension}"), $filePermissions);
 
         return $this;
     }
@@ -42,8 +59,16 @@ class ClassFactory
 
     public function classFactory(string $path, string $fileName): ClassFactory
     {
+        $path = $this->store->normalizePath($path);
         $namespace = '';
-        $separate = explode('/', "{$path}{$fileName}");
+        $separate = [];
+
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            $separate = explode('\\', $this->store->normalizePath("{$path}{$fileName}"));
+        } else {
+            $separate = explode('/', $this->store->normalizePath("{$path}{$fileName}"));
+        }
+
         $size = count($separate);
 
         foreach ($separate as $key => $part) {
@@ -114,7 +139,7 @@ class ClassFactory
 
     public function getFolder(): string
     {
-        return lcfirst(str_replace("\\", "/", $this->namespace)) . '/';
+        return $this->store->normalizePath(lcfirst(str_replace("\\", "/", $this->namespace)) . '/');
     }
 
     private function getGetter(string $name, string $type = 'string'): object

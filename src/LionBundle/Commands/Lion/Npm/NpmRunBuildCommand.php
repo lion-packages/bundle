@@ -34,10 +34,12 @@ class NpmRunBuildCommand extends MenuCommand
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
         $project = $this->selectedProject($input, $output);
-        $this->kernel->execute("cd vite/{$project}/ && npm run build", false);
+        $projectPath = $this->store->normalizePath("./vite/{$project}/");
+
+        $this->kernel->execute("cd {$projectPath} && npm run build", false);
 
         $output->writeln($this->warningOutput("\n\t>>  VITE: {$project}"));
-        $output->writeln($this->successOutput("\t>>  VITE: project dist has been generated: ./vite/{$project}/"));
+        $output->writeln($this->successOutput("\t>>  VITE: project dist has been generated: {$projectPath}"));
 
 		return Command::SUCCESS;
 	}

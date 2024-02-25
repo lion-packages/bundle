@@ -39,11 +39,12 @@ class NpmUninstallCommand extends MenuCommand
         $packages = $input->getArgument('packages');
 
         $this->kernel->execute(
-            "cd vite/{$project}/ && npm uninstall {$packages} > /dev/null 2>&1 || npm uninstall {$packages} > nul 2>&1",
+            "cd {$this->store->normalizePath("./vite/{$project}/")} && npm uninstall {$packages}",
             false
         );
 
         $output->writeln($this->warningOutput("\n\t>>  VITE: {$project}"));
+
         $output->writeln($this->successOutput(
             "\t>>  VITE: dependencies have been uninstalled: {$this->arr->of(explode(' ', $packages))->join(', ')}"
         ));

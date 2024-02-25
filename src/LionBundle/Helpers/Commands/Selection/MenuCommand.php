@@ -56,7 +56,7 @@ class MenuCommand extends Command
 
         foreach ($this->store->view('./vite/') as $folder) {
             if (is_dir($folder) && $folder != '.' && $folder != '..') {
-                $split = $this->str->of($folder)->split('vite/');
+                $split = $this->str->of($folder)->split($this->store->normalizePath('vite/'));
                 $projects[] = end($split);
             }
         }

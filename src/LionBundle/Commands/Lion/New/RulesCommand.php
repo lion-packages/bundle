@@ -49,6 +49,7 @@ class RulesCommand extends Command
         $rule = $input->getArgument('rule');
 
         $this->classFactory->classFactory('app/Rules/', $rule);
+
         $folder = $this->classFactory->getFolder();
         $class = $this->classFactory->getClass();
         $namespace = $this->classFactory->getNamespace();

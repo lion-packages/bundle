@@ -4,17 +4,48 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Helpers;
 
+use Lion\DependencyInjection\Container;
 use Lion\Helpers\Str;
 
+/**
+ * Class that allows writing system files
+ *
+ * @package Lion\Bundle\Helpers
+ */
 class FileWriter
 {
+    /**
+     * [Object of class Str]
+     *
+     * @var Str $str
+     */
     private Str $str;
 
+    /**
+     * [Object of class Container]
+     *
+     * @var Container $container
+     */
+    private Container $container;
+
+    /**
+     * Class constructor
+     */
     public function __construct()
     {
         $this->str = new Str();
+        $this->container = new Container();
     }
 
+    /**
+     * Replaces the content of a string with another
+     *
+     * @param  array $row [Row to modify]
+     * @param  string $modifiedLine [Modified row content]
+     * @param  string $originalLine [Original row content]
+     *
+     * @return string
+     */
     private function replaceContent(array $row, string $modifiedLine, string $originalLine): string
     {
         if ('--all-elem--' === $row['search']) {
@@ -27,8 +58,17 @@ class FileWriter
         return $modifiedLine;
     }
 
+    /**
+     * Reads all rows from a file and modifies them as defined
+     *
+     * @param  string $path [Defined route]
+     * @param  array $rows [list of rows to modify]
+     *
+     * @return void
+     */
     public function readFileRows(string $path, array $rows): void
     {
+        $path = $this->container->normalizePath($path);
         $file = fopen($path, 'r+');
         $rowsFile = file($path);
 

@@ -34,7 +34,7 @@ class NpmUpdateCommand extends MenuCommand
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		$project = $this->selectedProject($input, $output);
-        $this->kernel->execute("cd vite/{$project}/ && npm update > /dev/null 2>&1 || npm update > nul 2>&1", false);
+        $this->kernel->execute("cd {$this->store->normalizePath("./vite/{$project}/")} && npm update", false);
 
         $output->writeln($this->warningOutput("\n\t>>  VITE: {$project}"));
         $output->writeln($this->successOutput("\t>>  VITE: dependencies have been updated"));
