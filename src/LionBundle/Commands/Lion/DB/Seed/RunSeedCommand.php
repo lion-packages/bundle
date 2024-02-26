@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\DB\Seed;
 
+use Lion\Bundle\Interface\SeedInterface;
 use Lion\Command\Command;
 use Lion\DependencyInjection\Container;
 use Lion\Files\Store;
@@ -68,10 +69,14 @@ class RunSeedCommand extends Command
 
         $end = (int) $input->getOption('run');
         $selectedSeed = $helper->ask($input, $output, new ChoiceQuestion('Select a seed', $listSeed, 0));
-        $class = new $selectedSeed();
+
+        /**
+         * @var SeedInterface $seedInterface
+         */
+        $seedInterface = new $selectedSeed();
 
         for ($i = 0; $i < $end; $i++) {
-            $response = $class->run();
+            $response = $seedInterface->run();
 
             if (isError($response)) {
                 $output->writeln($this->errorOutput("\t>>  SEED: {$response->message}"));
