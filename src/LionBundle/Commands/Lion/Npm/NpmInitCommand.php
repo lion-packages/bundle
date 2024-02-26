@@ -76,7 +76,7 @@ class NpmInitCommand extends MenuCommand
         $type = $this->selectedTypes($input, $output, self::TYPES);
         $this->store->folder('./vite/');
 
-        $commandCreate = "cd {$this->store->normalizePath('./vite/')} && npm init vite@latest {$project}";
+        $commandCreate = "cd {$this->store->normalizePath('./vite/')} && echo | npm init vite@latest {$project}";
         $commandCreate .= " -- --template {$template}" . ('js' === $type ? '' : '-ts');
 
         $this->kernel->execute($commandCreate, false);
