@@ -982,16 +982,16 @@
         },
         {
             "name": "lion/dependency-injection",
-            "version": "v1.3.0",
+            "version": "v1.3.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/lion-packages/dependency-injection.git",
-                "reference": "89d68870ea1ff2e8e7908e2dd0cd309828c68520"
+                "url": "https://github.com/Sleon4/dependency-injection.git",
+                "reference": "72a0aca3e249b515d3dd8e56e180f858bb9ebcb9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/dependency-injection/zipball/89d68870ea1ff2e8e7908e2dd0cd309828c68520",
-                "reference": "89d68870ea1ff2e8e7908e2dd0cd309828c68520",
+                "url": "https://api.github.com/repos/Sleon4/dependency-injection/zipball/72a0aca3e249b515d3dd8e56e180f858bb9ebcb9",
+                "reference": "72a0aca3e249b515d3dd8e56e180f858bb9ebcb9",
                 "shasum": ""
             },
             "require": {
@@ -1015,23 +1015,23 @@
             ],
             "description": "Container for dependency injection with DI-PHP",
             "support": {
-                "issues": "https://github.com/lion-packages/dependency-injection/issues",
-                "source": "https://github.com/lion-packages/dependency-injection/tree/v1.3.0"
+                "issues": "https://github.com/Sleon4/dependency-injection/issues",
+                "source": "https://github.com/Sleon4/dependency-injection/tree/v1.3.1"
             },
-            "time": "2024-01-19T23:29:39+00:00"
+            "time": "2024-02-25T23:46:02+00:00"
         },
         {
             "name": "lion/files",
-            "version": "v6.0.0",
+            "version": "v6.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/files.git",
-                "reference": "97198ac1ed0e9a58648505354b7fda5838983f8e"
+                "reference": "d5b899ec6933712eae86b066524d170f9a6cd356"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/files/zipball/97198ac1ed0e9a58648505354b7fda5838983f8e",
-                "reference": "97198ac1ed0e9a58648505354b7fda5838983f8e",
+                "url": "https://api.github.com/repos/lion-packages/files/zipball/d5b899ec6933712eae86b066524d170f9a6cd356",
+                "reference": "d5b899ec6933712eae86b066524d170f9a6cd356",
                 "shasum": ""
             },
             "require": {
@@ -1054,9 +1054,9 @@
             "description": "library created with the function of working internal system files",
             "support": {
                 "issues": "https://github.com/lion-packages/files/issues",
-                "source": "https://github.com/lion-packages/files/tree/v6.0.0"
+                "source": "https://github.com/lion-packages/files/tree/v6.1.0"
             },
-            "time": "2024-01-20T17:37:34+00:00"
+            "time": "2024-02-26T15:08:01+00:00"
         },
         {
             "name": "lion/helpers",
@@ -1178,16 +1178,16 @@
         },
         {
             "name": "lion/route",
-            "version": "v10.1.0",
+            "version": "v10.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/route.git",
-                "reference": "7c214ff1d105cc9373f539b1eac4a03dda80bfe2"
+                "reference": "ca1b3709426f0cca2062c0787df73e3f65007c6d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/route/zipball/7c214ff1d105cc9373f539b1eac4a03dda80bfe2",
-                "reference": "7c214ff1d105cc9373f539b1eac4a03dda80bfe2",
+                "url": "https://api.github.com/repos/lion-packages/route/zipball/ca1b3709426f0cca2062c0787df73e3f65007c6d",
+                "reference": "ca1b3709426f0cca2062c0787df73e3f65007c6d",
                 "shasum": ""
             },
             "require": {
@@ -1214,9 +1214,9 @@
             "description": "This library has quick router usage with regular expressions.",
             "support": {
                 "issues": "https://github.com/lion-packages/route/issues",
-                "source": "https://github.com/lion-packages/route/tree/v10.1.0"
+                "source": "https://github.com/lion-packages/route/tree/v10.2.0"
             },
-            "time": "2024-02-17T16:31:48+00:00"
+            "time": "2024-02-26T00:29:15+00:00"
         },
         {
             "name": "lion/security",
@@ -5120,16 +5120,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "10.5.10",
+            "version": "10.5.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "50b8e314b6d0dd06521dc31d1abffa73f25f850c"
+                "reference": "0d968f6323deb3dbfeba5bfd4929b9415eb7a9a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/50b8e314b6d0dd06521dc31d1abffa73f25f850c",
-                "reference": "50b8e314b6d0dd06521dc31d1abffa73f25f850c",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/0d968f6323deb3dbfeba5bfd4929b9415eb7a9a4",
+                "reference": "0d968f6323deb3dbfeba5bfd4929b9415eb7a9a4",
                 "shasum": ""
             },
             "require": {
@@ -5201,7 +5201,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.10"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.11"
             },
             "funding": [
                 {
@@ -5217,7 +5217,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-04T09:07:51+00:00"
+            "time": "2024-02-25T14:05:00+00:00"
         },
         {
             "name": "sebastian/cli-parser",

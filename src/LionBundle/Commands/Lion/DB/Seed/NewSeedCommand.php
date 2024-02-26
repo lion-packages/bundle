@@ -69,11 +69,10 @@ class NewSeedCommand extends Command
             ->create($class, 'php', $folder)
             ->add($this->str->of("<?php")->ln()->ln()->concat('declare(strict_types=1);')->ln()->ln()->get())
             ->add($this->str->of("namespace ")->concat($namespace)->concat(";")->ln()->ln()->get())
+            ->add($this->str->of("use Lion\Bundle\Interface\SeedInterface;")->ln()->get())
             ->add($this->str->of("use Lion\Database\Drivers\MySQL as DB;")->ln()->ln()->get())
-            ->add($this->str->of("class ")->concat($class)->ln()->concat("{")->ln()->get())
-            ->add("\t/**\n")
-            ->add("\t * Seed the application's database\n")
-            ->add("\t **/\n")
+            ->add($this->str->of("class ")->concat($class)->concat(' implements SeedInterface')->ln()->concat("{")->ln()->get())
+            ->add("\t/**\n\t * {@inheritdoc}\n\t **/\n")
             ->add("\tpublic function run(): object\n\t{\n\t\treturn success('run seed');\n\t}\n}\n")
             ->close();
 

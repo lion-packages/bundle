@@ -48,7 +48,15 @@ class NewRSACommand extends Command
 	{
         $path = $input->getOption('path');
 
-        $this->rsa->setUrlPath(null === $path ? $this->rsa->getUrlPath() : storage_path($path, false));
+        $this->rsa->config([
+            'urlPath' => $this->store->normalizePath(
+                null === $path ? $this->rsa->getUrlPath() : storage_path($path, false)
+            ),
+            'rsaConfig' => $_ENV['RSA_PATH'],
+            'rsaPrivateKeyBits' => (int) $_ENV['RSA_PRIVATE_KEY_BITS'],
+            'rsaDefaultMd' => $_ENV['RSA_DEFAULT_MD']
+        ]);
+
         $this->store->folder($this->rsa->getUrlPath());
         $this->rsa->create();
 

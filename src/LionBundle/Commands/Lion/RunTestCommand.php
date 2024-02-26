@@ -6,6 +6,7 @@ namespace Lion\Bundle\Commands\Lion;
 
 use Lion\Command\Command;
 use Lion\Command\Kernel;
+use Lion\DependencyInjection\Container;
 use Lion\Helpers\Arr;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -13,8 +14,19 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class RunTestCommand extends Command
 {
+    private Container $container;
     private Kernel $kernel;
     private Arr $arr;
+
+    /**
+     * @required
+     * */
+    public function setContainer(Container $container): RunTestCommand
+    {
+        $this->container = $container;
+
+        return $this;
+    }
 
     /**
      * @required
@@ -55,17 +67,19 @@ class RunTestCommand extends Command
 
         $output->writeln($this->successOutput("\t>>  Running unit tests...\n\t>>  "));
 
+        $unitPath = $this->container->normalizePath('./vendor/bin/phpunit');
+
 		if (!$class && !$method) {
-			$result = $this->kernel->execute("./vendor/bin/phpunit --testsuite {$suite}", false);
+			$result = $this->kernel->execute("{$unitPath} --testsuite {$suite}", false);
 		}
 
 		if ($class && !$method) {
-			$result = $this->kernel->execute("./vendor/bin/phpunit tests/{$class}.php --testsuite {$suite}", false);
+			$result = $this->kernel->execute("{$unitPath} tests/{$class}.php --testsuite {$suite}", false);
 		}
 
 		if ($class && $method) {
 			$result = $this->kernel->execute(
-				"./vendor/bin/phpunit tests/{$class}.php --filter {$method} --testsuite {$suite}",
+				"{$unitPath} tests/{$class}.php --filter {$method} --testsuite {$suite}",
 				false
 			);
 		}
