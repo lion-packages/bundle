@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tests\Commands\Lion\AES;
+namespace Tests\Commands\Lion\New;
 
-use Lion\Bundle\Commands\Lion\AES\NewAESCommand;
+use Lion\Bundle\Commands\Lion\New\AESCommand;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\DependencyInjection\Container;
@@ -20,8 +20,8 @@ class AESTest extends Test
     protected function setUp(): void
     {
         $application = (new Kernel())->getApplication();
-        $application->add((new Container())->injectDependencies(new NewAESCommand()));
-        $this->commandTester = new CommandTester($application->find('aes:new'));
+        $application->add((new Container())->injectDependencies(new AESCommand()));
+        $this->commandTester = new CommandTester($application->find('new:aes'));
     }
 
     public function testExecute(): void
