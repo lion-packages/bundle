@@ -6,6 +6,7 @@ namespace Lion\Bundle\Commands\Lion\Migrations;
 
 use Lion\Bundle\Interface\MigrationUpInterface;
 use Lion\Command\Command;
+use Lion\Database\Drivers\Schema\MySQL as Schema;
 use Lion\DependencyInjection\Container;
 use Lion\Files\Store;
 use Symfony\Component\Console\Input\InputInterface;
@@ -45,6 +46,8 @@ class FreshMigrationsCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $this->dropTables($output);
+
         $files = [];
 
         foreach ($this->container->getFiles('./database/Migrations/') as $file) {
@@ -77,6 +80,28 @@ class FreshMigrationsCommand extends Command
         $output->writeln($this->infoOutput("\n\t>> Migrations executed successfully"));
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * Clears all tables of all available connections
+     *
+     * @param  OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     *
+     * @return void
+     */
+    private function dropTables(OutputInterface $output): void
+    {
+        $connections = (object) Schema::getConnections();
+
+        foreach ($connections->connections as $connection) {
+            $response = Schema::dropTables()->execute();
+
+            if (isError($response)) {
+                $output->writeln($this->warningOutput("\t>> DATABASE: {$connection->dbname}"));
+                $output->writeln($this->errorOutput("\t>> DATABASE: {$response->message}"));
+            }
+        }
     }
 
     private function orderList(array $files): array
