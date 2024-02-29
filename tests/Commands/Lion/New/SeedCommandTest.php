@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Tests\Commands\Lion\DB\Seed;
+namespace Tests\Commands\Lion\New;
 
-use Lion\Bundle\Commands\Lion\DB\Seed\NewSeedCommand;
+use Lion\Bundle\Commands\Lion\New\SeedCommand;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\DependencyInjection\Container;
 use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class NewSeedCommandTest extends Test
+class SeedCommandTest extends Test
 {
     const URL_PATH = './database/Seed/';
     const NAMESPACE_CLASS = 'Database\\Seed\\';
@@ -26,8 +26,8 @@ class NewSeedCommandTest extends Test
 	protected function setUp(): void 
 	{
         $application = (new Kernel())->getApplication();
-        $application->add((new Container())->injectDependencies(new NewSeedCommand()));
-        $this->commandTester = new CommandTester($application->find('db:seed:new'));
+        $application->add((new Container())->injectDependencies(new SeedCommand()));
+        $this->commandTester = new CommandTester($application->find('new:seed'));
 
         $this->createDirectory(self::URL_PATH);
 	}

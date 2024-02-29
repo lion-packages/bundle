@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Commands\Lion\DB\Seed;
 
-use Lion\Bundle\Commands\Lion\DB\Seed\NewSeedCommand;
 use Lion\Bundle\Commands\Lion\DB\Seed\RunSeedCommand;
+use Lion\Bundle\Commands\Lion\New\SeedCommand;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\DependencyInjection\Container;
@@ -35,11 +35,11 @@ class RunSeedCommandTest extends Test
         $this->createDirectory(self::URL_PATH);
 
         $application = (new Kernel())->getApplication();
-        $application->add((new Container())->injectDependencies(new NewSeedCommand()));
+        $application->add((new Container())->injectDependencies(new SeedCommand()));
         $application->add((new Container())->injectDependencies(new RunSeedCommand()));
 
         $this->commandTester = new CommandTester($application->find('db:seed:run'));
-        $this->commandTesterNewSeed = new CommandTester($application->find('db:seed:new'));
+        $this->commandTesterNewSeed = new CommandTester($application->find('new:seed'));
 	}
 
 	protected function tearDown(): void 
