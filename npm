@@ -65,7 +65,7 @@ Driver::run([
  * -----------------------------------------------------------------------------
  **/
 
-(new CommandHandler)
+(new CommandHandler('Lion-Bundle'))
     ->registerCommands('./src/LionBundle/Commands/Npm/', 'Lion\\Bundle\\Commands\\Npm\\', 'Commands/Npm/')
     ->getApplication()
     ->run();
