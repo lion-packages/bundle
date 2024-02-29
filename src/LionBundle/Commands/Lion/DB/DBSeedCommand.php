@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lion\Bundle\Commands\Lion\DB\Seed;
+namespace Lion\Bundle\Commands\Lion\DB;
 
 use Lion\Bundle\Interface\SeedInterface;
 use Lion\Command\Command;
@@ -14,7 +14,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 
-class RunSeedCommand extends Command
+class DBSeedCommand extends Command
 {
     private Container $container;
     private Store $store;
@@ -22,7 +22,7 @@ class RunSeedCommand extends Command
     /**
      * @required
      * */
-    public function setContainer(Container $container): RunSeedCommand
+    public function setContainer(Container $container): DBSeedCommand
     {
         $this->container = $container;
 
@@ -32,7 +32,7 @@ class RunSeedCommand extends Command
     /**
      * @required
      * */
-    public function setStore(Store $store): RunSeedCommand
+    public function setStore(Store $store): DBSeedCommand
     {
         $this->store = $store;
 
@@ -42,16 +42,14 @@ class RunSeedCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setName('db:seed:run')
+            ->setName('db:seed')
             ->setDescription('Run the available seeds')
             ->addOption('run', '-r', InputOption::VALUE_OPTIONAL, 'Number of executions', 1);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        /**
-         * @var array<string> $listSeed
-         */
+        /** @var array<string> $listSeed */
         $listSeed = [];
 
         foreach ($this->container->getFiles($this->container->normalizePath('./database/Seed/')) as $seed) {
@@ -70,9 +68,7 @@ class RunSeedCommand extends Command
         $end = (int) $input->getOption('run');
         $selectedSeed = $helper->ask($input, $output, new ChoiceQuestion('Select a seed', $listSeed, 0));
 
-        /**
-         * @var SeedInterface $seedInterface
-         */
+        /** @var SeedInterface $seedInterface */
         $seedInterface = new $selectedSeed();
 
         for ($i = 0; $i < $end; $i++) {
