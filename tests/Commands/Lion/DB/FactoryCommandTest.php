@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tests\Commands\Lion\DB\MySQL;
+namespace Tests\Commands\Lion\DB;
 
-use Lion\Bundle\Commands\Lion\DB\MySQL\FactoryCommand;
+use Lion\Bundle\Commands\Lion\New\FactoryCommand;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\DependencyInjection\Container;
@@ -27,7 +27,7 @@ class FactoryCommandTest extends Test
 	{
         $application = (new Kernel())->getApplication();
         $application->add((new Container())->injectDependencies(new FactoryCommand()));
-        $this->commandTester = new CommandTester($application->find('db:mysql:factory'));
+        $this->commandTester = new CommandTester($application->find('new:factory'));
 
         $this->createDirectory(self::URL_PATH);
 	}
