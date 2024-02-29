@@ -40,12 +40,16 @@ class CommandHandler
 
     /**
      * Class constructor
+     *
+     * @param string $name [Application name]
      */
-    public function __construct()
+    public function __construct(string $name = '')
     {
         $this->application = (new Kernel)->getApplication();
         $this->container = new Container();
         $this->store = new Store();
+
+        $this->application->setName($name);
     }
 
     /**

@@ -33,16 +33,27 @@ class NpmInitCommandTest extends Test
 
     public function testExecute(): void
     {
-        $this->assertSame(Command::SUCCESS, $this->commandTester->execute(['project' => self::PROJECT_NAME]));
+        $commandExecute = $this->commandTester->setInputs([2, 0])->execute(['project' => self::PROJECT_NAME]);
+
+        $this->assertSame(Command::SUCCESS, $commandExecute);
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
     }
 
     public function testExecuteExistProject(): void
     {
-        $this->assertSame(Command::SUCCESS, $this->commandTester->execute(['project' => self::PROJECT_NAME]));
-        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
+        $commandExecute = $this->commandTester->setInputs([2, 0])->execute(['project' => self::PROJECT_NAME]);
 
+        $this->assertSame(Command::SUCCESS, $commandExecute);
+        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertSame(Command::FAILURE, $this->commandTester->execute(['project' => self::PROJECT_NAME]));
         $this->assertStringContainsString(self::OUTPUT_MESSAGE_ERROR, $this->commandTester->getDisplay());
+    }
+
+    public function testExecuteElectronVite(): void
+    {
+        $commandExecute = $this->commandTester->setInputs([8, 2, 0])->execute(['project' => self::PROJECT_NAME]);
+
+        $this->assertSame(Command::SUCCESS, $commandExecute);
+        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
     }
 }

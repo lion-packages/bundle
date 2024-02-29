@@ -15,7 +15,7 @@ use Lion\Request\Response;
 class RouteMiddleware
 {
     /**
-     * List of all HTTP headers
+     * [List of all HTTP headers]
      *
      * @var array $headers;
      */

@@ -81,16 +81,36 @@ class MenuCommand extends Command
         );
     }
 
-    protected function selectedTemplate(InputInterface $input, OutputInterface $output, array $templates): string
-    {
+    /**
+     * Open a menu to select a template to create a project with vite
+     *
+     * @param  InputInterface $input [InputInterface is the interface
+     * implemented by all input classes]
+     * @param  OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     * @param  array $templates [List of available templates]
+     * @param  string $defaultTemplate [Default template]
+     * @param  int $defaultIndex [Default index]
+     *
+     * @return string
+     */
+    protected function selectedTemplate(
+        InputInterface $input,
+        OutputInterface $output,
+        array $templates,
+        string $defaultTemplate = 'React',
+        int $defaultIndex = 0
+    ): string {
         /** @var QuestionHelper $helper */
         $helper = $this->getHelper('question');
 
-        return $helper->ask(
-            $input,
-            $output,
-            new ChoiceQuestion("Select the type of template {$this->warningOutput('(default: React)')}", $templates, 2)
+        $choiceQuestion = new ChoiceQuestion(
+            "Select the type of template {$this->warningOutput("(default: {$defaultTemplate})")}",
+            $templates,
+            $defaultIndex
         );
+
+        return $helper->ask($input, $output, $choiceQuestion);
     }
 
     protected function selectedTypes(InputInterface $input, OutputInterface $output, array $types): string

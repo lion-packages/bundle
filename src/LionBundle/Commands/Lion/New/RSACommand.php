@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lion\Bundle\Commands\Lion\RSA;
+namespace Lion\Bundle\Commands\Lion\New;
 
 use Lion\Command\Command;
 use Lion\Files\Store;
@@ -11,7 +11,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class NewRSACommand extends Command
+class RSACommand extends Command
 {
     private RSA $rsa;
     private Store $store;
@@ -19,7 +19,7 @@ class NewRSACommand extends Command
     /**
      * @required
      * */
-    public function setRSA(RSA $rsa): NewRSACommand
+    public function setRSA(RSA $rsa): RSACommand
     {
         $this->rsa = $rsa;
 
@@ -29,7 +29,7 @@ class NewRSACommand extends Command
     /**
      * @required
      * */
-    public function setStore(Store $store): NewRSACommand
+    public function setStore(Store $store): RSACommand
     {
         $this->store = $store;
 
@@ -39,7 +39,7 @@ class NewRSACommand extends Command
 	protected function configure(): void
 	{
 		$this
-            ->setName('rsa:new')
+            ->setName('new:rsa')
             ->setDescription('Command to create public and private keys with RSA')
             ->addOption('path', 'p', InputOption::VALUE_REQUIRED, 'Save to a specific path?');
 	}
