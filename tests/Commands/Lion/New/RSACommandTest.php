@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Tests\Commands\Lion\RSA;
+namespace Tests\Commands\Lion\New;
 
-use Lion\Bundle\Commands\Lion\RSA\NewRSACommand;
+use Lion\Bundle\Commands\Lion\New\RSACommand;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\DependencyInjection\Container;
 use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class NewRSACommandTest extends Test
+class RSACommandTest extends Test
 {
     const URL_PATH = 'keys/';
     const OUTPUT_MESSAGE = 'public and private';
@@ -21,8 +21,8 @@ class NewRSACommandTest extends Test
     protected function setUp(): void
     {
         $application = (new Kernel())->getApplication();
-        $application->add((new Container())->injectDependencies(new NewRSACommand()));
-        $this->commandTester = new CommandTester($application->find('rsa:new'));
+        $application->add((new Container())->injectDependencies(new RSACommand()));
+        $this->commandTester = new CommandTester($application->find('new:rsa'));
     }
 
     protected function tearDown(): void
