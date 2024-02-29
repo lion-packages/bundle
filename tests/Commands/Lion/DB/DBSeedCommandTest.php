@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tests\Commands\Lion\DB\Seed;
+namespace Tests\Commands\Lion\DB;
 
-use Lion\Bundle\Commands\Lion\DB\Seed\NewSeedCommand;
-use Lion\Bundle\Commands\Lion\DB\Seed\RunSeedCommand;
+use Lion\Bundle\Commands\Lion\DB\DBSeedCommand;
+use Lion\Bundle\Commands\Lion\New\SeedCommand;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\DependencyInjection\Container;
@@ -13,7 +13,7 @@ use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tests\Providers\ConnectionProviderTrait;
 
-class RunSeedCommandTest extends Test
+class DBSeedCommandTest extends Test
 {
     use ConnectionProviderTrait;
 
@@ -35,11 +35,11 @@ class RunSeedCommandTest extends Test
         $this->createDirectory(self::URL_PATH);
 
         $application = (new Kernel())->getApplication();
-        $application->add((new Container())->injectDependencies(new NewSeedCommand()));
-        $application->add((new Container())->injectDependencies(new RunSeedCommand()));
+        $application->add((new Container())->injectDependencies(new SeedCommand()));
+        $application->add((new Container())->injectDependencies(new DBSeedCommand()));
 
-        $this->commandTester = new CommandTester($application->find('db:seed:run'));
-        $this->commandTesterNewSeed = new CommandTester($application->find('db:seed:new'));
+        $this->commandTester = new CommandTester($application->find('db:seed'));
+        $this->commandTesterNewSeed = new CommandTester($application->find('new:seed'));
 	}
 
 	protected function tearDown(): void 

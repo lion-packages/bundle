@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lion\Bundle\Commands\Lion\DB\MySQL;
+namespace Lion\Bundle\Commands\Lion\New;
 
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
@@ -51,7 +51,7 @@ class FactoryCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setName('db:mysql:factory')
+            ->setName('new:factory')
             ->setDescription('Command required for the creation of new factories')
             ->addArgument('factory', InputArgument::OPTIONAL, 'Factory name', 'ExampleFactory');
     }

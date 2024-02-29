@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lion\Bundle\Commands\Lion\DB\Seed;
+namespace Lion\Bundle\Commands\Lion\New;
 
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
@@ -12,7 +12,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class NewSeedCommand extends Command
+class SeedCommand extends Command
 {
     private ClassFactory $classFactory;
     private Store $store;
@@ -21,7 +21,7 @@ class NewSeedCommand extends Command
     /**
      * @required
      * */
-    public function setClassFactory(ClassFactory $classFactory): NewSeedCommand
+    public function setClassFactory(ClassFactory $classFactory): SeedCommand
     {
         $this->classFactory = $classFactory;
 
@@ -31,7 +31,7 @@ class NewSeedCommand extends Command
     /**
      * @required
      * */
-    public function setStore(Store $store): NewSeedCommand
+    public function setStore(Store $store): SeedCommand
     {
         $this->store = $store;
 
@@ -41,7 +41,7 @@ class NewSeedCommand extends Command
     /**
      * @required
      * */
-    public function setStr(Str $str): NewSeedCommand
+    public function setStr(Str $str): SeedCommand
     {
         $this->str = $str;
 
@@ -51,7 +51,7 @@ class NewSeedCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setName('db:seed:new')
+            ->setName('new:seed')
             ->setDescription('Command required for creating new seeds')
             ->addArgument('seed', InputArgument::OPTIONAL, 'Name seed', 'ExampleSeed');
     }
