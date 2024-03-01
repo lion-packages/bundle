@@ -61,6 +61,7 @@ class RouteListCommand extends Command
         foreach ($this->routes as $route => $methods) {
             foreach ($methods as $keyMethods => $method) {
                 $routeUrl = $this->str->of("/{$route}")->replace("//", "/")->get();
+
                 if ($method['handler']['callback'] != false) {
                     $rows[] = [
                         $this->warningOutput($keyMethods),
@@ -116,9 +117,7 @@ class RouteListCommand extends Command
                     }
                 }
 
-                if ($cont < ($size - 1)) {
-                    $rows[] = new TableSeparator();
-                }
+                $rows[] = new TableSeparator();
 
                 $cont++;
             }
@@ -128,7 +127,7 @@ class RouteListCommand extends Command
             ->setHeaderTitle($this->successOutput('ROUTES'))
             ->setFooterTitle(
                 $size > 1
-                ? $this->successOutput(" showing [{$size}] routes ")
+                ? $this->successOutput(" showing [{$cont}] routes ")
                 : ($size === 1
                     ? $this->successOutput(' showing a single route ')
                     : $this->successOutput(' no routes available ')
