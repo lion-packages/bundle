@@ -47,7 +47,16 @@ class DBSeedCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        if (isError($this->store->exist('./database/Seed/'))) {
+            $output->writeln($this->errorOutput("\t>> SEED: there are no defined seeds"));
+
+            return Command::FAILURE;
+        }
+
         $end = (int) $input->getOption('run');
+
+        /** @var array<SeedInterface> $files */
+        $files = [];
 
         foreach ($this->container->getFiles($this->container->normalizePath('./database/Seed/')) as $seed) {
             if (isSuccess($this->store->validate([$seed], ['php']))) {
@@ -60,16 +69,20 @@ class DBSeedCommand extends Command
                 /** @var SeedInterface $seedInterface */
                 $seedInterface = new $class();
 
-                for ($i = 0; $i < $end; $i++) {
-                    $response = $seedInterface->run();
+                $files[] = $seedInterface;
+            }
+        }
 
-                    $output->writeln($this->warningOutput("\t>>  SEED: " . $seedInterface::class));
+        foreach ($this->orderList($files) as $seedInterface) {
+            for ($i = 0; $i < $end; $i++) {
+                $response = $seedInterface->run();
 
-                    if (isError($response)) {
-                        $output->writeln($this->errorOutput("\t>>  SEED: {$response->message}"));
-                    } else {
-                        $output->writeln($this->successOutput("\t>>  SEED: {$response->message}"));
-                    }
+                $output->writeln($this->warningOutput("\t>>  SEED: " . $seedInterface::class));
+
+                if (isError($response)) {
+                    $output->writeln($this->errorOutput("\t>>  SEED: {$response->message}"));
+                } else {
+                    $output->writeln($this->successOutput("\t>>  SEED: {$response->message}"));
                 }
             }
         }
@@ -77,5 +90,32 @@ class DBSeedCommand extends Command
         $output->writeln($this->infoOutput("\n\t>>  SEED: seeds executed"));
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * Sorts the list of elements by the value defined in the INDEX constant
+     *
+     * @param  array $files [Class List]
+     *
+     * @return array<SeedInterface>
+     */
+    private function orderList(array $files): array
+    {
+        uasort($files, function($classA, $classB) {
+            $namespaceA = $classA::class;
+            $namespaceB = $classB::class;
+
+            if (!defined($namespaceA . "::INDEX")) {
+                return -1;
+            }
+
+            if (!defined($namespaceB . "::INDEX")) {
+                return -1;
+            }
+
+            return $classA::INDEX <=> $classB::INDEX;
+        });
+
+        return $files;
     }
 }

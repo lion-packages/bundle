@@ -52,6 +52,7 @@ class FreshMigrationsCommand extends Command
             return Command::FAILURE;
         }
 
+        /** @var array<MigrationUpInterface> $files */
         $files = [];
 
         foreach ($this->container->getFiles('./database/Migrations/') as $file) {
@@ -116,6 +117,13 @@ class FreshMigrationsCommand extends Command
         }
     }
 
+    /**
+     * Sorts the list of elements by the value defined in the INDEX constant
+     *
+     * @param  array $files [Class List]
+     *
+     * @return array<MigrationUpInterface>
+     */
     private function orderList(array $files): array
     {
         uasort($files, function($classA, $classB) {
