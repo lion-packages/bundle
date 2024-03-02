@@ -74,10 +74,10 @@ class DBSeedCommand extends Command
         }
 
         foreach ($this->orderList($files) as $seedInterface) {
+            $output->writeln($this->warningOutput("\t>>  SEED: " . $seedInterface::class));
+
             for ($i = 0; $i < $end; $i++) {
                 $response = $seedInterface->run();
-
-                $output->writeln($this->warningOutput("\t>>  SEED: " . $seedInterface::class));
 
                 if (isError($response)) {
                     $output->writeln($this->errorOutput("\t>>  SEED: {$response->message}"));
