@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lion\Bundle\Commands\Lion\Migrations;
+namespace Lion\Bundle\Commands\Lion\New;
 
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\Migrations\MigrationFactory;
@@ -45,7 +45,7 @@ class NewMigrationCommand extends MenuCommand
 	protected function configure(): void
     {
 		$this
-            ->setName('migrate:new')
+            ->setName('new:migration')
             ->setDescription('Command to generate a new migration')
             ->addArgument('migration', InputArgument::REQUIRED, 'Migration name');
 	}

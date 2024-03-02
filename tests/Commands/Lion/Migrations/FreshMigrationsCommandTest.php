@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Commands\Lion\Migrations;
 
 use Lion\Bundle\Commands\Lion\Migrations\FreshMigrationsCommand;
-use Lion\Bundle\Commands\Lion\Migrations\NewMigrationCommand;
+use Lion\Bundle\Commands\Lion\New\NewMigrationCommand;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\DependencyInjection\Container;
@@ -24,7 +24,7 @@ class FreshMigrationsCommandTest extends Test
         $application = (new Kernel())->getApplication();
         $application->add((new Container())->injectDependencies(new NewMigrationCommand()));
         $application->add((new Container())->injectDependencies(new FreshMigrationsCommand()));
-        $this->commandTesterFresh = new CommandTester($application->find('migrate:new'));
+        $this->commandTesterFresh = new CommandTester($application->find('new:migration'));
         $this->commandTester = new CommandTester($application->find('migrate:fresh'));
 
         $this->createDirectory('./database/Migrations/');
