@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tests\Commands\Lion\Migrations;
+namespace Tests\Commands\Lion\New;
 
-use Lion\Bundle\Commands\Lion\Migrations\NewMigrationCommand;
+use Lion\Bundle\Commands\Lion\New\NewMigrationCommand;
 use Lion\Bundle\Interface\MigrationUpInterface;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
@@ -31,7 +31,7 @@ class NewMigrationCommandTest extends Test
 	{
         $application = (new Kernel())->getApplication();
         $application->add((new Container())->injectDependencies(new NewMigrationCommand()));
-        $this->commandTester = new CommandTester($application->find('migrate:new'));
+        $this->commandTester = new CommandTester($application->find('new:migration'));
 	}
 
 	protected function tearDown(): void

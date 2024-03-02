@@ -61,7 +61,7 @@ class ShowDatabasesCommand extends Command
             ->setHeaders(['DATABASE CONNECTION', 'DATABASE HOST', 'DATABASE PORT', 'DATABASE NAME', 'DATABASE USER'])
             ->setFooterTitle(
                 $size > 1
-                    ? "<info> Showing [" . $size . "] connections </info>"
+                    ? "<info> Showing [{$size}] connections </info>"
                     : ($size === 1
                         ? '<info> showing a single connection </info>'
                         : '<info> No connections available </info>'

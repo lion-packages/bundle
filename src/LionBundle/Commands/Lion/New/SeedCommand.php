@@ -72,6 +72,7 @@ class SeedCommand extends Command
             ->add($this->str->of("use Lion\Bundle\Interface\SeedInterface;")->ln()->get())
             ->add($this->str->of("use Lion\Database\Drivers\MySQL as DB;")->ln()->ln()->get())
             ->add($this->str->of("class ")->concat($class)->concat(' implements SeedInterface')->ln()->concat("{")->ln()->get())
+            ->add($this->str->lt()->concat('const INDEX = null;')->ln()->ln()->get())
             ->add("\t/**\n\t * {@inheritdoc}\n\t **/\n")
             ->add("\tpublic function run(): object\n\t{\n\t\treturn success('run seed');\n\t}\n}\n")
             ->close();
