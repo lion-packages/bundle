@@ -46,14 +46,18 @@ class FreshMigrationsCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->dropTables($output);
+        if (isError($this->store->exist('./database/Migrations/'))) {
+            $output->writeln($this->errorOutput("\t>> MIGRATION: there are no defined migration routes"));
+
+            return Command::FAILURE;
+        }
 
         $files = [];
 
         foreach ($this->container->getFiles('./database/Migrations/') as $file) {
             if (isSuccess($this->store->validate([$file], ['php']))) {
                 $namespace = $this->container->getNamespace(
-                    strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? str_replace('\\', '/', $file) : $file,
+                    (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? str_replace('\\', '/', $file) : $file),
                     'Database\\Migrations\\',
                     'Migrations/'
                 );
@@ -61,6 +65,14 @@ class FreshMigrationsCommand extends Command
                 $files[$namespace] = include_once($file);
             }
         }
+
+        if (empty($files)) {
+            $output->writeln($this->warningOutput("\t>> MIGRATION: no migrations available"));
+
+            return Command::INVALID;
+        }
+
+        $this->dropTables($output);
 
         foreach ($this->orderList($files) as $namespace => $classObject) {
             if ($classObject instanceof MigrationUpInterface) {
