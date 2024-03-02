@@ -74,7 +74,7 @@ class DBSeedCommand extends Command
             }
         }
 
-        $output->writeln($this->purpleOutput("\n\t>>  SEED: seeds executed"));
+        $output->writeln($this->infoOutput("\n\t>>  SEED: seeds executed"));
 
         return Command::SUCCESS;
     }
