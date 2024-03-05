@@ -128,10 +128,11 @@ class CapsuleCommand extends Command
             ->concat("{")->ln();
 
         if (count($properties) > 0) {
-            $this->str->lt()->concat($this->arr->of($listProperties)->join("\n\t"))->ln()->ln();
+            $this->str->lt()->concat($this->arr->of($listProperties)->join("\n\t"))->ln();
         }
 
         $this->str
+            ->lt()->concat("/**\n\t * {@inheritdoc}\n\t * */")->ln()
             ->lt()->concat('public function jsonSerialize(): array')->ln()
             ->lt()->concat('{')->ln()
             ->lt()->lt()->concat('return get_object_vars($this);')->ln()
