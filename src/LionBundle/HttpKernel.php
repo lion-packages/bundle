@@ -5,9 +5,24 @@ declare(strict_types=1);
 namespace Lion\Bundle;
 
 use Lion\Bundle\Helpers\Http\Routes;
+use Lion\Bundle\Helpers\Rules;
+use Lion\Bundle\Interface\RulesInterface;
+use Lion\DependencyInjection\Container;
 
 class HttpKernel
 {
+    private Container $container;
+
+    /**
+     * @required
+     */
+    public function setContainer(Container $container): HttpKernel
+    {
+        $this->container = $container;
+
+        return $this;
+    }
+
     public function checkUrl(string $uri): bool
     {
         $cleanRequestUri = explode('?', $_SERVER['REQUEST_URI'])[0];
@@ -29,10 +44,12 @@ class HttpKernel
         $allRules = Routes::getRules();
 
         if (isset($allRules[$_SERVER['REQUEST_METHOD']])) {
+            /** @var array<RulesInterface> $rules */
             foreach ($allRules[$_SERVER['REQUEST_METHOD']] as $uri => $rules) {
                 if ($this->checkUrl($uri)) {
                     foreach ($rules as $rule) {
-                        $ruleClass = new $rule();
+                        /** @var RulesInterface|Rules $ruleClass */
+                        $ruleClass = $this->container->injectDependencies(new $rule());
 
                         $ruleClass->passes();
                         $ruleClass->display();

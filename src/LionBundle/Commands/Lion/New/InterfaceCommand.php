@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\New;
 
-use Lion\Bundle\Helpers\Commands\ClassCommandFactory;
+use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Files\Store;
 use Lion\Helpers\Str;
@@ -14,7 +14,29 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class InterfaceCommand extends Command
 {
+    private ClassFactory $classFactory;
+    private Store $store;
     private Str $str;
+
+    /**
+     * @required
+     */
+    public function setClassFactory(ClassFactory $classFactory): InterfaceCommand
+    {
+        $this->classFactory = $classFactory;
+
+        return $this;
+    }
+
+    /**
+     * @required
+     */
+    public function setStore(Store $store): InterfaceCommand
+    {
+        $this->store = $store;
+
+        return $this;
+    }
 
     /**
      * @required
@@ -36,39 +58,38 @@ class InterfaceCommand extends Command
 
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
-        $factory = new ClassCommandFactory(['interface']);
+        $interface = $input->getArgument('interface');
 
-        return $factory->execute(function(ClassCommandFactory $classFactory, Store $store) use ($input, $output) {
-            $interface = $input->getArgument('interface');
+        $this->classFactory->classFactory('app/Interfaces/', $interface);
+        $folder = $this->classFactory->getFolder();
+        $namespace = $this->classFactory->getNamespace();
+        $class = $this->classFactory->getClass();
 
-            $factoryInterface = $classFactory->getFactory('interface');
-            $data = $classFactory->getData($factoryInterface, ['path' => 'app/Interfaces/', 'class' => $interface]);
-            $store->folder($data->folder);
+        $this->store->folder($folder);
 
-            $factoryInterface
-                ->create($data->class, 'php', $data->folder)
-                ->add(
-                    $this->str->of("<?php")->ln()->ln()
-                        ->concat('declare(strict_types=1);')->ln()->ln()
-                        ->concat('namespace')->spaces(1)
-                        ->concat("{$data->namespace};")->ln()->ln()
-                        ->concat('interface')->spaces(1)
-                        ->concat($data->class)->ln()
-                        ->concat('{')->ln()->ln()
-                        ->concat("}")->ln()
-                        ->get()
-                )
-                ->close();
+        $this->classFactory
+            ->create($class, 'php', $folder)
+            ->add(
+                $this->str->of("<?php")->ln()->ln()
+                    ->concat('declare(strict_types=1);')->ln()->ln()
+                    ->concat('namespace')->spaces(1)
+                    ->concat("{$namespace};")->ln()->ln()
+                    ->concat('interface')->spaces(1)
+                    ->concat($class)->ln()
+                    ->concat('{')->ln()->ln()
+                    ->concat("}")->ln()
+                    ->get()
+            )
+            ->close();
 
-            $output->writeln($this->warningOutput("\t>>  INTERFACE: {$data->class}"));
+        $output->writeln($this->warningOutput("\t>>  INTERFACE: {$class}"));
 
-            $output->writeln(
-                $this->successOutput(
-                    "\t>>  INTERFACE: the '{$data->namespace}\\{$data->class}' interface has been generated"
-                )
-            );
+        $output->writeln(
+            $this->successOutput(
+                "\t>>  INTERFACE: the '{$namespace}\\{$class}' interface has been generated"
+            )
+        );
 
-            return Command::SUCCESS;
-        });
+        return Command::SUCCESS;
 	}
 }

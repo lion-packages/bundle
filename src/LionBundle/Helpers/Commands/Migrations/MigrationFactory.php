@@ -10,9 +10,14 @@ class MigrationFactory
 {
     private Str $str;
 
-    public function __construct()
+    /**
+     * @required
+     */
+    public function setStr(Str $str): MigrationFactory
     {
-        $this->str = new Str();
+        $this->str = $str;
+
+        return $this;
     }
 
     public function getTableBody(): string

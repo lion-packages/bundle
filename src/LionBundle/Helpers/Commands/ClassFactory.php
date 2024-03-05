@@ -24,11 +24,11 @@ class ClassFactory
     private string $class;
 
     /**
-     * Class constructor
+     * @required
      */
-    public function __construct()
+    public function setStore(Store $store)
     {
-        $this->store = new Store();
+        $this->store = $store;
     }
 
     public function create(
@@ -117,7 +117,10 @@ class ClassFactory
                 ],
                 'type' => (object) [
                     'camel' => ($finalVisibility . "?{$type} $" . "{$camel} = null;"),
-                    'snake' => ($finalVisibility . "?{$type} $" . "{$snake} = null;")
+                    'snake' => (
+                        "/**\n\t * property for {$name}\n\t *\n\t * @var {$type}|null $" . "{$snake}\n\t */\n" .
+                        "\t{$finalVisibility}?{$type} $" . "{$snake} = null;\n"
+                    )
                 ],
                 'initialize' => (object) [
                     'camel' => ($finalVisibility . '$' . "{$camel} = null"),
@@ -149,7 +152,8 @@ class ClassFactory
         $newName = str_replace('_', ' ', $newName);
         $newName = trim(str_replace(' ', '', ucwords($newName)));
 
-        $getter = "\tpublic function get{$newName}(): ?{$type}\n\t{\n\t\treturn " . '$this->' . $name;
+        $getter = "\t/**\n\t * getter method for {$name}\n\t *\n\t * @return {$type}|null\n\t */\n";
+        $getter .= "\tpublic function get{$newName}(): ?{$type}\n\t{\n\t\treturn " . '$this->' . $name;
         $getter .= ";\n\t}";
 
         return (object) ['name' => "get{$newName}", 'method' => $getter];
@@ -162,7 +166,8 @@ class ClassFactory
         $newName = str_replace('_', ' ', $newName);
         $newName = trim(str_replace(' ', '', ucwords($newName)));
 
-        $setter = "\tpublic function set{$newName}(?{$type} $" . $name . "): {$capsule}\n\t{\n";
+        $setter = "\t/**\n\t * setter method for {$name}\n\t *\n\t * @return {$capsule}\n\t */\n";
+        $setter .= "\tpublic function set{$newName}(?{$type} $" . $name . "): {$capsule}\n\t{\n";
         $setter .= "\t\t" . '$this->' . "{$name} = $" . $name . ";\n\n\t\treturn " . '$this' . ";\n\t}";
 
         return (object) ['name' => "set{$newName}", 'method' => $setter];

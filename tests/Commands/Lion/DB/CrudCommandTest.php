@@ -42,24 +42,23 @@ class CrudCommandTest extends Test
 	protected function setUp(): void 
 	{
         $this->runDatabaseConnections();
+        $this->createTable();
 
-        Schema::createTable(self::ENTITY, function() {
-             Schema::int('id')->notNull()->autoIncrement()->primaryKey()
-                ->varchar('name', 25)->notNull()
-                ->varchar('last_name', 25)->notNull();
-        })->execute();
-
+        $kernel = new Kernel();
         $container = new Container();
-        $application = (new Kernel())->getApplication();
-        $application->add($container->injectDependencies(new TestCommand()));
-        $application->add($container->injectDependencies(new ModelCommand()));
-        $application->add($container->injectDependencies(new ControllerCommand()));
-        $application->add($container->injectDependencies(new RulesCommand()));
-        $application->add($container->injectDependencies(new CapsuleCommand()));
-        $application->add($container->injectDependencies(new RulesDBCommand()));
-        $application->add($container->injectDependencies(new DBCapsuleCommand()));
-        $application->add($container->injectDependencies(new CrudCommand()));
-        $this->commandTester = new CommandTester($application->find('db:crud'));
+
+        $kernel->commandsOnObjects([
+            $container->injectDependencies(new TestCommand()),
+            $container->injectDependencies(new ModelCommand()),
+            $container->injectDependencies(new ControllerCommand()),
+            $container->injectDependencies(new RulesCommand()),
+            $container->injectDependencies(new CapsuleCommand()),
+            $container->injectDependencies(new RulesDBCommand()),
+            $container->injectDependencies(new DBCapsuleCommand()),
+            $container->injectDependencies(new CrudCommand())
+        ]);
+
+        $this->commandTester = new CommandTester($kernel->getApplication()->find('db:crud'));
 	}
 
 	protected function tearDown(): void 
@@ -71,6 +70,15 @@ class CrudCommandTest extends Test
         $this->rmdirRecursively('./tests/Models/');
         Schema::dropTable(self::ENTITY)->execute();
 	}
+
+    private function createTable(): void
+    {
+        Schema::createTable(self::ENTITY, function() {
+             Schema::int('id')->notNull()->autoIncrement()->primaryKey()
+                ->varchar('name', 25)->notNull()
+                ->varchar('last_name', 25)->notNull();
+        })->execute();
+    }
 
     public function testExecute(): void
     {
