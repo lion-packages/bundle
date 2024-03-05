@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Tests\Helpers\Commands;
 
 use Lion\Bundle\Helpers\Commands\ComposerFactory;
+use Lion\DependencyInjection\Container;
 use Lion\Helpers\Arr;
 use Lion\Test\Test;
-use stdClass;
 
 class ComposerFactoryTest extends Test
 {
@@ -23,19 +23,18 @@ class ComposerFactoryTest extends Test
         'ext-tokenizer'
     ];
 
-    private function getComposerFactory(): ComposerFactory
+    private ComposerFactory $composerFactory;
+
+    protected function setUp(): void
     {
-        return new ComposerFactory(json_decode(file_get_contents(self::COMPOSER_JSON)), self::EXTENSIONS);
+        $this->composerFactory = (new Container())->injectDependencies(new ComposerFactory());
+
+        $this->initReflection($this->composerFactory);
     }
 
     public function testConstruct(): void
     {
-        $composerFactory = $this->getComposerFactory();
-        $this->initReflection($composerFactory);
-
-        $this->assertInstanceOf(ComposerFactory::class, $composerFactory);
         $this->assertInstanceOf(Arr::class, $this->getPrivateProperty('arr'));
-        $this->assertInstanceOf(stdClass::class, $this->getPrivateProperty('composerJson'));
         $this->assertIsArray($this->getPrivateProperty('libraries'));
     }
 }

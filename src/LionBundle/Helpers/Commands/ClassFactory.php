@@ -24,11 +24,11 @@ class ClassFactory
     private string $class;
 
     /**
-     * Class constructor
+     * @required
      */
-    public function __construct()
+    public function setStore(Store $store)
     {
-        $this->store = new Store();
+        $this->store = $store;
     }
 
     public function create(

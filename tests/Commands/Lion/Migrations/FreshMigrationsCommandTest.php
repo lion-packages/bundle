@@ -21,11 +21,16 @@ class FreshMigrationsCommandTest extends Test
 
     protected function setUp(): void
     {
-        $application = (new Kernel())->getApplication();
-        $application->add((new Container())->injectDependencies(new NewMigrationCommand()));
-        $application->add((new Container())->injectDependencies(new FreshMigrationsCommand()));
-        $this->commandTesterFresh = new CommandTester($application->find('new:migration'));
-        $this->commandTester = new CommandTester($application->find('migrate:fresh'));
+        $kernel = new Kernel();
+        $container = new Container();
+
+        $kernel->commandsOnObjects([
+            $container->injectDependencies(new NewMigrationCommand()),
+            $container->injectDependencies(new FreshMigrationsCommand()),
+        ]);
+
+        $this->commandTesterFresh = new CommandTester($kernel->getApplication()->find('new:migration'));
+        $this->commandTester = new CommandTester($kernel->getApplication()->find('migrate:fresh'));
 
         $this->createDirectory('./database/Migrations/');
     }

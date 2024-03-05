@@ -22,11 +22,14 @@ class RulesCommandTest extends Test
     const METHOD = 'passes';
 
     private CommandTester $commandTester;
+    private Container $container;
 
 	protected function setUp(): void 
 	{
+        $this->container = new Container();
+
         $application = (new Kernel())->getApplication();
-        $application->add((new Container())->injectDependencies(new RulesCommand()));
+        $application->add($this->container->injectDependencies(new RulesCommand()));
         $this->commandTester = new CommandTester($application->find('new:rule'));
 
         $this->createDirectory(self::URL_PATH);
@@ -43,10 +46,12 @@ class RulesCommandTest extends Test
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH . self::FILE_NAME);
 
-        $objClass = new (self::OBJECT_NAME)();
+        $objClass = $this->container->injectDependencies(new (self::OBJECT_NAME)());
 
         $this->assertIsObject($objClass);
         $this->assertInstanceOf(self::OBJECT_NAME, $objClass);
         $this->assertContains(self::METHOD, get_class_methods($objClass));
+
+        $objClass->passes();
     }
 }

@@ -8,22 +8,28 @@ use Lion\Helpers\Arr;
 
 class ComposerFactory
 {
+    /**
+     * [Object of class Arr]
+     *
+     * @var Arr $arr
+     */
     private Arr $arr;
-    private object $composerJson;
+
     private array $libraries = [];
 
-    public function __construct(object $composerJson, array $extensions)
+    /**
+     * @required
+     */
+    public function setArr(Arr $arr): ComposerFactory
     {
-        $this->arr = new Arr();
-        $this->composerJson = $composerJson;
+        $this->arr = $arr;
 
-        $this->libraries($extensions);
-        $this->librariesDev($extensions);
+        return $this;
     }
 
-    private function libraries(array $extensions): void
+    public function libraries(object $composerJson, array $extensions): ComposerFactory
     {
-        foreach ($this->composerJson->require as $key => $library) {
+        foreach ($composerJson->require as $key => $library) {
             if (!in_array($key, $extensions, true)) {
                 $exec = [];
                 exec("composer show {$key} --direct --format=json", $exec);
@@ -38,11 +44,13 @@ class ComposerFactory
                 ];
             }
         }
+
+        return $this;
     }
 
-    private function librariesDev(array $extensions): void
+    public function librariesDev(object $composerJson, array $extensions): ComposerFactory
     {
-        foreach ($this->composerJson->{'require-dev'} as $key => $library) {
+        foreach ($composerJson->{'require-dev'} as $key => $library) {
             if (!in_array($key, $extensions, true)) {
                 $execResponse = [];
                 exec("composer show {$key} --direct --format=json", $execResponse);
@@ -57,6 +65,8 @@ class ComposerFactory
                 ];
             }
         }
+
+        return $this;
     }
 
     public function getLibraries(): array

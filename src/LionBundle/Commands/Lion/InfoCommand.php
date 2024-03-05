@@ -25,6 +25,7 @@ class InfoCommand extends Command
     ];
 
     private Arr $arr;
+    private ComposerFactory $composerFactory;
 
     /**
      * @required
@@ -32,6 +33,16 @@ class InfoCommand extends Command
     public function setArr(Arr $arr): InfoCommand
     {
         $this->arr = $arr;
+
+        return $this;
+    }
+
+    /**
+     * @required
+     */
+    public function setComposerFactory(ComposerFactory $composerFactory): InfoCommand
+    {
+        $this->composerFactory = $composerFactory;
 
         return $this;
     }
@@ -46,7 +57,12 @@ class InfoCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $composerJson = json_decode(file_get_contents("composer.json"));
-        $libraries = (new ComposerFactory($composerJson, self::EXTENSIONS))->getLibraries();
+
+        $libraries = $this->composerFactory
+            ->libraries($composerJson, self::EXTENSIONS)
+            ->librariesDev($composerJson, self::EXTENSIONS)
+            ->getLibraries();
+
         $size = $this->arr->of($libraries)->length();
 
         (new Table($output))

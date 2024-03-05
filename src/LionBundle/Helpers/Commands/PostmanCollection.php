@@ -16,14 +16,40 @@ class PostmanCollection
         'type' => 'text'
     ];
 
+    /**
+     * [Object of class Arr]
+     *
+     * @var Arr $arr
+     */
     private Arr $arr;
+
+    /**
+     * [Object of class Str]
+     *
+     * @var Str $str
+     */
     private Str $str;
+
     private array $postman = [];
 
-    public function __construct()
+    /**
+     * @required
+     */
+    public function setArr(Arr $arr): PostmanCollection
     {
-        $this->arr = new Arr();
-        $this->str = new Str();
+        $this->arr = $arr;
+
+        return $this;
+    }
+
+    /**
+     * @required
+     */
+    public function setStr(Str $str): PostmanCollection
+    {
+        $this->str = $str;
+
+        return $this;
     }
 
     public function init(string $host): void

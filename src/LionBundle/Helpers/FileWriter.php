@@ -29,12 +29,19 @@ class FileWriter
     private Container $container;
 
     /**
-     * Class constructor
+     * @required
      */
-    public function __construct()
+    public function setStr(Str $str)
     {
-        $this->str = new Str();
-        $this->container = new Container();
+        $this->str = $str;
+    }
+
+    /**
+     * @required
+     */
+    public function setContainer(Container $container)
+    {
+        $this->container = $container;
     }
 
     /**
