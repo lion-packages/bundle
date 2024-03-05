@@ -77,17 +77,23 @@ class CronCommand extends Command
                     ->concat("namespace {$namespace};")->ln()->ln()
                     ->concat('use Lion\Bundle\Helpers\Commands\Schedule\Schedule;')->ln()
                     ->concat('use Lion\Bundle\Interface\ScheduleInterface;')->ln()->ln()
+                    ->concat("/**\n * schedule {$class}\n *\n * @package {$namespace}\n * */")->ln()
                     ->concat("class {$class} implements ScheduleInterface")->ln()
                     ->concat('{')->ln()
                     ->lt()->concat("/**\n\t * {@inheritdoc}\n\t * */")->ln()
                     ->lt()->concat('public function schedule(Schedule $schedule): void')->ln()
                     ->lt()->concat('{')->ln()
-                    ->lt()->lt()->concat('$schedule->cron(' . "'* * * * *'" . ')->command(' . "''" . ');')->ln()
+                    ->lt()->lt()->concat(
+                        '$schedule->cron(' . "'* * * * *'" . ')->command(' . "''" . ')->log(' . "''" . ');'
+                    )->ln()
                     ->lt()->concat('}')->ln()
                     ->concat('}')->ln()
                     ->get()
             )
             ->close();
+
+        $output->writeln($this->warningOutput("\t>>  CRON: {$class}"));
+        $output->writeln($this->successOutput("\t>>  CRON: the '{$namespace}\\{$class}' cron has been generated"));
 
         return Command::SUCCESS;
     }

@@ -12,13 +12,6 @@ namespace Lion\Bundle\Helpers\Commands\Schedule;
 class Schedule
 {
     /**
-     * [Defines the crontab path]
-     *
-     * @var string $crontabPath
-     */
-    private string $crontabPath;
-
-    /**
      * [Define crontab configuration]
      *
      * @var string $cron
@@ -40,12 +33,11 @@ class Schedule
     private array $options;
 
     /**
-     * Class constructor
+     * [Defines the name of the log file to record the outputs]
+     *
+     * @var string $logName
      */
-    public function __construct()
-    {
-        $this->crontabPath = $_ENV['CRONTAB_PATH'];
-    }
+    private string $logName;
 
     /**
      * Define the configuration
@@ -68,13 +60,30 @@ class Schedule
      * @param  array $options [Defines the command options and arguments for
      * execution]
      *
-     * @return void
+     * @return Schedule
      */
-    public function command(string $command, array $options = []): void
+    public function command(string $command, array $options = []): Schedule
     {
         $this->command = $command;
 
         $this->options = $options;
+
+        return $this;
+    }
+
+    /**
+     * Defines the log record
+     *
+     * @param  string $logName [Defines the name of the log file to record the
+     * outputs]
+     *
+     * @return Schedule
+     */
+    public function log(string $logName): Schedule
+    {
+        $this->logName = $logName;
+
+        return $this;
     }
 
     /**
@@ -85,10 +94,10 @@ class Schedule
     public function getConfig(): array
     {
         return [
-            'crontabPath' => $this->crontabPath,
             'cron' => $this->cron,
             'command' => $this->command,
             'options' => $this->options,
+            'logName' => $this->logName,
         ];
     }
 }
