@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lion\Bundle\Commands\Lion\Sockets;
+namespace Lion\Bundle\Commands\Lion\New;
 
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
@@ -12,7 +12,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class NewSocketCommand extends Command
+class SocketCommand extends Command
 {
     private ClassFactory $classFactory;
     private Store $store;
@@ -21,7 +21,7 @@ class NewSocketCommand extends Command
     /**
      * @required
      * */
-    public function setClassFactory(ClassFactory $classFactory): NewSocketCommand
+    public function setClassFactory(ClassFactory $classFactory): SocketCommand
     {
         $this->classFactory = $classFactory;
 
@@ -31,7 +31,7 @@ class NewSocketCommand extends Command
     /**
      * @required
      * */
-    public function setStore(Store $store): NewSocketCommand
+    public function setStore(Store $store): SocketCommand
     {
         $this->store = $store;
 
@@ -41,7 +41,7 @@ class NewSocketCommand extends Command
     /**
      * @required
      * */
-    public function setStr(Str $str): NewSocketCommand
+    public function setStr(Str $str): SocketCommand
     {
         $this->str = $str;
 
@@ -51,7 +51,7 @@ class NewSocketCommand extends Command
 	protected function configure(): void
     {
         $this
-            ->setName('socket:new')
+            ->setName('new:socket')
             ->setDescription('Command required for creating new WebSockets')
             ->addArgument('socket', InputArgument::OPTIONAL, 'Socket name', 'ExampleSocket');
 	}

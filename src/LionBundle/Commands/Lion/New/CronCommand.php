@@ -60,7 +60,7 @@ class CronCommand extends Command
     {
         $cron = $input->getArgument('cron');
 
-        $this->classFactory->classFactory($this->store->normalizePath('app/cron/'), $cron);
+        $this->classFactory->classFactory($this->store->normalizePath('app/Cron/'), $cron);
 
         $class = $this->classFactory->getClass();
         $namespace = $this->classFactory->getNamespace();
