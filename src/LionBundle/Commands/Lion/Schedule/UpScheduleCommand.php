@@ -23,6 +23,9 @@ class UpScheduleCommand extends Command
     private Kernel $kernel;
     private Str $str;
 
+    /**
+     * @required
+     */
     public function setInject(
         ClassFactory $classFactory,
         Container $container,
@@ -53,7 +56,7 @@ class UpScheduleCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if (isError($this->store->exist('./app/Cron/'))) {
+        if (isError($this->store->exist('app/Console/Cron/'))) {
             $output->writeln($this->errorOutput("\t>> SCHEDULE: no scheduled tasks defined"));
 
             return Command::FAILURE;
@@ -62,11 +65,11 @@ class UpScheduleCommand extends Command
         /** @var array<ScheduleInterface> $files */
         $files = [];
 
-        foreach ($this->container->getFiles('./app/Cron/') as $file) {
+        foreach ($this->container->getFiles('app/Console/Cron/') as $file) {
             if (isSuccess($this->store->validate([$file], ['php']))) {
                 $namespace = $this->container->getNamespace(
                     (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? str_replace('\\', '/', $file) : $file),
-                    'App\\Cron\\',
+                    'App\\Console\\Cron\\',
                     $this->store->normalizePath('Cron/')
                 );
 
@@ -86,6 +89,14 @@ class UpScheduleCommand extends Command
             $scheduleInterface->schedule($schedule);
 
             $config = $schedule->getConfig();
+
+            if (empty($config['command'])) {
+                $output->writeln(
+                    $this->infoOutput("\t>> SCHEDULE: cron has not been configured '" . $scheduleInterface::class . "'")
+                );
+
+                continue;
+            }
 
             $options = '';
 

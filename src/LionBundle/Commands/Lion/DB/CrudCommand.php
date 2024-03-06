@@ -46,7 +46,7 @@ class CrudCommand extends MenuCommand
         $this
             ->setName('db:crud')
             ->setDescription(
-                'command to generate controller and model of an entity with their respective CRUD functions'
+                'Command to generate controller and model of an entity with their respective CRUD functions'
             )
             ->addArgument('entity', InputArgument::REQUIRED, 'Entity name');
     }
