@@ -90,6 +90,14 @@ class UpScheduleCommand extends Command
 
             $config = $schedule->getConfig();
 
+            if (empty($config['command'])) {
+                $output->writeln(
+                    $this->infoOutput("\t>> SCHEDULE: cron has not been configured '" . $scheduleInterface::class . "'")
+                );
+
+                continue;
+            }
+
             $options = '';
 
             foreach ($config['options'] as $option => $value) {
