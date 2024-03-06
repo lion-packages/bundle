@@ -88,6 +88,12 @@ class ListScheduleCommand extends Command
 
                 $config = $schedule->getConfig();
 
+                if (empty($config['command'])) {
+                    $output->writeln($this->infoOutput("\t>> SCHEDULE: cron has not been configured '{$namespace}'"));
+
+                    continue;
+                }
+
                 $options = '';
 
                 foreach ($config['options'] as $option => $value) {
@@ -112,6 +118,8 @@ class ListScheduleCommand extends Command
                 $size++;
             }
         }
+
+        $output->writeln('');
 
         (new Table($output))
             ->setHeaderTitle('<info> SCHEDULED TASKS </info>')
