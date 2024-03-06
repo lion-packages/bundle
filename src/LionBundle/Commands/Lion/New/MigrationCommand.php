@@ -12,7 +12,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class NewMigrationCommand extends MenuCommand
+class MigrationCommand extends MenuCommand
 {
     const TABLE = 'Table';
     const VIEW = 'View';
@@ -25,7 +25,7 @@ class NewMigrationCommand extends MenuCommand
     /**
      * @required
      * */
-    public function setClassFactory(ClassFactory $classFactory): NewMigrationCommand
+    public function setClassFactory(ClassFactory $classFactory): MigrationCommand
     {
         $this->classFactory = $classFactory;
 
@@ -35,7 +35,7 @@ class NewMigrationCommand extends MenuCommand
     /**
      * @required
      * */
-    public function setMigration(MigrationFactory $migrationFactory): NewMigrationCommand
+    public function setMigration(MigrationFactory $migrationFactory): MigrationCommand
     {
         $this->migrationFactory = $migrationFactory;
 
