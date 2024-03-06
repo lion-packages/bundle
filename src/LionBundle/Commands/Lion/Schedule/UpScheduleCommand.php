@@ -11,6 +11,7 @@ use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\DependencyInjection\Container;
 use Lion\Files\Store;
+use Lion\Helpers\Str;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -20,43 +21,25 @@ class UpScheduleCommand extends Command
     private Container $container;
     private Store $store;
     private Kernel $kernel;
+    private Str $str;
 
-    /**
-     * @required
-     */
-    public function setClassFactory(ClassFactory $classFactory): UpScheduleCommand
+    public function setInject(
+        ClassFactory $classFactory,
+        Container $container,
+        Store $store,
+        Kernel $kernel,
+        Str $str
+    ): UpScheduleCommand
     {
         $this->classFactory = $classFactory;
 
-        return $this;
-    }
-
-    /**
-     * @required
-     */
-    public function setContainer(Container $container): UpScheduleCommand
-    {
         $this->container = $container;
 
-        return $this;
-    }
-
-    /**
-     * @required
-     */
-    public function setStore(Store $store): UpScheduleCommand
-    {
         $this->store = $store;
 
-        return $this;
-    }
-
-    /**
-     * @required
-     */
-    public function setKernel(Kernel $kernel): UpScheduleCommand
-    {
         $this->kernel = $kernel;
+
+        $this->str = $str;
 
         return $this;
     }
@@ -107,7 +90,11 @@ class UpScheduleCommand extends Command
             $options = '';
 
             foreach ($config['options'] as $option => $value) {
-                $options .= "{$option} {$value}";
+                if ($this->str->of($option)->test('/-/')) {
+                    $options .= "{$option} {$value} ";
+                } else {
+                    $options .= "{$value} ";
+                }
             }
 
             /** @var Command $commandObject */
