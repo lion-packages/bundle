@@ -6,6 +6,7 @@ namespace Lion\Bundle\Commands\Lion\Sockets;
 
 use Lion\Command\Command;
 use Lion\DependencyInjection\Container;
+use Lion\Files\Store;
 use Ratchet\Http\HttpServer;
 use Ratchet\Server\IoServer;
 use Ratchet\WebSocket\WsServer;
@@ -18,6 +19,7 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 class ServerSocketCommand extends Command
 {
     private Container $container;
+    private Store $store;
 
     /**
      * @required
@@ -25,6 +27,16 @@ class ServerSocketCommand extends Command
     public function setContainer(Container $container): ServerSocketCommand
     {
         $this->container = $container;
+
+        return $this;
+    }
+
+    /**
+     * @required
+     * */
+    public function setStore(Store $store): ServerSocketCommand
+    {
+        $this->store = $store;
 
         return $this;
     }
@@ -39,6 +51,12 @@ class ServerSocketCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        if (isError($this->store->exist('./app/Http/Sockets/'))) {
+            $output->writeln($this->errorOutput("\t>> SOCKET: no sockets defined"));
+
+            return Command::FAILURE;
+        }
+
         $socketDefault = $input->getOption('socket');
         $selectedSocket = null;
 
