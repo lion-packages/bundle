@@ -63,11 +63,22 @@ class RulesCommand extends Command
             ->add("use Lion\Bundle\Helpers\Rules;\n")
             ->add("use Lion\Bundle\Interface\RulesInterface;\n")
             ->add("use Valitron\Validator;\n\n")
+            ->add("/**\n * [Rule defined for the '' property]\n *\n * @package {$namespace}\n */\n")
             ->add("class {$class} extends Rules implements RulesInterface\n{\n")
-            ->add("\t" . 'public string $field = ' . "''" . ';' . "\n")
-            ->add("\t" . 'public string $desc = ' . "''" . ';' . "\n")
-            ->add("\t" . 'public string $value = ' . "''" . ';' . "\n")
+            ->add("\t/**\n\t * [field for '']\n\t *\n\t * @var string $" . 'field' . "\n\t */\n")
+            ->add("\t" . 'public string $field = ' . "''" . ';' . "\n\n")
+            ->add("\t/**\n\t * [description for '']\n\t *\n\t * @var string $" . 'desc' . "\n\t */\n")
+            ->add("\t" . 'public string $desc = ' . "''" . ';' . "\n\n")
+            ->add("\t/**\n\t * [value for '']\n\t *\n\t * @var string $" . 'value' . "\n\t */\n")
+            ->add("\t" . 'public string $value = ' . "''" . ';' . "\n\n")
+            ->add(
+                (
+                    "\t/**\n\t * [Defines whether the column is optional for postman collections]\n\t *\n" .
+                    "\t * @var string $" . 'value' . "\n\t */\n"
+                )
+            )
             ->add("\t" . 'public bool $disabled = false;' . "\n\n")
+            ->add("\t/**\n\t * {@inheritdoc}\n\t * */\n")
             ->add("\tpublic function passes(): void\n\t{\n")
             ->add("\t\t" . '$this->validate(function(Validator $validator) {' . "\n")
             ->add("\t\t\t" . '$validator->rule(' . "'required'" . ', $this->field)->message(')

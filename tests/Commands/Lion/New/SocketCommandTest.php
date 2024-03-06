@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Tests\Commands\Lion\Sockets;
+namespace Tests\Commands\Lion\New;
 
-use Lion\Bundle\Commands\Lion\Sockets\NewSocketCommand;
+use Lion\Bundle\Commands\Lion\New\SocketCommand;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\DependencyInjection\Container;
 use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class NewSocketCommandTest extends Test
+class SocketCommandTest extends Test
 {
     const URL_PATH = './app/Http/Sockets/';
     const NAMESPACE_CLASS = 'App\\Http\\Sockets\\';
@@ -25,8 +25,8 @@ class NewSocketCommandTest extends Test
     protected function setUp(): void
     {
         $application = (new Kernel())->getApplication();
-        $application->add((new Container())->injectDependencies(new NewSocketCommand()));
-        $this->commandTester = new CommandTester($application->find('socket:new'));
+        $application->add((new Container())->injectDependencies(new SocketCommand()));
+        $this->commandTester = new CommandTester($application->find('new:socket'));
 
         $this->createDirectory(self::URL_PATH);
     }

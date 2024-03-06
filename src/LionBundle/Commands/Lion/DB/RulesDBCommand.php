@@ -92,17 +92,42 @@ class RulesDBCommand extends MenuCommand
                             'content' => "'" . strtolower($column->Field) . "'",
                             'search' => "''"
                         ],
-                        13 => [
+                        19 => [
+                            'replace' => true,
+                            'content' => "'" . strtolower($column->Field) . "'",
+                            'search' => "''"
+                        ],
+                        23 => [
+                            'replace' => true,
+                            'content' => "'" . strtolower($column->Field) . "'",
+                            'search' => "''"
+                        ],
+                        26 => [
+                            'replace' => true,
+                            'content' => "'" . strtolower($column->Field) . "'",
+                            'search' => "''"
+                        ],
+                        30 => [
                             'replace' => true,
                             'content' => "'{$column->Comment}'",
                             'search' => "''"
                         ],
-                        15 => [
+                        33 => [
+                            'replace' => true,
+                            'content' => "'" . strtolower($column->Field) . "'",
+                            'search' => "''"
+                        ],
+                        37 => [
+                            'replace' => true,
+                            'content' => "'{$column->Default}'",
+                            'search' => "''"
+                        ],
+                        44 => [
                             'replace' => true,
                             'content' => ($column->Null === 'NO' ? 'false' : 'true'),
                             'search' => 'false'
                         ],
-                        20 => [
+                        52 => [
                             'replace' => true,
                             'multiple' => [
                                 [
