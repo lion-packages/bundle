@@ -87,27 +87,47 @@ class RulesDBCommand extends MenuCommand
                 $this->fileWriter->readFileRows(
                     "app/Rules/{$connectionPascal}/MySQL/{$entityPascal}/{$ruleName}.php",
                     [
-                        13 => [
+                        12 => [
                             'replace' => true,
                             'content' => "'" . strtolower($column->Field) . "'",
                             'search' => "''"
                         ],
-                        14 => [
+                        19 => [
+                            'replace' => true,
+                            'content' => "'" . strtolower($column->Field) . "'",
+                            'search' => "''"
+                        ],
+                        23 => [
+                            'replace' => true,
+                            'content' => "'" . strtolower($column->Field) . "'",
+                            'search' => "''"
+                        ],
+                        26 => [
+                            'replace' => true,
+                            'content' => "'" . strtolower($column->Field) . "'",
+                            'search' => "''"
+                        ],
+                        30 => [
                             'replace' => true,
                             'content' => "'{$column->Comment}'",
                             'search' => "''"
                         ],
-                        15 => [
+                        33 => [
+                            'replace' => true,
+                            'content' => "'" . strtolower($column->Field) . "'",
+                            'search' => "''"
+                        ],
+                        37 => [
                             'replace' => true,
                             'content' => "'{$column->Default}'",
                             'search' => "''"
                         ],
-                        16 => [
+                        44 => [
                             'replace' => true,
                             'content' => ($column->Null === 'NO' ? 'false' : 'true'),
                             'search' => 'false'
                         ],
-                        21 => [
+                        52 => [
                             'replace' => true,
                             'multiple' => [
                                 [
