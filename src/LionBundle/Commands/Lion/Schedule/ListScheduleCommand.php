@@ -60,7 +60,7 @@ class ListScheduleCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if (isError($this->store->exist('./app/Cron/'))) {
+        if (isError($this->store->exist('app/Console/Cron/'))) {
             $output->writeln($this->errorOutput("\t>> SCHEDULE: no scheduled tasks defined"));
 
             return Command::FAILURE;
@@ -71,11 +71,11 @@ class ListScheduleCommand extends Command
 
         $size = 0;
 
-        foreach ($this->container->getFiles('./app/Cron/') as $file) {
+        foreach ($this->container->getFiles('app/Console/Cron/') as $file) {
             if (isSuccess($this->store->validate([$file], ['php']))) {
                 $namespace = $this->container->getNamespace(
                     (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? str_replace('\\', '/', $file) : $file),
-                    'App\\Cron\\',
+                    'App\\Console\\Cron\\',
                     $this->store->normalizePath('Cron/')
                 );
 
