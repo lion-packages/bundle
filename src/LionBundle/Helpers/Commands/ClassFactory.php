@@ -8,6 +8,9 @@ use Lion\Files\Store;
 
 class ClassFactory
 {
+    const PHP_EXTENSION = 'php';
+    const LOG_EXTENSION = 'log';
+
     const PUBLIC_PROPERTY = 'public';
     const PRIVATE_PROPERTY = 'private';
     const PROTECTED_PROPERTY = 'protected';

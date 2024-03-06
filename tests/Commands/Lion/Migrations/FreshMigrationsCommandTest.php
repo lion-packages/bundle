@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Commands\Lion\Migrations;
 
 use Lion\Bundle\Commands\Lion\Migrations\FreshMigrationsCommand;
-use Lion\Bundle\Commands\Lion\New\NewMigrationCommand;
+use Lion\Bundle\Commands\Lion\New\MigrationCommand;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\DependencyInjection\Container;
@@ -25,7 +25,7 @@ class FreshMigrationsCommandTest extends Test
         $container = new Container();
 
         $kernel->commandsOnObjects([
-            $container->injectDependencies(new NewMigrationCommand()),
+            $container->injectDependencies(new MigrationCommand()),
             $container->injectDependencies(new FreshMigrationsCommand()),
         ]);
 

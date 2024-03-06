@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Commands\Lion\New;
 
-use Lion\Bundle\Commands\Lion\New\NewMigrationCommand;
+use Lion\Bundle\Commands\Lion\New\MigrationCommand;
 use Lion\Bundle\Interface\MigrationUpInterface;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
@@ -13,7 +13,7 @@ use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tests\Providers\ConnectionProviderTrait;
 
-class NewMigrationCommandTest extends Test
+class MigrationCommandTest extends Test
 {
     use ConnectionProviderTrait;
 
@@ -30,7 +30,7 @@ class NewMigrationCommandTest extends Test
 	protected function setUp(): void 
 	{
         $application = (new Kernel())->getApplication();
-        $application->add((new Container())->injectDependencies(new NewMigrationCommand()));
+        $application->add((new Container())->injectDependencies(new MigrationCommand()));
         $this->commandTester = new CommandTester($application->find('new:migration'));
 	}
 
