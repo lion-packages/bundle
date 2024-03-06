@@ -87,22 +87,27 @@ class RulesDBCommand extends MenuCommand
                 $this->fileWriter->readFileRows(
                     "app/Rules/{$connectionPascal}/MySQL/{$entityPascal}/{$ruleName}.php",
                     [
-                        12 => [
+                        13 => [
                             'replace' => true,
                             'content' => "'" . strtolower($column->Field) . "'",
                             'search' => "''"
                         ],
-                        13 => [
+                        14 => [
                             'replace' => true,
                             'content' => "'{$column->Comment}'",
                             'search' => "''"
                         ],
                         15 => [
                             'replace' => true,
+                            'content' => "'{$column->Default}'",
+                            'search' => "''"
+                        ],
+                        16 => [
+                            'replace' => true,
                             'content' => ($column->Null === 'NO' ? 'false' : 'true'),
                             'search' => 'false'
                         ],
-                        20 => [
+                        21 => [
                             'replace' => true,
                             'multiple' => [
                                 [
