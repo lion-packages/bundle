@@ -12,10 +12,12 @@ use Lion\Request\Response;
 use Lion\Route\Route;
 use Lion\Test\Test;
 use Tests\Providers\EnviromentProviderTrait;
+use Tests\Providers\Helpers\HelpersProviderTrait;
 
 class HelpersTest extends Test
 {
     use EnviromentProviderTrait;
+    use HelpersProviderTrait;
 
     const PATH_URL = 'storage/';
     const PATH_URL_INDEX = '../storage/';
@@ -153,5 +155,14 @@ class HelpersTest extends Test
     public function testFake(): void
     {
         $this->assertInstanceOf(Generator::class, fake());
+        $this->assertSame(fake(), fake());
+    }
+
+    /**
+     * @dataProvider envProvider
+     */
+    public function testEnv(string $envKey, mixed $envValue, mixed $return): void
+    {
+        $this->assertSame($return, env($envKey, $envValue));
     }
 }
