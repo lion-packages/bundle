@@ -8,6 +8,7 @@ use Faker\Generator;
 use GuzzleHttp\Psr7\Response;
 use Lion\Bundle\Enums\LogTypeEnum;
 use Lion\Bundle\Enums\StatusResponseEnum;
+use Lion\Bundle\Helpers\Env;
 use Lion\Files\Store;
 use Lion\Request\Request;
 use Lion\Security\JWT;
@@ -257,5 +258,20 @@ if (!function_exists('fake')) {
     function fake(string $locale = Factory::DEFAULT_LOCALE): Generator
     {
         return Factory::create($locale);
+    }
+}
+
+if (!function_exists('env')) {
+    /**
+     * Gets the value defined for an environment variable
+     *
+     * @param  string $key [Property name]
+     * @param  mixed|null $default [Default value]
+     *
+     * @return mixed
+     */
+    function env(string $key, ?mixed $default = null): mixed
+    {
+        return Env::get($key, $default);
     }
 }
