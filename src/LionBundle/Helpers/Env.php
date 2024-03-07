@@ -15,11 +15,11 @@ class Env
      * Gets the value defined for an environment variable
      *
      * @param  string $key [Property name]
-     * @param  mixed|null $default [Default value]
+     * @param  mixed $default [Default value]
      *
      * @return mixed
      */
-    public static function get(string $key, ?mixed $default = null): mixed
+    public static function get(string $key, mixed $default = null): mixed
     {
         return self::getOption($key, $default);
     }
@@ -28,11 +28,11 @@ class Env
      * Gets and transforms the possible value of environment variables
      *
      * @param  string $key [Property name]
-     * @param  mixed|null $default [Default value]
+     * @param  mixed $default [Default value]
      *
      * @return mixed
      */
-    private static function getOption(string $key, ?mixed $default): mixed
+    private static function getOption(string $key, mixed $default): mixed
     {
         $transform = function(mixed $value): mixed {
             switch ($value) {
