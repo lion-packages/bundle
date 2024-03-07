@@ -11,6 +11,7 @@ use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\DependencyInjection\Container;
 use Lion\Files\Store;
+use Lion\Helpers\Arr;
 use Lion\Helpers\Str;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -22,6 +23,7 @@ class UpScheduleCommand extends Command
     private Store $store;
     private Kernel $kernel;
     private Str $str;
+    private Arr $arr;
 
     /**
      * @required
@@ -31,7 +33,8 @@ class UpScheduleCommand extends Command
         Container $container,
         Store $store,
         Kernel $kernel,
-        Str $str
+        Str $str,
+        Arr $arr
     ): UpScheduleCommand
     {
         $this->classFactory = $classFactory;
@@ -43,6 +46,8 @@ class UpScheduleCommand extends Command
         $this->kernel = $kernel;
 
         $this->str = $str;
+
+        $this->arr = $arr;
 
         return $this;
     }
@@ -78,6 +83,12 @@ class UpScheduleCommand extends Command
 
                 $files[] = $cronClass;
             }
+        }
+
+        if (empty($files)) {
+            $output->writeln($this->infoOutput("\t>> SCHEDULE: No scheduled tasks available"));
+
+            return Command::SUCCESS;
         }
 
         /** @var array<string> $commands */
@@ -136,13 +147,7 @@ class UpScheduleCommand extends Command
             $commands[] = trim($command);
         }
 
-        foreach ($commands as $command) {
-            $crontabOutput = '(echo "' . $command . '") | crontab -';
-
-            $this->kernel->execute($crontabOutput, false);
-
-            $output->writeln($this->warningOutput("\t>> SCHEDULE: {$command}"));
-        }
+        $this->kernel->execute('(echo "' . $this->arr->of($commands)->join("\n") . '") | crontab -', false);
 
         return Command::SUCCESS;
     }
