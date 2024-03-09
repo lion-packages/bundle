@@ -19,6 +19,7 @@ use Lion\Bundle\Middleware\RouteMiddleware;
 use Lion\Route\Middleware;
 use Lion\Route\Route;
 use Dotenv\Dotenv;
+use Lion\Bundle\Helpers\Http\Routes;
 
 /**
  * -----------------------------------------------------------------------------
@@ -39,9 +40,7 @@ Dotenv::createImmutable(__DIR__ . '/../')->load();
  **/
 
 Route::init();
-Route::addMiddleware([
-    new Middleware('protect-route-list', RouteMiddleware::class, 'protectRouteList')
-]);
+Route::addMiddleware(Routes::getMiddleware());
 // -----------------------------------------------------------------------------
 Route::get('/', fn() => info('[index]'));
 
@@ -56,7 +55,7 @@ Route::prefix('api', function() {
     Route::get('test', fn() => success('test-response'));
     Route::put('test/{id:i}', fn(string $id) => success('test-response: ' . $id));
 
-    Route::middleware(['get-arr-example'], function() {
+    Route::middleware(['protect-route-list'], function() {
         Route::delete('test/{id:i}', fn(string $id) => success('test-response: ' . $id));
     });
 });

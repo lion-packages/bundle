@@ -7,9 +7,11 @@ namespace Tests\Commands\Lion\Route;
 use Lion\Bundle\Commands\Lion\New\RulesCommand;
 use Lion\Bundle\Commands\Lion\Route\RouteListCommand;
 use Lion\Bundle\Helpers\Http\Routes;
+use Lion\Bundle\Middleware\RouteMiddleware;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\DependencyInjection\Container;
+use Lion\Route\Middleware;
 use Lion\Route\Route;
 use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -47,9 +49,7 @@ class RouteListCommandTest extends Test
     public function testExecute(): void
     {
         $listMiddleware = [
-            ExampleProvider::class => [
-                ['name' => 'get-arr-example', 'method' => 'getArrExample']
-            ]
+            new Middleware('protect-route-list', RouteMiddleware::class, 'protectRouteList')
         ];
 
         Routes::setMiddleware($listMiddleware);
@@ -70,6 +70,6 @@ class RouteListCommandTest extends Test
         $display = $this->commandTester->getDisplay();
 
         $this->assertStringContainsString('UsersNameRule', $display);
-        $this->assertStringContainsString('ExampleProvider', $display);
+        $this->assertStringContainsString('RouteMiddleware', $display);
     }
 }

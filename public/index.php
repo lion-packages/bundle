@@ -11,4 +11,5 @@ use Lion\DependencyInjection\Container;
 
 ((new Container)->injectDependencies(new HttpKernel))->validateRules();
 
+include_once(__DIR__ . '/../routes/middleware.php');
 include_once(__DIR__ . '/../routes/web.php');
