@@ -150,12 +150,18 @@ class HelpersTest extends Test
     {
         $this->assertTrue(isError(error()));
         $this->assertFalse(isError(success()));
+        $this->assertFalse(isError(['status' => null]));
+        $this->assertFalse(isError(['status' => '']));
+        $this->assertFalse(isError(['name' => 'Sleon']));
     }
 
     public function testIsSuccess(): void
     {
         $this->assertTrue(isSuccess(success()));
         $this->assertFalse(isSuccess(warning()));
+        $this->assertFalse(isSuccess(['status' => null]));
+        $this->assertFalse(isSuccess(['status' => '']));
+        $this->assertFalse(isSuccess(['name' => 'Sleon']));
     }
 
     public function testJwt(): void
