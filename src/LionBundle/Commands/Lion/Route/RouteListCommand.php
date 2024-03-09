@@ -8,6 +8,7 @@ use Lion\Bundle\Helpers\Http\Routes;
 use Lion\Command\Command;
 use Lion\Helpers\Arr;
 use Lion\Helpers\Str;
+use Lion\Route\Middleware;
 use Lion\Route\Route;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -20,7 +21,12 @@ class RouteListCommand extends Command
     private Str $str;
 
     private array $routes = [];
+
     private array $rules = [];
+
+    /**
+     * @var array<Middleware> $configMiddleware
+     */
     private array $configMiddleware = [];
 
     /**
@@ -82,16 +88,14 @@ class RouteListCommand extends Command
 
                 if ($this->arr->of($method['filters'])->length() > 0) {
                     foreach ($method['filters'] as $filter) {
-                        foreach ($this->configMiddleware as $middlewareClass => $middlewareMethods) {
-                            foreach ($middlewareMethods as $middlewareItem => $item) {
-                                if ($filter === $item['name']) {
-                                    $rows[] = [
-                                        $this->infoOutput('MIDDLEWARE:'),
-                                        $this->infoOutput($filter),
-                                        $this->transformNamespace($middlewareClass),
-                                        $this->warningOutput($item['method'])
-                                    ];
-                                }
+                        foreach ($this->configMiddleware as $middleware) {
+                            if ($filter === $middleware->getMiddlewareName()) {
+                                $rows[] = [
+                                    $this->infoOutput('MIDDLEWARE:'),
+                                    $this->infoOutput($filter),
+                                    $this->transformNamespace($middleware->getClass()),
+                                    $this->warningOutput($middleware->getMethodClass())
+                                ];
                             }
                         }
                     }
@@ -127,13 +131,14 @@ class RouteListCommand extends Command
             ->setHeaderTitle($this->successOutput('ROUTES'))
             ->setFooterTitle(
                 $size > 1
-                ? $this->successOutput(" showing [{$cont}] routes ")
-                : ($size === 1
-                    ? $this->successOutput(' showing a single route ')
-                    : $this->successOutput(' no routes available ')
-                )
+                    ? $this->successOutput(" showing [{$cont}] routes ")
+                    : (
+                        $size === 1
+                            ? $this->successOutput(' showing a single route ')
+                            : $this->successOutput(' no routes available ')
+                    )
             )
-            ->setHeaders(['METHOD', 'ROUTE', 'CLASS', 'FUNCTION'])
+            ->setHeaders(['HTTP METHOD', 'ROUTE', 'CLASS', 'FUNCTION'])
             ->setRows($rows)
             ->render();
 

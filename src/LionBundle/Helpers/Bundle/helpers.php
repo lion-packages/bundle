@@ -236,15 +236,13 @@ if (!function_exists('isSuccess')) {
 
 if (!function_exists('jwt')) {
     /**
-     * Function that returns JWT token if it exists
+     * Gets the HTTP_AUTHORIZATION header token
      *
-     * @return array|object|string
+     * @return string|bool
      */
-    function jwt(): array|object|string
+    function jwt(): string|bool
     {
-        $jwt = new JWT();
-
-        return $jwt->decode($jwt->getJWT())->get();
+        return (new JWT())->getJWT();
     }
 }
 

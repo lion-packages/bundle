@@ -10,6 +10,8 @@ use Lion\Bundle\Enums\LogTypeEnum;
 use Lion\Request\Request;
 use Lion\Request\Response;
 use Lion\Route\Route;
+use Lion\Security\AES;
+use Lion\Security\JWT;
 use Lion\Test\Test;
 use Tests\Providers\EnviromentProviderTrait;
 use Tests\Providers\Helpers\HelpersProviderTrait;
@@ -37,7 +39,7 @@ class HelpersTest extends Test
 
 	public function testFetch(): void
     {
-        $response = json_decode(fetch(Route::GET, $_ENV['SERVER_URL'])->getBody()->getContents(), true);
+        $response = json_decode(fetch(Route::GET, env('SERVER_URL'))->getBody()->getContents(), true);
 
         $this->assertSame(self::RESPONSE, $response);
     }
@@ -120,7 +122,9 @@ class HelpersTest extends Test
     public function testVd(): void
     {
         ob_start();
+
         vd('Testing');
+
         $output = ob_get_clean();
 
         $this->assertStringContainsString('Testing', $output);
@@ -129,7 +133,9 @@ class HelpersTest extends Test
     public function testLogger(): void
     {
         $path = storage_path('logs/monolog/', false);
+
         $fileName = "{$path}lion-" . Carbon::now()->format('Y-m-d') . '.log';
+
         logger(self::LOGGER_CONTENT, LogTypeEnum::INFO->value, ['user' => 'Sleon'], false);
 
         $this->assertFileExists($fileName);
@@ -150,6 +156,36 @@ class HelpersTest extends Test
     {
         $this->assertTrue(isSuccess(success()));
         $this->assertFalse(isSuccess(warning()));
+    }
+
+    public function testJwt(): void
+    {
+        $config = (new AES())->create(AES::AES_256_CBC)->get();
+
+        $token = (new JWT())
+            ->config([
+                'privateKey' => $config['iv'],
+                'jwtServerUrl' => env('SERVER_URL'),
+                'jwtServerUrlAud' => env('SERVER_URL_AUD'),
+                'jwtExp' => (int) env('JWT_EXP'),
+                'jwtDefaultMD' => 'HS256'
+            ])
+            ->encode(['session' => true])
+            ->get();
+
+        $response = json_decode(
+            fetch(Route::POST, env('SERVER_URL') . '/api/test', [
+                'headers' => [
+                    'Authorization' => "Bearer {$token}"
+                ]
+            ])
+            ->getBody()
+            ->getContents()
+        );
+
+        $this->assertIsObject($response);
+        $this->assertObjectHasProperty('token', $response);
+        $this->assertSame($token, $response->token);
     }
 
     public function testFake(): void
