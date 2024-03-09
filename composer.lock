@@ -1219,16 +1219,16 @@
         },
         {
             "name": "lion/security",
-            "version": "v9.0.1",
+            "version": "v9.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/security.git",
-                "reference": "b95c33304fc76d0e69039b82081d7974526da385"
+                "reference": "8b1c19f109df73a540162653ef747f4c6295387e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/security/zipball/b95c33304fc76d0e69039b82081d7974526da385",
-                "reference": "b95c33304fc76d0e69039b82081d7974526da385",
+                "url": "https://api.github.com/repos/lion-packages/security/zipball/8b1c19f109df73a540162653ef747f4c6295387e",
+                "reference": "8b1c19f109df73a540162653ef747f4c6295387e",
                 "shasum": ""
             },
             "require": {
@@ -1238,6 +1238,7 @@
                 "vlucas/valitron": "^1.4"
             },
             "require-dev": {
+                "guzzlehttp/guzzle": "^7.8",
                 "lion/test": "^1.4",
                 "phpunit/phpunit": "^10.4"
             },
@@ -1251,12 +1252,12 @@
             "license": [
                 "MIT"
             ],
-            "description": "library created with the function of implementing AES, RSA and JWT Security functions for PHP.",
+            "description": "Library created with the function of implementing AES, RSA and JWT Security functions for PHP.",
             "support": {
                 "issues": "https://github.com/lion-packages/security/issues",
-                "source": "https://github.com/lion-packages/security/tree/v9.0.1"
+                "source": "https://github.com/lion-packages/security/tree/v9.0.2"
             },
-            "time": "2024-02-23T01:32:34+00:00"
+            "time": "2024-03-08T02:46:29+00:00"
         },
         {
             "name": "monolog/monolog",
