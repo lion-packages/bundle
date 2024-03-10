@@ -31,7 +31,7 @@ class AESCommand extends Command
     {
         $this
             ->setName('new:aes')
-            ->setDescription("Command to create 'KEY' and 'IV' keys for AES");
+            ->setDescription("Command required to create 'KEY' and 'IV' keys for AES encryptions");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

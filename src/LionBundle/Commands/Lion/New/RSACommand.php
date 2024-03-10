@@ -40,7 +40,7 @@ class RSACommand extends Command
 	{
 		$this
             ->setName('new:rsa')
-            ->setDescription('Command to create public and private keys with RSA')
+            ->setDescription('Command required to create public and private keys for RSA encryptions')
             ->addOption('path', 'p', InputOption::VALUE_REQUIRED, 'Save to a specific path?');
 	}
 
