@@ -40,7 +40,7 @@ class SHFileCommand extends Command
 	{
 		$this
             ->setName('new:sh')
-            ->setDescription('Command to create files with extension sh')
+            ->setDescription('Command required to create files with sh extension')
             ->addArgument('sh', InputArgument::OPTIONAL, 'SH name', 'Example');
 	}
 

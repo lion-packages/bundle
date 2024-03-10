@@ -52,7 +52,7 @@ class CronCommand extends Command
     {
         $this
             ->setName('new:cron')
-            ->setDescription('Create a new scheduled task')
+            ->setDescription('Command required to create a new scheduled task')
             ->addArgument('cron', InputArgument::OPTIONAL, 'Scheduled task name', 'ExampleCron');
     }
 

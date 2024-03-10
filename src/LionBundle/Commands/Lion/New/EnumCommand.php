@@ -61,8 +61,11 @@ class EnumCommand extends Command
 		$enum = $input->getArgument('enum');
 
         $this->classFactory->classFactory('app/Enums/', $enum);
+
         $folder = $this->classFactory->getFolder();
+
         $class = $this->classFactory->getClass();
+
         $namespace = $this->classFactory->getNamespace();
 
         $this->store->folder($folder);
@@ -86,6 +89,7 @@ class EnumCommand extends Command
             ->close();
 
         $output->writeln($this->warningOutput("\t>>  ENUM: {$class}"));
+
         $output->writeln($this->successOutput("\t>>  ENUM: the '{$namespace}\\{$class}' enum has been generated"));
 
         return Command::SUCCESS;
