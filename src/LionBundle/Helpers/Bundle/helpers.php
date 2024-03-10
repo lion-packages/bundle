@@ -210,13 +210,19 @@ if (!function_exists('isError')) {
     /**
      * Function to check if a response object comes with errors
      *
-     * @param  object $res [Response object]
+     * @param  array|object $response [Response object]
      *
      * @return bool
      */
-    function isError(object $res): bool
+    function isError(array|object $response): bool
     {
-        return in_array($res->status, StatusResponseEnum::errors());
+        $response = (object) $response;
+
+        if (empty($response->status)) {
+            return false;
+        }
+
+        return in_array($response->status, StatusResponseEnum::errors());
     }
 }
 
@@ -224,13 +230,19 @@ if (!function_exists('isSuccess')) {
     /**
      * Function to check if a response object is successful
      *
-     * @param  object $res [Response object]
+     * @param  array|object $response [Response object]
      *
      * @return bool
      */
-    function isSuccess(object $res): bool
+    function isSuccess(array|object $response): bool
     {
-        return in_array($res->status, [StatusResponseEnum::SUCCESS->value], true);
+        $response = (object) $response;
+
+        if (empty($response->status)) {
+            return false;
+        }
+
+        return in_array($response->status, [StatusResponseEnum::SUCCESS->value], true);
     }
 }
 
