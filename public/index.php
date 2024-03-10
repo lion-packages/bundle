@@ -6,8 +6,11 @@ header('Content-Type: application/json');
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
+use Lion\Bundle\Helpers\ExceptionCore;
 use Lion\Bundle\HttpKernel;
 use Lion\DependencyInjection\Container;
+
+(new ExceptionCore)->exceptionHandler();
 
 ((new Container)->injectDependencies(new HttpKernel))->validateRules();
 
