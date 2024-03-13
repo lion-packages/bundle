@@ -120,12 +120,11 @@ class CapsuleCommand extends Command
             ->concat("namespace")->spaces(1)
             ->concat($namespace)
             ->concat(";")->ln()->ln()
-            ->concat('use JsonSerializable;')->ln()
             ->concat('use Lion\Bundle\Interface\CapsuleInterface;')->ln()->ln()
             ->concat("/**\n * Capsule for the '{$class}' entity\n *\n * @package {$namespace}\n */\n")
             ->concat("class")->spaces(1)
             ->concat($class)->spaces(1)
-            ->concat('implements CapsuleInterface, JsonSerializable')->ln()
+            ->concat('implements CapsuleInterface')->ln()
             ->concat("{")->ln();
 
         if (count($properties) > 0) {
