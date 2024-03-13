@@ -92,25 +92,20 @@ class CapsuleCommand extends Command
         foreach ($properties as $key => $propierty) {
             $split = explode(':', $propierty);
 
-            if (!empty($split[1])) {
-                $data = $this->classFactory->getProperty($split[0], $class, $split[1], ClassFactory::PRIVATE_PROPERTY);
-                $listProperties[] = $data->variable->type->snake;
+            $data = $this->classFactory->getProperty(
+                $split[0],
+                $class,
+                (!empty($split[1]) ? $split[1] : 'string'),
+                ClassFactory::PRIVATE_PROPERTY
+            );
 
-                $listMethods[] = [
-                    'getter' => $data->getter->method,
-                    'setter' => $data->setter->method,
-                    'config' => $data
-                ];
-            } else {
-                $data = $this->classFactory->getProperty($split[0], $class, 'string', ClassFactory::PRIVATE_PROPERTY);
-                $listProperties[] = $data->variable->type->snake;
+            $listProperties[] = $data->variable->type->snake;
 
-                $listMethods[] = [
-                    'getter' => $data->getter->method,
-                    'setter' => $data->setter->method,
-                    'config' => $data
-                ];
-            }
+            $listMethods[] = [
+                'getter' => $data->getter->method,
+                'setter' => $data->setter->method,
+                'config' => $data
+            ];
         }
 
         $this->store->folder($folder);
@@ -120,12 +115,22 @@ class CapsuleCommand extends Command
             ->concat("namespace")->spaces(1)
             ->concat($namespace)
             ->concat(";")->ln()->ln()
-            ->concat('use JsonSerializable;')->ln()
             ->concat('use Lion\Bundle\Interface\CapsuleInterface;')->ln()->ln()
-            ->concat("/**\n * Capsule for the '{$class}' entity\n *\n * @package {$namespace}\n */\n")
+            ->concat("/**\n * Capsule for the '{$class}' entity")->ln();
+
+        if (count($listMethods) > 0) {
+            $this->str->concat(' *')->ln();
+        }
+
+        foreach ($listMethods as $key => $method) {
+            $this->str->concat(" * {$method['config']->variable->annotations->class}\n");
+        }
+
+        $this->str
+            ->concat(" *\n * @package {$namespace}\n */\n")
             ->concat("class")->spaces(1)
             ->concat($class)->spaces(1)
-            ->concat('implements CapsuleInterface, JsonSerializable')->ln()
+            ->concat('implements CapsuleInterface')->ln()
             ->concat("{")->ln();
 
         if (count($properties) > 0) {

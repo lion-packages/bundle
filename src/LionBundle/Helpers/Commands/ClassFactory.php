@@ -99,10 +99,13 @@ class ClassFactory
         ?string $visibility = null
     ): object {
         $availableVisibility = [self::PUBLIC_PROPERTY, self::PRIVATE_PROPERTY, self::PROTECTED_PROPERTY];
+
         $finalVisibility = in_array($visibility, $availableVisibility, true) ? "{$visibility} " : '';
+
         $snake = trim(str_replace('-', '_', str_replace(' ', '_', $name)));
 
         $camel = str_replace('_', ' ', str_replace('-', ' ', $name));
+
         $camel = lcfirst(str_replace(' ', '', ucwords($camel)));
 
         return (object) [
@@ -113,6 +116,9 @@ class ClassFactory
             'getter' => $this->getGetter($snake, $type),
             'setter' => $this->getSetter($snake, $type, $capsule),
             'variable' => (object) [
+                'annotations' => (object) [
+                    'class' => "@property {$type} $" . "{$snake} [property for {$name}]"
+                ],
                 'reference' => '$this->' . "{$camel};",
                 'name' => (object) [
                     'camel' => ($finalVisibility . '$' . $camel),

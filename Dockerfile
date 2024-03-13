@@ -20,7 +20,7 @@ RUN apt-get update -y \
 
 RUN pecl install ev redis \
     && docker-php-ext-install mbstring gd pdo_mysql mysqli zip \
-    && docker-php-ext-enable gd zip
+    && docker-php-ext-enable gd zip redis
 
 RUN a2enmod rewrite \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
