@@ -12,14 +12,56 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Generate a migration for database structure control
+ *
+ * @property ClassFactory $classFactory [ClassFactory class object]
+ * @property MigrationFactory $migrationFactory [MigrationFactory class object]
+ *
+ * @package Lion\Bundle\Commands\Lion\New
+ */
 class MigrationCommand extends MenuCommand
 {
+    /**
+     * [Constant for a table]
+     *
+     * @const TABLE
+     */
     const TABLE = 'Table';
+
+    /**
+     * [Constant for a view]
+     *
+     * @const VIEW
+     */
     const VIEW = 'View';
+
+    /**
+     * [Constant for a store-procedure]
+     *
+     * @const STORE_PROCEDURE
+     */
     const STORE_PROCEDURE = 'Store-Procedure';
+
+    /**
+     * [List of available types]
+     *
+     * @const OPTIONS
+     */
     const OPTIONS = [self::TABLE, self::VIEW, self::STORE_PROCEDURE];
 
+    /**
+     * [ClassFactory class object]
+     *
+     * @var ClassFactory $classFactory
+     */
     private ClassFactory $classFactory;
+
+    /**
+     * [MigrationFactory class object]
+     *
+     * @var MigrationFactory $migrationFactory
+     */
     private MigrationFactory $migrationFactory;
 
     /**
@@ -42,6 +84,11 @@ class MigrationCommand extends MenuCommand
         return $this;
     }
 
+    /**
+     * Configures the current command
+     *
+     * @return void
+     */
 	protected function configure(): void
     {
 		$this
@@ -50,6 +97,25 @@ class MigrationCommand extends MenuCommand
             ->addArgument('migration', InputArgument::REQUIRED, 'Migration name');
 	}
 
+    /**
+     * Executes the current command
+     *
+     * This method is not abstract because you can use this class
+     * as a concrete class. In this case, instead of defining the
+     * execute() method, you set the code to execute by passing
+     * a Closure to the setCode() method
+     *
+     * @param InputInterface $input [InputInterface is the interface implemented
+     * by all input classes]
+     * @param OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     *
+     * @return int 0 if everything went fine, or an exit code
+     *
+     * @throws LogicException When this abstract method is not implemented
+     *
+     * @see setCode()
+     */
 	protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $migration = $input->getArgument('migration');
@@ -61,14 +127,18 @@ class MigrationCommand extends MenuCommand
         }
 
         $selectedConnection = $this->selectConnection($input, $output);
+
         $selectedType = $this->selectMigrationType($input, $output, self::OPTIONS);
 
         $migrationPascal = $this->str->of($migration)->replace('-', ' ')->replace('_', ' ')->pascal()->trim()->get();
+
         $dbPascal = $this->str->of($selectedConnection)->replace('-', ' ')->replace('_', ' ')->pascal()->trim()->get();
 
         if (self::TABLE === $selectedType) {
             $this->store->folder("database/Migrations/{$dbPascal}/Tables/");
+
             $this->classFactory->classFactory("database/Migrations/{$dbPascal}/Tables/", $migrationPascal);
+
             $body = $this->migrationFactory->getTableBody();
 
             $this->classFactory
@@ -79,7 +149,9 @@ class MigrationCommand extends MenuCommand
 
         if (self::VIEW === $selectedType) {
             $this->store->folder("database/Migrations/{$dbPascal}/Views/");
+
             $this->classFactory->classFactory("database/Migrations/{$dbPascal}/Views/", $migrationPascal);
+
             $body = $this->migrationFactory->getViewBody();
 
             $this->classFactory
@@ -90,7 +162,9 @@ class MigrationCommand extends MenuCommand
 
         if (self::STORE_PROCEDURE === $selectedType) {
             $this->store->folder("database/Migrations/{$dbPascal}/StoreProcedures/");
+
             $this->classFactory->classFactory("database/Migrations/{$dbPascal}/StoreProcedures/", $migrationPascal);
+
             $body = $this->migrationFactory->getStoreProcedureBody();
 
             $this->classFactory

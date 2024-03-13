@@ -14,13 +14,50 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Generate a Controller class
+ *
+ * @property ClassCommandFactory $classCommandFactory [ClassCommandFactory class
+ * object]
+ * @property Str $str [Str class object]
+ *
+ * @package Lion\Bundle\Commands\Lion\New
+ */
 class ControllerCommand extends Command
 {
+    /**
+     * [List of methods generated in the class]
+     *
+     * @const METHODS
+     */
     const METHODS = ['create', 'read', 'update', 'delete'];
+
+    /**
+     * [Controller path]
+     *
+     * @const PATH_CONTROLLER
+     */
     const PATH_CONTROLLER = 'app/Http/Controllers/';
+
+    /**
+     * [Model path]
+     *
+     * @const PATH_MODEL
+     */
     const PATH_MODEL = 'app/models/';
 
+    /**
+     * [ClassCommandFactory class object]
+     *
+     * @var ClassCommandFactory $classCommandFactory
+     */
     private ClassCommandFactory $classCommandFactory;
+
+    /**
+     * [Str class object]
+     *
+     * @var Str $str
+     */
     private Str $str;
 
     /**
@@ -43,6 +80,11 @@ class ControllerCommand extends Command
         return $this;
     }
 
+    /**
+     * Configures the current command
+     *
+     * @return void
+     */
     protected function configure(): void
     {
         $this
@@ -52,6 +94,25 @@ class ControllerCommand extends Command
             ->addOption('model', 'm', InputOption::VALUE_OPTIONAL, 'Do you want to create the model?', 'none');
     }
 
+    /**
+     * Executes the current command
+     *
+     * This method is not abstract because you can use this class
+     * as a concrete class. In this case, instead of defining the
+     * execute() method, you set the code to execute by passing
+     * a Closure to the setCode() method
+     *
+     * @param InputInterface $input [InputInterface is the interface implemented
+     * by all input classes]
+     * @param OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     *
+     * @return int 0 if everything went fine, or an exit code
+     *
+     * @throws LogicException When this abstract method is not implemented
+     *
+     * @see setCode()
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         return $this->classCommandFactory

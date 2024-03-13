@@ -11,8 +11,20 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Gets a list of all available database connections
+ *
+ * @property Arr $arr [Arr class object]
+ *
+ * @package Lion\Bundle\Commands\Lion\DB
+ */
 class ShowDatabasesCommand extends Command
 {
+    /**
+     * [Arr class object]
+     *
+     * @var Arr $arr
+     */
     private Arr $arr;
 
     /**
@@ -25,6 +37,11 @@ class ShowDatabasesCommand extends Command
         return $this;
     }
 
+    /**
+     * Configures the current command
+     *
+     * @return void
+     */
 	protected function configure(): void
     {
 		$this
@@ -32,6 +49,25 @@ class ShowDatabasesCommand extends Command
             ->setDescription('Command required to display available database connections');
 	}
 
+    /**
+     * Executes the current command
+     *
+     * This method is not abstract because you can use this class
+     * as a concrete class. In this case, instead of defining the
+     * execute() method, you set the code to execute by passing
+     * a Closure to the setCode() method
+     *
+     * @param InputInterface $input [InputInterface is the interface implemented
+     * by all input classes]
+     * @param OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     *
+     * @return int 0 if everything went fine, or an exit code
+     *
+     * @throws LogicException When this abstract method is not implemented
+     *
+     * @see setCode()
+     */
 	protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $connections = DB::getConnections();

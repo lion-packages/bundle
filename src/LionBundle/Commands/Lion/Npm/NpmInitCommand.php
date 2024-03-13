@@ -13,6 +13,15 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Initialize a project with Vite.JS
+ *
+ * @property ClassFactory $classFactory [ClassFactory class object]
+ * @property FileWriter $fileWriter [FileWriter class object]
+ * @property Kernel $Kernel [kernel class object]
+ *
+ * @package Lion\Bundle\Commands\Lion\Npm
+ */
 class NpmInitCommand extends MenuCommand
 {
     /**
@@ -36,8 +45,25 @@ class NpmInitCommand extends MenuCommand
      */
     const TYPES = ['js', 'ts'];
 
+    /**
+     * [ClassFactory class object]
+     *
+     * @property ClassFactory $classFactory
+     */
     private ClassFactory $classFactory;
+
+    /**
+     * [FileWriter class object]
+     *
+     * @property FileWriter $fileWriter
+     */
     private FileWriter $fileWriter;
+
+    /**
+     * [Kernel class object]
+     *
+     * @property Kernel $kernel
+     */
     private Kernel $kernel;
 
     /**
@@ -70,6 +96,11 @@ class NpmInitCommand extends MenuCommand
         return $this;
     }
 
+    /**
+     * Configures the current command
+     *
+     * @return void
+     */
 	protected function configure(): void
     {
 		$this
@@ -78,6 +109,25 @@ class NpmInitCommand extends MenuCommand
             ->addArgument('project', InputArgument::OPTIONAL, "Project's name", 'vite-project');
 	}
 
+    /**
+     * Executes the current command
+     *
+     * This method is not abstract because you can use this class
+     * as a concrete class. In this case, instead of defining the
+     * execute() method, you set the code to execute by passing
+     * a Closure to the setCode() method
+     *
+     * @param InputInterface $input [InputInterface is the interface implemented
+     * by all input classes]
+     * @param OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     *
+     * @return int 0 if everything went fine, or an exit code
+     *
+     * @throws LogicException When this abstract method is not implemented
+     *
+     * @see setCode()
+     */
 	protected function execute(InputInterface $input, OutputInterface $output): int
     {
 		$project = $this->str->of($input->getArgument('project'))->trim()->replace('_', '-')->replace(' ', '-')->get();
@@ -154,9 +204,11 @@ class NpmInitCommand extends MenuCommand
         $type = $this->selectedTypes($input, $output, self::TYPES);
 
         $commandCreate = "cd {$this->store->normalizePath('./vite/')} && echo | npm init vite@latest {$project}";
+
         $commandCreate .= " -- --template {$template}" . ('js' === $type ? '' : '-ts');
 
         $this->kernel->execute($commandCreate, false);
+
         $this->kernel->execute("cd {$this->store->normalizePath("./vite/{$project}/")} && npm install", false);
     }
 
@@ -181,9 +233,11 @@ class NpmInitCommand extends MenuCommand
         $type = $this->selectedTypes($input, $output, self::TYPES);
 
         $commandCreate = "cd {$this->store->normalizePath('./vite/')} && echo | npm create @quick-start/electron";
+
         $commandCreate .= " {$project} -- --template {$template}" . ('js' === $type ? '' : '-ts') . ' --skip';
 
         $this->kernel->execute($commandCreate, false);
+
         $this->kernel->execute("cd {$this->store->normalizePath("./vite/{$project}/")} && npm install", false);
     }
 

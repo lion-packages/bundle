@@ -10,8 +10,18 @@ use Lion\Database\Drivers\Schema\MySQL as Schema;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Empties all entities of the defined databases
+ *
+ * @package Lion\Bundle\Commands\Lion\Migrations
+ */
 class EmptyMigrationsCommand extends Command
 {
+    /**
+     * Configures the current command
+     *
+     * @return void
+     */
     protected function configure(): void
     {
         $this
@@ -19,6 +29,25 @@ class EmptyMigrationsCommand extends Command
             ->setDescription('Empties all tables built with the migrations');
     }
 
+    /**
+     * Executes the current command
+     *
+     * This method is not abstract because you can use this class
+     * as a concrete class. In this case, instead of defining the
+     * execute() method, you set the code to execute by passing
+     * a Closure to the setCode() method
+     *
+     * @param InputInterface $input [InputInterface is the interface implemented
+     * by all input classes]
+     * @param OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     *
+     * @return int 0 if everything went fine, or an exit code
+     *
+     * @throws LogicException When this abstract method is not implemented
+     *
+     * @see setCode()
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $connections = (object) Schema::getConnections();

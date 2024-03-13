@@ -16,9 +16,28 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 
+/**
+ * Initialize a socket
+ *
+ * @property Container $container [Container class object]
+ * @property Store $store [Store class object]
+ *
+ * @package Lion\Bundle\Commands\Lion\Sockets
+ */
 class ServerSocketCommand extends Command
 {
+    /**
+     * [Container class object]
+     *
+     * @var Container $container
+     */
     private Container $container;
+
+    /**
+     * [Store class object]
+     *
+     * @var Store $store
+     */
     private Store $store;
 
     /**
@@ -41,6 +60,11 @@ class ServerSocketCommand extends Command
         return $this;
     }
 
+    /**
+     * Configures the current command
+     *
+     * @return void
+     */
     protected function configure(): void
     {
         $this
@@ -49,6 +73,25 @@ class ServerSocketCommand extends Command
             ->addOption('socket', 's', InputOption::VALUE_OPTIONAL, 'Socket class namespace');
     }
 
+    /**
+     * Executes the current command
+     *
+     * This method is not abstract because you can use this class
+     * as a concrete class. In this case, instead of defining the
+     * execute() method, you set the code to execute by passing
+     * a Closure to the setCode() method
+     *
+     * @param InputInterface $input [InputInterface is the interface implemented
+     * by all input classes]
+     * @param OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     *
+     * @return int 0 if everything went fine, or an exit code
+     *
+     * @throws LogicException When this abstract method is not implemented
+     *
+     * @see setCode()
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (isError($this->store->exist('./app/Http/Sockets/'))) {
@@ -58,6 +101,7 @@ class ServerSocketCommand extends Command
         }
 
         $socketDefault = $input->getOption('socket');
+
         $selectedSocket = null;
 
         if (null === $socketDefault) {
@@ -73,10 +117,13 @@ class ServerSocketCommand extends Command
         }
 
         $socketClass = new $selectedSocket();
+
         $url = 'ws://' . $socketClass::HOST . ':' . $socketClass::PORT;
 
         $output->write($this->successOutput("\nLion-Framework "));
+
         $output->writeln($this->warningOutput("\t>>  LOCAL: Socket running on [{$url}]"));
+
         $output->writeln($this->warningOutput("\t>>  Press Ctrl+C to stop the socket"));
 
         IoServer::factory(
@@ -89,12 +136,24 @@ class ServerSocketCommand extends Command
         return Command::SUCCESS;
     }
 
+    /**
+     * Open a selection list to select a socket
+     *
+     * @param InputInterface $input [InputInterface is the interface
+     * implemented by all input classes]
+     * @param OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     *
+     * @return string
+     */
     private function selectSocket(InputInterface $input, OutputInterface $output): string
     {
         $classList = [];
 
         foreach ($this->container->getFiles('./app/Http/Sockets/') as $file) {
-            $classList[] = $this->container->getNamespace($file, 'App\\Http\\Sockets\\', 'Sockets/');
+            if (isSuccess($this->store->validate([$file], ['php']))) {
+                $classList[] = $this->container->getNamespace($file, 'App\\Http\\Sockets\\', 'Sockets/');
+            }
         }
 
         if (count($classList) === 0) {
@@ -105,6 +164,7 @@ class ServerSocketCommand extends Command
 
         if (count($classList) === 1) {
             $first = reset($classList);
+
             $output->writeln($this->warningOutput("\n(default: {$first})\n"));
 
             return $first;

@@ -11,9 +11,28 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Generate public and private keys with RSA
+ *
+ * @property RSA $rsa [RSA class object]
+ * @property Store $store [Store class object]
+ *
+ * @package Lion\Bundle\Commands\Lion\New
+ */
 class RSACommand extends Command
 {
+    /**
+     * [RSA class object]
+     *
+     * @var RSA $rsa
+     */
     private RSA $rsa;
+
+    /**
+     * [Store class object]
+     *
+     * @var Store $store
+     */
     private Store $store;
 
     /**
@@ -36,6 +55,11 @@ class RSACommand extends Command
         return $this;
     }
 
+    /**
+     * Configures the current command
+     *
+     * @return void
+     */
 	protected function configure(): void
 	{
 		$this
@@ -44,6 +68,25 @@ class RSACommand extends Command
             ->addOption('path', 'p', InputOption::VALUE_REQUIRED, 'Save to a specific path?');
 	}
 
+    /**
+     * Executes the current command
+     *
+     * This method is not abstract because you can use this class
+     * as a concrete class. In this case, instead of defining the
+     * execute() method, you set the code to execute by passing
+     * a Closure to the setCode() method
+     *
+     * @param InputInterface $input [InputInterface is the interface implemented
+     * by all input classes]
+     * @param OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     *
+     * @return int 0 if everything went fine, or an exit code
+     *
+     * @throws LogicException When this abstract method is not implemented
+     *
+     * @see setCode()
+     */
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
         $path = $input->getOption('path');
@@ -58,6 +101,7 @@ class RSACommand extends Command
         ]);
 
         $this->store->folder($this->rsa->getUrlPath());
+
         $this->rsa->create();
 
         if (isSuccess($this->store->exist('.rnd'))) {
@@ -65,7 +109,9 @@ class RSACommand extends Command
         }
 
         $output->writeln($this->warningOutput("\t>>  RSA KEYS: public and private"));
+
         $output->writeln($this->successOutput("\t>>  RSA KEYS: Exported in {$this->rsa->getUrlPath()}public.key"));
+
         $output->writeln($this->successOutput("\t>>  RSA KEYS: Exported in {$this->rsa->getUrlPath()}private.key"));
 
 		return Command::SUCCESS;

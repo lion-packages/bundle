@@ -12,10 +12,36 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Run the tests defined with PHPunit
+ *
+ * @property Container $container [Container class object]
+ * @property Kernel $kernel [Kernel class object]
+ * @property Arr $arr [Arr class object]
+ *
+ * @package Lion\Bundle\Commands\Lion
+ */
 class RunTestCommand extends Command
 {
+    /**
+     * [Container class object]
+     *
+     * @var Container $container
+     */
     private Container $container;
+
+    /**
+     * [Kernel class object]
+     *
+     * @var Kernel $kernel
+     */
     private Kernel $kernel;
+
+    /**
+     * [Arr class object]
+     *
+     * @var Arr $arr
+     */
     private Arr $arr;
 
     /**
@@ -48,6 +74,11 @@ class RunTestCommand extends Command
         return $this;
     }
 
+    /**
+     * Configures the current command
+     *
+     * @return void
+     */
 	protected function configure(): void
 	{
 		$this
@@ -55,14 +86,42 @@ class RunTestCommand extends Command
             ->setDescription('Command to create run unit tests')
             ->addOption('class', 'c', InputOption::VALUE_OPTIONAL, 'Do you want to run a specific class?', false)
             ->addOption('method', 'm', InputOption::VALUE_OPTIONAL, 'Do you want to filter a specific method?', false)
-            ->addOption('suite', 's', InputOption::VALUE_OPTIONAL, 'Do you want to test a specific directory?', 'All-Test');
+            ->addOption(
+                'suite',
+                's',
+                InputOption::VALUE_OPTIONAL,
+                'Do you want to test a specific directory?',
+                'All-Test'
+            );
 	}
 
+    /**
+     * Executes the current command
+     *
+     * This method is not abstract because you can use this class
+     * as a concrete class. In this case, instead of defining the
+     * execute() method, you set the code to execute by passing
+     * a Closure to the setCode() method
+     *
+     * @param InputInterface $input [InputInterface is the interface implemented
+     * by all input classes]
+     * @param OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     *
+     * @return int 0 if everything went fine, or an exit code
+     *
+     * @throws LogicException When this abstract method is not implemented
+     *
+     * @see setCode()
+     */
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		$result = '';
+
 		$class = $input->getOption('class');
+
 		$method = $input->getOption('method');
+
 		$suite = $input->getOption('suite');
 
         $output->writeln($this->successOutput("\t>>  Running unit tests...\n\t>>  "));

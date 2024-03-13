@@ -15,16 +15,47 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableSeparator;
 
+/**
+ * Shows a table with the defined web routes and their properties
+ *
+ * @property Arr $arr [Arr class object]
+ * @property Str $str [Str class object]
+ *
+ * @package Lion\Bundle\Commands\Lion\Route
+ */
 class RouteListCommand extends Command
 {
+    /**
+     * [Arr class object]
+     *
+     * @var Arr $arr
+     */
     private Arr $arr;
+
+    /**
+     * [Str class object]
+     *
+     * @var Str $str
+     */
     private Str $str;
 
+    /**
+     * [List of defined web routes]
+     *
+     * @var array $routes
+     */
     private array $routes = [];
 
+    /**
+     * [List of defined rules]
+     *
+     * @var array $rules
+     */
     private array $rules = [];
 
     /**
+     * [List of defined Middleware]
+     *
      * @var array<Middleware> $configMiddleware
      */
     private array $configMiddleware = [];
@@ -49,6 +80,11 @@ class RouteListCommand extends Command
         return $this;
     }
 
+    /**
+     * Configures the current command
+     *
+     * @return void
+     */
     protected function configure(): void
     {
         $this
@@ -56,12 +92,33 @@ class RouteListCommand extends Command
             ->setDescription('Command to view a list of available web routes');
     }
 
+    /**
+     * Executes the current command
+     *
+     * This method is not abstract because you can use this class
+     * as a concrete class. In this case, instead of defining the
+     * execute() method, you set the code to execute by passing
+     * a Closure to the setCode() method
+     *
+     * @param InputInterface $input [InputInterface is the interface implemented
+     * by all input classes]
+     * @param OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     *
+     * @return int 0 if everything went fine, or an exit code
+     *
+     * @throws LogicException When this abstract method is not implemented
+     *
+     * @see setCode()
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->fetchRoutes();
 
         $size = $this->arr->of($this->routes)->length();
+
         $cont = 0;
+
         $rows = [];
 
         foreach ($this->routes as $route => $methods) {
@@ -145,9 +202,17 @@ class RouteListCommand extends Command
         return Command::SUCCESS;
     }
 
+    /**
+     * Add colors in namespace separation
+     *
+     * @param  string $namespace [Class namespace]
+     *
+     * @return string
+     */
     private function transformNamespace(string $namespace): string
     {
         $classNew = '';
+
         $split = explode("\\", $namespace);
 
         foreach ($split as $key => $value) {
@@ -161,6 +226,12 @@ class RouteListCommand extends Command
         return $classNew;
     }
 
+    /**
+     * Gets the parameters (Web Routes/Rules/Middleware) of the defined web
+     * routes
+     *
+     * @return void
+     */
     private function fetchRoutes(): void
     {
         $this->routes = json_decode(
@@ -175,6 +246,7 @@ class RouteListCommand extends Command
         array_pop($this->routes);
 
         $this->rules = Routes::getRules();
+
         $this->configMiddleware = Routes::getMiddleware();
     }
 }
