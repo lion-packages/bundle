@@ -13,26 +13,30 @@ use Symfony\Component\Console\Application;
 /**
  * Initialize the command application to execute its functions
  *
+ * @property Application $application [Application class object]
+ * @property Container $container [Container class object]
+ * @property Store $store [Store class object]
+ *
  * @package Lion\Bundle\Commands
  */
 class CommandHandler
 {
     /**
-     * [Object of class Application]
+     * [Application class object]
      *
      * @var Application $application
      */
     private Application $application;
 
     /**
-     * [Object of class Container]
+     * [Container class object]
      *
      * @var Container $container
      */
     private Container $container;
 
     /**
-     * [Object of class Store]
+     * [Store class object]
      *
      * @var Store $store
      */
@@ -46,7 +50,9 @@ class CommandHandler
     public function __construct(string $name = '')
     {
         $this->application = (new Kernel)->getApplication();
+
         $this->container = new Container();
+
         $this->store = new Store();
 
         $this->application->setName($name);
@@ -67,17 +73,15 @@ class CommandHandler
     /**
      * Gets the list of routes with all available commands
      *
-     * @param  string $pathCommands [Defined route]
-     * @param  string $namespace [Namespace for Command classes]
-     * @param  string $pathSplit [Route separated]
+     * @param string $pathCommands [Defined route]
+     * @param string $namespace [Namespace for Command classes]
+     * @param string $pathSplit [Route separated]
      *
      * @return array<Command>
      */
     private function getCommands(string $pathCommands, string $namespace, string $pathSplit): array
     {
-        /**
-         * @var array<Command> $commands
-         */
+        /** @var array<Command> $commands */
         $commands = [];
 
         foreach ($this->container->getFiles($pathCommands) as $file) {
@@ -93,9 +97,9 @@ class CommandHandler
     /**
      * Record commands for a defined route
      *
-     * @param  string $pathCommands [Defined route]
-     * @param  string $namespace [Namespace for Command classes]
-     * @param  string $pathSplit [Route separated]
+     * @param string $pathCommands [Defined route]
+     * @param string $namespace [Namespace for Command classes]
+     * @param string $pathSplit [Route separated]
      *
      * @return CommandHandler
      */

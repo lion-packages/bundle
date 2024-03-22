@@ -6,8 +6,20 @@ namespace Lion\Bundle\Helpers\Commands\Migrations;
 
 use Lion\Helpers\Str;
 
+/**
+ * Factory of the content of the generated migrations
+ *
+ * @property Str $str [Str class object]
+ *
+ * @package Lion\Bundle\Helpers\Commands\Migrations
+ */
 class MigrationFactory
 {
+    /**
+     * [Str class object]
+     *
+     * @var Str $str
+     */
     private Str $str;
 
     /**
@@ -20,6 +32,11 @@ class MigrationFactory
         return $this;
     }
 
+    /**
+     * Returns the body of the migration of type table
+     *
+     * @return string
+     */
     public function getTableBody(): string
     {
         return $this->str->of("<?php")->ln()->ln()
@@ -40,6 +57,11 @@ class MigrationFactory
             ->get();
     }
 
+    /**
+     * Returns the body of the migration of type view
+     *
+     * @return string
+     */
     public function getViewBody(): string
     {
         return $this->str->of("<?php")->ln()->ln()
@@ -60,6 +82,11 @@ class MigrationFactory
             ->get();
     }
 
+    /**
+     * Returns the body of the migration of type store-procedure
+     *
+     * @return string
+     */
     public function getStoreProcedureBody(): string
     {
         return $this->str->of("<?php")->ln()->ln()

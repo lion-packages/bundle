@@ -13,8 +13,20 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Generates the base rules for the properties of an entity
+ *
+ * @property FileWriter $fileWrite [FileWriter class object]
+ *
+ * @package Lion\Bundle\Commands\Lion\DB
+ */
 class RulesDBCommand extends MenuCommand
 {
+    /**
+     * [FileWriter class object]
+     *
+     * @var FileWriter $fileWrite
+     */
     private FileWriter $fileWriter;
 
     /**
@@ -27,6 +39,11 @@ class RulesDBCommand extends MenuCommand
         return $this;
     }
 
+    /**
+     * Configures the current command
+     *
+     * @return void
+     */
     protected function configure(): void
     {
         $this
@@ -35,6 +52,25 @@ class RulesDBCommand extends MenuCommand
             ->addArgument('entity', InputArgument::REQUIRED, 'Entity name');
     }
 
+    /**
+     * Executes the current command
+     *
+     * This method is not abstract because you can use this class
+     * as a concrete class. In this case, instead of defining the
+     * execute() method, you set the code to execute by passing
+     * a Closure to the setCode() method
+     *
+     * @param InputInterface $input [InputInterface is the interface implemented
+     * by all input classes]
+     * @param OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     *
+     * @return int 0 if everything went fine, or an exit code
+     *
+     * @throws LogicException When this abstract method is not implemented
+     *
+     * @see setCode()
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $entity = $input->getArgument('entity');

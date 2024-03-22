@@ -15,14 +15,58 @@ use Lion\Route\Route;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Generate JSON object structure for POSTMAN collections
+ *
+ * @property ClassFactory $classFactory [ClassFactory class object]
+ * @property PostmanCollection $postmanCollection [PostmanCollection class object]
+ * @property Store $store [Store class object]
+ * @property Str $str [Str class object]
+ *
+ * @package Lion\Bundle\Commands\Lion\Route
+ */
 class PostmanCollectionCommand extends Command
 {
+    /**
+     * [ClassFactory class object]
+     *
+     * @var ClassFactory $classFactory
+     */
     private ClassFactory $classFactory;
+
+    /**
+     * [PostmanCollection class object]
+     *
+     * @var PostmanCollection $postmanCollection
+     */
     private PostmanCollection $postmanCollection;
+
+    /**
+     * [Store class object]
+     *
+     * @var Store $store
+     */
     private Store $store;
+
+    /**
+     * [Str class object]
+     *
+     * @var Str $str
+     */
     private Str $str;
 
+    /**
+     * [List of defined web routes]
+     *
+     * @var array $routes
+     */
     private array $routes;
+
+    /**
+     * [JSON file name]
+     *
+     * @var string $jsonName
+     */
     private string $jsonName;
 
     /**
@@ -65,6 +109,11 @@ class PostmanCollectionCommand extends Command
         return $this;
     }
 
+    /**
+     * Configures the current command
+     *
+     * @return void
+     */
     protected function configure(): void
     {
         $this
@@ -72,6 +121,25 @@ class PostmanCollectionCommand extends Command
             ->setDescription('Command required to create postman collections in JSON format');
     }
 
+    /**
+     * Executes the current command
+     *
+     * This method is not abstract because you can use this class
+     * as a concrete class. In this case, instead of defining the
+     * execute() method, you set the code to execute by passing
+     * a Closure to the setCode() method
+     *
+     * @param InputInterface $input [InputInterface is the interface implemented
+     * by all input classes]
+     * @param OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     *
+     * @return int 0 if everything went fine, or an exit code
+     *
+     * @throws LogicException When this abstract method is not implemented
+     *
+     * @see setCode()
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->fetchRoutes();
@@ -107,9 +175,15 @@ class PostmanCollectionCommand extends Command
         return Command::SUCCESS;
     }
 
+    /**
+     * Initialize the parameters for the generation of the collection
+     *
+     * @return void
+     */
     private function fetchRoutes(): void
     {
         $this->postmanCollection->init($_ENV['SERVER_URL']);
+
         $this->jsonName = $this->str->of(Carbon::now()->format('Y_m_d'))->concat('_lion_collection')->lower()->get();
 
         $this->routes = json_decode(

@@ -16,13 +16,60 @@ use Lion\Helpers\Str;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Add scheduled tasks in crontab
+ *
+ * @property ClassFactory $classFactory [ClassFactory class object]
+ * @property Container $container [Container class object]
+ * @property Store $store [Store class object]
+ * @property Kernel $kernel [Kernel class object]
+ * @property Str $str [Str class object]
+ * @property Arr $arr [Arr class object]
+ *
+ * @package Lion\Bundle\Commands\Lion\Schedule
+ */
 class UpScheduleCommand extends Command
 {
+    /**
+     * [ClassFactory class object]
+     *
+     * @var ClassFactory $classFactory
+     */
     private ClassFactory $classFactory;
+
+    /**
+     * [Container class object]
+     *
+     * @var Container $container
+     */
     private Container $container;
+
+    /**
+     * [Store class object]
+     *
+     * @var Store $store
+     */
     private Store $store;
+
+    /**
+     * [Kernel class object]
+     *
+     * @var Kernel $kernel
+     */
     private Kernel $kernel;
+
+    /**
+     * [Str class object]
+     *
+     * @var Str $str
+     */
     private Str $str;
+
+    /**
+     * [Arr class object]
+     *
+     * @var Arr $arr
+     */
     private Arr $arr;
 
     /**
@@ -52,6 +99,11 @@ class UpScheduleCommand extends Command
         return $this;
     }
 
+    /**
+     * Configures the current command
+     *
+     * @return void
+     */
     protected function configure(): void
     {
         $this
@@ -59,6 +111,25 @@ class UpScheduleCommand extends Command
             ->setDescription('Stores all scheduled tasks');
     }
 
+    /**
+     * Executes the current command
+     *
+     * This method is not abstract because you can use this class
+     * as a concrete class. In this case, instead of defining the
+     * execute() method, you set the code to execute by passing
+     * a Closure to the setCode() method
+     *
+     * @param InputInterface $input [InputInterface is the interface implemented
+     * by all input classes]
+     * @param OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     *
+     * @return int 0 if everything went fine, or an exit code
+     *
+     * @throws LogicException When this abstract method is not implemented
+     *
+     * @see setCode()
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (isError($this->store->exist('app/Console/Cron/'))) {
@@ -125,9 +196,13 @@ class UpScheduleCommand extends Command
             $output->writeln($this->warningOutput("\t>> SCHEDULE: {$config['command']}"));
 
             $command = "{$config['cron']} cd {$_ENV['CRONTAB_PROJECT_PATH']}";
+
             $command .= " && {$_ENV['CRONTAB_PHP_PATH']} {$_ENV['CRONTAB_PROJECT_PATH']}lion {$commandObject->getName()}";
+
             $command .= '' === $options ? '' : " {$options}";
+
             $command .= " >> {$_ENV['CRONTAB_PROJECT_PATH']}storage/logs/cron/{$config['logName']}.log 2>&1";
+
 
             $this->store->folder($this->store->normalizePath('./storage/logs/cron/'));
 

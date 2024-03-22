@@ -14,11 +14,35 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Generate a CRUD (Controllers, Models, Tests and Capsule Classes) of an entity
+ *
+ * @property FileWriter $fileWriter [Object of class FileWriter]
+ * @property ClassFactory $classFactory [Object of class ClassFactory]
+ *
+ * @package Lion\Bundle\Commands\Lion\DB
+ */
 class CrudCommand extends MenuCommand
 {
+    /**
+     * [Defined CRUD methods]
+     *
+     * @const METHODS
+     */
     const METHODS = ['create', 'update', 'delete'];
 
+    /**
+     * [Object of class FileWriter]
+     *
+     * @var FileWriter $fileWriter
+     */
     private FileWriter $fileWriter;
+
+    /**
+     * [Object of class ClassFactory]
+     *
+     * @var ClassFactory $classFactory
+     */
     private ClassFactory $classFactory;
 
     /**
@@ -41,6 +65,11 @@ class CrudCommand extends MenuCommand
         return $this;
     }
 
+    /**
+     * Configures the current command
+     *
+     * @return void
+     */
     protected function configure(): void
     {
         $this
@@ -51,14 +80,37 @@ class CrudCommand extends MenuCommand
             ->addArgument('entity', InputArgument::REQUIRED, 'Entity name');
     }
 
+    /**
+     * Executes the current command
+     *
+     * This method is not abstract because you can use this class
+     * as a concrete class. In this case, instead of defining the
+     * execute() method, you set the code to execute by passing
+     * a Closure to the setCode() method
+     *
+     * @param InputInterface $input [InputInterface is the interface implemented
+     * by all input classes]
+     * @param OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     *
+     * @return int 0 if everything went fine, or an exit code
+     *
+     * @throws LogicException When this abstract method is not implemented
+     *
+     * @see setCode()
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $entity = $input->getArgument('entity');
+
         $selectedConnection = $this->selectConnection($input, $output);
 
         $connectionPascal = $this->str->of($selectedConnection)->replace('_', ' ')->replace('-', ' ')->pascal()->get();
+
         $entityPascal = $this->str->of($entity)->replace('_', ' ')->replace('-', ' ')->pascal()->get();
+
         $namespacePascal = "Database\\Class\\{$connectionPascal}\\MySQL\\{$entityPascal}";
+
         $columns = DB::connection($selectedConnection)->show()->columns()->from($entity)->getAll();
 
         $this->addDBRules($entity, $output);
@@ -79,6 +131,15 @@ class CrudCommand extends MenuCommand
         return Command::SUCCESS;
     }
 
+    /**
+     * Create the rules of an entity
+     *
+     * @param string $entity [Entity name]
+     * @param OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     *
+     * @return void
+     */
     private function addDBRules(string $entity, OutputInterface $output): void
     {
         $this
@@ -87,6 +148,19 @@ class CrudCommand extends MenuCommand
             ->run(new ArrayInput(['entity' => $entity]), $output);
     }
 
+    /**
+     * Create the controller and model of an entity
+     *
+     * @param string $entityPascal [Entity name in pascal-case format]
+     * @param string $connectionPascal [Connection name in pascal-case format]
+     * @param string $namespacePascal [Namespace name in pascal-case format]
+     * @param string $entity [Entity name]
+     * @param array $columns [List of defined columns]
+     * @param OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     *
+     * @return void
+     */
     private function addControllerAndModel(
         string $entityPascal,
         string $connectionPascal,
@@ -122,6 +196,7 @@ class CrudCommand extends MenuCommand
             ->run(new ArrayInput(['test' => "Models/{$connectionPascal}/MySQL/{$entityPascal}ModelTest",]), $output);
 
         $fileC = "{$entityPascal}Controller";
+
         $pathC = "app/Http/Controllers/{$connectionPascal}/MySQL/{$fileC}.php";
 
         $this->fileWriter->readFileRows($pathC, [
@@ -162,7 +237,9 @@ class CrudCommand extends MenuCommand
         ]);
 
         $pathM = "app/Models/{$connectionPascal}/MySQL/{$entityPascal}Model.php";
+
         $gettersCallModel = $this->generateCallGettersModel($entityPascal, $columns);
+
         $listGettersCallModel = ['create' => '', 'update' => '', 'delete' => ''];
 
         foreach ($gettersCallModel as $keyGetterCallModel => $method) {
@@ -241,6 +318,17 @@ class CrudCommand extends MenuCommand
         ]);
     }
 
+    /**
+     * Create an entity capsule
+     *
+     * @param string $entity [Entity name]
+     * @param string $selectedConnection [Selected connection]
+     * @param string $entityPascal [Entity name in pascal-case format]
+     * @param OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     *
+     * @return void
+     */
     private function addCapsule(
         string $entity,
         string $selectedConnection,
@@ -258,6 +346,15 @@ class CrudCommand extends MenuCommand
             ->run(new ArrayInput(['test' => "Class/{$selectedConnection}/MySQL/{$entityPascal}Test",]), $output);
     }
 
+    /**
+     * Generates the calls of the getter methods in the models, to add this
+     * content to the generated model
+     *
+     * @param string $entityPascal [Entity name in pascal-case format]
+     * @param array $columns [List of defined columns]
+     *
+     * @return array
+     */
     private function generateCallGettersModel(string $entityPascal, array $columns): array
     {
         $methods = ['create' => [], 'update' => [], 'delete' => []];

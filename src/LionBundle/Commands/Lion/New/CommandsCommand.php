@@ -11,9 +11,28 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Generate a Command class to execute commands
+ *
+ * @property ClassFactory $classFactory [ClassFactory class object]
+ * @property Store $store [Store class object]
+ *
+ * @package Lion\Bundle\Commands\Lion\New
+ */
 class CommandsCommand extends Command
 {
+    /**
+     * [ClassFactory class object]
+     *
+     * @var ClassFactory $classFactory
+     */
     private ClassFactory $classFactory;
+
+    /**
+     * [Store class object]
+     *
+     * @var Store $store
+     */
     private Store $store;
 
 	/**
@@ -36,6 +55,11 @@ class CommandsCommand extends Command
         return $this;
     }
 
+    /**
+     * Configures the current command
+     *
+     * @return void
+     */
 	protected function configure(): void
     {
 		$this
@@ -44,13 +68,35 @@ class CommandsCommand extends Command
             ->addArgument('new-command', InputArgument::OPTIONAL, 'Command name', 'ExampleCommand');
 	}
 
+    /**
+     * Executes the current command
+     *
+     * This method is not abstract because you can use this class
+     * as a concrete class. In this case, instead of defining the
+     * execute() method, you set the code to execute by passing
+     * a Closure to the setCode() method
+     *
+     * @param InputInterface $input [InputInterface is the interface implemented
+     * by all input classes]
+     * @param OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     *
+     * @return int 0 if everything went fine, or an exit code
+     *
+     * @throws LogicException When this abstract method is not implemented
+     *
+     * @see setCode()
+     */
 	protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $command = $input->getArgument('new-command');
 
         $this->classFactory->classFactory('app/Console/Commands/', $command);
+
         $folder = $this->classFactory->getFolder();
+
         $class = $this->classFactory->getClass();
+
         $namespace = $this->classFactory->getNamespace();
 
         $this->store->folder($folder);
@@ -72,6 +118,7 @@ class CommandsCommand extends Command
             ->close();
 
         $output->writeln($this->warningOutput("\t>>  COMMAND: {$class}"));
+
         $output->writeln($this->successOutput("\t>>  COMMAND: the '{$namespace}\\{$class}' command has been generated"));
 
         return Command::SUCCESS;

@@ -6,13 +6,51 @@ namespace Lion\Bundle\Helpers\Commands;
 
 use Lion\Files\Store;
 
+/**
+ * Fabricates the data provided to manipulate information (folder, class,
+ * namespace)
+ *
+ * @property Store $store [Store class object]
+ * @property string $namespace [Class namespace]
+ * @property string $class [Class name]
+ *
+ * @package Lion\Bundle\Helpers\Commands
+ */
 class ClassFactory
 {
+    /**
+     * [.php file extension]
+     *
+     * @const PHP_EXTENSION
+     */
     const PHP_EXTENSION = 'php';
+
+    /**
+     * [.log file extension]
+     *
+     * @const LOG_EXTENSION
+     */
     const LOG_EXTENSION = 'log';
 
+    /**
+     * [Scope of public method or property]
+     *
+     * @const PUBLIC_PROPERTY
+     */
     const PUBLIC_PROPERTY = 'public';
+
+    /**
+     * [Scope of private method or property]
+     *
+     * @const PRIVATE_PROPERTY
+     */
     const PRIVATE_PROPERTY = 'private';
+
+    /**
+     * [Scope of protected method or property]
+     *
+     * @const PROTECTED_PROPERTY
+     */
     const PROTECTED_PROPERTY = 'protected';
 
     /**
@@ -22,8 +60,37 @@ class ClassFactory
      */
     private Store $store;
 
+    /**
+     * [If filename is of the form "scheme://...", it is assumed to be a URL and
+     * PHP will search for a protocol handler (also known as a wrapper) for that
+     * scheme. If no wrappers for that protocol are registered, PHP will emit a
+     * notice to help you track potential problems in your script and then
+     * continue as though filename specifies a regular file]
+     *
+     * [If PHP has decided that filename specifies a local file, then it will
+     * try to open a stream on that file. The file must be accessible to PHP, so
+     * you need to ensure that the file access permissions allow this access. If
+     * you have enabled open_basedir further restrictions may apply]
+     *
+     * [If PHP has decided that filename specifies a registered protocol, and
+     * that protocol is registered as a network URL, PHP will check to make sure
+     * that allow_url_fopen is enabled. If it is switched off, PHP will emit a
+     * warning and the fopen call will fail]
+     */
     private $content;
+
+    /**
+     * [Class namespace]
+     *
+     * @var string $namespace
+     */
     private string $namespace;
+
+    /**
+     * [Class name]
+     *
+     * @var string $class
+     */
     private string $class;
 
     /**
@@ -34,6 +101,16 @@ class ClassFactory
         $this->store = $store;
     }
 
+    /**
+     * Create a new file with its properties and permissions defined
+     *
+     * @param string $fileName [File name]
+     * @param string $extension [File extension]
+     * @param string $path [File path]
+     * @param string $filePermissions [File permissions]
+     *
+     * @return ClassFactory
+     */
     public function create(
         string $fileName,
         string $extension = 'php',
@@ -45,6 +122,13 @@ class ClassFactory
         return $this;
     }
 
+    /**
+     * Add content to the file
+     *
+     * @param string $content [File content]
+     *
+     * @return ClassFactory
+     */
     public function add(string $content): ClassFactory
     {
         fwrite($this->content, $content);
@@ -52,18 +136,35 @@ class ClassFactory
         return $this;
     }
 
+    /**
+     * Close the file with the defined data
+     *
+     * @return ClassFactory
+     */
     public function close(): ClassFactory
     {
         fflush($this->content);
+
         fclose($this->content);
 
         return $this;
     }
 
+    /**
+     * Generates the information required for the classes (class, namespace,
+     * folder)
+     *
+     * @param string $path [File path]
+     * @param string $fileName [File name]
+     *
+     * @return ClassFactory
+     */
     public function classFactory(string $path, string $fileName): ClassFactory
     {
         $path = $this->store->normalizePath($path);
+
         $namespace = '';
+
         $separate = [];
 
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
@@ -76,7 +177,9 @@ class ClassFactory
 
         foreach ($separate as $key => $part) {
             $part = str_replace('-', ' ', $part);
+
             $part = str_replace('_', ' ', $part);
+
             $part = str_replace(' ', '', ucwords($part));
 
             if ($key === ($size - 1)) {
@@ -92,9 +195,20 @@ class ClassFactory
         return $this;
     }
 
+    /**
+     * Generates the content (property name in [camel, snake] formats) of a
+     * property for getter, setter and class property methods
+     *
+     * @param string $propertyName [Property name]
+     * @param string $className [Class name]
+     * @param string $type [Datatype]
+     * @param string|null $visibility [Property Scope]
+     *
+     * @return object
+     */
     public function getProperty(
-        string $name,
-        string $capsule,
+        string $propertyName,
+        string $className,
         string $type = 'string',
         ?string $visibility = null
     ): object {
@@ -102,9 +216,9 @@ class ClassFactory
 
         $finalVisibility = in_array($visibility, $availableVisibility, true) ? "{$visibility} " : '';
 
-        $snake = trim(str_replace('-', '_', str_replace(' ', '_', $name)));
+        $snake = trim(str_replace('-', '_', str_replace(' ', '_', $propertyName)));
 
-        $camel = str_replace('_', ' ', str_replace('-', ' ', $name));
+        $camel = str_replace('_', ' ', str_replace('-', ' ', $propertyName));
 
         $camel = lcfirst(str_replace(' ', '', ucwords($camel)));
 
@@ -114,10 +228,10 @@ class ClassFactory
                 'snake' => $snake
             ],
             'getter' => $this->getGetter($snake, $type),
-            'setter' => $this->getSetter($snake, $type, $capsule),
+            'setter' => $this->getSetter($snake, $type, $className),
             'variable' => (object) [
                 'annotations' => (object) [
-                    'class' => "@property {$type} $" . "{$snake} [property for {$name}]"
+                    'class' => "@property {$type} $" . "{$snake} [property for {$propertyName}]"
                 ],
                 'reference' => '$this->' . "{$camel};",
                 'name' => (object) [
@@ -127,7 +241,7 @@ class ClassFactory
                 'type' => (object) [
                     'camel' => ($finalVisibility . "?{$type} $" . "{$camel} = null;"),
                     'snake' => (
-                        "/**\n\t * property for {$name}\n\t *\n\t * @var {$type}|null $" . "{$snake}\n\t */\n" .
+                        "/**\n\t * property for {$propertyName}\n\t *\n\t * @var {$type}|null $" . "{$snake}\n\t */\n" .
                         "\t{$finalVisibility}?{$type} $" . "{$snake} = null;\n"
                     )
                 ],
@@ -139,49 +253,103 @@ class ClassFactory
         ];
     }
 
+    /**
+     * Returns the name of the class
+     *
+     * @return string
+     */
     public function getClass(): string
     {
         return $this->class;
     }
 
+    /**
+     * Returns the namespace of the class
+     *
+     * @return string
+     */
     public function getNamespace(): string
     {
         return $this->namespace;
     }
 
+    /**
+     * Gets the folder path of the class
+     *
+     * @return string
+     */
     public function getFolder(): string
     {
         return $this->store->normalizePath(lcfirst(str_replace("\\", "/", $this->namespace)) . '/');
     }
 
+    /**
+     * Generate a getter method with its definitions
+     *
+     * @param string $name [Method name]
+     * @param string $type [Method type]
+     *
+     * @return object
+     */
     private function getGetter(string $name, string $type = 'string'): object
     {
         $newName = str_replace(' ', '_', $name);
+
         $newName = str_replace('-', '_', $newName);
+
         $newName = str_replace('_', ' ', $newName);
+
         $newName = trim(str_replace(' ', '', ucwords($newName)));
 
         $getter = "\t/**\n\t * getter method for {$name}\n\t *\n\t * @return {$type}|null\n\t */\n";
+
         $getter .= "\tpublic function get{$newName}(): ?{$type}\n\t{\n\t\treturn " . '$this->' . $name;
+
         $getter .= ";\n\t}";
 
         return (object) ['name' => "get{$newName}", 'method' => $getter];
     }
 
+    /**
+     * Generate a setter method with its definitions
+     *
+     * @param string $name [Method name]
+     * @param string $type [Method type]
+     * @param string $capsule [Class name]
+     *
+     * @return object
+     */
     private function getSetter(string $name, string $type, string $capsule): object
     {
         $newName = str_replace(' ', '_', $name);
+
         $newName = str_replace('-', '_', $newName);
+
         $newName = str_replace('_', ' ', $newName);
+
         $newName = trim(str_replace(' ', '', ucwords($newName)));
 
         $setter = "\t/**\n\t * setter method for {$name}\n\t *\n\t * @return {$capsule}\n\t */\n";
+
         $setter .= "\tpublic function set{$newName}(?{$type} $" . $name . "): {$capsule}\n\t{\n";
+
         $setter .= "\t\t" . '$this->' . "{$name} = $" . $name . ";\n\n\t\treturn " . '$this' . ";\n\t}";
 
         return (object) ['name' => "set{$newName}", 'method' => $setter];
     }
 
+    /**
+     * Generate a custom method with its definitions
+     *
+     * @param string $name [Method name]
+     * @param string $type [Method type]
+     * @param string $params [Method parameters]
+     * @param string $content [Method content]
+     * @param string $visibility [Scope of the method]
+     * @param int|integer $lineBreak [Number of line breaks after the method]
+     *
+     * @return string
+     */
     public function getCustomMethod(
         string $name,
         string $type = 'object',
@@ -191,45 +359,74 @@ class ClassFactory
         int $lineBreak = 2
     ): string {
         $method = '';
+
         $allCount = 16;
+
         $allCountWithType = 18;
 
         $countContentFunction = strlen($visibility) + strlen($name) + strlen($params);
+
         $countContentFunction += '' === $type ? 0 : strlen($type);
+
         $countContentFunction += '' === $type ? $allCount : $allCountWithType;
 
         if ($countContentFunction > 120) {
             $splitParams = explode(',', $params);
+
             $implodeParams = '';
 
             foreach ($splitParams as $key => $param) {
                 $param = trim($param);
+
                 $implodeParams .= $key === (count($splitParams) - 1) ? "\n\t\t{$param}" : "\n\t\t{$param},";
             }
 
             $method .= "\t{$visibility} function {$name}({$implodeParams}\n\t)". ($type === '' ? '' : ": {$type}");
+
             $method .=  " {\n\t\t{$content}\n\t}";
+
             $method .= str_repeat("\n", $lineBreak);
         } else {
             $method .= "\t{$visibility} function {$name}({$params})" . ($type === '' ? '' : ": {$type}");
+
             $method .= "\n\t{\n\t\t{$content}\n\t}";
+
             $method .= str_repeat("\n", $lineBreak);
         }
 
         return $method;
     }
 
+    /**
+     * Format Pascal-Case to generate class names
+     *
+     * @param  string $className [Class name]
+     *
+     * @return string
+     */
     public function getClassFormat(string $className): string
     {
         $className = str_replace('_', ' ', $className);
+
         $className = str_replace('-', ' ', $className);
+
         $className = str_replace(':', ' ', $className);
+
         $className = str_replace('.', ' ', $className);
+
         $className = str_replace(',', ' ', $className);
 
         return trim(str_replace(' ', '', ucwords($className)));
     }
 
+    /**
+     * Gets the data type of a property with the data type of the entity
+     * property
+     *
+     * @param  string $type [Datatype]
+     *
+     * @return string
+     */
     public static function getDBType(string $type): string
     {
         if (preg_match("/^int|bigint/", $type)) {

@@ -11,8 +11,20 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Install the Vite.JS project dependencies
+ *
+ * @property Kernel $Kernel [kernel class object]
+ *
+ * @package Lion\Bundle\Commands\Lion\Npm
+ */
 class NpmInstallCommand extends MenuCommand
 {
+    /**
+     * [Kernel class object]
+     *
+     * @property Kernel $kernel
+     */
     private Kernel $kernel;
 
     /**
@@ -25,6 +37,11 @@ class NpmInstallCommand extends MenuCommand
         return $this;
     }
 
+    /**
+     * Configures the current command
+     *
+     * @return void
+     */
 	protected function configure(): void
 	{
 		$this
@@ -33,9 +50,29 @@ class NpmInstallCommand extends MenuCommand
             ->addArgument('packages', InputArgument::OPTIONAL, 'Package name', '');
 	}
 
+    /**
+     * Executes the current command
+     *
+     * This method is not abstract because you can use this class
+     * as a concrete class. In this case, instead of defining the
+     * execute() method, you set the code to execute by passing
+     * a Closure to the setCode() method
+     *
+     * @param InputInterface $input [InputInterface is the interface implemented
+     * by all input classes]
+     * @param OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     *
+     * @return int 0 if everything went fine, or an exit code
+     *
+     * @throws LogicException When this abstract method is not implemented
+     *
+     * @see setCode()
+     */
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
         $project = $this->selectedProject($input, $output);
+
         $packages = $input->getArgument('packages');
 
 		$this->kernel->execute(
@@ -45,6 +82,7 @@ class NpmInstallCommand extends MenuCommand
 
         if ('' != $packages) {
             $output->writeln($this->warningOutput("\n\t>>  VITE: {$project}"));
+
             $output->writeln($this->successOutput(
                 "\t>>  VITE: dependencies have been installed: {$this->arr->of(explode(' ', $packages))->join(', ')}"
             ));
