@@ -23,14 +23,10 @@ class RulesDBCommandTest extends Test
     const ENTITY = 'users';
     const IDRULE_NAMESPACE = 'App\\Rules\\LionDatabase\\MySQL\\Users\\IdRule';
     const NAMERULE_NAMESPACE = 'App\\Rules\\LionDatabase\\MySQL\\Users\\NameRule';
-    const LASTNAMERULE_NAMESPACE = 'App\\Rules\\LionDatabase\\MySQL\\Users\\LastNameRule';
+    // const LASTNAMERULE_NAMESPACE = 'App\\Rules\\LionDatabase\\MySQL\\Users\\LastNameRule';
+    const LASTNAMERULE_NAMESPACE_REQUIRED = 'App\\Rules\\LionDatabase\\MySQL\\Users\\LastNameRequiredRule';
+    const LASTNAMERULE_NAMESPACE_OPTIONAL = 'App\\Rules\\LionDatabase\\MySQL\\Users\\LastNameOptionalRule';
     const EMAILRULE_NAMESPACE = 'App\\Rules\\LionDatabase\\MySQL\\Users\\EmailRule';
-    const RULES = [
-        self::IDRULE_NAMESPACE => 'app/Rules/LionDatabase/MySQL/Users/IdRule.php',
-        self::NAMERULE_NAMESPACE => 'app/Rules/LionDatabase/MySQL/Users/NameRule.php',
-        self::LASTNAMERULE_NAMESPACE => 'app/Rules/LionDatabase/MySQL/Users/LastNameRule.php',
-        self::EMAILRULE_NAMESPACE => 'app/Rules/LionDatabase/MySQL/Users/EmailRule.php'
-    ];
 
     private CommandTester $commandTester;
 
@@ -55,6 +51,7 @@ class RulesDBCommandTest extends Test
     protected function tearDown(): void
     {
         $this->rmdirRecursively('./app/');
+
         Schema::dropTable(self::ENTITY)->execute();
     }
 
@@ -90,11 +87,18 @@ class RulesDBCommandTest extends Test
             'disabled' => false
         ]);
 
-        $this->assertColumn($display, self::LASTNAMERULE_NAMESPACE, [
+        $this->assertColumn($display, self::LASTNAMERULE_NAMESPACE_OPTIONAL, [
             'field' => 'last_name',
             'desc' => '',
             'value' => 'N/A',
             'disabled' => true
+        ]);
+
+        $this->assertColumn($display, self::LASTNAMERULE_NAMESPACE_REQUIRED, [
+            'field' => 'last_name',
+            'desc' => '',
+            'value' => 'N/A',
+            'disabled' => false
         ]);
 
         $this->assertColumn($display, self::EMAILRULE_NAMESPACE, [
