@@ -9,7 +9,9 @@ use Lion\Command\Command;
 use Lion\Database\Drivers\Schema\MySQL as Schema;
 use Lion\DependencyInjection\Container;
 use Lion\Files\Store;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -62,7 +64,8 @@ class FreshMigrationsCommand extends Command
     {
         $this
             ->setName('migrate:fresh')
-            ->setDescription('Drop all tables and re-run all migrations');
+            ->setDescription('Drop all tables and re-run all migrations')
+            ->addOption('seed', 's', InputOption::VALUE_OPTIONAL, 'Do you want to run the seeds?', 'none');
     }
 
     /**
@@ -122,9 +125,11 @@ class FreshMigrationsCommand extends Command
 
                 if (isError($response)) {
                     $output->writeln($this->warningOutput("\t>> MIGRATION: {$namespace}"));
+
                     $output->writeln($this->errorOutput("\t>> MIGRATION: {$response->message}"));
                 } else {
                     $output->writeln($this->warningOutput("\t>> MIGRATION: {$namespace}"));
+
                     $output->writeln($this->successOutput("\t>> MIGRATION: {$response->message}"));
                 }
             }
@@ -132,13 +137,24 @@ class FreshMigrationsCommand extends Command
 
         $output->writeln($this->infoOutput("\n\t>> Migrations executed successfully"));
 
+        $seed = $input->getOption('seed');
+
+        if ($seed != 'none') {
+            $output->writeln('');
+
+            $this
+                ->getApplication()
+                ->find('db:seed')
+                ->run(new ArrayInput([]), $output);
+        }
+
         return Command::SUCCESS;
     }
 
     /**
      * Clears all tables of all available connections
      *
-     * @param  OutputInterface $output [OutputInterface is the interface
+     * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
      * @return void
@@ -152,6 +168,7 @@ class FreshMigrationsCommand extends Command
 
             if (isError($response)) {
                 $output->writeln($this->warningOutput("\t>> DATABASE: {$connection->dbname}"));
+
                 $output->writeln($this->errorOutput("\t>> DATABASE: {$response->message}"));
             }
         }
@@ -160,7 +177,7 @@ class FreshMigrationsCommand extends Command
     /**
      * Sorts the list of elements by the value defined in the INDEX constant
      *
-     * @param  array $files [Class List]
+     * @param array $files [Class List]
      *
      * @return array<MigrationUpInterface>
      */
@@ -168,6 +185,7 @@ class FreshMigrationsCommand extends Command
     {
         uasort($files, function($classA, $classB) {
             $namespaceA = $classA::class;
+
             $namespaceB = $classB::class;
 
             if (!defined($namespaceA . "::INDEX")) {
