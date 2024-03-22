@@ -108,12 +108,112 @@ class CommandsCommand extends Command
             ->add("use Lion\Command\Command;\n")
             ->add("use Symfony\Component\Console\Input\InputInterface;\n")
             ->add("use Symfony\Component\Console\Output\OutputInterface;\n\n")
+            ->add(
+                <<<EOT
+                /**
+                 * {$class} description
+                 *
+                 * @package {$namespace}
+                 */\n
+                EOT
+            )
             ->add("class {$class} extends Command\n{\n")
-            ->add("\t" . 'protected function initialize(InputInterface $input, OutputInterface $output): void' . "\n\t" . '{' . "\n\n\t}\n\n")
-            ->add("\t" . 'protected function interact(InputInterface $input, OutputInterface $output): void' . "\n\t" . '{'. "\n\n\t}\n\n")
+            ->add(
+                <<<EOT
+                    /**
+                     * Initializes the command after the input has been bound and before the
+                     * input is validated
+                     *
+                     * This is mainly useful when a lot of commands extends one main command
+                     * where some things need to be initialized based on the input arguments and
+                     * options
+                     *
+                     * @param InputInterface
+                EOT . ' $input ' .
+                <<<EOT
+                [InputInterface is the interface implemented
+                     * by all input classes]
+                     * @param OutputInterface
+                EOT . ' $output ' .
+                <<<EOT
+                [OutputInterface is the interface
+                     * implemented by all Output classes]
+                     *
+                     * @see InputInterface::bind()
+                     * @see InputInterface::validate()
+                     *
+                     * @return void
+                     */\n
+                EOT
+            )
+            ->add("\t" . 'protected function initialize(InputInterface $input, OutputInterface $output): void' . "\n\t" . '{' . "\n\t}\n\n")
+            ->add(
+                <<<EOT
+                    /**
+                     * Interacts with the user
+                     *
+                     * This method is executed before the InputDefinition is validated
+                     *
+                     * This means that this is the only place where the command can
+                     * interactively ask for values of missing required arguments
+                     *
+                     * @param InputInterface
+                EOT . ' $input ' .
+                <<<EOT
+                [InputInterface is the interface implemented
+                     * by all input classes]
+                     * @param OutputInterface
+                EOT . ' $output ' .
+                <<<EOT
+                [OutputInterface is the interface
+                     * implemented by all Output classes]
+                     *
+                     * @return void
+                     */\n
+                EOT
+            )
+            ->add("\t" . 'protected function interact(InputInterface $input, OutputInterface $output): void' . "\n\t" . '{'. "\n\t}\n\n")
+            ->add(
+                <<<EOT
+                    /**
+                     * Configures the current command
+                     *
+                     * @return void
+                     */\n
+                EOT
+            )
             ->add("\t" . "protected function configure(): void\n\t{\n\t\t" . '$this->setName(' . "'example:command'" . ')->setDescription(' . "''" . ');' . "\n\t}\n\n")
+            ->add(
+                <<<EOT
+                    /**
+                     * Executes the current command.
+                     *
+                     * This method is not abstract because you can use this class
+                     * as a concrete class. In this case, instead of defining the
+                     * execute() method, you set the code to execute by passing
+                     * a Closure to the setCode() method.
+                     *
+                     * @param InputInterface
+                EOT . ' $input ' .
+                <<<EOT
+                [InputInterface is the interface implemented
+                     * by all input classes]
+                     * @param OutputInterface
+                EOT . ' $output ' .
+                <<<EOT
+                [OutputInterface is the interface
+                     * implemented by all Output classes]
+                     *
+                     * @return int 0 if everything went fine, or an exit code
+                     *
+                     * @throws LogicException When this abstract method is not implemented
+                     *
+                     * @see setCode()
+                     */\n
+                EOT
+            )
             ->add("\t" . 'protected function execute(InputInterface $input, OutputInterface $output): int' . "\n\t" . '{'. "\n")
-            ->add("\t\t" . '$output->writeln(' . "''" . ');' . "\n\n\t\t" . 'return Command::SUCCESS;' . "\n")
+            ->add("\t\t" . '$output->writeln(' . "'ExampleCommand'" . ');' . "\n\n\t\t" . 'return Command::SUCCESS;' . "\n")
             ->add("\t}\n}")
             ->close();
 
