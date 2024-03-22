@@ -14,10 +14,34 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 
+/**
+ * Command class for selecting different types of selection menu
+ *
+ * @property Arr $arr [Arr class object]
+ * @property Store $store [Store class object]
+ * @property Str $str [Str class object]
+ */
 class MenuCommand extends Command
 {
+    /**
+     * [Arr class object]
+     *
+     * @var Arr $arr
+     */
     protected Arr $arr;
+
+    /**
+     * [Store class object]
+     *
+     * @var Store $store
+     */
     protected Store $store;
+
+    /**
+     * [Str class object]
+     *
+     * @var Str $str
+     */
     protected Str $str;
 
     /**
@@ -50,6 +74,16 @@ class MenuCommand extends Command
         return $this;
     }
 
+    /**
+     * Selection menu to obtain a Vite.JS project
+     *
+     * @param InputInterface $input [InputInterface is the interface
+     * implemented by all input classes]
+     * @param OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     *
+     * @return string
+     */
     protected function selectedProject(InputInterface $input, OutputInterface $output): string
     {
         $projects = [];
@@ -84,13 +118,13 @@ class MenuCommand extends Command
     /**
      * Open a menu to select a template to create a project with vite
      *
-     * @param  InputInterface $input [InputInterface is the interface
+     * @param InputInterface $input [InputInterface is the interface
      * implemented by all input classes]
-     * @param  OutputInterface $output [OutputInterface is the interface
+     * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
-     * @param  array $templates [List of available templates]
-     * @param  string $defaultTemplate [Default template]
-     * @param  int $defaultIndex [Default index]
+     * @param array $templates [List of available templates]
+     * @param string $defaultTemplate [Default template]
+     * @param int $defaultIndex [Default index]
      *
      * @return string
      */
@@ -113,6 +147,17 @@ class MenuCommand extends Command
         return $helper->ask($input, $output, $choiceQuestion);
     }
 
+    /**
+     * Selection menu for different types of languages
+     *
+     * @param InputInterface $input [InputInterface is the interface
+     * implemented by all input classes]
+     * @param OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     * @param array $types [description]
+     *
+     * @return string
+     */
     protected function selectedTypes(InputInterface $input, OutputInterface $output, array $types): string
     {
         /** @var QuestionHelper $helper */
@@ -125,12 +170,23 @@ class MenuCommand extends Command
         );
     }
 
+    /**
+     * Selection menu to select a database
+     *
+     * @param InputInterface $input [InputInterface is the interface
+     * implemented by all input classes]
+     * @param OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     *
+     * @return string
+     */
     protected function selectConnection(InputInterface $input, OutputInterface $output): string
     {
         /** @var QuestionHelper $helper */
         $helper = $this->getHelper('question');
 
         $connections = DB::getConnections();
+
         $selectedConnection = null;
 
         if ($this->arr->of($connections['connections'])->length() > 1) {
@@ -145,6 +201,7 @@ class MenuCommand extends Command
             );
         } else {
             $output->writeln($this->warningOutput("default connection: ({$connections['default']})"));
+
             $selectedConnection = $connections['default'];
         }
 
@@ -153,6 +210,16 @@ class MenuCommand extends Command
         return $selectedConnection;
     }
 
+    /**
+     * Selection menu to select a database
+     *
+     * @param InputInterface $input [InputInterface is the interface
+     * implemented by all input classes]
+     * @param OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     *
+     * @return string
+     */
     protected function selectConnectionByEnviroment(InputInterface $input, OutputInterface $output): string
     {
         if (empty($_ENV['SELECTED_CONNECTION'])) {
@@ -162,7 +229,18 @@ class MenuCommand extends Command
         }
     }
 
-    protected function selectMigrationType(InputInterface $input, OutputInterface $output, $options): string
+    /**
+     * Selection menu to select a database
+     *
+     * @param InputInterface $input [InputInterface is the interface
+     * implemented by all input classes]
+     * @param OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     * @param array $options [List of available migration types]
+     *
+     * @return string
+     */
+    protected function selectMigrationType(InputInterface $input, OutputInterface $output, array $options): string
     {
         /** @var QuestionHelper $helper */
         $helper = $this->getHelper('question');

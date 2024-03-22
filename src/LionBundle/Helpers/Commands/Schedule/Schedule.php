@@ -7,6 +7,13 @@ namespace Lion\Bundle\Helpers\Commands\Schedule;
 /**
  * Create settings for scheduled tasks
  *
+ * @property string $cron [Define crontab configuration]
+ * @property string $command [Command defined for execution]
+ * @property array $options [Defines the command options and arguments for
+ * execution]
+ * @property string $logName [Defines the name of the log file to record the
+ * outputs]
+ *
  * @package Lion\Bundle\Helpers\Commands\Schedule
  */
 class Schedule
@@ -42,7 +49,7 @@ class Schedule
     /**
      * Define the configuration
      *
-     * @param  string $cron [Define the cron configuration for execution]
+     * @param string $cron [Define the cron configuration for execution]
      *
      * @return Schedule
      */
@@ -56,8 +63,8 @@ class Schedule
     /**
      * Define the command
      *
-     * @param  string $command [Command defined for execution]
-     * @param  array $options [Defines the command options and arguments for
+     * @param string $command [Command defined for execution]
+     * @param array $options [Defines the command options and arguments for
      * execution]
      *
      * @return Schedule
@@ -74,7 +81,7 @@ class Schedule
     /**
      * Defines the log record
      *
-     * @param  string $logName [Defines the name of the log file to record the
+     * @param string $logName [Defines the name of the log file to record the
      * outputs]
      *
      * @return Schedule
