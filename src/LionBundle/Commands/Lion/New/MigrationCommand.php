@@ -7,6 +7,7 @@ namespace Lion\Bundle\Commands\Lion\New;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\Migrations\MigrationFactory;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
+use Lion\Bundle\Helpers\Env;
 use Lion\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -134,6 +135,8 @@ class MigrationCommand extends MenuCommand
 
         $dbPascal = $this->str->of($selectedConnection)->replace('-', ' ')->replace('_', ' ')->pascal()->trim()->get();
 
+        $envName = Env::getKey($selectedConnection);
+
         if (self::TABLE === $selectedType) {
             $this->store->folder("database/Migrations/{$dbPascal}/Tables/");
 
@@ -143,7 +146,7 @@ class MigrationCommand extends MenuCommand
 
             $this->classFactory
                 ->create($this->classFactory->getClass(), 'php', $this->classFactory->getFolder())
-                ->add($this->str->of($body)->replace('--CONNECTION--', $selectedConnection)->get())
+                ->add($this->str->of($body)->replace('--CONNECTION--', $envName)->get())
                 ->close();
         }
 
@@ -156,7 +159,7 @@ class MigrationCommand extends MenuCommand
 
             $this->classFactory
                 ->create($this->classFactory->getClass(), 'php', $this->classFactory->getFolder())
-                ->add($this->str->of($body)->replace('--CONNECTION--', $selectedConnection)->get())
+                ->add($this->str->of($body)->replace('--CONNECTION--', $envName)->get())
                 ->close();
         }
 
@@ -169,7 +172,7 @@ class MigrationCommand extends MenuCommand
 
             $this->classFactory
                 ->create($this->classFactory->getClass(), 'php', $this->classFactory->getFolder())
-                ->add($this->str->of($body)->replace('--CONNECTION--', $selectedConnection)->get())
+                ->add($this->str->of($body)->replace('--CONNECTION--', $envName)->get())
                 ->close();
         }
 

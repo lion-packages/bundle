@@ -25,6 +25,18 @@ class Env
     }
 
     /**
+     * Gets the name of the property defined by its value
+     *
+     * @param  string $value [Property value]
+     *
+     * @return string|int|false
+     */
+    public static function getKey(string $value): string|int|false
+    {
+        return array_search($value, $_ENV);
+    }
+
+    /**
      * Gets and transforms the possible value of environment variables
      *
      * @param  string $key [Property name]
