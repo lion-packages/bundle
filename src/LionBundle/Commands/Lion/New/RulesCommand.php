@@ -108,7 +108,21 @@ class RulesCommand extends Command
             ->add("use Lion\Bundle\Helpers\Rules;\n")
             ->add("use Lion\Bundle\Interface\RulesInterface;\n")
             ->add("use Valitron\Validator;\n\n")
-            ->add("/**\n * [Rule defined for the '' property]\n *\n * @package {$namespace}\n */\n")
+            ->add(
+                <<<EOT
+                /**
+                 * Rule defined for the '' property
+                 *
+                 * @property string \$field [field for '']
+                 * @property string \$desc [description for '']
+                 * @property string \$value [value for '']
+                 * @property bool \$disabled [Defines whether the column is optional for postman
+                 * collections]
+                 *
+                 * @package {$namespace}
+                 */\n
+                EOT
+            )
             ->add("class {$class} extends Rules implements RulesInterface\n{\n")
             ->add("\t/**\n\t * [field for '']\n\t *\n\t * @var string $" . 'field' . "\n\t */\n")
             ->add("\t" . 'public string $field = ' . "''" . ';' . "\n\n")
@@ -127,7 +141,7 @@ class RulesCommand extends Command
             ->add("\tpublic function passes(): void\n\t{\n")
             ->add("\t\t" . '$this->validate(function(Validator $validator) {' . "\n")
             ->add("\t\t\t" . '$validator->rule(' . "'required'" . ', $this->field)->message(')
-            ->add("'property is required'" . ');' . "\n\t\t});\n")
+            ->add("'" . 'the "" property is required' . "'" . ');' . "\n\t\t});\n")
             ->add("\t}\n}")
             ->close();
 
