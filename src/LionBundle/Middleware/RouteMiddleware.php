@@ -41,10 +41,6 @@ class RouteMiddleware
             finish(response(Response::SESSION_ERROR, 'Secure hash not found [1]', Request::HTTP_UNAUTHORIZED));
         }
 
-        if (empty($_ENV['SERVER_HASH'])) {
-            finish(response(Response::SESSION_ERROR, 'Secure hash not found [2]', Request::HTTP_UNAUTHORIZED));
-        }
-
         if ($_ENV['SERVER_HASH'] != $this->headers['Lion-Auth']) {
             finish(
                 response(Response::SESSION_ERROR, 'You do not have access to this resource', Request::HTTP_UNAUTHORIZED)

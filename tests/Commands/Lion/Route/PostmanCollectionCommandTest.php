@@ -69,9 +69,9 @@ class PostmanCollectionCommandTest extends Test
 
         $this->assertFileExists($file);
 
-        $jsonCollection = $this->store->get(self::URL_PATH . Carbon::now()->format('Y_m_d') . '_lion_collection.json');
-        $jsonProvider = $this->store->get('./tests/Providers/PostmanProvider.json');
-
-        $this->assertSame($jsonProvider, $jsonCollection);
+        $this->assertJsonFileEqualsJsonFile(
+            './tests/Providers/PostmanProvider.json',
+            (self::URL_PATH . Carbon::now()->format('Y_m_d') . '_lion_collection.json')
+        );
     }
 }
