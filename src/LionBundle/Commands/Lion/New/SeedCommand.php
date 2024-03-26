@@ -7,7 +7,6 @@ namespace Lion\Bundle\Commands\Lion\New;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Files\Store;
-use Lion\Helpers\Str;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,7 +16,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @property ClassFactory $classFactory [ClassFactory class object]
  * @property Store $store [Store class object]
- * @property Str $str [Str class object]
  *
  * @package Lion\Bundle\Commands\Lion\New
  */
@@ -38,13 +36,6 @@ class SeedCommand extends Command
     private Store $store;
 
     /**
-     * [Str class object]
-     *
-     * @var Str $str
-     */
-    private Str $str;
-
-    /**
      * @required
      * */
     public function setClassFactory(ClassFactory $classFactory): SeedCommand
@@ -60,16 +51,6 @@ class SeedCommand extends Command
     public function setStore(Store $store): SeedCommand
     {
         $this->store = $store;
-
-        return $this;
-    }
-
-    /**
-     * @required
-     * */
-    public function setStr(Str $str): SeedCommand
-    {
-        $this->str = $str;
 
         return $this;
     }
@@ -119,15 +100,43 @@ class SeedCommand extends Command
         $this->store->folder($folder);
 
         $this->classFactory
-            ->create($class, 'php', $folder)
-            ->add($this->str->of("<?php")->ln()->ln()->concat('declare(strict_types=1);')->ln()->ln()->get())
-            ->add($this->str->of("namespace ")->concat($namespace)->concat(";")->ln()->ln()->get())
-            ->add($this->str->of("use Lion\Bundle\Interface\SeedInterface;")->ln()->get())
-            ->add($this->str->of("use Lion\Database\Drivers\MySQL as DB;")->ln()->ln()->get())
-            ->add($this->str->of("class ")->concat($class)->concat(' implements SeedInterface')->ln()->concat("{")->ln()->get())
-            ->add($this->str->lt()->concat('const INDEX = null;')->ln()->ln()->get())
-            ->add("\t/**\n\t * {@inheritdoc}\n\t **/\n")
-            ->add("\tpublic function run(): object\n\t{\n\t\treturn success('run seed');\n\t}\n}\n")
+            ->create($class, ClassFactory::PHP_EXTENSION, $folder)
+            ->add(
+                <<<EOT
+                <?php
+
+                declare(strict_types=1);
+
+                namespace {$namespace};
+
+                use Lion\Bundle\Interface\SeedInterface;
+                use Lion\Database\Drivers\MySQL as DB;
+
+                /**
+                 * Description of '{$class}' Seed
+                 *
+                 * @package {$namespace}
+                 */
+                class {$class} implements SeedInterface
+                {
+                    /**
+                     * [Index number for seed execution priority]
+                     *
+                     * @const INDEX
+                     */
+                    const INDEX = null;
+
+                    /**
+                     * {@inheritdoc}
+                     */
+                    public function run(): object
+                    {
+                        return success('run seed');
+                    }
+                }
+
+                EOT
+            )
             ->close();
 
         $output->writeln($this->warningOutput("\t>>  SEED: {$class}"));

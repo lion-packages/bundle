@@ -102,10 +102,26 @@ class MiddlewareCommand extends Command
         $this->store->folder($folder);
 
 		$this->classFactory
-            ->create($class, 'php', $folder)
-            ->add("<?php\n\ndeclare(strict_types=1);\n\n")
-            ->add("namespace {$namespace};\n\n")
-            ->add("class {$class}\n{\n}\n")
+            ->create($class, ClassFactory::PHP_EXTENSION, $folder)
+            ->add(
+                <<<EOT
+                <?php
+
+                declare(strict_types=1);
+
+                namespace {$namespace};
+
+                /**
+                 * Description of Middleware '{$class}'
+                 *
+                 * @package {$namespace}
+                 */
+                class {$class}
+                {
+                }
+
+                EOT
+            )
             ->close();
 
         $output->writeln($this->warningOutput("\t>>  MIDDLEWARE: {$class}"));

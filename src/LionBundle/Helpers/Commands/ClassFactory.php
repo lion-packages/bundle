@@ -33,6 +33,13 @@ class ClassFactory
     const LOG_EXTENSION = 'log';
 
     /**
+     * [.sh file extension]
+     *
+     * @const SH_EXTENSION
+     */
+    const SH_EXTENSION = 'sh';
+
+    /**
      * [Scope of public method or property]
      *
      * @const PUBLIC_PROPERTY

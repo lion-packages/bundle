@@ -102,14 +102,19 @@ class RulesCommand extends Command
         $this->store->folder($folder);
 
         $this->classFactory
-            ->create($class, 'php', $folder)
-            ->add("<?php\n\ndeclare(strict_types=1);\n\n")
-            ->add("namespace {$namespace};\n\n")
-            ->add("use Lion\Bundle\Helpers\Rules;\n")
-            ->add("use Lion\Bundle\Interface\RulesInterface;\n")
-            ->add("use Valitron\Validator;\n\n")
+            ->create($class, ClassFactory::PHP_EXTENSION, $folder)
             ->add(
                 <<<EOT
+                <?php
+
+                declare(strict_types=1);
+
+                namespace {$namespace};
+
+                use Lion\Bundle\Helpers\Rules;
+                use Lion\Bundle\Interface\RulesInterface;
+                use Valitron\Validator;
+
                 /**
                  * Rule defined for the '' property
                  *
@@ -120,29 +125,52 @@ class RulesCommand extends Command
                  * collections]
                  *
                  * @package {$namespace}
-                 */\n
+                 */
+                class {$class} extends Rules implements RulesInterface
+                {
+                    /**
+                     * [field for '']
+                     *
+                     * @var string \$field
+                     */
+                    public string \$field = '';
+
+                    /**
+                     * [description for '']
+                     *
+                     * @var string \$desc
+                     */
+                    public string \$desc = '';
+
+                    /**
+                     * [value for '']
+                     *
+                     * @var string \$value;
+                     */
+                    public string \$value = '';
+
+                    /**
+                     * [Defines whether the column is optional for postman collections]
+                     *
+                     * @var bool \$disabled;
+                     */
+                    public bool \$disabled = false;
+
+                    /**
+                     * {@inheritdoc}
+                     */
+                    public function passes(): void
+                    {
+                        \$this->validate(function(Validator \$validator) {
+                            \$validator
+                                ->rule('required', \$this->field)
+                                ->message('the "" property is required');
+                        });
+                    }
+                }
+
                 EOT
             )
-            ->add("class {$class} extends Rules implements RulesInterface\n{\n")
-            ->add("\t/**\n\t * [field for '']\n\t *\n\t * @var string $" . 'field' . "\n\t */\n")
-            ->add("\t" . 'public string $field = ' . "''" . ';' . "\n\n")
-            ->add("\t/**\n\t * [description for '']\n\t *\n\t * @var string $" . 'desc' . "\n\t */\n")
-            ->add("\t" . 'public string $desc = ' . "''" . ';' . "\n\n")
-            ->add("\t/**\n\t * [value for '']\n\t *\n\t * @var string $" . 'value' . "\n\t */\n")
-            ->add("\t" . 'public string $value = ' . "''" . ';' . "\n\n")
-            ->add(
-                (
-                    "\t/**\n\t * [Defines whether the column is optional for postman collections]\n\t *\n" .
-                    "\t * @var string $" . 'value' . "\n\t */\n"
-                )
-            )
-            ->add("\t" . 'public bool $disabled = false;' . "\n\n")
-            ->add("\t/**\n\t * {@inheritdoc}\n\t * */\n")
-            ->add("\tpublic function passes(): void\n\t{\n")
-            ->add("\t\t" . '$this->validate(function(Validator $validator) {' . "\n")
-            ->add("\t\t\t" . '$validator->rule(' . "'required'" . ', $this->field)->message(')
-            ->add("'" . 'the "" property is required' . "'" . ');' . "\n\t\t});\n")
-            ->add("\t}\n}")
             ->close();
 
         $output->writeln($this->warningOutput("\t>>  RULE: {$class}"));

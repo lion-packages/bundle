@@ -237,7 +237,12 @@ class RulesDBCommand extends MenuCommand
                 'content' => ($type === 'Required' ? 'false' : ($type === 'Optional' ? 'true' : 'false')),
                 'search' => 'false'
             ],
-            58 => [
+            59 => [
+                'replace' => true,
+                'content' => ($type === 'Required' ? 'required' : ($type === 'Optional' ? 'optional' : 'required')),
+                'search' => 'required'
+            ],
+            60 => [
                 'replace' => true,
                 'multiple' => [
                     [

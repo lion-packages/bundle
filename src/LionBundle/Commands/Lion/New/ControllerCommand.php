@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lion\Bundle\Commands\Lion\New;
 
 use Lion\Bundle\Helpers\Commands\ClassCommandFactory;
+use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Files\Store;
 use Lion\Helpers\Str;
@@ -148,7 +149,7 @@ class ControllerCommand extends Command
                 $store->folder($dataController->folder);
 
                 $factoryController
-                    ->create($dataController->class, 'php', $dataController->folder)
+                    ->create($dataController->class, ClassFactory::PHP_EXTENSION, $dataController->folder)
                     ->add("<?php\n\ndeclare(strict_types=1);\n\n")
                     ->add("namespace {$dataController->namespace};\n\n");
 
@@ -156,7 +157,18 @@ class ControllerCommand extends Command
                     $factoryController->add("use {$dataModel->namespace}\\{$dataModel->class};\n\n");
                 }
 
-                $factoryController->add("class {$dataController->class}\n{\n");
+                $factoryController
+                ->add(
+                    <<<EOT
+                    /**
+                     * Description of Controller '{$dataController->class}'
+                     *
+                     * @package {$dataController->namespace}
+                     */
+                    class {$dataController->class}
+                    {\n
+                    EOT
+                );
 
                 foreach (self::METHODS as $method) {
                     $customMethod = '';

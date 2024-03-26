@@ -7,7 +7,6 @@ namespace Lion\Bundle\Commands\Lion\New;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Files\Store;
-use Lion\Helpers\Str;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,7 +16,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @property ClassFactory $classFactory [ClassFactory class object]
  * @property Store $store [Store class object]
- * @property Str $str [Str class object]
  *
  * @package Lion\Bundle\Commands\Lion\New
  */
@@ -38,13 +36,6 @@ class InterfaceCommand extends Command
     private Store $store;
 
     /**
-     * [Str class object]
-     *
-     * @var Str $str
-     */
-    private Str $str;
-
-    /**
      * @required
      */
     public function setClassFactory(ClassFactory $classFactory): InterfaceCommand
@@ -60,16 +51,6 @@ class InterfaceCommand extends Command
     public function setStore(Store $store): InterfaceCommand
     {
         $this->store = $store;
-
-        return $this;
-    }
-
-    /**
-     * @required
-     * */
-    public function setStr(Str $str): InterfaceCommand
-    {
-        $this->str = $str;
 
         return $this;
     }
@@ -121,17 +102,25 @@ class InterfaceCommand extends Command
         $this->store->folder($folder);
 
         $this->classFactory
-            ->create($class, 'php', $folder)
+            ->create($class, ClassFactory::PHP_EXTENSION, $folder)
             ->add(
-                $this->str->of("<?php")->ln()->ln()
-                    ->concat('declare(strict_types=1);')->ln()->ln()
-                    ->concat('namespace')->spaces(1)
-                    ->concat("{$namespace};")->ln()->ln()
-                    ->concat('interface')->spaces(1)
-                    ->concat($class)->ln()
-                    ->concat('{')->ln()->ln()
-                    ->concat("}")->ln()
-                    ->get()
+                <<<EOT
+                <?php
+
+                declare(strict_types=1);
+
+                namespace {$namespace};
+
+                /**
+                 * Description of the '{$class}' interface
+                 *
+                 * @package {$namespace}
+                 */
+                interface {$class}
+                {
+                }
+
+                EOT
             )
             ->close();
 

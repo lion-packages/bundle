@@ -145,7 +145,7 @@ class MigrationCommand extends MenuCommand
             $body = $this->migrationFactory->getTableBody();
 
             $this->classFactory
-                ->create($this->classFactory->getClass(), 'php', $this->classFactory->getFolder())
+                ->create($this->classFactory->getClass(), ClassFactory::PHP_EXTENSION, $this->classFactory->getFolder())
                 ->add($this->str->of($body)->replace('--CONNECTION--', $envName)->get())
                 ->close();
         }
@@ -158,7 +158,7 @@ class MigrationCommand extends MenuCommand
             $body = $this->migrationFactory->getViewBody();
 
             $this->classFactory
-                ->create($this->classFactory->getClass(), 'php', $this->classFactory->getFolder())
+                ->create($this->classFactory->getClass(), ClassFactory::PHP_EXTENSION, $this->classFactory->getFolder())
                 ->add($this->str->of($body)->replace('--CONNECTION--', $envName)->get())
                 ->close();
         }
@@ -171,7 +171,7 @@ class MigrationCommand extends MenuCommand
             $body = $this->migrationFactory->getStoreProcedureBody();
 
             $this->classFactory
-                ->create($this->classFactory->getClass(), 'php', $this->classFactory->getFolder())
+                ->create($this->classFactory->getClass(), ClassFactory::PHP_EXTENSION, $this->classFactory->getFolder())
                 ->add($this->str->of($body)->replace('--CONNECTION--', $envName)->get())
                 ->close();
         }
