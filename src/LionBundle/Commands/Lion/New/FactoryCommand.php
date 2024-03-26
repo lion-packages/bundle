@@ -126,7 +126,18 @@ class FactoryCommand extends Command
             ->add($this->str->of("namespace ")->concat($namespace)->concat(";")->ln()->ln()->get())
             ->add($this->str->of('use Lion\Bundle\Interface\FactoryInterface;')->ln()->ln()->get())
             ->add(
-                $this->str->of("class ")->concat($class)->concat(' implements FactoryInterface')->concat("\n{")->ln()->get()
+                $this->str
+                    ->of(
+                        <<<EOT
+                        /**
+                         * Description of the factory 'SleonFactory'
+                         *
+                         * @package {$namespace}
+                         */\n
+                        EOT
+                    )
+                    ->concat("class ")->concat($class)->concat(' implements FactoryInterface')->concat("\n{")->ln()
+                    ->get()
             )
             ->add("\t/**\n")
             ->add("\t * {@inheritdoc}\n")
