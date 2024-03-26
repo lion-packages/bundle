@@ -130,7 +130,7 @@ class FactoryCommand extends Command
                     ->of(
                         <<<EOT
                         /**
-                         * Description of the factory 'SleonFactory'
+                         * Description of the factory '{$class}'
                          *
                          * @package {$namespace}
                          */\n
@@ -139,6 +139,10 @@ class FactoryCommand extends Command
                     ->concat("class ")->concat($class)->concat(' implements FactoryInterface')->concat("\n{")->ln()
                     ->get()
             )
+            ->add("\t/**\n")
+            ->add("\t * {@inheritdoc}\n")
+            ->add("\t **/\n")
+            ->add("\tpublic static function columns(): array\n\t{\n\t\treturn [];\n\t}\n\n")
             ->add("\t/**\n")
             ->add("\t * {@inheritdoc}\n")
             ->add("\t **/\n")
