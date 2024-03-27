@@ -7,7 +7,6 @@ namespace Lion\Bundle\Commands\Lion\New;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Files\Store;
-use Lion\Helpers\Str;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,7 +16,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @property ClassFactory $classFactory [ClassFactory class object]
  * @property Store $store [Store class object]
- * @property Str $str [Str class object]
  *
  * @package Lion\Bundle\Commands\Lion\New
  */
@@ -37,13 +35,6 @@ class EnumCommand extends Command
      */
     private Store $store;
 
-    /**
-     * [Str class object]
-     *
-     * @var Str $str
-     */
-    private Str $str;
-
 	/**
      * @required
      * */
@@ -60,16 +51,6 @@ class EnumCommand extends Command
     public function setStore(Store $store): EnumCommand
     {
         $this->store = $store;
-
-        return $this;
-    }
-
-    /**
-     * @required
-     * */
-    public function setStr(Str $str): EnumCommand
-    {
-        $this->str = $str;
 
         return $this;
     }
@@ -121,20 +102,41 @@ class EnumCommand extends Command
         $this->store->folder($folder);
 
         $this->classFactory
-            ->create($class, 'php', $folder)
+            ->create($class, ClassFactory::PHP_EXTENSION, $folder)
             ->add(
-                $this->str->of("<?php")->ln()->ln()
-                    ->concat('declare(strict_types=1);')->ln()->ln()
-                    ->concat("namespace")->spaces(1)->concat($namespace)->concat(";")->ln()->ln()
-                    ->concat("enum")->spaces(1)->concat($class)->concat(": string")->ln()
-                    ->concat('{')->ln()
-                    ->lt()->concat("case EXAMPLE = 'example';")->ln()->ln()
-                    ->lt()->concat("public static function values(): array")->ln()
-                    ->lt()->concat('{')->ln()
-                    ->lt()->lt()->concat('return array_map(fn($value) => $value->value, self::cases());')->ln()
-                    ->lt()->concat("}")->ln()
-                    ->concat("}")
-                    ->get()
+                <<<EOT
+                <?php
+
+                declare(strict_types=1);
+
+                namespace {$namespace};
+
+                /**
+                 * Description of Enum '{$class}'
+                 *
+                 * @package {$namespace}
+                 */
+                enum {$class}: string
+                {
+                    /**
+                     * [Description of the case EXAMPLE]
+                     *
+                     * @const EXAMPLE
+                     */
+                    case EXAMPLE = 'example';
+
+                    /**
+                     * Returns an array of the values defined in the cases
+                     *
+                     * @return array<string>
+                     */
+                    public static function values(): array
+                    {
+                        return array_map(fn(\$value) => \$value->value, self::cases());
+                    }
+                }
+
+                EOT
             )
             ->close();
 

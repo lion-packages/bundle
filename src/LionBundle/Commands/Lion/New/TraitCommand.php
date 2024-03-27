@@ -121,17 +121,23 @@ class TraitCommand extends Command
         $this->store->folder($folder);
 
         $this->classFactory
-            ->create($class, 'php', $folder)
+            ->create($class, ClassFactory::PHP_EXTENSION, $folder)
             ->add(
-                $this->str->of('<?php')->ln()->ln()
-                    ->concat('declare(strict_types=1);')->ln()->ln()
-                    ->concat('namespace')->spaces(1)
-                    ->concat("{$namespace};")->ln()->ln()
-                    ->concat('trait')->spaces(1)
-                    ->concat($class)->ln()
-                    ->concat('{')->ln()->ln()
-                    ->concat('}')->ln()
-                    ->get()
+                <<<EOT
+                <?php
+
+                declare(strict_types=1);
+
+                namespace {$namespace};
+
+                /**
+                 * Trait Description 'ExampleTrait'
+                 */
+                trait {$class}
+                {
+                }
+
+                EOT
             )
             ->close();
 

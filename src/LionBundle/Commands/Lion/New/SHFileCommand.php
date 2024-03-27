@@ -93,7 +93,7 @@ class SHFileCommand extends Command
 
         $this->store->folder('storage/sh/');
 
-        $this->classFactory->create($sh, 'sh', 'storage/sh/')->add("#!/bin/bash\n")->close();
+        $this->classFactory->create($sh, ClassFactory::SH_EXTENSION, 'storage/sh/')->add("#!/bin/bash\n")->close();
 
         chmod("storage/sh/{$sh}.sh", 0755);
 

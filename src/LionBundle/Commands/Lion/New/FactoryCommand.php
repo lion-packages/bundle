@@ -6,7 +6,6 @@ namespace Lion\Bundle\Commands\Lion\New;
 
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
-use Lion\Helpers\Str;
 use Lion\Files\Store;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,7 +16,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @property ClassFactory $classFactory [ClassFactory class object]
  * @property Store $store [Store class object]
- * @property Str $str [Str class object]
  *
  * @package Lion\Bundle\Commands\Lion\New
  */
@@ -38,13 +36,6 @@ class FactoryCommand extends Command
     private Store $store;
 
     /**
-     * [Str class object]
-     *
-     * @var Str $str
-     */
-    private Str $str;
-
-    /**
      * @required
      * */
     public function setClassFactory(ClassFactory $classFactory): FactoryCommand
@@ -60,16 +51,6 @@ class FactoryCommand extends Command
     public function setStore(Store $store): FactoryCommand
     {
         $this->store = $store;
-
-        return $this;
-    }
-
-    /**
-     * @required
-     * */
-    public function setStr(Str $str): FactoryCommand
-    {
-        $this->str = $str;
 
         return $this;
     }
@@ -122,17 +103,46 @@ class FactoryCommand extends Command
 
         $this->classFactory
             ->create($class, 'php', $folder)
-            ->add($this->str->of("<?php")->ln()->ln()->concat('declare(strict_types=1);')->ln()->ln()->get())
-            ->add($this->str->of("namespace ")->concat($namespace)->concat(";")->ln()->ln()->get())
-            ->add($this->str->of('use Lion\Bundle\Interface\FactoryInterface;')->ln()->ln()->get())
             ->add(
-                $this->str->of("class ")->concat($class)->concat(' implements FactoryInterface')->concat("\n{")->ln()->get()
+                <<<EOT
+                <?php
+
+                declare(strict_types=1);
+
+                namespace {$namespace};
+
+                use Lion\Bundle\Interface\FactoryInterface;
+
+                /**
+                 * Description of the factory '{$class}'
+                 *
+                 * @package {$namespace}
+                 */
+                class {$class} implements FactoryInterface
+                {
+                    /**
+                     * {@inheritdoc}
+                     */
+                    public static function columns(): array
+                    {
+                        return [
+                            // ...
+                        ];
+                    }
+
+                    /**
+                     * {@inheritdoc}
+                     */
+                    public static function definition(): array
+                    {
+                        return [
+                            fake()->name()
+                        ];
+                    }
+                }
+
+                EOT
             )
-            ->add("\t/**\n")
-            ->add("\t * {@inheritdoc}\n")
-            ->add("\t **/\n")
-            ->add("\tpublic static function definition(): array\n\t{\n\t\treturn [fake()->name()];\n\t}\n")
-            ->add("}\n")
             ->close();
 
         $output->writeln($this->warningOutput("\t>>  FACTORY: {$class}"));

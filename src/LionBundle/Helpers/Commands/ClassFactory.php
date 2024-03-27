@@ -33,6 +33,13 @@ class ClassFactory
     const LOG_EXTENSION = 'log';
 
     /**
+     * [.sh file extension]
+     *
+     * @const SH_EXTENSION
+     */
+    const SH_EXTENSION = 'sh';
+
+    /**
      * [Scope of public method or property]
      *
      * @const PUBLIC_PROPERTY
@@ -231,7 +238,7 @@ class ClassFactory
             'setter' => $this->getSetter($snake, $type, $className),
             'variable' => (object) [
                 'annotations' => (object) [
-                    'class' => "@property {$type} $" . "{$snake} [property for {$propertyName}]"
+                    'class' => "@property {$type} $" . "{$snake} [Property for {$propertyName}]"
                 ],
                 'reference' => '$this->' . "{$camel};",
                 'name' => (object) [
@@ -241,7 +248,7 @@ class ClassFactory
                 'type' => (object) [
                     'camel' => ($finalVisibility . "?{$type} $" . "{$camel} = null;"),
                     'snake' => (
-                        "/**\n\t * property for {$propertyName}\n\t *\n\t * @var {$type}|null $" . "{$snake}\n\t */\n" .
+                        "/**\n\t * [Property for {$propertyName}]\n\t *\n\t * @var {$type}|null $" . "{$snake}\n\t */\n" .
                         "\t{$finalVisibility}?{$type} $" . "{$snake} = null;\n"
                     )
                 ],
@@ -301,11 +308,17 @@ class ClassFactory
 
         $newName = trim(str_replace(' ', '', ucwords($newName)));
 
-        $getter = "\t/**\n\t * getter method for {$name}\n\t *\n\t * @return {$type}|null\n\t */\n";
-
-        $getter .= "\tpublic function get{$newName}(): ?{$type}\n\t{\n\t\treturn " . '$this->' . $name;
-
-        $getter .= ";\n\t}";
+        $getter = <<<EOT
+            /**
+             * Getter method for '{$name}'
+             *
+             * @return {$type}|null
+             */
+            public function get{$newName}(): ?{$type}
+            {
+                return \$this->{$name};
+            }
+        EOT;
 
         return (object) ['name' => "get{$newName}", 'method' => $getter];
     }
@@ -329,11 +342,21 @@ class ClassFactory
 
         $newName = trim(str_replace(' ', '', ucwords($newName)));
 
-        $setter = "\t/**\n\t * setter method for {$name}\n\t *\n\t * @return {$capsule}\n\t */\n";
+        $setter = <<<EOT
+            /**
+             * Setter method for '{$name}'
+             *
+             * @param {$type}|null \${$name}
+             *
+             * @return {$capsule}
+             */
+            public function set{$newName}(?{$type} \${$name} = null): {$capsule}
+            {
+                \$this->{$name} = \${$name};
 
-        $setter .= "\tpublic function set{$newName}(?{$type} $" . $name . "): {$capsule}\n\t{\n";
-
-        $setter .= "\t\t" . '$this->' . "{$name} = $" . $name . ";\n\n\t\treturn " . '$this' . ";\n\t}";
+                return \$this;
+            }
+        EOT;
 
         return (object) ['name' => "set{$newName}", 'method' => $setter];
     }
@@ -352,7 +375,7 @@ class ClassFactory
      */
     public function getCustomMethod(
         string $name,
-        string $type = 'object',
+        string $type = '',
         string $params = '',
         string $content = 'return;',
         string $visibility = 'public',
@@ -370,6 +393,34 @@ class ClassFactory
 
         $countContentFunction += '' === $type ? $allCount : $allCountWithType;
 
+        $methodType = $type === '' ? '' : ": {$type}";
+
+        $splitMethodType = explode(':', $methodType);
+
+        $methodTypeAnnotation = trim(array_pop($splitMethodType));
+
+        $paramsAnnotation = '';
+
+        $paramsSize = $params === '' ? 0 : count(explode(',', $params));
+
+        if ($paramsSize > 1) {
+            foreach (explode(',', $params) as $key => $param) {
+                $split = explode('=', $param);
+
+                $param = isset($split[1]) ? trim($split[0]) : trim($param);
+
+                $paramsAnnotation .= $key === ($paramsSize - 1)
+                    ? "\t * @param {$param} [Parameter Description]"
+                    : "* @param {$param} [Parameter Description]\n";
+            }
+        } elseif ($paramsSize === 1) {
+            $split = explode('=', $params);
+
+            $params = isset($split[1]) ? trim($split[0]) : trim($params);
+
+            $paramsAnnotation .= "* @param {$params} [Parameter Description]";
+        }
+
         if ($countContentFunction > 120) {
             $splitParams = explode(',', $params);
 
@@ -381,13 +432,29 @@ class ClassFactory
                 $implodeParams .= $key === (count($splitParams) - 1) ? "\n\t\t{$param}" : "\n\t\t{$param},";
             }
 
-            $method .= "\t{$visibility} function {$name}({$implodeParams}\n\t)". ($type === '' ? '' : ": {$type}");
+            $method .= "\t/**\n\t * Description of '{$name}'\n";
+
+            $method .= "\t *\n";
+
+            $method .= $paramsAnnotation != '' ? "\t {$paramsAnnotation}\n\t *\n" : '';
+
+            $method .= "\t * @return {$methodTypeAnnotation}\n\t */\n";
+
+            $method .= "\t{$visibility} function {$name}({$implodeParams}\n\t){$methodType}";
 
             $method .=  " {\n\t\t{$content}\n\t}";
 
             $method .= str_repeat("\n", $lineBreak);
         } else {
-            $method .= "\t{$visibility} function {$name}({$params})" . ($type === '' ? '' : ": {$type}");
+            $method .= "\t/**\n\t * Description of '{$name}'\n";
+
+            $method .= "\t *\n";
+
+            $method .= $paramsAnnotation != '' ? "\t {$paramsAnnotation}\n\t *\n" : '';
+
+            $method .= "\t * @return {$methodTypeAnnotation}\n\t */\n";
+
+            $method .= "\t{$visibility} function {$name}({$params}){$methodType}";
 
             $method .= "\n\t{\n\t\t{$content}\n\t}";
 

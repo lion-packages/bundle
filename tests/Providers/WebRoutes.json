@@ -1,0 +1,72 @@
+{
+    "/": {
+        "GET": {
+            "filters": [],
+            "handler": {
+                "controller": false,
+                "callback": true,
+                "request": false
+            }
+        }
+    },
+    "logger": {
+        "GET": {
+            "filters": [],
+            "handler": {
+                "controller": false,
+                "callback": true,
+                "request": false
+            }
+        }
+    },
+    "api/test": {
+        "POST": {
+            "filters": [],
+            "handler": {
+                "controller": false,
+                "callback": true,
+                "request": false
+            }
+        },
+        "GET": {
+            "filters": [],
+            "handler": {
+                "controller": false,
+                "callback": true,
+                "request": false
+            }
+        }
+    },
+    "api/test/{id:i}": {
+        "PUT": {
+            "filters": [],
+            "handler": {
+                "controller": false,
+                "callback": true,
+                "request": false
+            }
+        },
+        "DELETE": {
+            "filters": [
+                "protect-route-list"
+            ],
+            "handler": {
+                "controller": false,
+                "callback": true,
+                "request": false
+            }
+        }
+    },
+    "route-list": {
+        "GET": {
+            "filters": [
+                "protect-route-list"
+            ],
+            "handler": {
+                "controller": false,
+                "callback": true,
+                "request": false
+            }
+        }
+    }
+}

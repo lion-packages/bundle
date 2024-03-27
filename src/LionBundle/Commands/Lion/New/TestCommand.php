@@ -7,7 +7,6 @@ namespace Lion\Bundle\Commands\Lion\New;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Files\Store;
-use Lion\Helpers\Str;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,7 +16,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @property ClassFactory $classFactory [ClassFactory class object]
  * @property Store $store [Store class object]
- * @property Str $str [Str class object]
  *
  * @package Lion\Bundle\Commands\Lion\New
  */
@@ -37,13 +35,6 @@ class TestCommand extends Command
      */
     private Store $store;
 
-    /**
-     * [Str class object]
-     *
-     * @var Str $str
-     */
-    private Str $str;
-
 	/**
      * @required
      * */
@@ -60,16 +51,6 @@ class TestCommand extends Command
     public function setStore(Store $store): TestCommand
     {
         $this->store = $store;
-
-        return $this;
-    }
-
-    /**
-     * @required
-     * */
-    public function setStr(Str $str): TestCommand
-    {
-        $this->str = $str;
 
         return $this;
     }
@@ -121,23 +102,29 @@ class TestCommand extends Command
 		$this->store->folder($folder);
 
 		$this->classFactory
-            ->create($class, 'php', $folder)
-            ->add("<?php\n\ndeclare(strict_types=1);\n\n")
-            ->add("namespace {$namespace};\n\n")
-            ->add("use Lion\Test\Test;\n\n")
+            ->create($class, ClassFactory::PHP_EXTENSION, $folder)
             ->add(
-                $this->str->of("class ")
-                    ->concat($class)
-                    ->concat(' extends Test')->ln()
-                    ->concat('{')->ln()
-                    ->lt()->concat("protected function setUp(): void ")->ln()
-                    ->lt()->concat('{')->ln()->ln()
-                    ->lt()->concat("}")->ln()->ln()
-                    ->lt()->concat("protected function tearDown(): void ")->ln()
-                    ->lt()->concat('{')->ln()->ln()
-                    ->lt()->concat("}")->ln()
-                    ->concat("}")->ln()
-                    ->get()
+                <<<EOT
+                <?php
+
+                declare(strict_types=1);
+
+                namespace {$namespace};
+
+                use Lion\Test\Test;
+
+                class ExampleTest extends Test
+                {
+                    protected function setUp(): void
+                    {
+                    }
+
+                    protected function tearDown(): void
+                    {
+                    }
+                }
+
+                EOT
             )
             ->close();
 

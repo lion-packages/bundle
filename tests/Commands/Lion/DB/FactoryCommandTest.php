@@ -19,7 +19,7 @@ class FactoryCommandTest extends Test
     const OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
     const FILE_NAME = self::CLASS_NAME . '.php';
     const OUTPUT_MESSAGE = 'factory has been generated';
-    const METHOD = ['definition'];
+    const METHOD = ['columns', 'definition'];
 
     private CommandTester $commandTester;
 

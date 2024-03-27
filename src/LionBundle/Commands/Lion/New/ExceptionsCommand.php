@@ -7,7 +7,6 @@ namespace Lion\Bundle\Commands\Lion\New;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Files\Store;
-use Lion\Helpers\Str;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,7 +16,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @property ClassFactory $classFactory [ClassFactory class object]
  * @property Store $store [Store class object]
- * @property Str $str [Str class object]
  *
  * @package Lion\Bundle\Commands\Lion\New
  */
@@ -38,13 +36,6 @@ class ExceptionsCommand extends Command
     private Store $store;
 
     /**
-     * [Str class object]
-     *
-     * @var Str $str
-     */
-    private Str $str;
-
-    /**
      * @required
      */
     public function setClassFactory(ClassFactory $classFactory): ExceptionsCommand
@@ -60,16 +51,6 @@ class ExceptionsCommand extends Command
     public function setStore(Store $store): ExceptionsCommand
     {
         $this->store = $store;
-
-        return $this;
-    }
-
-    /**
-     * @required
-     */
-    public function setStr(Str $str): ExceptionsCommand
-    {
-        $this->str = $str;
 
         return $this;
     }
@@ -123,24 +104,36 @@ class ExceptionsCommand extends Command
         $this->classFactory
             ->create($class, 'php', $folder)
             ->add(
-                $this->str->of("<?php")->ln()->ln()
-                    ->concat('declare(strict_types=1);')->ln()->ln()
-                    ->concat("namespace")->spaces(1)->concat($namespace)->concat(";")->ln()->ln()
-                    ->concat('use Exception;')->ln()
-                    ->concat('use JsonSerializable;')->ln()->ln()
-                    ->concat("class")->spaces()->concat($class)->spaces()->concat(
-                        "extends Exception implements JsonSerializable"
-                    )->ln()
-                    ->concat('{')->ln()
-                    ->lt()->concat("public function jsonSerialize(): mixed")->ln()
-                    ->lt()->concat('{')->ln()
-                    ->lt()->lt()->concat('return error($this->getMessage(), $this->getCode(), [')->ln()
-                    ->lt()->lt()->lt()->concat("'file' => ")->concat('$this->getFile(),')->ln()
-                    ->lt()->lt()->lt()->concat("'line' => ")->concat('$this->getLine(),')->ln()
-                    ->lt()->lt()->concat(']);')->ln()
-                    ->lt()->concat("}")->ln()
-                    ->concat("}")->ln()
-                    ->get()
+                <<<EOT
+                <?php
+
+                declare(strict_types=1);
+
+                namespace {$namespace};
+
+                use Exception;
+                use JsonSerializable;
+
+                /**
+                 * Description of '{$class}'
+                 *
+                 * @package {$namespace}
+                 */
+                class {$class} extends Exception implements JsonSerializable
+                {
+                    /**
+                     * {@inheritdoc}
+                     */
+                    public function jsonSerialize(): mixed
+                    {
+                        return error(\$this->getMessage(), \$this->getCode(), [
+                            'file' => \$this->getFile(),
+                            'line' => \$this->getLine(),
+                        ]);
+                    }
+                }
+
+                EOT
             )
             ->close();
 

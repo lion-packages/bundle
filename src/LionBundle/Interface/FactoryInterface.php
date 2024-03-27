@@ -12,6 +12,13 @@ namespace Lion\Bundle\Interface;
 interface FactoryInterface
 {
     /**
+     * Defines the factory columns
+     *
+     * @return array<string>
+     */
+    public static function columns(): array;
+
+    /**
      * Define the model's default state
      *
      * @return array

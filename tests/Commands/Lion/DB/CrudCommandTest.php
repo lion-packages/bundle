@@ -31,10 +31,10 @@ class CrudCommandTest extends Test
         'App\\Rules\\LionDatabase\\MySQL\\Users\\LastNameRule' => 'app/Rules/LionDatabase/MySQL/Users/LastNameRule.php',
         'App\\Http\\Controllers\\LionDatabase\\MySQL\\UsersController' => 'app/Http/Controllers/LionDatabase/MySQL/UsersController.php',
         'App\\Models\\LionDatabase\\MySQL\\UsersModel' => 'app/Models/LionDatabase/MySQL/UsersModel.php',
-        'Tests\\Models\\LionDatabase\\MySQL\\UsersModelTest' => 'tests/Models/LionDatabase/MySQL/UsersModelTest.php',
-        'Tests\\Controllers\\LionDatabase\\MySQL\\UsersControllerTest' => 'tests/Controllers/LionDatabase/MySQL/UsersControllerTest.php',
+        'Tests\\App\\Models\\LionDatabase\\MySQL\\UsersModelTest' => 'tests/App/Models/LionDatabase/MySQL/UsersModelTest.php',
+        'Tests\\App\\Http\\Controllers\\LionDatabase\\MySQL\\UsersControllerTest' => 'tests/App/Http/Controllers/LionDatabase/MySQL/UsersControllerTest.php',
         'Database\\Class\\LionDatabase\\MySQL\\Users' => 'database/Class/LionDatabase/MySQL/Users.php',
-        'Tests\\Class\\LionDatabase\\MySQL\\UsersTest' => 'tests/Class/LionDatabase/MySQL/UsersTest.php',
+        'Tests\\Database\\Class\\LionDatabase\\MySQL\\UsersTest' => 'tests/Database/Class/LionDatabase/MySQL/UsersTest.php',
     ];
 
     private CommandTester $commandTester;
@@ -42,9 +42,11 @@ class CrudCommandTest extends Test
 	protected function setUp(): void 
 	{
         $this->runDatabaseConnections();
+
         $this->createTable();
 
         $kernel = new Kernel();
+
         $container = new Container();
 
         $kernel->commandsOnObjects([
@@ -64,10 +66,13 @@ class CrudCommandTest extends Test
 	protected function tearDown(): void 
 	{
         $this->rmdirRecursively('./app/');
+
         $this->rmdirRecursively('./database/');
-        $this->rmdirRecursively('./tests/Class/');
-        $this->rmdirRecursively('./tests/Controllers/');
-        $this->rmdirRecursively('./tests/Models/');
+
+        $this->rmdirRecursively('./tests/App/');
+
+        $this->rmdirRecursively('./tests/Database/');
+
         Schema::dropTable(self::ENTITY)->execute();
 	}
 

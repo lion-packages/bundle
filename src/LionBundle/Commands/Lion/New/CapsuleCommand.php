@@ -136,14 +136,19 @@ class CapsuleCommand extends Command
 	protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $capsule = $input->getArgument('capsule');
+
         $properties = $input->getOption('properties');
 
         $this->classFactory->classFactory('database/Class/', $capsule);
+
         $folder = $this->classFactory->getFolder();
+
         $namespace = $this->classFactory->getNamespace();
+
         $class = $this->classFactory->getClass();
 
         $listProperties = [];
+
         $listMethods = [];
 
         foreach ($properties as $key => $propierty) {
@@ -233,9 +238,11 @@ class CapsuleCommand extends Command
             foreach ($listMethods as $key => $method) {
                 if ($key === (count($listMethods) - 1)) {
                     $this->str->concat($method['getter'])->ln()->ln();
+
                     $this->str->concat($method['setter'])->ln();
                 } else {
                     $this->str->concat($method['getter'])->ln()->ln();
+
                     $this->str->concat($method['setter'])->ln()->ln();
                 }
             }
@@ -245,7 +252,7 @@ class CapsuleCommand extends Command
 
         $contentFile = $this->str->concat("}")->get();
 
-        $this->classFactory->create($class, 'php', $folder)->add($contentFile)->close();
+        $this->classFactory->create($class, ClassFactory::PHP_EXTENSION, $folder)->add($contentFile)->close();
 
         $output->writeln($this->warningOutput("\t>>  CAPSULE: {$class}"));
 

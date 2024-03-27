@@ -10,6 +10,9 @@ use Lion\Helpers\Str;
 /**
  * Class that allows writing system files
  *
+ * @property Str $str [Str class object]
+ * @property Container $container [Container class object]
+ *
  * @package Lion\Bundle\Helpers
  */
 class FileWriter
@@ -47,9 +50,9 @@ class FileWriter
     /**
      * Replaces the content of a string with another
      *
-     * @param  array $row [Row to modify]
-     * @param  string $modifiedLine [Modified row content]
-     * @param  string $originalLine [Original row content]
+     * @param array $row [Row to modify]
+     * @param string $modifiedLine [Modified row content]
+     * @param string $originalLine [Original row content]
      *
      * @return string
      */
@@ -59,6 +62,7 @@ class FileWriter
             $modifiedLine = str_pad($row['content'], strlen($originalLine));
         } else {
             $newLine = $this->str->of($originalLine)->replace($row['search'], $row['content'])->get();
+
             $modifiedLine = str_pad($newLine, strlen($originalLine));
         }
 
@@ -68,15 +72,17 @@ class FileWriter
     /**
      * Reads all rows from a file and modifies them as defined
      *
-     * @param  string $path [Defined route]
-     * @param  array $rows [list of rows to modify]
+     * @param string $path [Defined route]
+     * @param array $rows [list of rows to modify]
      *
      * @return void
      */
     public function readFileRows(string $path, array $rows): void
     {
         $path = $this->container->normalizePath($path);
+
         $file = fopen($path, 'r+');
+
         $rowsFile = file($path);
 
         foreach ($rows as $key => $row) {
@@ -85,10 +91,13 @@ class FileWriter
 
                 if (isset($row['remove'])) {
                     $total = $key - 1;
+
                     unset($rowsFile[$total]);
                 } else {
                     $total = $key - 1;
+
                     $originalLine = $rowsFile[$total];
+
                     $modifiedLine = '';
 
                     if ($row['replace'] === false) {
@@ -115,7 +124,9 @@ class FileWriter
         }
 
         ftruncate($file, 0);
+
         fwrite($file, implode('', $rowsFile));
+
         fclose($file);
     }
 }

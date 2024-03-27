@@ -128,11 +128,21 @@ class ModelCommand extends Command
         $this->store->folder($folder);
 
 		$this->classFactory
-            ->create($class, 'php', $folder)
+            ->create($class, ClassFactory::PHP_EXTENSION, $folder)
             ->add("<?php\n\ndeclare(strict_types=1);\n\n")
             ->add("namespace {$namespace};\n\n")
             ->add("use Lion\Database\Drivers\MySQL as DB;\n\n")
-            ->add("class {$class}\n{\n");
+            ->add(
+                <<<EOT
+                /**
+                 * Description of Model '{$class}'
+                 *
+                 * @package {$namespace}
+                 */
+                class {$class}
+                {\n
+                EOT
+            );
 
         foreach (self::METHODS as $method) {
             $customMethod = $this->classFactory->getCustomMethod(

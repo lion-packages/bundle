@@ -7,7 +7,6 @@ namespace Lion\Bundle\Commands\Lion\New;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Files\Store;
-use Lion\Helpers\Str;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,7 +16,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @property ClassFactory $classFactory [ClassFactory class object]
  * @property Store $store [Store class object]
- * @property Str $str [Str class object]
  *
  * @package Lion\Bundle\Commands\Lion\New
  */
@@ -38,13 +36,6 @@ class SocketCommand extends Command
     private Store $store;
 
     /**
-     * [Str class object]
-     *
-     * @var Str $str
-     */
-    private Str $str;
-
-    /**
      * @required
      * */
     public function setClassFactory(ClassFactory $classFactory): SocketCommand
@@ -60,16 +51,6 @@ class SocketCommand extends Command
     public function setStore(Store $store): SocketCommand
     {
         $this->store = $store;
-
-        return $this;
-    }
-
-    /**
-     * @required
-     * */
-    public function setStr(Str $str): SocketCommand
-    {
-        $this->str = $str;
 
         return $this;
     }
@@ -119,41 +100,98 @@ class SocketCommand extends Command
         $this->store->folder($folder);
 
         $this->classFactory
-            ->create($class, 'php', $folder)
+            ->create($class, ClassFactory::PHP_EXTENSION, $folder)
             ->add(
-                $this->str->of('<?php')->ln()->ln()
-                    ->concat('declare(strict_types=1);')->ln()->ln()
-                    ->concat('namespace')->spaces(1)->concat($namespace)->concat(';')->ln()->ln()
-                    ->concat('use Exception;')->ln()
-                    ->concat('use Ratchet\\ConnectionInterface;')->ln()
-                    ->concat('use Ratchet\\MessageComponentInterface;')->ln()
-                    ->concat('use SplObjectStorage;')->ln()->ln()
-                    ->concat('class')->spaces(1)->concat($class)->spaces(1)->concat('implements')
-                    ->spaces()->concat('MessageComponentInterface')->ln()->concat('{')->ln()
-                    ->lt()->concat('const PORT = 9000;')->ln()
-                    ->lt()->concat('const HOST = ')->concat("'0.0.0.0';")->ln()->ln()
-                    ->lt()->concat('protected SplObjectStorage $clients;')->ln()->ln()
-                    ->lt()->concat('public function __construct()')->ln()->lt()->concat('{')->ln()
-                    ->lt()->lt()->concat('$this->clients = new SplObjectStorage();')->ln()
-                    ->lt()->concat('}')->ln()->ln()
-                    ->lt()->concat('public function onOpen(ConnectionInterface $conn): void')->ln()->lt()->concat('{')
-                    ->ln()->lt()->lt()->concat('echo("New connection! ({$conn->resourceId})\n");')->ln()
-                    ->lt()->lt()->concat('$this->clients->attach($conn);')->ln()
-                    ->lt()->concat('}')->ln()->ln()
-                    ->lt()->concat('public function onMessage(ConnectionInterface $from, $msg): void')->ln()->lt()
-                    ->concat('{')->ln()->lt()->lt()->concat('foreach ($this->clients as $client) {')->ln()
-                    ->lt()->lt()->lt()->concat('if ($from !== $client) {')->ln()
-                    ->lt()->lt()->lt()->lt()->concat('$client->send($msg);')->ln()
-                    ->lt()->lt()->lt()->concat('}')->ln()
-                    ->lt()->lt()->concat('}')->ln()
-                    ->lt()->concat('}')->ln()->ln()
-                    ->lt()->concat('public function onClose(ConnectionInterface $conn): void')->ln()->lt()->concat('{')
-                    ->ln()->lt()->lt()->concat('$this->clients->detach($conn);')->ln()
-                    ->lt()->concat('}')->ln()->ln()
-                    ->lt()->concat('public function onError(ConnectionInterface $conn, Exception $e): void')->ln()
-                    ->lt()->concat('{')->ln()->lt()->lt()->concat('$conn->close();')->ln()->lt()->concat('}')->ln()
-                    ->concat('}')->ln()
-                    ->get()
+                <<<EOT
+                <?php
+
+                declare(strict_types=1);
+
+                namespace {$namespace};
+
+                use Exception;
+                use Ratchet\ConnectionInterface;
+                use Ratchet\MessageComponentInterface;
+                use SplObjectStorage;
+
+                /**
+                 * Description of Socket '{$class}'
+                 *
+                 * @property SplObjectStorage \$clients [List of clients connected to the Socket]
+                 *
+                 * @package {$namespace}
+                 */
+                class {$class} implements MessageComponentInterface
+                {
+                    /**
+                     * [Defines the Socket Port]
+                     *
+                     * @const PORT
+                     */
+                    const PORT = 9000;
+
+                    /**
+                     * [Defines the Socket Host]
+                     *
+                     * @const HOST
+                     */
+                    const HOST = '0.0.0.0';
+
+                    /**
+                     * [List of clients connected to the Socket]
+                     *
+                     * @var SplObjectStorage \$clients
+                     */
+                    protected SplObjectStorage \$clients;
+
+                    /**
+                     * Class Constructor
+                     */
+                    public function __construct()
+                    {
+                        \$this->clients = new SplObjectStorage();
+                    }
+
+                    /**
+                     * {@inheritdoc}
+                     */
+                    public function onOpen(ConnectionInterface \$conn): void
+                    {
+                        echo("New connection! ({\$conn->resourceId})");
+
+                        \$this->clients->attach(\$conn);
+                    }
+
+                    /**
+                     * {@inheritdoc}
+                     */
+                    public function onMessage(ConnectionInterface \$from, \$msg): void
+                    {
+                        foreach (\$this->clients as \$client) {
+                            if (\$from !== \$client) {
+                                \$client->send(\$msg);
+                            }
+                        }
+                    }
+
+                    /**
+                     * {@inheritdoc}
+                     */
+                    public function onClose(ConnectionInterface \$conn): void
+                    {
+                        \$this->clients->detach(\$conn);
+                    }
+
+                    /**
+                     * {@inheritdoc}
+                     */
+                    public function onError(ConnectionInterface \$conn, Exception \$e): void
+                    {
+                        \$conn->close();
+                    }
+                }
+
+                EOT
             )
             ->close();
 

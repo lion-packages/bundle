@@ -7,7 +7,6 @@ namespace Lion\Bundle\Commands\Lion\New;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Files\Store;
-use Lion\Helpers\Str;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,7 +16,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @property ClassFactory $classFactory [ClassFactory class object]
  * @property Store $store [Store class object]
- * @property Str $str [Str class object]
  *
  * @package Lion\Bundle\Commands\Lion\New
  */
@@ -38,13 +36,6 @@ class CronCommand extends Command
     private Store $store;
 
     /**
-     * [Str class object]
-     *
-     * @var Str $str
-     */
-    private Str $str;
-
-    /**
      * @required
      */
     public function setClassFactory(ClassFactory $classFactory): CronCommand
@@ -60,16 +51,6 @@ class CronCommand extends Command
     public function setStore(Store $store): CronCommand
     {
         $this->store = $store;
-
-        return $this;
-    }
-
-    /**
-     * @required
-     */
-    public function setStr(Str $str): CronCommand
-    {
-        $this->str = $str;
 
         return $this;
     }
@@ -123,24 +104,37 @@ class CronCommand extends Command
         $this->classFactory
             ->create($class, ClassFactory::PHP_EXTENSION, $folder)
             ->add(
-                $this->str
-                    ->of('<?php')->ln()->ln()
-                    ->concat('declare(strict_types=1);')->ln()->ln()
-                    ->concat("namespace {$namespace};")->ln()->ln()
-                    ->concat('use Lion\Bundle\Helpers\Commands\Schedule\Schedule;')->ln()
-                    ->concat('use Lion\Bundle\Interface\ScheduleInterface;')->ln()->ln()
-                    ->concat("/**\n * schedule {$class}\n *\n * @package {$namespace}\n * */")->ln()
-                    ->concat("class {$class} implements ScheduleInterface")->ln()
-                    ->concat('{')->ln()
-                    ->lt()->concat("/**\n\t * {@inheritdoc}\n\t * */")->ln()
-                    ->lt()->concat('public function schedule(Schedule $schedule): void')->ln()
-                    ->lt()->concat('{')->ln()
-                    ->lt()->lt()->concat(
-                        '$schedule->cron(' . "'* * * * *'" . ')->command(' . "''" . ')->log(' . "''" . ');'
-                    )->ln()
-                    ->lt()->concat('}')->ln()
-                    ->concat('}')->ln()
-                    ->get()
+                <<<EOT
+                <?php
+
+                declare(strict_types=1);
+
+                namespace {$namespace};
+
+                use App\Console\Commands\ExampleCommand;
+                use Lion\Bundle\Helpers\Commands\Schedule\Schedule;
+                use Lion\Bundle\Interface\ScheduleInterface;
+
+                /**
+                 * schedule {$class}
+                 *
+                 * @package {$namespace}
+                 */
+                class {$class} implements ScheduleInterface
+                {
+                    /**
+                     * {@inheritdoc}
+                     */
+                    public function schedule(Schedule \$schedule): void
+                    {
+                        \$schedule
+                            ->cron('* * * * *')
+                            ->command(ExampleCommand::class)
+                            ->log('example');
+                    }
+                }
+
+                EOT
             )
             ->close();
 

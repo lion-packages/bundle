@@ -187,47 +187,73 @@ class RulesDBCommand extends MenuCommand
                 'content' => "'" . strtolower($column->Field) . "'",
                 'search' => "''"
             ],
-            19 => [
+            14 => [
                 'replace' => true,
                 'content' => "'" . strtolower($column->Field) . "'",
                 'search' => "''"
             ],
-            23 => [
+            15 => [
                 'replace' => true,
                 'content' => "'" . strtolower($column->Field) . "'",
                 'search' => "''"
             ],
-            26 => [
+            16 => [
                 'replace' => true,
                 'content' => "'" . strtolower($column->Field) . "'",
                 'search' => "''"
             ],
-            30 => [
+            25 => [
+                'replace' => true,
+                'content' => "'" . strtolower($column->Field) . "'",
+                'search' => "''"
+            ],
+            29 => [
+                'replace' => true,
+                'content' => "'" . strtolower($column->Field) . "'",
+                'search' => "''"
+            ],
+            32 => [
+                'replace' => true,
+                'content' => "'" . strtolower($column->Field) . "'",
+                'search' => "''"
+            ],
+            39 => [
+                'replace' => true,
+                'content' => "'" . strtolower($column->Field) . "'",
+                'search' => "''"
+            ],
+            36 => [
                 'replace' => true,
                 'content' => "'{$column->Comment}'",
                 'search' => "''"
             ],
-            33 => [
-                'replace' => true,
-                'content' => "'" . strtolower($column->Field) . "'",
-                'search' => "''"
-            ],
-            37 => [
+            43 => [
                 'replace' => true,
                 'content' => "'{$column->Default}'",
                 'search' => "''"
             ],
-            44 => [
+            50 => [
                 'replace' => true,
                 'content' => ($type === 'Required' ? 'false' : ($type === 'Optional' ? 'true' : 'false')),
                 'search' => 'false'
             ],
-            52 => [
+            59 => [
+                'replace' => true,
+                'content' => ($type === 'Required' ? 'required' : ($type === 'Optional' ? 'optional' : 'required')),
+                'search' => 'required'
+            ],
+            60 => [
                 'replace' => true,
                 'multiple' => [
                     [
-                        'content' => ($column->Null === 'NO' ? 'required' : 'optional'),
+                        'content' => (
+                            $type === 'Required' ? 'required' : ($type === 'Optional' ? 'optional' : 'required')
+                        ),
                         'search' => 'required'
+                    ],
+                    [
+                        'content' => '"' . strtolower($column->Field) . '"',
+                        'search' => '""'
                     ]
                 ]
             ]
