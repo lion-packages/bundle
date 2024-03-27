@@ -238,7 +238,7 @@ class ClassFactory
             'setter' => $this->getSetter($snake, $type, $className),
             'variable' => (object) [
                 'annotations' => (object) [
-                    'class' => "@property {$type} $" . "{$snake} [property for {$propertyName}]"
+                    'class' => "@property {$type} $" . "{$snake} [Property for {$propertyName}]"
                 ],
                 'reference' => '$this->' . "{$camel};",
                 'name' => (object) [
@@ -248,7 +248,7 @@ class ClassFactory
                 'type' => (object) [
                     'camel' => ($finalVisibility . "?{$type} $" . "{$camel} = null;"),
                     'snake' => (
-                        "/**\n\t * property for {$propertyName}\n\t *\n\t * @var {$type}|null $" . "{$snake}\n\t */\n" .
+                        "/**\n\t * [Property for {$propertyName}]\n\t *\n\t * @var {$type}|null $" . "{$snake}\n\t */\n" .
                         "\t{$finalVisibility}?{$type} $" . "{$snake} = null;\n"
                     )
                 ],
@@ -308,11 +308,17 @@ class ClassFactory
 
         $newName = trim(str_replace(' ', '', ucwords($newName)));
 
-        $getter = "\t/**\n\t * getter method for {$name}\n\t *\n\t * @return {$type}|null\n\t */\n";
-
-        $getter .= "\tpublic function get{$newName}(): ?{$type}\n\t{\n\t\treturn " . '$this->' . $name;
-
-        $getter .= ";\n\t}";
+        $getter = <<<EOT
+            /**
+             * Getter method for '{$name}'
+             *
+             * @return {$type}|null
+             */
+            public function get{$newName}(): ?{$type}
+            {
+                return \$this->{$name};
+            }
+        EOT;
 
         return (object) ['name' => "get{$newName}", 'method' => $getter];
     }
@@ -336,11 +342,21 @@ class ClassFactory
 
         $newName = trim(str_replace(' ', '', ucwords($newName)));
 
-        $setter = "\t/**\n\t * setter method for {$name}\n\t *\n\t * @return {$capsule}\n\t */\n";
+        $setter = <<<EOT
+            /**
+             * Setter method for '{$name}'
+             *
+             * @param {$type}|null \${$name}
+             *
+             * @return {$capsule}
+             */
+            public function set{$newName}(?{$type} \${$name} = null): {$capsule}
+            {
+                \$this->{$name} = \${$name};
 
-        $setter .= "\tpublic function set{$newName}(?{$type} $" . $name . "): {$capsule}\n\t{\n";
-
-        $setter .= "\t\t" . '$this->' . "{$name} = $" . $name . ";\n\n\t\treturn " . '$this' . ";\n\t}";
+                return \$this;
+            }
+        EOT;
 
         return (object) ['name' => "set{$newName}", 'method' => $setter];
     }
