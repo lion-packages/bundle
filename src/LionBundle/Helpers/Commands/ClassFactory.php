@@ -375,7 +375,7 @@ class ClassFactory
      */
     public function getCustomMethod(
         string $name,
-        string $type = 'object',
+        string $type = '',
         string $params = '',
         string $content = 'return;',
         string $visibility = 'public',
@@ -393,6 +393,34 @@ class ClassFactory
 
         $countContentFunction += '' === $type ? $allCount : $allCountWithType;
 
+        $methodType = $type === '' ? '' : ": {$type}";
+
+        $splitMethodType = explode(':', $methodType);
+
+        $methodTypeAnnotation = trim(array_pop($splitMethodType));
+
+        $paramsAnnotation = '';
+
+        $paramsSize = $params === '' ? 0 : count(explode(',', $params));
+
+        if ($paramsSize > 1) {
+            foreach (explode(',', $params) as $key => $param) {
+                $split = explode('=', $param);
+
+                $param = isset($split[1]) ? trim($split[0]) : trim($param);
+
+                $paramsAnnotation .= $key === ($paramsSize - 1)
+                    ? "\t * @param {$param} [Parameter Description]"
+                    : "* @param {$param} [Parameter Description]\n";
+            }
+        } elseif ($paramsSize === 1) {
+            $split = explode('=', $params);
+
+            $params = isset($split[1]) ? trim($split[0]) : trim($params);
+
+            $paramsAnnotation .= "* @param {$params} [Parameter Description]";
+        }
+
         if ($countContentFunction > 120) {
             $splitParams = explode(',', $params);
 
@@ -404,13 +432,29 @@ class ClassFactory
                 $implodeParams .= $key === (count($splitParams) - 1) ? "\n\t\t{$param}" : "\n\t\t{$param},";
             }
 
-            $method .= "\t{$visibility} function {$name}({$implodeParams}\n\t)". ($type === '' ? '' : ": {$type}");
+            $method .= "\t/**\n\t * Description of '{$name}'\n";
+
+            $method .= "\t *\n";
+
+            $method .= $paramsAnnotation != '' ? "\t {$paramsAnnotation}\n\t *\n" : '';
+
+            $method .= "\t * @return {$methodTypeAnnotation}\n\t */\n";
+
+            $method .= "\t{$visibility} function {$name}({$implodeParams}\n\t){$methodType}";
 
             $method .=  " {\n\t\t{$content}\n\t}";
 
             $method .= str_repeat("\n", $lineBreak);
         } else {
-            $method .= "\t{$visibility} function {$name}({$params})" . ($type === '' ? '' : ": {$type}");
+            $method .= "\t/**\n\t * Description of '{$name}'\n";
+
+            $method .= "\t *\n";
+
+            $method .= $paramsAnnotation != '' ? "\t {$paramsAnnotation}\n\t *\n" : '';
+
+            $method .= "\t * @return {$methodTypeAnnotation}\n\t */\n";
+
+            $method .= "\t{$visibility} function {$name}({$params}){$methodType}";
 
             $method .= "\n\t{\n\t\t{$content}\n\t}";
 

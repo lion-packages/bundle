@@ -158,23 +158,28 @@ class ControllerCommand extends Command
                 }
 
                 $factoryController
-                ->add(
-                    <<<EOT
-                    /**
-                     * Description of Controller '{$dataController->class}'
-                     *
-                     * @package {$dataController->namespace}
-                     */
-                    class {$dataController->class}
-                    {\n
-                    EOT
-                );
+                    ->add(
+                        <<<EOT
+                        /**
+                         * Description of Controller '{$dataController->class}'
+                         *
+                         * @package {$dataController->namespace}
+                         */
+                        class {$dataController->class}
+                        {\n
+                        EOT
+                    );
 
                 foreach (self::METHODS as $method) {
                     $customMethod = '';
 
                     if ('none' != $model) {
-                        $modelMethod = $this->str->of('return ')->concat('$')->concat($camelModelClass)->concat('->')->get();
+                        $modelMethod = $this->str
+                            ->of('return ')
+                            ->concat('$')
+                            ->concat($camelModelClass)
+                            ->concat('->')
+                            ->get();
 
                         $modelMethod .= $this->str
                             ->of($method . $dataModel->class)

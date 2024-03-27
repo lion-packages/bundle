@@ -109,6 +109,14 @@ class CrudCommand extends MenuCommand
 
         $entityPascal = $this->str->of($entity)->replace('_', ' ')->replace('-', ' ')->pascal()->get();
 
+        $columns = DB::connection($selectedConnection)->show()->columns()->from($entity)->getAll();
+
+        if (isError($columns)) {
+            $output->writeln($this->errorOutput("\t>>  CRUD: {$columns->message}"));
+
+            return Command::FAILURE;
+        }
+
         $this->addDBRules($entity, $output);
 
         $this->addControllerAndModel(
@@ -116,7 +124,7 @@ class CrudCommand extends MenuCommand
             $connectionPascal,
             "Database\\Class\\{$connectionPascal}\\MySQL\\{$entityPascal}",
             $entity,
-            DB::connection($selectedConnection)->show()->columns()->from($entity)->getAll(),
+            $columns,
             $output
         );
 
@@ -203,32 +211,47 @@ class CrudCommand extends MenuCommand
                 'replace' => false,
                 'content' => "use {$namespacePascal};\n\n"
             ],
-            11 => [
+            18 => [
                 'replace' => true,
-                'content' => ("{$entityPascal}({$entityPascal} " . '$' . lcfirst($entityPascal) . ', '),
-                'search' => "{$entityPascal}("
-            ],
-            13 => [
-                'replace' => true,
-                'content' => '($' . lcfirst($entityPascal) . ')',
-                'search' => '()'
-            ],
-            21 => [
-                'replace' => true,
-                'content' => ("{$entityPascal}({$entityPascal} " . '$' . lcfirst($entityPascal) . ', '),
-                'search' => "{$entityPascal}("
+                'content' => "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . ' [Parameter Description]',
+                'search' => '*'
             ],
             23 => [
                 'replace' => true,
+                'content' => ("{$entityPascal}({$entityPascal} " . '$' . lcfirst($entityPascal) . ', '),
+                'search' => "{$entityPascal}("
+            ],
+            25 => [
+                'replace' => true,
                 'content' => '($' . lcfirst($entityPascal) . ')',
                 'search' => '()'
             ],
-            26 => [
+            42 => [
                 'replace' => true,
-                'content' => ("{$entityPascal}({$entityPascal} " . '$' . lcfirst($entityPascal) . ','),
+                'content' => "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . ' [Parameter Description]',
+                'search' => '*'
+            ],
+            48 => [
+                'replace' => true,
+                'content' => ("{$entityPascal}({$entityPascal} " . '$' . lcfirst($entityPascal) . ', '),
                 'search' => "{$entityPascal}("
             ],
-            28 => [
+            50 => [
+                'replace' => true,
+                'content' => '($' . lcfirst($entityPascal) . ')',
+                'search' => '()'
+            ],
+            55 => [
+                'replace' => true,
+                'content' => "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . ' [Parameter Description]',
+                'search' => '*'
+            ],
+            61 => [
+                'replace' => true,
+                'content' => ("{$entityPascal}({$entityPascal} " . '$' . lcfirst($entityPascal) . ', '),
+                'search' => "{$entityPascal}("
+            ],
+            63 => [
                 'replace' => true,
                 'content' => '($' . lcfirst($entityPascal) . ')',
                 'search' => '()'
@@ -255,12 +278,20 @@ class CrudCommand extends MenuCommand
                 'replace' => false,
                 'content' => "\nuse {$namespacePascal};\n"
             ],
-            11 => [
+            18 => [
+                'replace' => true,
+                'content' => (
+                    "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . " [Parameter Description]\n" .
+                    "\t *"
+                ),
+                'search' => '*'
+            ],
+            21 => [
                 'replace' => true,
                 'content' => "({$entityPascal} $" . lcfirst($entityPascal) . ')',
                 'search' => '()'
             ],
-            13 => [
+            23 => [
                 'replace' => true,
                 'multiple' => [
                     [
@@ -273,17 +304,25 @@ class CrudCommand extends MenuCommand
                     ]
                 ]
             ],
-            18 => [
+            33 => [
                 'replace' => true,
                 'content' => "'read_{$entity}'",
                 'search' => "''"
             ],
-            21 => [
+            38 => [
+                'replace' => true,
+                'content' => (
+                    "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . " [Parameter Description]\n" .
+                    "\t *"
+                ),
+                'search' => '*'
+            ],
+            41 => [
                 'replace' => true,
                 'content' => "({$entityPascal} $" . lcfirst($entityPascal) . ')',
                 'search' => '()'
             ],
-            23 => [
+            43 => [
                 'replace' => true,
                 'multiple' => [
                     [
@@ -296,12 +335,20 @@ class CrudCommand extends MenuCommand
                     ]
                 ]
             ],
-            26 => [
+            48 => [
+                'replace' => true,
+                'content' => (
+                    "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . " [Parameter Description]\n" .
+                    "\t *"
+                ),
+                'search' => '*'
+            ],
+            51 => [
                 'replace' => true,
                 'content' => "({$entityPascal} $" . lcfirst($entityPascal) . ')',
                 'search' => '()'
             ],
-            28 => [
+            53 => [
                 'replace' => true,
                 'multiple' => [
                     [
