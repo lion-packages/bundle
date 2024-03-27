@@ -109,24 +109,20 @@ class CrudCommand extends MenuCommand
 
         $entityPascal = $this->str->of($entity)->replace('_', ' ')->replace('-', ' ')->pascal()->get();
 
-        $namespacePascal = "Database\\Class\\{$connectionPascal}\\MySQL\\{$entityPascal}";
-
-        $columns = DB::connection($selectedConnection)->show()->columns()->from($entity)->getAll();
-
         $this->addDBRules($entity, $output);
 
         $this->addControllerAndModel(
             $entityPascal,
             $connectionPascal,
-            $namespacePascal,
+            "Database\\Class\\{$connectionPascal}\\MySQL\\{$entityPascal}",
             $entity,
-            $columns,
+            DB::connection($selectedConnection)->show()->columns()->from($entity)->getAll(),
             $output
         );
 
         $this->addCapsule($entity, $selectedConnection, $entityPascal, $output);
 
-        $output->writeln($this->infoOutput("\t>>  CRUD: crud has been generated for the '{$entity}' entity"));
+        $output->writeln($this->infoOutput("\n\t>>  CRUD: crud has been generated for the '{$entity}' entity"));
 
         return Command::SUCCESS;
     }
@@ -185,7 +181,7 @@ class CrudCommand extends MenuCommand
             ->find('new:test')
             ->run(
                 new ArrayInput([
-                    'test' => "Controllers/{$connectionPascal}/MySQL/{$entityPascal}ControllerTest",
+                    'test' => "app/Http/Controllers/{$connectionPascal}/MySQL/{$entityPascal}ControllerTest"
                 ]),
                 $output
             );
@@ -193,7 +189,10 @@ class CrudCommand extends MenuCommand
         $this
             ->getApplication()
             ->find('new:test')
-            ->run(new ArrayInput(['test' => "Models/{$connectionPascal}/MySQL/{$entityPascal}ModelTest",]), $output);
+            ->run(
+                new ArrayInput(['test' => "app/Models/{$connectionPascal}/MySQL/{$entityPascal}ModelTest"]),
+                $output
+            );
 
         $fileC = "{$entityPascal}Controller";
 
@@ -343,7 +342,10 @@ class CrudCommand extends MenuCommand
         $this
             ->getApplication()
             ->find('new:test')
-            ->run(new ArrayInput(['test' => "Class/{$selectedConnection}/MySQL/{$entityPascal}Test",]), $output);
+            ->run(
+                new ArrayInput(['test' => "database/Class/{$selectedConnection}/MySQL/{$entityPascal}Test",]),
+                $output
+            );
     }
 
     /**

@@ -109,7 +109,7 @@ class TestCommand extends Command
 
                 declare(strict_types=1);
 
-                namespace Tests;
+                namespace {$namespace};
 
                 use Lion\Test\Test;
 
