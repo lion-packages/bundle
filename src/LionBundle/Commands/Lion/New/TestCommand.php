@@ -113,7 +113,7 @@ class TestCommand extends Command
 
                 use Lion\Test\Test;
 
-                class ExampleTest extends Test
+                class {$class} extends Test
                 {
                     protected function setUp(): void
                     {

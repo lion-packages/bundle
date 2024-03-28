@@ -250,7 +250,7 @@ class CapsuleCommand extends Command
             $this->str->ln();
         }
 
-        $contentFile = $this->str->concat("}")->get();
+        $contentFile = $this->str->concat("}")->ln()->get();
 
         $this->classFactory->create($class, ClassFactory::PHP_EXTENSION, $folder)->add($contentFile)->close();
 
