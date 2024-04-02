@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Commands\Lion\DB;
+namespace Tests\Commands\Lion\New;
 
 use Lion\Bundle\Commands\Lion\New\FactoryCommand;
 use Lion\Command\Command;
@@ -23,19 +23,19 @@ class FactoryCommandTest extends Test
 
     private CommandTester $commandTester;
 
-	protected function setUp(): void 
-	{
+    protected function setUp(): void
+    {
         $application = (new Kernel())->getApplication();
         $application->add((new Container())->injectDependencies(new FactoryCommand()));
         $this->commandTester = new CommandTester($application->find('new:factory'));
 
         $this->createDirectory(self::URL_PATH);
-	}
+    }
 
-	protected function tearDown(): void 
-	{
+    protected function tearDown(): void
+    {
         $this->rmdirRecursively('./app/');
-	}
+    }
 
     public function testExecute(): void
     {
