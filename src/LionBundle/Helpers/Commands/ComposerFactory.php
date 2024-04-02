@@ -6,15 +6,28 @@ namespace Lion\Bundle\Helpers\Commands;
 
 use Lion\Helpers\Arr;
 
+/**
+ * Gets the list of installed libraries and dev-libraries
+ *
+ * @property Arr $arr [Arr class object]
+ * @property array $libraries [List of installed libraries and dev-libraries]
+ *
+ * @package Lion\Bundle\Helpers\Commands
+ */
 class ComposerFactory
 {
     /**
-     * [Object of class Arr]
+     * [Arr class object]
      *
      * @var Arr $arr
      */
     private Arr $arr;
 
+    /**
+     * [List of installed libraries and dev-libraries]
+     *
+     * @var array $libraries
+     */
     private array $libraries = [];
 
     /**
@@ -27,6 +40,14 @@ class ComposerFactory
         return $this;
     }
 
+    /**
+     * List of installed libraries
+     *
+     * @param object $composerJson [Composer json content]
+     * @param array $extensions [Extensions that should be ignored]
+     *
+     * @return ComposerFactory
+     */
     public function libraries(object $composerJson, array $extensions): ComposerFactory
     {
         foreach ($composerJson->require as $key => $library) {
@@ -48,6 +69,14 @@ class ComposerFactory
         return $this;
     }
 
+    /**
+     * List of installed libraries-dev
+     *
+     * @param object $composerJson [Composer json content]
+     * @param array $extensions [Extensions that should be ignored]
+     *
+     * @return ComposerFactory
+     */
     public function librariesDev(object $composerJson, array $extensions): ComposerFactory
     {
         foreach ($composerJson->{'require-dev'} as $key => $library) {
@@ -69,6 +98,11 @@ class ComposerFactory
         return $this;
     }
 
+    /**
+     * Gets the libraries obtained
+     *
+     * @return array
+     */
     public function getLibraries(): array
     {
         return $this->libraries;
