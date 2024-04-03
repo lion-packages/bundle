@@ -168,8 +168,8 @@ class RouteListCommand extends Command
                                 $this->successOutput('PARAM:'),
                                 (
                                     empty($objectClassRule->field)
-                                        ? $this->successOutput('(NAMELESS)')
-                                        : $this->successOutput($objectClassRule->field . " ({$requiredParam})")
+                                    ? $this->successOutput('(NAMELESS)')
+                                    : $this->successOutput($objectClassRule->field . " ({$requiredParam})")
                                 ),
                                 $this->transformNamespace($objectClassRule::class),
                                 $this->warningOutput('passes')
@@ -191,8 +191,8 @@ class RouteListCommand extends Command
                     ? $this->successOutput(" showing [{$cont}] routes ")
                     : (
                         $size === 1
-                            ? $this->successOutput(' showing a single route ')
-                            : $this->successOutput(' no routes available ')
+                        ? $this->successOutput(' showing a single route ')
+                        : $this->successOutput(' no routes available ')
                     )
             )
             ->setHeaders(['HTTP METHOD', 'ROUTE', 'CLASS', 'FUNCTION'])

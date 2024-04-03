@@ -1,0 +1,32 @@
+[
+    {
+        "url": "/",
+        "method": "GET",
+        "params": []
+    },
+    {
+        "url": "logger",
+        "method": "GET",
+        "params": []
+    },
+    {
+        "url": "api/test",
+        "method": "POST",
+        "params": []
+    },
+    {
+        "url": "api/test",
+        "method": "GET",
+        "params": []
+    },
+    {
+        "url": "api/test/{id:i}",
+        "method": "PUT",
+        "params": []
+    },
+    {
+        "url": "api/test/{id:i}",
+        "method": "DELETE",
+        "params": []
+    }
+]

@@ -40,24 +40,24 @@ Dotenv::createImmutable(__DIR__ . '/../')->load();
 Route::init();
 Route::addMiddleware(Routes::getMiddleware());
 // -----------------------------------------------------------------------------
-Route::get('/', fn() => info('[index]'));
+Route::get('/', fn () => info('[index]'));
 
-Route::get('logger', function() {
+Route::get('logger', function () {
     logger('test-logger', 'info', ['user' => 'Sleon'], true);
 
     return success();
 });
 
-Route::prefix('api', function() {
-    Route::post('test', fn() => ['token' => jwt()]);
-    Route::get('test', fn() => success('test-response'));
-    Route::put('test/{id:i}', fn(string $id) => success('test-response: ' . $id));
+Route::prefix('api', function () {
+    Route::post('test', fn () => ['token' => jwt()]);
+    Route::get('test', fn () => success('test-response'));
+    Route::put('test/{id:i}', fn (string $id) => success('test-response: ' . $id));
 
-    Route::middleware(['protect-route-list'], function() {
-        Route::delete('test/{id:i}', fn(string $id) => success('test-response: ' . $id));
+    Route::middleware(['protect-route-list'], function () {
+        Route::delete('test/{id:i}', fn (string $id) => success('test-response: ' . $id));
     });
 });
 
-Route::get('route-list', fn() => Route::getFullRoutes(), ['protect-route-list']);
+Route::get('route-list', fn () => Route::getFullRoutes(), ['protect-route-list']);
 // -----------------------------------------------------------------------------
 Route::dispatch();
