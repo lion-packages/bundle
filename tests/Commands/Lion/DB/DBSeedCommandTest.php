@@ -29,8 +29,8 @@ class DBSeedCommandTest extends Test
     private CommandTester $commandTester;
     private CommandTester $commandTesterNewSeed;
 
-	protected function setUp(): void 
-	{
+    protected function setUp(): void
+    {
         $this->runDatabaseConnections();
         $this->createDirectory(self::URL_PATH);
 
@@ -40,19 +40,18 @@ class DBSeedCommandTest extends Test
 
         $this->commandTester = new CommandTester($application->find('db:seed'));
         $this->commandTesterNewSeed = new CommandTester($application->find('new:seed'));
-	}
+    }
 
-	protected function tearDown(): void 
-	{
+    protected function tearDown(): void
+    {
         $this->rmdirRecursively('./database/');
-	}
+    }
 
     public function testExecute(): void
     {
         $this->assertSame(Command::SUCCESS, $this->commandTesterNewSeed->execute(['seed' => self::CLASS_NAME]));
         $this->assertStringContainsString(self::OUTPUT_MESSAGE_NEW_SEED, $this->commandTesterNewSeed->getDisplay());
         $this->assertFileExists(self::URL_PATH . self::FILE_NAME);
-
         $this->assertSame(Command::SUCCESS, $this->commandTester->setInputs(['0'])->execute(['--run' => 1]));
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH . self::FILE_NAME);
