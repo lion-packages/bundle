@@ -19,6 +19,20 @@ use Lion\Files\Store;
 class ClassFactory
 {
     /**
+     * [.txt file extension]
+     *
+     * @const TXT_EXTENSION
+     */
+    const TXT_EXTENSION = 'txt';
+
+    /**
+     * [.json file extension]
+     *
+     * @const JSON_EXTENSION
+     */
+    const JSON_EXTENSION = 'json';
+
+    /**
      * [.php file extension]
      *
      * @const PHP_EXTENSION
@@ -120,7 +134,7 @@ class ClassFactory
      */
     public function create(
         string $fileName,
-        string $extension = 'php',
+        string $extension = self::PHP_EXTENSION,
         string $path = '',
         string $filePermissions = 'w+b'
     ): ClassFactory {
@@ -191,11 +205,12 @@ class ClassFactory
 
             if ($key === ($size - 1)) {
                 $this->namespace = $namespace;
+
                 $this->class = $part;
             } elseif ($key === ($size - 2)) {
-                $namespace.= $part;
+                $namespace .= $part;
             } else {
-                $namespace.= "$part\\";
+                $namespace .= "$part\\";
             }
         }
 
@@ -320,7 +335,10 @@ class ClassFactory
             }
         EOT;
 
-        return (object) ['name' => "get{$newName}", 'method' => $getter];
+        return (object) [
+            'name' => "get{$newName}",
+            'method' => $getter
+        ];
     }
 
     /**
@@ -358,7 +376,10 @@ class ClassFactory
             }
         EOT;
 
-        return (object) ['name' => "set{$newName}", 'method' => $setter];
+        return (object) [
+            'name' => "set{$newName}",
+            'method' => $setter
+        ];
     }
 
     /**
@@ -393,7 +414,7 @@ class ClassFactory
 
         $countContentFunction += '' === $type ? $allCount : $allCountWithType;
 
-        $methodType = $type === '' ? '' : ": {$type}";
+        $methodType = $type === '' ? ': void' : ": {$type}";
 
         $splitMethodType = explode(':', $methodType);
 
@@ -467,7 +488,7 @@ class ClassFactory
     /**
      * Format Pascal-Case to generate class names
      *
-     * @param  string $className [Class name]
+     * @param string $className [Class name]
      *
      * @return string
      */
@@ -494,7 +515,7 @@ class ClassFactory
      *
      * @return string
      */
-    public static function getDBType(string $type): string
+    public function getDBType(string $type): string
     {
         if (preg_match("/^int|bigint/", $type)) {
             return 'int';

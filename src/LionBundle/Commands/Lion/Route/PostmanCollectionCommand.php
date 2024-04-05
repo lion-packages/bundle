@@ -143,8 +143,11 @@ class PostmanCollectionCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->fetchRoutes();
+
         $this->postmanCollection->addRoutes($this->routes, Routes::getRules());
+
         $path = storage_path('postman/', false);
+
         $this->store->folder($path);
 
         $jsonData = [
@@ -170,6 +173,7 @@ class PostmanCollectionCommand extends Command
             ->close();
 
         $output->writeln($this->warningOutput("\t>>  COLLECTION: {$this->jsonName}"));
+
         $output->writeln($this->successOutput("\t>>  COLLECTION: Exported in {$path}{$this->jsonName}.json"));
 
         return Command::SUCCESS;

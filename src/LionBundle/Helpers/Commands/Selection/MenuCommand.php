@@ -20,6 +20,8 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
  * @property Arr $arr [Arr class object]
  * @property Store $store [Store class object]
  * @property Str $str [Str class object]
+ *
+ * @package Lion\Bundle\Helpers\Commands\Selection
  */
 class MenuCommand extends Command
 {
@@ -133,7 +135,7 @@ class MenuCommand extends Command
         OutputInterface $output,
         array $templates,
         string $defaultTemplate = 'React',
-        int $defaultIndex = 0
+        int $defaultIndex = 2
     ): string {
         /** @var QuestionHelper $helper */
         $helper = $this->getHelper('question');

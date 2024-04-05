@@ -8,8 +8,22 @@ use Lion\Helpers\Arr;
 use Lion\Helpers\Str;
 use Lion\Route\Route;
 
+/**
+ * Generate structures to create Postman collections
+ *
+ * @property Arr $arr [Arr class object]
+ * @property Str $str [Str class object]
+ * @property array $postman [List of configuration data for postman collection]
+ *
+ * @package Lion\Bundle\Helpers\Commands
+ */
 class PostmanCollection
 {
+    /**
+     * [Headers available for requests]
+     *
+     * @const HEADERS
+     */
     const HEADERS = [
         'key' => 'Content-Type',
         'value' => 'application/json',
@@ -17,19 +31,24 @@ class PostmanCollection
     ];
 
     /**
-     * [Object of class Arr]
+     * [Arr class object]
      *
      * @var Arr $arr
      */
     private Arr $arr;
 
     /**
-     * [Object of class Str]
+     * [Str class object]
      *
      * @var Str $str
      */
     private Str $str;
 
+    /**
+     * [List of configuration data for postman collection]
+     *
+     * @var array $postman
+     */
     private array $postman = [];
 
     /**
@@ -52,6 +71,13 @@ class PostmanCollection
         return $this;
     }
 
+    /**
+     * Defines the initial configuration of the collection
+     *
+     * @param string $host [Defines the host of HTTP requests]
+     *
+     * @return void
+     */
     public function init(string $host): void
     {
         $this->postman['params'] = [
@@ -66,50 +92,100 @@ class PostmanCollection
         ];
     }
 
-    private function addValuesParam(string $params, string $data, string $key, bool $index = false): string
+    /**
+     * Convert 2 values with GET format
+     *
+     * @param string $params [String that concatenates the parameters]
+     * @param string $value [Parameter value]
+     * @param string $key [Parameter name]
+     * @param bool $index [Confirm if the GET parameter is the initial one]
+     *
+     * @return string
+     */
+    private function addValuesParam(string $params, string $value, string $key, bool $index = false): string
     {
-        if ('' === $data) {
+        if ('' === $value) {
             $params .= !$index ? "&{$key}" : "?{$key}";
         } else {
-            $params .= !$index ? "&{$key}={$data}" : "?{$key}={$data}";
+            $params .= !$index ? "&{$key}={$value}" : "?{$key}={$value}";
         }
 
         return $params;
     }
 
-    private function createQueryParams(array $arrayParams): array
+    /**
+     * Convert a list of parameters to GET parameters
+     *
+     * @param string $jsonParams [JSON object with parameters]
+     *
+     * @return array<string>
+     */
+    private function createQueryParams(string $jsonParams): array
     {
         $query = [];
+
         $params = '';
+
         $cont = 0;
 
-        foreach ($arrayParams as $key => $data) {
-            if ($cont === 0) {
-                $params = $this->addValuesParam($params, $data, $key, true);
-                $cont++;
-            } else {
-                $params = $this->addValuesParam($params, $data, $key);
-            }
+        if (!empty($jsonParams)) {
+            foreach (json_decode($jsonParams, true) as $key => $data) {
+                if ($cont === 0) {
+                    $params = $this->addValuesParam($params, $data, $key, true);
 
-            $query[] = ['key' => $key, 'value' => ('' === $data ? null : $data)];
+                    $cont++;
+                } else {
+                    $params = $this->addValuesParam($params, $data, $key);
+                }
+
+                $query[] = [
+                    'key' => $key,
+                    'value' => ('' === $data ? null : $data)
+                ];
+            }
         }
 
-        return ['raw' => $params, 'query' => $query];
+        return [
+            'raw' => $params,
+            'query' => $query
+        ];
     }
 
-    private function addParams(array $rules): array
+    /**
+     * Gets the structure of the body with its respective keys and values
+     *
+     * @param array $rules [List of defined rules]
+     *
+     * @return array<string, string>|string
+     */
+    private function addParams(array $rules): array|string
     {
         $newParams = [];
 
         foreach ($rules as $rule) {
             $objectRuleClass = new $rule();
 
-            $newParams[$objectRuleClass->field] = $objectRuleClass->value;
+            if (!empty($objectRuleClass->field)) {
+                $newParams[$objectRuleClass->field] = $objectRuleClass->value;
+            }
         }
 
-        return $newParams;
+        if (count($newParams) > 0) {
+            return json_encode($newParams);
+        }
+
+        return '';
     }
 
+    /**
+     * Generate the structure of an HTTP PATCH request
+     *
+     * @param string $name [Request name]
+     * @param string $route [Route name]
+     * @param array $params [Parameters defined for routes]
+     *
+     * @return array
+     */
     private function addPatch(string $name, string $route, array $params): array
     {
         return [
@@ -120,7 +196,7 @@ class PostmanCollection
                 'header' => [self::HEADERS],
                 'body' => [
                     'mode' => 'raw',
-                    'raw' => json_encode($this->addParams($params)),
+                    'raw' => $this->addParams($params),
                     'options' => [
                         'raw' => [
                             'language' => 'json'
@@ -136,11 +212,25 @@ class PostmanCollection
         ];
     }
 
+    /**
+     * Generate the structure of an HTTP GET request
+     *
+     * @param string $name [Request name]
+     * @param string $route [Route name]
+     * @param array $params [Parameters defined for routes]
+     *
+     * @return array
+     */
     private function addGet(string $name, string $route, array $params): array
     {
-        $arrayParams = json_decode(json_encode($this->addParams($params)), true);
-        $createParams = self::createQueryParams($arrayParams);
-        $newRoute = $this->str->of("{{base_url}}/{$route}{$createParams['raw']}")->replace("//", '/')->get();
+        $paramsJson = $this->addParams($params);
+
+        $createParams = self::createQueryParams($paramsJson);
+
+        $newRoute = $this->str
+            ->of("{{base_url}}/{$route}{$createParams['raw']}")
+            ->replace("//", '/')
+            ->get();
 
         return [
             'name' => $name,
@@ -158,6 +248,15 @@ class PostmanCollection
         ];
     }
 
+    /**
+     * Generate the structure of an HTTP DELETE request
+     *
+     * @param string $name [Request name]
+     * @param string $route [Route name]
+     * @param array $params [Parameters defined for routes]
+     *
+     * @return array
+     */
     private function addDelete(string $name, string $route, array $params): array
     {
         return [
@@ -168,7 +267,7 @@ class PostmanCollection
                 'header' => [self::HEADERS],
                 'body' => [
                     'mode' => 'raw',
-                    'raw' => json_encode($this->addParams($params)),
+                    'raw' => $this->addParams($params),
                     'options' => [
                         'raw' => [
                             'language' => 'json'
@@ -184,6 +283,15 @@ class PostmanCollection
         ];
     }
 
+    /**
+     * Generate the structure of an HTTP POST request
+     *
+     * @param string $name [Request name]
+     * @param string $route [Route name]
+     * @param array $params [Parameters defined for routes]
+     *
+     * @return array
+     */
     private function addPost(string $name, string $route, array $params): array
     {
         return [
@@ -194,7 +302,7 @@ class PostmanCollection
                 'header' => [self::HEADERS],
                 'body' => [
                     'mode' => 'raw',
-                    'raw' => json_encode($this->addParams($params)),
+                    'raw' => $this->addParams($params),
                     'options' => [
                         'raw' => [
                             'language' => 'json'
@@ -210,6 +318,15 @@ class PostmanCollection
         ];
     }
 
+    /**
+     * Generate the structure of an HTTP PUT request
+     *
+     * @param string $name [Request name]
+     * @param string $route [Route name]
+     * @param array $params [Parameters defined for routes]
+     *
+     * @return array
+     */
     private function addPut(string $name, string $route, array $params): array
     {
         return [
@@ -220,7 +337,7 @@ class PostmanCollection
                 'header' => [self::HEADERS],
                 'body' => [
                     'mode' => 'raw',
-                    'raw' => json_encode($this->addParams($params)),
+                    'raw' => $this->addParams($params),
                     'options' => [
                         'raw' => [
                             'language' => 'json'
@@ -236,6 +353,16 @@ class PostmanCollection
         ];
     }
 
+    /**
+     * Generate the structure of an HTTP request
+     *
+     * @param string $name [Request name]
+     * @param string $route [Route name]
+     * @param string $method [Defined HTTP method]
+     * @param array $params [Parameters defined for routes]
+     *
+     * @return array
+     */
     private function addRequest(string $name, string $route, string $method, array $params): array
     {
         if (Route::POST === $method) {
@@ -253,11 +380,21 @@ class PostmanCollection
         }
     }
 
+    /**
+     * Add the available web routes to create a new data structure to generate
+     * collections
+     *
+     * @param array $routes [List of defined web routes]
+     * @param array $rules [List of defined web rules]
+     *
+     * @return void
+     */
     public function addRoutes(array $routes, array $rules): void
     {
-        foreach($routes as $routeUrl => $allRoutes) {
+        foreach ($routes as $routeUrl => $allRoutes) {
             foreach ($allRoutes as $routeMethod => $routeInfo) {
                 $params = [];
+
                 $pathRoute = '/' === $routeUrl ? '/' : "/{$routeUrl}";
 
                 if (isset($rules[$routeMethod][$pathRoute])) {
@@ -275,6 +412,11 @@ class PostmanCollection
         $this->generateItems();
     }
 
+    /**
+     * Generate the structures of each HTTP request for the collection
+     *
+     * @return void
+     */
     private function generateItems(): void
     {
         foreach ($this->postman['params']['routes'] as $route) {
@@ -287,9 +429,13 @@ class PostmanCollection
             }
 
             $reverse = $this->reverseArray($splitAll);
+
             $size = count($reverse) - 1;
+
             $request = null;
+
             $initial = true;
+
             $lastArray = [];
 
             foreach ($reverse as $keySplit => $split) {
@@ -307,6 +453,7 @@ class PostmanCollection
                 } else {
                     if ($initial) {
                         $initial = false;
+
                         $lastArray = ['name' => $split, 'item' => [$request]];
                     } else {
                         $lastArray = ['name' => $split, 'item' => [$lastArray]];
@@ -319,10 +466,19 @@ class PostmanCollection
             }
 
             $initial = true;
+
             $lastArray = [];
         }
     }
 
+    /**
+     * Organizes HTTP request structures for collections
+     *
+     * @param array $items [Data structure]
+     * @param &$result [List the data structure organized as a result]
+     *
+     * @return array
+     */
     public function createCollection(array $items, &$result = null): array
     {
         if ($result === null) {
@@ -331,6 +487,7 @@ class PostmanCollection
 
         foreach ($items as $json) {
             $name = $json['name'];
+
             $lastIndex = count($result) - 1;
 
             while ($lastIndex >= 0 && $result[$lastIndex]['name'] !== $name) {
@@ -351,17 +508,34 @@ class PostmanCollection
         return $result;
     }
 
+    /**
+     * Returns the routes available for the collection
+     *
+     * @return array<array<string, string>>
+     */
     public function getRoutes(): array
     {
         return $this->postman['params']['routes'];
     }
 
+    /**
+     * You get the data structures constructed from HTTP requests
+     *
+     * @return array
+     */
     public function getItems(): array
     {
         return $this->postman['params']['items'];
     }
 
-    public function reverseArray(array $items): array
+    /**
+     * Create an array with the data in reverse order
+     *
+     * @param array $items [List of defined elements]
+     *
+     * @return array
+     */
+    private function reverseArray(array $items): array
     {
         $newItems = [];
 

@@ -26,7 +26,9 @@ class ExceptionsCommandTest extends Test
     protected function setUp(): void
     {
         $application = (new Kernel())->getApplication();
+
         $application->add((new Container())->injectDependencies(new ExceptionsCommand()));
+
         $this->commandTester = new CommandTester($application->find('new:exception'));
 
         $this->createDirectory(self::URL_PATH);

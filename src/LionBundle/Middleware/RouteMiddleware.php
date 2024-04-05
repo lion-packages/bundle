@@ -15,21 +15,6 @@ use Lion\Request\Response;
 class RouteMiddleware
 {
     /**
-     * [List of all HTTP headers]
-     *
-     * @var array $headers;
-     */
-    private array $headers;
-
-    /**
-     * Class constructor
-     */
-    public function __construct()
-    {
-        $this->headers = apache_request_headers();
-    }
-
-    /**
      * Protects defined web routes by validating a header with the hash defined
      * in the environment
      *
@@ -37,11 +22,11 @@ class RouteMiddleware
      */
     public function protectRouteList(): void
     {
-        if (empty($this->headers['Lion-Auth'])) {
+        if (empty($_SERVER['HTTP_LION_AUTH'])) {
             finish(response(Response::SESSION_ERROR, 'Secure hash not found [1]', Request::HTTP_UNAUTHORIZED));
         }
 
-        if ($_ENV['SERVER_HASH'] != $this->headers['Lion-Auth']) {
+        if ($_ENV['SERVER_HASH'] != $_SERVER['HTTP_LION_AUTH']) {
             finish(
                 response(Response::SESSION_ERROR, 'You do not have access to this resource', Request::HTTP_UNAUTHORIZED)
             );

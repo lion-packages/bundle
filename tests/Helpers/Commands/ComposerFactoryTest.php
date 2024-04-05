@@ -6,7 +6,7 @@ namespace Tests\Helpers\Commands;
 
 use Lion\Bundle\Helpers\Commands\ComposerFactory;
 use Lion\DependencyInjection\Container;
-use Lion\Helpers\Arr;
+use Lion\Files\Store;
 use Lion\Test\Test;
 
 class ComposerFactoryTest extends Test
@@ -32,9 +32,39 @@ class ComposerFactoryTest extends Test
         $this->initReflection($this->composerFactory);
     }
 
-    public function testConstruct(): void
+    private function getComposerJson(): object
     {
-        $this->assertInstanceOf(Arr::class, $this->getPrivateProperty('arr'));
-        $this->assertIsArray($this->getPrivateProperty('libraries'));
+        return json_decode((new Store())->get(self::COMPOSER_JSON));
+    }
+
+    public function testLibraries(): void
+    {
+        $this->composerFactory->libraries($this->getComposerJson(), self::EXTENSIONS);
+
+        $libraries = $this->getPrivateProperty('libraries');
+
+        $this->assertIsArray($libraries);
+        $this->assertNotEmpty($libraries);
+    }
+
+    public function testLibrariesDev(): void
+    {
+        $this->composerFactory->librariesDev($this->getComposerJson(), self::EXTENSIONS);
+
+        $libraries = $this->getPrivateProperty('libraries');
+
+        $this->assertIsArray($libraries);
+        $this->assertNotEmpty($libraries);
+    }
+
+    public function testGetLibraries(): void
+    {
+        $libraries = $this->composerFactory
+            ->libraries($this->getComposerJson(), self::EXTENSIONS)
+            ->librariesDev($this->getComposerJson(), self::EXTENSIONS)
+            ->getLibraries();
+
+        $this->assertIsArray($libraries);
+        $this->assertNotEmpty($libraries);
     }
 }
