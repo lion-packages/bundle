@@ -14,8 +14,8 @@ class Env
     /**
      * Gets the value defined for an environment variable
      *
-     * @param  string $key [Property name]
-     * @param  mixed $default [Default value]
+     * @param string $key [Property name]
+     * @param mixed $default [Default value]
      *
      * @return mixed
      */
@@ -27,7 +27,7 @@ class Env
     /**
      * Gets the name of the property defined by its value
      *
-     * @param  string $value [Property value]
+     * @param string $value [Property value]
      *
      * @return string|int|false
      */
@@ -39,14 +39,14 @@ class Env
     /**
      * Gets and transforms the possible value of environment variables
      *
-     * @param  string $key [Property name]
-     * @param  mixed $default [Default value]
+     * @param string $key [Property name]
+     * @param mixed $default [Default value]
      *
      * @return mixed
      */
     private static function getOption(string $key, mixed $default): mixed
     {
-        $transform = function(mixed $value): mixed {
+        $transform = function (mixed $value): mixed {
             switch ($value) {
                 case 'true':
                 case '(true)':
