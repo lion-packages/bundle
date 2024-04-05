@@ -58,13 +58,9 @@ class FileWriter
      */
     private function replaceContent(array $row, string $modifiedLine, string $originalLine): string
     {
-        if ('--all-elem--' === $row['search']) {
-            $modifiedLine = str_pad($row['content'], strlen($originalLine));
-        } else {
-            $newLine = $this->str->of($originalLine)->replace($row['search'], $row['content'])->get();
+        $newLine = $this->str->of($originalLine)->replace($row['search'], $row['content'])->get();
 
-            $modifiedLine = str_pad($newLine, strlen($originalLine));
-        }
+        $modifiedLine = str_pad($newLine, strlen($originalLine));
 
         return $modifiedLine;
     }

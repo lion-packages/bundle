@@ -24,6 +24,5 @@ trait Singleton
 
     protected function init(): void
     {
-
     }
 }

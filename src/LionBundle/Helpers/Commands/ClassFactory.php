@@ -19,6 +19,20 @@ use Lion\Files\Store;
 class ClassFactory
 {
     /**
+     * [.txt file extension]
+     *
+     * @const TXT_EXTENSION
+     */
+    const TXT_EXTENSION = 'txt';
+
+    /**
+     * [.json file extension]
+     *
+     * @const JSON_EXTENSION
+     */
+    const JSON_EXTENSION = 'json';
+
+    /**
      * [.php file extension]
      *
      * @const PHP_EXTENSION
