@@ -104,7 +104,7 @@ class ExceptionsCommand extends Command
         $this->classFactory
             ->create($class, 'php', $folder)
             ->add(
-                <<<EOT
+                <<<PHP
                 <?php
 
                 declare(strict_types=1);
@@ -133,7 +133,7 @@ class ExceptionsCommand extends Command
                     }
                 }
 
-                EOT
+                PHP
             )
             ->close();
 

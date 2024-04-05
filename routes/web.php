@@ -17,7 +17,18 @@ require_once(__DIR__ . '/../vendor/autoload.php');
 
 use Lion\Route\Route;
 use Dotenv\Dotenv;
+use Lion\Bundle\Helpers\ExceptionCore;
 use Lion\Bundle\Helpers\Http\Routes;
+
+/**
+ * -----------------------------------------------------------------------------
+ * Initialize exception handling
+ * -----------------------------------------------------------------------------
+ * Controls and serializes exceptions to JSON format
+ * -----------------------------------------------------------------------------
+ **/
+
+(new ExceptionCore)->exceptionHandler();
 
 /**
  * -----------------------------------------------------------------------------
@@ -40,7 +51,9 @@ Dotenv::createImmutable(__DIR__ . '/../')->load();
 Route::init();
 Route::addMiddleware(Routes::getMiddleware());
 // -----------------------------------------------------------------------------
-Route::get('/', fn () => info('[index]'));
+Route::get('/', function () {
+    return info('[index]');
+});
 
 Route::get('logger', function () {
     logger('test-logger', 'info', ['user' => 'Sleon'], true);
