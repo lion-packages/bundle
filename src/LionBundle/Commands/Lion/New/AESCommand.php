@@ -86,7 +86,7 @@ class AESCommand extends Command
             $input,
             $output,
             new ChoiceQuestion(
-                ('Select project ' . $this->warningOutput('(default: ' . reset($aesMethods) . ')')),
+                ('Select AES method ' . $this->warningOutput('(default: ' . reset($aesMethods) . ')')),
                 $aesMethods,
                 0
             )
@@ -94,7 +94,7 @@ class AESCommand extends Command
 
         $config = $this->aes->create($aesMethod)->toObject()->get();
 
-        $output->writeln($this->errorOutput("\t>>  AES METHOD: {$aesMethod}"));
+        $output->writeln($this->infoOutput("\t>>  AES METHOD: {$aesMethod}"));
         $output->writeln($this->warningOutput("\t>>  AES KEY: {$config->key}"));
         $output->writeln($this->warningOutput("\t>>  AES IV: {$config->iv}"));
         $output->writeln($this->successOutput("\t>>  Keys created successfully"));
