@@ -9,7 +9,7 @@ use Lion\Bundle\Helpers\Commands\Schedule\Schedule;
 use Lion\Bundle\Interface\ScheduleInterface;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
-use Lion\DependencyInjection\Container;
+use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
 use Lion\Helpers\Arr;
 use Lion\Helpers\Str;
@@ -82,8 +82,7 @@ class UpScheduleCommand extends Command
         Kernel $kernel,
         Str $str,
         Arr $arr
-    ): UpScheduleCommand
-    {
+    ): UpScheduleCommand {
         $this->classFactory = $classFactory;
 
         $this->container = $container;

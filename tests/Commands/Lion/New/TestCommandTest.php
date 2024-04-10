@@ -7,7 +7,7 @@ namespace Tests\Commands\Lion\New;
 use Lion\Bundle\Commands\Lion\New\TestCommand;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
-use Lion\DependencyInjection\Container;
+use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
 use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -23,17 +23,17 @@ class TestCommandTest extends Test
 
     private CommandTester $commandTester;
 
-	protected function setUp(): void 
-	{
+    protected function setUp(): void
+    {
         $application = (new Kernel())->getApplication();
         $application->add((new Container())->injectDependencies(new TestCommand()));
         $this->commandTester = new CommandTester($application->find('new:test'));
-	}
+    }
 
-	protected function tearDown(): void 
-	{
+    protected function tearDown(): void
+    {
         (new Store())->remove('./tests/' . self::FILE_NAME);
-	}
+    }
 
     public function testExecute(): void
     {

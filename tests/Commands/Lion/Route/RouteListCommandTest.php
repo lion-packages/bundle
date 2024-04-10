@@ -10,7 +10,7 @@ use Lion\Bundle\Helpers\Http\Routes;
 use Lion\Bundle\Middleware\RouteMiddleware;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
-use Lion\DependencyInjection\Container;
+use Lion\Dependency\Injection\Container;
 use Lion\Route\Middleware;
 use Lion\Route\Route;
 use Lion\Test\Test;

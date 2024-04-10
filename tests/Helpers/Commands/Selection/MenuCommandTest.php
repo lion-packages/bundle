@@ -7,7 +7,7 @@ namespace Tests\Helpers\Commands\Selection;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
-use Lion\DependencyInjection\Container;
+use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Console\Input\InputInterface;

@@ -7,7 +7,7 @@ namespace Lion\Bundle\Commands\Lion\Migrations;
 use Lion\Bundle\Interface\MigrationUpInterface;
 use Lion\Command\Command;
 use Lion\Database\Drivers\Schema\MySQL as Schema;
-use Lion\DependencyInjection\Container;
+use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
@@ -183,7 +183,7 @@ class FreshMigrationsCommand extends Command
      */
     private function orderList(array $files): array
     {
-        uasort($files, function($classA, $classB) {
+        uasort($files, function ($classA, $classB) {
             $namespaceA = $classA::class;
 
             $namespaceB = $classB::class;

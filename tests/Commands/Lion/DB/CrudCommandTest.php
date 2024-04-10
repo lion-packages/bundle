@@ -15,7 +15,7 @@ use Lion\Bundle\Commands\Lion\New\TestCommand;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\Database\Drivers\Schema\MySQL as Schema;
-use Lion\DependencyInjection\Container;
+use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tests\Providers\ConnectionProviderTrait;
@@ -39,8 +39,8 @@ class CrudCommandTest extends Test
 
     private CommandTester $commandTester;
 
-	protected function setUp(): void 
-	{
+    protected function setUp(): void
+    {
         $this->runDatabaseConnections();
 
         $this->createTable();
@@ -61,10 +61,10 @@ class CrudCommandTest extends Test
         ]);
 
         $this->commandTester = new CommandTester($kernel->getApplication()->find('db:crud'));
-	}
+    }
 
-	protected function tearDown(): void 
-	{
+    protected function tearDown(): void
+    {
         $this->rmdirRecursively('./app/');
 
         $this->rmdirRecursively('./database/');
@@ -74,12 +74,12 @@ class CrudCommandTest extends Test
         $this->rmdirRecursively('./tests/Database/');
 
         Schema::dropTable(self::ENTITY)->execute();
-	}
+    }
 
     private function createTable(): void
     {
-        Schema::createTable(self::ENTITY, function() {
-             Schema::int('id')->notNull()->autoIncrement()->primaryKey()
+        Schema::createTable(self::ENTITY, function () {
+            Schema::int('id')->notNull()->autoIncrement()->primaryKey()
                 ->varchar('name', 25)->notNull()
                 ->varchar('last_name', 25)->notNull();
         })->execute();

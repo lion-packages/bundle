@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Helpers\Commands;
 
 use Lion\Bundle\Helpers\Commands\ComposerFactory;
-use Lion\DependencyInjection\Container;
+use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
 use Lion\Test\Test;
 

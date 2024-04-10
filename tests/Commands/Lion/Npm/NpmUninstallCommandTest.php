@@ -9,7 +9,7 @@ use Lion\Bundle\Commands\Lion\Npm\NpmInstallCommand;
 use Lion\Bundle\Commands\Lion\Npm\NpmUninstallCommand;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
-use Lion\DependencyInjection\Container;
+use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
 

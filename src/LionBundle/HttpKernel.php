@@ -7,7 +7,7 @@ namespace Lion\Bundle;
 use Lion\Bundle\Helpers\Http\Routes;
 use Lion\Bundle\Helpers\Rules;
 use Lion\Bundle\Interface\RulesInterface;
-use Lion\DependencyInjection\Container;
+use Lion\Dependency\Injection\Container;
 
 class HttpKernel
 {

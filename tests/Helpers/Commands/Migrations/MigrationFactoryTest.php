@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Helpers\Commands\Migrations;
 
 use Lion\Bundle\Helpers\Commands\Migrations\MigrationFactory;
-use Lion\DependencyInjection\Container;
+use Lion\Dependency\Injection\Container;
 use Lion\Helpers\Str;
 use Lion\Test\Test;
 

@@ -8,7 +8,7 @@ use Lion\Bundle\Commands\Lion\New\CapsuleCommand;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
-use Lion\DependencyInjection\Container;
+use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -25,7 +25,7 @@ class CapsuleCommandTest extends Test
     private CommandTester $commandTester;
     private ClassFactory $classFactory;
 
-	protected function setUp(): void
+    protected function setUp(): void
     {
         $this->classFactory = new ClassFactory();
 
