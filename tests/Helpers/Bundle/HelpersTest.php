@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Helpers\Bundle;
 
 use Carbon\Carbon;
+use DateTimeZone;
 use Faker\Generator;
 use Lion\Bundle\Enums\LogTypeEnum;
 use Lion\Request\Request;
@@ -37,7 +38,13 @@ class HelpersTest extends Test
         $this->loadEnviroment();
     }
 
-	public function testFetch(): void
+    public function testNow(): void
+    {
+        $this->assertInstanceOf(Carbon::class, now());
+        $this->assertInstanceOf(Carbon::class, now(new DateTimeZone('America/Bogota')));
+    }
+
+    public function testFetch(): void
     {
         $response = json_decode(fetch(Route::GET, env('SERVER_URL'))->getBody()->getContents(), true);
 
@@ -185,8 +192,8 @@ class HelpersTest extends Test
                     'Authorization' => "Bearer {$token}"
                 ]
             ])
-            ->getBody()
-            ->getContents()
+                ->getBody()
+                ->getContents()
         );
 
         $this->assertIsObject($response);
