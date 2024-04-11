@@ -7,7 +7,7 @@ namespace Tests\Commands\Lion\New;
 use Lion\Bundle\Commands\Lion\New\RulesCommand;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
-use Lion\DependencyInjection\Container;
+use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -24,8 +24,8 @@ class RulesCommandTest extends Test
     private CommandTester $commandTester;
     private Container $container;
 
-	protected function setUp(): void 
-	{
+    protected function setUp(): void
+    {
         $this->container = new Container();
 
         $application = (new Kernel())->getApplication();
@@ -33,12 +33,12 @@ class RulesCommandTest extends Test
         $this->commandTester = new CommandTester($application->find('new:rule'));
 
         $this->createDirectory(self::URL_PATH);
-	}
+    }
 
-	protected function tearDown(): void 
-	{
+    protected function tearDown(): void
+    {
         $this->rmdirRecursively('./app/');
-	}
+    }
 
     public function testExecute(): void
     {

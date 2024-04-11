@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Lion\Bundle\Commands\Lion\Sockets;
 
 use Lion\Command\Command;
-use Lion\DependencyInjection\Container;
+use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
 use Ratchet\Http\HttpServer;
 use Ratchet\Server\IoServer;
@@ -127,10 +127,10 @@ class ServerSocketCommand extends Command
         $output->writeln($this->warningOutput("\t>>  Press Ctrl+C to stop the socket"));
 
         IoServer::factory(
-                new HttpServer(new WsServer($socketClass)),
-                $socketClass::PORT,
-                $socketClass::HOST
-            )
+            new HttpServer(new WsServer($socketClass)),
+            $socketClass::PORT,
+            $socketClass::HOST
+        )
             ->run();
 
         return Command::SUCCESS;

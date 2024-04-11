@@ -8,7 +8,7 @@ use Lion\Bundle\Commands\Lion\Npm\NpmInitCommand;
 use Lion\Bundle\Commands\Lion\Npm\NpmUpdateCommand;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
-use Lion\DependencyInjection\Container;
+use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
 

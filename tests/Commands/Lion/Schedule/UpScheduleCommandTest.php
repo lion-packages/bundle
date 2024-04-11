@@ -10,13 +10,13 @@ use Lion\Bundle\Commands\Lion\Schedule\UpScheduleCommand;
 use Lion\Bundle\Interface\ScheduleInterface;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
-use Lion\DependencyInjection\Container;
+use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class UpScheduleCommandTest extends Test
 {
-	const URL_PATH = './app/Console/Cron/';
+    const URL_PATH = './app/Console/Cron/';
     const URL_PATH_COMMAND = './app/Console/Commands/';
     const NAMESPACE_CLASS = 'App\\Console\\Cron\\';
     const CLASS_NAME = 'TestCron';

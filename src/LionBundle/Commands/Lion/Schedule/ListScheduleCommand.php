@@ -7,7 +7,7 @@ namespace Lion\Bundle\Commands\Lion\Schedule;
 use Lion\Bundle\Helpers\Commands\Schedule\Schedule;
 use Lion\Bundle\Interface\ScheduleInterface;
 use Lion\Command\Command;
-use Lion\DependencyInjection\Container;
+use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
 use Lion\Helpers\Str;
 use Symfony\Component\Console\Helper\Table;

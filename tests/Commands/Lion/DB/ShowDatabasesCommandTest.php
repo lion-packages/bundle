@@ -7,7 +7,7 @@ namespace Tests\Commands\Lion\DB;
 use Lion\Bundle\Commands\Lion\DB\ShowDatabasesCommand;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
-use Lion\DependencyInjection\Container;
+use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tests\Providers\ConnectionProviderTrait;
@@ -23,14 +23,14 @@ class ShowDatabasesCommandTest extends Test
 
     private CommandTester $commandTester;
 
-	protected function setUp(): void 
-	{
+    protected function setUp(): void
+    {
         $application = (new Kernel())->getApplication();
         $application->add((new Container())->injectDependencies(new ShowDatabasesCommand()));
         $this->commandTester = new CommandTester($application->find('db:show'));
 
         $this->runDatabaseConnections();
-	}
+    }
 
     public function testExecute(): void
     {

@@ -11,7 +11,7 @@ use Lion\Bundle\Interface\RulesInterface;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\Database\Drivers\Schema\MySQL as Schema;
-use Lion\DependencyInjection\Container;
+use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tests\Providers\ConnectionProviderTrait;
@@ -34,7 +34,7 @@ class RulesDBCommandTest extends Test
     {
         $this->runDatabaseConnections();
 
-        Schema::createTable(self::ENTITY, function() {
+        Schema::createTable(self::ENTITY, function () {
             Schema::int('id')->notNull()->autoIncrement()->primaryKey();
             Schema::varchar('name', 25)->notNull()->comment('username');
             Schema::varchar('last_name', 25)->null()->default('N/A');

@@ -8,7 +8,7 @@ use Lion\Bundle\Commands\Lion\New\MigrationCommand;
 use Lion\Bundle\Interface\MigrationUpInterface;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
-use Lion\DependencyInjection\Container;
+use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tests\Providers\ConnectionProviderTrait;
@@ -27,17 +27,17 @@ class MigrationCommandTest extends Test
 
     private CommandTester $commandTester;
 
-	protected function setUp(): void 
-	{
+    protected function setUp(): void
+    {
         $application = (new Kernel())->getApplication();
         $application->add((new Container())->injectDependencies(new MigrationCommand()));
         $this->commandTester = new CommandTester($application->find('new:migration'));
-	}
+    }
 
-	protected function tearDown(): void
-	{
+    protected function tearDown(): void
+    {
         $this->rmdirRecursively('./database/');
-	}
+    }
 
     public function testExecuteIsInvalid(): void
     {

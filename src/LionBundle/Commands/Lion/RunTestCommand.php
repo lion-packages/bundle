@@ -6,7 +6,7 @@ namespace Lion\Bundle\Commands\Lion;
 
 use Lion\Command\Command;
 use Lion\Command\Kernel;
-use Lion\DependencyInjection\Container;
+use Lion\Dependency\Injection\Container;
 use Lion\Helpers\Arr;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -79,9 +79,9 @@ class RunTestCommand extends Command
      *
      * @return void
      */
-	protected function configure(): void
-	{
-		$this
+    protected function configure(): void
+    {
+        $this
             ->setName('test')
             ->setDescription('Command to create run unit tests')
             ->addOption('class', 'c', InputOption::VALUE_OPTIONAL, 'Do you want to run a specific class?', false)
@@ -93,7 +93,7 @@ class RunTestCommand extends Command
                 'Do you want to test a specific directory?',
                 'All-Test'
             );
-	}
+    }
 
     /**
      * Executes the current command
@@ -114,37 +114,37 @@ class RunTestCommand extends Command
      *
      * @see setCode()
      */
-	protected function execute(InputInterface $input, OutputInterface $output): int
-	{
-		$result = '';
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $result = '';
 
-		$class = $input->getOption('class');
+        $class = $input->getOption('class');
 
-		$method = $input->getOption('method');
+        $method = $input->getOption('method');
 
-		$suite = $input->getOption('suite');
+        $suite = $input->getOption('suite');
 
         $output->writeln($this->successOutput("\t>>  Running unit tests...\n\t>>  "));
 
-        $unitPath = $this->container->normalizePath('./vendor/bin/phpunit');
+        $path = './vendor/bin/phpunit';
 
-		if (!$class && !$method) {
-			$result = $this->kernel->execute("{$unitPath} --testsuite {$suite}", false);
-		}
+        if (!$class && !$method) {
+            $result = $this->kernel->execute("{$path} --testsuite {$suite}", false);
+        }
 
-		if ($class && !$method) {
-			$result = $this->kernel->execute("{$unitPath} tests/{$class}.php --testsuite {$suite}", false);
-		}
+        if ($class && !$method) {
+            $result = $this->kernel->execute("{$path} tests/{$class}.php --testsuite {$suite}", false);
+        }
 
-		if ($class && $method) {
-			$result = $this->kernel->execute(
-				"{$unitPath} tests/{$class}.php --filter {$method} --testsuite {$suite}",
-				false
-			);
-		}
+        if ($class && $method) {
+            $result = $this->kernel->execute(
+                "{$path} tests/{$class}.php --filter {$method} --testsuite {$suite}",
+                false
+            );
+        }
 
-		$output->writeln($this->warningOutput("\t>>  " . $this->arr->of($result)->join("\n\t>>  ")));
+        $output->writeln($this->warningOutput("\t>>  " . $this->arr->of($result)->join("\n\t>>  ")));
 
         return Command::SUCCESS;
-	}
+    }
 }

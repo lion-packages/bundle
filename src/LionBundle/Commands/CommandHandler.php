@@ -6,7 +6,7 @@ namespace Lion\Bundle\Commands;
 
 use Lion\Command\Command;
 use Lion\Command\Kernel;
-use Lion\DependencyInjection\Container;
+use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
 use Symfony\Component\Console\Application;
 
@@ -22,14 +22,14 @@ use Symfony\Component\Console\Application;
 class CommandHandler
 {
     /**
-     * [Application class object]
+     * [An Application is the container for a collection of commands]
      *
      * @var Application $application
      */
     private Application $application;
 
     /**
-     * [Container class object]
+     * [Container to generate dependency injection]
      *
      * @var Container $container
      */
@@ -86,7 +86,7 @@ class CommandHandler
 
         foreach ($this->container->getFiles($pathCommands) as $file) {
             if (isSuccess($this->store->validate([$file], ['php']))) {
-                $class = $this->container->getNamespace($file, $namespace, $this->container->normalizePath($pathSplit));
+                $class = $this->container->getNamespace($file, $namespace, $pathSplit);
                 $commands[] = $this->container->injectDependencies(new $class());
             }
         }

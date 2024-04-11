@@ -6,7 +6,7 @@ namespace Lion\Bundle\Helpers\Commands;
 
 use Closure;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
-use Lion\DependencyInjection\Container;
+use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
 
 /**

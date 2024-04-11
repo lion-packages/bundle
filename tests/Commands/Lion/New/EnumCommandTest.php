@@ -7,7 +7,7 @@ namespace Tests\Commands\Lion\New;
 use Lion\Bundle\Commands\Lion\New\EnumCommand;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
-use Lion\DependencyInjection\Container;
+use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -23,19 +23,19 @@ class EnumCommandTest extends Test
 
     private CommandTester $commandTester;
 
-	protected function setUp(): void 
-	{
+    protected function setUp(): void
+    {
         $application = (new Kernel())->getApplication();
         $application->add((new Container())->injectDependencies(new EnumCommand()));
         $this->commandTester = new CommandTester($application->find('new:enum'));
 
         $this->createDirectory(self::URL_PATH);
-	}
+    }
 
-	protected function tearDown(): void 
-	{
+    protected function tearDown(): void
+    {
         $this->rmdirRecursively('./app/');
-	}
+    }
 
     public function testExecute(): void
     {

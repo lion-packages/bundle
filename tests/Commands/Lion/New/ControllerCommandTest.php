@@ -8,7 +8,7 @@ use Lion\Bundle\Commands\Lion\New\ControllerCommand;
 use Lion\Bundle\Commands\Lion\New\ModelCommand;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
-use Lion\DependencyInjection\Container;
+use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -32,8 +32,8 @@ class ControllerCommandTest extends Test
 
     private CommandTester $commandTester;
 
-	protected function setUp(): void 
-	{
+    protected function setUp(): void
+    {
         $container = new Container();
         $application = (new Kernel())->getApplication();
         $application->add($container->injectDependencies(new ControllerCommand()));
@@ -43,12 +43,12 @@ class ControllerCommandTest extends Test
 
         $this->createDirectory(self::URL_PATH);
         $this->createDirectory(self::URL_PATH_MODEL);
-	}
+    }
 
-	protected function tearDown(): void 
-	{
+    protected function tearDown(): void
+    {
         $this->rmdirRecursively('./app/');
-	}
+    }
 
     public function testExecute(): void
     {

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "409b20d85d21a5324aa5bf0e1f2a3a15",
+    "content-hash": "a02fc1c306f62a6d6628a2c4771bd977",
     "packages": [
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -982,20 +982,19 @@
         },
         {
             "name": "lion/dependency-injection",
-            "version": "v1.4.1",
+            "version": "v1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/dependency-injection.git",
-                "reference": "1b98612551c5a4ed2dc0392c3f7f9a1e162715fe"
+                "reference": "f54a7627509a5ff937e4628d505709afd48477f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/dependency-injection/zipball/1b98612551c5a4ed2dc0392c3f7f9a1e162715fe",
-                "reference": "1b98612551c5a4ed2dc0392c3f7f9a1e162715fe",
+                "url": "https://api.github.com/repos/lion-packages/dependency-injection/zipball/f54a7627509a5ff937e4628d505709afd48477f3",
+                "reference": "f54a7627509a5ff937e4628d505709afd48477f3",
                 "shasum": ""
             },
             "require": {
-                "lion/helpers": "^3.0",
                 "php": ">=8.2",
                 "php-di/php-di": "^7.0"
             },
@@ -1006,7 +1005,7 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Lion\\DependencyInjection\\": "src/DependencyInjection/"
+                    "Lion\\Dependency\\Injection\\": "src/DependencyInjection/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1016,9 +1015,9 @@
             "description": "Container for dependency injection with DI-PHP",
             "support": {
                 "issues": "https://github.com/lion-packages/dependency-injection/issues",
-                "source": "https://github.com/lion-packages/dependency-injection/tree/v1.4.1"
+                "source": "https://github.com/lion-packages/dependency-injection/tree/v1.5.0"
             },
-            "time": "2024-03-03T22:27:28+00:00"
+            "time": "2024-04-10T17:08:41+00:00"
         },
         {
             "name": "lion/files",
@@ -1060,16 +1059,16 @@
         },
         {
             "name": "lion/helpers",
-            "version": "v3.1.1",
+            "version": "v3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/helpers.git",
-                "reference": "5ccb8bee5a466be868ead096c594beb7a43f7be1"
+                "reference": "a941ae2722cde7a6efdef49bb2d7ddd0919169bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/helpers/zipball/5ccb8bee5a466be868ead096c594beb7a43f7be1",
-                "reference": "5ccb8bee5a466be868ead096c594beb7a43f7be1",
+                "url": "https://api.github.com/repos/lion-packages/helpers/zipball/a941ae2722cde7a6efdef49bb2d7ddd0919169bd",
+                "reference": "a941ae2722cde7a6efdef49bb2d7ddd0919169bd",
                 "shasum": ""
             },
             "require": {
@@ -1092,9 +1091,9 @@
             "description": "easy to use helpers for any type of use",
             "support": {
                 "issues": "https://github.com/lion-packages/helpers/issues",
-                "source": "https://github.com/lion-packages/helpers/tree/v3.1.1"
+                "source": "https://github.com/lion-packages/helpers/tree/v3.2.0"
             },
-            "time": "2024-02-13T14:48:04+00:00"
+            "time": "2024-04-10T15:26:11+00:00"
         },
         {
             "name": "lion/mailer",
@@ -1177,20 +1176,20 @@
         },
         {
             "name": "lion/route",
-            "version": "v10.3.0",
+            "version": "v10.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/route.git",
-                "reference": "43ceafdcebdd51d08c6076bfa4dbb8294b19bc73"
+                "reference": "a536e60c0ef75289e237fb165eab1c8b1ab0efcc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/route/zipball/43ceafdcebdd51d08c6076bfa4dbb8294b19bc73",
-                "reference": "43ceafdcebdd51d08c6076bfa4dbb8294b19bc73",
+                "url": "https://api.github.com/repos/lion-packages/route/zipball/a536e60c0ef75289e237fb165eab1c8b1ab0efcc",
+                "reference": "a536e60c0ef75289e237fb165eab1c8b1ab0efcc",
                 "shasum": ""
             },
             "require": {
-                "lion/dependency-injection": "^1.1",
+                "lion/dependency-injection": "^1.5",
                 "php": ">=8.2",
                 "php-di/php-di": "^7.0",
                 "phroute/phroute": "^2.2"
@@ -1213,22 +1212,22 @@
             "description": "This library has quick router usage with regular expressions.",
             "support": {
                 "issues": "https://github.com/lion-packages/route/issues",
-                "source": "https://github.com/lion-packages/route/tree/v10.3.0"
+                "source": "https://github.com/lion-packages/route/tree/v10.4.0"
             },
-            "time": "2024-03-03T22:38:17+00:00"
+            "time": "2024-04-10T21:26:38+00:00"
         },
         {
             "name": "lion/security",
-            "version": "v9.0.2",
+            "version": "v9.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/security.git",
-                "reference": "8b1c19f109df73a540162653ef747f4c6295387e"
+                "reference": "b9fd06671a7e93aaf470a801cfd1b7f3d8cb048d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/security/zipball/8b1c19f109df73a540162653ef747f4c6295387e",
-                "reference": "8b1c19f109df73a540162653ef747f4c6295387e",
+                "url": "https://api.github.com/repos/lion-packages/security/zipball/b9fd06671a7e93aaf470a801cfd1b7f3d8cb048d",
+                "reference": "b9fd06671a7e93aaf470a801cfd1b7f3d8cb048d",
                 "shasum": ""
             },
             "require": {
@@ -1255,9 +1254,9 @@
             "description": "Library created with the function of implementing AES, RSA and JWT Security functions for PHP.",
             "support": {
                 "issues": "https://github.com/lion-packages/security/issues",
-                "source": "https://github.com/lion-packages/security/tree/v9.0.2"
+                "source": "https://github.com/lion-packages/security/tree/v9.1.0"
             },
-            "time": "2024-03-08T02:46:29+00:00"
+            "time": "2024-04-10T04:17:07+00:00"
         },
         {
             "name": "monolog/monolog",

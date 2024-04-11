@@ -6,7 +6,7 @@ namespace Lion\Bundle\Commands\Lion\DB;
 
 use Lion\Bundle\Interface\SeedInterface;
 use Lion\Command\Command;
-use Lion\DependencyInjection\Container;
+use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -101,13 +101,9 @@ class DBSeedCommand extends Command
         /** @var array<SeedInterface> $files */
         $files = [];
 
-        foreach ($this->container->getFiles($this->container->normalizePath('./database/Seed/')) as $seed) {
+        foreach ($this->container->getFiles('./database/Seed/') as $seed) {
             if (isSuccess($this->store->validate([$seed], ['php']))) {
-                $class = $this->container->getNamespace(
-                    $seed,
-                    'Database\\Seed\\',
-                    $this->container->normalizePath('Seed/')
-                );
+                $class = $this->container->getNamespace($seed, 'Database\\Seed\\', 'Seed/');
 
                 /** @var SeedInterface $seedInterface */
                 $seedInterface = new $class();
@@ -144,7 +140,7 @@ class DBSeedCommand extends Command
      */
     private function orderList(array $files): array
     {
-        uasort($files, function($classA, $classB) {
+        uasort($files, function ($classA, $classB) {
             $namespaceA = $classA::class;
             $namespaceB = $classB::class;
 

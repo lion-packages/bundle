@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Helpers;
 
-use Lion\DependencyInjection\Container;
+use Lion\Dependency\Injection\Container;
 use Lion\Helpers\Str;
 
 /**
@@ -75,7 +75,7 @@ class FileWriter
      */
     public function readFileRows(string $path, array $rows): void
     {
-        $path = $this->container->normalizePath($path);
+        $path = $path;
 
         $file = fopen($path, 'r+');
 
