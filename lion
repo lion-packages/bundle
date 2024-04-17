@@ -18,6 +18,7 @@ require_once(__DIR__ . '/vendor/autoload.php');
 use Dotenv\Dotenv;
 use Lion\Bundle\Commands\CommandHandler;
 use Lion\Database\Driver;
+use Lion\Mailer\Mailer;
 
 /**
  * -----------------------------------------------------------------------------
@@ -36,26 +37,67 @@ Dotenv::createImmutable(__DIR__)->load();
  * */
 
 Driver::run([
-    'default' => $_ENV['DB_NAME'],
+    'default' => env('DB_NAME'),
     'connections' => [
-        $_ENV['DB_NAME'] => [
-            'type' => $_ENV['DB_TYPE'],
-            'host' => $_ENV['DB_HOST'],
-            'port' => $_ENV['DB_PORT'],
-            'dbname' => $_ENV['DB_NAME'],
-            'user' => $_ENV['DB_USER'],
-            'password' => $_ENV['DB_PASSWORD']
+        env('DB_NAME') => [
+            'type' => env('DB_TYPE'),
+            'host' => env('DB_HOST'),
+            'port' => env('DB_PORT'),
+            'dbname' => env('DB_NAME'),
+            'user' => env('DB_USER'),
+            'password' => env('DB_PASSWORD')
         ],
-        $_ENV['DB_NAME_TEST'] => [
-            'type' => $_ENV['DB_TYPE_TEST'],
-            'host' => $_ENV['DB_HOST_TEST'],
-            'port' => $_ENV['DB_PORT_TEST'],
-            'dbname' => $_ENV['DB_NAME'],
-            'user' => $_ENV['DB_USER_TEST'],
-            'password' => $_ENV['DB_PASSWORD_TEST']
+        env('DB_NAME_TEST') => [
+            'type' => env('DB_TYPE_TEST'),
+            'host' => env('DB_HOST_TEST'),
+            'port' => env('DB_PORT_TEST'),
+            'dbname' => env('DB_NAME'),
+            'user' => env('DB_USER_TEST'),
+            'password' => env('DB_PASSWORD_TEST')
         ]
     ]
 ]);
+
+/**
+ * -----------------------------------------------------------------------------
+ * Start mail service
+ * -----------------------------------------------------------------------------
+ * describe connections to establish connecting to multiple databases
+ * -----------------------------------------------------------------------------
+ **/
+
+Mailer::initialize([
+    env('MAIL_NAME', 'lion-app') => [
+        'name' => env('MAIL_NAME', 'lion-app'),
+        'type' => env('MAIL_TYPE', 'symfony'),
+        'host' => env('MAIL_HOST', 'mailhog'),
+        'username' => env('MAIL_USER_NAME', 'lion-app'),
+        'password' => env('MAIL_PASSWORD', 'lion'),
+        'port' => (int) env('MAIL_PORT', 1025),
+        'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+        'debug' => env('MAIL_DEBUG', false)
+    ],
+    env('MAIL_NAME_SUPP', 'lion-app') => [
+        'name' => env('MAIL_NAME_SUPP', 'lion-app'),
+        'type' => env('MAIL_TYPE_SUPP', 'symfony'),
+        'host' => env('MAIL_HOST_SUPP', 'mailhog'),
+        'username' => env('MAIL_USER_NAME_SUPP', 'lion-app'),
+        'password' => env('MAIL_PASSWORD_SUPP', 'lion'),
+        'port' => (int) env('MAIL_PORT_SUPP', 1025),
+        'encryption' => env('MAIL_ENCRYPTION_SUPP', 'tls'),
+        'debug' => env('MAIL_DEBUG_SUPP', false)
+    ]
+], env('MAIL_NAME', 'lion-app'));
+
+/**
+ * -----------------------------------------------------------------------------
+ * Queued Tasks
+ * -----------------------------------------------------------------------------
+ * This is where you can register the processes required for your queued tasks
+ * -----------------------------------------------------------------------------
+ **/
+
+include(__DIR__ . '/config/queue.php');
 
 /**
  * -----------------------------------------------------------------------------

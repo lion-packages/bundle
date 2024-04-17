@@ -10,13 +10,14 @@ use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Command\Command;
 use Lion\Database\Drivers\Schema\MySQL as Schema;
 use Lion\Database\Helpers\Constants\MySQLConstants;
+use Lion\Request\Request;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * ExampleCommand description
  *
- * @package App\Console\Commands
+ * @package Lion\Bundle\Commands\Lion\Schedule
  */
 class ScheduleSchemaCommand extends MenuCommand
 {
@@ -109,6 +110,9 @@ class ScheduleSchemaCommand extends MenuCommand
      * @param string $connection [Connection name where the table is created]
      *
      * @return void
+     *
+     * @throws Exception [Catch an exception if the schema of the queued tasks
+     * is not created]
      */
     private function createScheduleTable(string $connection): void
     {
@@ -118,7 +122,7 @@ class ScheduleSchemaCommand extends MenuCommand
                 Schema::varchar('task_queue_type', 255)->notNull();
                 Schema::json('task_queue_data')->notNull();
 
-                Schema::enum('task_queue_options', TaskStatusEnum::values())
+                Schema::enum('task_queue_status', TaskStatusEnum::values())
                     ->notNull()
                     ->default(TaskStatusEnum::PENDING->value);
 
@@ -128,7 +132,7 @@ class ScheduleSchemaCommand extends MenuCommand
             ->execute();
 
         if (isError($response)) {
-            throw new Exception($response->message);
+            throw new Exception($response->message, Request::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }
