@@ -17,16 +17,16 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 /**
  * Command class for selecting different types of selection menu
  *
- * @property Arr $arr [Arr class object]
+ * @property Arr $arr [Modify and build arrays with different indexes or values]
  * @property Store $store [Store class object]
- * @property Str $str [Str class object]
+ * @property Str $str [Modify and construct strings with different formats]
  *
  * @package Lion\Bundle\Helpers\Commands\Selection
  */
 class MenuCommand extends Command
 {
     /**
-     * [Arr class object]
+     * [Modify and build arrays with different indexes or values]
      *
      * @var Arr $arr
      */
@@ -40,7 +40,7 @@ class MenuCommand extends Command
     protected Store $store;
 
     /**
-     * [Str class object]
+     * [Modify and construct strings with different formats]
      *
      * @var Str $str
      */

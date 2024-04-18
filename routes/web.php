@@ -19,6 +19,8 @@ use Lion\Route\Route;
 use Dotenv\Dotenv;
 use Lion\Bundle\Helpers\ExceptionCore;
 use Lion\Bundle\Helpers\Http\Routes;
+use Lion\Database\Driver;
+use Lion\Mailer\Mailer;
 
 /**
  * -----------------------------------------------------------------------------
@@ -39,6 +41,65 @@ use Lion\Bundle\Helpers\Http\Routes;
  **/
 
 Dotenv::createImmutable(__DIR__ . '/../')->load();
+
+/**
+ * -----------------------------------------------------------------------------
+ * Database initialization
+ * -----------------------------------------------------------------------------
+ * */
+
+Driver::run([
+    'default' => env('DB_NAME'),
+    'connections' => [
+        env('DB_NAME') => [
+            'type' => env('DB_TYPE'),
+            'host' => env('DB_HOST'),
+            'port' => env('DB_PORT'),
+            'dbname' => env('DB_NAME'),
+            'user' => env('DB_USER'),
+            'password' => env('DB_PASSWORD')
+        ],
+        env('DB_NAME_TEST') => [
+            'type' => env('DB_TYPE_TEST'),
+            'host' => env('DB_HOST_TEST'),
+            'port' => env('DB_PORT_TEST'),
+            'dbname' => env('DB_NAME'),
+            'user' => env('DB_USER_TEST'),
+            'password' => env('DB_PASSWORD_TEST')
+        ]
+    ]
+]);
+
+/**
+ * -----------------------------------------------------------------------------
+ * Start mail service
+ * -----------------------------------------------------------------------------
+ * describe connections to establish connecting to multiple databases
+ * -----------------------------------------------------------------------------
+ **/
+
+Mailer::initialize([
+    env('MAIL_NAME', 'lion-app') => [
+        'name' => env('MAIL_NAME', 'lion-app'),
+        'type' => env('MAIL_TYPE', 'symfony'),
+        'host' => env('MAIL_HOST', 'mailhog'),
+        'username' => env('MAIL_USER_NAME', 'lion-app'),
+        'password' => env('MAIL_PASSWORD', 'lion'),
+        'port' => (int) env('MAIL_PORT', 1025),
+        'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+        'debug' => env('MAIL_DEBUG', false)
+    ],
+    env('MAIL_NAME_SUPP', 'lion-app') => [
+        'name' => env('MAIL_NAME_SUPP', 'lion-app'),
+        'type' => env('MAIL_TYPE_SUPP', 'symfony'),
+        'host' => env('MAIL_HOST_SUPP', 'mailhog'),
+        'username' => env('MAIL_USER_NAME_SUPP', 'lion-app'),
+        'password' => env('MAIL_PASSWORD_SUPP', 'lion'),
+        'port' => (int) env('MAIL_PORT_SUPP', 1025),
+        'encryption' => env('MAIL_ENCRYPTION_SUPP', 'tls'),
+        'debug' => env('MAIL_DEBUG_SUPP', false)
+    ]
+], env('MAIL_NAME', 'lion-app'));
 
 /**
  * -----------------------------------------------------------------------------
