@@ -109,14 +109,14 @@ class ClassFactoryTest extends Test
     }
 
     #[DataProvider('classFactoryProvider')]
-    public function testGetNamespace(string $path, string $fileName, string $namespace): void
+    public function testGetNamespace(string $path, string $fileName, string $namespace, string $class): void
     {
         $this->assertInstanceOf(ClassFactory::class, $this->classFactory->classFactory($path, $fileName));
         $this->assertSame($namespace, $this->classFactory->getNamespace());
     }
 
     #[DataProvider('classFactoryProvider')]
-    public function testGetFolder(string $path, string $fileName): void
+    public function testGetFolder(string $path, string $fileName, string $namespace, string $class): void
     {
         $this->assertInstanceOf(ClassFactory::class, $this->classFactory->classFactory($path, $fileName));
         $this->assertSame($path, $this->classFactory->getFolder());
