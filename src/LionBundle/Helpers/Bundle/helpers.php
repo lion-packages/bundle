@@ -189,7 +189,7 @@ if (!function_exists('logger')) {
      *
      * @return void
      */
-    function logger(string $message, string $logType = LogTypeEnum::INFO, array $data = [], bool $index = true): void
+    function logger(string $message, LogTypeEnum $logType = LogTypeEnum::INFO, array $data = [], bool $index = true): void
     {
         $path = storage_path('logs/monolog/', $index);
         $fileName = "{$path}lion-" . Carbon::now()->format('Y-m-d') . '.log';
@@ -199,9 +199,9 @@ if (!function_exists('logger')) {
         $logger->pushHandler(new StreamHandler($fileName, Level::Info));
 
         if (!isset($_SERVER['REQUEST_URI'])) {
-            $logger->$logType(json_encode($message), $data);
+            $logger->$logType->value(json_encode($message), $data);
         } else {
-            $logger->$logType(json_encode(['uri' => $_SERVER['REQUEST_URI'], 'data' => json_decode($message)]), $data);
+            $logger->$logType->value(json_encode(['uri' => $_SERVER['REQUEST_URI'], 'data' => json_decode($message)]), $data);
         }
     }
 }
