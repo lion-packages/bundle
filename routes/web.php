@@ -17,6 +17,8 @@ require_once(__DIR__ . '/../vendor/autoload.php');
 
 use Lion\Route\Route;
 use Dotenv\Dotenv;
+use Lion\Bundle\Enums\LogTypeEnum;
+use Lion\Bundle\Helpers\Commands\Schedule\TaskQueue;
 use Lion\Bundle\Helpers\ExceptionCore;
 use Lion\Bundle\Helpers\Http\Routes;
 use Lion\Database\Driver;
@@ -113,11 +115,16 @@ Route::init();
 Route::addMiddleware(Routes::getMiddleware());
 // -----------------------------------------------------------------------------
 Route::get('/', function () {
+    // TaskQueue::push('send:email:verify', json([
+    //     'email' => 'sleon@dev.com',
+    //     'template' => '<h1>Tasks Test</h1>'
+    // ]));
+
     return info('[index]');
 });
 
 Route::get('logger', function () {
-    logger('test-logger', 'info', ['user' => 'Sleon'], true);
+    logger('test-logger', LogTypeEnum::INFO, ['user' => 'Sleon'], true);
 
     return success();
 });
