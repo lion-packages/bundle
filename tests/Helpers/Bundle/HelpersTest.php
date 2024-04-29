@@ -143,7 +143,7 @@ class HelpersTest extends Test
 
         $fileName = "{$path}lion-" . Carbon::now()->format('Y-m-d') . '.log';
 
-        logger(self::LOGGER_CONTENT, LogTypeEnum::INFO->value, ['user' => 'Sleon'], false);
+        logger(self::LOGGER_CONTENT, LogTypeEnum::INFO, ['user' => 'Sleon'], false);
 
         $this->assertFileExists($fileName);
     }

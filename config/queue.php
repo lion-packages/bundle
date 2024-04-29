@@ -42,7 +42,7 @@ TaskQueue::add(
             } catch (Exception $e) {
                 TaskQueue::edit($queue, TaskStatusEnum::FAILED);
 
-                logger($e->getMessage(), LogTypeEnum::ERROR->value, [
+                logger($e->getMessage(), LogTypeEnum::ERROR, [
                     'idtask_queue' => $queue->idtask_queue,
                     'task_queue_type' => $queue->task_queue_type,
                     'task_queue_data' => $queue->task_queue_data

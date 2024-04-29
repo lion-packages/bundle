@@ -27,7 +27,7 @@ class RunQueuedTasksCommand extends Command
     {
         $this
             ->setName('schedule:run')
-            ->setDescription('Query and execute queued tasks in the background');
+            ->setDescription('Run queued tasks.');
     }
 
     /**
@@ -67,14 +67,34 @@ class RunQueuedTasksCommand extends Command
             foreach ($data as $queue) {
                 $data = (object) json_decode($queue->task_queue_data, true);
 
-                $output->writeln($this->warningOutput("\t>> SCHEDULE: {$queue->task_queue_type}"));
+                $output->writeln($this->warningOutput("\t>> SCHEDULE: {$queue->task_queue_type} [PROCESSING]"));
 
-                $output->writeln($this->successOutput("\t>> SCHEDULE: {$data->template} [PROCESSING]"));
+                if (TaskStatusEnum::PENDING->value === $queue->task_queue_status) {
+                    $output->writeln($this->successOutput("\t>> SCHEDULE: {$queue->task_queue_type} [IN-PROGRESS]"));
+
+                    TaskQueue::edit($queue, TaskStatusEnum::IN_PROGRESS);
+
+                    TaskQueue::pause(1);
+
+                    continue;
+                }
+
+                if (TaskStatusEnum::IN_PROGRESS->value === $queue->task_queue_status) {
+                    $callable = TaskQueue::get($queue->task_queue_type);
+
+                    $callable($queue);
+
+                    $output->writeln($this->successOutput("\t>> SCHEDULE: {$queue->task_queue_type} [COMPLETED]"));
+
+                    TaskQueue::edit($queue, TaskStatusEnum::COMPLETED);
+
+                    TaskQueue::pause(1);
+
+                    continue;
+                }
 
                 if (TaskStatusEnum::COMPLETED->value === $queue->task_queue_status) {
-                    $output->writeln($this->successOutput("\t>> SCHEDULE: {$data->template} [COMPLETED]"));
-
-                    $output->writeln($this->successOutput("\t>> SCHEDULE: {$data->template} [REMOVED]"));
+                    $output->writeln($this->successOutput("\t>> SCHEDULE: {$queue->task_queue_type} [REMOVED]"));
 
                     TaskQueue::remove($queue);
 
@@ -82,24 +102,6 @@ class RunQueuedTasksCommand extends Command
 
                     continue;
                 }
-
-                TaskQueue::edit($queue, TaskStatusEnum::IN_PROGRESS);
-
-                $output->writeln($this->successOutput("\t>> SCHEDULE: {$data->template} [IN-PROGRESS]"));
-
-                TaskQueue::pause(1);
-
-                $callable = TaskQueue::get($queue->task_queue_type);
-
-                $callable($queue);
-
-                TaskQueue::pause(1);
-
-                TaskQueue::edit($queue, TaskStatusEnum::COMPLETED);
-
-                $output->writeln($this->successOutput("\t>> SCHEDULE: {$data->template} [COMPLETED]"));
-
-                TaskQueue::pause(1);
             }
         }
 
