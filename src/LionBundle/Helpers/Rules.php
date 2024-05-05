@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Lion\Bundle\Helpers;
 
 use Closure;
-use Lion\Bundle\Enums\StatusResponseEnum;
+use Lion\Bundle\Enums\LogTypeEnum;
 use Lion\Security\Validation;
 
 /**
@@ -63,7 +63,7 @@ abstract class Rules
     public function display(): void
     {
         foreach ($this->responses as $errors) {
-            logger($errors[0], StatusResponseEnum::ERROR);
+            logger($errors[0], LogTypeEnum::ERROR);
 
             finish(error($errors[0]));
         }
