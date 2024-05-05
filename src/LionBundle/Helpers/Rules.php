@@ -63,7 +63,7 @@ abstract class Rules
     public function display(): void
     {
         foreach ($this->responses as $errors) {
-            logger($errors[0], StatusResponseEnum::ERROR->value);
+            logger($errors[0], StatusResponseEnum::ERROR);
 
             finish(error($errors[0]));
         }
