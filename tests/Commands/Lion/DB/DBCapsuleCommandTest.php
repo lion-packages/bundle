@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tests\Commands\Lion\DB\MySQL;
+namespace Tests\Commands\Lion\DB;
 
-use Lion\Bundle\Commands\Lion\DB\MySQL\DBCapsuleCommand;
+use Lion\Bundle\Commands\Lion\DB\DBCapsuleCommand;
 use Lion\Bundle\Commands\Lion\New\CapsuleCommand;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
@@ -30,6 +30,7 @@ class DBCapsuleCommandTest extends Test
     protected function setUp(): void
     {
         $this->runDatabaseConnections();
+
         $this->createDirectory(self::URL_PATH);
 
         Schema::createTable(self::ENTITY, function () {
@@ -38,14 +39,18 @@ class DBCapsuleCommandTest extends Test
         })->execute();
 
         $application = (new Kernel())->getApplication();
+
         $application->add((new Container())->injectDependencies(new CapsuleCommand()));
+
         $application->add((new Container())->injectDependencies(new DBCapsuleCommand()));
-        $this->commandTester = new CommandTester($application->find('db:mysql:capsule'));
+
+        $this->commandTester = new CommandTester($application->find('db:capsule'));
     }
 
     protected function tearDown(): void
     {
         Schema::dropTable(self::ENTITY)->execute();
+
         $this->rmdirRecursively('./database/');
     }
 

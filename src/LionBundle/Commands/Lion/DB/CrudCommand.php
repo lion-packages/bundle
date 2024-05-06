@@ -189,7 +189,7 @@ class CrudCommand extends MenuCommand
             ->find('new:test')
             ->run(
                 new ArrayInput([
-                    'test' => "app/Http/Controllers/{$connectionPascal}/MySQL/{$entityPascal}ControllerTest"
+                    'test' => "App/Http/Controllers/{$connectionPascal}/MySQL/{$entityPascal}ControllerTest"
                 ]),
                 $output
             );
@@ -198,7 +198,7 @@ class CrudCommand extends MenuCommand
             ->getApplication()
             ->find('new:test')
             ->run(
-                new ArrayInput(['test' => "app/Models/{$connectionPascal}/MySQL/{$entityPascal}ModelTest"]),
+                new ArrayInput(['test' => "App/Models/{$connectionPascal}/MySQL/{$entityPascal}ModelTest"]),
                 $output
             );
 
@@ -383,14 +383,14 @@ class CrudCommand extends MenuCommand
     ): void {
         $this
             ->getApplication()
-            ->find('db:mysql:capsule')
+            ->find('db:capsule')
             ->run(new ArrayInput(['entity' => $entity]), $output);
 
         $this
             ->getApplication()
             ->find('new:test')
             ->run(
-                new ArrayInput(['test' => "database/Class/{$selectedConnection}/MySQL/{$entityPascal}Test",]),
+                new ArrayInput(['test' => "Database/Class/{$selectedConnection}/MySQL/{$entityPascal}Test",]),
                 $output
             );
     }
@@ -433,7 +433,7 @@ class CrudCommand extends MenuCommand
         foreach ($columns as $key => $column) {
             if ('PRI' === $column->Key) {
                 $methods['update'] = [
-                    ...$this->arr->of($methods['update'])->where(fn($value, $key) => $key != 0)->get(),
+                    ...$this->arr->of($methods['update'])->where(fn ($value, $key) => $key != 0)->get(),
                     reset($methods['update'])
                 ];
             }

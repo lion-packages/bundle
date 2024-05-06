@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lion\Bundle\Commands\Lion\DB\MySQL;
+namespace Lion\Bundle\Commands\Lion\DB;
 
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
@@ -45,7 +45,7 @@ class DBCapsuleCommand extends MenuCommand
     protected function configure(): void
     {
         $this
-            ->setName('db:mysql:capsule')
+            ->setName('db:capsule')
             ->setDescription('Command required for the creation of new Capsules')
             ->addArgument('entity', InputArgument::REQUIRED, 'Entity name', null);
     }

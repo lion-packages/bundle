@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Commands\Lion\DB;
 
 use Lion\Bundle\Commands\Lion\DB\CrudCommand;
-use Lion\Bundle\Commands\Lion\DB\MySQL\DBCapsuleCommand;
+use Lion\Bundle\Commands\Lion\DB\DBCapsuleCommand;
 use Lion\Bundle\Commands\Lion\DB\RulesDBCommand;
 use Lion\Bundle\Commands\Lion\New\CapsuleCommand;
 use Lion\Bundle\Commands\Lion\New\ControllerCommand;
