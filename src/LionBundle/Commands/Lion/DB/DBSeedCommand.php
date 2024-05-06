@@ -98,7 +98,7 @@ class DBSeedCommand extends Command
 
         $end = (int) $input->getOption('run');
 
-        /** @var array<SeedInterface> $files */
+        /** @var array<int, SeedInterface> $files */
         $files = [];
 
         foreach ($this->container->getFiles('./database/Seed/') as $seed) {

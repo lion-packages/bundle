@@ -131,7 +131,10 @@ class SeedCommand extends Command
                      */
                     public function run(): object
                     {
-                        return success('run seed');
+                        return (object) [
+                            'status' => 'success',
+                            'message' => 'run seed',
+                        ];
                     }
                 }
 

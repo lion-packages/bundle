@@ -34,6 +34,7 @@ class FreshMigrationsCommandTest extends Test
     protected function setUp(): void
     {
         $kernel = new Kernel();
+
         $container = new Container();
 
         $kernel->commandsOnObjects([
@@ -44,7 +45,9 @@ class FreshMigrationsCommandTest extends Test
         ]);
 
         $this->commandTesterNew = new CommandTester($kernel->getApplication()->find('new:migration'));
+
         $this->commandTesterSeed = new CommandTester($kernel->getApplication()->find('new:seed'));
+
         $this->commandTesterFresh = new CommandTester($kernel->getApplication()->find('migrate:fresh'));
 
         $this->createDirectory('./database/Migrations/');
