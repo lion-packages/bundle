@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\Migrations;
 
+use Lion\Bundle\Interface\Migrations\StoreProcedureInterface;
+use Lion\Bundle\Interface\Migrations\TableInterface;
+use Lion\Bundle\Interface\Migrations\ViewInterface;
 use Lion\Bundle\Interface\MigrationUpInterface;
 use Lion\Command\Command;
 use Lion\Database\Drivers\Schema\MySQL as Schema;
@@ -12,6 +15,7 @@ use Lion\Files\Store;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -95,45 +99,22 @@ class FreshMigrationsCommand extends Command
             return Command::FAILURE;
         }
 
-        /** @var array<MigrationUpInterface> $files */
-        $files = [];
+        $this->dropTables($output);
 
-        foreach ($this->container->getFiles('./database/Migrations/') as $file) {
-            if (isSuccess($this->store->validate([$file], ['php']))) {
-                $namespace = $this->container->getNamespace(
-                    (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? str_replace('\\', '/', $file) : $file),
-                    'Database\\Migrations\\',
-                    'Migrations/'
-                );
+        /** @var array<string, array<string, MigrationUpInterface>> $migrations */
+        $migrations = $this->getMigrations();
 
-                $files[$namespace] = include_once($file);
-            }
-        }
-
-        if (empty($files)) {
+        if (empty($migrations)) {
             $output->writeln($this->warningOutput("\t>> MIGRATION: no migrations available"));
 
             return Command::INVALID;
         }
 
-        $this->dropTables($output);
+        $this->executeMigrations($output, $this->orderList($migrations[TableInterface::class]));
 
-        foreach ($this->orderList($files) as $namespace => $classObject) {
-            if ($classObject instanceof MigrationUpInterface) {
-                /** @var MigrationUpInterface $classObject */
-                $response = $classObject->up();
+        $this->executeMigrations($output, $migrations[ViewInterface::class]);
 
-                if (isError($response)) {
-                    $output->writeln($this->warningOutput("\t>> MIGRATION: {$namespace}"));
-
-                    $output->writeln($this->errorOutput("\t>> MIGRATION: {$response->message}"));
-                } else {
-                    $output->writeln($this->warningOutput("\t>> MIGRATION: {$namespace}"));
-
-                    $output->writeln($this->successOutput("\t>> MIGRATION: {$response->message}"));
-                }
-            }
-        }
+        $this->executeMigrations($output, $migrations[StoreProcedureInterface::class]);
 
         $output->writeln($this->infoOutput("\n\t>> Migrations executed successfully"));
 
@@ -149,6 +130,43 @@ class FreshMigrationsCommand extends Command
         }
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * Gets defined migrations categorized by type
+     *
+     * @return array<string, array<string, MigrationUpInterface>>
+     */
+    private function getMigrations(): array
+    {
+        /** @var array<string, array<string, MigrationUpInterface>> $allMigrations */
+        $allMigrations = [
+            TableInterface::class => [],
+            ViewInterface::class => [],
+            StoreProcedureInterface::class => [],
+        ];
+
+        foreach ($this->container->getFiles('./database/Migrations/') as $migration) {
+            if (isSuccess($this->store->validate([$migration], ['php']))) {
+                $namespace = $this->container->getNamespace($migration, 'Database\\Migrations\\', 'Migrations/');
+
+                $tableMigration = include_once($migration);
+
+                if ($tableMigration instanceof TableInterface) {
+                    $allMigrations[TableInterface::class][$namespace] = $tableMigration;
+                }
+
+                if ($tableMigration instanceof ViewInterface) {
+                    $allMigrations[ViewInterface::class][$namespace] = $tableMigration;
+                }
+
+                if ($tableMigration instanceof StoreProcedureInterface) {
+                    $allMigrations[StoreProcedureInterface::class][$namespace] = $tableMigration;
+                }
+            }
+        }
+
+        return $allMigrations;
     }
 
     /**
@@ -177,9 +195,9 @@ class FreshMigrationsCommand extends Command
     /**
      * Sorts the list of elements by the value defined in the INDEX constant
      *
-     * @param array $files [Class List]
+     * @param array<string, MigrationUpInterface> $files [Class List]
      *
-     * @return array<MigrationUpInterface>
+     * @return array<string, MigrationUpInterface>
      */
     private function orderList(array $files): array
     {
@@ -200,5 +218,34 @@ class FreshMigrationsCommand extends Command
         });
 
         return $files;
+    }
+
+    /**
+     * Run the migrations
+     *
+     * @param OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     * @param array<int, MigrationUpInterface> $files [description]
+     *
+     * @return [type] [description]
+     */
+    private function executeMigrations(Output $output, array $files): void
+    {
+        foreach ($files as $namespace => $classObject) {
+            if ($classObject instanceof MigrationUpInterface) {
+                /** @var MigrationUpInterface $classObject */
+                $response = $classObject->up();
+
+                if (isError($response)) {
+                    $output->writeln($this->warningOutput("\t>> MIGRATION: {$namespace}"));
+
+                    $output->writeln($this->errorOutput("\t>> MIGRATION: {$response->message}"));
+                } else {
+                    $output->writeln($this->warningOutput("\t>> MIGRATION: {$namespace}"));
+
+                    $output->writeln($this->successOutput("\t>> MIGRATION: {$response->message}"));
+                }
+            }
+        }
     }
 }
