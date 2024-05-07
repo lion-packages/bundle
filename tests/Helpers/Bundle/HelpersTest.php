@@ -14,6 +14,7 @@ use Lion\Route\Route;
 use Lion\Security\AES;
 use Lion\Security\JWT;
 use Lion\Test\Test;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\Providers\EnviromentProviderTrait;
 use Tests\Providers\Helpers\HelpersProviderTrait;
 
@@ -207,9 +208,7 @@ class HelpersTest extends Test
         $this->assertSame(fake(), fake());
     }
 
-    /**
-     * @dataProvider envProvider
-     */
+    #[DataProvider('envProvider')]
     public function testEnv(string $envKey, mixed $envValue, mixed $return): void
     {
         $this->assertSame($return, env($envKey, $envValue));

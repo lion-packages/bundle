@@ -10,25 +10,26 @@ use Lion\Test\Test;
 
 class StatusResponseEnumTest extends Test
 {
-	public function testValues(): void
-	{
-		$values = [
-			Response::SUCCESS,
-			Response::ERROR,
-			Response::WARNING,
-			Response::INFO,
-			Response::DATABASE_ERROR,
-			Response::SESSION_ERROR,
-			Response::ROUTE_ERROR,
+    public function testValues(): void
+    {
+        $values = [
+            Response::SUCCESS,
+            Response::ERROR,
+            Response::WARNING,
+            Response::INFO,
+            Response::DATABASE_ERROR,
+            Response::SESSION_ERROR,
+            Response::ROUTE_ERROR,
             Response::FILE_ERROR,
-			Response::MAIL_ERROR
-		];
+            Response::MAIL_ERROR,
+            'rule-error'
+        ];
 
-		$this->assertSame($values, StatusResponseEnum::values());
-	}
+        $this->assertSame($values, StatusResponseEnum::values());
+    }
 
-	public function testErrors(): void
-	{
-		$this->assertSame((new Response)->getErrors(), StatusResponseEnum::errors());
-	}
+    public function testErrors(): void
+    {
+        $this->assertSame([...(new Response)->getErrors(), 'rule-error'], StatusResponseEnum::errors());
+    }
 }

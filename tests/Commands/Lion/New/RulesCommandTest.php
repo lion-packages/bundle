@@ -29,7 +29,9 @@ class RulesCommandTest extends Test
         $this->container = new Container();
 
         $application = (new Kernel())->getApplication();
+
         $application->add($this->container->injectDependencies(new RulesCommand()));
+
         $this->commandTester = new CommandTester($application->find('new:rule'));
 
         $this->createDirectory(self::URL_PATH);
@@ -51,7 +53,5 @@ class RulesCommandTest extends Test
         $this->assertIsObject($objClass);
         $this->assertInstanceOf(self::OBJECT_NAME, $objClass);
         $this->assertContains(self::METHOD, get_class_methods($objClass));
-
-        $objClass->passes();
     }
 }

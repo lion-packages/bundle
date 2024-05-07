@@ -15,16 +15,27 @@ use Lion\Files\Store;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Drop all tables and re-run all migrations
  *
+ * @property OutputInterface $output [OutputInterface is the interface
+ * implemented by all Output classes]
  * @property Container $container [Container class object]
+ * @property Store $store [Store class object]
+ *
+ * @package Lion\Bundle\Commands\Lion\Migrations
  */
 class FreshMigrationsCommand extends Command
 {
+    /**
+     * [OutputInterface is the interface implemented by all Output classes]
+     *
+     * @var OutputInterface $output
+     */
+    private OutputInterface $output;
+
     /**
      * [Container class object]
      *
@@ -73,6 +84,29 @@ class FreshMigrationsCommand extends Command
     }
 
     /**
+     * Initializes the command after the input has been bound and before the
+     * input is validated
+     *
+     * This is mainly useful when a lot of commands extends one main command
+     * where some things need to be initialized based on the input arguments and
+     * options
+     *
+     * @param InputInterface $input [InputInterface is the interface implemented
+     * by all input classes]
+     * @param OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     *
+     * @see InputInterface::bind()
+     * @see InputInterface::validate()
+     *
+     * @return void
+     */
+    protected function initialize(InputInterface $input, OutputInterface $output): void
+    {
+        $this->output = $output;
+    }
+
+    /**
      * Executes the current command
      *
      * This method is not abstract because you can use this class
@@ -99,7 +133,7 @@ class FreshMigrationsCommand extends Command
             return Command::FAILURE;
         }
 
-        $this->dropTables($output);
+        $this->dropTables();
 
         /** @var array<string, array<string, MigrationUpInterface>> $migrations */
         $migrations = $this->getMigrations();
@@ -110,11 +144,11 @@ class FreshMigrationsCommand extends Command
             return Command::INVALID;
         }
 
-        $this->executeMigrations($output, $this->orderList($migrations[TableInterface::class]));
+        $this->executeMigrations($this->orderList($migrations[TableInterface::class]));
 
-        $this->executeMigrations($output, $migrations[ViewInterface::class]);
+        $this->executeMigrations($migrations[ViewInterface::class]);
 
-        $this->executeMigrations($output, $migrations[StoreProcedureInterface::class]);
+        $this->executeMigrations($migrations[StoreProcedureInterface::class]);
 
         $output->writeln($this->infoOutput("\n\t>> Migrations executed successfully"));
 
@@ -172,12 +206,9 @@ class FreshMigrationsCommand extends Command
     /**
      * Clears all tables of all available connections
      *
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
-     *
      * @return void
      */
-    private function dropTables(OutputInterface $output): void
+    private function dropTables(): void
     {
         $connections = (object) Schema::getConnections();
 
@@ -185,9 +216,9 @@ class FreshMigrationsCommand extends Command
             $response = Schema::dropTables()->execute();
 
             if (isError($response)) {
-                $output->writeln($this->warningOutput("\t>> DATABASE: {$connection->dbname}"));
+                $this->output->writeln($this->warningOutput("\t>> DATABASE: {$connection->dbname}"));
 
-                $output->writeln($this->errorOutput("\t>> DATABASE: {$response->message}"));
+                $this->output->writeln($this->errorOutput("\t>> DATABASE: {$response->message}"));
             }
         }
     }
@@ -223,13 +254,11 @@ class FreshMigrationsCommand extends Command
     /**
      * Run the migrations
      *
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
      * @param array<int, MigrationUpInterface> $files [description]
      *
-     * @return [type] [description]
+     * @return void
      */
-    private function executeMigrations(Output $output, array $files): void
+    private function executeMigrations(array $files): void
     {
         foreach ($files as $namespace => $classObject) {
             if ($classObject instanceof MigrationUpInterface) {
@@ -237,13 +266,13 @@ class FreshMigrationsCommand extends Command
                 $response = $classObject->up();
 
                 if (isError($response)) {
-                    $output->writeln($this->warningOutput("\t>> MIGRATION: {$namespace}"));
+                    $this->output->writeln($this->warningOutput("\t>> MIGRATION: {$namespace}"));
 
-                    $output->writeln($this->errorOutput("\t>> MIGRATION: {$response->message}"));
+                    $this->output->writeln($this->errorOutput("\t>> MIGRATION: {$response->message}"));
                 } else {
-                    $output->writeln($this->warningOutput("\t>> MIGRATION: {$namespace}"));
+                    $this->output->writeln($this->warningOutput("\t>> MIGRATION: {$namespace}"));
 
-                    $output->writeln($this->successOutput("\t>> MIGRATION: {$response->message}"));
+                    $this->output->writeln($this->successOutput("\t>> MIGRATION: {$response->message}"));
                 }
             }
         }

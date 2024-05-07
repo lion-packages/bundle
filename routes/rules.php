@@ -15,5 +15,5 @@ use Lion\Route\Route;
 
 Routes::setRules([
     Route::GET => [],
-    Route::POST => []
+    Route::POST => [],
 ]);
