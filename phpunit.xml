@@ -42,6 +42,14 @@
             <directory>tests/Enums/</directory>
         </testsuite>
 
+        <testsuite name="Exceptions">
+            <directory>tests/Exceptions/</directory>
+        </testsuite>
+
+        <testsuite name="Kernel">
+            <directory>tests/Kernel/</directory>
+        </testsuite>
+
         <testsuite name="Helpers">
             <directory>tests/Helpers/</directory>
         </testsuite>
