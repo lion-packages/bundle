@@ -28,6 +28,7 @@ class HttpKernelTest extends Test
     const OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
     const FILE_NAME = self::CLASS_NAME . '.php';
     const OUTPUT_MESSAGE = 'rule has been generated';
+    const MESSAGE = 'parameter error';
 
     private HttpKernel $httpKernel;
     private Container $container;
@@ -74,7 +75,7 @@ class HttpKernelTest extends Test
         $this->assertInstanceOf(self::OBJECT_NAME, $objClass);
         $this->expectException(RulesException::class);
         $this->expectExceptionCode(Request::HTTP_INTERNAL_SERVER_ERROR);
-        $this->expectExceptionMessage('{"code":500,"status":"rule-error","message":"parameter error","data":{"rules-error":{"":["the \"\" property is required"]}}}');
+        $this->expectExceptionMessage(self::MESSAGE);
 
         $_SERVER['REQUEST_METHOD'] = 'POST';
 

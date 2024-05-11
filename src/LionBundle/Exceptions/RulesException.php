@@ -4,23 +4,16 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Exceptions;
 
-use Exception;
 use JsonSerializable;
+use Lion\Bundle\Support\Exceptions\ExceptionSupport;
+use Lion\Bundle\Traits\ExceptionsTrait;
 
 /**
- * Description of 'ExampleException'
+ * Exceptions to the rules
  *
  * @package Lion\Bundle\Exceptions
  */
-class RulesException extends Exception implements JsonSerializable
+class RulesException extends ExceptionSupport implements JsonSerializable
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize(): mixed
-    {
-        $json = json_decode($this->getMessage());
-
-        return error($json->message, $this->getCode(), $json->data);
-    }
+    use ExceptionsTrait;
 }

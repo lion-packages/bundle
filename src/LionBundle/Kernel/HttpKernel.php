@@ -98,13 +98,12 @@ class HttpKernel
 
             if (count($errors) > 0) {
                 throw new RulesException(
-                    json(response(
-                        StatusResponseEnum::RULE_ERROR->value,
-                        'parameter error',
-                        Request::HTTP_INTERNAL_SERVER_ERROR,
-                        ['rules-error' => $errors]
-                    )),
-                    Request::HTTP_INTERNAL_SERVER_ERROR
+                    'parameter error',
+                    Request::HTTP_INTERNAL_SERVER_ERROR,
+                    StatusResponseEnum::RULE_ERROR->value,
+                    [
+                        'rules-error' => $errors
+                    ]
                 );
             }
         }
