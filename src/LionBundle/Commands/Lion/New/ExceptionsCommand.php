@@ -102,7 +102,7 @@ class ExceptionsCommand extends Command
         $this->store->folder($folder);
 
         $this->classFactory
-            ->create($class, 'php', $folder)
+            ->create($class, ClassFactory::PHP_EXTENSION, $folder)
             ->add(
                 <<<PHP
                 <?php
@@ -111,26 +111,18 @@ class ExceptionsCommand extends Command
 
                 namespace {$namespace};
 
-                use Exception;
                 use JsonSerializable;
+                use Lion\Bundle\Support\Exceptions\ExceptionSupport;
+                use Lion\Bundle\Traits\ExceptionsTrait;
 
                 /**
                  * Description of '{$class}'
                  *
                  * @package {$namespace}
                  */
-                class {$class} extends Exception implements JsonSerializable
+                class {$class} extends ExceptionSupport implements JsonSerializable
                 {
-                    /**
-                     * {@inheritdoc}
-                     */
-                    public function jsonSerialize(): mixed
-                    {
-                        return error(\$this->getMessage(), \$this->getCode(), [
-                            'file' => \$this->getFile(),
-                            'line' => \$this->getLine(),
-                        ]);
-                    }
+                    use ExceptionsTrait;
                 }
 
                 PHP
