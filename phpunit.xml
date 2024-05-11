@@ -34,10 +34,6 @@
             <directory>tests/</directory>
         </testsuite>
 
-        <testsuite name="Traits">
-            <directory>tests/Traits/</directory>
-        </testsuite>
-
         <testsuite name="Commands">
             <directory>tests/Commands/</directory>
         </testsuite>
@@ -50,12 +46,29 @@
             <directory>tests/Exceptions/</directory>
         </testsuite>
 
+        <testsuite name="Helpers">
+            <directory>tests/Helpers/</directory>
+        </testsuite>
+
         <testsuite name="Kernel">
             <directory>tests/Kernel/</directory>
         </testsuite>
 
-        <testsuite name="Helpers">
-            <directory>tests/Helpers/</directory>
+        <testsuite name="Middleware">
+            <directory>tests/Middleware/</directory>
+        </testsuite>
+
+        <testsuite name="Support">
+            <directory>tests/Support/</directory>
+        </testsuite>
+
+        <testsuite name="Traits">
+            <directory>tests/Traits/</directory>
+        </testsuite>
+
+        <testsuite name="Redis/Mailhog">
+            <file>tests/RedisConnectionTest.php</file>
+            <file>tests/MailhogTest.php</file>
         </testsuite>
     </testsuites>
 </phpunit>
