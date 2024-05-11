@@ -34,6 +34,10 @@
             <directory>tests/</directory>
         </testsuite>
 
+        <testsuite name="Traits">
+            <directory>tests/Traits/</directory>
+        </testsuite>
+
         <testsuite name="Commands">
             <directory>tests/Commands/</directory>
         </testsuite>
