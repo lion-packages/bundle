@@ -15,13 +15,6 @@ use Faker\Generator;
 class Fake
 {
     /**
-     * [Generator class object]
-     *
-     * @var Generator|null $generator
-     */
-    private static ?Generator $generator = null;
-
-    /**
      * Function that generates a Generator object to obtain fake data
      *
      * @param  string $locale [Regional configuration]
@@ -30,10 +23,6 @@ class Fake
      */
     public static function get(string $locale = Factory::DEFAULT_LOCALE): Generator
     {
-        if (null === self::$generator) {
-            self::$generator = Factory::create($locale);
-        }
-
-        return self::$generator;
+        return Factory::create($locale);
     }
 }
