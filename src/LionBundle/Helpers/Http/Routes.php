@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Lion\Bundle\Helpers\Http;
 
 /**
- * Initializes the defined web rules and filters.
+ * Initializes the defined web rules and filters
  *
  * @property array $rules [List of defined web rules]
  * @property array $middleware [List of defined web filters]

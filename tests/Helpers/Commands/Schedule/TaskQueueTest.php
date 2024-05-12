@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Helpers\Commands\Schedule;
 
+use Closure;
 use Lion\Bundle\Commands\Lion\Schedule\ScheduleSchemaCommand;
 use Lion\Bundle\Enums\TaskStatusEnum;
 use Lion\Bundle\Helpers\Commands\Schedule\TaskQueue;
@@ -14,12 +15,15 @@ use Lion\Database\Drivers\Schema\MySQL as Schema;
 use Lion\Dependency\Injection\Container;
 use Lion\Request\Response;
 use Lion\Test\Test;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tests\Providers\ConnectionProviderTrait;
+use Tests\Providers\Helpers\Schedule\TaskQueueProviderTrait;
 
 class TaskQueueTest extends Test
 {
     use ConnectionProviderTrait;
+    use TaskQueueProviderTrait;
 
     const MESSAGE = 'the schema for queued tasks has been created';
     const TASK_QUEUE_NAME = 'send:email:test';
@@ -48,12 +52,9 @@ class TaskQueueTest extends Test
         Schema::dropTable('task_queue')->execute();
     }
 
-    public function testAdd(): void
+    #[DataProvider('addProvider')]
+    public function testAdd(Closure|array $callable): void
     {
-        $callable = function (object $object): void {
-            $name = null;
-        };
-
         $this->taskQueue->add(self::TASK_QUEUE_NAME, $callable);
 
         $functions = $this->getPrivateProperty('functions');
@@ -63,12 +64,9 @@ class TaskQueueTest extends Test
         $this->assertSame($callable, $functions[self::TASK_QUEUE_NAME]);
     }
 
-    public function testGet(): void
+    #[DataProvider('addProvider')]
+    public function testGet(Closure|array $callable): void
     {
-        $callable = function (object $object): void {
-            $name = null;
-        };
-
         $this->taskQueue->add(self::TASK_QUEUE_NAME, $callable);
 
         $closure = $this->taskQueue->get(self::TASK_QUEUE_NAME);

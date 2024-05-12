@@ -42,6 +42,8 @@ class Html
      */
     public function replace(string $search, string $replace): Html
     {
+        $search = "{{ " . trim($search) . " }}";
+
         $this->htmlTemplate = str_replace($search, $replace, $this->htmlTemplate);
 
         return $this;

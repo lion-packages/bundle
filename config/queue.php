@@ -5,6 +5,8 @@ declare(strict_types=1);
 use Lion\Bundle\Enums\LogTypeEnum;
 use Lion\Bundle\Enums\TaskStatusEnum;
 use Lion\Bundle\Helpers\Commands\Schedule\TaskQueue;
+use Lion\Bundle\Helpers\Env;
+use Lion\Bundle\Kernel\HttpKernel;
 use Lion\Mailer\Mailer;
 use Lion\Mailer\Priority;
 
@@ -16,27 +18,30 @@ use Lion\Mailer\Priority;
  * -----------------------------------------------------------------------------
  **/
 
+TaskQueue::add('example', [Env::class, 'get']);
+
 TaskQueue::add(
     'send:email:verify',
     (
         /**
          * Send an email configured in a task queue
          *
+         * @param HttpKernel $httpKernel [Kernel for HTTP requests]
          * @param object $queue [Queued task object]
+         * @param string $template [HTML Template]
+         * @param string $email [Email]
          *
          * @return void
          *
          * @throws Exception [Catch an exception if the email has not been sent]
          */
-        function (object $queue): void {
-            $data = (object) json_decode($queue->task_queue_data, true);
-
+        function (HttpKernel $httpKernel, object $queue, string $template, string $email): void {
             try {
                 Mailer::account(env('MAIL_NAME'))
                     ->subject('Test Priority')
-                    ->from($data->email, 'Sleon')
+                    ->from($email, 'Sleon')
                     ->addAddress('jjerez@dev.com', 'Jjerez')
-                    ->body($data->template)
+                    ->body(str->of($template)->replace('{{ REPLACE_TEXT }}', $httpKernel::class)->get())
                     ->priority(Priority::HIGH)
                     ->send();
             } catch (Exception $e) {

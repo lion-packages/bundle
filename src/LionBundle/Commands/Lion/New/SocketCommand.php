@@ -60,13 +60,13 @@ class SocketCommand extends Command
      *
      * @return void
      */
-	protected function configure(): void
+    protected function configure(): void
     {
         $this
             ->setName('new:socket')
             ->setDescription('Command required for creating new WebSockets')
             ->addArgument('socket', InputArgument::OPTIONAL, 'Socket name', 'ExampleSocket');
-	}
+    }
 
     /**
      * Executes the current command
@@ -87,9 +87,9 @@ class SocketCommand extends Command
      *
      * @see setCode()
      */
-	protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->classFactory->classFactory('app/Http/Sockets/', $input->getArgument('socket'));
+        $this->classFactory->classFactory('app/Sockets/', $input->getArgument('socket'));
 
         $folder = $this->classFactory->getFolder();
 
@@ -110,8 +110,8 @@ class SocketCommand extends Command
                 namespace {$namespace};
 
                 use Exception;
+                use Lion\Bundle\Interface\SocketInterface;
                 use Ratchet\ConnectionInterface;
-                use Ratchet\MessageComponentInterface;
                 use SplObjectStorage;
 
                 /**
@@ -121,22 +121,8 @@ class SocketCommand extends Command
                  *
                  * @package {$namespace}
                  */
-                class {$class} implements MessageComponentInterface
+                class {$class} implements SocketInterface
                 {
-                    /**
-                     * [Defines the Socket Port]
-                     *
-                     * @const PORT
-                     */
-                    const PORT = 9000;
-
-                    /**
-                     * [Defines the Socket Host]
-                     *
-                     * @const HOST
-                     */
-                    const HOST = '0.0.0.0';
-
                     /**
                      * [List of clients connected to the Socket]
                      *
@@ -200,5 +186,5 @@ class SocketCommand extends Command
         $output->writeln($this->successOutput("\t>>  SOCKET: the '{$namespace}\\{$class}' socket has been generated"));
 
         return Command::SUCCESS;
-	}
+    }
 }

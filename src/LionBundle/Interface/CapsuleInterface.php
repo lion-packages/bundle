@@ -17,6 +17,6 @@ interface CapsuleInterface extends JsonSerializable
      * Returns an object of the class
      *
      * @return object
-     * */
+     */
     public function capsule(): object;
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\Sockets;
 
+use Lion\Bundle\Interface\SocketInterface;
 use Lion\Command\Command;
 use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
@@ -70,7 +71,9 @@ class ServerSocketCommand extends Command
         $this
             ->setName('socket:serve')
             ->setDescription('Command required to run WebSockets')
-            ->addOption('socket', 's', InputOption::VALUE_OPTIONAL, 'Socket class namespace');
+            ->addOption('socket', 's', InputOption::VALUE_OPTIONAL, 'Socket class namespace')
+            ->addOption('host', 'o', InputOption::VALUE_OPTIONAL, 'Socket host', '127.0.0.1')
+            ->addOption('port', 'p', InputOption::VALUE_OPTIONAL, 'Socket port', 8080);
     }
 
     /**
@@ -94,7 +97,7 @@ class ServerSocketCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if (isError($this->store->exist('./app/Http/Sockets/'))) {
+        if (isError($this->store->exist('./app/Sockets/'))) {
             $output->writeln($this->errorOutput("\t>> SOCKET: no sockets defined"));
 
             return Command::FAILURE;
@@ -111,26 +114,27 @@ class ServerSocketCommand extends Command
                 return Command::SUCCESS;
             }
         } else {
-            $output->writeln($this->warningOutput("\n(default: {$socketDefault})\n"));
+            $output->writeln($this->warningOutput("(default: {$socketDefault})"));
 
             $selectedSocket = $socketDefault;
         }
 
-        $socketClass = new $selectedSocket();
+        /** @var SocketInterface $socketInterface */
+        $socketInterface = new $selectedSocket();
 
-        $url = 'ws://' . $socketClass::HOST . ':' . $socketClass::PORT;
+        $host = $input->getOption('host');
 
-        $output->write($this->successOutput("\nLion-Framework "));
+        $port = $input->getOption('port');
+
+        $url = "ws://{$host}:{$port}";
+
+        $output->writeln($this->successOutput("Lion-Framework\n"));
 
         $output->writeln($this->warningOutput("\t>>  LOCAL: Socket running on [{$url}]"));
 
         $output->writeln($this->warningOutput("\t>>  Press Ctrl+C to stop the socket"));
 
-        IoServer::factory(
-            new HttpServer(new WsServer($socketClass)),
-            $socketClass::PORT,
-            $socketClass::HOST
-        )
+        IoServer::factory(new HttpServer(new WsServer($socketInterface)), $port, $host)
             ->run();
 
         return Command::SUCCESS;
@@ -150,9 +154,9 @@ class ServerSocketCommand extends Command
     {
         $classList = [];
 
-        foreach ($this->container->getFiles('./app/Http/Sockets/') as $file) {
+        foreach ($this->container->getFiles('./app/Sockets/') as $file) {
             if (isSuccess($this->store->validate([$file], ['php']))) {
-                $classList[] = $this->container->getNamespace($file, 'App\\Http\\Sockets\\', 'Sockets/');
+                $classList[] = $this->container->getNamespace($file, 'App\\Sockets\\', 'Sockets/');
             }
         }
 

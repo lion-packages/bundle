@@ -117,7 +117,11 @@ Route::addMiddleware(Routes::getMiddleware());
 Route::get('/', function () {
     // TaskQueue::push('send:email:verify', json([
     //     'email' => 'sleon@dev.com',
-    //     'template' => '<h1>Tasks Test</h1>'
+    //     'template' => '<h1>Tasks Test: {{ REPLACE_TEXT }}</h1>'
+    // ]));
+
+    // TaskQueue::push('example', json([
+    //     'key' => 'SERVER_URL',
     // ]));
 
     return info('[index]');

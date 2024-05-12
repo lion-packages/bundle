@@ -35,7 +35,7 @@ class MiddlewareCommand extends Command
      */
     private Store $store;
 
-	/**
+    /**
      * @required
      * */
     public function setClassFactory(ClassFactory $classFactory): MiddlewareCommand
@@ -60,13 +60,13 @@ class MiddlewareCommand extends Command
      *
      * @return void
      */
-	protected function configure(): void
-	{
-		$this
+    protected function configure(): void
+    {
+        $this
             ->setName('new:middleware')
             ->setDescription('Command required for the creation of new Middleware')
             ->addArgument('middleware', InputArgument::OPTIONAL, 'Middleware name', 'ExampleMiddleware');
-	}
+    }
 
     /**
      * Executes the current command
@@ -87,8 +87,8 @@ class MiddlewareCommand extends Command
      *
      * @see setCode()
      */
-	protected function execute(InputInterface $input, OutputInterface $output): int
-	{
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
         $middleware = $input->getArgument('middleware');
 
         $this->classFactory->classFactory('app/Http/Middleware/', $middleware);
@@ -101,7 +101,7 @@ class MiddlewareCommand extends Command
 
         $this->store->folder($folder);
 
-		$this->classFactory
+        $this->classFactory
             ->create($class, ClassFactory::PHP_EXTENSION, $folder)
             ->add(
                 <<<EOT
@@ -111,6 +111,10 @@ class MiddlewareCommand extends Command
 
                 namespace {$namespace};
 
+                use Lion\Bundle\Exceptions\MiddlewareException;
+                use Lion\Request\Request;
+                use Lion\Request\Response;
+
                 /**
                  * Description of Middleware '{$class}'
                  *
@@ -118,6 +122,17 @@ class MiddlewareCommand extends Command
                  */
                 class {$class}
                 {
+                    /**
+                     * Middleware description
+                     *
+                     * @return void
+                     *
+                     * @throws MiddlewareException [Exception message]
+                     */
+                    public function example(): void
+                    {
+                        throw new MiddlewareException('message', Response::ERROR, Request::HTTP_UNAUTHORIZED);
+                    }
                 }
 
                 EOT
@@ -127,9 +142,9 @@ class MiddlewareCommand extends Command
         $output->writeln($this->warningOutput("\t>>  MIDDLEWARE: {$class}"));
 
         $output->writeln(
-        	$this->successOutput("\t>>  MIDDLEWARE: the '{$namespace}\\{$class}' middleware has been generated")
+            $this->successOutput("\t>>  MIDDLEWARE: the '{$namespace}\\{$class}' middleware has been generated")
         );
 
-		return Command::SUCCESS;
-	}
+        return Command::SUCCESS;
+    }
 }

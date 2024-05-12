@@ -8,16 +8,34 @@ use Lion\Bundle\Enums\TaskStatusEnum;
 use Lion\Bundle\Helpers\Commands\Schedule\TaskQueue;
 use Lion\Command\Command;
 use Lion\Database\Drivers\MySQL as DB;
+use Lion\Dependency\Injection\Container;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * RunQueuedTasksCommand description
  *
+ * @property Container $container [Container to generate dependency injection]
+ *
  * @package Lion\Bundle\Commands\Lion\Schedule
  */
 class RunQueuedTasksCommand extends Command
 {
+    /**
+     * [Container to generate dependency injection]
+     *
+     * @var Container $container
+     */
+    private Container $container;
+
+    /**
+     * @required
+     */
+    public function setContainer(Container $container): void
+    {
+        $this->container = $container;
+    }
+
     /**
      * Configures the current command
      *
@@ -82,7 +100,18 @@ class RunQueuedTasksCommand extends Command
                 if (TaskStatusEnum::IN_PROGRESS->value === $queue->task_queue_status) {
                     $callable = TaskQueue::get($queue->task_queue_type);
 
-                    $callable($queue);
+                    if (is_array($callable)) {
+                        $this->container->injectDependenciesMethod(
+                            new $callable[0],
+                            $callable[1],
+                            ['queue' => $queue, ...((array) json_decode($queue->task_queue_data, true))]
+                        );
+                    } else {
+                        $this->container->injectDependenciesCallback(
+                            $callable,
+                            ['queue' => $queue, ...((array) json_decode($queue->task_queue_data, true))]
+                        );
+                    }
 
                     $output->writeln($this->successOutput("\t>> SCHEDULE: {$queue->task_queue_type} [COMPLETED]"));
 

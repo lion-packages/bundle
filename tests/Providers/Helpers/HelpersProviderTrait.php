@@ -68,6 +68,11 @@ trait HelpersProviderTrait
                 'envKey' => 'APP_DEBUG_TEST',
                 'envValue' => '(null)',
                 'return' => null
+            ],
+            [
+                'envKey' => 'NOT_EXIST_ENVIROMENT',
+                'envValue' => null,
+                'return' => null,
             ]
         ];
     }

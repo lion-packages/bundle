@@ -38,7 +38,7 @@ class HtmlTest extends Test
 
         $this->assertSame($template, $this->getPrivateProperty('htmlTemplate'));
 
-        $this->html->replace('--REPLACE--', self::REPLACE_TEXT);
+        $this->html->replace('REPLACE', self::REPLACE_TEXT);
 
         $templateReplaced = (new Store)->get('./tests/Providers/Helpers/Commands/HtmlTemplateReplaced.html');
 
@@ -53,7 +53,7 @@ class HtmlTest extends Test
 
         $this->assertSame($template, $this->getPrivateProperty('htmlTemplate'));
 
-        $this->html->replace('--REPLACE--', self::REPLACE_TEXT);
+        $this->html->replace('REPLACE', self::REPLACE_TEXT);
 
         $templateReplaced = (new Store)->get('./tests/Providers/Helpers/Commands/HtmlTemplateReplaced.html');
 

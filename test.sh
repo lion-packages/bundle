@@ -15,12 +15,8 @@ echo -e "\033[0;36m\t>>  Dump Autoload \033[0m"
 composer dump-autoload
 echo -e "\n\033[0;31m>> -------------------------------------------------------------------------------------- << \n\033[0m";
 
-echo -e "\033[0;36m\t>>  Suite Services (Redis/Mailhog) \033[0m"
-php vendor/bin/phpunit tests/RedisConnectionTest.php tests/MailhogTest.php
-echo -e "\n\033[0;31m>> -------------------------------------------------------------------------------------- << \n\033[0m";
-
-echo -e "\033[0;36m\t>>  Suite Helpers \033[0m"
-php vendor/bin/phpunit --testsuite Helpers
+echo -e "\033[0;36m\t>>  Suite Commands \033[0m"
+php vendor/bin/phpunit --testsuite Commands
 echo -e "\n\033[0;31m>> -------------------------------------------------------------------------------------- << \n\033[0m";
 
 echo -e "\033[0;36m\t>>  Suite Enums \033[0m"
@@ -31,12 +27,28 @@ echo -e "\033[0;36m\t>>  Suite Exceptions \033[0m"
 php vendor/bin/phpunit --testsuite Exceptions
 echo -e "\n\033[0;31m>> -------------------------------------------------------------------------------------- << \n\033[0m";
 
+echo -e "\033[0;36m\t>>  Suite Helpers \033[0m"
+php vendor/bin/phpunit --testsuite Helpers
+echo -e "\n\033[0;31m>> -------------------------------------------------------------------------------------- << \n\033[0m";
+
 echo -e "\033[0;36m\t>>  Suite Kernel \033[0m"
 php vendor/bin/phpunit --testsuite Kernel
 echo -e "\n\033[0;31m>> -------------------------------------------------------------------------------------- << \n\033[0m";
 
-echo -e "\033[0;36m\t>>  Suite Commands \033[0m"
-php vendor/bin/phpunit --testsuite Commands
+echo -e "\033[0;36m\t>>  Suite Middleware \033[0m"
+php vendor/bin/phpunit --testsuite Middleware
+echo -e "\n\033[0;31m>> -------------------------------------------------------------------------------------- << \n\033[0m";
+
+echo -e "\033[0;36m\t>>  Suite Support \033[0m"
+php vendor/bin/phpunit --testsuite Support
+echo -e "\n\033[0;31m>> -------------------------------------------------------------------------------------- << \n\033[0m";
+
+echo -e "\033[0;36m\t>>  Suite Traits \033[0m"
+php vendor/bin/phpunit --testsuite Traits
+echo -e "\n\033[0;31m>> -------------------------------------------------------------------------------------- << \n\033[0m";
+
+echo -e "\033[0;36m\t>>  Suite Redis/Mailhog \033[0m"
+php vendor/bin/phpunit  --testsuite Redis/Mailhog
 echo -e "\n\033[0;31m>> -------------------------------------------------------------------------------------- << \n\033[0m";
 
 end_time=$(date +"%Y-%m-%d %H:%M:%S")

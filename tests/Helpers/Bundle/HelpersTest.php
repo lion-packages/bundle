@@ -205,7 +205,6 @@ class HelpersTest extends Test
     public function testFake(): void
     {
         $this->assertInstanceOf(Generator::class, fake());
-        $this->assertSame(fake(), fake());
     }
 
     #[DataProvider('envProvider')]

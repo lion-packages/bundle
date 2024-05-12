@@ -9,11 +9,11 @@ use Lion\Bundle\Support\Exceptions\ExceptionSupport;
 use Lion\Bundle\Traits\ExceptionsTrait;
 
 /**
- * Exceptions to the rules
+ * Exception for middleware errors
  *
- * @package Lion\Bundle\Exceptions
+ * @package App\Exceptions
  */
-class RulesException extends ExceptionSupport implements JsonSerializable
+class MiddlewareException extends ExceptionSupport implements JsonSerializable
 {
     use ExceptionsTrait;
 }
