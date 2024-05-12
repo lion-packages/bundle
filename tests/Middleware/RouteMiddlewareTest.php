@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Middleware;
 
-use Lion\Files\Store;
+use Lion\Bundle\Exceptions\MiddlewareException;
+use Lion\Bundle\Middleware\RouteMiddleware;
 use Lion\Request\Request;
-use Lion\Request\Response;
-use Lion\Route\Route;
 use Lion\Test\Test;
 use Tests\Providers\EnviromentProviderTrait;
 
@@ -15,54 +14,32 @@ class RouteMiddlewareTest extends Test
 {
     use EnviromentProviderTrait;
 
-    const URI = 'http://127.0.0.1:8000/route-list';
-    const HASH = '0db400cd06201d3ad142a104554f3fb57d712d4524b80cd1d476775b40039a8d';
-
-    private Store $store;
+    private RouteMiddleware $routeMiddleware;
 
     protected function setUp(): void
     {
         $this->loadEnviroment();
 
-        $this->store = new Store();
+        $this->routeMiddleware = new RouteMiddleware();
     }
 
-    public function testProtectRouteList(): void
+    public function testProtectRouteListWithoutHeader(): void
     {
-        $response = fetch(Route::GET, self::URI, ['headers' => ['Lion-Auth' => env('SERVER_HASH')]])
-            ->getBody()
-            ->getContents();
+        $this->expectException(MiddlewareException::class);
+        $this->expectExceptionMessage('secure hash not found');
+        $this->expectExceptionCode(Request::HTTP_UNAUTHORIZED);
 
-        $this->assertJsonStringEqualsJsonFile('./tests/Providers/WebRoutes.json', $response);
+        $this->routeMiddleware->protectRouteList();
     }
 
-    public function testProtectRouteListNotFound1(): void
+    public function testProtectedRouteListDiferentHash(): void
     {
-        $exception = $this->getExceptionFromApi(function() {
-            fetch(Route::GET, self::URI)
-                ->getBody()
-                ->getContents();
-        });
+        $this->expectException(MiddlewareException::class);
+        $this->expectExceptionMessage('you do not have access to this resource');
+        $this->expectExceptionCode(Request::HTTP_UNAUTHORIZED);
 
-        $this->assertJsonContent($this->getResponse($exception->getMessage(), 'response:'), [
-            'code' => Request::HTTP_UNAUTHORIZED,
-            'status' => Response::SESSION_ERROR,
-            'message' => 'Secure hash not found [1]'
-        ]);
-    }
+        $_SERVER['HTTP_LION_AUTH'] = 'ff1d1bcda9afa5873bdc8205c11e880a43351ea56dc059f6544116961f6f5c0e';
 
-    public function testProtectRouteListNotAccess(): void
-    {
-        $exception = $this->getExceptionFromApi(function() {
-            fetch(Route::GET, self::URI, ['headers' => ['Lion-Auth' => self::HASH]])
-                ->getBody()
-                ->getContents();
-        });
-
-        $this->assertJsonContent($this->getResponse($exception->getMessage(), 'response:'), [
-            'code' => Request::HTTP_UNAUTHORIZED,
-            'status' => Response::SESSION_ERROR,
-            'message' => 'You do not have access to this resource'
-        ]);
+        $this->routeMiddleware->protectRouteList();
     }
 }

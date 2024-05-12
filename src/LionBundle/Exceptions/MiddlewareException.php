@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Exceptions;
+namespace Lion\Bundle\Exceptions;
 
 use JsonSerializable;
 use Lion\Bundle\Support\Exceptions\ExceptionSupport;
