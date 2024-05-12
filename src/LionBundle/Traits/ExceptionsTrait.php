@@ -19,16 +19,16 @@ trait ExceptionsTrait
      * Construct the exception
      *
      * @param string $message [The Exception message to throw]
-     * @param int $code [The Exception code]
      * @param string $status [Response status]
+     * @param int $code [The Exception code]
      * @param mixed $data [Response data]
      * @param Throwable|null $previus [The previous exception used for the
      * exception chaining]
      */
     public function __construct(
         string $message = '',
-        int $code = Request::HTTP_INTERNAL_SERVER_ERROR,
         string $status = Response::ERROR,
+        int $code = Request::HTTP_INTERNAL_SERVER_ERROR,
         mixed $data = null,
         ?Throwable $previus = null
     ) {

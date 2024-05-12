@@ -99,8 +99,8 @@ class HttpKernel
             if (count($errors) > 0) {
                 throw new RulesException(
                     'parameter error',
-                    Request::HTTP_INTERNAL_SERVER_ERROR,
                     StatusResponseEnum::RULE_ERROR->value,
+                    Request::HTTP_INTERNAL_SERVER_ERROR,
                     [
                         'rules-error' => $errors
                     ]

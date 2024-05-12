@@ -9,6 +9,7 @@ use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\Dependency\Injection\Container;
 use Lion\Request\Request;
+use Lion\Request\Response;
 use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -56,6 +57,6 @@ class ExceptionsCommandTest extends Test
         $this->expectExceptionCode(Request::HTTP_INTERNAL_SERVER_ERROR);
         $this->expectExceptionMessage(self::CUSTOM_MESSAGE);
 
-        throw new (self::OBJECT_NAME)(self::CUSTOM_MESSAGE, Request::HTTP_INTERNAL_SERVER_ERROR);
+        throw new (self::OBJECT_NAME)(self::CUSTOM_MESSAGE, Response::ERROR, Request::HTTP_INTERNAL_SERVER_ERROR);
     }
 }

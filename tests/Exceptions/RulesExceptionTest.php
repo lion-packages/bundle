@@ -7,6 +7,7 @@ namespace Tests\Exceptions;
 
 use Lion\Bundle\Exceptions\RulesException;
 use Lion\Request\Request;
+use Lion\Request\Response;
 use Lion\Test\Test;
 
 class RulesExceptionTest extends Test
@@ -19,6 +20,6 @@ class RulesExceptionTest extends Test
         $this->expectExceptionCode(Request::HTTP_INTERNAL_SERVER_ERROR);
         $this->expectExceptionMessage(self::MESSAGE);
 
-        throw new RulesException(self::MESSAGE, Request::HTTP_INTERNAL_SERVER_ERROR);
+        throw new RulesException(self::MESSAGE, Response::ERROR, Request::HTTP_INTERNAL_SERVER_ERROR);
     }
 }
