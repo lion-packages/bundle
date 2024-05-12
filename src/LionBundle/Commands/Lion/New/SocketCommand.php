@@ -110,8 +110,8 @@ class SocketCommand extends Command
                 namespace {$namespace};
 
                 use Exception;
+                use Lion\Bundle\Interface\SocketInterface;
                 use Ratchet\ConnectionInterface;
-                use Ratchet\MessageComponentInterface;
                 use SplObjectStorage;
 
                 /**
@@ -121,22 +121,8 @@ class SocketCommand extends Command
                  *
                  * @package {$namespace}
                  */
-                class {$class} implements MessageComponentInterface
+                class {$class} implements SocketInterface
                 {
-                    /**
-                     * [Defines the Socket Port]
-                     *
-                     * @const PORT
-                     */
-                    const PORT = 9000;
-
-                    /**
-                     * [Defines the Socket Host]
-                     *
-                     * @const HOST
-                     */
-                    const HOST = '0.0.0.0';
-
                     /**
                      * [List of clients connected to the Socket]
                      *
