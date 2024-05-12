@@ -60,13 +60,13 @@ class SocketCommand extends Command
      *
      * @return void
      */
-	protected function configure(): void
+    protected function configure(): void
     {
         $this
             ->setName('new:socket')
             ->setDescription('Command required for creating new WebSockets')
             ->addArgument('socket', InputArgument::OPTIONAL, 'Socket name', 'ExampleSocket');
-	}
+    }
 
     /**
      * Executes the current command
@@ -87,9 +87,9 @@ class SocketCommand extends Command
      *
      * @see setCode()
      */
-	protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->classFactory->classFactory('app/Http/Sockets/', $input->getArgument('socket'));
+        $this->classFactory->classFactory('app/Sockets/', $input->getArgument('socket'));
 
         $folder = $this->classFactory->getFolder();
 
@@ -200,5 +200,5 @@ class SocketCommand extends Command
         $output->writeln($this->successOutput("\t>>  SOCKET: the '{$namespace}\\{$class}' socket has been generated"));
 
         return Command::SUCCESS;
-	}
+    }
 }

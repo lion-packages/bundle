@@ -13,8 +13,8 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class SocketCommandTest extends Test
 {
-    const URL_PATH = './app/Http/Sockets/';
-    const NAMESPACE_CLASS = 'App\\Http\\Sockets\\';
+    const URL_PATH = './app/Sockets/';
+    const NAMESPACE_CLASS = 'App\\Sockets\\';
     const CLASS_NAME = 'TestSocket';
     const OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
     const FILE_NAME = self::CLASS_NAME . '.php';

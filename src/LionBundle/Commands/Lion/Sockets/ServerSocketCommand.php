@@ -94,7 +94,7 @@ class ServerSocketCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if (isError($this->store->exist('./app/Http/Sockets/'))) {
+        if (isError($this->store->exist('./app/Sockets/'))) {
             $output->writeln($this->errorOutput("\t>> SOCKET: no sockets defined"));
 
             return Command::FAILURE;
@@ -111,7 +111,7 @@ class ServerSocketCommand extends Command
                 return Command::SUCCESS;
             }
         } else {
-            $output->writeln($this->warningOutput("\n(default: {$socketDefault})\n"));
+            $output->writeln($this->warningOutput("(default: {$socketDefault})"));
 
             $selectedSocket = $socketDefault;
         }
@@ -120,7 +120,7 @@ class ServerSocketCommand extends Command
 
         $url = 'ws://' . $socketClass::HOST . ':' . $socketClass::PORT;
 
-        $output->write($this->successOutput("\nLion-Framework "));
+        $output->writeln($this->successOutput("Lion-Framework "));
 
         $output->writeln($this->warningOutput("\t>>  LOCAL: Socket running on [{$url}]"));
 
@@ -150,9 +150,9 @@ class ServerSocketCommand extends Command
     {
         $classList = [];
 
-        foreach ($this->container->getFiles('./app/Http/Sockets/') as $file) {
+        foreach ($this->container->getFiles('./app/Sockets/') as $file) {
             if (isSuccess($this->store->validate([$file], ['php']))) {
-                $classList[] = $this->container->getNamespace($file, 'App\\Http\\Sockets\\', 'Sockets/');
+                $classList[] = $this->container->getNamespace($file, 'App\\Sockets\\', 'Sockets/');
             }
         }
 
