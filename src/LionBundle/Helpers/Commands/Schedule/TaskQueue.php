@@ -13,7 +13,7 @@ use Lion\Request\Request;
 /**
  * Manage server queued task processes
  *
- * @property array<string, Closure> $functions [List of processes to run in task
+ * @property array<string, Closure|array<string, string>> $functions [List of processes to run in task
  * list]
  *
  * @package Lion\Bundle\Helpers\Commands\Schedule
@@ -23,7 +23,7 @@ class TaskQueue
     /**
      * [List of processes to run in task list]
      *
-     * @var array<string, Closure> $functions
+     * @var array<string, Closure|array<string, string>> $functions
      */
     private static array $functions = [];
 
@@ -31,11 +31,11 @@ class TaskQueue
      * Add the list of processes to run in the task list
      *
      * @param string $name [Name of the function being executed]
-     * @param Closure $callable [Function that is executed]
+     * @param Closure|array<string, string> $callable [Function that is executed]
      *
      * @return void
      */
-    public static function add(string $name, Closure $callable): void
+    public static function add(string $name, Closure|array $callable): void
     {
         self::$functions[$name] = $callable;
     }
@@ -45,9 +45,9 @@ class TaskQueue
      *
      * @param string $name [Name of the function being executed]
      *
-     * @return Closure
+     * @return Closure|array<string, string>
      */
-    public static function get(string $name): Closure
+    public static function get(string $name): Closure|array
     {
         return self::$functions[$name];
     }
