@@ -13,7 +13,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Generate a Model class
+ * Generate a Request class
  *
  * @property ClassFactory $classFactory [ClassFactory class object]
  * @property Store $store [Store class object]
@@ -86,13 +86,13 @@ class ModelCommand extends Command
      *
      * @return void
      */
-	protected function configure(): void
-	{
-		$this
+    protected function configure(): void
+    {
+        $this
             ->setName('new:model')
             ->setDescription('Command required for the creation of new Models')
             ->addArgument('model', InputArgument::OPTIONAL, 'Model name', 'ExampleModel');
-	}
+    }
 
     /**
      * Executes the current command
@@ -113,8 +113,8 @@ class ModelCommand extends Command
      *
      * @see setCode()
      */
-	protected function execute(InputInterface $input, OutputInterface $output): int
-	{
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
         $model = $input->getArgument('model');
 
         $this->classFactory->classFactory('app/Models/', $model);
@@ -127,7 +127,7 @@ class ModelCommand extends Command
 
         $this->store->folder($folder);
 
-		$this->classFactory
+        $this->classFactory
             ->create($class, ClassFactory::PHP_EXTENSION, $folder)
             ->add("<?php\n\ndeclare(strict_types=1);\n\n")
             ->add("namespace {$namespace};\n\n")
