@@ -1021,16 +1021,16 @@
         },
         {
             "name": "lion/exceptions",
-            "version": "v1.1.0",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/exceptions.git",
-                "reference": "05189ec9a2ca1d2cc40693c7be94c8bbbb395bff"
+                "reference": "a36b072bf893f703a80e140c0d400263ac6c58ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/exceptions/zipball/05189ec9a2ca1d2cc40693c7be94c8bbbb395bff",
-                "reference": "05189ec9a2ca1d2cc40693c7be94c8bbbb395bff",
+                "url": "https://api.github.com/repos/lion-packages/exceptions/zipball/a36b072bf893f703a80e140c0d400263ac6c58ba",
+                "reference": "a36b072bf893f703a80e140c0d400263ac6c58ba",
                 "shasum": ""
             },
             "require": {
@@ -1053,9 +1053,9 @@
             "description": "Handling exceptions and serializations",
             "support": {
                 "issues": "https://github.com/lion-packages/exceptions/issues",
-                "source": "https://github.com/lion-packages/exceptions/tree/v1.1.0"
+                "source": "https://github.com/lion-packages/exceptions/tree/v1.1.1"
             },
-            "time": "2024-05-14T22:40:57+00:00"
+            "time": "2024-05-16T16:28:23+00:00"
         },
         {
             "name": "lion/files",
