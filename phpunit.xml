@@ -58,10 +58,6 @@
             <directory>tests/Middleware/</directory>
         </testsuite>
 
-        <testsuite name="Support">
-            <directory>tests/Support/</directory>
-        </testsuite>
-
         <testsuite name="Traits">
             <directory>tests/Traits/</directory>
         </testsuite>
