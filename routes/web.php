@@ -15,6 +15,7 @@ define('LION_START', microtime(true));
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
+// use App\Exceptions\ExampleException;
 use Lion\Route\Route;
 use Dotenv\Dotenv;
 use Lion\Bundle\Enums\LogTypeEnum;
@@ -22,6 +23,8 @@ use Lion\Bundle\Helpers\Commands\Schedule\TaskQueue;
 use Lion\Bundle\Helpers\Http\Routes;
 use Lion\Database\Driver;
 use Lion\Mailer\Mailer;
+use Lion\Request\Http;
+use Lion\Request\Status;
 
 /**
  * -----------------------------------------------------------------------------
@@ -112,6 +115,8 @@ Route::get('/', function () {
     // TaskQueue::push('example', json([
     //     'key' => 'SERVER_URL',
     // ]));
+
+    // throw new ExampleException('ERR', Status::ROUTE_ERROR, Http::HTTP_BAD_REQUEST);
 
     return info('[index]');
 });
