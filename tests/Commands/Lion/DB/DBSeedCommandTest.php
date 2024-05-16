@@ -32,13 +32,17 @@ class DBSeedCommandTest extends Test
     protected function setUp(): void
     {
         $this->runDatabaseConnections();
+
         $this->createDirectory(self::URL_PATH);
 
         $application = (new Kernel())->getApplication();
+
         $application->add((new Container())->injectDependencies(new SeedCommand()));
+
         $application->add((new Container())->injectDependencies(new DBSeedCommand()));
 
         $this->commandTester = new CommandTester($application->find('db:seed'));
+
         $this->commandTesterNewSeed = new CommandTester($application->find('new:seed'));
     }
 

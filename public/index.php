@@ -6,11 +6,11 @@ header('Content-Type: application/json');
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
-use Lion\Bundle\Helpers\ExceptionCore;
 use Lion\Bundle\Kernel\HttpKernel;
 use Lion\Dependency\Injection\Container;
+use Lion\Exceptions\Serialize;
 
-(new ExceptionCore)->exceptionHandler();
+(new Serialize())->exceptionHandler();
 
 include_once(__DIR__ . '/../routes/rules.php');
 

@@ -8,8 +8,8 @@ use Carbon\Carbon;
 use DateTimeZone;
 use Faker\Generator;
 use Lion\Bundle\Enums\LogTypeEnum;
-use Lion\Request\Request;
-use Lion\Request\Response;
+use Lion\Request\Http;
+use Lion\Request\Status;
 use Lion\Route\Route;
 use Lion\Security\AES;
 use Lion\Security\JWT;
@@ -26,7 +26,7 @@ class HelpersTest extends Test
     const PATH_URL = 'storage/';
     const PATH_URL_INDEX = '../storage/';
     const CUSTOM_FOLDER = 'example/';
-    const RESPONSE = ['code' => Request::HTTP_OK, 'status' => Response::INFO, 'message' => '[index]'];
+    const RESPONSE = ['code' => Http::HTTP_OK, 'status' => Status::INFO, 'message' => '[index]'];
     const JSON_RESPONSE = '{"name":"Sleon"}';
     const CODE = 'code';
     const STATUS = 'status';
@@ -70,7 +70,7 @@ class HelpersTest extends Test
         $this->assertObjectHasProperty(self::CODE, $response);
         $this->assertObjectHasProperty(self::STATUS, $response);
         $this->assertObjectHasProperty(self::MESSAGE, $response);
-        $this->assertSame(Request::HTTP_OK, $response->code);
+        $this->assertSame(Http::HTTP_OK, $response->code);
         $this->assertSame(self::CUSTOM, $response->status);
         $this->assertNull($response->message);
     }
@@ -83,8 +83,8 @@ class HelpersTest extends Test
         $this->assertObjectHasProperty(self::CODE, $response);
         $this->assertObjectHasProperty(self::STATUS, $response);
         $this->assertObjectHasProperty(self::MESSAGE, $response);
-        $this->assertSame(Request::HTTP_OK, $response->code);
-        $this->assertSame(Response::SUCCESS, $response->status);
+        $this->assertSame(Http::HTTP_OK, $response->code);
+        $this->assertSame(Status::SUCCESS, $response->status);
         $this->assertNull($response->message);
     }
 
@@ -96,8 +96,8 @@ class HelpersTest extends Test
         $this->assertObjectHasProperty(self::CODE, $response);
         $this->assertObjectHasProperty(self::STATUS, $response);
         $this->assertObjectHasProperty(self::MESSAGE, $response);
-        $this->assertSame(Request::HTTP_INTERNAL_SERVER_ERROR, $response->code);
-        $this->assertSame(Response::ERROR, $response->status);
+        $this->assertSame(Http::HTTP_INTERNAL_SERVER_ERROR, $response->code);
+        $this->assertSame(Status::ERROR, $response->status);
         $this->assertNull($response->message);
     }
 
@@ -109,8 +109,8 @@ class HelpersTest extends Test
         $this->assertObjectHasProperty(self::CODE, $response);
         $this->assertObjectHasProperty(self::STATUS, $response);
         $this->assertObjectHasProperty(self::MESSAGE, $response);
-        $this->assertSame(Request::HTTP_OK, $response->code);
-        $this->assertSame(Response::WARNING, $response->status);
+        $this->assertSame(Http::HTTP_OK, $response->code);
+        $this->assertSame(Status::WARNING, $response->status);
         $this->assertNull($response->message);
     }
 
@@ -122,8 +122,8 @@ class HelpersTest extends Test
         $this->assertObjectHasProperty(self::CODE, $response);
         $this->assertObjectHasProperty(self::STATUS, $response);
         $this->assertObjectHasProperty(self::MESSAGE, $response);
-        $this->assertSame(Request::HTTP_OK, $response->code);
-        $this->assertSame(Response::INFO, $response->status);
+        $this->assertSame(Http::HTTP_OK, $response->code);
+        $this->assertSame(Status::INFO, $response->status);
         $this->assertNull($response->message);
     }
 

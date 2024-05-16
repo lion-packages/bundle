@@ -7,11 +7,11 @@ use Faker\Factory;
 use Faker\Generator;
 use GuzzleHttp\Psr7\Response;
 use Lion\Bundle\Enums\LogTypeEnum;
-use Lion\Bundle\Enums\StatusResponseEnum;
 use Lion\Bundle\Helpers\Env;
 use Lion\Bundle\Helpers\Fake;
 use Lion\Files\Store;
-use Lion\Request\Request;
+use Lion\Request\Http;
+use Lion\Request\Status;
 use Lion\Security\JWT;
 use Monolog\Handler\StreamHandler;
 use Monolog\Level;
@@ -92,7 +92,7 @@ if (!function_exists('response')) {
     function response(
         string $status = 'custom',
         mixed $message = null,
-        int $code = Request::HTTP_OK,
+        int $code = Http::HTTP_OK,
         mixed $data = null
     ): object {
         return response->custom($status, $message, $code, $data);
@@ -109,7 +109,7 @@ if (!function_exists('success')) {
      *
      * @return object
      */
-    function success(mixed $message = null, int $code = Request::HTTP_OK, mixed $data = null): object
+    function success(mixed $message = null, int $code = Http::HTTP_OK, mixed $data = null): object
     {
         return response->success($message, $code, $data);
     }
@@ -125,7 +125,7 @@ if (!function_exists('error')) {
      *
      * @return object
      */
-    function error(mixed $message = null, int $code = Request::HTTP_INTERNAL_SERVER_ERROR, mixed $data = null): object
+    function error(mixed $message = null, int $code = Http::HTTP_INTERNAL_SERVER_ERROR, mixed $data = null): object
     {
         return response->error($message, $code, $data);
     }
@@ -141,7 +141,7 @@ if (!function_exists('warning')) {
      *
      * @return object
      */
-    function warning(mixed $message = null, int $code = Request::HTTP_OK, mixed $data = null): object
+    function warning(mixed $message = null, int $code = Http::HTTP_OK, mixed $data = null): object
     {
         return response->warning($message, $code, $data);
     }
@@ -157,7 +157,7 @@ if (!function_exists('info')) {
      *
      * @return object
      */
-    function info(mixed $message = null, int $code = Request::HTTP_OK, mixed $data = null): object
+    function info(mixed $message = null, int $code = Http::HTTP_OK, mixed $data = null): object
     {
         return response->info($message, $code, $data);
     }
@@ -251,7 +251,7 @@ if (!function_exists('isError')) {
             return false;
         }
 
-        return in_array($response->status, StatusResponseEnum::errors());
+        return in_array($response->status, response->getErrors());
     }
 }
 
@@ -271,7 +271,7 @@ if (!function_exists('isSuccess')) {
             return false;
         }
 
-        return in_array($response->status, [StatusResponseEnum::SUCCESS->value], true);
+        return in_array($response->status, [Status::SUCCESS], true);
     }
 }
 

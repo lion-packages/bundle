@@ -11,7 +11,9 @@ use Lion\Bundle\Kernel\HttpKernel;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\Dependency\Injection\Container;
+use Lion\Request\Http;
 use Lion\Request\Request;
+use Lion\Request\Status;
 use Lion\Route\Route;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -52,6 +54,10 @@ class HttpKernelTest extends Test
 
     protected function tearDown(): void
     {
+        unset($_SERVER['REQUEST_URI']);
+
+        unset($_SERVER['REQUEST_METHOD']);
+
         $this->rmdirRecursively('./app/');
     }
 
@@ -73,22 +79,26 @@ class HttpKernelTest extends Test
 
         $this->assertIsObject($objClass);
         $this->assertInstanceOf(self::OBJECT_NAME, $objClass);
-        $this->expectException(RulesException::class);
-        $this->expectExceptionCode(Request::HTTP_INTERNAL_SERVER_ERROR);
-        $this->expectExceptionMessage(self::MESSAGE);
 
-        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $this
+            ->exception(RulesException::class)
+            ->exceptionMessage(self::MESSAGE)
+            ->exceptionStatus(Status::RULE_ERROR)
+            ->exceptionCode(Http::HTTP_INTERNAL_SERVER_ERROR)
+            ->expectLionException(function (): void {
+                $_SERVER['REQUEST_METHOD'] = 'POST';
 
-        $_SERVER['REQUEST_URI'] = 'api/users/1';
+                $_SERVER['REQUEST_URI'] = 'api/users/1';
 
-        Routes::setRules([
-            Route::POST => [
-                'api/users/{idusers}' => [
-                    self::OBJECT_NAME
-                ]
-            ]
-        ]);
+                Routes::setRules([
+                    Route::POST => [
+                        'api/users/{idusers}' => [
+                            self::OBJECT_NAME
+                        ]
+                    ]
+                ]);
 
-        $this->httpKernel->validateRules();
+                $this->httpKernel->validateRules();
+            });
     }
 }

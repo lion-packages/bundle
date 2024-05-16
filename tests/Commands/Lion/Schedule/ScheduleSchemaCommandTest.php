@@ -10,7 +10,7 @@ use Lion\Database\Drivers\MySQL as DB;
 use Lion\Database\Drivers\Schema\MySQL as Schema;
 use Lion\Command\Kernel;
 use Lion\Dependency\Injection\Container;
-use Lion\Request\Response;
+use Lion\Request\Status;
 use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tests\Providers\ConnectionProviderTrait;
@@ -49,7 +49,7 @@ class ScheduleSchemaCommandTest extends Test
         $this->assertIsObject($response);
         $this->assertObjectHasProperty('status', $response);
         $this->assertObjectHasProperty('message', $response);
-        $this->assertSame(Response::SUCCESS, $response->status);
+        $this->assertSame(Status::SUCCESS, $response->status);
         $this->assertSame('no data available', $response->message);
     }
 }
