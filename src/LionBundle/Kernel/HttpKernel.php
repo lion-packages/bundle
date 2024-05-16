@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Kernel;
 
-use Lion\Bundle\Enums\StatusResponseEnum;
 use Lion\Bundle\Exceptions\RulesException;
 use Lion\Bundle\Helpers\Http\Routes;
 use Lion\Bundle\Helpers\Rules;
 use Lion\Bundle\Interface\RulesInterface;
 use Lion\Dependency\Injection\Container;
-use Lion\Request\Request;
+use Lion\Request\Http;
+use Lion\Request\Status;
 
 /**
  * Kernel for HTTP requests
  *
  * @property Container $container [Container to generate dependency injection]
+ *
+ * @package Lion\Bundle\Kernel
  */
 class HttpKernel
 {
@@ -97,14 +99,9 @@ class HttpKernel
             }
 
             if (count($errors) > 0) {
-                throw new RulesException(
-                    'parameter error',
-                    StatusResponseEnum::RULE_ERROR->value,
-                    Request::HTTP_INTERNAL_SERVER_ERROR,
-                    [
-                        'rules-error' => $errors
-                    ]
-                );
+                throw new RulesException('parameter error', Status::RULE_ERROR, Http::HTTP_INTERNAL_SERVER_ERROR, [
+                    'rules-error' => $errors
+                ]);
             }
         }
     }

@@ -1021,23 +1021,23 @@
         },
         {
             "name": "lion/exceptions",
-            "version": "v1.0.0",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/exceptions.git",
-                "reference": "682bf2b80feaac7e9b8fbe92b5c6d08d105d76fa"
+                "reference": "05189ec9a2ca1d2cc40693c7be94c8bbbb395bff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/exceptions/zipball/682bf2b80feaac7e9b8fbe92b5c6d08d105d76fa",
-                "reference": "682bf2b80feaac7e9b8fbe92b5c6d08d105d76fa",
+                "url": "https://api.github.com/repos/lion-packages/exceptions/zipball/05189ec9a2ca1d2cc40693c7be94c8bbbb395bff",
+                "reference": "05189ec9a2ca1d2cc40693c7be94c8bbbb395bff",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.3"
             },
             "require-dev": {
-                "lion/test": "^1.3",
+                "lion/test": "^2.0",
                 "phpunit/phpunit": "^10.5"
             },
             "type": "library",
@@ -1053,9 +1053,9 @@
             "description": "Handling exceptions and serializations",
             "support": {
                 "issues": "https://github.com/lion-packages/exceptions/issues",
-                "source": "https://github.com/lion-packages/exceptions/tree/v1.0.0"
+                "source": "https://github.com/lion-packages/exceptions/tree/v1.1.0"
             },
-            "time": "2024-05-14T21:19:08+00:00"
+            "time": "2024-05-14T22:40:57+00:00"
         },
         {
             "name": "lion/files",
@@ -1176,23 +1176,23 @@
         },
         {
             "name": "lion/request",
-            "version": "v6.2.0",
+            "version": "v6.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/request.git",
-                "reference": "3f6937b0044cd67ef81391072c05d129ad23348b"
+                "reference": "e342381c5df4fb1ef65d61db475d1c1e4f651a90"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/request/zipball/3f6937b0044cd67ef81391072c05d129ad23348b",
-                "reference": "3f6937b0044cd67ef81391072c05d129ad23348b",
+                "url": "https://api.github.com/repos/lion-packages/request/zipball/e342381c5df4fb1ef65d61db475d1c1e4f651a90",
+                "reference": "e342381c5df4fb1ef65d61db475d1c1e4f651a90",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.2"
+                "php": ">=8.3"
             },
             "require-dev": {
-                "lion/test": "^1.4",
+                "lion/test": "^2.0",
                 "phpunit/phpunit": "^10.4"
             },
             "type": "library",
@@ -1208,9 +1208,9 @@
             "description": "library created to request input data and response requests",
             "support": {
                 "issues": "https://github.com/lion-packages/request/issues",
-                "source": "https://github.com/lion-packages/request/tree/v6.2.0"
+                "source": "https://github.com/lion-packages/request/tree/v6.7.0"
             },
-            "time": "2024-02-23T16:34:49+00:00"
+            "time": "2024-05-16T03:39:07+00:00"
         },
         {
             "name": "lion/route",

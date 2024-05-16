@@ -19,20 +19,9 @@ use Lion\Route\Route;
 use Dotenv\Dotenv;
 use Lion\Bundle\Enums\LogTypeEnum;
 use Lion\Bundle\Helpers\Commands\Schedule\TaskQueue;
-use Lion\Bundle\Helpers\ExceptionCore;
 use Lion\Bundle\Helpers\Http\Routes;
 use Lion\Database\Driver;
 use Lion\Mailer\Mailer;
-
-/**
- * -----------------------------------------------------------------------------
- * Initialize exception handling
- * -----------------------------------------------------------------------------
- * Controls and serializes exceptions to JSON format
- * -----------------------------------------------------------------------------
- **/
-
-(new ExceptionCore)->exceptionHandler();
 
 /**
  * -----------------------------------------------------------------------------

@@ -8,8 +8,8 @@ use Lion\Bundle\Commands\Lion\New\ExceptionsCommand;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\Dependency\Injection\Container;
-use Lion\Request\Request;
-use Lion\Request\Response;
+use Lion\Request\Http;
+use Lion\Request\Status;
 use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -50,13 +50,15 @@ class ExceptionsCommandTest extends Test
 
     public function testExecuteWithException(): void
     {
-        $this->assertSame(Command::SUCCESS, $this->commandTester->execute(['exception' => self::CLASS_NAME]));
-        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
-        $this->assertFileExists(self::URL_PATH . self::FILE_NAME);
-        $this->expectException(self::OBJECT_NAME);
-        $this->expectExceptionCode(Request::HTTP_INTERNAL_SERVER_ERROR);
-        $this->expectExceptionMessage(self::CUSTOM_MESSAGE);
-
-        throw new (self::OBJECT_NAME)(self::CUSTOM_MESSAGE, Response::ERROR, Request::HTTP_INTERNAL_SERVER_ERROR);
+        $this
+            ->exception(self::OBJECT_NAME)
+            ->exceptionMessage(self::CUSTOM_MESSAGE)
+            ->exceptionStatus(Status::ERROR)
+            ->exceptionCode(Http::HTTP_INTERNAL_SERVER_ERROR)
+            ->expectLionException(function (): void {
+                $this->assertSame(Command::SUCCESS, $this->commandTester->execute(['exception' => self::CLASS_NAME]));
+                $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
+                $this->assertFileExists(self::URL_PATH . self::FILE_NAME);
+            });
     }
 }

@@ -13,7 +13,7 @@ use Lion\Command\Kernel;
 use Lion\Database\Drivers\MySQL as DB;
 use Lion\Database\Drivers\Schema\MySQL as Schema;
 use Lion\Dependency\Injection\Container;
-use Lion\Request\Response;
+use Lion\Request\Status;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -84,7 +84,7 @@ class TaskQueueTest extends Test
         $this->assertIsObject($tasks);
         $this->assertObjectHasProperty('status', $tasks);
         $this->assertObjectHasProperty('message', $tasks);
-        $this->assertSame(Response::SUCCESS, $tasks->status);
+        $this->assertSame(Status::SUCCESS, $tasks->status);
         $this->assertSame('no data available', $tasks->message);
 
         $queueType = 'send:email';
@@ -124,7 +124,7 @@ class TaskQueueTest extends Test
         $this->assertIsObject($tasks);
         $this->assertObjectHasProperty('status', $tasks);
         $this->assertObjectHasProperty('message', $tasks);
-        $this->assertSame(Response::SUCCESS, $tasks->status);
+        $this->assertSame(Status::SUCCESS, $tasks->status);
         $this->assertSame('no data available', $tasks->message);
 
         $queueType = 'send:email';
@@ -184,7 +184,7 @@ class TaskQueueTest extends Test
         $this->assertIsObject($tasks);
         $this->assertObjectHasProperty('status', $tasks);
         $this->assertObjectHasProperty('message', $tasks);
-        $this->assertSame(Response::SUCCESS, $tasks->status);
+        $this->assertSame(Status::SUCCESS, $tasks->status);
         $this->assertSame('no data available', $tasks->message);
 
         $queueType = 'send:email';
@@ -220,7 +220,7 @@ class TaskQueueTest extends Test
         $this->assertIsObject($tasks);
         $this->assertObjectHasProperty('status', $tasks);
         $this->assertObjectHasProperty('message', $tasks);
-        $this->assertSame(Response::SUCCESS, $tasks->status);
+        $this->assertSame(Status::SUCCESS, $tasks->status);
         $this->assertSame('no data available', $tasks->message);
     }
 

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Lion\Bundle\Middleware;
 
 use Lion\Bundle\Exceptions\MiddlewareException;
-use Lion\Request\Request;
-use Lion\Request\Response;
+use Lion\Request\Http;
+use Lion\Request\Status;
 
 /**
  * Responsible for filtering and validating the defined web routes
@@ -26,18 +26,14 @@ class RouteMiddleware
     public function protectRouteList(): void
     {
         if (empty($_SERVER['HTTP_LION_AUTH'])) {
-            throw new MiddlewareException(
-                'secure hash not found',
-                Response::SESSION_ERROR,
-                Request::HTTP_UNAUTHORIZED
-            );
+            throw new MiddlewareException('secure hash not found', Status::SESSION_ERROR, Http::HTTP_UNAUTHORIZED);
         }
 
         if ($_ENV['SERVER_HASH'] != $_SERVER['HTTP_LION_AUTH']) {
             throw new MiddlewareException(
                 'you do not have access to this resource',
-                Response::SESSION_ERROR,
-                Request::HTTP_UNAUTHORIZED
+                Status::SESSION_ERROR,
+                Http::HTTP_UNAUTHORIZED
             );
         }
     }

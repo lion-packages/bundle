@@ -111,18 +111,18 @@ class ExceptionsCommand extends Command
 
                 namespace {$namespace};
 
-                use JsonSerializable;
-                use Lion\Bundle\Support\Exceptions\ExceptionSupport;
-                use Lion\Bundle\Traits\ExceptionsTrait;
+                use Lion\Exceptions\Exception;
+                use Lion\Exceptions\Interfaces\ExceptionInterface;
+                use Lion\Exceptions\Traits\ExceptionTrait;
 
                 /**
                  * Description of '{$class}'
                  *
                  * @package {$namespace}
                  */
-                class {$class} extends ExceptionSupport implements JsonSerializable
+                class {$class} extends Exception implements ExceptionInterface
                 {
-                    use ExceptionsTrait;
+                    use ExceptionTrait;
                 }
 
                 PHP
