@@ -40,12 +40,12 @@ enum TaskStatusEnum: string
     case FAILED = 'FAILED';
 
     /**
-     * Return a list with the different types of responses available
+     * Return a list with the different types of status available
      *
-     * @return array<string>
+     * @return array<int, string>
      */
     public static function values(): array
     {
-        return array_map(fn(object $value) => $value->value, self::cases());
+        return array_map(fn (object $value) => $value->value, self::cases());
     }
 }
