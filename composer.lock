@@ -1021,22 +1021,23 @@
         },
         {
             "name": "lion/exceptions",
-            "version": "v1.1.1",
+            "version": "v1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/exceptions.git",
-                "reference": "a36b072bf893f703a80e140c0d400263ac6c58ba"
+                "reference": "b59071f7bb6ecd5c3f527397424f90f3f857b034"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/exceptions/zipball/a36b072bf893f703a80e140c0d400263ac6c58ba",
-                "reference": "a36b072bf893f703a80e140c0d400263ac6c58ba",
+                "url": "https://api.github.com/repos/lion-packages/exceptions/zipball/b59071f7bb6ecd5c3f527397424f90f3f857b034",
+                "reference": "b59071f7bb6ecd5c3f527397424f90f3f857b034",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.3"
             },
             "require-dev": {
+                "guzzlehttp/guzzle": "^7.8",
                 "lion/test": "^2.0",
                 "phpunit/phpunit": "^10.5"
             },
@@ -1053,9 +1054,9 @@
             "description": "Handling exceptions and serializations",
             "support": {
                 "issues": "https://github.com/lion-packages/exceptions/issues",
-                "source": "https://github.com/lion-packages/exceptions/tree/v1.1.1"
+                "source": "https://github.com/lion-packages/exceptions/tree/v1.1.2"
             },
-            "time": "2024-05-16T16:28:23+00:00"
+            "time": "2024-05-16T17:32:01+00:00"
         },
         {
             "name": "lion/files",
