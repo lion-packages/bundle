@@ -10,6 +10,7 @@ use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Command\Command;
 use Lion\Database\Drivers\Schema\MySQL as Schema;
 use Lion\Database\Helpers\Constants\MySQLConstants;
+use Lion\Request\Http;
 use Lion\Request\Request;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -31,47 +32,6 @@ class ScheduleSchemaCommand extends MenuCommand
         $this
             ->setName('schedule:schema')
             ->setDescription('Create the necessary tables in the database to process the queued tasks');
-    }
-
-    /**
-     * Initializes the command after the input has been bound and before the
-     * input is validated
-     *
-     * This is mainly useful when a lot of commands extends one main command
-     * where some things need to be initialized based on the input arguments and
-     * options
-     *
-     * @param InputInterface $input [InputInterface is the interface implemented
-     * by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
-     *
-     * @see InputInterface::bind()
-     * @see InputInterface::validate()
-     *
-     * @return void
-     */
-    protected function initialize(InputInterface $input, OutputInterface $output): void
-    {
-    }
-
-    /**
-     * Interacts with the user
-     *
-     * This method is executed before the InputDefinition is validated
-     *
-     * This means that this is the only place where the command can
-     * interactively ask for values of missing required arguments
-     *
-     * @param InputInterface $input [InputInterface is the interface implemented
-     * by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
-     *
-     * @return void
-     */
-    protected function interact(InputInterface $input, OutputInterface $output): void
-    {
     }
 
     /**
@@ -132,7 +92,7 @@ class ScheduleSchemaCommand extends MenuCommand
             ->execute();
 
         if (isError($response)) {
-            throw new Exception($response->message, Request::HTTP_INTERNAL_SERVER_ERROR);
+            throw new Exception($response->message, Http::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

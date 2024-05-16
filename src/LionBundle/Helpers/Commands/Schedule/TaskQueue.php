@@ -8,7 +8,7 @@ use Closure;
 use Exception;
 use Lion\Bundle\Enums\TaskStatusEnum;
 use Lion\Database\Drivers\MySQL as DB;
-use Lion\Request\Request;
+use Lion\Request\Http;
 
 /**
  * Manage server queued task processes
@@ -75,7 +75,7 @@ class TaskQueue
             ->execute();
 
         if (isError($response)) {
-            throw new Exception($response->message, Request::HTTP_INTERNAL_SERVER_ERROR);
+            throw new Exception($response->message, Http::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -100,7 +100,7 @@ class TaskQueue
             ->execute();
 
         if (isError($response)) {
-            throw new Exception($response->message, Request::HTTP_INTERNAL_SERVER_ERROR);
+            throw new Exception($response->message, Http::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -122,7 +122,7 @@ class TaskQueue
             ->execute();
 
         if (isError($response)) {
-            throw new Exception($response->message, Request::HTTP_INTERNAL_SERVER_ERROR);
+            throw new Exception($response->message, Http::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

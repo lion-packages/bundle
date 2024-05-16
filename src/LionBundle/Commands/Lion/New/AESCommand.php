@@ -95,8 +95,11 @@ class AESCommand extends Command
         $config = $this->aes->create($aesMethod)->toObject()->get();
 
         $output->writeln($this->infoOutput("\t>>  AES METHOD: {$aesMethod}"));
+
         $output->writeln($this->warningOutput("\t>>  AES KEY: {$config->key}"));
+
         $output->writeln($this->warningOutput("\t>>  AES IV: {$config->iv}"));
+
         $output->writeln($this->successOutput("\t>>  Keys created successfully"));
 
         return Command::SUCCESS;

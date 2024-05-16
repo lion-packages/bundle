@@ -101,13 +101,13 @@ class NpmInitCommand extends MenuCommand
      *
      * @return void
      */
-	protected function configure(): void
+    protected function configure(): void
     {
-		$this
+        $this
             ->setName('npm:init')
             ->setDescription('Command to create Javascript projects with Vite.JS (Vanilla/Vue/React/Preact/Lit/Svelte/Solid/Qwik/Electron)')
             ->addArgument('project', InputArgument::OPTIONAL, "Project's name", 'vite-project');
-	}
+    }
 
     /**
      * Executes the current command
@@ -128,9 +128,9 @@ class NpmInitCommand extends MenuCommand
      *
      * @see setCode()
      */
-	protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-		$project = $this->str->of($input->getArgument('project'))->trim()->replace('_', '-')->replace(' ', '-')->get();
+        $project = $this->str->of($input->getArgument('project'))->trim()->replace('_', '-')->replace(' ', '-')->get();
 
         if (isSuccess($this->store->exist($this->store->normalizePath("vite/{$project}/")))) {
             $output->writeln($this->warningOutput("\t>>  VITE: a resource with this name already exists"));
@@ -180,18 +180,18 @@ class NpmInitCommand extends MenuCommand
             $this->warningOutput("\t>>  VITE: server: { host: true, port: 5173, watch: { usePolling: true } }")
         );
 
-		return Command::SUCCESS;
-	}
+        return Command::SUCCESS;
+    }
 
     /**
      * Create a vite project and install its dependencies
      *
-     * @param  InputInterface $input [InputInterface is the interface
+     * @param InputInterface $input [InputInterface is the interface
      * implemented by all input classes]
-     * @param  OutputInterface $output [OutputInterface is the interface
+     * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
-     * @param  string $project [Project's name]
-     * @param  string $template [Project template]
+     * @param string $project [Project's name]
+     * @param string $template [Project template]
      *
      * @return void
      */
@@ -215,12 +215,12 @@ class NpmInitCommand extends MenuCommand
     /**
      * Create an electron-vite project and install its dependencies
      *
-     * @param  InputInterface $input [InputInterface is the interface
+     * @param InputInterface $input [InputInterface is the interface
      * implemented by all input classes]
-     * @param  OutputInterface $output [OutputInterface is the interface
+     * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
-     * @param  string $project [Project's name]
-     * @param  string $template [Project template]
+     * @param string $project [Project's name]
+     * @param string $template [Project template]
      *
      * @return void
      */

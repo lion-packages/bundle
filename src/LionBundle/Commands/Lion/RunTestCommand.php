@@ -6,7 +6,6 @@ namespace Lion\Bundle\Commands\Lion;
 
 use Lion\Command\Command;
 use Lion\Command\Kernel;
-use Lion\Dependency\Injection\Container;
 use Lion\Helpers\Arr;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -15,7 +14,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Run the tests defined with PHPunit
  *
- * @property Container $container [Container class object]
  * @property Kernel $kernel [Kernel class object]
  * @property Arr $arr [Arr class object]
  *
@@ -23,13 +21,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class RunTestCommand extends Command
 {
-    /**
-     * [Container class object]
-     *
-     * @var Container $container
-     */
-    private Container $container;
-
     /**
      * [Kernel class object]
      *
@@ -43,16 +34,6 @@ class RunTestCommand extends Command
      * @var Arr $arr
      */
     private Arr $arr;
-
-    /**
-     * @required
-     * */
-    public function setContainer(Container $container): RunTestCommand
-    {
-        $this->container = $container;
-
-        return $this;
-    }
 
     /**
      * @required
