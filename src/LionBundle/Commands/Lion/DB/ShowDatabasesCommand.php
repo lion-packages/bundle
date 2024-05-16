@@ -42,12 +42,12 @@ class ShowDatabasesCommand extends Command
      *
      * @return void
      */
-	protected function configure(): void
+    protected function configure(): void
     {
-		$this
+        $this
             ->setName('db:show')
             ->setDescription('Command required to display available database connections');
-	}
+    }
 
     /**
      * Executes the current command
@@ -68,10 +68,12 @@ class ShowDatabasesCommand extends Command
      *
      * @see setCode()
      */
-	protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $connections = DB::getConnections();
+
         $size = $this->arr->of($connections['connections'])->length();
+
         $listConnections = [];
 
         foreach ($connections['connections'] as $connection) {
@@ -106,6 +108,6 @@ class ShowDatabasesCommand extends Command
             ->setRows($listConnections)
             ->render();
 
-		return Command::SUCCESS;
-	}
+        return Command::SUCCESS;
+    }
 }

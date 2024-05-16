@@ -47,7 +47,7 @@ class HelpersTest extends Test
 
     public function testFetch(): void
     {
-        $response = json_decode(fetch(Route::GET, env('SERVER_URL'))->getBody()->getContents(), true);
+        $response = json_decode(fetch(Http::HTTP_GET, env('SERVER_URL'))->getBody()->getContents(), true);
 
         $this->assertSame(self::RESPONSE, $response);
     }
@@ -188,7 +188,7 @@ class HelpersTest extends Test
             ->get();
 
         $response = json_decode(
-            fetch(Route::POST, env('SERVER_URL') . '/api/test', [
+            fetch(Http::HTTP_POST, env('SERVER_URL') . '/api/test', [
                 'headers' => [
                     'Authorization' => "Bearer {$token}"
                 ]

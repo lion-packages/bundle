@@ -7,7 +7,6 @@ namespace Lion\Bundle\Commands\Lion\New;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Files\Store;
-use Lion\Helpers\Str;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,7 +16,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @property ClassFactory $classFactory [ClassFactory class object]
  * @property Store $store [Store class object]
- * @property Str $str [Str class object]
  *
  * @package Lion\Bundle\Commands\Lion\New
  */
@@ -37,14 +35,8 @@ class TraitCommand extends Command
      */
     private Store $store;
 
-    /**
-     * [Str class object]
-     *
-     * @var Str $str
-     */
-    private Str $str;
 
-	/**
+    /**
      * @required
      * */
     public function setClassFactory(ClassFactory $classFactory): TraitCommand
@@ -65,21 +57,11 @@ class TraitCommand extends Command
     }
 
     /**
-     * @required
-     * */
-    public function setStr(Str $str): TraitCommand
-    {
-        $this->str = $str;
-
-        return $this;
-    }
-
-    /**
      * Configures the current command
      *
      * @return void
      */
-	protected function configure(): void
+    protected function configure(): void
     {
         $this
             ->setName('new:trait')
@@ -147,5 +129,4 @@ class TraitCommand extends Command
 
         return Command::SUCCESS;
     }
-
 }

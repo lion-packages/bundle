@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Helpers;
 
-use Lion\Dependency\Injection\Container;
 use Lion\Helpers\Str;
 
 /**
  * Class that allows writing system files
  *
  * @property Str $str [Str class object]
- * @property Container $container [Container class object]
  *
  * @package Lion\Bundle\Helpers
  */
@@ -25,26 +23,11 @@ class FileWriter
     private Str $str;
 
     /**
-     * [Object of class Container]
-     *
-     * @var Container $container
-     */
-    private Container $container;
-
-    /**
      * @required
      */
     public function setStr(Str $str)
     {
         $this->str = $str;
-    }
-
-    /**
-     * @required
-     */
-    public function setContainer(Container $container)
-    {
-        $this->container = $container;
     }
 
     /**
