@@ -52,6 +52,23 @@ trait FileWriterProviderTrait
                     "last_name-test": "Example"
                 }
                 JSON
+            ],
+            [
+                'rows' => [
+                    2 => [
+                        'replace' => false,
+                        'content' => <<<JSON
+                            "name": "Root Test",
+
+                        JSON
+                    ]
+                ],
+                'return' => <<<JSON
+                {
+                    "name": "Root Test",
+                    "last_name-test": "Example"
+                }
+                JSON
             ]
         ];
     }
@@ -61,16 +78,40 @@ trait FileWriterProviderTrait
         return [
             [
                 'rows' => [
+                    2 => [
+                        'replace' => true,
+                        'multiple' => [
+                            [
+                                'search' => 'name',
+                                'content' => 'first_name'
+                            ],
+                            [
+                                'search' => 'Test',
+                                'content' => 'Testing'
+                            ]
+                        ]
+
+                    ]
+                ],
+                'return' => <<<JSON
+                {
+                    "first_name": "Testing",
+                    "last_name-test": "Example"
+                }
+                JSON
+            ],
+            [
+                'rows' => [
                     3 => [
                         'replace' => true,
-                        'mutliple' => [
+                        'multiple' => [
                             [
                                 'search' => '-test',
                                 'content' => ''
                             ],
                             [
                                 'search' => 'Example',
-                                'content' => 'Example-Test'
+                                'content' => 'Testing'
                             ]
                         ]
 
@@ -79,31 +120,7 @@ trait FileWriterProviderTrait
                 'return' => <<<JSON
                 {
                     "name": "Test",
-                    "last_name": "Example-Test"
-                }
-                JSON
-            ],
-            [
-                'rows' => [
-                    2 => [
-                        'replace' => true,
-                        'mutliple' => [
-                            [
-                                'search' => 'name',
-                                'content' => 'full_name'
-                            ],
-                            [
-                                'search' => 'Test',
-                                'content' => 'Bundle'
-                            ]
-                        ]
-
-                    ]
-                ],
-                'return' => <<<JSON
-                {
-                    "full_name": "Bundle",
-                    "last_name": "Example-Test"
+                    "last_name": "Testing"
                 }
                 JSON
             ],
