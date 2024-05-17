@@ -155,7 +155,7 @@ class ClassFactoryTest extends Test
     ): void {
         $customMethod = $this->classFactory->getCustomMethod($name, $type, $params, $content, $visibility, $lineBreak);
 
-        $this->assertEquals($return, $customMethod);
+        $this->assertSame($return, $customMethod);
     }
 
     #[DataProvider('getClassFormatProvider')]

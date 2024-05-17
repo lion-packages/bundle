@@ -523,7 +523,28 @@ trait ClassFactoryProviderTrait
                 \t\treturn [...\$param1];
                 \t}\n\n
                 PHP
-            ]
+            ],
+            [
+                'name' => 'exampleLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongMethod',
+                'type' => 'array',
+                'params' => 'array $param1',
+                'content' => 'return [...$param1];',
+                'visibility' => 'protected',
+                'lineBreak' => 2,
+                'return' => <<<PHP
+                \t/**
+                \t * Description of 'exampleLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongMethod'
+                \t *
+                \t * @param array \$param1 [Parameter Description]
+                \t *
+                \t * @return array
+                \t */
+                \tprotected function exampleLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongMethod(array \$param1): array
+                \t{
+                \t\treturn [...\$param1];
+                \t}\n\n
+                PHP
+            ],
         ];
     }
 
