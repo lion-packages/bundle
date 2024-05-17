@@ -6,6 +6,7 @@
 /storage/**/*.key
 /storage/**/*.log
 /storage/postman/*.json
+/tests/build/
 /vite/
 /app/
 .rnd

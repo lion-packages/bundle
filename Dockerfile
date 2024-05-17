@@ -20,10 +20,9 @@ RUN apt-get update -y \
 
 RUN pecl install ev redis xdebug \
     && docker-php-ext-install mbstring gd pdo_mysql mysqli zip \
-    && docker-php-ext-enable gd zip redis xdebug
-
-RUN echo "xdebug.coverage_enable" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-RUN echo "xdebug.mode=coverage" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    && docker-php-ext-enable gd zip redis xdebug \
+    && echo "xdebug.coverage_enable" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.mode=coverage" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 RUN a2enmod rewrite \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
