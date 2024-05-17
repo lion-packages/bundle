@@ -22,7 +22,8 @@ class ClassFactoryTest extends Test
 
     protected function setUp(): void
     {
-        $this->classFactory = (new Container())->injectDependencies(new ClassFactory());
+        $this->classFactory = (new Container())
+            ->injectDependencies(new ClassFactory());
 
         $this->initReflection($this->classFactory);
 
