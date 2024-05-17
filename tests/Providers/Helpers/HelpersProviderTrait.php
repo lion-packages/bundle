@@ -73,7 +73,7 @@ trait HelpersProviderTrait
                 'envKey' => 'NOT_EXIST_ENVIROMENT',
                 'envValue' => null,
                 'return' => null,
-            ]
+            ],
         ];
     }
 }
