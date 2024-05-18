@@ -20,7 +20,7 @@
         "files": [
             "routes/rules.php",
             "routes/middleware.php",
-            "src/LionBundle/Helpers/Bundle/constans.php",
+            "src/LionBundle/Helpers/Bundle/constants.php",
             "src/LionBundle/Helpers/Bundle/helpers.php"
         ]
     },
@@ -29,7 +29,7 @@
             "Tests\\": "tests/"
         },
         "files": [
-            "src/LionBundle/Helpers/Bundle/constans.php",
+            "src/LionBundle/Helpers/Bundle/constants.php",
             "src/LionBundle/Helpers/Bundle/helpers.php"
         ]
     },

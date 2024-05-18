@@ -12,7 +12,7 @@
     stopOnError="true"
     stopOnFailure="true"
     stopOnWarning="true"
-    bootstrap="vendor/autoload.php"
+    bootstrap="tests/bootstrap.php"
     xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.1/phpunit.xsd"
     backupStaticProperties="false"
     displayDetailsOnIncompleteTests="true"
@@ -35,12 +35,12 @@
         </include>
     </source>
 
-    <coverage>
+    <!-- <coverage>
         <report>
             <clover outputFile="tests/build/logs/clover.xml" />
             <html outputDirectory="tests/build/coverage" />
         </report>
-    </coverage>
+    </coverage> -->
 
     <testsuites>
         <testsuite name="All-Test">

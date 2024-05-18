@@ -30,5 +30,5 @@ RUN a2enmod rewrite \
 COPY . .
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-CMD touch storage/server.log storage/socket.log storage/supervisord.log \
+CMD touch storage/logs/server.log storage/logs/socket.log storage/logs/supervisord.log storage/logs/test-coverage.log \
     && /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
