@@ -35,6 +35,14 @@
         </include>
     </source>
 
+    <extensions>
+        <bootstrap class="RobinIngelbrecht\PHPUnitPrettyPrint\PhpUnitExtension">
+            <parameter name="enableByDefault" value="true" />
+            <parameter name="displayProfiling" value="true" />
+            <parameter name="useCompactMode" value="false" />
+        </bootstrap>
+    </extensions>
+
     <!-- <coverage>
         <report>
             <clover outputFile="tests/build/logs/clover.xml" />

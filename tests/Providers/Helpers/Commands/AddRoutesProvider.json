@@ -15,7 +15,7 @@
                 "url": "api\/test",
                 "method": "POST",
                 "params": [
-                    "Lion\\Bundle\\Helpers\\Rules@anonymous\u0000\/var\/www\/html\/routes\/rules.php:19$1"
+                    "Tests\\Providers\\Helpers\\Commands\\RulesProvider"
                 ]
             },
             {

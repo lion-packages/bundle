@@ -59,6 +59,11 @@
         "predis/predis": "^2.2",
         "symfony/console": "^6.3"
     },
+    "require-dev": {
+        "lion/test": "^2.0",
+        "phpunit/phpunit": "^11.1",
+        "robiningelbrecht/phpunit-pretty-print": "^1.3"
+    },
     "suggest": {
         "ext-gd": "Required to use LionSpreadsheet.",
         "ext-pdo": "Required to use all database features.",
@@ -75,9 +80,5 @@
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true,
-    "require-dev": {
-        "lion/test": "^2.0",
-        "phpunit/phpunit": "^11.1"
-    }
+    "prefer-stable": true
 }
