@@ -186,13 +186,7 @@ class ClassFactory
 
         $namespace = '';
 
-        $separate = [];
-
-        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            $separate = explode('\\', $this->store->normalizePath("{$path}{$fileName}"));
-        } else {
-            $separate = explode('/', $this->store->normalizePath("{$path}{$fileName}"));
-        }
+        $separate = explode('/', $this->store->normalizePath("{$path}{$fileName}"));
 
         $size = count($separate);
 
@@ -442,45 +436,19 @@ class ClassFactory
             $paramsAnnotation .= "* @param {$params} [Parameter Description]";
         }
 
-        if ($countContentFunction > 120) {
-            $splitParams = explode(',', $params);
+        $method .= "\t/**\n\t * Description of '{$name}'\n";
 
-            $implodeParams = '';
+        $method .= "\t *\n";
 
-            foreach ($splitParams as $key => $param) {
-                $param = trim($param);
+        $method .= $paramsAnnotation != '' ? "\t {$paramsAnnotation}\n\t *\n" : '';
 
-                $implodeParams .= $key === (count($splitParams) - 1) ? "\n\t\t{$param}" : "\n\t\t{$param},";
-            }
+        $method .= "\t * @return {$methodTypeAnnotation}\n\t */\n";
 
-            $method .= "\t/**\n\t * Description of '{$name}'\n";
+        $method .= "\t{$visibility} function {$name}({$params}){$methodType}";
 
-            $method .= "\t *\n";
+        $method .= "\n\t{\n\t\t{$content}\n\t}";
 
-            $method .= $paramsAnnotation != '' ? "\t {$paramsAnnotation}\n\t *\n" : '';
-
-            $method .= "\t * @return {$methodTypeAnnotation}\n\t */\n";
-
-            $method .= "\t{$visibility} function {$name}({$implodeParams}\n\t){$methodType}";
-
-            $method .=  " {\n\t\t{$content}\n\t}";
-
-            $method .= str_repeat("\n", $lineBreak);
-        } else {
-            $method .= "\t/**\n\t * Description of '{$name}'\n";
-
-            $method .= "\t *\n";
-
-            $method .= $paramsAnnotation != '' ? "\t {$paramsAnnotation}\n\t *\n" : '';
-
-            $method .= "\t * @return {$methodTypeAnnotation}\n\t */\n";
-
-            $method .= "\t{$visibility} function {$name}({$params}){$methodType}";
-
-            $method .= "\n\t{\n\t\t{$content}\n\t}";
-
-            $method .= str_repeat("\n", $lineBreak);
-        }
+        $method .= str_repeat("\n", $lineBreak);
 
         return $method;
     }

@@ -18,9 +18,11 @@ RUN apt-get update -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pecl install ev redis \
+RUN pecl install ev redis xdebug \
     && docker-php-ext-install mbstring gd pdo_mysql mysqli zip \
-    && docker-php-ext-enable gd zip redis
+    && docker-php-ext-enable gd zip redis xdebug \
+    && echo "xdebug.coverage_enable" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.mode=coverage" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 RUN a2enmod rewrite \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -28,5 +30,5 @@ RUN a2enmod rewrite \
 COPY . .
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-CMD touch storage/server.log storage/socket.log storage/supervisord.log \
+CMD touch storage/logs/server.log storage/logs/socket.log storage/logs/supervisord.log storage/logs/test-coverage.log \
     && /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf

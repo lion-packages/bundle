@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Lion\Bundle\Helpers\Http\Routes;
 use Lion\Route\Route;
+use Tests\Providers\Helpers\Commands\RulesProvider;
 
 /**
  * -----------------------------------------------------------------------------
@@ -15,5 +16,9 @@ use Lion\Route\Route;
 
 Routes::setRules([
     Route::GET => [],
-    Route::POST => [],
+    Route::POST => [
+        '/api/test' => [
+            RulesProvider::class
+        ]
+    ],
 ]);

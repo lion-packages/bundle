@@ -9,13 +9,11 @@ use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\Providers\EnviromentProviderTrait;
 use Tests\Providers\Helpers\EnvProviderTrait;
-use Tests\Providers\Helpers\HelpersProviderTrait;
 
 class EnvTest extends Test
 {
     use EnviromentProviderTrait;
     use EnvProviderTrait;
-    use HelpersProviderTrait;
 
     private Env $env;
 
@@ -28,7 +26,7 @@ class EnvTest extends Test
         $this->initReflection($this->env);
     }
 
-    #[DataProvider('envProvider')]
+    #[DataProvider('getProvider')]
     public function testGet(string $envKey, mixed $envValue, mixed $return): void
     {
         $this->assertSame($return, $this->env->get($envKey, $envValue));
@@ -40,9 +38,18 @@ class EnvTest extends Test
         $this->assertSame($return, $this->env->getKey($value));
     }
 
-    #[DataProvider('envProvider')]
+    #[DataProvider('getOptionProvider')]
     public function testGetOption(string $envKey, mixed $envValue, mixed $return): void
     {
+        $_ENV['key'] = '"value"';
+
+        $_ENV['key2'] = '\'value\'';
+
         $this->assertSame($return, $this->getPrivateMethod('getOption', [$envKey, $envValue]));
+
+        unset($_ENV['key'], $_ENV['key2']);
+
+        $this->assertArrayNotHasKey('key', $_ENV);
+        $this->assertArrayNotHasKey('key2', $_ENV);
     }
 }

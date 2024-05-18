@@ -497,9 +497,11 @@ class PostmanCollection
             if ($lastIndex >= 0 && isset($result[$lastIndex]['item'])) {
                 if (isset($json['item'])) {
                     $this->createCollection($json['item'], $result[$lastIndex]['item']);
-                } else {
-                    $result[$lastIndex]['item'][] = $json;
                 }
+
+                // else {
+                //     $result[$lastIndex]['item'][] = $json;
+                // }
             } else {
                 $result[] = $json;
             }

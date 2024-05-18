@@ -12,8 +12,8 @@
     stopOnError="true"
     stopOnFailure="true"
     stopOnWarning="true"
-    bootstrap="vendor/autoload.php"
-    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.3/phpunit.xsd"
+    bootstrap="tests/bootstrap.php"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.1/phpunit.xsd"
     backupStaticProperties="false"
     displayDetailsOnIncompleteTests="true"
     displayDetailsOnSkippedTests="true"
@@ -28,6 +28,27 @@
         <ini name="intl.default_locale" value="C.UTF-8" />
         <ini name="memory_limit" value="2048M" />
     </php>
+
+    <source>
+        <include>
+            <directory>src</directory>
+        </include>
+    </source>
+
+    <extensions>
+        <bootstrap class="RobinIngelbrecht\PHPUnitPrettyPrint\PhpUnitExtension">
+            <parameter name="enableByDefault" value="true" />
+            <parameter name="displayProfiling" value="true" />
+            <parameter name="useCompactMode" value="false" />
+        </bootstrap>
+    </extensions>
+
+    <!-- <coverage>
+        <report>
+            <clover outputFile="tests/build/logs/clover.xml" />
+            <html outputDirectory="tests/build/coverage" />
+        </report>
+    </coverage> -->
 
     <testsuites>
         <testsuite name="All-Test">

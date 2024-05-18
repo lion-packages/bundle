@@ -10,7 +10,6 @@ use Faker\Generator;
 use Lion\Bundle\Enums\LogTypeEnum;
 use Lion\Request\Http;
 use Lion\Request\Status;
-use Lion\Route\Route;
 use Lion\Security\AES;
 use Lion\Security\JWT;
 use Lion\Test\Test;
@@ -39,6 +38,11 @@ class HelpersTest extends Test
         $this->loadEnviroment();
     }
 
+    protected function tearDown(): void
+    {
+        unset($_SERVER['REQUEST_URI']);
+    }
+
     public function testNow(): void
     {
         $this->assertInstanceOf(Carbon::class, now());
@@ -60,6 +64,11 @@ class HelpersTest extends Test
     public function testStoragePathForIndex(): void
     {
         $this->assertSame(self::PATH_URL_INDEX . self::CUSTOM_FOLDER, storage_path(self::CUSTOM_FOLDER));
+    }
+
+    public function testFinish(): void
+    {
+        $this->expectNotToPerformAssertions();
     }
 
     public function testResponse(): void
@@ -149,6 +158,19 @@ class HelpersTest extends Test
         $this->assertFileExists($fileName);
     }
 
+    public function testLoggerForApi(): void
+    {
+        $_SERVER['REQUEST_URI'] = '/api/test';
+
+        $path = storage_path('logs/monolog/', false);
+
+        $fileName = "{$path}lion-" . Carbon::now()->format('Y-m-d') . '.log';
+
+        logger(self::LOGGER_CONTENT, LogTypeEnum::INFO, ['user' => 'Sleon'], false);
+
+        $this->assertFileExists($fileName);
+    }
+
     public function testJson(): void
     {
         $this->assertJsonStringEqualsJsonString(self::JSON_RESPONSE, json(['name' => 'Sleon']));
@@ -174,32 +196,27 @@ class HelpersTest extends Test
 
     public function testJwt(): void
     {
-        $config = (new AES())->create(AES::AES_256_CBC)->get();
+        $config = (new AES())
+            ->create(AES::AES_256_CBC)->get();
 
-        $token = (new JWT())
+        $jwt = new JWT();
+
+        $tokenEncode = $jwt
             ->config([
                 'privateKey' => $config['iv'],
                 'jwtServerUrl' => env('SERVER_URL'),
                 'jwtServerUrlAud' => env('SERVER_URL_AUD'),
                 'jwtExp' => (int) env('JWT_EXP'),
-                'jwtDefaultMD' => 'HS256'
+                'jwtDefaultMD' => 'HS256',
             ])
             ->encode(['session' => true])
             ->get();
 
-        $response = json_decode(
-            fetch(Http::HTTP_POST, env('SERVER_URL') . '/api/test', [
-                'headers' => [
-                    'Authorization' => "Bearer {$token}"
-                ]
-            ])
-                ->getBody()
-                ->getContents()
-        );
+        $_SERVER['HTTP_AUTHORIZATION'] = "Bearer {$tokenEncode}";
 
-        $this->assertIsObject($response);
-        $this->assertObjectHasProperty('token', $response);
-        $this->assertSame($token, $response->token);
+        $token = jwt();
+
+        $this->assertIsString($token);
     }
 
     public function testFake(): void

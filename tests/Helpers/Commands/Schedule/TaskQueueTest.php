@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Helpers\Commands\Schedule;
 
 use Closure;
+use Exception;
 use Lion\Bundle\Commands\Lion\Schedule\ScheduleSchemaCommand;
 use Lion\Bundle\Enums\TaskStatusEnum;
 use Lion\Bundle\Helpers\Commands\Schedule\TaskQueue;
@@ -13,6 +14,7 @@ use Lion\Command\Kernel;
 use Lion\Database\Drivers\MySQL as DB;
 use Lion\Database\Drivers\Schema\MySQL as Schema;
 use Lion\Dependency\Injection\Container;
+use Lion\Request\Http;
 use Lion\Request\Status;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -32,6 +34,8 @@ class TaskQueueTest extends Test
     private TaskQueue $taskQueue;
     private CommandTester $commandTester;
 
+    private array $backupConnections;
+
     protected function setUp(): void
     {
         $this->runDatabaseConnections();
@@ -45,11 +49,15 @@ class TaskQueueTest extends Test
         $application->add((new Container())->injectDependencies(new ScheduleSchemaCommand()));
 
         $this->commandTester = new CommandTester($application->find('schedule:schema'));
+
+        $this->backupConnections = DB::getConnections();
     }
 
     protected function tearDown(): void
     {
         Schema::dropTable('task_queue')->execute();
+
+        DB::run($this->backupConnections);
     }
 
     #[DataProvider('addProvider')]
@@ -114,6 +122,33 @@ class TaskQueueTest extends Test
         $this->assertSame(TaskStatusEnum::PENDING->value, $row->task_queue_status);
     }
 
+    public function testPushWithException(): void
+    {
+        $connections = DB::getConnections();
+
+        $this->assertArrayHasKey('connections', $connections);
+        $this->assertArrayHasKey('lion_database', $connections['connections']);
+        $this->assertArrayHasKey('dbname', $connections['connections']['lion_database']);
+
+        $code = uniqid('code-');
+
+        $connections['connections']['lion_database']['dbname'] = $code;
+
+        DB::addConnections('lion_database', $connections['connections']['lion_database']);
+
+        $connections = DB::getConnections();
+
+        $this->assertArrayHasKey('connections', $connections);
+        $this->assertArrayHasKey('lion_database', $connections['connections']);
+        $this->assertSame($code, $connections['connections']['lion_database']['dbname']);
+        $this->expectException(Exception::class);
+        $this->expectExceptionCode(Http::HTTP_INTERNAL_SERVER_ERROR);
+
+        $this->taskQueue->push('send:email', json([
+            'email' => 'root@dev.com'
+        ]));
+    }
+
     public function testEdit(): void
     {
         $this->assertSame(Command::SUCCESS, $this->commandTester->setInputs(['0'])->execute([]));
@@ -174,6 +209,31 @@ class TaskQueueTest extends Test
         $this->assertSame(TaskStatusEnum::IN_PROGRESS->value, $queue->task_queue_status);
     }
 
+    public function testEditWithException(): void
+    {
+        $connections = DB::getConnections();
+
+        $this->assertArrayHasKey('connections', $connections);
+        $this->assertArrayHasKey('lion_database', $connections['connections']);
+        $this->assertArrayHasKey('dbname', $connections['connections']['lion_database']);
+
+        $code = uniqid('code-');
+
+        $connections['connections']['lion_database']['dbname'] = $code;
+
+        DB::addConnections('lion_database', $connections['connections']['lion_database']);
+
+        $connections = DB::getConnections();
+
+        $this->assertArrayHasKey('connections', $connections);
+        $this->assertArrayHasKey('lion_database', $connections['connections']);
+        $this->assertSame($code, $connections['connections']['lion_database']['dbname']);
+        $this->expectException(Exception::class);
+        $this->expectExceptionCode(Http::HTTP_INTERNAL_SERVER_ERROR);
+
+        $this->taskQueue->edit((object) ['idtask_queue' => 1], TaskStatusEnum::FAILED);
+    }
+
     public function testRemove(): void
     {
         $this->assertSame(Command::SUCCESS, $this->commandTester->setInputs(['0'])->execute([]));
@@ -222,6 +282,31 @@ class TaskQueueTest extends Test
         $this->assertObjectHasProperty('message', $tasks);
         $this->assertSame(Status::SUCCESS, $tasks->status);
         $this->assertSame('no data available', $tasks->message);
+    }
+
+    public function testRemoveWithException(): void
+    {
+        $connections = DB::getConnections();
+
+        $this->assertArrayHasKey('connections', $connections);
+        $this->assertArrayHasKey('lion_database', $connections['connections']);
+        $this->assertArrayHasKey('dbname', $connections['connections']['lion_database']);
+
+        $code = uniqid('code-');
+
+        $connections['connections']['lion_database']['dbname'] = $code;
+
+        DB::addConnections('lion_database', $connections['connections']['lion_database']);
+
+        $connections = DB::getConnections();
+
+        $this->assertArrayHasKey('connections', $connections);
+        $this->assertArrayHasKey('lion_database', $connections['connections']);
+        $this->assertSame($code, $connections['connections']['lion_database']['dbname']);
+        $this->expectException(Exception::class);
+        $this->expectExceptionCode(Http::HTTP_INTERNAL_SERVER_ERROR);
+
+        $this->taskQueue->remove((object) ['idtask_queue' => 1]);
     }
 
     public function testPause(): void

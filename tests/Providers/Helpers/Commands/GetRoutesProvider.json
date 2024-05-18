@@ -1,6 +1,6 @@
 [
     {
-        "url": "/",
+        "url": "\/",
         "method": "GET",
         "params": []
     },
@@ -10,22 +10,24 @@
         "params": []
     },
     {
-        "url": "api/test",
+        "url": "api\/test",
         "method": "POST",
-        "params": []
+        "params": [
+            "Tests\\Providers\\Helpers\\Commands\\RulesProvider"
+        ]
     },
     {
-        "url": "api/test",
+        "url": "api\/test",
         "method": "GET",
         "params": []
     },
     {
-        "url": "api/test/{id:i}",
+        "url": "api\/test\/{id:i}",
         "method": "PUT",
         "params": []
     },
     {
-        "url": "api/test/{id:i}",
+        "url": "api\/test\/{id:i}",
         "method": "DELETE",
         "params": []
     }

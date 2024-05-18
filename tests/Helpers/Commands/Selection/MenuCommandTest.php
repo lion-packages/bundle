@@ -7,6 +7,7 @@ namespace Tests\Helpers\Commands\Selection;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
+use Lion\Database\Drivers\MySQL as DB;
 use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -33,16 +34,17 @@ class MenuCommandTest extends Test
     {
         $this->runDatabaseConnections();
 
-        $this->menuCommand = (new Container())->injectDependencies(new MenuCommand());
+        $this->menuCommand = (new Container())
+            ->injectDependencies(new MenuCommand());
 
         $this->initReflection($this->menuCommand);
     }
 
     protected function tearDown(): void
     {
-        $this->rmdirRecursively(self::VITE_PATH);
-
         $_ENV['SELECTED_CONNECTION'] = '';
+
+        $this->rmdirRecursively(self::VITE_PATH);
     }
 
     public function testSelectedProjectWithSingleProject(): void
@@ -99,9 +101,11 @@ class MenuCommandTest extends Test
             }
         };
 
-        $application = (new Kernel())->getApplication();
+        $application = (new Kernel())
+            ->getApplication();
 
-        $application->add((new Container())->injectDependencies($command));
+        $application->add((new Container())
+            ->injectDependencies($command));
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -162,9 +166,11 @@ class MenuCommandTest extends Test
             }
         };
 
-        $application = (new Kernel())->getApplication();
+        $application = (new Kernel())
+            ->getApplication();
 
-        $application->add((new Container())->injectDependencies($command));
+        $application->add((new Container())
+            ->injectDependencies($command));
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -195,9 +201,11 @@ class MenuCommandTest extends Test
             }
         };
 
-        $application = (new Kernel())->getApplication();
+        $application = (new Kernel())
+            ->getApplication();
 
-        $application->add((new Container())->injectDependencies($command));
+        $application->add((new Container())
+            ->injectDependencies($command));
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -207,6 +215,61 @@ class MenuCommandTest extends Test
         $this->assertSame(Command::SUCCESS, $commandTester->setInputs(["1"])->execute([]));
         $this->assertStringContainsString("(lion_database_test)", $commandTester->getDisplay());
         $this->assertSame($_ENV['SELECTED_CONNECTION'], 'lion_database_test');
+    }
+
+    public function testSelectConnectionDefault(): void
+    {
+        $command = new class extends MenuCommand
+        {
+            const TYPES = ['js', 'ts'];
+
+            protected function configure(): void
+            {
+                $this->setName('test:menu:command');
+            }
+
+            protected function execute(InputInterface $input, OutputInterface $output): int
+            {
+                $connection = $this->selectConnection($input, $output);
+
+                $output->write("({$connection})");
+
+                return Command::SUCCESS;
+            }
+        };
+
+        $connections = DB::getConnections();
+
+        $this->assertArrayHasKey('connections', $connections);
+        $this->assertArrayHasKey('lion_database_test', $connections['connections']);
+
+        $backupConnection = $connections['connections']['lion_database_test'];
+
+        DB::removeConnection('lion_database_test');
+
+        $connections = DB::getConnections();
+
+        $this->assertArrayNotHasKey('lion_database_test', $connections['connections']);
+
+        $application = (new Kernel())
+            ->getApplication();
+
+        $application->add((new Container())
+            ->injectDependencies($command));
+
+        $commandTester = new CommandTester($application->find('test:menu:command'));
+
+        $this->assertSame(Command::SUCCESS, $commandTester->setInputs([""])->execute([]));
+        $this->assertStringContainsString("(lion_database)", $commandTester->getDisplay());
+        $this->assertSame($_ENV['SELECTED_CONNECTION'], 'lion_database');
+
+        DB::addConnections('lion_database_test', $backupConnection);
+
+        $connections = DB::getConnections();
+
+        $this->assertArrayHasKey('connections', $connections);
+        $this->assertArrayHasKey('lion_database', $connections['connections']);
+        $this->assertArrayHasKey('lion_database_test', $connections['connections']);
     }
 
     public function testSelectConnectionByEnviromentEmpty(): void

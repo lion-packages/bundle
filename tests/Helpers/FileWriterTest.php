@@ -46,12 +46,12 @@ class FileWriterTest extends Test
         $this->classFactory
             ->create('example', ClassFactory::JSON_EXTENSION, './')
             ->add(
-                <<<EOT
+                <<<JSON
                 {
                     "name": "Test",
                     "last_name-test": "Example"
                 }
-                EOT
+                JSON
             )
             ->close();
 
@@ -66,18 +66,18 @@ class FileWriterTest extends Test
         $this->assertFileDoesNotExist(self::FILE_NAME);
     }
 
-    #[DataProvider('readFileRowsProvider')]
+    #[DataProvider('readFileRowsWithMultipleRowsProvider')]
     public function testReadFileRowsWithMultipleRows(array $rows, string $return): void
     {
         $this->classFactory
             ->create('example', ClassFactory::JSON_EXTENSION, './')
             ->add(
-                <<<EOT
+                <<<JSON
                 {
                     "name": "Test",
                     "last_name-test": "Example"
                 }
-                EOT
+                JSON
             )
             ->close();
 
@@ -98,12 +98,12 @@ class FileWriterTest extends Test
         $this->classFactory
             ->create('example', ClassFactory::JSON_EXTENSION, './')
             ->add(
-                <<<EOT
+                <<<JSON
                 {
                     "name": "Test",
                     "last_name-test": "Example"
                 }
-                EOT
+                JSON
             )
             ->close();
 

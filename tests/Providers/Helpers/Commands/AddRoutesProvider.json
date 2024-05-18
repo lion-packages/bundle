@@ -2,7 +2,7 @@
     "params": {
         "routes": [
             {
-                "url": "/",
+                "url": "\/",
                 "method": "GET",
                 "params": []
             },
@@ -12,22 +12,24 @@
                 "params": []
             },
             {
-                "url": "api/test",
+                "url": "api\/test",
                 "method": "POST",
-                "params": []
+                "params": [
+                    "Tests\\Providers\\Helpers\\Commands\\RulesProvider"
+                ]
             },
             {
-                "url": "api/test",
+                "url": "api\/test",
                 "method": "GET",
                 "params": []
             },
             {
-                "url": "api/test/{id:i}",
+                "url": "api\/test\/{id:i}",
                 "method": "PUT",
                 "params": []
             },
             {
-                "url": "api/test/{id:i}",
+                "url": "api\/test\/{id:i}",
                 "method": "DELETE",
                 "params": []
             }
@@ -41,7 +43,7 @@
                     "header": [
                         {
                             "key": "Content-Type",
-                            "value": "application/json",
+                            "value": "application\/json",
                             "type": "text"
                         }
                     ],
@@ -49,7 +51,7 @@
                         "host": [
                             "{{base_url}}"
                         ],
-                        "raw": "{{base_url}}/",
+                        "raw": "{{base_url}}\/",
                         "path": [
                             ""
                         ],
@@ -65,7 +67,7 @@
                     "header": [
                         {
                             "key": "Content-Type",
-                            "value": "application/json",
+                            "value": "application\/json",
                             "type": "text"
                         }
                     ],
@@ -73,7 +75,7 @@
                         "host": [
                             "{{base_url}}"
                         ],
-                        "raw": "{{base_url}}/logger",
+                        "raw": "{{base_url}}\/logger",
                         "path": [
                             "logger"
                         ],
@@ -92,13 +94,13 @@
                             "header": [
                                 {
                                     "key": "Content-Type",
-                                    "value": "application/json",
+                                    "value": "application\/json",
                                     "type": "text"
                                 }
                             ],
                             "body": {
                                 "mode": "raw",
-                                "raw": "",
+                                "raw": "{\"name\":\"\"}",
                                 "options": {
                                     "raw": {
                                         "language": "json"
@@ -109,7 +111,7 @@
                                 "host": [
                                     "{{base_url}}"
                                 ],
-                                "raw": "{{base_url}}/api/test",
+                                "raw": "{{base_url}}\/api\/test",
                                 "path": [
                                     "api",
                                     "test"
@@ -130,7 +132,7 @@
                             "header": [
                                 {
                                     "key": "Content-Type",
-                                    "value": "application/json",
+                                    "value": "application\/json",
                                     "type": "text"
                                 }
                             ],
@@ -138,7 +140,7 @@
                                 "host": [
                                     "{{base_url}}"
                                 ],
-                                "raw": "{{base_url}}/api/test",
+                                "raw": "{{base_url}}\/api\/test",
                                 "path": [
                                     "api",
                                     "test"
@@ -163,7 +165,7 @@
                                     "header": [
                                         {
                                             "key": "Content-Type",
-                                            "value": "application/json",
+                                            "value": "application\/json",
                                             "type": "text"
                                         }
                                     ],
@@ -180,7 +182,7 @@
                                         "host": [
                                             "{{base_url}}"
                                         ],
-                                        "raw": "{{base_url}}/api/test/{id:i}",
+                                        "raw": "{{base_url}}\/api\/test\/{id:i}",
                                         "path": [
                                             "api",
                                             "test",
@@ -207,7 +209,7 @@
                                     "header": [
                                         {
                                             "key": "Content-Type",
-                                            "value": "application/json",
+                                            "value": "application\/json",
                                             "type": "text"
                                         }
                                     ],
@@ -224,7 +226,7 @@
                                         "host": [
                                             "{{base_url}}"
                                         ],
-                                        "raw": "{{base_url}}/api/test/{id:i}",
+                                        "raw": "{{base_url}}\/api\/test\/{id:i}",
                                         "path": [
                                             "api",
                                             "test",
@@ -239,7 +241,7 @@
             }
         ],
         "host": {
-            "url": "http://127.0.0.1:8000",
+            "url": "http:\/\/127.0.0.1:8000",
             "params": {
                 "host": [
                     "{{base_url}}"

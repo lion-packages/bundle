@@ -40,6 +40,34 @@ trait PostmanCollectionProviderTrait
                 'index' => false,
                 'return' => '&name=root'
             ],
+            [
+                'params' => '',
+                'value' => '',
+                'key' => 'root',
+                'index' => true,
+                'return' => '?root'
+            ],
+            [
+                'params' => '',
+                'value' => '',
+                'key' => 'name',
+                'index' => true,
+                'return' => '?name'
+            ],
+            [
+                'params' => '',
+                'value' => '',
+                'key' => 'root',
+                'index' => false,
+                'return' => '&root'
+            ],
+            [
+                'params' => '',
+                'value' => '',
+                'key' => 'name',
+                'index' => false,
+                'return' => '&name'
+            ],
         ];
     }
 

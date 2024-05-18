@@ -22,7 +22,8 @@ class ClassFactoryTest extends Test
 
     protected function setUp(): void
     {
-        $this->classFactory = (new Container())->injectDependencies(new ClassFactory());
+        $this->classFactory = (new Container())
+            ->injectDependencies(new ClassFactory());
 
         $this->initReflection($this->classFactory);
 
@@ -154,7 +155,7 @@ class ClassFactoryTest extends Test
     ): void {
         $customMethod = $this->classFactory->getCustomMethod($name, $type, $params, $content, $visibility, $lineBreak);
 
-        $this->assertEquals($return, $customMethod);
+        $this->assertSame($return, $customMethod);
     }
 
     #[DataProvider('getClassFormatProvider')]

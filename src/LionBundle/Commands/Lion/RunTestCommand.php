@@ -67,13 +67,7 @@ class RunTestCommand extends Command
             ->setDescription('Command to create run unit tests')
             ->addOption('class', 'c', InputOption::VALUE_OPTIONAL, 'Do you want to run a specific class?', false)
             ->addOption('method', 'm', InputOption::VALUE_OPTIONAL, 'Do you want to filter a specific method?', false)
-            ->addOption(
-                'suite',
-                's',
-                InputOption::VALUE_OPTIONAL,
-                'Do you want to test a specific directory?',
-                'All-Test'
-            );
+            ->addOption('suite', 's', InputOption::VALUE_OPTIONAL, 'Do you want to run a specific suite?', 'All-Test');
     }
 
     /**
@@ -107,7 +101,7 @@ class RunTestCommand extends Command
 
         $output->writeln($this->successOutput("\t>>  Running unit tests...\n\t>>  "));
 
-        $path = './vendor/bin/phpunit';
+        $path = 'php vendor/bin/phpunit';
 
         if (!$class && !$method) {
             $result = $this->kernel->execute("{$path} --testsuite {$suite}", false);

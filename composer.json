@@ -20,7 +20,7 @@
         "files": [
             "routes/rules.php",
             "routes/middleware.php",
-            "src/LionBundle/Helpers/Bundle/constans.php",
+            "src/LionBundle/Helpers/Bundle/constants.php",
             "src/LionBundle/Helpers/Bundle/helpers.php"
         ]
     },
@@ -29,7 +29,7 @@
             "Tests\\": "tests/"
         },
         "files": [
-            "src/LionBundle/Helpers/Bundle/constans.php",
+            "src/LionBundle/Helpers/Bundle/constants.php",
             "src/LionBundle/Helpers/Bundle/helpers.php"
         ]
     },
@@ -61,7 +61,8 @@
     },
     "require-dev": {
         "lion/test": "^2.0",
-        "phpunit/phpunit": "^11.1"
+        "phpunit/phpunit": "^11.1",
+        "robiningelbrecht/phpunit-pretty-print": "^1.3"
     },
     "suggest": {
         "ext-gd": "Required to use LionSpreadsheet.",
