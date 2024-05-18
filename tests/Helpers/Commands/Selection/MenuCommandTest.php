@@ -166,9 +166,11 @@ class MenuCommandTest extends Test
             }
         };
 
-        $application = (new Kernel())->getApplication();
+        $application = (new Kernel())
+            ->getApplication();
 
-        $application->add((new Container())->injectDependencies($command));
+        $application->add((new Container())
+            ->injectDependencies($command));
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -241,6 +243,8 @@ class MenuCommandTest extends Test
         $this->assertArrayHasKey('connections', $connections);
         $this->assertArrayHasKey('lion_database_test', $connections['connections']);
 
+        $backupConnection = $connections['connections']['lion_database_test'];
+
         DB::removeConnection('lion_database_test');
 
         $connections = DB::getConnections();
@@ -258,6 +262,14 @@ class MenuCommandTest extends Test
         $this->assertSame(Command::SUCCESS, $commandTester->setInputs([""])->execute([]));
         $this->assertStringContainsString("(lion_database)", $commandTester->getDisplay());
         $this->assertSame($_ENV['SELECTED_CONNECTION'], 'lion_database');
+
+        DB::addConnections('lion_database_test', $backupConnection);
+
+        $connections = DB::getConnections();
+
+        $this->assertArrayHasKey('connections', $connections);
+        $this->assertArrayHasKey('lion_database', $connections['connections']);
+        $this->assertArrayHasKey('lion_database_test', $connections['connections']);
     }
 
     public function testSelectConnectionByEnviromentEmpty(): void
