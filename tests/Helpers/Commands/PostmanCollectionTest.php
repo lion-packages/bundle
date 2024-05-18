@@ -39,7 +39,8 @@ class PostmanCollectionTest extends Test
     {
         $this->loadEnviroment();
 
-        $this->postmanCollection = (new Container())->injectDependencies(new PostmanCollection());
+        $this->postmanCollection = (new Container())
+            ->injectDependencies(new PostmanCollection());
 
         $this->initReflection($this->postmanCollection);
     }

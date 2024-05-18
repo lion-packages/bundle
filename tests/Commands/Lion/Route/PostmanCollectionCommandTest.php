@@ -55,23 +55,12 @@ class PostmanCollectionCommandTest extends Test
     {
         $this->assertSame(Command::SUCCESS, $this->commandTesterRule->execute(['rule' => self::CLASS_NAME_RULE]));
 
-        Routes::setRules([
-            Route::POST => [
-                '/api/test' => [
-                    self::NAMESPACE_RULE
-                ]
-            ]
-        ]);
-
         $this->assertSame(Command::SUCCESS, $this->commandTester->execute([]));
 
-        $file = self::URL_PATH . Carbon::now()->format('Y_m_d') . '_lion_collection.json';
+        $jsonFile = self::URL_PATH . Carbon::now()->format('Y_m_d') . '_lion_collection.json';
 
-        $this->assertFileExists($file);
+        $this->assertFileExists($jsonFile);
 
-        $this->assertJsonFileEqualsJsonFile(
-            './tests/Providers/PostmanProvider.json',
-            (self::URL_PATH . Carbon::now()->format('Y_m_d') . '_lion_collection.json')
-        );
+        $this->assertJsonFileEqualsJsonFile('./tests/Providers/Helpers/Commands/PostmanProvider.json', $jsonFile);
     }
 }
