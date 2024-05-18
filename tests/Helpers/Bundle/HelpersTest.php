@@ -10,7 +10,6 @@ use Faker\Generator;
 use Lion\Bundle\Enums\LogTypeEnum;
 use Lion\Request\Http;
 use Lion\Request\Status;
-use Lion\Route\Route;
 use Lion\Security\AES;
 use Lion\Security\JWT;
 use Lion\Test\Test;
