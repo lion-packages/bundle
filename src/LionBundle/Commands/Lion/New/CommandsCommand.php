@@ -35,7 +35,7 @@ class CommandsCommand extends Command
      */
     private Store $store;
 
-	/**
+    /**
      * @required
      * */
     public function setClassFactory(ClassFactory $classFactory): CommandsCommand
@@ -60,13 +60,13 @@ class CommandsCommand extends Command
      *
      * @return void
      */
-	protected function configure(): void
+    protected function configure(): void
     {
-		$this
+        $this
             ->setName('new:command')
             ->setDescription('Command required for the creation of new Commands')
             ->addArgument('new-command', InputArgument::OPTIONAL, 'Command name', 'ExampleCommand');
-	}
+    }
 
     /**
      * Executes the current command
@@ -87,7 +87,7 @@ class CommandsCommand extends Command
      *
      * @see setCode()
      */
-	protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $command = $input->getArgument('new-command');
 
@@ -176,12 +176,12 @@ class CommandsCommand extends Command
                     }
 
                     /**
-                     * Executes the current command.
+                     * Executes the current command
                      *
                      * This method is not abstract because you can use this class
                      * as a concrete class. In this case, instead of defining the
                      * execute() method, you set the code to execute by passing
-                     * a Closure to the setCode() method.
+                     * a Closure to the setCode() method
                      *
                      * @param InputInterface \$input [InputInterface is the interface implemented
                      * by all input classes]
@@ -211,5 +211,5 @@ class CommandsCommand extends Command
         $output->writeln($this->successOutput("\t>>  COMMAND: the '{$namespace}\\{$class}' command has been generated"));
 
         return Command::SUCCESS;
-	}
+    }
 }
