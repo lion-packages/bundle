@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Tests\Helpers\Commands\Selection;
 
+use Exception;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\Database\Drivers\MySQL as DB;
 use Lion\Dependency\Injection\Container;
+use Lion\Request\Http;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Console\Input\InputInterface;
@@ -45,6 +47,42 @@ class MenuCommandTest extends Test
         $_ENV['SELECTED_CONNECTION'] = '';
 
         $this->rmdirRecursively(self::VITE_PATH);
+    }
+
+    public function testSelectedProjectNotAvailable(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('there are no projects available');
+        $this->expectExceptionCode(Http::HTTP_INTERNAL_SERVER_ERROR);
+
+        $this->createDirectory(self::VITE_PATH);
+
+        $command = new class extends MenuCommand
+        {
+            protected function configure(): void
+            {
+                $this->setName('test:menu:command');
+            }
+
+            protected function execute(InputInterface $input, OutputInterface $output): int
+            {
+                $project = $this->selectedProject($input, $output);
+
+                $output->write("({$project})");
+
+                return Command::SUCCESS;
+            }
+        };
+
+        $application = (new Kernel())
+            ->getApplication();
+
+        $application->add((new Container())
+            ->injectDependencies($command));
+
+        $commandTester = new CommandTester($application->find('test:menu:command'));
+
+        $commandTester->execute([]);
     }
 
     public function testSelectedProjectWithSingleProject(): void

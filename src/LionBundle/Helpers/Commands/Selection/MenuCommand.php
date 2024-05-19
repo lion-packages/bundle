@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Helpers\Commands\Selection;
 
+use Exception;
 use Lion\Command\Command;
 use Lion\Database\Drivers\MySQL as DB;
 use Lion\Files\Store;
 use Lion\Helpers\Arr;
 use Lion\Helpers\Str;
+use Lion\Request\Http;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -85,6 +87,8 @@ class MenuCommand extends Command
      * implemented by all Output classes]
      *
      * @return string
+     *
+     * @throws Exception [If there are no projects available]
      */
     protected function selectedProject(InputInterface $input, OutputInterface $output): string
     {
@@ -92,9 +96,16 @@ class MenuCommand extends Command
 
         foreach ($this->store->view('./vite/') as $folder) {
             if (is_dir($folder) && $folder != '.' && $folder != '..') {
-                $split = $this->str->of($folder)->split($this->store->normalizePath('vite/'));
+                $split = $this->str->of($folder)->split('vite/');
+
                 $projects[] = end($split);
             }
+        }
+
+        if (empty($projects)) {
+            $output->writeln($this->warningOutput('(default: ' . reset($projects) . ')'));
+
+            throw new Exception('there are no projects available', Http::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         if (count($projects) <= 1) {
