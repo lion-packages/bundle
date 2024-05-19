@@ -175,14 +175,7 @@ class ListScheduleCommand extends Command
         (new Table($output))
             ->setHeaderTitle('<info> SCHEDULED TASKS </info>')
             ->setHeaders(['CRON', 'COMMAND', 'OPTIONS', 'LOG'])
-            ->setFooterTitle(
-                $size > 1
-                    ? "<info> Showing [{$size}] available scheduled tasks </info>"
-                    : ($size === 1
-                        ? '<info> Showing a scheduled task </info>'
-                        : '<info> No scheduled tasks available </info>'
-                    )
-            )
+            ->setFooterTitle("<info> Showing [{$size}] available scheduled tasks </info>")
             ->setRows($rows)
             ->render();
 

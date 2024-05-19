@@ -4,11 +4,16 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\Schedule;
 
+use Exception;
 use Lion\Bundle\Enums\TaskStatusEnum;
 use Lion\Bundle\Helpers\Commands\Schedule\TaskQueue;
+use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Command\Command;
 use Lion\Database\Drivers\MySQL as DB;
+use Lion\Database\Drivers\Schema\MySQL as Schema;
+use Lion\Database\Helpers\Constants\MySQLConstants;
 use Lion\Dependency\Injection\Container;
+use Lion\Request\Http;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -19,7 +24,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @package Lion\Bundle\Commands\Lion\Schedule
  */
-class RunQueuedTasksCommand extends Command
+class RunQueuedTasksCommand extends MenuCommand
 {
     /**
      * [Container to generate dependency injection]
@@ -45,16 +50,16 @@ class RunQueuedTasksCommand extends Command
     {
         $this
             ->setName('schedule:run')
-            ->setDescription('Run queued tasks.');
+            ->setDescription('Run queued tasks');
     }
 
     /**
-     * Executes the current command.
+     * Executes the current command
      *
      * This method is not abstract because you can use this class
      * as a concrete class. In this case, instead of defining the
      * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method.
+     * a Closure to the setCode() method
      *
      * @param InputInterface $input [InputInterface is the interface implemented
      * by all input classes]
@@ -69,6 +74,8 @@ class RunQueuedTasksCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $this->createScheduleTable($input, $output);
+
         while (true) {
             $data = DB::table('task_queue')
                 ->select()
@@ -91,8 +98,6 @@ class RunQueuedTasksCommand extends Command
                     $output->writeln($this->successOutput("\t>> SCHEDULE: {$queue->task_queue_type} [IN-PROGRESS]"));
 
                     TaskQueue::edit($queue, TaskStatusEnum::IN_PROGRESS);
-
-                    TaskQueue::pause(1);
 
                     continue;
                 }
@@ -117,8 +122,6 @@ class RunQueuedTasksCommand extends Command
 
                     TaskQueue::edit($queue, TaskStatusEnum::COMPLETED);
 
-                    TaskQueue::pause(1);
-
                     continue;
                 }
 
@@ -127,13 +130,59 @@ class RunQueuedTasksCommand extends Command
 
                     TaskQueue::remove($queue);
 
-                    TaskQueue::pause(1);
-
                     continue;
                 }
             }
         }
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * Generate the schema for the queued tasks
+     *
+     * @param InputInterface $input [InputInterface is the interface implemented
+     * by all input classes]
+     * @param OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     *
+     * @return void
+     *
+     * @throws Exception [Catch an exception if the schema of the queued tasks
+     * is not created]
+     */
+    private function createScheduleTable(InputInterface $input, OutputInterface $output): void
+    {
+        $connection = $this->selectConnection($input, $output);
+
+        $response = DB::connection($connection)
+            ->table('task_queue')
+            ->select()
+            ->getAll();
+
+        if (isError($response)) {
+            $response = Schema::connection($connection)
+                ->createTable('task_queue', function () {
+                    Schema::int('idtask_queue')->notNull()->autoIncrement()->primaryKey();
+                    Schema::varchar('task_queue_type', 255)->notNull();
+                    Schema::json('task_queue_data')->notNull();
+
+                    Schema::enum('task_queue_status', TaskStatusEnum::values())
+                        ->notNull()
+                        ->default(TaskStatusEnum::PENDING->value);
+
+                    Schema::int('task_queue_attempts', 11)->notNull();
+                    Schema::timeStamp('task_queue_create_at')->default(MySQLConstants::CURRENT_TIMESTAMP);
+                })
+                ->execute();
+
+            if (isError($response)) {
+                throw new Exception($response->message, Http::HTTP_INTERNAL_SERVER_ERROR);
+            }
+
+            $output->writeln(
+                $this->successOutput("\t>> SCHEDULE: successfully generated task_queue table [INITIALIZE]")
+            );
+        }
     }
 }
