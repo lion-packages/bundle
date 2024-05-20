@@ -6,6 +6,36 @@ namespace Tests\Providers\Helpers;
 
 trait HelpersProviderTrait
 {
+    public static function requestProvider(): array
+    {
+        return [
+            [
+                'key' => 'key',
+                'value' => 10,
+                'return' => 10,
+            ],
+            [
+                'key' => 'key',
+                'value' => 'root',
+                'return' => 'root',
+            ],
+            [
+                'key' => 'key',
+                'value' => now()->format('Y-m-d'),
+                'return' => now()->format('Y-m-d'),
+            ],
+            [
+                'key' => 'key',
+                'value' => [
+                    'name' => 'root'
+                ],
+                'return' => [
+                    'name' => 'root'
+                ],
+            ],
+        ];
+    }
+
     public static function envProvider(): array
     {
         return [

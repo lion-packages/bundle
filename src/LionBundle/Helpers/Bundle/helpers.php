@@ -11,11 +11,37 @@ use Lion\Bundle\Helpers\Env;
 use Lion\Bundle\Helpers\Fake;
 use Lion\Files\Store;
 use Lion\Request\Http;
+use Lion\Request\Request;
 use Lion\Request\Status;
 use Lion\Security\JWT;
 use Monolog\Handler\StreamHandler;
 use Monolog\Level;
 use Monolog\Logger;
+
+if (!function_exists('request')) {
+    /**
+     * Object with properties captured in an HTTP request and you can add
+     * properties to the object
+     *
+     * @param string $key [Property name]
+     *
+     * @return mixed
+     */
+    function request(string $key = ''): mixed
+    {
+        $data = (new Request())->capture();
+
+        if (!empty($key)) {
+            if (empty($data->$key)) {
+                return null;
+            } else {
+                return $data->$key;
+            }
+        }
+
+        return $data;
+    }
+}
 
 if (!function_exists('now')) {
     /**
