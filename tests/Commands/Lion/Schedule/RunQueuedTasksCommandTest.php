@@ -6,6 +6,7 @@ namespace Tests\Commands\Lion\Schedule;
 
 use Lion\Bundle\Commands\Lion\Schedule\RunQueuedTasksCommand;
 use Lion\Command\Kernel;
+use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tests\Providers\ConnectionProviderTrait;
@@ -20,9 +21,13 @@ class RunQueuedTasksCommandTest extends Test
     {
         $this->runDatabaseConnections();
 
-        $application = (new Kernel())->getApplication();
+        $application = (new Kernel())
+            ->getApplication();
 
-        $application->add(new RunQueuedTasksCommand());
+        $application->add(
+            (new Container())
+                ->injectDependencies(new RunQueuedTasksCommand())
+        );
 
         $this->commandTester = new CommandTester($application->find('schedule:run'));
     }

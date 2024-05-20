@@ -5,56 +5,21 @@ declare(strict_types=1);
 namespace Lion\Bundle\Commands\Lion;
 
 use Lion\Command\Command;
-use Lion\Command\Kernel;
-use Lion\Helpers\Arr;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\PhpExecutableFinder;
+use Symfony\Component\Process\Process;
 
 /**
  * Run the tests defined with PHPunit
- *
- * @property Kernel $kernel [Kernel class object]
- * @property Arr $arr [Arr class object]
  *
  * @package Lion\Bundle\Commands\Lion
  */
 class RunTestCommand extends Command
 {
-    /**
-     * [Kernel class object]
-     *
-     * @var Kernel $kernel
-     */
-    private Kernel $kernel;
-
-    /**
-     * [Arr class object]
-     *
-     * @var Arr $arr
-     */
-    private Arr $arr;
-
-    /**
-     * @required
-     * */
-    public function setKernel(Kernel $kernel): RunTestCommand
-    {
-        $this->kernel = $kernel;
-
-        return $this;
-    }
-
-    /**
-     * @required
-     * */
-    public function setArr(Arr $arr): RunTestCommand
-    {
-        $this->arr = $arr;
-
-        return $this;
-    }
-
     /**
      * Configures the current command
      *
@@ -64,10 +29,12 @@ class RunTestCommand extends Command
     {
         $this
             ->setName('test')
-            ->setDescription('Command to create run unit tests')
-            ->addOption('class', 'c', InputOption::VALUE_OPTIONAL, 'Do you want to run a specific class?', false)
-            ->addOption('method', 'm', InputOption::VALUE_OPTIONAL, 'Do you want to filter a specific method?', false)
-            ->addOption('suite', 's', InputOption::VALUE_OPTIONAL, 'Do you want to run a specific suite?', 'All-Test');
+            ->setDescription('Runs the PHPUnit tests')
+            ->setHelp('This command allows you to run PHPUnit tests via the Symfony Console command')
+            ->addOption('class', 'c', InputOption::VALUE_OPTIONAL, 'The class to test')
+            ->addOption('method', 'm', InputOption::VALUE_OPTIONAL, 'The method to test')
+            ->addOption('suite', 's', InputOption::VALUE_OPTIONAL, 'The test suite to run')
+            ->addOption('report', 'r', InputOption::VALUE_OPTIONAL, 'The test suite with coverage report', 'none');
     }
 
     /**
@@ -91,34 +58,45 @@ class RunTestCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $result = '';
+        $application = new Application();
 
-        $class = $input->getOption('class');
+        $application->setAutoExit(false);
 
-        $method = $input->getOption('method');
+        $phpBinaryPath = (new PhpExecutableFinder())->find();
 
-        $suite = $input->getOption('suite');
+        $commandString = "{$phpBinaryPath} ./vendor/bin/phpunit";
 
-        $output->writeln($this->successOutput("\t>>  Running unit tests...\n\t>>  "));
-
-        $path = 'php vendor/bin/phpunit';
-
-        if (!$class && !$method) {
-            $result = $this->kernel->execute("{$path} --testsuite {$suite}", false);
+        if ($input->getOption('suite')) {
+            $commandString .= ' --testsuite ' . $input->getOption('suite');
         }
 
-        if ($class && !$method) {
-            $result = $this->kernel->execute("{$path} tests/{$class}.php --testsuite {$suite}", false);
+        if ($input->getOption('class')) {
+            $commandString .= ' ./tests/' . $input->getOption('class') . '.php';
         }
 
-        if ($class && $method) {
-            $result = $this->kernel->execute(
-                "{$path} tests/{$class}.php --filter {$method} --testsuite {$suite}",
-                false
-            );
+        if ($input->getOption('method')) {
+            $commandString .= ' --filter ' . $input->getOption('method');
         }
 
-        $output->writeln($this->warningOutput("\t>>  " . $this->arr->of($result)->join("\n\t>>  ")));
+        if ('none' != $input->getOption('report')) {
+            $commandString .= ' --coverage-clover tests/build/logs/clover.xml --coverage-html tests/build/coverage';
+        }
+
+        $process = new Process(explode(' ', $commandString));
+
+        $process->setTimeout(null);
+
+        if (Process::isTtySupported()) {
+            $process->setTty(true);
+        }
+
+        $process->run(function ($type, $buffer): void {
+            echo $buffer;
+        });
+
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
 
         return Command::SUCCESS;
     }

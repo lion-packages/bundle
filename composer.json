@@ -57,7 +57,8 @@
         "monolog/monolog": "^3.3",
         "nesbot/carbon": "^2.66",
         "predis/predis": "^2.2",
-        "symfony/console": "^6.3"
+        "symfony/console": "^6.3",
+        "symfony/process": "^7.0"
     },
     "require-dev": {
         "lion/test": "^2.0",

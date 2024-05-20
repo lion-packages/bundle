@@ -6,24 +6,22 @@ namespace Tests\Helpers\Commands\Schedule;
 
 use Closure;
 use Exception;
-use Lion\Bundle\Commands\Lion\Schedule\ScheduleSchemaCommand;
 use Lion\Bundle\Enums\TaskStatusEnum;
 use Lion\Bundle\Helpers\Commands\Schedule\TaskQueue;
 use Lion\Command\Command;
-use Lion\Command\Kernel;
 use Lion\Database\Drivers\MySQL as DB;
 use Lion\Database\Drivers\Schema\MySQL as Schema;
-use Lion\Dependency\Injection\Container;
 use Lion\Request\Http;
 use Lion\Request\Status;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
-use Symfony\Component\Console\Tester\CommandTester;
+use Tests\Providers\Commands\TaskQueueSchemaProviderTrait;
 use Tests\Providers\ConnectionProviderTrait;
 use Tests\Providers\Helpers\Schedule\TaskQueueProviderTrait;
 
 class TaskQueueTest extends Test
 {
+    use TaskQueueSchemaProviderTrait;
     use ConnectionProviderTrait;
     use TaskQueueProviderTrait;
 
@@ -32,7 +30,6 @@ class TaskQueueTest extends Test
     const TASK_QUEUE_TIME = 3;
 
     private TaskQueue $taskQueue;
-    private CommandTester $commandTester;
 
     private array $backupConnections;
 
@@ -43,12 +40,6 @@ class TaskQueueTest extends Test
         $this->taskQueue = new TaskQueue();
 
         $this->initReflection($this->taskQueue);
-
-        $application = (new Kernel())->getApplication();
-
-        $application->add((new Container())->injectDependencies(new ScheduleSchemaCommand()));
-
-        $this->commandTester = new CommandTester($application->find('schedule:schema'));
 
         $this->backupConnections = DB::getConnections();
     }
@@ -84,8 +75,7 @@ class TaskQueueTest extends Test
 
     public function testPush(): void
     {
-        $this->assertSame(Command::SUCCESS, $this->commandTester->setInputs(['0'])->execute([]));
-        $this->assertStringContainsString(self::MESSAGE, $this->commandTester->getDisplay());
+        $this->createTaskQueueSchema();
 
         $tasks = DB::table('task_queue')->select()->getAll();
 
@@ -151,8 +141,7 @@ class TaskQueueTest extends Test
 
     public function testEdit(): void
     {
-        $this->assertSame(Command::SUCCESS, $this->commandTester->setInputs(['0'])->execute([]));
-        $this->assertStringContainsString(self::MESSAGE, $this->commandTester->getDisplay());
+        $this->createTaskQueueSchema();
 
         $tasks = DB::table('task_queue')->select()->getAll();
 
@@ -236,8 +225,7 @@ class TaskQueueTest extends Test
 
     public function testRemove(): void
     {
-        $this->assertSame(Command::SUCCESS, $this->commandTester->setInputs(['0'])->execute([]));
-        $this->assertStringContainsString(self::MESSAGE, $this->commandTester->getDisplay());
+        $this->createTaskQueueSchema();
 
         $tasks = DB::table('task_queue')->select()->getAll();
 
