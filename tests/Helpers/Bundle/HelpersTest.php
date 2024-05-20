@@ -32,6 +32,7 @@ class HelpersTest extends Test
     const MESSAGE = 'message';
     const CUSTOM = 'custom';
     const LOGGER_CONTENT = 'test-logger';
+    const USERS_NAME = 'root';
 
     protected function setUp(): void
     {
@@ -41,6 +42,42 @@ class HelpersTest extends Test
     protected function tearDown(): void
     {
         unset($_SERVER['REQUEST_URI']);
+    }
+
+    public function testRequest(): void
+    {
+        $_POST['users_name'] = self::USERS_NAME;
+
+        $data = request();
+
+        $this->assertIsObject($data);
+        $this->assertObjectHasProperty('users_name', $data);
+        $this->assertSame(self::USERS_NAME, $data->users_name);
+
+        unset($_POST['users_name']);
+
+        $this->assertArrayNotHasKey('users_name', $_POST);
+    }
+
+    #[DataProvider('requestProvider')]
+    public function testRequestWithProperty(string $key, mixed $value, mixed $return): void
+    {
+        $_POST[$key] = $value;
+
+        $data = request($key);
+
+        $this->assertSame($return, $data);
+
+        unset($_POST[$key]);
+
+        $this->assertArrayNotHasKey($key, $_POST);
+    }
+
+    public function testRequestReturnNull(): void
+    {
+        $data = request(uniqid('code-'));
+
+        $this->assertNull($data);
     }
 
     public function testNow(): void

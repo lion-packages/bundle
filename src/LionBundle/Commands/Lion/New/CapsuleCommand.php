@@ -99,9 +99,9 @@ class CapsuleCommand extends Command
      *
      * @return void
      */
-	protected function configure(): void
+    protected function configure(): void
     {
-		$this
+        $this
             ->setName('new:capsule')
             ->setDescription('Command required for creating new custom capsules')
             ->addArgument('capsule', InputArgument::OPTIONAL, 'Capsule name', 'Example')
@@ -112,7 +112,7 @@ class CapsuleCommand extends Command
                 'Defined properties for the capsule',
                 []
             );
-	}
+    }
 
     /**
      * Executes the current command
@@ -133,7 +133,7 @@ class CapsuleCommand extends Command
      *
      * @see setCode()
      */
-	protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $capsule = $input->getArgument('capsule');
 
@@ -217,7 +217,7 @@ class CapsuleCommand extends Command
                 $this->str
                     ->lt()->lt()->lt()->concat('->')
                     ->concat($method['config']->setter->name)
-                    ->concat('(request->' . $method['config']->format->snake . ' ?? null)')
+                    ->concat("(request('{$method['config']->format->snake}'))")
                     ->concat($key === (count($listMethods) - 1) ? ';' : '')->ln();
             }
 
@@ -261,5 +261,5 @@ class CapsuleCommand extends Command
         );
 
         return Command::SUCCESS;
-	}
+    }
 }
