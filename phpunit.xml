@@ -33,6 +33,10 @@
         <include>
             <directory>src</directory>
         </include>
+
+        <exclude>
+            <file>src/LionBundle/Helpers/Bundle/constants.php</file>
+        </exclude>
     </source>
 
     <extensions>
