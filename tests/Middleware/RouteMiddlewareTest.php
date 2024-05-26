@@ -30,7 +30,7 @@ class RouteMiddlewareTest extends Test
             ->exception(MiddlewareException::class)
             ->exceptionMessage('secure hash not found')
             ->exceptionStatus(Status::SESSION_ERROR)
-            ->exceptionCode(Http::HTTP_UNAUTHORIZED)
+            ->exceptionCode(Http::UNAUTHORIZED)
             ->expectLionException(function (): void {
                 $this->routeMiddleware->protectRouteList();
             });
@@ -42,7 +42,7 @@ class RouteMiddlewareTest extends Test
             ->exception(MiddlewareException::class)
             ->exceptionMessage('you do not have access to this resource')
             ->exceptionStatus(Status::SESSION_ERROR)
-            ->exceptionCode(Http::HTTP_UNAUTHORIZED)
+            ->exceptionCode(Http::UNAUTHORIZED)
             ->expectLionException(function (): void {
                 $_SERVER['HTTP_LION_AUTH'] = 'ff1d1bcda9afa5873bdc8205c11e880a43351ea56dc059f6544116961f6f5c0e';
 

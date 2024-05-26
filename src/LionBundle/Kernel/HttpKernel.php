@@ -99,7 +99,7 @@ class HttpKernel
             }
 
             if (count($errors) > 0) {
-                throw new RulesException('parameter error', Status::RULE_ERROR, Http::HTTP_INTERNAL_SERVER_ERROR, [
+                throw new RulesException('parameter error', Status::RULE_ERROR, Http::INTERNAL_SERVER_ERROR, [
                     'rules-error' => $errors
                 ]);
             }

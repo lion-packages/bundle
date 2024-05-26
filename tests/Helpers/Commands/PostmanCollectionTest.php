@@ -151,7 +151,7 @@ class PostmanCollectionTest extends Test
     public function testAddRoutes(): void
     {
         $routes = json_decode(
-            fetch(Http::HTTP_GET, (self::HOST . '/route-list'), [
+            fetch(Http::GET, (self::HOST . '/route-list'), [
                 'headers' => [
                     'Lion-Auth' => $_ENV['SERVER_HASH']
                 ]
@@ -177,7 +177,7 @@ class PostmanCollectionTest extends Test
     public function testCreateCollection(): void
     {
         $routes = json_decode(
-            fetch(Http::HTTP_GET, (self::HOST . '/route-list'), [
+            fetch(Http::GET, (self::HOST . '/route-list'), [
                 'headers' => [
                     'Lion-Auth' => $_ENV['SERVER_HASH']
                 ]
@@ -212,7 +212,7 @@ class PostmanCollectionTest extends Test
     public function testGetRoutes(): void
     {
         $routes = json_decode(
-            fetch(Http::HTTP_GET, (self::HOST . '/route-list'), [
+            fetch(Http::GET, (self::HOST . '/route-list'), [
                 'headers' => [
                     'Lion-Auth' => $_ENV['SERVER_HASH']
                 ]
@@ -242,7 +242,7 @@ class PostmanCollectionTest extends Test
     public function testGetItems(): void
     {
         $routes = json_decode(
-            fetch(Http::HTTP_GET, (self::HOST . '/route-list'), [
+            fetch(Http::GET, (self::HOST . '/route-list'), [
                 'headers' => [
                     'Lion-Auth' => $_ENV['SERVER_HASH']
                 ]

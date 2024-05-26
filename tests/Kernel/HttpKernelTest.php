@@ -69,15 +69,15 @@ class HttpKernelTest extends Test
             ->exception(RulesException::class)
             ->exceptionMessage(self::MESSAGE)
             ->exceptionStatus(Status::RULE_ERROR)
-            ->exceptionCode(Http::HTTP_INTERNAL_SERVER_ERROR)
+            ->exceptionCode(Http::INTERNAL_SERVER_ERROR)
             ->expectLionException(function () use ($rule): void {
                 $rules = Routes::getRules();
 
-                $rules[Http::HTTP_POST][self::URI][] = $rule::class;
+                $rules[Http::POST][self::URI][] = $rule::class;
 
                 Routes::setRules($rules);
 
-                $_SERVER['REQUEST_METHOD'] = Http::HTTP_POST;
+                $_SERVER['REQUEST_METHOD'] = Http::POST;
 
                 $_SERVER['REQUEST_URI'] = self::URI;
 

@@ -75,7 +75,7 @@ class TaskQueue
             ->execute();
 
         if (isError($response)) {
-            throw new Exception($response->message, Http::HTTP_INTERNAL_SERVER_ERROR);
+            throw new Exception($response->message, Http::INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -100,7 +100,7 @@ class TaskQueue
             ->execute();
 
         if (isError($response)) {
-            throw new Exception($response->message, Http::HTTP_INTERNAL_SERVER_ERROR);
+            throw new Exception($response->message, Http::INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -122,7 +122,7 @@ class TaskQueue
             ->execute();
 
         if (isError($response)) {
-            throw new Exception($response->message, Http::HTTP_INTERNAL_SERVER_ERROR);
+            throw new Exception($response->message, Http::INTERNAL_SERVER_ERROR);
         }
     }
 
