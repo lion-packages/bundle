@@ -32,11 +32,7 @@ if (!function_exists('request')) {
         $data = (new Request())->capture();
 
         if (!empty($key)) {
-            if (empty($data->$key)) {
-                return null;
-            } else {
-                return $data->$key;
-            }
+            return $data->$key ?? null;
         }
 
         return $data;
@@ -97,6 +93,8 @@ if (!function_exists('finish')) {
      * @param mixed|null $response [Message or content of the response]
      *
      * @return void
+     *
+     * @codeCoverageIgnore
      */
     function finish(mixed $response = null): void
     {
@@ -118,7 +116,7 @@ if (!function_exists('response')) {
     function response(
         string $status = 'custom',
         mixed $message = null,
-        int $code = Http::HTTP_OK,
+        int $code = Http::OK,
         mixed $data = null
     ): object {
         return response->custom($status, $message, $code, $data);
@@ -135,7 +133,7 @@ if (!function_exists('success')) {
      *
      * @return object
      */
-    function success(mixed $message = null, int $code = Http::HTTP_OK, mixed $data = null): object
+    function success(mixed $message = null, int $code = Http::OK, mixed $data = null): object
     {
         return response->success($message, $code, $data);
     }
@@ -151,7 +149,7 @@ if (!function_exists('error')) {
      *
      * @return object
      */
-    function error(mixed $message = null, int $code = Http::HTTP_INTERNAL_SERVER_ERROR, mixed $data = null): object
+    function error(mixed $message = null, int $code = Http::INTERNAL_SERVER_ERROR, mixed $data = null): object
     {
         return response->error($message, $code, $data);
     }
@@ -167,7 +165,7 @@ if (!function_exists('warning')) {
      *
      * @return object
      */
-    function warning(mixed $message = null, int $code = Http::HTTP_OK, mixed $data = null): object
+    function warning(mixed $message = null, int $code = Http::OK, mixed $data = null): object
     {
         return response->warning($message, $code, $data);
     }
@@ -183,7 +181,7 @@ if (!function_exists('info')) {
      *
      * @return object
      */
-    function info(mixed $message = null, int $code = Http::HTTP_OK, mixed $data = null): object
+    function info(mixed $message = null, int $code = Http::OK, mixed $data = null): object
     {
         return response->info($message, $code, $data);
     }

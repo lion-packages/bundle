@@ -105,7 +105,7 @@ class MenuCommand extends Command
         if (empty($projects)) {
             $output->writeln($this->warningOutput('(default: ' . reset($projects) . ')'));
 
-            throw new Exception('there are no projects available', Http::HTTP_INTERNAL_SERVER_ERROR);
+            throw new Exception('there are no projects available', Http::INTERNAL_SERVER_ERROR);
         }
 
         if (count($projects) <= 1) {

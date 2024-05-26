@@ -11,7 +11,7 @@ use Lion\Exceptions\Traits\ExceptionTrait;
 /**
  * Exception for middleware errors
  *
- * @package App\Exceptions
+ * @package Lion\Bundle\Exceptions
  */
 class MiddlewareException extends Exception implements ExceptionInterface
 {

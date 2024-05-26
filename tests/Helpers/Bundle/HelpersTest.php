@@ -25,7 +25,7 @@ class HelpersTest extends Test
     const PATH_URL = 'storage/';
     const PATH_URL_INDEX = '../storage/';
     const CUSTOM_FOLDER = 'example/';
-    const RESPONSE = ['code' => Http::HTTP_OK, 'status' => Status::INFO, 'message' => '[index]'];
+    const RESPONSE = ['code' => Http::OK, 'status' => Status::INFO, 'message' => '[index]'];
     const JSON_RESPONSE = '{"name":"Sleon"}';
     const CODE = 'code';
     const STATUS = 'status';
@@ -88,7 +88,7 @@ class HelpersTest extends Test
 
     public function testFetch(): void
     {
-        $response = json_decode(fetch(Http::HTTP_GET, env('SERVER_URL'))->getBody()->getContents(), true);
+        $response = json_decode(fetch(Http::GET, env('SERVER_URL'))->getBody()->getContents(), true);
 
         $this->assertSame(self::RESPONSE, $response);
     }
@@ -103,11 +103,6 @@ class HelpersTest extends Test
         $this->assertSame(self::PATH_URL_INDEX . self::CUSTOM_FOLDER, storage_path(self::CUSTOM_FOLDER));
     }
 
-    public function testFinish(): void
-    {
-        $this->expectNotToPerformAssertions();
-    }
-
     public function testResponse(): void
     {
         $response = response();
@@ -116,7 +111,7 @@ class HelpersTest extends Test
         $this->assertObjectHasProperty(self::CODE, $response);
         $this->assertObjectHasProperty(self::STATUS, $response);
         $this->assertObjectHasProperty(self::MESSAGE, $response);
-        $this->assertSame(Http::HTTP_OK, $response->code);
+        $this->assertSame(Http::OK, $response->code);
         $this->assertSame(self::CUSTOM, $response->status);
         $this->assertNull($response->message);
     }
@@ -129,7 +124,7 @@ class HelpersTest extends Test
         $this->assertObjectHasProperty(self::CODE, $response);
         $this->assertObjectHasProperty(self::STATUS, $response);
         $this->assertObjectHasProperty(self::MESSAGE, $response);
-        $this->assertSame(Http::HTTP_OK, $response->code);
+        $this->assertSame(Http::OK, $response->code);
         $this->assertSame(Status::SUCCESS, $response->status);
         $this->assertNull($response->message);
     }
@@ -142,7 +137,7 @@ class HelpersTest extends Test
         $this->assertObjectHasProperty(self::CODE, $response);
         $this->assertObjectHasProperty(self::STATUS, $response);
         $this->assertObjectHasProperty(self::MESSAGE, $response);
-        $this->assertSame(Http::HTTP_INTERNAL_SERVER_ERROR, $response->code);
+        $this->assertSame(Http::INTERNAL_SERVER_ERROR, $response->code);
         $this->assertSame(Status::ERROR, $response->status);
         $this->assertNull($response->message);
     }
@@ -155,7 +150,7 @@ class HelpersTest extends Test
         $this->assertObjectHasProperty(self::CODE, $response);
         $this->assertObjectHasProperty(self::STATUS, $response);
         $this->assertObjectHasProperty(self::MESSAGE, $response);
-        $this->assertSame(Http::HTTP_OK, $response->code);
+        $this->assertSame(Http::OK, $response->code);
         $this->assertSame(Status::WARNING, $response->status);
         $this->assertNull($response->message);
     }
@@ -168,7 +163,7 @@ class HelpersTest extends Test
         $this->assertObjectHasProperty(self::CODE, $response);
         $this->assertObjectHasProperty(self::STATUS, $response);
         $this->assertObjectHasProperty(self::MESSAGE, $response);
-        $this->assertSame(Http::HTTP_OK, $response->code);
+        $this->assertSame(Http::OK, $response->code);
         $this->assertSame(Status::INFO, $response->status);
         $this->assertNull($response->message);
     }

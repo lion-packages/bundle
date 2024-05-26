@@ -26,14 +26,14 @@ class RouteMiddleware
     public function protectRouteList(): void
     {
         if (empty($_SERVER['HTTP_LION_AUTH'])) {
-            throw new MiddlewareException('secure hash not found', Status::SESSION_ERROR, Http::HTTP_UNAUTHORIZED);
+            throw new MiddlewareException('secure hash not found', Status::SESSION_ERROR, Http::UNAUTHORIZED);
         }
 
         if ($_ENV['SERVER_HASH'] != $_SERVER['HTTP_LION_AUTH']) {
             throw new MiddlewareException(
                 'you do not have access to this resource',
                 Status::SESSION_ERROR,
-                Http::HTTP_UNAUTHORIZED
+                Http::UNAUTHORIZED
             );
         }
     }

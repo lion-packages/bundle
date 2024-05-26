@@ -13,29 +13,21 @@ enum TaskStatusEnum: string
 {
     /**
      * [Defines a task in the PENDING state]
-     *
-     * @const PENDING
      */
     case PENDING = 'PENDING';
 
     /**
      * [Defines a task in the IN_PROGRESS state]
-     *
-     * @const IN_PROGRESS
      */
     case IN_PROGRESS = 'IN-PROGRESS';
 
     /**
      * [Defines a task in the COMPLETED state]
-     *
-     * @const COMPLETED
      */
     case COMPLETED = 'COMPLETED';
 
     /**
      * [Defines a task in the FAILED state]
-     *
-     * @const FAILED
      */
     case FAILED = 'FAILED';
 

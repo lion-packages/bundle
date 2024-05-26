@@ -54,7 +54,7 @@ class ExceptionsCommandTest extends Test
             ->exception(self::OBJECT_NAME)
             ->exceptionMessage(self::CUSTOM_MESSAGE)
             ->exceptionStatus(Status::ERROR)
-            ->exceptionCode(Http::HTTP_INTERNAL_SERVER_ERROR)
+            ->exceptionCode(Http::INTERNAL_SERVER_ERROR)
             ->expectLionException(function (): void {
                 $this->assertSame(Command::SUCCESS, $this->commandTester->execute(['exception' => self::CLASS_NAME]));
                 $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());

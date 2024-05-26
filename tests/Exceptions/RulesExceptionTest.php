@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Exceptions;
 
-
 use Lion\Bundle\Exceptions\RulesException;
 use Lion\Request\Http;
 use Lion\Request\Status;
@@ -20,7 +19,7 @@ class RulesExceptionTest extends Test
             ->exception(RulesException::class)
             ->exceptionMessage(self::MESSAGE)
             ->exceptionStatus(Status::ERROR)
-            ->exceptionCode(Http::HTTP_INTERNAL_SERVER_ERROR)
+            ->exceptionCode(Http::INTERNAL_SERVER_ERROR)
             ->expectLionException();
     }
 }

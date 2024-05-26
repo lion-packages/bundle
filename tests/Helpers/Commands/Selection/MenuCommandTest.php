@@ -53,7 +53,7 @@ class MenuCommandTest extends Test
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('there are no projects available');
-        $this->expectExceptionCode(Http::HTTP_INTERNAL_SERVER_ERROR);
+        $this->expectExceptionCode(Http::INTERNAL_SERVER_ERROR);
 
         $this->createDirectory(self::VITE_PATH);
 

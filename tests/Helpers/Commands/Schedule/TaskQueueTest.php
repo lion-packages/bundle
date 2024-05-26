@@ -132,7 +132,7 @@ class TaskQueueTest extends Test
         $this->assertArrayHasKey('lion_database', $connections['connections']);
         $this->assertSame($code, $connections['connections']['lion_database']['dbname']);
         $this->expectException(Exception::class);
-        $this->expectExceptionCode(Http::HTTP_INTERNAL_SERVER_ERROR);
+        $this->expectExceptionCode(Http::INTERNAL_SERVER_ERROR);
 
         $this->taskQueue->push('send:email', json([
             'email' => 'root@dev.com'
@@ -218,7 +218,7 @@ class TaskQueueTest extends Test
         $this->assertArrayHasKey('lion_database', $connections['connections']);
         $this->assertSame($code, $connections['connections']['lion_database']['dbname']);
         $this->expectException(Exception::class);
-        $this->expectExceptionCode(Http::HTTP_INTERNAL_SERVER_ERROR);
+        $this->expectExceptionCode(Http::INTERNAL_SERVER_ERROR);
 
         $this->taskQueue->edit((object) ['idtask_queue' => 1], TaskStatusEnum::FAILED);
     }
@@ -292,7 +292,7 @@ class TaskQueueTest extends Test
         $this->assertArrayHasKey('lion_database', $connections['connections']);
         $this->assertSame($code, $connections['connections']['lion_database']['dbname']);
         $this->expectException(Exception::class);
-        $this->expectExceptionCode(Http::HTTP_INTERNAL_SERVER_ERROR);
+        $this->expectExceptionCode(Http::INTERNAL_SERVER_ERROR);
 
         $this->taskQueue->remove((object) ['idtask_queue' => 1]);
     }

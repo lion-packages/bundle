@@ -19,7 +19,7 @@ class MiddlewareExceptionTest extends Test
             ->exception(MiddlewareException::class)
             ->exceptionMessage(self::MESSAGE)
             ->exceptionStatus(Status::ERROR)
-            ->exceptionCode(Http::HTTP_INTERNAL_SERVER_ERROR)
+            ->exceptionCode(Http::INTERNAL_SERVER_ERROR)
             ->expectLionException();
     }
 }
