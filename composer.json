@@ -52,7 +52,7 @@
         "lion/helpers": "^3.2",
         "lion/mailer": "^6.0",
         "lion/request": "^6.0",
-        "lion/route": "^10.3",
+        "lion/route": "^11.0",
         "lion/security": "^9.1",
         "monolog/monolog": "^3.3",
         "nesbot/carbon": "^2.66",
