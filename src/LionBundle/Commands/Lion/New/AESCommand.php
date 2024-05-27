@@ -96,6 +96,8 @@ class AESCommand extends Command
 
         $output->writeln($this->infoOutput("\t>>  AES METHOD: {$aesMethod}"));
 
+        $output->writeln($this->warningOutput("\t>>  AES PASSPHRASE: {$config->passphrase}"));
+
         $output->writeln($this->warningOutput("\t>>  AES KEY: {$config->key}"));
 
         $output->writeln($this->warningOutput("\t>>  AES IV: {$config->iv}"));
