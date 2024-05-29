@@ -365,6 +365,8 @@ class PostmanCollection
      */
     private function addRequest(string $name, string $route, string $method, array $params): array
     {
+        $name = '' === $name ? 'index' : $name;
+
         if (Route::POST === $method) {
             return $this->addPost($name, $route, $params);
         } elseif (Route::GET === $method) {
