@@ -124,7 +124,7 @@ class SeedCommand extends Command
                      *
                      * @const INDEX
                      */
-                    const INDEX = null;
+                    const ?int INDEX = null;
 
                     /**
                      * {@inheritdoc}
