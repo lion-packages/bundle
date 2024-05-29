@@ -41,12 +41,12 @@ class NpmUpdateCommand extends MenuCommand
      *
      * @return void
      */
-	protected function configure(): void
-	{
-		$this
+    protected function configure(): void
+    {
+        $this
             ->setName('npm:update')
             ->setDescription('Command to install dependencies with npm for a vite project');
-	}
+    }
 
     /**
      * Executes the current command
@@ -67,16 +67,16 @@ class NpmUpdateCommand extends MenuCommand
      *
      * @see setCode()
      */
-	protected function execute(InputInterface $input, OutputInterface $output): int
-	{
-		$project = $this->selectedProject($input, $output);
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $project = $this->selectedProject($input, $output);
 
-        $this->kernel->execute("cd {$this->store->normalizePath("./vite/{$project}/")} && npm update", false);
+        $this->kernel->execute("cd vite/{$project}/ && npm update", false);
 
         $output->writeln($this->warningOutput("\n\t>>  VITE: {$project}"));
 
         $output->writeln($this->successOutput("\t>>  VITE: dependencies have been updated"));
 
-		return Command::SUCCESS;
-	}
+        return Command::SUCCESS;
+    }
 }

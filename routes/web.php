@@ -137,6 +137,16 @@ Route::prefix('api', function () {
     });
 });
 
+// Route::prefix('users', function () {
+//     Route::get('/', function () {
+//         return null;
+//     });
+
+//     Route::post('/', function () {
+//         return null;
+//     });
+// });
+
 Route::get('route-list', fn () => Route::getFullRoutes(), ['protect-route-list']);
 // -----------------------------------------------------------------------------
 Route::dispatch();

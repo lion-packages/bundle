@@ -112,8 +112,8 @@ class MiddlewareCommand extends Command
                 namespace {$namespace};
 
                 use Lion\Bundle\Exceptions\MiddlewareException;
-                use Lion\Request\Request;
-                use Lion\Request\Response;
+                use Lion\Request\Http;
+                use Lion\Request\Status;
 
                 /**
                  * Description of Middleware '{$class}'
@@ -127,11 +127,11 @@ class MiddlewareCommand extends Command
                      *
                      * @return void
                      *
-                     * @throws MiddlewareException [Exception message]
+                     * @throws MiddlewareException
                      */
                     public function example(): void
                     {
-                        throw new MiddlewareException('message', Response::ERROR, Request::HTTP_UNAUTHORIZED);
+                        throw new MiddlewareException('message', Status::ERROR, Http::UNAUTHORIZED);
                     }
                 }
 

@@ -41,12 +41,12 @@ class NpmRunBuildCommand extends MenuCommand
      *
      * @return void
      */
-	protected function configure(): void
-	{
-		$this
+    protected function configure(): void
+    {
+        $this
             ->setName('npm:build')
             ->setDescription('Command to generate dist for a vite project');
-	}
+    }
 
     /**
      * Executes the current command
@@ -67,11 +67,11 @@ class NpmRunBuildCommand extends MenuCommand
      *
      * @see setCode()
      */
-	protected function execute(InputInterface $input, OutputInterface $output): int
-	{
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
         $project = $this->selectedProject($input, $output);
 
-        $projectPath = $this->store->normalizePath("./vite/{$project}/");
+        $projectPath = "vite/{$project}/";
 
         $this->kernel->execute("cd {$projectPath} && npm run build", false);
 
@@ -79,6 +79,6 @@ class NpmRunBuildCommand extends MenuCommand
 
         $output->writeln($this->successOutput("\t>>  VITE: project dist has been generated: {$projectPath}"));
 
-		return Command::SUCCESS;
-	}
+        return Command::SUCCESS;
+    }
 }

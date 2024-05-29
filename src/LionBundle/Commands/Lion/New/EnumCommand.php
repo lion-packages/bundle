@@ -35,7 +35,7 @@ class EnumCommand extends Command
      */
     private Store $store;
 
-	/**
+    /**
      * @required
      * */
     public function setClassFactory(ClassFactory $classFactory): EnumCommand
@@ -60,13 +60,13 @@ class EnumCommand extends Command
      *
      * @return void
      */
-	protected function configure(): void
+    protected function configure(): void
     {
-		$this
+        $this
             ->setName('new:enum')
             ->setDescription('Command required for creating new Enums')
             ->addArgument('enum', InputArgument::OPTIONAL, 'Enum name', 'ExampleEnum');
-	}
+    }
 
     /**
      * Executes the current command
@@ -87,9 +87,9 @@ class EnumCommand extends Command
      *
      * @see setCode()
      */
-	protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-		$enum = $input->getArgument('enum');
+        $enum = $input->getArgument('enum');
 
         $this->classFactory->classFactory('app/Enums/', $enum);
 
@@ -120,15 +120,13 @@ class EnumCommand extends Command
                 {
                     /**
                      * [Description of the case EXAMPLE]
-                     *
-                     * @const EXAMPLE
                      */
                     case EXAMPLE = 'example';
 
                     /**
                      * Returns an array of the values defined in the cases
                      *
-                     * @return array<string>
+                     * @return array<int, string>
                      */
                     public static function values(): array
                     {
@@ -145,5 +143,5 @@ class EnumCommand extends Command
         $output->writeln($this->successOutput("\t>>  ENUM: the '{$namespace}\\{$class}' enum has been generated"));
 
         return Command::SUCCESS;
-	}
+    }
 }

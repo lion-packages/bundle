@@ -7,6 +7,7 @@ namespace Lion\Bundle\Commands\Lion\New;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Files\Store;
+use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -112,6 +113,7 @@ class CommandsCommand extends Command
                 namespace {$namespace};
 
                 use Lion\Command\Command;
+                use Symfony\Component\Console\Exception\LogicException;
                 use Symfony\Component\Console\Input\InputInterface;
                 use Symfony\Component\Console\Output\OutputInterface;
 

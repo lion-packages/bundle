@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\Npm;
 
-use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Bundle\Helpers\FileWriter;
 use Lion\Command\Command;
@@ -46,13 +45,6 @@ class NpmInitCommand extends MenuCommand
     const TYPES = ['js', 'ts'];
 
     /**
-     * [ClassFactory class object]
-     *
-     * @property ClassFactory $classFactory
-     */
-    private ClassFactory $classFactory;
-
-    /**
      * [FileWriter class object]
      *
      * @property FileWriter $fileWriter
@@ -65,16 +57,6 @@ class NpmInitCommand extends MenuCommand
      * @property Kernel $kernel
      */
     private Kernel $kernel;
-
-    /**
-     * @required
-     * */
-    public function setClassFactory(ClassFactory $classFactory): NpmInitCommand
-    {
-        $this->classFactory = $classFactory;
-
-        return $this;
-    }
 
     /**
      * @required
@@ -132,13 +114,13 @@ class NpmInitCommand extends MenuCommand
     {
         $project = $this->str->of($input->getArgument('project'))->trim()->replace('_', '-')->replace(' ', '-')->get();
 
-        if (isSuccess($this->store->exist($this->store->normalizePath("vite/{$project}/")))) {
+        if (isSuccess($this->store->exist("vite/{$project}/"))) {
             $output->writeln($this->warningOutput("\t>>  VITE: a resource with this name already exists"));
 
             return Command::FAILURE;
         }
 
-        $this->store->folder($this->store->normalizePath('./vite/'));
+        $this->store->folder('vite/');
 
         $template = $this->str
             ->of($this->selectedTemplate($input, $output, self::VITE_TEMPLATES, 'React', 2))->lower()
@@ -169,9 +151,7 @@ class NpmInitCommand extends MenuCommand
         $output->writeln($this->warningOutput("\t>>  VITE: {$project}"));
 
         $output->writeln(
-            $this->successOutput(
-                "\t>>  VITE: vite '{$this->store->normalizePath("vite/{$project}/")}' project has been generated successfully"
-            )
+            $this->successOutput("\t>>  VITE: vite 'vite/{$project}/' project has been generated successfully")
         );
 
         $output->writeln($this->warningOutput("\t>>  VITE: add your configuration in the vite.config"));
@@ -203,13 +183,13 @@ class NpmInitCommand extends MenuCommand
     ): void {
         $type = $this->selectedTypes($input, $output, self::TYPES);
 
-        $commandCreate = "cd {$this->store->normalizePath('./vite/')} && echo | npm init vite@latest {$project}";
+        $commandCreate = "cd vite/ && echo | npm init vite@latest {$project}";
 
         $commandCreate .= " -- --template {$template}" . ('js' === $type ? '' : '-ts');
 
-        $this->kernel->execute($commandCreate, false);
+        $this->kernel->execute($this->str->of($commandCreate)->trim()->get(), false);
 
-        $this->kernel->execute("cd {$this->store->normalizePath("./vite/{$project}/")} && npm install", false);
+        $this->kernel->execute("cd vite/{$project} && npm install", false);
     }
 
     /**
@@ -232,13 +212,13 @@ class NpmInitCommand extends MenuCommand
     ): void {
         $type = $this->selectedTypes($input, $output, self::TYPES);
 
-        $commandCreate = "cd {$this->store->normalizePath('./vite/')} && echo | npm create @quick-start/electron";
+        $commandCreate = "cd vite/ && echo | npm create @quick-start/electron";
 
         $commandCreate .= " {$project} -- --template {$template}" . ('js' === $type ? '' : '-ts') . ' --skip';
 
         $this->kernel->execute($commandCreate, false);
 
-        $this->kernel->execute("cd {$this->store->normalizePath("./vite/{$project}/")} && npm install", false);
+        $this->kernel->execute("cd vite/{$project} && npm install", false);
     }
 
     /**
@@ -253,11 +233,11 @@ class NpmInitCommand extends MenuCommand
      */
     private function setViteConfig(string $project, int $rowNumber, array $config): void
     {
-        $this->classFactory
-            ->create('', 'env', $this->store->normalizePath("./vite/{$project}/"))
-            ->add('VITE_SERVER_URL="' . $_ENV['SERVER_URL_AUD'] . '"' . "\n")
-            ->add('VITE_SERVER_URL_AUD="' . $_ENV['SERVER_URL'] . '"')
-            ->close();
+        // $this->classFactory
+        // ->create('', 'env', "vite/{$project}/")
+        // ->add('VITE_SERVER_URL="' . $_ENV['SERVER_URL_AUD'] . '"' . "\n")
+        // ->add('VITE_SERVER_URL_AUD="' . $_ENV['SERVER_URL'] . '"')
+        // ->close();
 
         $replace = [$rowNumber => $config];
 
