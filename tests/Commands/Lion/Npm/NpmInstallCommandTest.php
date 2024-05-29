@@ -40,10 +40,10 @@ class NpmInstallCommandTest extends Test
     {
         $this->assertSame(Command::SUCCESS, $this->commandTesterNpmIn->execute(['project' => self::PROJECT_NAME]));
         $this->assertStringContainsString(self::OUTPUT_MESSAGE_INIT_PROJECT, $this->commandTesterNpmIn->getDisplay());
-        $this->assertSame(Command::SUCCESS, $this->commandTesterNpmI->execute(['packages' => '']));
-        $this->assertSame(Command::SUCCESS, $this->commandTesterNpmI->execute(['packages' => 'axios']));
+        $this->assertSame(Command::SUCCESS, $this->commandTesterNpmI->execute(['packages' => ['']]));
+        $this->assertSame(Command::SUCCESS, $this->commandTesterNpmI->execute(['packages' => ['axios']]));
         $this->assertStringContainsString(self::OUTPUT_MESSAGE_INSTALL, $this->commandTesterNpmI->getDisplay());
-        $this->assertSame(Command::SUCCESS, $this->commandTesterNpmI->execute(['packages' => 'dayjs jwt-decode']));
+        $this->assertSame(Command::SUCCESS, $this->commandTesterNpmI->execute(['packages' => ['dayjs jwt-decode']]));
         $this->assertStringContainsString(self::OUTPUT_MESSAGE_INSTALL, $this->commandTesterNpmI->getDisplay());
     }
 }

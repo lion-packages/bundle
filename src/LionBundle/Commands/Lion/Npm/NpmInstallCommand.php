@@ -42,13 +42,13 @@ class NpmInstallCommand extends MenuCommand
      *
      * @return void
      */
-	protected function configure(): void
-	{
-		$this
+    protected function configure(): void
+    {
+        $this
             ->setName('npm:install')
             ->setDescription('Command to install dependencies with npm for a certain vite project')
-            ->addArgument('packages', InputArgument::OPTIONAL, 'Package name', '');
-	}
+            ->addArgument('packages', InputArgument::IS_ARRAY | InputArgument::OPTIONAL, 'Package name', []);
+    }
 
     /**
      * Executes the current command
@@ -69,25 +69,22 @@ class NpmInstallCommand extends MenuCommand
      *
      * @see setCode()
      */
-	protected function execute(InputInterface $input, OutputInterface $output): int
-	{
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
         $project = $this->selectedProject($input, $output);
 
-        $packages = $input->getArgument('packages');
+        $packages = $this->str->of($this->arr->of($input->getArgument('packages'))->join(' '))->trim()->get();
 
-		$this->kernel->execute(
-            "cd {$this->store->normalizePath("vite/{$project}/")} && npm install {$packages}",
-            false
-        );
+        $this->kernel->execute($this->str->of("cd vite/{$project}/ && npm install {$packages}")->trim()->get(), false);
 
         if ('' != $packages) {
             $output->writeln($this->warningOutput("\n\t>>  VITE: {$project}"));
 
             $output->writeln($this->successOutput(
-                "\t>>  VITE: dependencies have been installed: {$this->arr->of(explode(' ', $packages))->join(', ')}"
+                "\t>>  VITE: dependencies have been installed: {$this->arr->of(explode(' ',$packages))->join(', ')}"
             ));
         }
 
-		return Command::SUCCESS;
-	}
+        return Command::SUCCESS;
+    }
 }

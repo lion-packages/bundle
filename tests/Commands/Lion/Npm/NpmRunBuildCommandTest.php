@@ -14,10 +14,10 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class NpmRunBuildCommandTest extends Test
 {
-    const DIST_PATH = './vite/test-app/dist/';
-    const PROJECT_NAME = 'test-app';
-    const OUTPUT_MESSAGE_INIT_PROJECT = 'project has been generated successfully';
-    const OUTPUT_MESSAGE_BUILD = 'project dist has been generated';
+    const string DIST_PATH = 'vite/test-app/dist/';
+    const string PROJECT_NAME = 'test-app';
+    const string OUTPUT_MESSAGE_INIT_PROJECT = 'project has been generated successfully';
+    const string OUTPUT_MESSAGE_BUILD = 'project dist has been generated';
 
     private CommandTester $commandTesterNpmInit;
     private CommandTester $commandTesterNpmBuild;
@@ -25,10 +25,13 @@ class NpmRunBuildCommandTest extends Test
     protected function setUp(): void
     {
         $application = (new Kernel())->getApplication();
+
         $application->add((new Container())->injectDependencies(new NpmInitCommand()));
+
         $application->add((new Container())->injectDependencies(new NpmRunBuildCommand()));
 
         $this->commandTesterNpmInit = new CommandTester($application->find('npm:init'));
+
         $this->commandTesterNpmBuild = new CommandTester($application->find('npm:build'));
     }
 

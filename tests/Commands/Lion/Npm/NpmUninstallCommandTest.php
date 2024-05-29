@@ -27,12 +27,17 @@ class NpmUninstallCommandTest extends Test
     protected function setUp(): void
     {
         $application = (new Kernel())->getApplication();
+
         $application->add((new Container())->injectDependencies(new NpmInitCommand()));
+
         $application->add((new Container())->injectDependencies(new NpmInstallCommand()));
+
         $application->add((new Container())->injectDependencies(new NpmUninstallCommand()));
 
         $this->commandTesterNpmIn = new CommandTester($application->find('npm:init'));
+
         $this->commandTesterNpmI = new CommandTester($application->find('npm:install'));
+
         $this->commandTesterNpmU = new CommandTester($application->find('npm:uninstall'));
     }
 
@@ -45,9 +50,9 @@ class NpmUninstallCommandTest extends Test
     {
         $this->assertSame(Command::SUCCESS, $this->commandTesterNpmIn->execute(['project' => self::PROJECT_NAME]));
         $this->assertStringContainsString(self::OUTPUT_MESSAGE_INIT_PROJECT, $this->commandTesterNpmIn->getDisplay());
-        $this->assertSame(Command::SUCCESS, $this->commandTesterNpmI->execute(['packages' => 'axios']));
+        $this->assertSame(Command::SUCCESS, $this->commandTesterNpmI->execute(['packages' => ['axios']]));
         $this->assertStringContainsString(self::OUTPUT_MESSAGE_INSTALL, $this->commandTesterNpmI->getDisplay());
-        $this->assertSame(Command::SUCCESS, $this->commandTesterNpmU->execute(['packages' => 'axios']));
+        $this->assertSame(Command::SUCCESS, $this->commandTesterNpmU->execute(['packages' => ['axios']]));
         $this->assertStringContainsString(self::OUTPUT_MESSAGE_UNINSTALL, $this->commandTesterNpmU->getDisplay());
     }
 }

@@ -42,13 +42,13 @@ class NpmUninstallCommand extends MenuCommand
      *
      * @return void
      */
-	protected function configure(): void
-	{
-		$this
+    protected function configure(): void
+    {
+        $this
             ->setName('npm:uninstall')
             ->setDescription('Command to uninstall dependencies with npm from a vite project')
-            ->addArgument('packages', InputArgument::REQUIRED, 'Package name');
-	}
+            ->addArgument('packages', InputArgument::IS_ARRAY | InputArgument::OPTIONAL, 'Package name', []);
+    }
 
     /**
      * Executes the current command
@@ -69,23 +69,25 @@ class NpmUninstallCommand extends MenuCommand
      *
      * @see setCode()
      */
-	protected function execute(InputInterface $input, OutputInterface $output): int
-	{
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
         $project = $this->selectedProject($input, $output);
 
-        $packages = $input->getArgument('packages');
+        $packages = $this->arr->of($input->getArgument('packages'))->join(' ');
+
+        $packages = $this->str->of($packages)->trim()->get();
 
         $this->kernel->execute(
-            "cd {$this->store->normalizePath("./vite/{$project}/")} && npm uninstall {$packages}",
+            $this->str->of("cd vite/{$project}/ && npm uninstall {$packages}")->trim()->get(),
             false
         );
 
         $output->writeln($this->warningOutput("\n\t>>  VITE: {$project}"));
 
         $output->writeln($this->successOutput(
-            "\t>>  VITE: dependencies have been uninstalled: {$this->arr->of(explode(' ', $packages))->join(', ')}"
+            "\t>>  VITE: dependencies have been uninstalled: {$this->arr->of(explode(' ',$packages))->join(', ')}"
         ));
 
         return Command::SUCCESS;
-	}
+    }
 }
