@@ -18,7 +18,7 @@ define('client', new Client());
 /**
  * [Object with properties captured in an HTTP request]
  *
- * @var object
+ * @var stdClass
  * */
 define('request', (new Request())->capture());
 

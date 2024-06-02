@@ -111,6 +111,7 @@ class SeedCommand extends Command
 
                 use Lion\Bundle\Interface\SeedInterface;
                 use Lion\Database\Drivers\MySQL as DB;
+                use stdClass;
 
                 /**
                  * Description of '{$class}' Seed
@@ -129,7 +130,7 @@ class SeedCommand extends Command
                     /**
                      * {@inheritdoc}
                      */
-                    public function run(): object
+                    public function run(): stdClass
                     {
                         return (object) [
                             'status' => 'success',

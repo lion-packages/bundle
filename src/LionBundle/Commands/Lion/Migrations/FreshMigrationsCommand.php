@@ -210,9 +210,9 @@ class FreshMigrationsCommand extends Command
      */
     private function dropTables(): void
     {
-        $connections = (object) Schema::getConnections();
+        $connections = Schema::getConnections();
 
-        foreach ($connections->connections as $connection) {
+        foreach ($connections['connections'] as $connection) {
             $response = Schema::dropTables()->execute();
 
             if (isError($response)) {

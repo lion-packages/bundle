@@ -4,34 +4,13 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Helpers\Commands\Migrations;
 
-use Lion\Helpers\Str;
-
 /**
  * Factory of the content of the generated migrations
- *
- * @property Str $str [Str class object]
  *
  * @package Lion\Bundle\Helpers\Commands\Migrations
  */
 class MigrationFactory
 {
-    /**
-     * [Str class object]
-     *
-     * @var Str $str
-     */
-    private Str $str;
-
-    /**
-     * @required
-     */
-    public function setStr(Str $str): MigrationFactory
-    {
-        $this->str = $str;
-
-        return $this;
-    }
-
     /**
      * Returns the body of the migration of type table
      *
@@ -62,7 +41,7 @@ class MigrationFactory
             /**
              * {@inheritdoc}
              */
-            public function up(): object
+            public function up(): stdClass
             {
                 return Schema::connection(env('DB_NAME', 'lion_database'))
                     ->createTable('example', function (): void {
@@ -99,7 +78,7 @@ class MigrationFactory
             /**
              * {@inheritdoc}
              * */
-            public function up(): object
+            public function up(): stdClass
             {
                 return Schema::connection(env('DB_NAME', 'lion_database'))
                     ->createView('read_example', function (MySQL \$db): void {
@@ -138,7 +117,7 @@ class MigrationFactory
             /**
              * {@inheritdoc}
              * */
-            public function up(): object
+            public function up(): stdClass
             {
                 return Schema::connection(env('DB_NAME', 'lion_database'))
                     ->createStoreProcedure('example', function (): void {

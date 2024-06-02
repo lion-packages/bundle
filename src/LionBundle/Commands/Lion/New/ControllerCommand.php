@@ -118,7 +118,7 @@ class ControllerCommand extends Command
     {
         return $this->classCommandFactory
             ->setFactories(['controller', 'model'])
-            ->execute(function(ClassCommandFactory $classFactory, Store $store) use ($input, $output) {
+            ->execute(function (ClassCommandFactory $classFactory, Store $store) use ($input, $output) {
                 $controller = $input->getArgument('controller');
                 $model = $input->getOption('model');
 
@@ -133,6 +133,7 @@ class ControllerCommand extends Command
                 }
 
                 $factoryController = $classFactory->getFactory('controller');
+
                 $factoryModel = $classFactory->getFactory('model');
 
                 $dataController = $classFactory->getData($factoryController, [
@@ -146,6 +147,7 @@ class ControllerCommand extends Command
                 ]);
 
                 $camelModelClass = lcfirst($dataModel->class);
+
                 $store->folder($dataController->folder);
 
                 $factoryController
@@ -154,12 +156,14 @@ class ControllerCommand extends Command
                     ->add("namespace {$dataController->namespace};\n\n");
 
                 if ('none' != $model) {
-                    $factoryController->add("use {$dataModel->namespace}\\{$dataModel->class};\n\n");
+                    $factoryController->add("use {$dataModel->namespace}\\{$dataModel->class};\n");
                 }
 
                 $factoryController
                     ->add(
                         <<<EOT
+                        use stdClass;
+
                         /**
                          * Description of Controller '{$dataController->class}'
                          *
@@ -194,11 +198,13 @@ class ControllerCommand extends Command
                                 ->replace('Controller', '')
                                 ->replace('controller', '')
                                 ->get(),
-                            $method === 'read' ? 'array|object' : 'object',
+                            $method === 'read' ? 'stdClass|array' : 'stdClass',
                             (
-                                in_array($method, ['update', 'delete'], true)
-                                    ? ($dataModel->class . ' $' . $camelModelClass . ', string $id')
-                                    : ($dataModel->class . ' $' . $camelModelClass)
+                                in_array($method, ['update', 'delete'], true) ? (
+                                    $dataModel->class . ' $' . $camelModelClass . ', string $id'
+                                ) : (
+                                    $dataModel->class . ' $' . $camelModelClass
+                                )
                             ),
                             $modelMethod,
                             'public',
@@ -211,7 +217,7 @@ class ControllerCommand extends Command
                                 ->replace('Controller', '')
                                 ->replace('controller', '')
                                 ->get(),
-                            $method === 'read' ? 'array|object' : 'object',
+                            $method === 'read' ? 'stdClass|array' : 'stdClass',
                             (in_array($method, ['update', 'delete'], true) ? 'string $id' : ''),
                             $method === 'read' ? "return [];" : "return success();",
                             'public',

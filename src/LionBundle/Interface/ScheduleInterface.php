@@ -16,7 +16,7 @@ interface ScheduleInterface
     /**
      * Define settings for scheduled tasks
      *
-     * @param  Schedule $schedule [Configuration object for scheduled tasks]
+     * @param Schedule $schedule [Configuration object for scheduled tasks]
      *
      * @return void
      */

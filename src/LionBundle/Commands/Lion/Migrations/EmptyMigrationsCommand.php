@@ -50,9 +50,9 @@ class EmptyMigrationsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $connections = (object) Schema::getConnections();
+        $connections = Schema::getConnections();
 
-        foreach ($connections->connections as $connectionName => $connection) {
+        foreach ($connections['connections'] as $connectionName => $connection) {
             $tables = DB::connection($connectionName)->show()->tables()->getAll();
 
             if (!is_array($tables) && isSuccess($tables)) {

@@ -53,7 +53,9 @@ class ComposerFactory
         foreach ($composerJson->require as $key => $library) {
             if (!in_array($key, $extensions, true)) {
                 $exec = [];
+
                 exec("composer show {$key} --direct --format=json", $exec);
+
                 $json = json_decode($this->arr->of($exec)->join(' '));
 
                 $this->libraries[] = [
@@ -82,7 +84,9 @@ class ComposerFactory
         foreach ($composerJson->{'require-dev'} as $key => $library) {
             if (!in_array($key, $extensions, true)) {
                 $execResponse = [];
+
                 exec("composer show {$key} --direct --format=json", $execResponse);
+
                 $json = json_decode($this->arr->of($execResponse)->join(' '));
 
                 $this->libraries[] = [

@@ -43,7 +43,7 @@ class MigrationFactoryTest extends Test
             /**
              * {@inheritdoc}
              */
-            public function up(): object
+            public function up(): stdClass
             {
                 return Schema::connection(env('DB_NAME', 'lion_database'))
                     ->createTable('example', function (): void {
@@ -77,7 +77,7 @@ class MigrationFactoryTest extends Test
             /**
              * {@inheritdoc}
              * */
-            public function up(): object
+            public function up(): stdClass
             {
                 return Schema::connection(env('DB_NAME', 'lion_database'))
                     ->createView('read_example', function (MySQL \$db): void {
@@ -113,7 +113,7 @@ class MigrationFactoryTest extends Test
             /**
              * {@inheritdoc}
              * */
-            public function up(): object
+            public function up(): stdClass
             {
                 return Schema::connection(env('DB_NAME', 'lion_database'))
                     ->createStoreProcedure('example', function (): void {

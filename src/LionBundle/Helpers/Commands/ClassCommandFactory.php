@@ -8,6 +8,7 @@ use Closure;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
+use stdClass;
 
 /**
  * Allows adding several ClassFactory type objects for multiple management
@@ -113,9 +114,9 @@ class ClassCommandFactory
      * @param ClassFactory $classFactory [description]
      * @param array $data [description]
      *
-     * @return object
+     * @return stdClass
      */
-    public function getData(ClassFactory $classFactory, array $data): object
+    public function getData(ClassFactory $classFactory, array $data): stdClass
     {
         $classFactory->classFactory($data['path'], $data['class']);
 

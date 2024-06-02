@@ -129,11 +129,17 @@ class ModelCommand extends Command
 
         $this->classFactory
             ->create($class, ClassFactory::PHP_EXTENSION, $folder)
-            ->add("<?php\n\ndeclare(strict_types=1);\n\n")
-            ->add("namespace {$namespace};\n\n")
-            ->add("use Lion\Database\Drivers\MySQL as DB;\n\n")
             ->add(
                 <<<EOT
+                <?php
+
+                declare(strict_types=1);
+
+                namespace {$namespace};
+
+                use Lion\Database\Drivers\MySQL as DB;
+                use stdClass;
+
                 /**
                  * Description of Model '{$class}'
                  *
@@ -147,9 +153,9 @@ class ModelCommand extends Command
         foreach (self::METHODS as $method) {
             $customMethod = $this->classFactory->getCustomMethod(
                 $this->str->of($method . $class)->replace('Model', '')->replace('model', '')->concat('DB')->get(),
-                $method === 'read' ? 'array|object' : 'object',
+                $method === 'read' ? 'stdClass|array' : 'stdClass',
                 '',
-                $method === 'read' ? "return DB::view('')->select()->getAll();" : "return DB::call('', [])->execute();",
+                $method === 'read' ? "return DB::view('')\n\t\t\t->select()\n\t\t\t->getAll();" : "return DB::call('', [])\n\t\t\t->execute();",
                 'public',
                 $method === 'delete' ? 1 : 2
             );
