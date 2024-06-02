@@ -138,7 +138,7 @@ class RouteListCommand extends Command
                     $rows[] = [
                         $this->warningOutput($keyMethods),
                         $routeUrl,
-                        $this->transformNamespace($method['handler']['controller']['name']),
+                        $method['handler']['controller']['name'],
                         $this->warningOutput($method['handler']['controller']['function'])
                     ];
                 }
@@ -150,7 +150,7 @@ class RouteListCommand extends Command
                                 $rows[] = [
                                     $this->infoOutput('MIDDLEWARE:'),
                                     $this->infoOutput($filter),
-                                    $this->transformNamespace($middleware->getClass()),
+                                    $middleware->getClass(),
                                     $this->warningOutput($middleware->getMethodClass())
                                 ];
                             }
@@ -171,7 +171,7 @@ class RouteListCommand extends Command
                                     ? $this->successOutput('(NAMELESS)')
                                     : $this->successOutput($objectClassRule->field . " ({$requiredParam})")
                                 ),
-                                $this->transformNamespace($objectClassRule::class),
+                                $objectClassRule::class,
                                 $this->warningOutput('passes')
                             ];
                         }
@@ -203,30 +203,6 @@ class RouteListCommand extends Command
     }
 
     /**
-     * Add colors in namespace separation
-     *
-     * @param  string $namespace [Class namespace]
-     *
-     * @return string
-     */
-    private function transformNamespace(string $namespace): string
-    {
-        $classNew = '';
-
-        $split = explode("\\", $namespace);
-
-        foreach ($split as $key => $value) {
-            if ($key < (count($split) - 1)) {
-                $classNew .= "{$this->purpleOutput($value)}\\";
-            } else {
-                $classNew .= $value;
-            }
-        }
-
-        return $classNew;
-    }
-
-    /**
      * Gets the parameters (Web Routes/Rules/Middleware) of the defined web
      * routes
      *
@@ -244,8 +220,6 @@ class RouteListCommand extends Command
         );
 
         array_pop($this->routes);
-
-        $this->rules = Routes::getRules();
 
         $this->configMiddleware = Routes::getMiddleware();
     }

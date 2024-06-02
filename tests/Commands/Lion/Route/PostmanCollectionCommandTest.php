@@ -7,12 +7,10 @@ namespace Tests\Commands\Lion\Route;
 use Carbon\Carbon;
 use Lion\Bundle\Commands\Lion\New\RulesCommand;
 use Lion\Bundle\Commands\Lion\Route\PostmanCollectionCommand;
-use Lion\Bundle\Helpers\Http\Routes;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
-use Lion\Route\Route;
 use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tests\Providers\EnviromentProviderTrait;
@@ -33,21 +31,26 @@ class PostmanCollectionCommandTest extends Test
     protected function setUp(): void
     {
         $this->loadEnviroment();
+
         $this->createDirectory(self::URL_PATH);
 
         $this->store = new Store();
+
         $application = (new Kernel)->getApplication();
 
         $application->add((new Container)->injectDependencies(new RulesCommand()));
+
         $application->add((new Container)->injectDependencies(new PostmanCollectionCommand()));
 
         $this->commandTester = new CommandTester($application->find('route:postman'));
+
         $this->commandTesterRule = new CommandTester($application->find('new:rule'));
     }
 
     protected function tearDown(): void
     {
         $this->rmdirRecursively(self::URL_PATH);
+
         $this->rmdirRecursively('./app/');
     }
 

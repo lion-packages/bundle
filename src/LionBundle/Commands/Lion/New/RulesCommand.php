@@ -111,8 +111,8 @@ class RulesCommand extends Command
 
                 namespace {$namespace};
 
-                use Lion\Bundle\Helpers\Rules;
-                use Lion\Bundle\Interface\RulesInterface;
+                use Lion\Route\Helpers\Rules;
+                use Lion\Route\Interface\RulesInterface;
                 use Valitron\Validator;
 
                 /**

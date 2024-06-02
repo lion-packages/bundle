@@ -18,10 +18,10 @@
             "Database\\Seed\\": "database/Seed/"
         },
         "files": [
-            "routes/rules.php",
             "routes/middleware.php",
             "src/LionBundle/Helpers/Bundle/constants.php",
-            "src/LionBundle/Helpers/Bundle/helpers.php"
+            "src/LionBundle/Helpers/Bundle/helpers.php",
+            "tests/Providers/NameRuleProvider.php"
         ]
     },
     "autoload-dev": {

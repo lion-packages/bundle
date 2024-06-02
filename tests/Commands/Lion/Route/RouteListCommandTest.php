@@ -55,6 +55,6 @@ class RouteListCommandTest extends Test
 
         $display = $this->commandTester->getDisplay();
 
-        $this->assertStringContainsString('RouteMiddleware', $display);
+        $this->assertStringContainsString(RouteMiddleware::class, $display);
     }
 }

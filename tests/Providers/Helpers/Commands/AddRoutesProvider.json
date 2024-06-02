@@ -14,9 +14,7 @@
             {
                 "url": "api\/test",
                 "method": "POST",
-                "params": [
-                    "Tests\\Providers\\Helpers\\Commands\\RulesProvider"
-                ]
+                "params": []
             },
             {
                 "url": "api\/test",
@@ -100,7 +98,7 @@
                             ],
                             "body": {
                                 "mode": "raw",
-                                "raw": "{\"name\":\"\"}",
+                                "raw": "",
                                 "options": {
                                     "raw": {
                                         "language": "json"

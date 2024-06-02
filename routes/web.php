@@ -25,6 +25,7 @@ use Lion\Database\Driver;
 use Lion\Mailer\Mailer;
 use Lion\Request\Http;
 use Lion\Request\Status;
+use Tests\Providers\ExampleProvider;
 
 /**
  * -----------------------------------------------------------------------------
@@ -104,6 +105,7 @@ Mailer::initialize([
  **/
 
 Route::init();
+
 Route::addMiddleware(Routes::getMiddleware());
 // -----------------------------------------------------------------------------
 Route::get('/', function () {
@@ -128,7 +130,7 @@ Route::get('logger', function () {
 });
 
 Route::prefix('api', function () {
-    Route::post('test', fn () => ['token' => jwt()]);
+    Route::post('test', [ExampleProvider::class, 'getResult']);
     Route::get('test', fn () => success('test-response'));
     Route::put('test/{id:i}', fn (string $id) => success('test-response: ' . $id));
 

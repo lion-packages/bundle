@@ -19,7 +19,7 @@
                 "header": [
                     {
                         "key": "Content-Type",
-                        "value": "application\/json",
+                        "value": "application/json",
                         "type": "text"
                     }
                 ],
@@ -27,7 +27,7 @@
                     "host": [
                         "{{base_url}}"
                     ],
-                    "raw": "{{base_url}}\/",
+                    "raw": "{{base_url}}/",
                     "path": [
                         ""
                     ],
@@ -43,7 +43,7 @@
                 "header": [
                     {
                         "key": "Content-Type",
-                        "value": "application\/json",
+                        "value": "application/json",
                         "type": "text"
                     }
                 ],
@@ -51,7 +51,7 @@
                     "host": [
                         "{{base_url}}"
                     ],
-                    "raw": "{{base_url}}\/logger",
+                    "raw": "{{base_url}}/logger",
                     "path": [
                         "logger"
                     ],
@@ -70,13 +70,13 @@
                         "header": [
                             {
                                 "key": "Content-Type",
-                                "value": "application\/json",
+                                "value": "application/json",
                                 "type": "text"
                             }
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"\"}",
+                            "raw": "",
                             "options": {
                                 "raw": {
                                     "language": "json"
@@ -87,7 +87,7 @@
                             "host": [
                                 "{{base_url}}"
                             ],
-                            "raw": "{{base_url}}\/api\/test",
+                            "raw": "{{base_url}}/api/test",
                             "path": [
                                 "api",
                                 "test"
@@ -103,7 +103,7 @@
                         "header": [
                             {
                                 "key": "Content-Type",
-                                "value": "application\/json",
+                                "value": "application/json",
                                 "type": "text"
                             }
                         ],
@@ -111,7 +111,7 @@
                             "host": [
                                 "{{base_url}}"
                             ],
-                            "raw": "{{base_url}}\/api\/test",
+                            "raw": "{{base_url}}/api/test",
                             "path": [
                                 "api",
                                 "test"
@@ -131,7 +131,7 @@
                                 "header": [
                                     {
                                         "key": "Content-Type",
-                                        "value": "application\/json",
+                                        "value": "application/json",
                                         "type": "text"
                                     }
                                 ],
@@ -148,7 +148,7 @@
                                     "host": [
                                         "{{base_url}}"
                                     ],
-                                    "raw": "{{base_url}}\/api\/test\/{id:i}",
+                                    "raw": "{{base_url}}/api/test/{id:i}",
                                     "path": [
                                         "api",
                                         "test",
@@ -165,7 +165,7 @@
                                 "header": [
                                     {
                                         "key": "Content-Type",
-                                        "value": "application\/json",
+                                        "value": "application/json",
                                         "type": "text"
                                     }
                                 ],
@@ -182,7 +182,7 @@
                                     "host": [
                                         "{{base_url}}"
                                     ],
-                                    "raw": "{{base_url}}\/api\/test\/{id:i}",
+                                    "raw": "{{base_url}}/api/test/{id:i}",
                                     "path": [
                                         "api",
                                         "test",
@@ -195,6 +195,6 @@
                 }
             ]
         }
-],
+    ],
     "event": []
 }

@@ -6,12 +6,12 @@ namespace Tests\Commands\Lion\DB;
 
 use Lion\Bundle\Commands\Lion\DB\RulesDBCommand;
 use Lion\Bundle\Commands\Lion\New\RulesCommand;
-use Lion\Bundle\Helpers\Rules;
-use Lion\Bundle\Interface\RulesInterface;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\Database\Drivers\Schema\MySQL as Schema;
 use Lion\Dependency\Injection\Container;
+use Lion\Route\Helpers\Rules;
+use Lion\Route\Interface\RulesInterface;
 use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tests\Providers\ConnectionProviderTrait;
