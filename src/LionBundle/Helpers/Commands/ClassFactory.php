@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lion\Bundle\Helpers\Commands;
 
 use Lion\Files\Store;
+use stdClass;
 
 /**
  * Fabricates the data provided to manipulate information (folder, class,
@@ -220,14 +221,14 @@ class ClassFactory
      * @param string $type [Datatype]
      * @param string|null $visibility [Property Scope]
      *
-     * @return object
+     * @return stdClass
      */
     public function getProperty(
         string $propertyName,
         string $className,
         string $type = 'string',
         ?string $visibility = null
-    ): object {
+    ): stdClass {
         $availableVisibility = [self::PUBLIC_PROPERTY, self::PRIVATE_PROPERTY, self::PROTECTED_PROPERTY];
 
         $finalVisibility = in_array($visibility, $availableVisibility, true) ? "{$visibility} " : '';
@@ -305,9 +306,9 @@ class ClassFactory
      * @param string $name [Method name]
      * @param string $type [Method type]
      *
-     * @return object
+     * @return stdClass
      */
-    private function getGetter(string $name, string $type = 'string'): object
+    private function getGetter(string $name, string $type = 'string'): stdClass
     {
         $newName = str_replace(' ', '_', $name);
 
@@ -342,9 +343,9 @@ class ClassFactory
      * @param string $type [Method type]
      * @param string $capsule [Class name]
      *
-     * @return object
+     * @return stdClass
      */
-    private function getSetter(string $name, string $type, string $capsule): object
+    private function getSetter(string $name, string $type, string $capsule): stdClass
     {
         $newName = str_replace(' ', '_', $name);
 

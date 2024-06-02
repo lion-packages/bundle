@@ -111,14 +111,14 @@ if (!function_exists('response')) {
      * @param int $code [HTTP status code inside the object]
      * @param mixed|null $data [Extra data inside the object]
      *
-     * @return object
+     * @return stdClass
      */
     function response(
         string $status = 'custom',
         mixed $message = null,
         int $code = Http::OK,
         mixed $data = null
-    ): object {
+    ): stdClass {
         return response->custom($status, $message, $code, $data);
     }
 }
@@ -131,9 +131,9 @@ if (!function_exists('success')) {
      * @param int $code [HTTP status code inside the object]
      * @param mixed|null $data [Extra data inside the object]
      *
-     * @return object
+     * @return stdClass
      */
-    function success(mixed $message = null, int $code = Http::OK, mixed $data = null): object
+    function success(mixed $message = null, int $code = Http::OK, mixed $data = null): stdClass
     {
         return response->success($message, $code, $data);
     }
@@ -147,9 +147,9 @@ if (!function_exists('error')) {
      * @param int $code [HTTP status code inside the object]
      * @param mixed|null $data [Extra data inside the object]
      *
-     * @return object
+     * @return stdClass
      */
-    function error(mixed $message = null, int $code = Http::INTERNAL_SERVER_ERROR, mixed $data = null): object
+    function error(mixed $message = null, int $code = Http::INTERNAL_SERVER_ERROR, mixed $data = null): stdClass
     {
         return response->error($message, $code, $data);
     }
@@ -163,9 +163,9 @@ if (!function_exists('warning')) {
      * @param int $code [HTTP status code inside the object]
      * @param mixed|null $data [Extra data inside the object]
      *
-     * @return object
+     * @return stdClass
      */
-    function warning(mixed $message = null, int $code = Http::OK, mixed $data = null): object
+    function warning(mixed $message = null, int $code = Http::OK, mixed $data = null): stdClass
     {
         return response->warning($message, $code, $data);
     }
@@ -179,9 +179,9 @@ if (!function_exists('info')) {
      * @param int $code [HTTP status code inside the object]
      * @param mixed|null $data [Extra data inside the object]
      *
-     * @return object
+     * @return stdClass
      */
-    function info(mixed $message = null, int $code = Http::OK, mixed $data = null): object
+    function info(mixed $message = null, int $code = Http::OK, mixed $data = null): stdClass
     {
         return response->info($message, $code, $data);
     }
@@ -263,13 +263,15 @@ if (!function_exists('isError')) {
     /**
      * Function to check if a response object comes with errors
      *
-     * @param array|object $response [Response object]
+     * @param stdClass|array $response [Response object]
      *
      * @return bool
      */
-    function isError(array|object $response): bool
+    function isError(stdClass|array $response): bool
     {
-        $response = (object) $response;
+        if (is_array($response)) {
+            $response = (object) $response;
+        }
 
         if (empty($response->status)) {
             return false;
@@ -283,13 +285,15 @@ if (!function_exists('isSuccess')) {
     /**
      * Function to check if a response object is successful
      *
-     * @param array|object $response [Response object]
+     * @param stdClass|array $response [Response object]
      *
      * @return bool
      */
-    function isSuccess(array|object $response): bool
+    function isSuccess(stdClass|array $response): bool
     {
-        $response = (object) $response;
+        if (is_array($response)) {
+            $response = (object) $response;
+        }
 
         if (empty($response->status)) {
             return false;

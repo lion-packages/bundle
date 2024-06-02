@@ -209,49 +209,49 @@ class CrudCommand extends MenuCommand
         $this->fileWriter->readFileRows($pathC, [
             8 => [
                 'replace' => false,
-                'content' => "use {$namespacePascal};\n\n"
+                'content' => "use {$namespacePascal};\nuse stdClass;\n"
             ],
-            18 => [
+            19 => [
                 'replace' => true,
                 'content' => "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . ' [Parameter Description]',
                 'search' => '*'
             ],
-            23 => [
+            24 => [
                 'replace' => true,
                 'content' => ("{$entityPascal}({$entityPascal} " . '$' . lcfirst($entityPascal) . ', '),
                 'search' => "{$entityPascal}("
             ],
-            25 => [
+            26 => [
                 'replace' => true,
-                'content' => '($' . lcfirst($entityPascal) . ')',
+                'content' => '($' . lcfirst($entityPascal) . '->capsule())',
                 'search' => '()'
             ],
-            42 => [
+            43 => [
                 'replace' => true,
                 'content' => "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . ' [Parameter Description]',
                 'search' => '*'
             ],
-            48 => [
+            49 => [
                 'replace' => true,
                 'content' => ("{$entityPascal}({$entityPascal} " . '$' . lcfirst($entityPascal) . ', '),
                 'search' => "{$entityPascal}("
             ],
-            50 => [
+            51 => [
                 'replace' => true,
-                'content' => '($' . lcfirst($entityPascal) . ')',
+                'content' => '($' . lcfirst($entityPascal) . '->capsule())',
                 'search' => '()'
             ],
-            55 => [
+            56 => [
                 'replace' => true,
                 'content' => "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . ' [Parameter Description]',
                 'search' => '*'
             ],
-            61 => [
+            62 => [
                 'replace' => true,
                 'content' => ("{$entityPascal}({$entityPascal} " . '$' . lcfirst($entityPascal) . ', '),
                 'search' => "{$entityPascal}("
             ],
-            63 => [
+            64 => [
                 'replace' => true,
                 'content' => '($' . lcfirst($entityPascal) . ')',
                 'search' => '()'
@@ -278,7 +278,7 @@ class CrudCommand extends MenuCommand
                 'replace' => false,
                 'content' => "\nuse {$namespacePascal};\n"
             ],
-            18 => [
+            19 => [
                 'replace' => true,
                 'content' => (
                     "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . " [Parameter Description]\n" .
@@ -286,12 +286,12 @@ class CrudCommand extends MenuCommand
                 ),
                 'search' => '*'
             ],
-            21 => [
+            22 => [
                 'replace' => true,
                 'content' => "({$entityPascal} $" . lcfirst($entityPascal) . ')',
                 'search' => '()'
             ],
-            23 => [
+            24 => [
                 'replace' => true,
                 'multiple' => [
                     [
@@ -304,12 +304,12 @@ class CrudCommand extends MenuCommand
                     ]
                 ]
             ],
-            33 => [
+            35 => [
                 'replace' => true,
                 'content' => "'read_{$entity}'",
                 'search' => "''"
             ],
-            38 => [
+            42 => [
                 'replace' => true,
                 'content' => (
                     "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . " [Parameter Description]\n" .
@@ -317,12 +317,12 @@ class CrudCommand extends MenuCommand
                 ),
                 'search' => '*'
             ],
-            41 => [
+            45 => [
                 'replace' => true,
                 'content' => "({$entityPascal} $" . lcfirst($entityPascal) . ')',
                 'search' => '()'
             ],
-            43 => [
+            47 => [
                 'replace' => true,
                 'multiple' => [
                     [
@@ -335,7 +335,7 @@ class CrudCommand extends MenuCommand
                     ]
                 ]
             ],
-            48 => [
+            53 => [
                 'replace' => true,
                 'content' => (
                     "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . " [Parameter Description]\n" .
@@ -343,12 +343,12 @@ class CrudCommand extends MenuCommand
                 ),
                 'search' => '*'
             ],
-            51 => [
+            56 => [
                 'replace' => true,
                 'content' => "({$entityPascal} $" . lcfirst($entityPascal) . ')',
                 'search' => '()'
             ],
-            53 => [
+            58 => [
                 'replace' => true,
                 'multiple' => [
                     [

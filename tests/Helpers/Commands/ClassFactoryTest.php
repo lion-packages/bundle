@@ -9,6 +9,7 @@ use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
+use stdClass;
 use Tests\Providers\Helpers\ClassFactoryProviderTrait;
 
 class ClassFactoryTest extends Test
@@ -80,7 +81,7 @@ class ClassFactoryTest extends Test
         string $className,
         string $type,
         ?string $visibility,
-        object $return
+        stdClass $return
     ): void {
         $property = $this->classFactory->getProperty($propertyName, $className, $type, $visibility);
 
@@ -124,7 +125,7 @@ class ClassFactoryTest extends Test
     }
 
     #[DataProvider('getGetterProvider')]
-    public function testGetGetter(string $name, string $type, object $return): void
+    public function testGetGetter(string $name, string $type, stdClass $return): void
     {
         $getter = $this->getPrivateMethod('getGetter', [$name, $type]);
 
@@ -134,7 +135,7 @@ class ClassFactoryTest extends Test
     }
 
     #[DataProvider('getSetterProvider')]
-    public function testGetSetter(string $name, string $type, string $capsule, object $return): void
+    public function testGetSetter(string $name, string $type, string $capsule, stdClass $return): void
     {
         $setter = $this->getPrivateMethod('getSetter', [$name, $type, $capsule]);
 

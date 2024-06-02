@@ -136,7 +136,7 @@ class FactoryCommand extends Command
                     public static function definition(): array
                     {
                         return [
-                            fake()->name()
+                            fake()->name(),
                         ];
                     }
                 }

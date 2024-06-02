@@ -8,6 +8,7 @@ use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Bundle\Helpers\FileWriter;
 use Lion\Command\Command;
 use Lion\Database\Drivers\MySQL as DB;
+use stdClass;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -151,7 +152,7 @@ class RulesDBCommand extends MenuCommand
      *
      * @param string $connectionPascal [Connection name in PascalCase format]
      * @param string $entityPascal [Entity name in PascalCase format]
-     * @param object $column [Property object]
+     * @param stdClass $column [Property object]
      * @param string $type [Defines whether the rule type is optional or
      * required]
      * @param OutputInterface $output [OutputInterface is the interface
@@ -162,7 +163,7 @@ class RulesDBCommand extends MenuCommand
     private function generateRule(
         string $connectionPascal,
         string $entityPascal,
-        object $column,
+        stdClass $column,
         string $type,
         OutputInterface $output
     ): void {

@@ -8,6 +8,7 @@ use Lion\Bundle\Helpers\Commands\ComposerFactory;
 use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
 use Lion\Test\Test;
+use stdClass;
 
 class ComposerFactoryTest extends Test
 {
@@ -32,7 +33,7 @@ class ComposerFactoryTest extends Test
         $this->initReflection($this->composerFactory);
     }
 
-    private function getComposerJson(): object
+    private function getComposerJson(): stdClass
     {
         return json_decode((new Store())->get(self::COMPOSER_JSON));
     }

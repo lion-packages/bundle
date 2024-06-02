@@ -27,7 +27,7 @@ TaskQueue::add(
          * Send an email configured in a task queue
          *
          * @param HttpKernel $httpKernel [Kernel for HTTP requests]
-         * @param object $queue [Queued task object]
+         * @param stdClass $queue [Queued task object]
          * @param string $template [HTML Template]
          * @param string $email [Email]
          *
@@ -35,7 +35,7 @@ TaskQueue::add(
          *
          * @throws Exception [Catch an exception if the email has not been sent]
          */
-        function (HttpKernel $httpKernel, object $queue, string $template, string $email): void {
+        function (HttpKernel $httpKernel, stdClass $queue, string $template, string $email): void {
             try {
                 Mailer::account(env('MAIL_NAME'))
                     ->subject('Test Priority')

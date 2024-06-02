@@ -90,7 +90,7 @@ class DBSeedCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if (isError($this->store->exist('./database/Seed/'))) {
+        if (isError($this->store->exist('database/Seed/'))) {
             $output->writeln($this->errorOutput("\t>> SEED: there are no defined seeds"));
 
             return Command::FAILURE;
