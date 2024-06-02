@@ -391,7 +391,7 @@ class PostmanCollection
      *
      * @return void
      */
-    public function addRoutes(array $routes, array $rules): void
+    public function addRoutes(array $routes, array $rules = []): void
     {
         foreach ($routes as $routeUrl => $allRoutes) {
             foreach ($allRoutes as $routeMethod => $routeInfo) {

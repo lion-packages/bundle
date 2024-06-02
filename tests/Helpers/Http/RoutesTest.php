@@ -9,7 +9,6 @@ use Lion\Test\Test;
 
 class RoutesTest extends Test
 {
-    const RULES = ['POST' => []];
     const MIDDLEWARE = ['app' => [], 'framework' => []];
 
     private Routes $routes;
@@ -17,19 +16,6 @@ class RoutesTest extends Test
     protected function setUp(): void
     {
         $this->routes = new Routes();
-    }
-
-    public function testGetRules(): void
-    {
-        $this->routes->setRules(self::RULES);
-
-        $this->assertSame(self::RULES, $this->routes->getRules());
-    }
-
-    public function testSetRules(): void
-    {
-        $this->assertInstanceOf(Routes::class, $this->routes->setRules(self::RULES));
-        $this->assertSame(self::RULES, $this->routes->getRules());
     }
 
     public function testGetMiddleware(): void

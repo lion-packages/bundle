@@ -144,7 +144,7 @@ class PostmanCollectionCommand extends Command
     {
         $this->fetchRoutes();
 
-        $this->postmanCollection->addRoutes($this->routes, Routes::getRules());
+        $this->postmanCollection->addRoutes($this->routes);
 
         $path = storage_path('postman/', false);
 
