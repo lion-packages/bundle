@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\Sockets;
 
+use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Interface\SocketInterface;
 use Lion\Command\Command;
 use Lion\Dependency\Injection\Container;
@@ -155,7 +156,7 @@ class ServerSocketCommand extends Command
         $classList = [];
 
         foreach ($this->container->getFiles('./app/Sockets/') as $file) {
-            if (isSuccess($this->store->validate([$file], ['php']))) {
+            if (isSuccess($this->store->validate([$file], [ClassFactory::PHP_EXTENSION]))) {
                 $classList[] = $this->container->getNamespace($file, 'App\\Sockets\\', 'Sockets/');
             }
         }
