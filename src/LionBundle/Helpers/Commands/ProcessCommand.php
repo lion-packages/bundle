@@ -22,8 +22,7 @@ class ProcessCommand
      * component
      *
      * @param string $commandString [Command that is executed]
-     * @param bool|boolean $showOutput [Enable if the command is executed in
-     * real time]
+     * @param bool $showOutput [Enable if the command is executed in real time]
      *
      * @return void
      *
