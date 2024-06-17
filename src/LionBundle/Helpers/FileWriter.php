@@ -43,9 +43,7 @@ class FileWriter
     {
         $newLine = $this->str->of($originalLine)->replace($row['search'], $row['content'])->get();
 
-        $modifiedLine = str_pad($newLine, strlen($originalLine));
-
-        return $modifiedLine;
+        return str_pad($newLine, strlen($originalLine));
     }
 
     /**
@@ -58,8 +56,6 @@ class FileWriter
      */
     public function readFileRows(string $path, array $rows): void
     {
-        $path = $path;
-
         $file = fopen($path, 'r+');
 
         $rowsFile = file($path);
