@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Lion\Bundle\Helpers\Commands;
 
 use Closure;
-use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
 use stdClass;
