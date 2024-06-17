@@ -1,22 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Lion\Bundle\Commands\Lion\Npm;
 
 use Exception;
 use Lion\Bundle\Helpers\Commands\ProcessCommand;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
-use LogicException;
+use Lion\Command\Command;
+use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * Run the local vite environment for development
- *
- * @package Lion\Bundle\Commands\Lion\Npm
- */
-class NpmRunDevCommand extends MenuCommand
+class NpmRunTestCommand extends MenuCommand
 {
     /**
      * Configures the current command
@@ -26,8 +20,8 @@ class NpmRunDevCommand extends MenuCommand
     protected function configure(): void
     {
         $this
-            ->setName('npm:dev')
-            ->setDescription('Starts the Vite development server');
+            ->setName('npm:test')
+            ->setDescription('Run the tests configured in a vite project');
     }
 
     /**
@@ -45,8 +39,8 @@ class NpmRunDevCommand extends MenuCommand
      *
      * @return int 0 if everything went fine, or an exit code
      *
-     * @throws Exception
      * @throws LogicException When this abstract method is not implemented
+     * @throws Exception
      *
      * @see setCode()
      */
@@ -54,7 +48,7 @@ class NpmRunDevCommand extends MenuCommand
     {
         $project = $this->selectedProject($input, $output);
 
-        ProcessCommand::run("cd ./vite/{$project} && npm run dev");
+        ProcessCommand::run("cd ./vite/{$project} && npm run test");
 
         return Command::SUCCESS;
     }

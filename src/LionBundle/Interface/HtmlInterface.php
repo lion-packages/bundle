@@ -14,7 +14,7 @@ interface HtmlInterface
     /**
      * Define the HTML template
      *
-     * @return void
+     * @return HtmlInterface
      */
     public function template(): HtmlInterface;
 }

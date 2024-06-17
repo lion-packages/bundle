@@ -159,6 +159,8 @@ class ControllerCommand extends Command
                     $factoryController->add("use {$dataModel->namespace}\\{$dataModel->class};\n");
                 }
 
+                $factoryController->add("use Lion\Database\Interface\DatabaseCapsuleInterface;\n");
+
                 $factoryController
                     ->add(
                         <<<EOT
@@ -198,7 +200,7 @@ class ControllerCommand extends Command
                                 ->replace('Controller', '')
                                 ->replace('controller', '')
                                 ->get(),
-                            $method === 'read' ? 'stdClass|array' : 'stdClass',
+                            $method === 'read' ? 'stdClass|array|DatabaseCapsuleInterface' : 'stdClass',
                             (
                                 in_array($method, ['update', 'delete'], true) ? (
                                     $dataModel->class . ' $' . $camelModelClass . ', string $id'
@@ -217,7 +219,7 @@ class ControllerCommand extends Command
                                 ->replace('Controller', '')
                                 ->replace('controller', '')
                                 ->get(),
-                            $method === 'read' ? 'stdClass|array' : 'stdClass',
+                            $method === 'read' ? 'stdClass|array|DatabaseCapsuleInterface' : 'stdClass',
                             (in_array($method, ['update', 'delete'], true) ? 'string $id' : ''),
                             $method === 'read' ? "return [];" : "return success();",
                             'public',

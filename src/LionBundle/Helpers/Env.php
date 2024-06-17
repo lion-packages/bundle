@@ -47,22 +47,13 @@ class Env
     private static function getOption(string $key, mixed $default): mixed
     {
         $transform = function (mixed $value): mixed {
-            switch ($value) {
-                case 'true':
-                case '(true)':
-                    return true;
-                case 'false':
-                case '(false)':
-                    return false;
-                case 'empty':
-                case '(empty)':
-                    return '';
-                case 'null':
-                case '(null)':
-                    return null;
-                default:
-                    return $value;
-            }
+            return match ($value) {
+                'true', '(true)' => true,
+                'false', '(false)' => false,
+                'empty', '(empty)' => '',
+                'null', '(null)' => null,
+                default => $value,
+            };
         };
 
         if (empty($_ENV[$key])) {

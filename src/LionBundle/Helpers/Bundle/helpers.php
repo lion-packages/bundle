@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Carbon\Carbon;
 use Faker\Factory;
 use Faker\Generator;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
 use Lion\Bundle\Enums\LogTypeEnum;
 use Lion\Bundle\Helpers\Env;
@@ -63,6 +64,8 @@ if (!function_exists('fetch')) {
      * headers or parameters]
      *
      * @return Response
+     *
+     * @throws GuzzleException
      */
     function fetch(string $method, string $uri, array $options = []): Response
     {
@@ -75,14 +78,12 @@ if (!function_exists('storage_path')) {
      * Function to get the path of the storage directory
      *
      * @param string $path [directory path]
-     * @param bool|boolean $index [Determines whether to run in the root of the
-     * project or in './public/index.php']
      *
      * @return string
      */
-    function storage_path(string $path = '', bool $index = true): string
+    function storage_path(string $path = ''): string
     {
-        return !$index ? "storage/{$path}" : "../storage/{$path}";
+        return !IS_INDEX ? "storage/{$path}" : "../storage/{$path}";
     }
 }
 
@@ -206,22 +207,19 @@ if (!function_exists('logger')) {
      * Function to add a line to the log file
      *
      * @param string $message [Message or content to add to the log record]
-     * @param string $logType [Log type]
+     * @param LogTypeEnum $logType [Log type]
      * @param array $data [data to add to the log record]
-     * @param bool|boolean $index [Determines whether you are in the root of
-     * the project or in './public/index.php']
      *
      * @return void
      */
     function logger(
         string $message,
         LogTypeEnum $logType = LogTypeEnum::INFO,
-        array $data = [],
-        bool $index = true
+        array $data = []
     ): void {
         $logTypeValue = $logType->value;
 
-        $path = storage_path('logs/monolog/', $index);
+        $path = storage_path('logs/monolog/');
 
         $fileName = "{$path}lion-" . Carbon::now()->format('Y-m-d') . '.log';
 
@@ -299,7 +297,7 @@ if (!function_exists('isSuccess')) {
             return false;
         }
 
-        return in_array($response->status, [Status::SUCCESS], true);
+        return Status::SUCCESS === $response->status;
     }
 }
 

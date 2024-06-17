@@ -138,6 +138,7 @@ class ModelCommand extends Command
                 namespace {$namespace};
 
                 use Lion\Database\Drivers\MySQL as DB;
+                use Lion\Database\Interface\DatabaseCapsuleInterface;
                 use stdClass;
 
                 /**
@@ -153,7 +154,7 @@ class ModelCommand extends Command
         foreach (self::METHODS as $method) {
             $customMethod = $this->classFactory->getCustomMethod(
                 $this->str->of($method . $class)->replace('Model', '')->replace('model', '')->concat('DB')->get(),
-                $method === 'read' ? 'stdClass|array' : 'stdClass',
+                $method === 'read' ? 'stdClass|array|DatabaseCapsuleInterface' : 'stdClass',
                 '',
                 $method === 'read' ? "return DB::view('')\n\t\t\t->select()\n\t\t\t->getAll();" : "return DB::call('', [])\n\t\t\t->execute();",
                 'public',

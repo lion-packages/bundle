@@ -14,7 +14,7 @@ interface FactoryInterface
     /**
      * Defines the factory columns
      *
-     * @return array<string>
+     * @return array<int, string>
      */
     public static function columns(): array;
 
