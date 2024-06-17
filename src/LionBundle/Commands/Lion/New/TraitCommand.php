@@ -114,6 +114,8 @@ class TraitCommand extends Command
 
                 /**
                  * Trait Description 'ExampleTrait'
+                 *
+                 * @package {$namespace}
                  */
                 trait {$class}
                 {

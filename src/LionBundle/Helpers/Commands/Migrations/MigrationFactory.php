@@ -36,7 +36,7 @@ class MigrationFactory
              *
              * @const INDEX
              */
-            const INDEX = null;
+            const ?int INDEX = null;
 
             /**
              * {@inheritdoc}
