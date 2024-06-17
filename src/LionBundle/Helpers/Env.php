@@ -71,7 +71,7 @@ class Env
 
         $value = $transform($_ENV[$key]);
 
-        if (preg_match('/\A([\'"])(.*)\1\z/', $value, $matches)) {
+        if (is_string($value) && preg_match('/\A([\'"])(.*)\1\z/', $value, $matches)) {
             return $matches[2];
         }
 
