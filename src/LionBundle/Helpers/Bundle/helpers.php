@@ -78,14 +78,12 @@ if (!function_exists('storage_path')) {
      * Function to get the path of the storage directory
      *
      * @param string $path [directory path]
-     * @param bool $index [Determines whether to run in the root of the project
-     * or in './public/index.php']
      *
      * @return string
      */
-    function storage_path(string $path = '', bool $index = true): string
+    function storage_path(string $path = ''): string
     {
-        return !$index ? "storage/{$path}" : "../storage/{$path}";
+        return !IS_INDEX ? "storage/{$path}" : "../storage/{$path}";
     }
 }
 
@@ -211,20 +209,17 @@ if (!function_exists('logger')) {
      * @param string $message [Message or content to add to the log record]
      * @param LogTypeEnum $logType [Log type]
      * @param array $data [data to add to the log record]
-     * @param bool $index [Determines whether you are in the root of
-     * the project or in './public/index.php']
      *
      * @return void
      */
     function logger(
         string $message,
         LogTypeEnum $logType = LogTypeEnum::INFO,
-        array $data = [],
-        bool $index = true
+        array $data = []
     ): void {
         $logTypeValue = $logType->value;
 
-        $path = storage_path('logs/monolog/', $index);
+        $path = storage_path('logs/monolog/');
 
         $fileName = "{$path}lion-" . Carbon::now()->format('Y-m-d') . '.log';
 

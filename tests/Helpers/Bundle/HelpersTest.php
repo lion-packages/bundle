@@ -7,6 +7,7 @@ namespace Tests\Helpers\Bundle;
 use Carbon\Carbon;
 use DateTimeZone;
 use Faker\Generator;
+use GuzzleHttp\Exception\GuzzleException;
 use Lion\Bundle\Enums\LogTypeEnum;
 use Lion\Request\Http;
 use Lion\Request\Status;
@@ -22,17 +23,17 @@ class HelpersTest extends Test
     use EnviromentProviderTrait;
     use HelpersProviderTrait;
 
-    const PATH_URL = 'storage/';
-    const PATH_URL_INDEX = '../storage/';
-    const CUSTOM_FOLDER = 'example/';
-    const RESPONSE = ['code' => Http::OK, 'status' => Status::INFO, 'message' => '[index]'];
-    const JSON_RESPONSE = '{"name":"Sleon"}';
-    const CODE = 'code';
-    const STATUS = 'status';
-    const MESSAGE = 'message';
-    const CUSTOM = 'custom';
-    const LOGGER_CONTENT = 'test-logger';
-    const USERS_NAME = 'root';
+    const string PATH_URL = 'storage/';
+    const string PATH_URL_INDEX = '../storage/';
+    const string CUSTOM_FOLDER = 'example/';
+    const array RESPONSE = ['code' => Http::OK, 'status' => Status::INFO, 'message' => '[index]'];
+    const string JSON_RESPONSE = '{"name":"Sleon"}';
+    const string CODE = 'code';
+    const string STATUS = 'status';
+    const string MESSAGE = 'message';
+    const string CUSTOM = 'custom';
+    const string LOGGER_CONTENT = 'test-logger';
+    const string USERS_NAME = 'root';
 
     protected function setUp(): void
     {
@@ -86,21 +87,21 @@ class HelpersTest extends Test
         $this->assertInstanceOf(Carbon::class, now(new DateTimeZone('America/Bogota')));
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function testFetch(): void
     {
-        $response = json_decode(fetch(Http::GET, env('SERVER_URL'))->getBody()->getContents(), true);
+        $fetchResponse = fetch(Http::GET, env('SERVER_URL'))->getBody()->getContents();
+
+        $response = json_decode($fetchResponse, true);
 
         $this->assertSame(self::RESPONSE, $response);
     }
 
     public function testStoragePathForRoot(): void
     {
-        $this->assertSame(self::PATH_URL . self::CUSTOM_FOLDER, storage_path(self::CUSTOM_FOLDER, false));
-    }
-
-    public function testStoragePathForIndex(): void
-    {
-        $this->assertSame(self::PATH_URL_INDEX . self::CUSTOM_FOLDER, storage_path(self::CUSTOM_FOLDER));
+        $this->assertSame(self::PATH_URL . self::CUSTOM_FOLDER, storage_path(self::CUSTOM_FOLDER));
     }
 
     public function testResponse(): void
