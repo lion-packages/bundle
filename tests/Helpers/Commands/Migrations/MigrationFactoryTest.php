@@ -38,7 +38,7 @@ class MigrationFactoryTest extends Test
              *
              * @const INDEX
              */
-            const INDEX = null;
+            const ?int INDEX = null;
 
             /**
              * {@inheritdoc}

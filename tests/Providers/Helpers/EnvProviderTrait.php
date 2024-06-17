@@ -74,6 +74,16 @@ trait EnvProviderTrait
                 'envValue' => null,
                 'return' => null,
             ],
+            [
+                'envKey' => 'NOT_EXIST_ENVIROMENT',
+                'envValue' => false,
+                'return' => false,
+            ],
+            [
+                'envKey' => 'NOT_EXIST_ENVIROMENT',
+                'envValue' => true,
+                'return' => true,
+            ],
         ];
     }
 
