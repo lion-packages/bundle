@@ -13,7 +13,8 @@ class NpmRunTestCommand extends LionNpmRunTestCommand
      */
     protected function configure(): void
     {
-        $this
-            ->setName('test');
+        parent::configure();
+
+        $this->setName('test');
     }
 }
