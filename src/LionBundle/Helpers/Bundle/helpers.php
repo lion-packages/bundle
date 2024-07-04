@@ -77,13 +77,27 @@ if (!function_exists('storage_path')) {
     /**
      * Function to get the path of the storage directory
      *
-     * @param string $path [directory path]
+     * @param string $path [Directory path]
      *
      * @return string
      */
-    function storage_path(string $path = ''): string
+    function storage_path(string $path): string
     {
         return !IS_INDEX ? "storage/{$path}" : "../storage/{$path}";
+    }
+}
+
+if (!function_exists('public_path')) {
+    /**
+     * Function to get the path of the public directory
+     *
+     * @param string $path [Directory path]
+     *
+     * @return string
+     */
+    function public_path(string $path): string
+    {
+        return !IS_INDEX ? "public/{$path}" : $path;
     }
 }
 
