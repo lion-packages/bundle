@@ -28,6 +28,7 @@ services:
             - SYS_ADMIN
         networks:
             - lion
+
     redis:
         image: redis
         container_name: bundle-redis
@@ -42,6 +43,7 @@ services:
             REDIS_DATABASES: 1
         networks:
             - lion
+
     mailhog:
         image: mailhog/mailhog
         container_name: bundle-mailhog
@@ -51,6 +53,7 @@ services:
             - "1025:1025"
         networks:
             - lion
+
     mysql:
         image: mysql
         container_name: bundle-mysql
@@ -64,6 +67,7 @@ services:
             - mysql_data:/var/lib/mysql
         networks:
             - lion
+
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
         container_name: bundle-phpmyadmin
@@ -78,10 +82,12 @@ services:
             MYSQL_ROOT_PASSWORD: lion
         networks:
             - lion
+
 volumes:
     mysql_data:
     redis_data:
         driver: local
+
 networks:
     lion:
         driver: bridge

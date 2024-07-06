@@ -24,6 +24,7 @@ class HelpersTest extends Test
     use HelpersProviderTrait;
 
     const string PATH_URL = 'storage/';
+    const string PUBLIC_PATH_URL = 'public/';
     const string PATH_URL_INDEX = '../storage/';
     const string CUSTOM_FOLDER = 'example/';
     const array RESPONSE = ['code' => Http::OK, 'status' => Status::INFO, 'message' => '[index]'];
@@ -102,6 +103,11 @@ class HelpersTest extends Test
     public function testStoragePathForRoot(): void
     {
         $this->assertSame(self::PATH_URL . self::CUSTOM_FOLDER, storage_path(self::CUSTOM_FOLDER));
+    }
+
+    public function testPublicPathForRoot(): void
+    {
+        $this->assertSame(self::PUBLIC_PATH_URL . self::CUSTOM_FOLDER, public_path(self::CUSTOM_FOLDER));
     }
 
     public function testResponse(): void
