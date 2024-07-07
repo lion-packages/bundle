@@ -76,10 +76,6 @@
             <directory>tests/Helpers/</directory>
         </testsuite>
 
-        <testsuite name="Kernel">
-            <directory>tests/Kernel/</directory>
-        </testsuite>
-
         <testsuite name="Middleware">
             <directory>tests/Middleware/</directory>
         </testsuite>

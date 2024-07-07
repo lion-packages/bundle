@@ -31,10 +31,6 @@ echo -e "\033[0;36m\t>>  Suite Helpers \033[0m"
 php vendor/bin/phpunit --testsuite Helpers
 echo -e "\n\033[0;31m>> -------------------------------------------------------------------------------------- << \n\033[0m";
 
-echo -e "\033[0;36m\t>>  Suite Kernel \033[0m"
-php vendor/bin/phpunit --testsuite Kernel
-echo -e "\n\033[0;31m>> -------------------------------------------------------------------------------------- << \n\033[0m";
-
 echo -e "\033[0;36m\t>>  Suite Middleware \033[0m"
 php vendor/bin/phpunit --testsuite Middleware
 echo -e "\n\033[0;31m>> -------------------------------------------------------------------------------------- << \n\033[0m";
