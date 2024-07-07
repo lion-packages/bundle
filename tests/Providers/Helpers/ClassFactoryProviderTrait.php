@@ -575,32 +575,56 @@ trait ClassFactoryProviderTrait
         return [
             [
                 'type' => 'varchar(100)',
-                'return' => 'string'
+                'return' => 'string',
             ],
             [
                 'type' => 'BLOB',
-                'return' => 'string'
+                'return' => 'string',
             ],
             [
                 'type' => 'ENUM("ONLINE", "OFFLINE")',
-                'return' => 'string'
+                'return' => 'string',
             ],
             [
                 'type' => 'float',
-                'return' => 'float'
+                'return' => 'float',
+            ],
+            [
+                'type' => 'FLOAT',
+                'return' => 'float',
+            ],
+            [
+                'type' => 'floAT',
+                'return' => 'float',
+            ],
+            [
+                'type' => 'FLOat',
+                'return' => 'float',
             ],
             [
                 'type' => 'int',
-                'return' => 'int'
+                'return' => 'int',
             ],
             [
                 'type' => 'int(11)',
-                'return' => 'int'
+                'return' => 'int',
             ],
             [
                 'type' => 'bigint(11)',
-                'return' => 'int'
-            ]
+                'return' => 'int',
+            ],
+            [
+                'type' => 'tinyint(1)',
+                'return' => 'int',
+            ],
+            [
+                'type' => 'TINYINT(1)',
+                'return' => 'int',
+            ],
+            [
+                'type' => 'TINYInt(1)',
+                'return' => 'int',
+            ],
         ];
     }
 }

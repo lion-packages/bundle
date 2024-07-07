@@ -486,9 +486,9 @@ class ClassFactory
      */
     public function getDBType(string $type): string
     {
-        if (preg_match("/^int|bigint/", $type)) {
+        if (preg_match("/int/i", $type)) {
             return 'int';
-        } elseif (preg_match("/^float/", $type)) {
+        } elseif (preg_match("/float/i", $type)) {
             return 'float';
         }
 
