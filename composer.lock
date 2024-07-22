@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3db1273de16e63e1275c06001fe9ec28",
+    "content-hash": "781342ccf236bac30a0ff3f5561892af",
     "packages": [
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -943,16 +943,16 @@
         },
         {
             "name": "lion/database",
-            "version": "v10.0.0",
+            "version": "v10.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/database.git",
-                "reference": "40b3dabcec1310768d5444604ccbc12e8c576816"
+                "reference": "b9a602d5af5ac60144d7763deae2b52e81b673f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/database/zipball/40b3dabcec1310768d5444604ccbc12e8c576816",
-                "reference": "40b3dabcec1310768d5444604ccbc12e8c576816",
+                "url": "https://api.github.com/repos/lion-packages/database/zipball/b9a602d5af5ac60144d7763deae2b52e81b673f5",
+                "reference": "b9a602d5af5ac60144d7763deae2b52e81b673f5",
                 "shasum": ""
             },
             "require": {
@@ -979,7 +979,7 @@
                 "issues": "https://github.com/lion-packages/database/issues",
                 "source": "https://github.com/lion-packages/database"
             },
-            "time": "2024-06-01T19:14:53+00:00"
+            "time": "2024-07-22T20:59:23+00:00"
         },
         {
             "name": "lion/dependency-injection",

@@ -50,7 +50,7 @@
         "fakerphp/faker": "^1.23",
         "guzzlehttp/guzzle": "^7.8",
         "lion/command": "^3.1",
-        "lion/database": "^10.0",
+        "lion/database": "^10.1",
         "lion/dependency-injection": "^2.0",
         "lion/exceptions": "^1.2",
         "lion/files": "^7.0",
