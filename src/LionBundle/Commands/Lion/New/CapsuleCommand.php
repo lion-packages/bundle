@@ -111,7 +111,8 @@ class CapsuleCommand extends Command
                 InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
                 'Defined properties for the capsule',
                 []
-            );
+            )
+            ->addOption('entity', 'e', InputOption::VALUE_OPTIONAL, 'Entity name', '');
     }
 
     /**
@@ -127,17 +128,17 @@ class CapsuleCommand extends Command
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int 0 if everything went fine, or an exit code
+     * @return int [0 if everything went fine, or an exit code]
      *
-     * @throws LogicException When this abstract method is not implemented
-     *
-     * @see setCode()
+     * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $capsule = $input->getArgument('capsule');
 
         $properties = $input->getOption('properties');
+
+        $entity = $input->getOption('entity');
 
         $this->classFactory->classFactory('database/Class/', $capsule);
 
@@ -177,11 +178,14 @@ class CapsuleCommand extends Command
             ->concat("namespace")->spaces(1)
             ->concat($namespace)
             ->concat(";")->ln()->ln()
-            ->concat('use Lion\Bundle\Interface\CapsuleInterface;')->ln()->ln()
-            ->concat("/**\n * Capsule for the '{$class}' entity")->ln();
+            ->concat('use Lion\Bundle\Interface\CapsuleInterface;')->ln()
+            ->concat('use Lion\Bundle\Traits\CapsuleTrait;')->ln()->ln()
+            ->concat("/**\n * Capsule for the '{$class}' entity")->ln()
+            ->concat(' *')->ln()
+            ->concat(' * @property string $entity [Entity name]');
 
         if (count($listMethods) > 0) {
-            $this->str->concat(' *')->ln();
+            $this->str->ln();
         }
 
         foreach ($listMethods as $key => $method) {
@@ -193,18 +197,23 @@ class CapsuleCommand extends Command
             ->concat("class")->spaces(1)
             ->concat($class)->spaces(1)
             ->concat('implements CapsuleInterface')->ln()
-            ->concat("{")->ln();
+            ->concat("{")->ln()
+            ->lt()->concat('use CapsuleTrait;')->ln()->ln()
+            ->lt()->concat(
+                <<<PHP
+                /**
+                     * [Entity name]
+                     *
+                     * @var string \$entity
+                     */
+                    private string \$entity = '{$entity}';
+
+                PHP
+            )->ln();
 
         if (count($properties) > 0) {
             $this->str->lt()->concat($this->arr->of($listProperties)->join("\n\t"))->ln();
         }
-
-        $this->str
-            ->lt()->concat("/**\n\t * {@inheritdoc}\n\t * */")->ln()
-            ->lt()->concat('public function jsonSerialize(): array')->ln()
-            ->lt()->concat('{')->ln()
-            ->lt()->lt()->concat('return get_object_vars($this);')->ln()
-            ->lt()->concat('}')->ln()->ln();
 
         if ($this->arr->of($properties)->length() > 0) {
             $this->str

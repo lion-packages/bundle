@@ -6,9 +6,11 @@ namespace Lion\Bundle\Commands\Lion\DB;
 
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
+use Lion\Bundle\Helpers\DatabaseEngine;
 use Lion\Bundle\Helpers\FileWriter;
 use Lion\Command\Command;
-use Lion\Database\Drivers\MySQL as DB;
+use Lion\Database\Connection;
+use Lion\Database\Driver;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,6 +21,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @property FileWriter $fileWriter [Object of class FileWriter]
  * @property ClassFactory $classFactory [Object of class ClassFactory]
+ * @property DatabaseEngine $databaseEngine [Manages basic database engine
+ * processes]
  *
  * @package Lion\Bundle\Commands\Lion\DB
  */
@@ -29,7 +33,11 @@ class CrudCommand extends MenuCommand
      *
      * @const METHODS
      */
-    const METHODS = ['create', 'update', 'delete'];
+    private const array METHODS = [
+        'create',
+        'update',
+        'delete',
+    ];
 
     /**
      * [Object of class FileWriter]
@@ -46,8 +54,15 @@ class CrudCommand extends MenuCommand
     private ClassFactory $classFactory;
 
     /**
+     * [Manages basic database engine processes]
+     *
+     * @var DatabaseEngine $databaseEngine
+     */
+    private DatabaseEngine $databaseEngine;
+
+    /**
      * @required
-     * */
+     */
     public function setFileWriter(FileWriter $fileWriter): CrudCommand
     {
         $this->fileWriter = $fileWriter;
@@ -57,10 +72,20 @@ class CrudCommand extends MenuCommand
 
     /**
      * @required
-     * */
+     */
     public function setClassFactory(ClassFactory $classFactory): CrudCommand
     {
         $this->classFactory = $classFactory;
+
+        return $this;
+    }
+
+    /**
+     * @required
+     */
+    public function setDatabaseEngine(DatabaseEngine $databaseEngine): CrudCommand
+    {
+        $this->databaseEngine = $databaseEngine;
 
         return $this;
     }
@@ -93,11 +118,9 @@ class CrudCommand extends MenuCommand
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int 0 if everything went fine, or an exit code
+     * @return int [0 if everything went fine, or an exit code]
      *
-     * @throws LogicException When this abstract method is not implemented
-     *
-     * @see setCode()
+     * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -105,11 +128,15 @@ class CrudCommand extends MenuCommand
 
         $selectedConnection = $this->selectConnection($input, $output);
 
-        $connectionPascal = $this->str->of($selectedConnection)->replace('_', ' ')->replace('-', ' ')->pascal()->get();
+        $connectionName = Connection::getConnections()[$selectedConnection]['dbname'];
+
+        $driver = $this->databaseEngine->getDatabaseEngineType($selectedConnection);
+
+        $connectionPascal = $this->str->of($connectionName)->replace('_', ' ')->replace('-', ' ')->pascal()->get();
 
         $entityPascal = $this->str->of($entity)->replace('_', ' ')->replace('-', ' ')->pascal()->get();
 
-        $columns = DB::connection($selectedConnection)->show()->columns()->from($entity)->getAll();
+        $columns = $this->getTableColumns($driver, $selectedConnection, $entity);
 
         if (isError($columns)) {
             $output->writeln($this->errorOutput("\t>>  CRUD: {$columns->message}"));
@@ -120,15 +147,21 @@ class CrudCommand extends MenuCommand
         $this->addDBRules($entity, $output);
 
         $this->addControllerAndModel(
+            $this->databaseEngine->getDriver($driver),
             $entityPascal,
             $connectionPascal,
-            "Database\\Class\\{$connectionPascal}\\MySQL\\{$entityPascal}",
             $entity,
             $columns,
             $output
         );
 
-        $this->addCapsule($entity, $selectedConnection, $entityPascal, $output);
+        $this->addCapsule(
+            $this->databaseEngine->getDriver($driver),
+            $entity,
+            $connectionPascal,
+            $entityPascal,
+            $output
+        );
 
         $output->writeln($this->infoOutput("\n\t>>  CRUD: crud has been generated for the '{$entity}' entity"));
 
@@ -149,15 +182,20 @@ class CrudCommand extends MenuCommand
         $this
             ->getApplication()
             ->find('db:rules')
-            ->run(new ArrayInput(['entity' => $entity]), $output);
+            ->run(
+                new ArrayInput([
+                    'entity' => $entity,
+                ]),
+                $output
+            );
     }
 
     /**
      * Create the controller and model of an entity
      *
+     * @param string $driver [Database engine]
      * @param string $entityPascal [Entity name in pascal-case format]
-     * @param string $connectionPascal [Connection name in pascal-case format]
-     * @param string $namespacePascal [Namespace name in pascal-case format]
+     * @param string $connectionPascal [Database name in pascal-case format]
      * @param string $entity [Entity name]
      * @param array $columns [List of defined columns]
      * @param OutputInterface $output [OutputInterface is the interface
@@ -166,9 +204,9 @@ class CrudCommand extends MenuCommand
      * @return void
      */
     private function addControllerAndModel(
+        string $driver,
         string $entityPascal,
         string $connectionPascal,
-        string $namespacePascal,
         string $entity,
         array $columns,
         OutputInterface $output
@@ -178,8 +216,8 @@ class CrudCommand extends MenuCommand
             ->find('new:controller')
             ->run(
                 new ArrayInput([
-                    'controller' => "{$connectionPascal}/MySQL/{$entityPascal}Controller",
-                    '--model' => "{$connectionPascal}/MySQL/{$entityPascal}Model"
+                    'controller' => "{$connectionPascal}/{$driver}/{$entityPascal}Controller",
+                    '--model' => "{$connectionPascal}/{$driver}/{$entityPascal}Model",
                 ]),
                 $output
             );
@@ -189,7 +227,7 @@ class CrudCommand extends MenuCommand
             ->find('new:test')
             ->run(
                 new ArrayInput([
-                    'test' => "App/Http/Controllers/{$connectionPascal}/MySQL/{$entityPascal}ControllerTest"
+                    'test' => "App/Http/Controllers/{$connectionPascal}/{$driver}/{$entityPascal}ControllerTest",
                 ]),
                 $output
             );
@@ -198,13 +236,17 @@ class CrudCommand extends MenuCommand
             ->getApplication()
             ->find('new:test')
             ->run(
-                new ArrayInput(['test' => "App/Models/{$connectionPascal}/MySQL/{$entityPascal}ModelTest"]),
+                new ArrayInput([
+                    'test' => "App/Models/{$connectionPascal}/{$driver}/{$entityPascal}ModelTest",
+                ]),
                 $output
             );
 
+        $namespacePascal = "Database\\Class\\{$connectionPascal}\\{$driver}\\{$entityPascal}";
+
         $fileC = "{$entityPascal}Controller";
 
-        $pathC = "app/Http/Controllers/{$connectionPascal}/MySQL/{$fileC}.php";
+        $pathC = "app/Http/Controllers/{$connectionPascal}/{$driver}/{$fileC}.php";
 
         $this->fileWriter->readFileRows($pathC, [
             7 => [
@@ -259,117 +301,224 @@ class CrudCommand extends MenuCommand
             ]
         ]);
 
-        $pathM = "app/Models/{$connectionPascal}/MySQL/{$entityPascal}Model.php";
+        $pathM = "app/Models/{$connectionPascal}/{$driver}/{$entityPascal}Model.php";
 
         $gettersCallModel = $this->generateCallGettersModel($entityPascal, $columns);
 
-        $listGettersCallModel = ['create' => '', 'update' => '', 'delete' => ''];
+        if (Driver::MYSQL === $this->str->of($driver)->lower()->get()) {
+            $listGettersCallModel = [
+                'create' => '',
+                'update' => '',
+                'delete' => '',
+            ];
 
-        foreach ($gettersCallModel as $keyGetterCallModel => $method) {
-            foreach ($method as $name) {
-                $listGettersCallModel[$keyGetterCallModel] .= $this->str
-                    ->lt()->lt()->lt()->concat('$')->concat(lcfirst($entityPascal))->concat("->{$name}()")->concat(',')
-                    ->ln()
-                    ->get();
+            foreach ($gettersCallModel as $keyGetterCallModel => $method) {
+                foreach ($method as $name) {
+                    $listGettersCallModel[$keyGetterCallModel] .= $this->str
+                        ->lt()->lt()->lt()->concat('$')->concat(lcfirst($entityPascal))->concat("->{$name}()")->concat(',')
+                        ->ln()
+                        ->get();
+                }
             }
+
+            $this->fileWriter->readFileRows($pathM, [
+                6 => [
+                    'replace' => false,
+                    'content' => "\nuse {$namespacePascal};\n",
+                ],
+                20 => [
+                    'replace' => true,
+                    'content' => (
+                        "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . " [Parameter Description]\n" .
+                        "\t *"
+                    ),
+                    'search' => '*',
+                ],
+                23 => [
+                    'replace' => true,
+                    'content' => "({$entityPascal} $" . lcfirst($entityPascal) . ')',
+                    'search' => '()',
+                ],
+                25 => [
+                    'replace' => true,
+                    'multiple' => [
+                        [
+                            'content' => "'create_{$entity}'",
+                            'search' => "''",
+                        ],
+                        [
+                            'content' => "[\n{$listGettersCallModel['create']}\t\t]",
+                            'search' => '[]',
+                        ],
+                    ],
+                ],
+                36 => [
+                    'replace' => true,
+                    'content' => "'{$entity}'",
+                    'search' => "''",
+                ],
+                43 => [
+                    'replace' => true,
+                    'content' => (
+                        "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . " [Parameter Description]\n" .
+                        "\t *"
+                    ),
+                    'search' => '*',
+                ],
+                46 => [
+                    'replace' => true,
+                    'content' => "({$entityPascal} $" . lcfirst($entityPascal) . ')',
+                    'search' => '()',
+                ],
+                48 => [
+                    'replace' => true,
+                    'multiple' => [
+                        [
+                            'content' => "'update_{$entity}'",
+                            'search' => "''",
+                        ],
+                        [
+                            'content' => "[\n{$listGettersCallModel['update']}\t\t]",
+                            'search' => '[]',
+                        ],
+                    ],
+                ],
+                54 => [
+                    'replace' => true,
+                    'content' => (
+                        "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . " [Parameter Description]\n" .
+                        "\t *"
+                    ),
+                    'search' => '*',
+                ],
+                57 => [
+                    'replace' => true,
+                    'content' => "({$entityPascal} $" . lcfirst($entityPascal) . ')',
+                    'search' => '()',
+                ],
+                59 => [
+                    'replace' => true,
+                    'multiple' => [
+                        [
+                            'content' => "'delete_{$entity}'",
+                            'search' => "''",
+                        ],
+                        [
+                            'content' => "[\n{$listGettersCallModel['delete']}\t\t]",
+                            'search' => '[]',
+                        ],
+                    ],
+                ],
+            ]);
         }
 
-        $this->fileWriter->readFileRows($pathM, [
-            6 => [
-                'replace' => false,
-                'content' => "\nuse {$namespacePascal};\n"
-            ],
-            20 => [
-                'replace' => true,
-                'content' => (
-                    "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . " [Parameter Description]\n" .
-                    "\t *"
-                ),
-                'search' => '*'
-            ],
-            23 => [
-                'replace' => true,
-                'content' => "({$entityPascal} $" . lcfirst($entityPascal) . ')',
-                'search' => '()'
-            ],
-            25 => [
-                'replace' => true,
-                'multiple' => [
-                    [
-                        'content' => "'create_{$entity}'",
-                        'search' => "''"
+        if (Driver::PostgreSQL === $this->str->of($driver)->lower()->get()) {
+            $this->fileWriter->readFileRows($pathM, [
+                6 => [
+                    'replace' => false,
+                    'content' => "\nuse {$namespacePascal};\n",
+                ],
+                7 => [
+                    'replace' => true,
+                    'search' => 'use Lion\Database\Drivers\MySQL as DB;',
+                    'content' => 'use Lion\Database\Drivers\PostgreSQL as DB;',
+                ],
+                20 => [
+                    'replace' => true,
+                    'search' => '*',
+                    'content' => (
+                        "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . " [Parameter Description]\n" .
+                        "\t *"
+                    ),
+                ],
+                23 => [
+                    'replace' => true,
+                    'content' => "({$entityPascal} $" . lcfirst($entityPascal) . ')',
+                    'search' => '()',
+                ],
+                25 => [
+                    'replace' => true,
+                    'multiple' => [
+                        [
+                            'search' => 'call',
+                            'content' => 'query',
+                        ],
+                        [
+                            'content' => '',
+                            'search' => ', []',
+                        ],
                     ],
-                    [
-                        'content' => "[\n{$listGettersCallModel['create']}\t\t]",
-                        'search' => '[]'
-                    ]
-                ]
-            ],
-            36 => [
-                'replace' => true,
-                'content' => "'read_{$entity}'",
-                'search' => "''"
-            ],
-            43 => [
-                'replace' => true,
-                'content' => (
-                    "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . " [Parameter Description]\n" .
-                    "\t *"
-                ),
-                'search' => '*'
-            ],
-            46 => [
-                'replace' => true,
-                'content' => "({$entityPascal} $" . lcfirst($entityPascal) . ')',
-                'search' => '()'
-            ],
-            48 => [
-                'replace' => true,
-                'multiple' => [
-                    [
-                        'content' => "'update_{$entity}'",
-                        'search' => "''"
+                ],
+                36 => [
+                    'replace' => true,
+                    'search' => 'table',
+                    'content' => 'query',
+                ],
+                37 => [
+                    'remove' => true,
+                ],
+                43 => [
+                    'replace' => true,
+                    'content' => (
+                        "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . " [Parameter Description]\n" .
+                        "\t *"
+                    ),
+                    'search' => '*',
+                ],
+                46 => [
+                    'replace' => true,
+                    'content' => "({$entityPascal} $" . lcfirst($entityPascal) . ')',
+                    'search' => '()',
+                ],
+                48 => [
+                    'replace' => true,
+                    'multiple' => [
+                        [
+                            'search' => 'call',
+                            'content' => 'query',
+                        ],
+                        [
+                            'content' => "",
+                            'search' => ', []',
+                        ],
                     ],
-                    [
-                        'content' => "[\n{$listGettersCallModel['update']}\t\t]",
-                        'search' => '[]'
-                    ]
-                ]
-            ],
-            54 => [
-                'replace' => true,
-                'content' => (
-                    "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . " [Parameter Description]\n" .
-                    "\t *"
-                ),
-                'search' => '*'
-            ],
-            57 => [
-                'replace' => true,
-                'content' => "({$entityPascal} $" . lcfirst($entityPascal) . ')',
-                'search' => '()'
-            ],
-            59 => [
-                'replace' => true,
-                'multiple' => [
-                    [
-                        'content' => "'delete_{$entity}'",
-                        'search' => "''"
+                ],
+                54 => [
+                    'replace' => true,
+                    'content' => (
+                        "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . " [Parameter Description]\n" .
+                        "\t *"
+                    ),
+                    'search' => '*',
+                ],
+                57 => [
+                    'replace' => true,
+                    'content' => "({$entityPascal} $" . lcfirst($entityPascal) . ')',
+                    'search' => '()',
+                ],
+                59 => [
+                    'replace' => true,
+                    'multiple' => [
+                        [
+                            'search' => 'call',
+                            'content' => 'query',
+                        ],
+                        [
+                            'content' => "",
+                            'search' => ', []',
+                        ],
                     ],
-                    [
-                        'content' => "[\n{$listGettersCallModel['delete']}\t\t]",
-                        'search' => '[]'
-                    ]
-                ]
-            ]
-        ]);
+                ],
+            ]);
+        }
     }
 
     /**
      * Create an entity capsule
      *
+     * @param string $driver [Database engine]
      * @param string $entity [Entity name]
-     * @param string $selectedConnection [Selected connection]
+     * @param string $connectionPascal [Database name in pascal-case format]
      * @param string $entityPascal [Entity name in pascal-case format]
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
@@ -377,21 +526,29 @@ class CrudCommand extends MenuCommand
      * @return void
      */
     private function addCapsule(
+        string $driver,
         string $entity,
-        string $selectedConnection,
+        string $connectionPascal,
         string $entityPascal,
         OutputInterface $output
     ): void {
         $this
             ->getApplication()
             ->find('db:capsule')
-            ->run(new ArrayInput(['entity' => $entity]), $output);
+            ->run(
+                new ArrayInput([
+                    'entity' => $entity,
+                ]),
+                $output
+            );
 
         $this
             ->getApplication()
             ->find('new:test')
             ->run(
-                new ArrayInput(['test' => "Database/Class/{$selectedConnection}/MySQL/{$entityPascal}Test",]),
+                new ArrayInput([
+                    'test' => "Database/Class/{$connectionPascal}/{$driver}/{$entityPascal}Test",
+                ]),
                 $output
             );
     }
@@ -409,7 +566,7 @@ class CrudCommand extends MenuCommand
     {
         $methods = ['create' => [], 'update' => [], 'delete' => []];
 
-        foreach (['create', 'update', 'delete'] as $method) {
+        foreach (self::METHODS as $method) {
             foreach ($columns as $column) {
                 $getter = $this->classFactory->getProperty(
                     $column->Field,

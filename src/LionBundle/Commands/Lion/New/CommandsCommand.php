@@ -85,8 +85,6 @@ class CommandsCommand extends Command
      * @return int 0 if everything went fine, or an exit code
      *
      * @throws LogicException When this abstract method is not implemented
-     *
-     * @see setCode()
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -149,9 +147,6 @@ class CommandsCommand extends Command
                      * @param OutputInterface \$output [OutputInterface is the interface
                      * implemented by all Output classes]
                      *
-                     * @see InputInterface::bind()
-                     * @see InputInterface::validate()
-                     *
                      * @return void
                      */
                     protected function initialize(InputInterface \$input, OutputInterface \$output): void
@@ -190,11 +185,9 @@ class CommandsCommand extends Command
                      * @param OutputInterface \$output [OutputInterface is the interface
                      * implemented by all Output classes]
                      *
-                     * @return int 0 if everything went fine, or an exit code
+                     * @return int [0 if everything went fine, or an exit code]
                      *
-                     * @throws LogicException When this abstract method is not implemented
-                     *
-                     * @see setCode()
+                     * @throws LogicException [When this abstract method is not implemented]
                      */
                     protected function execute(InputInterface \$input, OutputInterface \$output): int
                     {

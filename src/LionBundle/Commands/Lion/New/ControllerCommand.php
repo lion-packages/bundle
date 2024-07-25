@@ -31,21 +31,26 @@ class ControllerCommand extends Command
      *
      * @const METHODS
      */
-    const METHODS = ['create', 'read', 'update', 'delete'];
+    private const array METHODS = [
+        'create',
+        'read',
+        'update',
+        'delete',
+    ];
 
     /**
      * [Controller path]
      *
      * @const PATH_CONTROLLER
      */
-    const PATH_CONTROLLER = 'app/Http/Controllers/';
+    private const string PATH_CONTROLLER = 'app/Http/Controllers/';
 
     /**
      * [Model path]
      *
      * @const PATH_MODEL
      */
-    const PATH_MODEL = 'app/models/';
+    private const string PATH_MODEL = 'app/models/';
 
     /**
      * [ClassCommandFactory class object]
@@ -111,15 +116,14 @@ class ControllerCommand extends Command
      * @return int 0 if everything went fine, or an exit code
      *
      * @throws LogicException When this abstract method is not implemented
-     *
-     * @see setCode()
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         return $this->classCommandFactory
             ->setFactories(['controller', 'model'])
-            ->execute(function (ClassCommandFactory $classFactory, Store $store) use ($input, $output) {
+            ->execute(function (ClassCommandFactory $classFactory, Store $store) use ($input, $output): int {
                 $controller = $input->getArgument('controller');
+
                 $model = $input->getOption('model');
 
                 if (null === $model) {
@@ -138,12 +142,12 @@ class ControllerCommand extends Command
 
                 $dataController = $classFactory->getData($factoryController, [
                     'path' => self::PATH_CONTROLLER,
-                    'class' => $controller
+                    'class' => $controller,
                 ]);
 
                 $dataModel = $classFactory->getData($factoryModel, [
                     'path' => self::PATH_MODEL,
-                    'class' => $model
+                    'class' => $model,
                 ]);
 
                 $camelModelClass = lcfirst($dataModel->class);
@@ -152,18 +156,25 @@ class ControllerCommand extends Command
 
                 $factoryController
                     ->create($dataController->class, ClassFactory::PHP_EXTENSION, $dataController->folder)
-                    ->add("<?php\n\ndeclare(strict_types=1);\n\n")
-                    ->add("namespace {$dataController->namespace};\n\n");
+                    ->add(
+                        <<<PHP
+                        <?php
+
+                        declare(strict_types=1);
+
+                        namespace {$dataController->namespace};
+
+                        PHP
+                    );
 
                 if ('none' != $model) {
-                    $factoryController->add("use {$dataModel->namespace}\\{$dataModel->class};\n");
+                    $factoryController->add("\nuse {$dataModel->namespace}\\{$dataModel->class};\n");
                 }
-
-                $factoryController->add("use Lion\Database\Interface\DatabaseCapsuleInterface;\n");
 
                 $factoryController
                     ->add(
                         <<<EOT
+                        use Lion\Database\Interface\DatabaseCapsuleInterface;
                         use stdClass;
 
                         /**

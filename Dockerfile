@@ -10,7 +10,7 @@ RUN useradd -m lion && echo 'lion:lion' | chpasswd && usermod -aG sudo lion && u
 # Dependencies
 RUN apt-get update -y \
     && apt-get install -y sudo nano zsh git default-mysql-client curl wget unzip cron sendmail golang-go \
-    && apt-get install -y libpng-dev libzip-dev zlib1g-dev libonig-dev supervisor libevent-dev libssl-dev \
+    && apt-get install -y libpq-dev libpng-dev libzip-dev zlib1g-dev libonig-dev supervisor libevent-dev libssl-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -24,8 +24,8 @@ RUN apt-get update -y \
 
 # Configure PHP-Extensions
 RUN pecl install ev redis xdebug \
-    && docker-php-ext-install mbstring gd pdo_mysql mysqli zip \
-    && docker-php-ext-enable gd zip redis xdebug \
+    && docker-php-ext-install mbstring gd zip pdo pdo_mysql pdo_pgsql \
+    && docker-php-ext-enable xdebug redis gd zip pdo_pgsql \
     && a2enmod rewrite
 
 # Configure Xdebug

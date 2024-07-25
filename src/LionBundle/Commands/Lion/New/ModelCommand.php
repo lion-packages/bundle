@@ -110,8 +110,6 @@ class ModelCommand extends Command
      * @return int 0 if everything went fine, or an exit code
      *
      * @throws LogicException When this abstract method is not implemented
-     *
-     * @see setCode()
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -156,7 +154,7 @@ class ModelCommand extends Command
                 $this->str->of($method . $class)->replace('Model', '')->replace('model', '')->concat('DB')->get(),
                 $method === 'read' ? 'stdClass|array|DatabaseCapsuleInterface' : 'stdClass',
                 '',
-                $method === 'read' ? "return DB::view('')\n\t\t\t->select()\n\t\t\t->getAll();" : "return DB::call('', [])\n\t\t\t->execute();",
+                $method === 'read' ? "return DB::table('')\n\t\t\t->select()\n\t\t\t->getAll();" : "return DB::call('', [])\n\t\t\t->execute();",
                 'public',
                 $method === 'delete' ? 1 : 2
             );

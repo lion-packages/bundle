@@ -7,12 +7,13 @@ namespace Tests\Commands\Lion\DB;
 use Lion\Bundle\Commands\Lion\DB\RulesDBCommand;
 use Lion\Bundle\Commands\Lion\New\RulesCommand;
 use Lion\Command\Command;
-use Lion\Command\Kernel;
 use Lion\Database\Drivers\Schema\MySQL as Schema;
 use Lion\Dependency\Injection\Container;
 use Lion\Route\Helpers\Rules;
 use Lion\Route\Interface\RulesInterface;
 use Lion\Test\Test;
+use PHPUnit\Framework\Attributes\Test as Testing;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tests\Providers\ConnectionProviderTrait;
 
@@ -23,7 +24,6 @@ class RulesDBCommandTest extends Test
     const ENTITY = 'users';
     const IDRULE_NAMESPACE = 'App\\Rules\\LionDatabase\\MySQL\\Users\\IdRule';
     const NAMERULE_NAMESPACE = 'App\\Rules\\LionDatabase\\MySQL\\Users\\NameRule';
-    // const LASTNAMERULE_NAMESPACE = 'App\\Rules\\LionDatabase\\MySQL\\Users\\LastNameRule';
     const LASTNAMERULE_NAMESPACE_REQUIRED = 'App\\Rules\\LionDatabase\\MySQL\\Users\\LastNameRequiredRule';
     const LASTNAMERULE_NAMESPACE_OPTIONAL = 'App\\Rules\\LionDatabase\\MySQL\\Users\\LastNameOptionalRule';
     const EMAILRULE_NAMESPACE = 'App\\Rules\\LionDatabase\\MySQL\\Users\\EmailRule';
@@ -34,15 +34,12 @@ class RulesDBCommandTest extends Test
     {
         $this->runDatabaseConnections();
 
-        Schema::createTable(self::ENTITY, function () {
-            Schema::int('id')->notNull()->autoIncrement()->primaryKey();
-            Schema::varchar('name', 25)->notNull()->comment('username');
-            Schema::varchar('last_name', 25)->null()->default('N/A');
-            Schema::varchar('email', 150)->notNull()->comment('user email');
-        })->execute();
+        $this->createTables();
 
-        $application = (new Kernel())->getApplication();
+        $application = new Application();
+
         $application->add((new Container())->injectDependencies(new RulesCommand()));
+
         $application->add((new Container())->injectDependencies(new RulesDBCommand()));
 
         $this->commandTester = new CommandTester($application->find('db:rules'));
@@ -55,21 +52,41 @@ class RulesDBCommandTest extends Test
         Schema::dropTable(self::ENTITY)->execute();
     }
 
+    private function createTables(): void
+    {
+        Schema::connection(env('DB_NAME'))
+            ->createTable(self::ENTITY, function (): void {
+                Schema::int('id')->notNull()->autoIncrement()->primaryKey();
+                Schema::varchar('name', 25)->notNull()->comment('username');
+                Schema::varchar('last_name', 25)->null()->default('N/A');
+                Schema::varchar('email', 150)->notNull()->comment('user email');
+            })
+            ->execute();
+    }
+
     private function assertColumn(string $display, string $namespace, array $options): void
     {
+        $this->assertStringContainsString($namespace, $display);
+
         $rules = new $namespace();
 
-        $this->assertInstances($rules, [Rules::class, RulesInterface::class]);
-        $this->assertStringContainsString($namespace, $display);
+        $this->assertInstances($rules, [
+            Rules::class,
+            RulesInterface::class,
+        ]);
+
         $this->assertSame($options['field'], $rules->field);
         $this->assertSame($options['desc'], $rules->desc);
         $this->assertSame($options['value'], $rules->value);
         $this->assertSame($options['disabled'], $rules->disabled);
     }
 
-    public function testExecute(): void
+    #[Testing]
+    public function execute(): void
     {
-        $this->assertSame(Command::SUCCESS, $this->commandTester->execute(['entity' => self::ENTITY]));
+        $execute = $this->commandTester->setInputs(['0'])->execute(['entity' => self::ENTITY]);
+
+        $this->assertSame(Command::SUCCESS, $execute);
 
         $display = $this->commandTester->getDisplay();
 
@@ -107,5 +124,9 @@ class RulesDBCommandTest extends Test
             'value' => '',
             'disabled' => false
         ]);
+
+        unset($_ENV['SELECTED_CONNECTION']);
+
+        $this->assertArrayNotHasKey('SELECTED_CONNECTION', $_ENV);
     }
 }

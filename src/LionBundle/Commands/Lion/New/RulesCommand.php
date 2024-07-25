@@ -84,8 +84,6 @@ class RulesCommand extends Command
      * @return int 0 if everything went fine, or an exit code
      *
      * @throws LogicException When this abstract method is not implemented
-     *
-     * @see setCode()
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -147,7 +145,7 @@ class RulesCommand extends Command
                      *
                      * @var string \$value;
                      */
-                    public string \$value = '';
+                    public string \$value = "";
 
                     /**
                      * [Defines whether the column is optional for postman collections]
