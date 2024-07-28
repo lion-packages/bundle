@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Lion\Bundle\Commands\Lion\Migrations;
 
 use Lion\Command\Command;
+use Lion\Database\Connection;
 use Lion\Database\Drivers\MySQL as DB;
 use Lion\Database\Drivers\Schema\MySQL as Schema;
+use LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -42,17 +44,15 @@ class EmptyMigrationsCommand extends Command
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int 0 if everything went fine, or an exit code
+     * @return int [0 if everything went fine, or an exit code]
      *
-     * @throws LogicException When this abstract method is not implemented
-     *
-     * @see setCode()
+     * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $connections = Schema::getConnections();
+        $connections = Connection::getConnections();
 
-        foreach ($connections['connections'] as $connectionName => $connection) {
+        foreach ($connections as $connectionName => $connection) {
             $tables = DB::connection($connectionName)->show()->tables()->getAll();
 
             if (!is_array($tables) && isSuccess($tables)) {
@@ -86,7 +86,7 @@ class EmptyMigrationsCommand extends Command
             }
         }
 
-        $output->writeln($this->infoOutput("\n\t>> All tables have been truncated"));
+        $output->writeln($this->infoOutput("\n\t>> all tables have been truncated"));
 
         return Command::SUCCESS;
     }

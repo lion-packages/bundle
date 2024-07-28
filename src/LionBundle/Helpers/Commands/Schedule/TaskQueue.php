@@ -70,7 +70,7 @@ class TaskQueue
                 'task_queue_type' => $queueType,
                 'task_queue_data' => $json,
                 'task_queue_status' => TaskStatusEnum::PENDING->value,
-                'task_queue_attempts' => 0
+                'task_queue_attempts' => 0,
             ])
             ->execute();
 

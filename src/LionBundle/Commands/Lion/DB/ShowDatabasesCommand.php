@@ -62,22 +62,21 @@ class ShowDatabasesCommand extends Command
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int 0 if everything went fine, or an exit code
+     * @return int [0 if everything went fine, or an exit code]
      *
-     * @throws LogicException When this abstract method is not implemented
-     *
-     * @see setCode()
+     * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $connections = DB::getConnections();
 
-        $size = $this->arr->of($connections['connections'])->length();
+        $size = $this->arr->of($connections)->length();
 
         $listConnections = [];
 
-        foreach ($connections['connections'] as $connection) {
+        foreach ($connections as $connectionName => $connection) {
             $item = [
+                'connectionName' => $this->infoOutput($connectionName),
                 'type' => "<fg=#FFB63E>{$connection['type']}</>",
                 'host' => $connection['host'],
                 'port' => $connection['port'],
@@ -85,18 +84,27 @@ class ShowDatabasesCommand extends Command
                 'user' => $connection['user']
             ];
 
-            if ($connection['dbname'] === $connections['default']) {
-                $item['dbname'] = "{$connection['dbname']} <fg=#FFB63E>(default)</>";
-            } else {
-                $item['dbname'] = $connection['dbname'];
-            }
+            $item['dbname'] = $connection['dbname'];
+
+            // if ($connection['dbname'] === $connections['default']) {
+            //     $item['dbname'] = "{$connection['dbname']} <fg=#FFB63E>(default)</>";
+            // } else {
+            //     $item['dbname'] = $connection['dbname'];
+            // }
 
             $listConnections[] = $item;
         }
 
         (new Table($output))
             ->setHeaderTitle('<info> DATABASE CONNECTIONS </info>')
-            ->setHeaders(['DATABASE CONNECTION', 'DATABASE HOST', 'DATABASE PORT', 'DATABASE NAME', 'DATABASE USER'])
+            ->setHeaders([
+                'CONNECTION NAME',
+                'DRIVER CONNECTION',
+                'DATABASE HOST',
+                'DATABASE PORT',
+                'DATABASE NAME',
+                'DATABASE USER',
+            ])
             ->setFooterTitle(
                 $size > 1
                     ? "<info> Showing [{$size}] connections </info>"

@@ -6,21 +6,22 @@ namespace Tests\Commands\Lion\Migrations;
 
 use Lion\Bundle\Commands\Lion\Migrations\EmptyMigrationsCommand;
 use Lion\Command\Command;
-use Lion\Command\Kernel;
-use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class EmptyMigrationsCommandTest extends Test
 {
-    const OUTPUT_MESSAGE = 'All tables have been truncated';
+    const OUTPUT_MESSAGE = 'all tables have been truncated';
 
     private CommandTester $commandTester;
 
     protected function setUp(): void
     {
-        $application = (new Kernel())->getApplication();
-        $application->add((new Container())->injectDependencies(new EmptyMigrationsCommand()));
+        $application = new Application();
+
+        $application->add(new EmptyMigrationsCommand());
+
         $this->commandTester = new CommandTester($application->find('migrate:empty'));
     }
 

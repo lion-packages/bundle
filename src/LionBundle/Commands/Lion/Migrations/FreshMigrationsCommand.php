@@ -12,6 +12,7 @@ use Lion\Command\Command;
 use Lion\Database\Drivers\Schema\MySQL as Schema;
 use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
+use LogicException;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -96,9 +97,6 @@ class FreshMigrationsCommand extends Command
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @see InputInterface::bind()
-     * @see InputInterface::validate()
-     *
      * @return void
      */
     protected function initialize(InputInterface $input, OutputInterface $output): void
@@ -119,11 +117,9 @@ class FreshMigrationsCommand extends Command
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int 0 if everything went fine, or an exit code
+     * @return int [0 if everything went fine, or an exit code]
      *
-     * @throws LogicException When this abstract method is not implemented
-     *
-     * @see setCode()
+     * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -212,11 +208,11 @@ class FreshMigrationsCommand extends Command
     {
         $connections = Schema::getConnections();
 
-        foreach ($connections['connections'] as $connection) {
+        foreach ($connections as $connection) {
             $response = Schema::dropTables()->execute();
 
             if (isError($response)) {
-                $this->output->writeln($this->warningOutput("\t>> DATABASE: {$connection->dbname}"));
+                $this->output->writeln($this->warningOutput("\t>> DATABASE: {$connection['dbname']}"));
 
                 $this->output->writeln($this->errorOutput("\t>> DATABASE: {$response->message}"));
             }

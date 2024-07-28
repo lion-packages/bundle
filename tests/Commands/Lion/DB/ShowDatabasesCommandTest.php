@@ -6,9 +6,10 @@ namespace Tests\Commands\Lion\DB;
 
 use Lion\Bundle\Commands\Lion\DB\ShowDatabasesCommand;
 use Lion\Command\Command;
-use Lion\Command\Kernel;
 use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
+use PHPUnit\Framework\Attributes\Test as Testing;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tests\Providers\ConnectionProviderTrait;
 
@@ -16,23 +17,26 @@ class ShowDatabasesCommandTest extends Test
 {
     use ConnectionProviderTrait;
 
-    const MYSQL = 'mysql';
-    const PORT = '3306';
-    const DATABASE_NAME = 'lion_database (default)';
-    const DATABASE_USER = 'root';
+    private const string MYSQL = 'mysql';
+    private const string PORT = '3306';
+    private const string DATABASE_NAME = 'lion_database';
+    private const string DATABASE_USER = 'root';
 
     private CommandTester $commandTester;
 
     protected function setUp(): void
     {
-        $application = (new Kernel())->getApplication();
-        $application->add((new Container())->injectDependencies(new ShowDatabasesCommand()));
-        $this->commandTester = new CommandTester($application->find('db:show'));
-
         $this->runDatabaseConnections();
+
+        $application = new Application();
+
+        $application->add((new Container())->injectDependencies(new ShowDatabasesCommand()));
+
+        $this->commandTester = new CommandTester($application->find('db:show'));
     }
 
-    public function testExecute(): void
+    #[Testing]
+    public function execute(): void
     {
         $this->assertSame(Command::SUCCESS, $this->commandTester->execute([]));
 

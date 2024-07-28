@@ -25,9 +25,9 @@ class TaskQueueTest extends Test
     use ConnectionProviderTrait;
     use TaskQueueProviderTrait;
 
-    const MESSAGE = 'the schema for queued tasks has been created';
-    const TASK_QUEUE_NAME = 'send:email:test';
-    const TASK_QUEUE_TIME = 3;
+    private const string MESSAGE = 'the schema for queued tasks has been created';
+    private const string TASK_QUEUE_NAME = 'send:email:test';
+    private const int TASK_QUEUE_TIME = 3;
 
     private TaskQueue $taskQueue;
 
@@ -48,7 +48,10 @@ class TaskQueueTest extends Test
     {
         Schema::dropTable('task_queue')->execute();
 
-        DB::run($this->backupConnections);
+        DB::run([
+            'default' => env('DB_NAME'),
+            'connections' => $this->backupConnections,
+        ]);
     }
 
     #[DataProvider('addProvider')]
@@ -116,21 +119,19 @@ class TaskQueueTest extends Test
     {
         $connections = DB::getConnections();
 
-        $this->assertArrayHasKey('connections', $connections);
-        $this->assertArrayHasKey('lion_database', $connections['connections']);
-        $this->assertArrayHasKey('dbname', $connections['connections']['lion_database']);
+        $this->assertArrayHasKey('lion_database', $connections);
+        $this->assertArrayHasKey('dbname', $connections['lion_database']);
 
         $code = uniqid('code-');
 
-        $connections['connections']['lion_database']['dbname'] = $code;
+        $connections['lion_database']['dbname'] = $code;
 
-        DB::addConnections('lion_database', $connections['connections']['lion_database']);
+        DB::addConnection('lion_database', $connections['lion_database']);
 
         $connections = DB::getConnections();
 
-        $this->assertArrayHasKey('connections', $connections);
-        $this->assertArrayHasKey('lion_database', $connections['connections']);
-        $this->assertSame($code, $connections['connections']['lion_database']['dbname']);
+        $this->assertArrayHasKey('lion_database', $connections);
+        $this->assertSame($code, $connections['lion_database']['dbname']);
         $this->expectException(Exception::class);
         $this->expectExceptionCode(Http::INTERNAL_SERVER_ERROR);
 
@@ -202,21 +203,19 @@ class TaskQueueTest extends Test
     {
         $connections = DB::getConnections();
 
-        $this->assertArrayHasKey('connections', $connections);
-        $this->assertArrayHasKey('lion_database', $connections['connections']);
-        $this->assertArrayHasKey('dbname', $connections['connections']['lion_database']);
+        $this->assertArrayHasKey('lion_database', $connections);
+        $this->assertArrayHasKey('dbname', $connections['lion_database']);
 
         $code = uniqid('code-');
 
-        $connections['connections']['lion_database']['dbname'] = $code;
+        $connections['lion_database']['dbname'] = $code;
 
-        DB::addConnections('lion_database', $connections['connections']['lion_database']);
+        DB::addConnection('lion_database', $connections['lion_database']);
 
         $connections = DB::getConnections();
 
-        $this->assertArrayHasKey('connections', $connections);
-        $this->assertArrayHasKey('lion_database', $connections['connections']);
-        $this->assertSame($code, $connections['connections']['lion_database']['dbname']);
+        $this->assertArrayHasKey('lion_database', $connections);
+        $this->assertSame($code, $connections['lion_database']['dbname']);
         $this->expectException(Exception::class);
         $this->expectExceptionCode(Http::INTERNAL_SERVER_ERROR);
 
@@ -276,21 +275,19 @@ class TaskQueueTest extends Test
     {
         $connections = DB::getConnections();
 
-        $this->assertArrayHasKey('connections', $connections);
-        $this->assertArrayHasKey('lion_database', $connections['connections']);
-        $this->assertArrayHasKey('dbname', $connections['connections']['lion_database']);
+        $this->assertArrayHasKey('lion_database', $connections);
+        $this->assertArrayHasKey('dbname', $connections['lion_database']);
 
         $code = uniqid('code-');
 
-        $connections['connections']['lion_database']['dbname'] = $code;
+        $connections['lion_database']['dbname'] = $code;
 
-        DB::addConnections('lion_database', $connections['connections']['lion_database']);
+        DB::addConnection('lion_database', $connections['lion_database']);
 
         $connections = DB::getConnections();
 
-        $this->assertArrayHasKey('connections', $connections);
-        $this->assertArrayHasKey('lion_database', $connections['connections']);
-        $this->assertSame($code, $connections['connections']['lion_database']['dbname']);
+        $this->assertArrayHasKey('lion_database', $connections);
+        $this->assertSame($code, $connections['lion_database']['dbname']);
         $this->expectException(Exception::class);
         $this->expectExceptionCode(Http::INTERNAL_SERVER_ERROR);
 
