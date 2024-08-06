@@ -24,6 +24,7 @@ use Lion\Bundle\Enums\LogTypeEnum;
 use Lion\Bundle\Helpers\Commands\Schedule\TaskQueue;
 use Lion\Bundle\Helpers\Http\Routes;
 use Lion\Database\Driver;
+use Lion\Files\Store;
 use Lion\Mailer\Mailer;
 use Lion\Request\Http;
 use Lion\Request\Status;
@@ -37,7 +38,9 @@ use Tests\Providers\ExampleProvider;
  * -----------------------------------------------------------------------------
  **/
 
-Dotenv::createImmutable(__DIR__ . '/../')->load();
+if ((new Store())->exist(__DIR__ . '/../.env')) {
+    Dotenv::createMutable(__DIR__ . '/../')->load();
+}
 
 /**
  * -----------------------------------------------------------------------------

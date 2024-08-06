@@ -5,130 +5,79 @@ declare(strict_types=1);
 namespace Tests\Helpers\Commands\Migrations;
 
 use Lion\Bundle\Helpers\Commands\Migrations\MigrationFactory;
-use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test as Testing;
+use Tests\Providers\Helpers\Commands\MigrationsFactoryProviderTrait;
 
 class MigrationFactoryTest extends Test
 {
+    use MigrationsFactoryProviderTrait;
+
     private MigrationFactory $migrationFactory;
 
     protected function setUp(): void
     {
-        $this->migrationFactory = (new Container())
-            ->injectDependencies(new MigrationFactory());
+        $this->migrationFactory = new MigrationFactory();
     }
 
-    public function testGetTableBody(): void
+    #[Testing]
+    #[DataProvider('getMySQLTableBodyProvider')]
+    public function getMySQLTableBody(string $body): void
     {
-        $tableBody = <<<PHP
-        <?php
+        $return = $this->migrationFactory->getMySQLTableBody();
 
-        declare(strict_types=1);
-
-        use Lion\Bundle\Interface\Migrations\TableInterface;
-        use Lion\Database\Drivers\Schema\MySQL as Schema;
-
-        /**
-         * Description
-         */
-        return new class implements TableInterface
-        {
-            /**
-             * [Index number for seed execution priority]
-             *
-             * @const INDEX
-             */
-            const ?int INDEX = null;
-
-            /**
-             * {@inheritdoc}
-             */
-            public function up(): stdClass
-            {
-                return Schema::connection(env('DB_NAME', 'lion_database'))
-                    ->createTable('example', function (): void {
-                        Schema::int('id')->notNull()->autoIncrement()->primaryKey();
-                    })
-                    ->execute();
-            }
-        };
-
-        PHP;
-
-        $this->assertSame($tableBody, $this->migrationFactory->getTableBody());
+        $this->assertIsString($return);
+        $this->assertSame($body, $return);
     }
 
-    public function testGetViewBody(): void
+    #[Testing]
+    #[DataProvider('getPostgreSQLTableBodyProvider')]
+    public function getPostgreSQLTableBody(string $body): void
     {
-        $viewBody = <<<PHP
-        <?php
+        $return = $this->migrationFactory->getPostgreSQLTableBody();
 
-        declare(strict_types=1);
-
-        use Lion\Bundle\Interface\Migrations\ViewInterface;
-        use Lion\Database\Drivers\MySQL;
-        use Lion\Database\Drivers\Schema\MySQL as Schema;
-
-        /**
-         * Description
-         */
-        return new class implements ViewInterface
-        {
-            /**
-             * {@inheritdoc}
-             * */
-            public function up(): stdClass
-            {
-                return Schema::connection(env('DB_NAME', 'lion_database'))
-                    ->createView('read_example', function (MySQL \$db): void {
-                        \$db
-                            ->table('table')
-                            ->select();
-                    })
-                    ->execute();
-            }
-        };
-
-        PHP;
-
-        $this->assertSame($viewBody, $this->migrationFactory->getViewBody());
+        $this->assertIsString($return);
+        $this->assertSame($body, $return);
     }
 
-    public function testGetStoreProcedureBody(): void
+    #[Testing]
+    #[DataProvider('getMySQLViewBodyProvider')]
+    public function getMySQLViewBody(string $body): void
     {
-        $storeProcedureBody = <<<PHP
-        <?php
+        $return = $this->migrationFactory->getMySQLViewBody();
 
-        declare(strict_types=1);
+        $this->assertIsString($return);
+        $this->assertSame($body, $return);
+    }
 
-        use Lion\Bundle\Interface\Migrations\StoreProcedureInterface;
-        use Lion\Database\Drivers\MySQL;
-        use Lion\Database\Drivers\Schema\MySQL as Schema;
+    #[Testing]
+    #[DataProvider('getPostgreSQLViewBodyProvider')]
+    public function getPostgreSQLViewBody(string $body): void
+    {
+        $return = $this->migrationFactory->getPostgreSQLViewBody();
 
-        /**
-         * Description
-         */
-        return new class implements StoreProcedureInterface
-        {
-            /**
-             * {@inheritdoc}
-             * */
-            public function up(): stdClass
-            {
-                return Schema::connection(env('DB_NAME', 'lion_database'))
-                    ->createStoreProcedure('example', function (): void {
-                        Schema::in()->varchar('name', 25);
-                    }, function (MySQL \$db): void {
-                        \$db
-                            ->table('')
-                            ->insert(['name' => '']);
-                    })
-                    ->execute();
-            }
-        };
+        $this->assertIsString($return);
+        $this->assertSame($body, $return);
+    }
 
-        PHP;
+    #[Testing]
+    #[DataProvider('getMySQLStoreProcedureBodyProvider')]
+    public function getMySQLStoreProcedureBody(string $body): void
+    {
+        $return = $this->migrationFactory->getMySQLStoreProcedureBody();
 
-        $this->assertSame($storeProcedureBody, $this->migrationFactory->getStoreProcedureBody());
+        $this->assertIsString($return);
+        $this->assertSame($body, $return);
+    }
+
+    #[Testing]
+    #[DataProvider('getPostgreSQLStoreProcedureBodyProvider')]
+    public function getPostgreSQLStoreProcedureBody(string $body): void
+    {
+        $return = $this->migrationFactory->getPostgreSQLStoreProcedureBody();
+
+        $this->assertIsString($return);
+        $this->assertSame($body, $return);
     }
 }
