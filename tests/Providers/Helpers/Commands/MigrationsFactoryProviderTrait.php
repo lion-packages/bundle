@@ -79,9 +79,9 @@ trait MigrationsFactoryProviderTrait
                     {
                         return PostgreSQL::connection(env('DB_NAME_EXAMPLE', 'lion_database'))
                             ->query(
-                            <<<SQL
-                            -- SQL
-                            SQL
+                                <<<SQL
+                                -- SQL
+                                SQL
                             )
                             ->execute();
                     }
@@ -154,9 +154,9 @@ trait MigrationsFactoryProviderTrait
                     {
                         return PostgreSQL::connection(env('DB_NAME_EXAMPLE', 'lion_database'))
                             ->query(
-                            <<<SQL
-                            -- SQL
-                            SQL
+                                <<<SQL
+                                -- SQL
+                                SQL
                             )
                             ->execute();
                     }
@@ -231,9 +231,9 @@ trait MigrationsFactoryProviderTrait
                     {
                         return PostgreSQL::connection(env('DB_NAME_EXAMPLE', 'lion_database'))
                             ->query(
-                            <<<SQL
-                            -- SQL
-                            SQL
+                                <<<SQL
+                                -- SQL
+                                SQL
                             )
                             ->execute();
                     }
