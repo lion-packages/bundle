@@ -7,8 +7,12 @@ namespace Lion\Bundle\Commands\Lion\New;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\Migrations\MigrationFactory;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
+use Lion\Bundle\Helpers\DatabaseEngine;
 use Lion\Bundle\Helpers\Env;
 use Lion\Command\Command;
+use Lion\Database\Connection;
+use Lion\Database\Driver;
+use stdClass;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -18,6 +22,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @property ClassFactory $classFactory [ClassFactory class object]
  * @property MigrationFactory $migrationFactory [MigrationFactory class object]
+ * @property DatabaseEngine $databaseEngine [Manages basic database engine
+ * processes]
  *
  * @package Lion\Bundle\Commands\Lion\New
  */
@@ -66,8 +72,15 @@ class MigrationCommand extends MenuCommand
     private MigrationFactory $migrationFactory;
 
     /**
+     * [Manages basic database engine processes]
+     *
+     * @var DatabaseEngine $databaseEngine
+     */
+    private DatabaseEngine $databaseEngine;
+
+    /**
      * @required
-     * */
+     */
     public function setClassFactory(ClassFactory $classFactory): MigrationCommand
     {
         $this->classFactory = $classFactory;
@@ -77,10 +90,20 @@ class MigrationCommand extends MenuCommand
 
     /**
      * @required
-     * */
+     */
     public function setMigration(MigrationFactory $migrationFactory): MigrationCommand
     {
         $this->migrationFactory = $migrationFactory;
+
+        return $this;
+    }
+
+    /**
+     * @required
+     */
+    public function setDatabaseEngine(DatabaseEngine $databaseEngine): MigrationCommand
+    {
+        $this->databaseEngine = $databaseEngine;
 
         return $this;
     }
@@ -90,13 +113,13 @@ class MigrationCommand extends MenuCommand
      *
      * @return void
      */
-	protected function configure(): void
+    protected function configure(): void
     {
-		$this
+        $this
             ->setName('new:migration')
             ->setDescription('Command required to generate a new migration')
             ->addArgument('migration', InputArgument::REQUIRED, 'Migration name');
-	}
+    }
 
     /**
      * Executes the current command
@@ -111,13 +134,11 @@ class MigrationCommand extends MenuCommand
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int 0 if everything went fine, or an exit code
+     * @return int [0 if everything went fine, or an exit code]
      *
-     * @throws LogicException When this abstract method is not implemented
-     *
-     * @see setCode()
+     * @throws LogicException [When this abstract method is not implemented]
      */
-	protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $migration = $input->getArgument('migration');
 
@@ -129,52 +150,27 @@ class MigrationCommand extends MenuCommand
 
         $selectedConnection = $this->selectConnection($input, $output);
 
+        $connectionName = Connection::getConnections()[$selectedConnection]['dbname'];
+
+        $databaseEngineType = $this->databaseEngine->getDatabaseEngineType($selectedConnection);
+
+        $driver = $this->databaseEngine->getDriver($databaseEngineType);
+
         $selectedType = $this->selectMigrationType($input, $output, self::OPTIONS);
 
         $migrationPascal = $this->str->of($migration)->replace('-', ' ')->replace('_', ' ')->pascal()->trim()->get();
 
-        $dbPascal = $this->str->of($selectedConnection)->replace('-', ' ')->replace('_', ' ')->pascal()->trim()->get();
+        $dbPascal = $this->str->of($connectionName)->replace('-', ' ')->replace('_', ' ')->pascal()->trim()->get();
 
-        $envName = Env::getKey($selectedConnection);
+        $dataMigration = $this->getBody($selectedType, $dbPascal, $driver);
 
-        if (self::TABLE === $selectedType) {
-            $this->store->folder("database/Migrations/{$dbPascal}/Tables/");
+        $this->store->folder($dataMigration->path);
 
-            $this->classFactory->classFactory("database/Migrations/{$dbPascal}/Tables/", $migrationPascal);
-
-            $body = $this->migrationFactory->getTableBody();
-
-            $this->classFactory
-                ->create($this->classFactory->getClass(), ClassFactory::PHP_EXTENSION, $this->classFactory->getFolder())
-                ->add($this->str->of($body)->replace('--CONNECTION--', $envName)->get())
-                ->close();
-        }
-
-        if (self::VIEW === $selectedType) {
-            $this->store->folder("database/Migrations/{$dbPascal}/Views/");
-
-            $this->classFactory->classFactory("database/Migrations/{$dbPascal}/Views/", $migrationPascal);
-
-            $body = $this->migrationFactory->getViewBody();
-
-            $this->classFactory
-                ->create($this->classFactory->getClass(), ClassFactory::PHP_EXTENSION, $this->classFactory->getFolder())
-                ->add($this->str->of($body)->replace('--CONNECTION--', $envName)->get())
-                ->close();
-        }
-
-        if (self::STORE_PROCEDURE === $selectedType) {
-            $this->store->folder("database/Migrations/{$dbPascal}/StoreProcedures/");
-
-            $this->classFactory->classFactory("database/Migrations/{$dbPascal}/StoreProcedures/", $migrationPascal);
-
-            $body = $this->migrationFactory->getStoreProcedureBody();
-
-            $this->classFactory
-                ->create($this->classFactory->getClass(), ClassFactory::PHP_EXTENSION, $this->classFactory->getFolder())
-                ->add($this->str->of($body)->replace('--CONNECTION--', $envName)->get())
-                ->close();
-        }
+        $this->classFactory
+            ->classFactory($dataMigration->path, $migrationPascal)
+            ->create($this->classFactory->getClass(), ClassFactory::PHP_EXTENSION, $dataMigration->path)
+            ->add($this->str->of($dataMigration->body)->replace('--NAME--', $migration)->get())
+            ->close();
 
         $output->writeln($this->warningOutput("\t>>  MIGRATION: {$this->classFactory->getClass()}"));
 
@@ -184,6 +180,57 @@ class MigrationCommand extends MenuCommand
             )
         );
 
-		return Command::SUCCESS;
-	}
+        return Command::SUCCESS;
+    }
+
+    /**
+     * Gets the data to generate the body of the selected migration type
+     *
+     * @param string $selectedType [Type of migration]
+     * @param string $dbPascal [Database in PascalCase format]
+     * @param string $driver [Database Engine Type]
+     *
+     * @return stdClass
+     */
+    private function getBody(string $selectedType, string $dbPascal, string $driver): stdClass
+    {
+        $body = '';
+
+        $path = '';
+
+        if (self::TABLE === $selectedType) {
+            $path = "database/Migrations/{$dbPascal}/{$driver}/Tables/";
+
+            if ($this->databaseEngine->getDriver(Driver::MYSQL) === $driver) {
+                $body = $this->migrationFactory->getMySQLTableBody();
+            } elseif ($this->databaseEngine->getDriver(Driver::PostgreSQL) === $driver) {
+                $body = $this->migrationFactory->getPostgreSQLTableBody();
+            }
+        }
+
+        if (self::VIEW === $selectedType) {
+            $path = "database/Migrations/{$dbPascal}/{$driver}/Views/";
+
+            if ($this->databaseEngine->getDriver(Driver::MYSQL) === $driver) {
+                $body = $this->migrationFactory->getMySQLViewBody();
+            } elseif ($this->databaseEngine->getDriver(Driver::PostgreSQL) === $driver) {
+                $body = $this->migrationFactory->getPostgreSQLViewBody();
+            }
+        }
+
+        if (self::STORE_PROCEDURE === $selectedType) {
+            $path = "database/Migrations/{$dbPascal}/{$driver}/StoreProcedures/";
+
+            if ($this->databaseEngine->getDriver(Driver::MYSQL) === $driver) {
+                $body = $this->migrationFactory->getMySQLStoreProcedureBody();
+            } elseif ($this->databaseEngine->getDriver(Driver::PostgreSQL) === $driver) {
+                $body = $this->migrationFactory->getPostgreSQLStoreProcedureBody();
+            }
+        }
+
+        return (object) [
+            'body' => $body,
+            'path' => $path,
+        ];
+    }
 }

@@ -4,14 +4,19 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\Migrations;
 
+use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Bundle\Interface\Migrations\StoreProcedureInterface;
 use Lion\Bundle\Interface\Migrations\TableInterface;
 use Lion\Bundle\Interface\Migrations\ViewInterface;
 use Lion\Bundle\Interface\MigrationUpInterface;
 use Lion\Command\Command;
+use Lion\Database\Connection;
+use Lion\Database\Driver;
+use Lion\Database\Drivers\PostgreSQL;
 use Lion\Database\Drivers\Schema\MySQL as Schema;
 use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
+use LogicException;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -27,7 +32,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @package Lion\Bundle\Commands\Lion\Migrations
  */
-class FreshMigrationsCommand extends Command
+class FreshMigrationsCommand extends MenuCommand
 {
     /**
      * [OutputInterface is the interface implemented by all Output classes]
@@ -44,28 +49,11 @@ class FreshMigrationsCommand extends Command
     private Container $container;
 
     /**
-     * [Store class object]
-     *
-     * @var Store $store
-     */
-    private Store $store;
-
-    /**
      * @required
      * */
     public function setContainer(Container $container): FreshMigrationsCommand
     {
         $this->container = $container;
-
-        return $this;
-    }
-
-    /**
-     * @required
-     * */
-    public function setStore(Store $store): FreshMigrationsCommand
-    {
-        $this->store = $store;
 
         return $this;
     }
@@ -96,9 +84,6 @@ class FreshMigrationsCommand extends Command
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @see InputInterface::bind()
-     * @see InputInterface::validate()
-     *
      * @return void
      */
     protected function initialize(InputInterface $input, OutputInterface $output): void
@@ -119,11 +104,9 @@ class FreshMigrationsCommand extends Command
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int 0 if everything went fine, or an exit code
+     * @return int [0 if everything went fine, or an exit code]
      *
-     * @throws LogicException When this abstract method is not implemented
-     *
-     * @see setCode()
+     * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -210,15 +193,39 @@ class FreshMigrationsCommand extends Command
      */
     private function dropTables(): void
     {
-        $connections = Schema::getConnections();
+        $connections = Connection::getConnections();
 
-        foreach ($connections['connections'] as $connection) {
-            $response = Schema::dropTables()->execute();
+        foreach ($connections as $connectionName => $connection) {
+            $response = [];
+
+            if (Driver::MYSQL === $connection['type']) {
+                $response = Schema::connection($connectionName)
+                    ->dropTables()
+                    ->execute();
+            }
+
+            if (Driver::PostgreSQL === $connection['type']) {
+                $tables = $this->getTables($connectionName);
+
+                if (!isset($tables->status)) {
+                    $tablesArr = $this->arr->of($tables)->tree('tablename')->keys()->join(', ');
+
+                    $response = PostgreSQL::connection($connectionName)
+                        ->query(
+                            $this->str->of('DROP TABLE IF EXISTS ')->concat($tablesArr)->concat('CASCADE;')->get()
+                        )
+                        ->execute();
+                }
+            }
 
             if (isError($response)) {
-                $this->output->writeln($this->warningOutput("\t>> DATABASE: {$connection->dbname}"));
+                $this->output->writeln(
+                    $this->warningOutput("\t>> DATABASE: {$connection['dbname']} [{$connection['type']}]")
+                );
 
-                $this->output->writeln($this->errorOutput("\t>> DATABASE: {$response->message}"));
+                $this->output->writeln(
+                    $this->errorOutput("\t>> DATABASE: {$response->message} [{$connection['type']}]")
+                );
             }
         }
     }
@@ -254,7 +261,7 @@ class FreshMigrationsCommand extends Command
     /**
      * Run the migrations
      *
-     * @param array<int, MigrationUpInterface> $files [description]
+     * @param array<int, MigrationUpInterface> $files [List of migration files]
      *
      * @return void
      */
@@ -262,7 +269,6 @@ class FreshMigrationsCommand extends Command
     {
         foreach ($files as $namespace => $classObject) {
             if ($classObject instanceof MigrationUpInterface) {
-                /** @var MigrationUpInterface $classObject */
                 $response = $classObject->up();
 
                 if (isError($response)) {

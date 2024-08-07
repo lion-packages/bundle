@@ -7,10 +7,11 @@ namespace Tests\Commands\Lion\DB;
 use Lion\Bundle\Commands\Lion\DB\DBCapsuleCommand;
 use Lion\Bundle\Commands\Lion\New\CapsuleCommand;
 use Lion\Command\Command;
-use Lion\Command\Kernel;
 use Lion\Database\Drivers\Schema\MySQL as Schema;
 use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
+use PHPUnit\Framework\Attributes\Test as Testing;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tests\Providers\ConnectionProviderTrait;
 
@@ -18,12 +19,12 @@ class DBCapsuleCommandTest extends Test
 {
     use ConnectionProviderTrait;
 
-    const URL_PATH = './database/Class/LionDatabase/MySQL/';
-    const NAMESPACE_CLASS = 'Database\\Class\\LionDatabase\\MySQL\\';
-    const ENTITY = 'test';
-    const CLASS_NAME = 'Test';
-    const OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
-    const OUTPUT_MESSAGE = 'capsule has been generated';
+    private const string URL_PATH = './database/Class/LionDatabase/MySQL/';
+    private const string NAMESPACE_CLASS = 'Database\\Class\\LionDatabase\\MySQL\\';
+    private const string ENTITY = 'test';
+    private const string CLASS_NAME = 'Test';
+    private const string OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
+    private const string OUTPUT_MESSAGE = 'capsule has been generated';
 
     private CommandTester $commandTester;
 
@@ -33,12 +34,9 @@ class DBCapsuleCommandTest extends Test
 
         $this->createDirectory(self::URL_PATH);
 
-        Schema::createTable(self::ENTITY, function () {
-            Schema::int('id', 11)->notNull()->autoIncrement()->primaryKey();
-            Schema::varchar('name', 25)->notNull();
-        })->execute();
+        $this->createTables();
 
-        $application = (new Kernel())->getApplication();
+        $application = new Application();
 
         $application->add((new Container())->injectDependencies(new CapsuleCommand()));
 
@@ -54,10 +52,29 @@ class DBCapsuleCommandTest extends Test
         $this->rmdirRecursively('./database/');
     }
 
-    public function testExecute(): void
+    private function createTables(): void
     {
-        $this->assertSame(Command::SUCCESS, $this->commandTester->execute(['entity' => self::ENTITY]));
+        Schema::connection(env('DB_NAME'))
+            ->createTable(self::ENTITY, function () {
+                Schema::int('id', 11)->notNull()->autoIncrement()->primaryKey();
+                Schema::varchar('name', 25)->notNull();
+            })
+            ->execute();
+    }
+
+    #[Testing]
+    public function execute(): void
+    {
+        $execute = $this->commandTester
+            ->setInputs(['0'])
+            ->execute(['entity' => self::ENTITY]);
+
+        $this->assertSame(Command::SUCCESS, $execute);
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
-        $this->assertInstanceOf(self::OBJECT_NAME, new (self::OBJECT_NAME)());
+        $this->assertInstanceOf(self::OBJECT_NAME, new (self::OBJECT_NAME));
+
+        unset($_ENV['SELECTED_CONNECTION']);
+
+        $this->assertArrayNotHasKey('SELECTED_CONNECTION', $_ENV);
     }
 }

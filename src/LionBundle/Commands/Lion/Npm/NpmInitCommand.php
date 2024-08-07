@@ -183,7 +183,7 @@ class NpmInitCommand extends MenuCommand
     ): void {
         $type = $this->selectedTypes($input, $output, self::TYPES);
 
-        $commandCreate = "cd vite/ && echo | npm init vite@latest {$project}";
+        $commandCreate = "cd vite/ && echo | npm create vite@latest {$project}";
 
         $commandCreate .= " -- --template {$template}" . ('js' === $type ? '' : '-ts');
 

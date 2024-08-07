@@ -44,7 +44,7 @@ class MenuCommandTest extends Test
 
     protected function tearDown(): void
     {
-        $_ENV['SELECTED_CONNECTION'] = '';
+        unset($_ENV['SELECTED_CONNECTION']);
 
         $this->rmdirRecursively(self::VITE_PATH);
     }
@@ -253,6 +253,10 @@ class MenuCommandTest extends Test
         $this->assertSame(Command::SUCCESS, $commandTester->setInputs(["1"])->execute([]));
         $this->assertStringContainsString("(lion_database_test)", $commandTester->getDisplay());
         $this->assertSame($_ENV['SELECTED_CONNECTION'], 'lion_database_test');
+
+        unset($_ENV['SELECTED_CONNECTION']);
+
+        $this->assertArrayNotHasKey('SELECTED_CONNECTION', $_ENV);
     }
 
     public function testSelectConnectionDefault(): void
@@ -278,16 +282,15 @@ class MenuCommandTest extends Test
 
         $connections = DB::getConnections();
 
-        $this->assertArrayHasKey('connections', $connections);
-        $this->assertArrayHasKey('lion_database_test', $connections['connections']);
+        $this->assertArrayHasKey('lion_database_test', $connections);
 
-        $backupConnection = $connections['connections']['lion_database_test'];
+        $backupConnection = $connections['lion_database_test'];
 
         DB::removeConnection('lion_database_test');
 
         $connections = DB::getConnections();
 
-        $this->assertArrayNotHasKey('lion_database_test', $connections['connections']);
+        $this->assertArrayNotHasKey('lion_database_test', $connections);
 
         $application = (new Kernel())
             ->getApplication();
@@ -301,13 +304,16 @@ class MenuCommandTest extends Test
         $this->assertStringContainsString("(lion_database)", $commandTester->getDisplay());
         $this->assertSame($_ENV['SELECTED_CONNECTION'], 'lion_database');
 
-        DB::addConnections('lion_database_test', $backupConnection);
+        unset($_ENV['SELECTED_CONNECTION']);
+
+        $this->assertArrayNotHasKey('SELECTED_CONNECTION', $_ENV);
+
+        DB::addConnection('lion_database_test', $backupConnection);
 
         $connections = DB::getConnections();
 
-        $this->assertArrayHasKey('connections', $connections);
-        $this->assertArrayHasKey('lion_database', $connections['connections']);
-        $this->assertArrayHasKey('lion_database_test', $connections['connections']);
+        $this->assertArrayHasKey('lion_database', $connections);
+        $this->assertArrayHasKey('lion_database_test', $connections);
     }
 
     public function testSelectConnectionByEnviromentEmpty(): void
@@ -340,6 +346,10 @@ class MenuCommandTest extends Test
         $this->assertSame(Command::SUCCESS, $commandTester->setInputs(["0"])->execute([]));
         $this->assertStringContainsString("(lion_database)", $commandTester->getDisplay());
         $this->assertSame($_ENV['SELECTED_CONNECTION'], 'lion_database');
+
+        unset($_ENV['SELECTED_CONNECTION']);
+
+        $this->assertArrayNotHasKey('SELECTED_CONNECTION', $_ENV);
     }
 
     public function testSelectConnectionByEnviromentNotEmpty(): void
@@ -375,6 +385,10 @@ class MenuCommandTest extends Test
         $this->assertSame(Command::SUCCESS, $commandTester->setInputs(["0"])->execute([]));
         $this->assertStringContainsString("(lion_database)", $commandTester->getDisplay());
         $this->assertSame($_ENV['SELECTED_CONNECTION'], 'lion_database');
+
+        unset($_ENV['SELECTED_CONNECTION']);
+
+        $this->assertArrayNotHasKey('SELECTED_CONNECTION', $_ENV);
     }
 
     public function testSelectMigrationType(): void

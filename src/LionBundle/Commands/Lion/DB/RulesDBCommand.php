@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Lion\Bundle\Commands\Lion\DB;
 
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
+use Lion\Bundle\Helpers\DatabaseEngine;
 use Lion\Bundle\Helpers\FileWriter;
 use Lion\Command\Command;
-use Lion\Database\Drivers\MySQL as DB;
+use Lion\Database\Connection;
 use stdClass;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
@@ -18,6 +19,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Generates the base rules for the properties of an entity
  *
  * @property FileWriter $fileWrite [FileWriter class object]
+ * @property DatabaseEngine $databaseEngine [Manages basic database engine
+ * processes]
  *
  * @package Lion\Bundle\Commands\Lion\DB
  */
@@ -31,11 +34,28 @@ class RulesDBCommand extends MenuCommand
     private FileWriter $fileWriter;
 
     /**
+     * [Manages basic database engine processes]
+     *
+     * @var DatabaseEngine $databaseEngine
+     */
+    private DatabaseEngine $databaseEngine;
+
+    /**
      * @required
-     * */
+     */
     public function setFileWriter(FileWriter $fileWriter): RulesDBCommand
     {
         $this->fileWriter = $fileWriter;
+
+        return $this;
+    }
+
+    /**
+     * @required
+     */
+    public function setDatabaseEngine(DatabaseEngine $databaseEngine): RulesDBCommand
+    {
+        $this->databaseEngine = $databaseEngine;
 
         return $this;
     }
@@ -66,11 +86,9 @@ class RulesDBCommand extends MenuCommand
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int 0 if everything went fine, or an exit code
+     * @return int [0 if everything went fine, or an exit code]
      *
-     * @throws LogicException When this abstract method is not implemented
-     *
-     * @see setCode()
+     * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -78,11 +96,17 @@ class RulesDBCommand extends MenuCommand
 
         $selectedConnection = $this->selectConnectionByEnviroment($input, $output);
 
+        $connectionName = Connection::getConnections()[$selectedConnection]['dbname'];
+
+        $databaseEngineType = $this->databaseEngine->getDatabaseEngineType($selectedConnection);
+
+        $driver = $this->databaseEngine->getDriver($databaseEngineType);
+
         $entityPascal = $this->str->of($entity)->replace('_', ' ')->replace('-', ' ')->pascal()->get();
 
-        $connectionPascal = $this->str->of($selectedConnection)->replace('_', ' ')->replace('-', ' ')->pascal()->get();
+        $connectionPascal = $this->str->of($connectionName)->replace('_', ' ')->replace('-', ' ')->pascal()->get();
 
-        $columns = DB::connection($selectedConnection)->show()->full()->columns()->from($entity)->getAll();
+        $columns = $this->getTableColumns($databaseEngineType, $selectedConnection, $entity);
 
         if (isset($columns->status)) {
             $output->writeln($this->errorOutput($columns->message));
@@ -90,13 +114,7 @@ class RulesDBCommand extends MenuCommand
             return Command::FAILURE;
         }
 
-        $foreigns = DB::connection($selectedConnection)
-            ->table('INFORMATION_SCHEMA.KEY_COLUMN_USAGE', false)
-            ->select('COLUMN_NAME', 'REFERENCED_TABLE_NAME', 'REFERENCED_COLUMN_NAME')
-            ->where()->equalTo('TABLE_SCHEMA', $selectedConnection)
-            ->and()->equalTo('TABLE_NAME', $entity)
-            ->and('REFERENCED_TABLE_NAME')->isNotNull()
-            ->getAll();
+        $foreigns = $this->getTableForeigns($databaseEngineType, $selectedConnection, $entity);
 
         foreach ($columns as $column) {
             $isForeign = false;
@@ -112,6 +130,7 @@ class RulesDBCommand extends MenuCommand
             if (!$isForeign) {
                 if ($column->Null === 'YES') {
                     $this->generateRule(
+                        $driver,
                         $connectionPascal,
                         $entityPascal,
                         $column,
@@ -120,6 +139,7 @@ class RulesDBCommand extends MenuCommand
                     );
 
                     $this->generateRule(
+                        $driver,
                         $connectionPascal,
                         $entityPascal,
                         $column,
@@ -128,6 +148,7 @@ class RulesDBCommand extends MenuCommand
                     );
                 } else {
                     $this->generateRule(
+                        $driver,
                         $connectionPascal,
                         $entityPascal,
                         $column,
@@ -161,6 +182,7 @@ class RulesDBCommand extends MenuCommand
      * @return void
      */
     private function generateRule(
+        string $driver,
         string $connectionPascal,
         string $entityPascal,
         stdClass $column,
@@ -180,9 +202,14 @@ class RulesDBCommand extends MenuCommand
         $this
             ->getApplication()
             ->find('new:rule')
-            ->run(new ArrayInput(['rule' => "{$connectionPascal}/MySQL/{$entityPascal}/{$ruleName}"]), $output);
+            ->run(
+                new ArrayInput([
+                    'rule' => "{$connectionPascal}/{$driver}/{$entityPascal}/{$ruleName}",
+                ]),
+                $output
+            );
 
-        $this->fileWriter->readFileRows("app/Rules/{$connectionPascal}/MySQL/{$entityPascal}/{$ruleName}.php", [
+        $this->fileWriter->readFileRows("app/Rules/{$connectionPascal}/{$driver}/{$entityPascal}/{$ruleName}.php", [
             12 => [
                 'replace' => true,
                 'content' => "'" . strtolower($column->Field) . "'",
@@ -230,8 +257,8 @@ class RulesDBCommand extends MenuCommand
             ],
             43 => [
                 'replace' => true,
+                'search' => '""',
                 'content' => "'{$column->Default}'",
-                'search' => "''"
             ],
             50 => [
                 'replace' => true,
