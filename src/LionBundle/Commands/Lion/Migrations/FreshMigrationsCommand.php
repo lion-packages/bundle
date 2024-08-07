@@ -205,13 +205,7 @@ class FreshMigrationsCommand extends MenuCommand
             }
 
             if (Driver::PostgreSQL === $connection['type']) {
-                $tables = PostgreSQL::connection($connectionName)
-                    ->query(
-                        <<<SQL
-                        SELECT tablename FROM pg_tables WHERE schemaname = 'public';
-                        SQL
-                    )
-                    ->getAll();
+                $tables = $this->getTables($connectionName);
 
                 if (!isset($tables->status)) {
                     $tablesArr = $this->arr->of($tables)->tree('tablename')->keys()->join(', ');

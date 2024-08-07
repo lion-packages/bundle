@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\Migrations;
 
+use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Command\Command;
 use Lion\Database\Connection;
-use Lion\Database\Drivers\MySQL as DB;
+use Lion\Database\Driver;
+use Lion\Database\Drivers\PostgreSQL;
 use Lion\Database\Drivers\Schema\MySQL as Schema;
+use Lion\Database\Interface\RunDatabaseProcessesInterface;
 use LogicException;
+use stdClass;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -17,7 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @package Lion\Bundle\Commands\Lion\Migrations
  */
-class EmptyMigrationsCommand extends Command
+class EmptyMigrationsCommand extends MenuCommand
 {
     /**
      * Configures the current command
@@ -53,7 +57,7 @@ class EmptyMigrationsCommand extends Command
         $connections = Connection::getConnections();
 
         foreach ($connections as $connectionName => $connection) {
-            $tables = DB::connection($connectionName)->show()->tables()->getAll();
+            $tables = $this->getTables($connectionName);
 
             if (!is_array($tables) && isSuccess($tables)) {
                 $output->writeln($this->warningOutput("\t>> MIGRATION: no tables available"));
@@ -67,14 +71,17 @@ class EmptyMigrationsCommand extends Command
                 continue;
             }
 
+            /** @var stdClass $table */
             foreach ($tables as $table) {
-                $response = Schema::connection($connectionName)
-                    ->truncateTable($table->{"Tables_in_{$connection['dbname']}"})
+                $tableName = $table->{"Tables_in_{$connection['dbname']}"};
+
+                $response = $this
+                    ->truncateTable($connection['type'], $connectionName, $tableName)
                     ->execute();
 
                 $output->writeln(
                     $this->warningOutput(
-                        "\t>> MIGRATION: {$connection['dbname']}." . $table->{"Tables_in_{$connection['dbname']}"}
+                        "\t>> MIGRATION: {$connection['dbname']}.{$tableName} [{$connection['type']}]"
                     )
                 );
 
@@ -89,5 +96,36 @@ class EmptyMigrationsCommand extends Command
         $output->writeln($this->infoOutput("\n\t>> all tables have been truncated"));
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * Empty the available tables
+     *
+     * @param string $driver [Database engine]
+     * @param string $connectionName [Connection name]
+     * @param string $table [Name the table]
+     *
+     * @return RunDatabaseProcessesInterface|null
+     */
+    private function truncateTable(
+        string $driver,
+        string $connectionName,
+        string $table
+    ): ?RunDatabaseProcessesInterface {
+        if (Driver::MYSQL === $driver) {
+            return Schema::connection($connectionName)
+                ->truncateTable($table);
+        }
+
+        if (Driver::PostgreSQL === $driver) {
+            return PostgreSQL::connection($connectionName)
+                ->query(
+                    <<<SQL
+                    TRUNCATE TABLE {$table} CASCADE;
+                    SQL
+                );
+        }
+
+        return null;
     }
 }

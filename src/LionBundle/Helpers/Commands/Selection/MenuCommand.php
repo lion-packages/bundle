@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lion\Bundle\Helpers\Commands\Selection;
 
 use Exception;
+use Lion\Bundle\Helpers\DatabaseEngine;
 use Lion\Command\Command;
 use Lion\Database\Connection;
 use Lion\Database\Driver;
@@ -55,7 +56,7 @@ class MenuCommand extends Command
 
     /**
      * @required
-     * */
+     */
     public function setArr(Arr $arr): MenuCommand
     {
         $this->arr = $arr;
@@ -65,7 +66,7 @@ class MenuCommand extends Command
 
     /**
      * @required
-     * */
+     */
     public function setStore(Store $store): MenuCommand
     {
         $this->store = $store;
@@ -75,7 +76,7 @@ class MenuCommand extends Command
 
     /**
      * @required
-     * */
+     */
     public function setStr(Str $str): MenuCommand
     {
         $this->str = $str;
@@ -388,7 +389,7 @@ class MenuCommand extends Command
      *
      * @internal
      */
-    public function getTableForeigns(
+    protected function getTableForeigns(
         string $driver,
         string $selectedConnection,
         string $entity
@@ -420,5 +421,40 @@ class MenuCommand extends Command
                 ->addRows(['FOREIGN KEY', 'public', $entity])
                 ->getAll();
         }
+    }
+
+    /**
+     * Gets the available tables
+     *
+     * @param string $connectionName [Connection name]
+     *
+     * @return stdClass|array
+     */
+    protected function getTables(string $connectionName): stdClass|array
+    {
+        $connections = Connection::getConnections();
+
+        if (Driver::MYSQL === $connections[$connectionName]['type']) {
+            return MySQL::connection($connectionName)
+                ->show()
+                ->tables()
+                ->getAll();
+        }
+
+        if (Driver::PostgreSQL === $connections[$connectionName]['type']) {
+            return PostgreSQL::connection($connectionName)
+                ->query(
+                    <<<SQL
+                    SELECT
+                        tablename,
+                        tablename AS "Tables_in_{$connections[$connectionName]['dbname']}"
+                    FROM pg_tables
+                    WHERE schemaname = 'public';
+                    SQL
+                )
+                ->getAll();
+        }
+
+        return [];
     }
 }
