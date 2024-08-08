@@ -248,7 +248,10 @@ class ClassFactory
             'setter' => $this->getSetter($snake, $type, $className),
             'variable' => (object) [
                 'annotations' => (object) [
-                    'class' => "@property {$type} $" . "{$snake} [Property for {$propertyName}]"
+                    'class' => (object) [
+                        'data_type' => "@property {$type} $" . "{$snake} [Property for {$propertyName}]",
+                        'data_type_with_null' => "@property {$type}|null $" . "{$snake} [Property for {$propertyName}]",
+                    ]
                 ],
                 'reference' => '$this->' . "{$camel};",
                 'name' => (object) [
