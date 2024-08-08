@@ -9,6 +9,7 @@ use Lion\Command\Command;
 use Lion\Files\Store;
 use Lion\Helpers\Arr;
 use Lion\Helpers\Str;
+use LogicException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -189,7 +190,7 @@ class CapsuleCommand extends Command
         }
 
         foreach ($listMethods as $key => $method) {
-            $this->str->concat(" * {$method['config']->variable->annotations->class}\n");
+            $this->str->concat(" * {$method['config']->variable->annotations->class->data_type_with_null}\n");
         }
 
         $this->str

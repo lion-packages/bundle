@@ -6,21 +6,24 @@ namespace Tests\Commands\Lion\New;
 
 use Lion\Bundle\Commands\Lion\New\CapsuleCommand;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
+use Lion\Bundle\Interface\CapsuleInterface;
 use Lion\Command\Command;
-use Lion\Command\Kernel;
 use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
+use PHPUnit\Framework\Attributes\Test as Testing;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class CapsuleCommandTest extends Test
 {
-    const URL_PATH = './database/Class/';
-    const NAMESPACE_CLASS = 'Database\\Class\\';
-    const CLASS_NAME = 'TestCapsule';
-    const OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
-    const FILE_NAME = self::CLASS_NAME . '.php';
-    const OUTPUT_MESSAGE = 'capsule has been generated';
-    const PROPIERTIES = ['idusers:int', 'users_name:string', 'users_last_name'];
+    private const string URL_PATH = './database/Class/';
+    private const string NAMESPACE_CLASS = 'Database\\Class\\';
+    private const string CLASS_NAME = 'TestCapsule';
+    private const string CLASS_ENTITY = 'test';
+    private const string OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
+    private const string FILE_NAME = self::CLASS_NAME . '.php';
+    private const string OUTPUT_MESSAGE = 'capsule has been generated';
+    private const array PROPERTIES = ['idusers:int', 'users_name:string', 'users_last_name'];
 
     private CommandTester $commandTester;
     private ClassFactory $classFactory;
@@ -29,8 +32,10 @@ class CapsuleCommandTest extends Test
     {
         $this->classFactory = new ClassFactory();
 
-        $application = (new Kernel())->getApplication();
+        $application = new Application();
+
         $application->add((new Container())->injectDependencies(new CapsuleCommand()));
+
         $this->commandTester = new CommandTester($application->find('new:capsule'));
 
         $this->createDirectory(self::URL_PATH);
@@ -41,37 +46,59 @@ class CapsuleCommandTest extends Test
         $this->rmdirRecursively('./database/');
     }
 
-    public function testExecute(): void
+    #[Testing]
+    public function execute(): void
     {
         $commandExecute = $this->commandTester->execute([
             'capsule' => self::CLASS_NAME,
-            '--properties' => self::PROPIERTIES
+            '--entity' => self::CLASS_ENTITY,
+            '--properties' => self::PROPERTIES,
         ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH . self::FILE_NAME);
 
+        /** @var CapsuleInterface $objClass */
         $objClass = new (self::OBJECT_NAME)();
+
         $this->initReflection($objClass);
 
         $this->assertIsObject($objClass);
-        $this->assertInstanceOf(self::OBJECT_NAME, $objClass);
 
-        foreach (self::PROPIERTIES as $propierty) {
-            $split = explode(':', $propierty);
+        $this->assertInstances($objClass, [
+            self::OBJECT_NAME,
+            CapsuleInterface::class,
+        ]);
 
-            $dataPropierty = $this->classFactory->getProperty(
+        $tableName = $objClass->getTableName();
+
+        $this->assertIsString($tableName);
+        $this->assertSame(self::CLASS_ENTITY, $tableName);
+
+        $capsule = $objClass->capsule();
+
+        $this->assertIsObject($capsule);
+
+        $this->assertInstances($capsule, [
+            self::OBJECT_NAME,
+            CapsuleInterface::class,
+        ]);
+
+        foreach (self::PROPERTIES as $property) {
+            $split = explode(':', $property);
+
+            $dataProperty = $this->classFactory->getProperty(
                 $split[0],
                 self::CLASS_NAME,
                 (!empty($split[1]) ? $split[1] : 'string'),
                 ClassFactory::PRIVATE_PROPERTY
             );
 
-            $this->assertNull($this->getPrivateProperty($dataPropierty->format->snake));
+            $this->assertNull($this->getPrivateProperty($dataProperty->format->snake));
 
-            $getter = $dataPropierty->getter->name;
-            $setter = $dataPropierty->setter->name;
+            $getter = $dataProperty->getter->name;
+            $setter = $dataProperty->setter->name;
 
             $this->assertInstanceOf(self::OBJECT_NAME, $objClass->$setter(null));
             $this->assertNull($objClass->$getter());
