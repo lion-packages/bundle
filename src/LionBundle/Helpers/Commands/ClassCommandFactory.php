@@ -12,8 +12,8 @@ use stdClass;
 /**
  * Allows adding several ClassFactory type objects for multiple management
  *
- * @property Container $container [Container class object]
- * @property Store $store [Store class object]
+ * @property Container $container [Container to generate dependency injection]
+ * @property Store $store [Manipulate system files]
  * @property array<ClassFactory> $factories [List of available factories]
  *
  * @package Lion\Bundle\Helpers\Commands
@@ -21,14 +21,14 @@ use stdClass;
 class ClassCommandFactory
 {
     /**
-     * [Container class object]
+     * [Container to generate dependency injection]
      *
      * @var Container $container
      */
     private Container $container;
 
     /**
-     * [Store class object]
+     * [Manipulate system files]
      *
      * @var Store $store
      */
@@ -44,17 +44,21 @@ class ClassCommandFactory
     /**
      * @required
      */
-    public function setContainer(Container $container): void
+    public function setContainer(Container $container): ClassCommandFactory
     {
         $this->container = $container;
+
+        return $this;
     }
 
     /**
      * @required
      */
-    public function setStore(Store $store): void
+    public function setStore(Store $store): ClassCommandFactory
     {
         $this->store = $store;
+
+        return $this;
     }
 
     /**

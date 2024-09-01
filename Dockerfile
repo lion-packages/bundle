@@ -1,6 +1,5 @@
 FROM php:8.3-apache
 
-ARG DEBIAN_FRONTEND=noninteractive
 # ----------------------------------------------------------------------------------------------------------------------
 USER root
 
@@ -41,7 +40,22 @@ RUN echo "xdebug.mode=develop,coverage,debug" >> /usr/local/etc/php/conf.d/docke
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
 # ----------------------------------------------------------------------------------------------------------------------
+# Set Permissions for /var/www/html
+WORKDIR /var/www/html
+
+# Set directory and file ownership to lion
+RUN chown -R lion:lion /var/www/html
+
+# Create log files with appropriate permissions for lion
+RUN mkdir -p storage/logs \
+    && touch storage/logs/server.log storage/logs/socket.log storage/logs/supervisord.log storage/logs/test-coverage.log \
+    && chown -R lion:lion storage/logs \
+    && chmod -R 775 storage/logs
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Change to lion user for subsequent operations
 USER lion
 
 SHELL ["/bin/bash", "--login", "-i", "-c"]
@@ -54,7 +68,9 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | b
 
 # Install OhMyZsh
 RUN sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
+
 # ----------------------------------------------------------------------------------------------------------------------
+# Finalize Configurations and Copy Files
 USER root
 
 SHELL ["/bin/bash", "--login", "-c"]
@@ -71,12 +87,19 @@ RUN echo 'export NVM_DIR="$HOME/.nvm"' >> /home/lion/.zshrc \
     && echo '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"' >> /home/lion/.zshrc \
     && echo 'alias ls="logo-ls"' >> /home/lion/.zshrc \
     && source /home/lion/.zshrc
+
 # ----------------------------------------------------------------------------------------------------------------------
 # Copy Data
 COPY . .
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Set ownership of files to lion after copy
+RUN chown -R lion:lion /var/www/html
+
 # ----------------------------------------------------------------------------------------------------------------------
 # Init Project
-CMD touch storage/logs/server.log storage/logs/socket.log storage/logs/supervisord.log storage/logs/test-coverage.log \
-    && /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+USER lion
+
+# Command to start supervisord
+CMD /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
