@@ -8,10 +8,10 @@ use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\Migrations\MigrationFactory;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Bundle\Helpers\DatabaseEngine;
-use Lion\Bundle\Helpers\Env;
 use Lion\Command\Command;
 use Lion\Database\Connection;
 use Lion\Database\Driver;
+use LogicException;
 use stdClass;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -20,8 +20,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Generate a migration for database structure control
  *
- * @property ClassFactory $classFactory [ClassFactory class object]
- * @property MigrationFactory $migrationFactory [MigrationFactory class object]
+ * @property ClassFactory $classFactory [Fabricates the data provided to
+ * manipulate information (folder, class, namespace)]
+ * @property MigrationFactory $migrationFactory [Factory of the content of the generated migrations]
  * @property DatabaseEngine $databaseEngine [Manages basic database engine
  * processes]
  *
@@ -34,38 +35,43 @@ class MigrationCommand extends MenuCommand
      *
      * @const TABLE
      */
-    const TABLE = 'Table';
+    private const string TABLE = 'Table';
 
     /**
      * [Constant for a view]
      *
      * @const VIEW
      */
-    const VIEW = 'View';
+    private const string VIEW = 'View';
 
     /**
      * [Constant for a store-procedure]
      *
      * @const STORE_PROCEDURE
      */
-    const STORE_PROCEDURE = 'Store-Procedure';
+    private const string STORE_PROCEDURE = 'Store-Procedure';
 
     /**
      * [List of available types]
      *
      * @const OPTIONS
      */
-    const OPTIONS = [self::TABLE, self::VIEW, self::STORE_PROCEDURE];
+    private const array MIGRATIONS_OPTIONS = [
+        self::TABLE,
+        self::VIEW,
+        self::STORE_PROCEDURE,
+    ];
 
     /**
-     * [ClassFactory class object]
+     * [Fabricates the data provided to manipulate information (folder, class,
+     * namespace)]
      *
      * @var ClassFactory $classFactory
      */
     private ClassFactory $classFactory;
 
     /**
-     * [MigrationFactory class object]
+     * [Factory of the content of the generated migrations]
      *
      * @var MigrationFactory $migrationFactory
      */
@@ -91,7 +97,7 @@ class MigrationCommand extends MenuCommand
     /**
      * @required
      */
-    public function setMigration(MigrationFactory $migrationFactory): MigrationCommand
+    public function setMigrationFactory(MigrationFactory $migrationFactory): MigrationCommand
     {
         $this->migrationFactory = $migrationFactory;
 
@@ -156,7 +162,7 @@ class MigrationCommand extends MenuCommand
 
         $driver = $this->databaseEngine->getDriver($databaseEngineType);
 
-        $selectedType = $this->selectMigrationType($input, $output, self::OPTIONS);
+        $selectedType = $this->selectMigrationType($input, $output, self::MIGRATIONS_OPTIONS);
 
         $migrationPascal = $this->str->of($migration)->replace('-', ' ')->replace('_', ' ')->pascal()->trim()->get();
 

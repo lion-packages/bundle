@@ -18,38 +18,40 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Generates a capsule class and its defined properties
  *
- * @property ClassFactory $classFactory [ClassFactory class object]
- * @property Store $store [Store class object]
- * @property Str $str [Str class object]
- * @property Arr $arr [Arr class object]
+ * @property ClassFactory $classFactory [Fabricates the data provided to
+ * manipulate information (folder, class, namespace)]
+ * @property Store $store [Manipulate system files]
+ * @property Str $str [Modify and construct strings with different formats]
+ * @property Arr $arr [Modify and build arrays with different indexes or values]
  *
  * @package Lion\Bundle\Commands\Lion\New
  */
 class CapsuleCommand extends Command
 {
     /**
-     * [ClassFactory class object]
+     * [Fabricates the data provided to manipulate information (folder, class,
+     * namespace)]
      *
      * @var ClassFactory $classFactory
      */
     private ClassFactory $classFactory;
 
     /**
-     * [Store class object]
+     * [Manipulate system files]
      *
      * @var Store $store
      */
     private Store $store;
 
     /**
-     * [Str class object]
+     * [Modify and construct strings with different formats]
      *
      * @var Str $str
      */
     private Str $str;
 
     /**
-     * [Arr class object]
+     * [Modify and build arrays with different indexes or values]
      *
      * @var Arr $arr
      */

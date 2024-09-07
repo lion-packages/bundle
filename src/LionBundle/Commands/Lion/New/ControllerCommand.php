@@ -20,7 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @property ClassCommandFactory $classCommandFactory [ClassCommandFactory class
  * object]
- * @property Str $str [Str class object]
+ * @property Str $str [Modify and construct strings with different formats]
  *
  * @package Lion\Bundle\Commands\Lion\New
  */
@@ -43,14 +43,21 @@ class ControllerCommand extends Command
      *
      * @const PATH_CONTROLLER
      */
-    private const string PATH_CONTROLLER = 'app/Http/Controllers/';
+    public const string PATH_CONTROLLER = 'app/Http/Controllers/';
 
     /**
      * [Model path]
      *
      * @const PATH_MODEL
      */
-    private const string PATH_MODEL = 'app/models/';
+    public const string PATH_MODEL = 'app/Models/';
+
+    /**
+     * [Modify and construct strings with different formats]
+     *
+     * @var Str $str
+     */
+    private Str $str;
 
     /**
      * [ClassCommandFactory class object]
@@ -58,13 +65,6 @@ class ControllerCommand extends Command
      * @var ClassCommandFactory $classCommandFactory
      */
     private ClassCommandFactory $classCommandFactory;
-
-    /**
-     * [Str class object]
-     *
-     * @var Str $str
-     */
-    private Str $str;
 
     /**
      * @required

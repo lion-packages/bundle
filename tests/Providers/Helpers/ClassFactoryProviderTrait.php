@@ -74,7 +74,7 @@ trait ClassFactoryProviderTrait
                     ],
                     'getter' => (object) [
                         'name' => 'getIdusers',
-                        'method' => <<<EOT
+                        'method' => <<<PHP
                             /**
                              * Getter method for 'idusers'
                              *
@@ -84,11 +84,11 @@ trait ClassFactoryProviderTrait
                             {
                                 return \$this->idusers;
                             }
-                        EOT
+                        PHP
                     ],
                     'setter' => (object) [
                         'name' => 'setIdusers',
-                        'method' => <<<EOT
+                        'method' => <<<PHP
                             /**
                              * Setter method for 'idusers'
                              *
@@ -102,11 +102,14 @@ trait ClassFactoryProviderTrait
 
                                 return \$this;
                             }
-                        EOT
+                        PHP
                     ],
                     'variable' => (object) [
                         'annotations' => (object) [
-                            'class' => "@property int \$idusers [Property for idusers]"
+                            'class' => (object) [
+                                'data_type' => "@property int \$idusers [Property for idusers]",
+                                'data_type_with_null' => "@property int|null \$idusers [Property for idusers]",
+                            ],
                         ],
                         'reference' => "\$this->idusers;",
                         'name' => (object) [
@@ -139,7 +142,7 @@ trait ClassFactoryProviderTrait
                     ],
                     'getter' => (object) [
                         'name' => 'getIdusers',
-                        'method' => <<<EOT
+                        'method' => <<<PHP
                             /**
                              * Getter method for 'idusers'
                              *
@@ -149,11 +152,11 @@ trait ClassFactoryProviderTrait
                             {
                                 return \$this->idusers;
                             }
-                        EOT
+                        PHP
                     ],
                     'setter' => (object) [
                         'name' => 'setIdusers',
-                        'method' => <<<EOT
+                        'method' => <<<PHP
                             /**
                              * Setter method for 'idusers'
                              *
@@ -167,11 +170,14 @@ trait ClassFactoryProviderTrait
 
                                 return \$this;
                             }
-                        EOT
+                        PHP
                     ],
                     'variable' => (object) [
                         'annotations' => (object) [
-                            'class' => "@property int \$idusers [Property for idusers]"
+                            'class' => (object) [
+                                'data_type' => "@property int \$idusers [Property for idusers]",
+                                'data_type_with_null' => "@property int|null \$idusers [Property for idusers]",
+                            ],
                         ],
                         'reference' => "\$this->idusers;",
                         'name' => (object) [
@@ -204,7 +210,7 @@ trait ClassFactoryProviderTrait
                     ],
                     'getter' => (object) [
                         'name' => 'getIdusers',
-                        'method' => <<<EOT
+                        'method' => <<<PHP
                             /**
                              * Getter method for 'idusers'
                              *
@@ -214,11 +220,11 @@ trait ClassFactoryProviderTrait
                             {
                                 return \$this->idusers;
                             }
-                        EOT
+                        PHP
                     ],
                     'setter' => (object) [
                         'name' => 'setIdusers',
-                        'method' => <<<EOT
+                        'method' => <<<PHP
                             /**
                              * Setter method for 'idusers'
                              *
@@ -232,11 +238,14 @@ trait ClassFactoryProviderTrait
 
                                 return \$this;
                             }
-                        EOT
+                        PHP
                     ],
                     'variable' => (object) [
                         'annotations' => (object) [
-                            'class' => "@property int \$idusers [Property for idusers]"
+                            'class' => (object) [
+                                'data_type' => "@property int \$idusers [Property for idusers]",
+                                'data_type_with_null' => "@property int|null \$idusers [Property for idusers]",
+                            ],
                         ],
                         'reference' => "\$this->idusers;",
                         'name' => (object) [
@@ -269,7 +278,7 @@ trait ClassFactoryProviderTrait
                     ],
                     'getter' => (object) [
                         'name' => 'getIdusers',
-                        'method' => <<<EOT
+                        'method' => <<<PHP
                             /**
                              * Getter method for 'idusers'
                              *
@@ -279,11 +288,11 @@ trait ClassFactoryProviderTrait
                             {
                                 return \$this->idusers;
                             }
-                        EOT
+                        PHP
                     ],
                     'setter' => (object) [
                         'name' => 'setIdusers',
-                        'method' => <<<EOT
+                        'method' => <<<PHP
                             /**
                              * Setter method for 'idusers'
                              *
@@ -297,11 +306,14 @@ trait ClassFactoryProviderTrait
 
                                 return \$this;
                             }
-                        EOT
+                        PHP
                     ],
                     'variable' => (object) [
                         'annotations' => (object) [
-                            'class' => "@property int \$idusers [Property for idusers]"
+                            'class' => (object) [
+                                'data_type' => "@property int \$idusers [Property for idusers]",
+                                'data_type_with_null' => "@property int|null \$idusers [Property for idusers]",
+                            ],
                         ],
                         'reference' => "\$this->idusers;",
                         'name' => (object) [

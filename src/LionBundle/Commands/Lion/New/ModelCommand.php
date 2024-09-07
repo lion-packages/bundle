@@ -8,6 +8,7 @@ use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Files\Store;
 use Lion\Helpers\Str;
+use LogicException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -15,9 +16,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Generate a Request class
  *
- * @property ClassFactory $classFactory [ClassFactory class object]
- * @property Store $store [Store class object]
- * @property Str $str [Str class object]
+ * @property ClassFactory $classFactory [Fabricates the data provided to
+ * manipulate information (folder, class, namespace)]
+ * @property Store $store [Manipulate system files]
+ * @property Str $str [Modify and construct strings with different formats]
  *
  * @package Lion\Bundle\Commands\Lion\New
  */
@@ -28,7 +30,12 @@ class ModelCommand extends Command
      *
      * @const METHODS
      */
-    const METHODS = ['create', 'read', 'update', 'delete'];
+    private const array METHODS = [
+        'create',
+        'read',
+        'update',
+        'delete'
+    ];
 
     /**
      * [ClassFactory class object]
@@ -38,14 +45,14 @@ class ModelCommand extends Command
     private ClassFactory $classFactory;
 
     /**
-     * [Store class object]
+     * [Manipulate system files]
      *
      * @var Store $store
      */
     private Store $store;
 
     /**
-     * [Str class object]
+     * [Modify and construct strings with different formats]
      *
      * @var Str $str
      */
@@ -107,9 +114,9 @@ class ModelCommand extends Command
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int 0 if everything went fine, or an exit code
+     * @return int [0 if everything went fine, or an exit code]
      *
-     * @throws LogicException When this abstract method is not implemented
+     * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -128,7 +135,7 @@ class ModelCommand extends Command
         $this->classFactory
             ->create($class, ClassFactory::PHP_EXTENSION, $folder)
             ->add(
-                <<<EOT
+                <<<PHP
                 <?php
 
                 declare(strict_types=1);
@@ -146,7 +153,7 @@ class ModelCommand extends Command
                  */
                 class {$class}
                 {\n
-                EOT
+                PHP
             );
 
         foreach (self::METHODS as $method) {

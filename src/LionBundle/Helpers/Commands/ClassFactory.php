@@ -11,7 +11,7 @@ use stdClass;
  * Fabricates the data provided to manipulate information (folder, class,
  * namespace)
  *
- * @property Store $store [Store class object]
+ * @property Store $store [Manipulate system files]
  * @property string $namespace [Class namespace]
  * @property string $class [Class name]
  *
@@ -24,59 +24,59 @@ class ClassFactory
      *
      * @const TXT_EXTENSION
      */
-    const TXT_EXTENSION = 'txt';
+    public const string TXT_EXTENSION = 'txt';
 
     /**
      * [.json file extension]
      *
      * @const JSON_EXTENSION
      */
-    const JSON_EXTENSION = 'json';
+    public const string JSON_EXTENSION = 'json';
 
     /**
      * [.php file extension]
      *
      * @const PHP_EXTENSION
      */
-    const PHP_EXTENSION = 'php';
+    public const string PHP_EXTENSION = 'php';
 
     /**
      * [.log file extension]
      *
      * @const LOG_EXTENSION
      */
-    const LOG_EXTENSION = 'log';
+    public const string LOG_EXTENSION = 'log';
 
     /**
      * [.sh file extension]
      *
      * @const SH_EXTENSION
      */
-    const SH_EXTENSION = 'sh';
+    public const string SH_EXTENSION = 'sh';
 
     /**
      * [Scope of public method or property]
      *
      * @const PUBLIC_PROPERTY
      */
-    const PUBLIC_PROPERTY = 'public';
+    public const string PUBLIC_PROPERTY = 'public';
 
     /**
      * [Scope of private method or property]
      *
      * @const PRIVATE_PROPERTY
      */
-    const PRIVATE_PROPERTY = 'private';
+    public const string PRIVATE_PROPERTY = 'private';
 
     /**
      * [Scope of protected method or property]
      *
      * @const PROTECTED_PROPERTY
      */
-    const PROTECTED_PROPERTY = 'protected';
+    public const string PROTECTED_PROPERTY = 'protected';
 
     /**
-     * [Object of class Store]
+     * [Manipulate system files]
      *
      * @var Store $store
      */
@@ -118,9 +118,11 @@ class ClassFactory
     /**
      * @required
      */
-    public function setStore(Store $store)
+    public function setStore(Store $store): ClassFactory
     {
         $this->store = $store;
+        
+        return $this;
     }
 
     /**

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Lion\Bundle\Helpers\Commands\Selection;
 
 use Exception;
-use Lion\Bundle\Helpers\DatabaseEngine;
 use Lion\Command\Command;
 use Lion\Database\Connection;
 use Lion\Database\Driver;
