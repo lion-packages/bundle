@@ -7,6 +7,7 @@ namespace Lion\Bundle\Commands\Lion;
 use Lion\Bundle\Helpers\Commands\ComposerFactory;
 use Lion\Command\Command;
 use Lion\Helpers\Arr;
+use LogicException;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -14,8 +15,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Shows the libraries installed in the project in a table
  *
- * @property Arr $arr [Arr class object]
- * @property ComposerFactory $composerFactory [ComposerFactory class object]
+ * @property Arr $arr [Modify and build arrays with different indexes or values]
+ * @property ComposerFactory $composerFactory [Gets the list of installed
+ * libraries and dev-libraries]
  *
  * @package Lion\Bundle\Commands\Lion
  */
@@ -26,7 +28,7 @@ class InfoCommand extends Command
      *
      * @const EXTENSIONS
      */
-    const EXTENSIONS = [
+    private const array EXTENSIONS = [
         'php',
         'ext-ctype',
         'ext-filter',
@@ -38,14 +40,14 @@ class InfoCommand extends Command
     ];
 
     /**
-     * [Arr class object]
+     * [Modify and build arrays with different indexes or values]
      *
      * @var Arr $arr
      */
     private Arr $arr;
 
     /**
-     * [ComposerFactory class object]
+     * [Gets the list of installed libraries and dev-libraries]
      *
      * @var ComposerFactory $composerFactory
      */
@@ -96,11 +98,9 @@ class InfoCommand extends Command
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int 0 if everything went fine, or an exit code
+     * @return int [0 if everything went fine, or an exit code]
      *
-     * @throws LogicException When this abstract method is not implemented
-     *
-     * @see setCode()
+     * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -116,14 +116,7 @@ class InfoCommand extends Command
         (new Table($output))
             ->setHeaderTitle($this->successOutput(' LIBRARIES '))
             ->setHeaders(['LIBRARY', 'VERSION', 'LICENSE', 'DEV', 'DESCRIPTION'])
-            ->setFooterTitle(
-                $size > 1
-                    ? $this->successOutput(" Showing [{$size}] libraries ")
-                    : ($size === 1
-                        ? $this->successOutput(" showing a single library ")
-                        : $this->successOutput(" No libraries available ")
-                    )
-            )
+            ->setFooterTitle($this->successOutput(" Showing [{$size}] libraries "))
             ->setRows($libraries)
             ->render();
 
