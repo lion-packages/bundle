@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\New;
 
+use Exception;
 use Lion\Command\Command;
 use Lion\Files\Store;
 use Lion\Security\RSA;
+use LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -81,20 +83,17 @@ class RSACommand extends Command
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int 0 if everything went fine, or an exit code
+     * @return int [0 if everything went fine, or an exit code]
      *
-     * @throws LogicException When this abstract method is not implemented
-     *
-     * @see setCode()
+     * @throws Exception
+     * @throws LogicException [When this abstract method is not implemented]
      */
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
         $path = $input->getOption('path');
 
         $this->rsa->config([
-            'urlPath' => $this->store->normalizePath(
-                null === $path ? $this->rsa->getUrlPath() : storage_path($path, false)
-            ),
+            'urlPath' => null === $path ? $this->rsa->getUrlPath() : storage_path($path),
             'rsaConfig' => $_ENV['RSA_PATH'],
             'rsaPrivateKeyBits' => (int) $_ENV['RSA_PRIVATE_KEY_BITS'],
             'rsaDefaultMd' => $_ENV['RSA_DEFAULT_MD']
@@ -103,10 +102,6 @@ class RSACommand extends Command
         $this->store->folder($this->rsa->getUrlPath());
 
         $this->rsa->create();
-
-        if (isSuccess($this->store->exist('.rnd'))) {
-            $this->store->remove('.rnd');
-        }
 
         $output->writeln($this->warningOutput("\t>>  RSA KEYS: public and private"));
 

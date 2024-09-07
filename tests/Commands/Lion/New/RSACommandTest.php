@@ -6,22 +6,31 @@ namespace Tests\Commands\Lion\New;
 
 use Lion\Bundle\Commands\Lion\New\RSACommand;
 use Lion\Command\Command;
-use Lion\Command\Kernel;
-use Lion\Dependency\Injection\Container;
+use Lion\Files\Store;
+use Lion\Security\RSA;
 use Lion\Test\Test;
+use PHPUnit\Framework\Attributes\Test as Testing;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class RSACommandTest extends Test
 {
-    const URL_PATH = 'keys/';
-    const OUTPUT_MESSAGE = 'public and private';
+    private const string URL_PATH = 'keys/';
+    private const string OUTPUT_MESSAGE = 'public and private';
 
     private CommandTester $commandTester;
+    private RSACommand $rSACommand;
 
     protected function setUp(): void
     {
-        $application = (new Kernel())->getApplication();
-        $application->add((new Container())->injectDependencies(new RSACommand()));
+        $application = new Application();
+
+        $this->rSACommand = (new RSACommand())
+            ->setRSA(new RSA())
+            ->setStore(new Store());
+
+        $application->add($this->rSACommand);
+
         $this->commandTester = new CommandTester($application->find('new:rsa'));
     }
 
@@ -30,7 +39,8 @@ class RSACommandTest extends Test
         $this->rmdirRecursively('./storage/keys/');
     }
 
-    public function testExecute(): void
+    #[Testing]
+    public function execute(): void
     {
         $this->assertSame(Command::SUCCESS, $this->commandTester->execute(['--path' => self::URL_PATH]));
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
