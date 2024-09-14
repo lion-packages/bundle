@@ -85,7 +85,7 @@ services:
 
     postgres:
         image: postgres
-        container_name: database-postgres
+        container_name: bundle-postgres
         ports:
             - "5432:5432"
         environment:
@@ -99,7 +99,7 @@ services:
 
     pgadmin:
         image: dpage/pgadmin4
-        container_name: database-pgadmin4
+        container_name: bundle-pgadmin4
         ports:
             - "5050:80"
         environment:
