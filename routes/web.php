@@ -38,7 +38,7 @@ use Tests\Providers\ExampleProvider;
  * -----------------------------------------------------------------------------
  **/
 
-if ((new Store())->exist(__DIR__ . '/../.env')) {
+if (isSuccess((new Store())->exist(__DIR__ . '/../.env'))) {
     Dotenv::createMutable(__DIR__ . '/../')->load();
 }
 

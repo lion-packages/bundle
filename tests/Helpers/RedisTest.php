@@ -9,20 +9,15 @@ use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
 use PHPUnit\Framework\Attributes\TestWith;
 use Predis\Client;
-use Tests\Providers\EnviromentProviderTrait;
 
 class RedisTest extends Test
 {
-    use EnviromentProviderTrait;
-
     private const int REDIS_TIME_CACHE = 10;
 
     private Redis $redis;
 
     protected function setUp(): void
     {
-        $this->loadEnviroment();
-
         $this->redis = new Redis();
 
         $this->initReflection($this->redis);

@@ -5,22 +5,19 @@ declare(strict_types=1);
 namespace Tests\Helpers\Commands;
 
 use Lion\Bundle\Helpers\Commands\PostmanCollection;
-use Lion\Bundle\Helpers\Http\Routes;
 use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
 use Lion\Request\Http;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
-use Tests\Providers\EnviromentProviderTrait;
 use Tests\Providers\Helpers\PostmanCollectionProviderTrait;
 
 class PostmanCollectionTest extends Test
 {
-    use EnviromentProviderTrait;
     use PostmanCollectionProviderTrait;
 
-    const HOST = 'http://127.0.0.1:8000';
-    const POSTMAN_CONFIG = [
+    private const string HOST = 'http://127.0.0.1:8000';
+    private const array POSTMAN_CONFIG = [
         'params' => [
             'routes' => [],
             'items' => [],
@@ -37,8 +34,6 @@ class PostmanCollectionTest extends Test
 
     protected function setUp(): void
     {
-        $this->loadEnviroment();
-
         $this->postmanCollection = (new Container())
             ->injectDependencies(new PostmanCollection());
 

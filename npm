@@ -20,6 +20,7 @@ require_once(__DIR__ . '/vendor/autoload.php');
 use Dotenv\Dotenv;
 use Lion\Bundle\Commands\CommandHandler;
 use Lion\Database\Driver;
+use Lion\Files\Store;
 
 /**
  * -----------------------------------------------------------------------------
@@ -29,7 +30,9 @@ use Lion\Database\Driver;
  * -----------------------------------------------------------------------------
  **/
 
-Dotenv::createImmutable(__DIR__)->load();
+if (isSuccess((new Store())->exist(__DIR__ . '/.env'))) {
+    Dotenv::createImmutable(__DIR__)->load();
+}
 
 /**
  * -----------------------------------------------------------------------------

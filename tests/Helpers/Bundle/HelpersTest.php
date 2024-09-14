@@ -15,31 +15,24 @@ use Lion\Security\AES;
 use Lion\Security\JWT;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
-use Tests\Providers\EnviromentProviderTrait;
 use Tests\Providers\Helpers\HelpersProviderTrait;
 
 class HelpersTest extends Test
 {
-    use EnviromentProviderTrait;
     use HelpersProviderTrait;
 
-    const string PATH_URL = 'storage/';
-    const string PUBLIC_PATH_URL = 'public/';
-    const string PATH_URL_INDEX = '../storage/';
-    const string CUSTOM_FOLDER = 'example/';
-    const array RESPONSE = ['code' => Http::OK, 'status' => Status::INFO, 'message' => '[index]'];
-    const string JSON_RESPONSE = '{"name":"Sleon"}';
-    const string CODE = 'code';
-    const string STATUS = 'status';
-    const string MESSAGE = 'message';
-    const string CUSTOM = 'custom';
-    const string LOGGER_CONTENT = 'test-logger';
-    const string USERS_NAME = 'root';
-
-    protected function setUp(): void
-    {
-        $this->loadEnviroment();
-    }
+    private const string PATH_URL = 'storage/';
+    private const string PUBLIC_PATH_URL = 'public/';
+    private const string PATH_URL_INDEX = '../storage/';
+    private const string CUSTOM_FOLDER = 'example/';
+    private const array RESPONSE = ['code' => Http::OK, 'status' => Status::INFO, 'message' => '[index]'];
+    private const string JSON_RESPONSE = '{"name":"Sleon"}';
+    private const string CODE = 'code';
+    private const string STATUS = 'status';
+    private const string MESSAGE = 'message';
+    private const string CUSTOM = 'custom';
+    private const string LOGGER_CONTENT = 'test-logger';
+    private const string USERS_NAME = 'root';
 
     protected function tearDown(): void
     {

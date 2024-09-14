@@ -7,20 +7,17 @@ namespace Tests\Helpers;
 use Lion\Bundle\Helpers\Env;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
-use Tests\Providers\EnviromentProviderTrait;
+
 use Tests\Providers\Helpers\EnvProviderTrait;
 
 class EnvTest extends Test
 {
-    use EnviromentProviderTrait;
     use EnvProviderTrait;
 
     private Env $env;
 
     protected function setUp(): void
     {
-        $this->loadEnviroment();
-
         $this->env = new Env();
 
         $this->initReflection($this->env);

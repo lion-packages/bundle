@@ -6,24 +6,23 @@ namespace Tests\Middleware;
 
 use Lion\Bundle\Exceptions\MiddlewareException;
 use Lion\Bundle\Middleware\RouteMiddleware;
+use Lion\Exceptions\Exception;
 use Lion\Request\Http;
 use Lion\Request\Status;
 use Lion\Test\Test;
-use Tests\Providers\EnviromentProviderTrait;
 
 class RouteMiddlewareTest extends Test
 {
-    use EnviromentProviderTrait;
-
     private RouteMiddleware $routeMiddleware;
 
     protected function setUp(): void
     {
-        $this->loadEnviroment();
-
         $this->routeMiddleware = new RouteMiddleware();
     }
 
+    /**
+     * @throws Exception
+     */
     public function testProtectRouteListWithoutHeader(): void
     {
         $this
@@ -36,6 +35,9 @@ class RouteMiddlewareTest extends Test
             });
     }
 
+    /**
+     * @throws Exception
+     */
     public function testProtectedRouteListDiferentHash(): void
     {
         $this
