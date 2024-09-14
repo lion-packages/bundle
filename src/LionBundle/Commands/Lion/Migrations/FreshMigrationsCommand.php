@@ -17,6 +17,7 @@ use Lion\Database\Drivers\Schema\MySQL as Schema;
 use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
 use LogicException;
+use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -107,6 +108,7 @@ class FreshMigrationsCommand extends MenuCommand
      * @return int [0 if everything went fine, or an exit code]
      *
      * @throws LogicException [When this abstract method is not implemented]
+     * @throws ExceptionInterface
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -204,7 +206,7 @@ class FreshMigrationsCommand extends MenuCommand
                     ->execute();
             }
 
-            if (Driver::PostgreSQL === $connection['type']) {
+            if (Driver::POSTGRESQL === $connection['type']) {
                 $tables = $this->getTables($connectionName);
 
                 if (!isset($tables->status)) {
@@ -271,13 +273,11 @@ class FreshMigrationsCommand extends MenuCommand
             if ($classObject instanceof MigrationUpInterface) {
                 $response = $classObject->up();
 
-                if (isError($response)) {
-                    $this->output->writeln($this->warningOutput("\t>> MIGRATION: {$namespace}"));
+                $this->output->writeln($this->warningOutput("\t>> MIGRATION: {$namespace}"));
 
+                if (isError($response)) {
                     $this->output->writeln($this->errorOutput("\t>> MIGRATION: {$response->message}"));
                 } else {
-                    $this->output->writeln($this->warningOutput("\t>> MIGRATION: {$namespace}"));
-
                     $this->output->writeln($this->successOutput("\t>> MIGRATION: {$response->message}"));
                 }
             }

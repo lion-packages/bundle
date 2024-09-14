@@ -25,7 +25,7 @@ class DatabaseEngine
     {
         $drivers = [
             Driver::MYSQL => 'MySQL',
-            Driver::PostgreSQL => 'PostgreSQL',
+            Driver::POSTGRESQL => 'PostgreSQL',
         ];
 
         return $drivers[$driver] ?? 'MySQL';

@@ -117,7 +117,7 @@ class EmptyMigrationsCommand extends MenuCommand
                 ->truncateTable($table);
         }
 
-        if (Driver::PostgreSQL === $driver) {
+        if (Driver::POSTGRESQL === $driver) {
             return PostgreSQL::connection($connectionName)
                 ->query(
                     <<<SQL

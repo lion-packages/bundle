@@ -309,7 +309,7 @@ class MenuCommand extends Command
                 ->getAll();
         }
 
-        if (Driver::PostgreSQL === $driver) {
+        if (Driver::POSTGRESQL === $driver) {
             return PostgreSQL::connection($selectedConnection)
                 ->query(
                     <<<SQL
@@ -403,7 +403,7 @@ class MenuCommand extends Command
                 ->getAll();
         }
 
-        if (Driver::PostgreSQL === $driver) {
+        if (Driver::POSTGRESQL === $driver) {
             return PostgreSQL::connection($selectedConnection)
                 ->query(
                     <<<SQL
@@ -440,7 +440,7 @@ class MenuCommand extends Command
                 ->getAll();
         }
 
-        if (Driver::PostgreSQL === $connections[$connectionName]['type']) {
+        if (Driver::POSTGRESQL === $connections[$connectionName]['type']) {
             return PostgreSQL::connection($connectionName)
                 ->query(
                     <<<SQL

@@ -209,7 +209,7 @@ class MigrationCommand extends MenuCommand
 
             if ($this->databaseEngine->getDriver(Driver::MYSQL) === $driver) {
                 $body = $this->migrationFactory->getMySQLTableBody();
-            } elseif ($this->databaseEngine->getDriver(Driver::PostgreSQL) === $driver) {
+            } elseif ($this->databaseEngine->getDriver(Driver::POSTGRESQL) === $driver) {
                 $body = $this->migrationFactory->getPostgreSQLTableBody();
             }
         }
@@ -219,7 +219,7 @@ class MigrationCommand extends MenuCommand
 
             if ($this->databaseEngine->getDriver(Driver::MYSQL) === $driver) {
                 $body = $this->migrationFactory->getMySQLViewBody();
-            } elseif ($this->databaseEngine->getDriver(Driver::PostgreSQL) === $driver) {
+            } elseif ($this->databaseEngine->getDriver(Driver::POSTGRESQL) === $driver) {
                 $body = $this->migrationFactory->getPostgreSQLViewBody();
             }
         }
@@ -229,7 +229,7 @@ class MigrationCommand extends MenuCommand
 
             if ($this->databaseEngine->getDriver(Driver::MYSQL) === $driver) {
                 $body = $this->migrationFactory->getMySQLStoreProcedureBody();
-            } elseif ($this->databaseEngine->getDriver(Driver::PostgreSQL) === $driver) {
+            } elseif ($this->databaseEngine->getDriver(Driver::POSTGRESQL) === $driver) {
                 $body = $this->migrationFactory->getPostgreSQLStoreProcedureBody();
             }
         }
