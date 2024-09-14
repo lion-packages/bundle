@@ -9,10 +9,10 @@
 </p>
 
 <p align="center">
-  <img src="http://poser.pugx.org/lion/bundle/v" alt="Latest Stable Version">
-  <img src="http://poser.pugx.org/lion/bundle/downloads" alt="Total Downloads">
-  <img src="http://poser.pugx.org/lion/bundle/license" alt="License">
-  <img src="http://poser.pugx.org/lion/bundle/require/php" alt="PHP Version Require">
+  <img src="https://poser.pugx.org/lion/bundle/v" alt="Latest Stable Version">
+  <img src="https://poser.pugx.org/lion/bundle/downloads" alt="Total Downloads">
+  <img src="https://poser.pugx.org/lion/bundle/license" alt="License">
+  <img src="https://poser.pugx.org/lion/bundle/require/php" alt="PHP Version Require">
 </p>
 
 ## Install
