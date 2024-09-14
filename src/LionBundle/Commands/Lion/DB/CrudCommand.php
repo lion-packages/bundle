@@ -412,7 +412,7 @@ class CrudCommand extends MenuCommand
             ]);
         }
 
-        if (Driver::PostgreSQL === $this->str->of($driver)->lower()->get()) {
+        if (Driver::POSTGRESQL === $this->str->of($driver)->lower()->get()) {
             $this->fileWriter->readFileRows($pathM, [
                 6 => [
                     'replace' => false,

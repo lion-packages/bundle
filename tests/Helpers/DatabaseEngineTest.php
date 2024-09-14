@@ -26,7 +26,7 @@ class DatabaseEngineTest extends Test
 
     #[Testing]
     #[TestWith(['driver' => Driver::MYSQL, 'return' => 'MySQL'])]
-    #[TestWith(['driver' => Driver::PostgreSQL, 'return' => 'PostgreSQL'])]
+    #[TestWith(['driver' => Driver::POSTGRESQL, 'return' => 'PostgreSQL'])]
     #[TestWith(['driver' => 'redis', 'return' => 'MySQL'])]
     public function getDriver(string $driver, string $return): void
     {
