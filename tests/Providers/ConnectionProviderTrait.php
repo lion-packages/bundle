@@ -8,12 +8,8 @@ use Lion\Database\Driver;
 
 trait ConnectionProviderTrait
 {
-    use EnviromentProviderTrait;
-
     private function runDatabaseConnections(): void
     {
-        $this->loadEnviroment();
-
         Driver::run([
             'default' => env('DB_NAME'),
             'connections' => [

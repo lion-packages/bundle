@@ -4,23 +4,26 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use Lion\Mailer\Exceptions\MailerAccountConfigException;
 use Lion\Mailer\Mailer;
 use Lion\Mailer\Priority;
 use Lion\Test\Test;
 use Tests\Providers\EmailProviderTrait;
-use Tests\Providers\EnviromentProviderTrait;
+
 
 class MailhogTest extends Test
 {
     use EmailProviderTrait;
-    use EnviromentProviderTrait;
+
 
     protected function setUp(): void
     {
-        $this->loadEnviroment();
         $this->runMailer();
     }
 
+    /**
+     * @throws MailerAccountConfigException
+     */
     public function testMail(): void
     {
         $this->assertTrue(
@@ -34,6 +37,9 @@ class MailhogTest extends Test
         );
     }
 
+    /**
+     * @throws MailerAccountConfigException
+     */
     public function testMailSupp(): void
     {
         $this->assertTrue(

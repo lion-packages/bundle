@@ -39,8 +39,8 @@ echo -e "\033[0;36m\t>>  Suite Traits \033[0m"
 php vendor/bin/phpunit --testsuite Traits
 echo -e "\n\033[0;31m>> -------------------------------------------------------------------------------------- << \n\033[0m";
 
-echo -e "\033[0;36m\t>>  Suite Redis/Mailhog \033[0m"
-php vendor/bin/phpunit  --testsuite Redis/Mailhog
+echo -e "\033[0;36m\t>>  Suite Mailhog \033[0m"
+php vendor/bin/phpunit  --testsuite Mailhog
 echo -e "\n\033[0;31m>> -------------------------------------------------------------------------------------- << \n\033[0m";
 
 end_time=$(date +"%Y-%m-%d %H:%M:%S")

@@ -13,16 +13,13 @@ use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
 use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
-use Tests\Providers\EnviromentProviderTrait;
 
 class PostmanCollectionCommandTest extends Test
 {
-    use EnviromentProviderTrait;
-
-    const URL_PATH = './storage/postman/';
-    const OUTPUT_MESSAGE = 'Exported in';
-    const NAMESPACE_RULE = 'App\\Rules\\UsersNameRule';
-    const CLASS_NAME_RULE = 'UsersNameRule';
+    private const string URL_PATH = './storage/postman/';
+    private const string OUTPUT_MESSAGE = 'Exported in';
+    private const string NAMESPACE_RULE = 'App\\Rules\\UsersNameRule';
+    private const string CLASS_NAME_RULE = 'UsersNameRule';
 
     private CommandTester $commandTester;
     private CommandTester $commandTesterRule;
@@ -30,8 +27,6 @@ class PostmanCollectionCommandTest extends Test
 
     protected function setUp(): void
     {
-        $this->loadEnviroment();
-
         $this->createDirectory(self::URL_PATH);
 
         $this->store = new Store();

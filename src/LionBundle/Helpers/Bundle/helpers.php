@@ -130,7 +130,7 @@ if (!function_exists('response')) {
      */
     function response(
         string $status = 'custom',
-        mixed $message = null,
+        ?string $message = null,
         int $code = Http::OK,
         mixed $data = null
     ): stdClass {
@@ -148,7 +148,7 @@ if (!function_exists('success')) {
      *
      * @return stdClass
      */
-    function success(mixed $message = null, int $code = Http::OK, mixed $data = null): stdClass
+    function success(?string $message = null, int $code = Http::OK, mixed $data = null): stdClass
     {
         return response->success($message, $code, $data);
     }
@@ -164,7 +164,7 @@ if (!function_exists('error')) {
      *
      * @return stdClass
      */
-    function error(mixed $message = null, int $code = Http::INTERNAL_SERVER_ERROR, mixed $data = null): stdClass
+    function error(?string $message = null, int $code = Http::INTERNAL_SERVER_ERROR, mixed $data = null): stdClass
     {
         return response->error($message, $code, $data);
     }
@@ -180,7 +180,7 @@ if (!function_exists('warning')) {
      *
      * @return stdClass
      */
-    function warning(mixed $message = null, int $code = Http::OK, mixed $data = null): stdClass
+    function warning(?string $message = null, int $code = Http::OK, mixed $data = null): stdClass
     {
         return response->warning($message, $code, $data);
     }
@@ -196,7 +196,7 @@ if (!function_exists('info')) {
      *
      * @return stdClass
      */
-    function info(mixed $message = null, int $code = Http::OK, mixed $data = null): stdClass
+    function info(?string $message = null, int $code = Http::OK, mixed $data = null): stdClass
     {
         return response->info($message, $code, $data);
     }

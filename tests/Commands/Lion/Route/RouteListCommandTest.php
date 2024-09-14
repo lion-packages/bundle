@@ -13,20 +13,15 @@ use Lion\Dependency\Injection\Container;
 use Lion\Route\Middleware;
 use Lion\Test\Test;
 use Symfony\Component\Console\Tester\CommandTester;
-use Tests\Providers\EnviromentProviderTrait;
 
 class RouteListCommandTest extends Test
 {
-    use EnviromentProviderTrait;
-
-    const OUTPUT_MESSAGE = 'ROUTES';
+    private const string OUTPUT_MESSAGE = 'ROUTES';
 
     private CommandTester $commandTester;
 
     protected function setUp(): void
     {
-        $this->loadEnviroment();
-
         $container = new Container();
 
         $application = (new Kernel())

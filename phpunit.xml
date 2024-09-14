@@ -13,7 +13,7 @@
     stopOnFailure="true"
     stopOnWarning="true"
     bootstrap="tests/bootstrap.php"
-    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.1/phpunit.xsd"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.3/phpunit.xsd"
     backupStaticProperties="false"
     displayDetailsOnIncompleteTests="true"
     displayDetailsOnSkippedTests="true"
@@ -39,21 +39,6 @@
             <directory>src/LionBundle/Commands/Npm</directory>
         </exclude>
     </source>
-
-    <!-- <extensions>
-        <bootstrap class="RobinIngelbrecht\PHPUnitPrettyPrint\PhpUnitExtension">
-            <parameter name="enableByDefault" value="true" />
-            <parameter name="displayProfiling" value="true" />
-            <parameter name="useCompactMode" value="true" />
-        </bootstrap>
-    </extensions> -->
-
-    <!-- <coverage>
-        <report>
-            <clover outputFile="tests/build/logs/clover.xml" />
-            <html outputDirectory="tests/build/coverage" />
-        </report>
-    </coverage> -->
 
     <testsuites>
         <testsuite name="All-Test">
@@ -84,8 +69,7 @@
             <directory>tests/Traits/</directory>
         </testsuite>
 
-        <testsuite name="Redis/Mailhog">
-            <file>tests/RedisConnectionTest.php</file>
+        <testsuite name="Mailhog">
             <file>tests/MailhogTest.php</file>
         </testsuite>
     </testsuites>
