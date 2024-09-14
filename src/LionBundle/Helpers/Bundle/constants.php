@@ -12,33 +12,31 @@ use Lion\Request\Response;
  * [Object of the GuzzleHttp Client class]
  *
  * @var Client
- * */
-define('client', new Client());
+ */
+const client = new Client();
 
 /**
  * [Object with properties captured in an HTTP request]
- *
- * @var stdClass
- * */
+ */
 define('request', (new Request())->capture());
 
 /**
  * [Object of Response class to generate response objects]
  *
  * @var Response
- * */
-define('response', new Response());
+ */
+const response = new Response();
 
 /**
  * Object of class Str
  *
  * @var Str
- * */
-define('str', new Str());
+ */
+const str = new Str();
 
 /**
  * Object of class Arr
  *
  * @var Arr
- * */
-define('arr', new Arr());
+ */
+const arr = new Arr();
