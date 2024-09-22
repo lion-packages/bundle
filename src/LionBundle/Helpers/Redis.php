@@ -18,11 +18,18 @@ use Predis\Client;
 class Redis
 {
     /**
-     * Default seconds for redis cache
+     * [Default seconds for redis cache]
      *
      * @const REDIS_DEFAULT_SECONDS
      */
-    public const int REDIS_DEFAULT_SECONDS = 15;
+    public const int REDIS_TIME_DEFAULT = 15;
+
+    /**
+     * [Zero time for redis processes]
+     *
+     * @const REDIS_TIME_EMPTY
+     */
+    private const int REDIS_TIME_EMPTY = 0;
 
     /**
      * [Client class used for connecting and executing commands on Redis]
@@ -36,7 +43,7 @@ class Redis
      *
      * @var int
      */
-    private int $seconds = 0;
+    private int $seconds = self::REDIS_TIME_EMPTY;
 
     /**
      * Class Constructor
@@ -77,13 +84,13 @@ class Redis
     /**
      * Converts string in JSON format to array
      *
-     * @param string $data [String in JSON format]
+     * @param string|null $data [String in JSON format]
      *
      * @return array
      */
-    private function toArray(string $data): array
+    private function toArray(?string $data): array
     {
-        return json_decode($data, true);
+        return NULL_VALUE === $data ? [] : json_decode($data, true);
     }
 
     /**
@@ -116,13 +123,13 @@ class Redis
 
         $jsonData = json_encode($value);
 
-        $this->seconds = 0 === $this->seconds ? self::REDIS_DEFAULT_SECONDS : $this->seconds;
-
         $this->client->set($key, $jsonData);
 
-        $this->client->expire($key, $this->seconds);
+        if ($this->seconds > self::REDIS_TIME_EMPTY) {
+            $this->client->expire($key, $this->seconds);
+        }
 
-        $this->seconds = self::REDIS_DEFAULT_SECONDS;
+        $this->seconds = self::REDIS_TIME_EMPTY;
 
         return $this;
     }
@@ -157,5 +164,30 @@ class Redis
         $this->connect();
 
         $this->client->flushall();
+    }
+
+    /**
+     * Store data in cache
+     *
+     * @param string $key [Index name]
+     * @param mixed $value [Defined value]
+     *
+     * @return void
+     */
+    public function addQueue(string $key, mixed $value): void
+    {
+        $data = $this->get('queue');
+
+        if (NULL_VALUE === $data) {
+            $this->set('queue', [
+                $key => $value,
+            ]);
+        }
+
+        unset($data[$key]);
+
+        $data[$key] = $value;
+
+        $this->set('queue', $data);
     }
 }

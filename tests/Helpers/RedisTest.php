@@ -66,6 +66,15 @@ class RedisTest extends Test
     }
 
     #[Testing]
+    public function toArrayWithParamNull(): void
+    {
+        $return = $this->getPrivateMethod('toArray', [NULL_VALUE]);
+
+        $this->assertIsArray($return);
+        $this->assertempty($return);
+    }
+
+    #[Testing]
     public function setTime(): void
     {
         $seconds = (int) fake()->numerify('##');
