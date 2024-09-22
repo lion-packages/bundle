@@ -17,7 +17,7 @@ define('IS_INDEX', false);
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
-// use App\Exceptions\ExampleException;
+use Lion\Bundle\Helpers\Commands\Schedule\Task;
 use Lion\Route\Route;
 use Dotenv\Dotenv;
 use Lion\Bundle\Enums\LogTypeEnum;
@@ -26,8 +26,6 @@ use Lion\Bundle\Helpers\Http\Routes;
 use Lion\Database\Driver;
 use Lion\Files\Store;
 use Lion\Mailer\Mailer;
-use Lion\Request\Http;
-use Lion\Request\Status;
 use Tests\Providers\ExampleProvider;
 
 /**
@@ -113,17 +111,10 @@ Route::init();
 
 Route::addMiddleware(Routes::getMiddleware());
 // -----------------------------------------------------------------------------
-Route::get('/', function () {
-    // TaskQueue::push('send:email:verify', json([
-    //     'email' => 'sleon@dev.com',
-    //     'template' => '<h1>Tasks Test: {{ REPLACE_TEXT }}</h1>'
-    // ]));
+Route::get('/', function (TaskQueue $taskQueue) {
+    // $taskQueue->push(new Task(ExampleProvider::class, 'getArrExample', ['name' => 'root']));
 
-    // TaskQueue::push('example', json([
-    //     'key' => 'SERVER_URL',
-    // ]));
-
-    // throw new ExampleException('ERR', Status::ROUTE_ERROR, Http::HTTP_BAD_REQUEST);
+    // $taskQueue->push(new Task(ExampleProvider::class, 'myMethod', ['name' => 'root']));
 
     return info('[index]');
 });

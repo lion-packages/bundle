@@ -40,3 +40,10 @@ const str = new Str();
  * @var Arr
  */
 const arr = new Arr();
+
+/**
+ * [Defines a null value]
+ *
+ * @var null
+ */
+const NULL_VALUE = null;

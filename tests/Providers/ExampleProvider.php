@@ -10,6 +10,10 @@ use stdClass;
 
 class ExampleProvider
 {
+    public function myMethod(): void
+    {
+    }
+
     public function getArrExample(Arr $arr): array
     {
         return $arr->of(['message' => 'testing'])->get();
