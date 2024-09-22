@@ -18,13 +18,6 @@ use Predis\Client;
 class Redis
 {
     /**
-     * [Default seconds for redis cache]
-     *
-     * @const REDIS_DEFAULT_SECONDS
-     */
-    public const int REDIS_TIME_DEFAULT = 15;
-
-    /**
      * [Zero time for redis processes]
      *
      * @const REDIS_TIME_EMPTY
@@ -164,30 +157,5 @@ class Redis
         $this->connect();
 
         $this->client->flushall();
-    }
-
-    /**
-     * Store data in cache
-     *
-     * @param string $key [Index name]
-     * @param mixed $value [Defined value]
-     *
-     * @return void
-     */
-    public function addQueue(string $key, mixed $value): void
-    {
-        $data = $this->get('queue');
-
-        if (NULL_VALUE === $data) {
-            $this->set('queue', [
-                $key => $value,
-            ]);
-        }
-
-        unset($data[$key]);
-
-        $data[$key] = $value;
-
-        $this->set('queue', $data);
     }
 }

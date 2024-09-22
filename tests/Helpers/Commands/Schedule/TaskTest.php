@@ -52,7 +52,7 @@ class TaskTest extends Test
         $this->expectExceptionMessage('data is null');
         $this->expectExceptionCode(Http::INTERNAL_SERVER_ERROR);
 
-        new Task(self::class, 'construct');
+        new Task(self::class, 'construct', null);
     }
 
     #[Testing]

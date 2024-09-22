@@ -46,7 +46,7 @@ class Task
      * @param string|null $method [Property for method]
      * @param array|null $data [Property for data]
      */
-    public function __construct(?string $namespace = null, ?string $method = null, ?array $data = null)
+    public function __construct(?string $namespace = null, ?string $method = null, ?array $data = [])
     {
         if (NULL_VALUE === $namespace) {
             throw new InvalidArgumentException('namespace is null', Http::INTERNAL_SERVER_ERROR);
