@@ -637,6 +637,10 @@ trait ClassFactoryProviderTrait
                 'type' => 'TINYInt(1)',
                 'return' => 'int',
             ],
+            [
+                'type' => 'double',
+                'return' => 'float',
+            ],
         ];
     }
 }

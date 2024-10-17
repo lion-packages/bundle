@@ -121,7 +121,7 @@ class ClassFactory
     public function setStore(Store $store): ClassFactory
     {
         $this->store = $store;
-        
+
         return $this;
     }
 
@@ -482,10 +482,10 @@ class ClassFactory
     }
 
     /**
-     * Gets the data type of a property with the data type of the entity
+     * Gets the data type of property with the data type of the entity
      * property
      *
-     * @param  string $type [Datatype]
+     * @param string $type [Datatype]
      *
      * @return string
      */
@@ -494,6 +494,8 @@ class ClassFactory
         if (preg_match("/int/i", $type)) {
             return 'int';
         } elseif (preg_match("/float/i", $type)) {
+            return 'float';
+        } elseif (preg_match("/double/i", $type)) {
             return 'float';
         }
 
