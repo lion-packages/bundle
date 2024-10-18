@@ -8,92 +8,93 @@ use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\Schedule\Schedule;
 use Lion\Bundle\Interface\ScheduleInterface;
 use Lion\Command\Command;
-use Lion\Command\Kernel;
 use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
-use Lion\Helpers\Arr;
 use Lion\Helpers\Str;
+use LogicException;
+use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Add scheduled tasks in crontab
  *
- * @property ClassFactory $classFactory [ClassFactory class object]
- * @property Container $container [Container class object]
- * @property Store $store [Store class object]
- * @property Kernel $kernel [Kernel class object]
- * @property Str $str [Str class object]
- * @property Arr $arr [Arr class object]
+ * @property ClassFactory $classFactory [Fabricates the data provided to
+ * manipulate information (folder, class, namespace)]
+ * @property Container $container [Container to generate dependency injection]
+ * @property Store $store [Manipulate system files]
+ * @property Str $str [Modify and construct strings with different formats]
  *
  * @package Lion\Bundle\Commands\Lion\Schedule
  */
 class UpScheduleCommand extends Command
 {
     /**
-     * [ClassFactory class object]
+     * [Fabricates the data provided to manipulate information (folder, class,
+     * namespace)]
      *
      * @var ClassFactory $classFactory
      */
     private ClassFactory $classFactory;
 
     /**
-     * [Container class object]
+     * [Container to generate dependency injection]
      *
      * @var Container $container
      */
     private Container $container;
 
     /**
-     * [Store class object]
+     * [Manipulate system files]
      *
      * @var Store $store
      */
     private Store $store;
 
     /**
-     * [Kernel class object]
-     *
-     * @var Kernel $kernel
-     */
-    private Kernel $kernel;
-
-    /**
-     * [Str class object]
+     * [Modify and construct strings with different formats]
      *
      * @var Str $str
      */
     private Str $str;
 
     /**
-     * [Arr class object]
-     *
-     * @var Arr $arr
+     * @required
      */
-    private Arr $arr;
+    public function setClassFactory(ClassFactory $classFactory): UpScheduleCommand
+    {
+        $this->classFactory = $classFactory;
+
+        return $this;
+    }
 
     /**
      * @required
      */
-    public function setInject(
-        ClassFactory $classFactory,
-        Container $container,
-        Store $store,
-        Kernel $kernel,
-        Str $str,
-        Arr $arr
-    ): UpScheduleCommand {
-        $this->classFactory = $classFactory;
-
+    public function setContainer(Container $container): UpScheduleCommand
+    {
         $this->container = $container;
 
+        return $this;
+    }
+
+    /**
+     * @required
+     */
+    public function setStore(Store $store): UpScheduleCommand
+    {
         $this->store = $store;
 
-        $this->kernel = $kernel;
+        return $this;
+    }
 
+    /**
+     * @required
+     */
+    public function setStr(Str $str): UpScheduleCommand
+    {
         $this->str = $str;
-
-        $this->arr = $arr;
 
         return $this;
     }
@@ -123,11 +124,9 @@ class UpScheduleCommand extends Command
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int 0 if everything went fine, or an exit code
+     * @return int [0 if everything went fine, or an exit code]
      *
-     * @throws LogicException When this abstract method is not implemented
-     *
-     * @see setCode()
+     * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -161,8 +160,7 @@ class UpScheduleCommand extends Command
             return Command::SUCCESS;
         }
 
-        /** @var array<string> $commands */
-        $commands = [];
+        $data = [];
 
         foreach ($files as $scheduleInterface) {
             $schedule = new Schedule();
@@ -192,8 +190,6 @@ class UpScheduleCommand extends Command
             /** @var Command $commandObject */
             $commandObject = new $config['command'];
 
-            $output->writeln($this->warningOutput("\t>> SCHEDULE: {$config['command']}"));
-
             $command = "{$config['cron']} cd {$_ENV['CRONTAB_PROJECT_PATH']}";
 
             $command .= " && {$_ENV['CRONTAB_PHP_PATH']} {$_ENV['CRONTAB_PROJECT_PATH']}lion {$commandObject->getName()}";
@@ -202,26 +198,39 @@ class UpScheduleCommand extends Command
 
             $command .= " >> {$_ENV['CRONTAB_PROJECT_PATH']}storage/logs/cron/{$config['logName']}.log 2>&1";
 
+            $data[] = [
+                $config['command'],
+                $this->infoOutput($command),
+            ];
+
+            $data[] = new TableSeparator();
 
             $this->store->folder($this->store->normalizePath('./storage/logs/cron/'));
 
-            $this->classFactory
-                ->create(
-                    $config['logName'],
-                    ClassFactory::LOG_EXTENSION,
-                    $this->store->normalizePath('./storage/logs/cron/')
-                )
-                ->close();
-
-            $this->classFactory->classFactory(
-                $this->store->normalizePath('./storage/logs/cron/'),
-                $config['logName']
-            );
-
-            $commands[] = trim($command);
+            if (isError($this->store->exist($this->store->normalizePath('./storage/logs/cron/') . $config['logName']))) {
+                $this->classFactory
+                    ->create(
+                        $config['logName'],
+                        ClassFactory::LOG_EXTENSION,
+                        $this->store->normalizePath('./storage/logs/cron/')
+                    )
+                    ->close();
+            }
         }
 
-        $this->kernel->execute('(echo "' . $this->arr->of($commands)->join("\n") . '") | crontab -', false);
+        $output->writeln($this->warningOutput("\t>> CRONTAB PATH: " . env('CRONTAB_PATH') . 'crontab'));
+
+        $output->writeln($this->infoOutput("\t>> CRON: sudo service cron status"));
+
+        $output->writeln($this->infoOutput("\t>> CRON: sudo service cron stop"));
+
+        $output->writeln($this->infoOutput("\t>> CRON: sudo service cron start"));
+
+        (new Table($output))
+            ->setHeaderTitle($this->successOutput(' CRONTAB '))
+            ->setHeaders(['CLASS', 'CRON'])
+            ->setRows($data)
+            ->render();
 
         return Command::SUCCESS;
     }
