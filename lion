@@ -110,7 +110,22 @@ Mailer::initialize([
  * -----------------------------------------------------------------------------
  **/
 
-(new CommandHandler('Lion-Bundle'))
-    ->registerCommands('./src/LionBundle/Commands/Lion/', 'Lion\\Bundle\\Commands\\Lion\\', 'Commands/Lion/')
+$commandHandler = (new CommandHandler('Lion-Bundle'));
+
+$commandHandler->registerCommands(
+    './src/LionBundle/Commands/Lion/',
+    'Lion\\Bundle\\Commands\\Lion\\',
+    'Commands/Lion/'
+);
+
+if ((new Store())->exist('./app/Console/Commands/')) {
+    $commandHandler->registerCommands(
+        './app/Console/Commands/',
+        'App\\Console\\Commands\\',
+        'Commands/'
+    );
+}
+
+$commandHandler
     ->getApplication()
     ->run();
