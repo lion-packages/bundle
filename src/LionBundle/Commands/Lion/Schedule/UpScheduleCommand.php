@@ -136,13 +136,13 @@ class UpScheduleCommand extends Command
             return Command::FAILURE;
         }
 
-        /** @var array<ScheduleInterface> $files */
+        /** @var array<int, ScheduleInterface> $files */
         $files = [];
 
         foreach ($this->container->getFiles('app/Console/Cron/') as $file) {
             if (isSuccess($this->store->validate([$file], ['php']))) {
                 $namespace = $this->container->getNamespace(
-                    (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? str_replace('\\', '/', $file) : $file),
+                    $this->store->normalizePath($file),
                     'App\\Console\\Cron\\',
                     $this->store->normalizePath('Cron/')
                 );
@@ -190,9 +190,9 @@ class UpScheduleCommand extends Command
             /** @var Command $commandObject */
             $commandObject = new $config['command'];
 
-            $command = "{$config['cron']} cd {$_ENV['CRONTAB_PROJECT_PATH']}";
+            $command = "{$config['cron']} lion cd {$_ENV['CRONTAB_PROJECT_PATH']} && ";
 
-            $command .= " && {$_ENV['CRONTAB_PHP_PATH']} {$_ENV['CRONTAB_PROJECT_PATH']}lion {$commandObject->getName()}";
+            $command .= "{$_ENV['CRONTAB_PHP_PATH']} {$_ENV['CRONTAB_PROJECT_PATH']}lion {$commandObject->getName()}";
 
             $command .= '' === $options ? '' : " {$options}";
 
