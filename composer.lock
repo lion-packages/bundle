@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c03116ba2cc202d3d8546214617cbe34",
+    "content-hash": "76a66cb031b01922956125952c5c82fc",
     "packages": [
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -1023,16 +1023,16 @@
         },
         {
             "name": "lion/exceptions",
-            "version": "v1.2.0",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/exceptions.git",
-                "reference": "b0325f937a14d455603c31304270ac13a75fda80"
+                "reference": "1ed281a8d7b0075b8fd60f6b8f9592f24ef50760"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/exceptions/zipball/b0325f937a14d455603c31304270ac13a75fda80",
-                "reference": "b0325f937a14d455603c31304270ac13a75fda80",
+                "url": "https://api.github.com/repos/lion-packages/exceptions/zipball/1ed281a8d7b0075b8fd60f6b8f9592f24ef50760",
+                "reference": "1ed281a8d7b0075b8fd60f6b8f9592f24ef50760",
                 "shasum": ""
             },
             "require": {
@@ -1041,7 +1041,7 @@
             "require-dev": {
                 "guzzlehttp/guzzle": "^7.8",
                 "lion/test": "^2.0",
-                "phpunit/phpunit": "^10.5"
+                "phpunit/phpunit": "^11.4"
             },
             "type": "library",
             "autoload": {
@@ -1056,9 +1056,9 @@
             "description": "Handling exceptions and serializations",
             "support": {
                 "issues": "https://github.com/lion-packages/exceptions/issues",
-                "source": "https://github.com/lion-packages/exceptions/tree/v1.2.0"
+                "source": "https://github.com/lion-packages/exceptions/tree/v1.3.0"
             },
-            "time": "2024-06-29T20:45:18+00:00"
+            "time": "2024-10-22T19:52:19+00:00"
         },
         {
             "name": "lion/files",

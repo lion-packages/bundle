@@ -82,9 +82,9 @@ class CommandsCommand extends Command
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int 0 if everything went fine, or an exit code
+     * @return int [0 if everything went fine, or an exit code]
      *
-     * @throws LogicException When this abstract method is not implemented
+     * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
