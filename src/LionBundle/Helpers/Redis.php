@@ -29,7 +29,7 @@ class Redis
      *
      * @var Client $client
      */
-    private Client $client;
+    protected Client $client;
 
     /**
      * [Time in seconds to expire the cache]
