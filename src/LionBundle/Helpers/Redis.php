@@ -148,6 +148,24 @@ class Redis
     }
 
     /**
+     * Removes a value from the Redis database
+     *
+     * @param string $key [Index name]
+     *
+     * @return Redis
+     */
+    public function del(string $key): Redis
+    {
+        $this->connect();
+
+        $key = trim($key);
+
+        $this->client->del($key);
+
+        return $this;
+    }
+
+    /**
      * Clear all cached data
      *
      * @return void
