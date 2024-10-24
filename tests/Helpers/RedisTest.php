@@ -136,6 +136,20 @@ class RedisTest extends Test
     #[Testing]
     #[TestWith(['key' => 'data', 'json' => ['name' => 'root']])]
     #[TestWith(['key' => 'data', 'json' => ['name' => 'lion']])]
+    public function del(string $key, array $json): void
+    {
+        $value = $this->redis
+            ->setTime(self::REDIS_TIME_CACHE)
+            ->set($key, $json)
+            ->del($key)
+            ->get($key);
+
+        $this->assertNull($value);
+    }
+
+    #[Testing]
+    #[TestWith(['key' => 'data', 'json' => ['name' => 'root']])]
+    #[TestWith(['key' => 'data', 'json' => ['name' => 'lion']])]
     public function empty(string $key, array $json): void
     {
         $return = $this->redis

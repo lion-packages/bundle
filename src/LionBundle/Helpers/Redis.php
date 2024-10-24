@@ -29,7 +29,7 @@ class Redis
      *
      * @var Client $client
      */
-    private Client $client;
+    protected Client $client;
 
     /**
      * [Time in seconds to expire the cache]
@@ -145,6 +145,24 @@ class Redis
         }
 
         return $this->toArray($this->client->get($key));
+    }
+
+    /**
+     * Removes a value from the Redis database
+     *
+     * @param string $key [Index name]
+     *
+     * @return Redis
+     */
+    public function del(string $key): Redis
+    {
+        $this->connect();
+
+        $key = trim($key);
+
+        $this->client->del($key);
+
+        return $this;
     }
 
     /**
