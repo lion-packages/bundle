@@ -98,9 +98,9 @@ class ListScheduleCommand extends Command
 
         $size = 0;
 
-        foreach ($this->store->view('app/Console/Cron/') as $file) {
+        foreach ($this->store->getFiles('app/Console/Cron/') as $file) {
             if (isSuccess($this->store->validate([$file], ['php']))) {
-                $namespace = getNamespaceFromFile(
+                $namespace = $this->store->getNamespaceFromFile(
                     (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? str_replace('\\', '/', $file) : $file),
                     'App\\Console\\Cron\\',
                     $this->store->normalizePath('Cron/')

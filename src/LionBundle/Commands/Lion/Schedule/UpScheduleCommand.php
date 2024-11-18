@@ -115,9 +115,9 @@ class UpScheduleCommand extends Command
         /** @var array<int, ScheduleInterface> $files */
         $files = [];
 
-        foreach ($this->store->view('app/Console/Cron/') as $file) {
+        foreach ($this->store->getFiles('app/Console/Cron/') as $file) {
             if (isSuccess($this->store->validate([$file], ['php']))) {
-                $namespace = getNamespaceFromFile(
+                $namespace = $this->store->getNamespaceFromFile(
                     $this->store->normalizePath($file),
                     'App\\Console\\Cron\\',
                     $this->store->normalizePath('Cron/')

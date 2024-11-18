@@ -355,27 +355,3 @@ if (!function_exists('env')) {
         return Env::get($key, $default);
     }
 }
-
-if (!function_exists('getNamespaceFromFile')) {
-    /**
-     * Gets the namespace of a class through a defined path
-     *
-     * @param string $file [File path]
-     * @param string $namespace [Namespace for the file]
-     * @param string $split [Separator to obtain the namespace]
-     *
-     * @return string
-     *
-     * @internal
-     */
-    function getNamespaceFromFile(string $file, string $namespace, string $split = '/'): string
-    {
-        $splitFile = explode($split, $file);
-
-        $namespace = str_replace("/", "\\", "{$namespace}{$splitFile[1]}");
-
-        $namespace = str_replace('.php', '',  $namespace);
-
-        return trim($namespace);
-    }
-}

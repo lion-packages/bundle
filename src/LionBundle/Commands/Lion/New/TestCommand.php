@@ -108,6 +108,7 @@ class TestCommand extends Command
                 namespace {$namespace};
 
                 use Lion\Test\Test;
+                use PHPUnit\Framework\Attributes\Test as Testing;
 
                 class {$class} extends Test
                 {
@@ -116,6 +117,11 @@ class TestCommand extends Command
                     }
 
                     protected function tearDown(): void
+                    {
+                    }
+
+                    #[Testing]
+                    public function example(): void
                     {
                     }
                 }

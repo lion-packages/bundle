@@ -134,9 +134,9 @@ class ServerSocketCommand extends Command
     {
         $classList = [];
 
-        foreach ($this->store->view('./app/Sockets/') as $file) {
+        foreach ($this->store->getFiles('./app/Sockets/') as $file) {
             if (isSuccess($this->store->validate([$file], [ClassFactory::PHP_EXTENSION]))) {
-                $classList[] = getNamespaceFromFile($file, 'App\\Sockets\\', 'Sockets/');
+                $classList[] = $this->store->getNamespaceFromFile($file, 'App\\Sockets\\', 'Sockets/');
             }
         }
 
