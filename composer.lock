@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8e0a21e8a82d539178bd955811164239",
+    "content-hash": "0dc5f3d987ef9a0486ca7651dc0e8815",
     "packages": [
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -919,24 +919,25 @@
         },
         {
             "name": "lion/files",
-            "version": "V7.0.0",
+            "version": "v7.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/files.git",
-                "reference": "3a498dd4b486195aebb7dd5184c4d0bde8265aec"
+                "reference": "9f8ba435ac85dc1872ca51f8704285a3d00f7b4f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/files/zipball/3a498dd4b486195aebb7dd5184c4d0bde8265aec",
-                "reference": "3a498dd4b486195aebb7dd5184c4d0bde8265aec",
+                "url": "https://api.github.com/repos/lion-packages/files/zipball/9f8ba435ac85dc1872ca51f8704285a3d00f7b4f",
+                "reference": "9f8ba435ac85dc1872ca51f8704285a3d00f7b4f",
                 "shasum": ""
             },
             "require": {
+                "ext-mbstring": "*",
                 "php": ">=8.3"
             },
             "require-dev": {
-                "lion/test": "^2.0",
-                "phpunit/phpunit": "^11.2"
+                "lion/test": "^2.1",
+                "phpunit/phpunit": "^11.4"
             },
             "type": "library",
             "autoload": {
@@ -951,9 +952,9 @@
             "description": "Library created with the function of working internal system files",
             "support": {
                 "issues": "https://github.com/lion-packages/files/issues",
-                "source": "https://github.com/lion-packages/files/tree/V7.0.0"
+                "source": "https://github.com/lion-packages/files/tree/v7.1.0"
             },
-            "time": "2024-06-29T22:32:18+00:00"
+            "time": "2024-11-18T21:29:03+00:00"
         },
         {
             "name": "lion/helpers",

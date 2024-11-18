@@ -146,9 +146,9 @@ class FreshMigrationsCommand extends MenuCommand
             StoreProcedureInterface::class => [],
         ];
 
-        foreach ($this->store->view('./database/Migrations/') as $migration) {
+        foreach ($this->store->getFiles('./database/Migrations/') as $migration) {
             if (isSuccess($this->store->validate([$migration], ['php']))) {
-                $namespace = getNamespaceFromFile($migration, 'Database\\Migrations\\', 'Migrations/');
+                $namespace = $this->store->getNamespaceFromFile($migration, 'Database\\Migrations\\', 'Migrations/');
 
                 $tableMigration = include_once($migration);
 

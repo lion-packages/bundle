@@ -84,9 +84,9 @@ class CommandHandler
         /** @var array<int, Command> $commands */
         $commands = [];
 
-        foreach ($this->store->view($pathCommands) as $file) {
+        foreach ($this->store->getFiles($pathCommands) as $file) {
             if (isSuccess($this->store->validate([$file], ['php']))) {
-                $class = getNamespaceFromFile($file, $namespace, $pathSplit);
+                $class = $this->store->getNamespaceFromFile($file, $namespace, $pathSplit);
 
                 $commands[] = $this->container->resolve($class);
             }

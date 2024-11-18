@@ -80,9 +80,9 @@ class DBSeedCommand extends Command
         /** @var array<int, SeedInterface> $files */
         $files = [];
 
-        foreach ($this->store->view('./database/Seed/') as $seed) {
+        foreach ($this->store->getFiles('./database/Seed/') as $seed) {
             if (isSuccess($this->store->validate([$seed], ['php']))) {
-                $class = getNamespaceFromFile($seed, 'Database\\Seed\\', 'Seed/');
+                $class = $this->store->getNamespaceFromFile($seed, 'Database\\Seed\\', 'Seed/');
 
                 /** @var SeedInterface $seedInterface */
                 $seedInterface = new $class();
