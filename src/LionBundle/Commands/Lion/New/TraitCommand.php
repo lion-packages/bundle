@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\New;
 
+use DI\Attribute\Inject;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Files\Store;
+use LogicException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -36,9 +38,7 @@ class TraitCommand extends Command
     private Store $store;
 
 
-    /**
-     * @required
-     * */
+    #[Inject]
     public function setClassFactory(ClassFactory $classFactory): TraitCommand
     {
         $this->classFactory = $classFactory;
@@ -46,9 +46,7 @@ class TraitCommand extends Command
         return $this;
     }
 
-    /**
-     * @required
-     * */
+    #[Inject]
     public function setStore(Store $store): TraitCommand
     {
         $this->store = $store;
@@ -82,11 +80,9 @@ class TraitCommand extends Command
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int 0 if everything went fine, or an exit code
+     * @return int
      *
-     * @throws LogicException When this abstract method is not implemented
-     *
-     * @see setCode()
+     * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -105,7 +101,7 @@ class TraitCommand extends Command
         $this->classFactory
             ->create($class, ClassFactory::PHP_EXTENSION, $folder)
             ->add(
-                <<<EOT
+                <<<PHP
                 <?php
 
                 declare(strict_types=1);
@@ -121,7 +117,7 @@ class TraitCommand extends Command
                 {
                 }
 
-                EOT
+                PHP
             )
             ->close();
 

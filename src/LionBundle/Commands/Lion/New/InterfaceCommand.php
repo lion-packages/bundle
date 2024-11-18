@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\New;
 
+use DI\Attribute\Inject;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Files\Store;
@@ -36,9 +37,7 @@ class InterfaceCommand extends Command
      */
     private Store $store;
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setClassFactory(ClassFactory $classFactory): InterfaceCommand
     {
         $this->classFactory = $classFactory;
@@ -46,9 +45,7 @@ class InterfaceCommand extends Command
         return $this;
     }
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setStore(Store $store): InterfaceCommand
     {
         $this->store = $store;
@@ -82,7 +79,7 @@ class InterfaceCommand extends Command
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int [0 if everything went fine, or an exit code]
+     * @return int
      *
      * @throws LogicException [When this abstract method is not implemented]
      */

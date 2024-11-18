@@ -10,6 +10,7 @@ use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
+use PHPUnit\Framework\Attributes\Test as Testing;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class NpmRunBuildCommandTest extends Test
@@ -26,9 +27,11 @@ class NpmRunBuildCommandTest extends Test
     {
         $application = (new Kernel())->getApplication();
 
-        $application->add((new Container())->injectDependencies(new NpmInitCommand()));
+        $container = new Container();
 
-        $application->add((new Container())->injectDependencies(new NpmRunBuildCommand()));
+        $application->add($container->resolve(NpmInitCommand::class));
+
+        $application->add($container->resolve(NpmRunBuildCommand::class));
 
         $this->commandTesterNpmInit = new CommandTester($application->find('npm:init'));
 
@@ -40,7 +43,8 @@ class NpmRunBuildCommandTest extends Test
         $this->rmdirRecursively('./vite/');
     }
 
-    public function testExecute(): void
+    #[Testing]
+    public function execute(): void
     {
         $this->assertSame(Command::SUCCESS, $this->commandTesterNpmInit->execute(['project' => self::PROJECT_NAME]));
         $this->assertStringContainsString(self::OUTPUT_MESSAGE_INIT_PROJECT, $this->commandTesterNpmInit->getDisplay());

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\DB;
 
+use DI\Attribute\Inject;
 use Lion\Command\Command;
 use Lion\Helpers\Arr;
 use Lion\Database\Drivers\MySQL as DB;
@@ -27,9 +28,7 @@ class ShowDatabasesCommand extends Command
      */
     private Arr $arr;
 
-    /**
-     * @required
-     * */
+    #[Inject]
     public function setArr(Arr $arr): ShowDatabasesCommand
     {
         $this->arr = $arr;

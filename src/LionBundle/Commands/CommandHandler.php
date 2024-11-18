@@ -49,7 +49,7 @@ class CommandHandler
      */
     public function __construct(string $name = '')
     {
-        $this->application = (new Kernel)->getApplication();
+        $this->application = (new Kernel())->getApplication();
 
         $this->container = new Container();
 
@@ -77,17 +77,18 @@ class CommandHandler
      * @param string $namespace [Namespace for Command classes]
      * @param string $pathSplit [Route separated]
      *
-     * @return array<Command>
+     * @return array<int, Command>
      */
     private function getCommands(string $pathCommands, string $namespace, string $pathSplit): array
     {
-        /** @var array<Command> $commands */
+        /** @var array<int, Command> $commands */
         $commands = [];
 
-        foreach ($this->container->getFiles($pathCommands) as $file) {
+        foreach ($this->store->view($pathCommands) as $file) {
             if (isSuccess($this->store->validate([$file], ['php']))) {
-                $class = $this->container->getNamespace($file, $namespace, $pathSplit);
-                $commands[] = $this->container->injectDependencies(new $class());
+                $class = getNamespaceFromFile($file, $namespace, $pathSplit);
+
+                $commands[] = $this->container->resolve($class);
             }
         }
 

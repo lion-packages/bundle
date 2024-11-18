@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Helpers\Commands\Selection;
 
+use DI\Attribute\Inject;
 use Exception;
 use Lion\Command\Command;
 use Lion\Database\Connection;
@@ -53,9 +54,7 @@ class MenuCommand extends Command
      */
     protected Str $str;
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setArr(Arr $arr): MenuCommand
     {
         $this->arr = $arr;
@@ -63,9 +62,7 @@ class MenuCommand extends Command
         return $this;
     }
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setStore(Store $store): MenuCommand
     {
         $this->store = $store;
@@ -73,9 +70,7 @@ class MenuCommand extends Command
         return $this;
     }
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setStr(Str $str): MenuCommand
     {
         $this->str = $str;
@@ -375,6 +370,8 @@ class MenuCommand extends Command
                 ])
                 ->getAll();
         }
+
+        return [];
     }
 
     /**
@@ -384,7 +381,7 @@ class MenuCommand extends Command
      * @param string $selectedConnection [Database connection]
      * @param string $entity [Entity name]
      *
-     * @return stdClass|array<stdClass|array<int|string, mixed>|DatabaseCapsuleInterface>
+     * @return stdClass|array|DatabaseCapsuleInterface
      *
      * @internal
      */
@@ -420,6 +417,8 @@ class MenuCommand extends Command
                 ->addRows(['FOREIGN KEY', 'public', $entity])
                 ->getAll();
         }
+
+        return [];
     }
 
     /**

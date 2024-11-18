@@ -8,12 +8,14 @@ use Lion\Bundle\Helpers\Commands\ComposerFactory;
 use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
 use Lion\Test\Test;
+use PHPUnit\Framework\Attributes\Test as Testing;
+use ReflectionException;
 use stdClass;
 
 class ComposerFactoryTest extends Test
 {
-    const COMPOSER_JSON = './composer.json';
-    const EXTENSIONS = [
+    private const string COMPOSER_JSON = './composer.json';
+    private const array EXTENSIONS = [
         'php',
         'ext-ctype',
         'ext-filter',
@@ -26,9 +28,12 @@ class ComposerFactoryTest extends Test
 
     private ComposerFactory $composerFactory;
 
+    /**
+     * @throws ReflectionException
+     */
     protected function setUp(): void
     {
-        $this->composerFactory = (new Container())->injectDependencies(new ComposerFactory());
+        $this->composerFactory = (new Container())->resolve(ComposerFactory::class);
 
         $this->initReflection($this->composerFactory);
     }
@@ -38,7 +43,11 @@ class ComposerFactoryTest extends Test
         return json_decode((new Store())->get(self::COMPOSER_JSON));
     }
 
-    public function testLibraries(): void
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
+    public function libraries(): void
     {
         $this->composerFactory->libraries($this->getComposerJson(), self::EXTENSIONS);
 
@@ -48,7 +57,11 @@ class ComposerFactoryTest extends Test
         $this->assertNotEmpty($libraries);
     }
 
-    public function testLibrariesDev(): void
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
+    public function librariesDev(): void
     {
         $this->composerFactory->librariesDev($this->getComposerJson(), self::EXTENSIONS);
 
@@ -58,7 +71,8 @@ class ComposerFactoryTest extends Test
         $this->assertNotEmpty($libraries);
     }
 
-    public function testGetLibraries(): void
+    #[Testing]
+    public function getLibraries(): void
     {
         $libraries = $this->composerFactory
             ->libraries($this->getComposerJson(), self::EXTENSIONS)

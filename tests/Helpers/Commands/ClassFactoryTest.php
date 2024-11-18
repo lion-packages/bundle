@@ -9,6 +9,7 @@ use Lion\Files\Store;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test as Testing;
+use ReflectionException;
 use stdClass;
 use Tests\Providers\Helpers\ClassFactoryProviderTrait;
 
@@ -21,6 +22,9 @@ class ClassFactoryTest extends Test
 
     private ClassFactory $classFactory;
 
+    /**
+     * @throws ReflectionException
+     */
     protected function setUp(): void
     {
         $this->classFactory = (new ClassFactory())

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Helpers\Commands\Schedule;
 
+use DI\Attribute\Inject;
 use Lion\Bundle\Helpers\Redis;
 
 /**
@@ -29,9 +30,7 @@ class TaskQueue
      */
     private Redis $redis;
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setRedis(Redis $redis): TaskQueue
     {
         $this->redis = $redis;

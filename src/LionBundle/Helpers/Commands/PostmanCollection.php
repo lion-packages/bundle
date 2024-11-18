@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Helpers\Commands;
 
+use DI\Attribute\Inject;
 use Lion\Helpers\Arr;
 use Lion\Helpers\Str;
 use Lion\Route\Route;
@@ -24,7 +25,7 @@ class PostmanCollection
      *
      * @const HEADERS
      */
-    const HEADERS = [
+    public const array HEADERS = [
         'key' => 'Content-Type',
         'value' => 'application/json',
         'type' => 'text'
@@ -51,9 +52,7 @@ class PostmanCollection
      */
     private array $postman = [];
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setArr(Arr $arr): PostmanCollection
     {
         $this->arr = $arr;
@@ -61,9 +60,7 @@ class PostmanCollection
         return $this;
     }
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setStr(Str $str): PostmanCollection
     {
         $this->str = $str;

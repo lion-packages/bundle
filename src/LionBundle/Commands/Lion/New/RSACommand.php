@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\New;
 
+use DI\Attribute\Inject;
 use Exception;
 use Lion\Command\Command;
 use Lion\Files\Store;
@@ -37,9 +38,7 @@ class RSACommand extends Command
      */
     private Store $store;
 
-    /**
-     * @required
-     * */
+    #[Inject]
     public function setRSA(RSA $rsa): RSACommand
     {
         $this->rsa = $rsa;
@@ -47,9 +46,7 @@ class RSACommand extends Command
         return $this;
     }
 
-    /**
-     * @required
-     * */
+    #[Inject]
     public function setStore(Store $store): RSACommand
     {
         $this->store = $store;

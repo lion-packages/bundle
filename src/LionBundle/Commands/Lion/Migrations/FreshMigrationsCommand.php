@@ -14,7 +14,6 @@ use Lion\Database\Connection;
 use Lion\Database\Driver;
 use Lion\Database\Drivers\PostgreSQL;
 use Lion\Database\Drivers\Schema\MySQL as Schema;
-use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
 use LogicException;
 use Symfony\Component\Console\Exception\ExceptionInterface;
@@ -28,7 +27,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @property OutputInterface $output [OutputInterface is the interface
  * implemented by all Output classes]
- * @property Container $container [Container class object]
  * @property Store $store [Store class object]
  *
  * @package Lion\Bundle\Commands\Lion\Migrations
@@ -41,23 +39,6 @@ class FreshMigrationsCommand extends MenuCommand
      * @var OutputInterface $output
      */
     private OutputInterface $output;
-
-    /**
-     * [Container class object]
-     *
-     * @var Container $container
-     */
-    private Container $container;
-
-    /**
-     * @required
-     * */
-    public function setContainer(Container $container): FreshMigrationsCommand
-    {
-        $this->container = $container;
-
-        return $this;
-    }
 
     /**
      * Configures the current command
@@ -165,9 +146,9 @@ class FreshMigrationsCommand extends MenuCommand
             StoreProcedureInterface::class => [],
         ];
 
-        foreach ($this->container->getFiles('./database/Migrations/') as $migration) {
+        foreach ($this->store->view('./database/Migrations/') as $migration) {
             if (isSuccess($this->store->validate([$migration], ['php']))) {
-                $namespace = $this->container->getNamespace($migration, 'Database\\Migrations\\', 'Migrations/');
+                $namespace = getNamespaceFromFile($migration, 'Database\\Migrations\\', 'Migrations/');
 
                 $tableMigration = include_once($migration);
 

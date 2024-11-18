@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Helpers\Commands;
 
+use DI\Attribute\Inject;
 use Lion\Files\Store;
 use stdClass;
 
@@ -115,9 +116,7 @@ class ClassFactory
      */
     private string $class;
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setStore(Store $store): ClassFactory
     {
         $this->store = $store;

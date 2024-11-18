@@ -12,22 +12,18 @@ use Lion\Command\Kernel;
 use Lion\Dependency\Injection\Container;
 use Lion\Route\Middleware;
 use Lion\Test\Test;
+use PHPUnit\Framework\Attributes\Test as Testing;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class RouteListCommandTest extends Test
 {
-    private const string OUTPUT_MESSAGE = 'ROUTES';
-
     private CommandTester $commandTester;
 
     protected function setUp(): void
     {
-        $container = new Container();
+        $application = (new Kernel())->getApplication();
 
-        $application = (new Kernel())
-            ->getApplication();
-
-        $application->add($container->injectDependencies(new RouteListCommand()));
+        $application->add((new Container())->resolve(RouteListCommand::class));
 
         $this->commandTester = new CommandTester($application->find('route:list'));
     }
@@ -37,7 +33,8 @@ class RouteListCommandTest extends Test
         $this->rmdirRecursively('./app/');
     }
 
-    public function testExecute(): void
+    #[Testing]
+    public function execute(): void
     {
         $listMiddleware = [
             new Middleware('protect-route-list', RouteMiddleware::class, 'protectRouteList')

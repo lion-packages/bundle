@@ -9,17 +9,18 @@ use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
+use PHPUnit\Framework\Attributes\Test as Testing;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class EnumCommandTest extends Test
 {
-    const URL_PATH = './app/Enums/';
-    const NAMESPACE_CLASS = 'App\\Enums\\';
-    const CLASS_NAME = 'TestEnum';
-    const OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
-    const FILE_NAME = self::CLASS_NAME . '.php';
-    const OUTPUT_MESSAGE = 'enum has been generated';
-    const METHOD = ['values'];
+    private const string URL_PATH = './app/Enums/';
+    private const string NAMESPACE_CLASS = 'App\\Enums\\';
+    private const string CLASS_NAME = 'TestEnum';
+    private const string OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
+    private const string FILE_NAME = self::CLASS_NAME . '.php';
+    private const string OUTPUT_MESSAGE = 'enum has been generated';
+    private const array METHOD = ['values'];
 
     private CommandTester $commandTester;
 
@@ -27,7 +28,7 @@ class EnumCommandTest extends Test
     {
         $application = (new Kernel())->getApplication();
 
-        $application->add((new Container())->injectDependencies(new EnumCommand()));
+        $application->add((new Container())->resolve(EnumCommand::class));
 
         $this->commandTester = new CommandTester($application->find('new:enum'));
 
@@ -39,7 +40,8 @@ class EnumCommandTest extends Test
         $this->rmdirRecursively('./app/');
     }
 
-    public function testExecute(): void
+    #[Testing]
+    public function execute(): void
     {
         $this->assertSame(Command::SUCCESS, $this->commandTester->execute(['enum' => self::CLASS_NAME]));
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());

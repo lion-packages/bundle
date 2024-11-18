@@ -38,9 +38,11 @@ class DBCapsuleCommandTest extends Test
 
         $application = new Application();
 
-        $application->add((new Container())->injectDependencies(new CapsuleCommand()));
+        $container = new Container();
 
-        $application->add((new Container())->injectDependencies(new DBCapsuleCommand()));
+        $application->add($container->resolve(CapsuleCommand::class));
+
+        $application->add($container->resolve(DBCapsuleCommand::class));
 
         $this->commandTester = new CommandTester($application->find('db:capsule'));
     }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lion\Bundle\Helpers\Commands;
 
 use Closure;
+use DI\Attribute\Inject;
 use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
 use stdClass;
@@ -41,9 +42,7 @@ class ClassCommandFactory
      */
     private array $factories;
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setContainer(Container $container): ClassCommandFactory
     {
         $this->container = $container;
@@ -51,9 +50,7 @@ class ClassCommandFactory
         return $this;
     }
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setStore(Store $store): ClassCommandFactory
     {
         $this->store = $store;
@@ -93,7 +90,7 @@ class ClassCommandFactory
     public function setFactories(array $factories): ClassCommandFactory
     {
         foreach ($factories as $classFactory) {
-            $this->factories[$classFactory] = $this->container->injectDependencies(new ClassFactory());
+            $this->factories[$classFactory] = $this->container->resolve(ClassFactory::class);
         }
 
         return $this;

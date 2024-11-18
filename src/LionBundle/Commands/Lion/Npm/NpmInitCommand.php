@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\Npm;
 
+use DI\Attribute\Inject;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Bundle\Helpers\FileWriter;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
+use LogicException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -15,7 +17,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Initialize a project with Vite.JS
  *
- * @property ClassFactory $classFactory [ClassFactory class object]
  * @property FileWriter $fileWriter [FileWriter class object]
  * @property Kernel $Kernel [kernel class object]
  *
@@ -28,21 +29,40 @@ class NpmInitCommand extends MenuCommand
      *
      * @const VITE_ELECTRON_TEMPLATES
      */
-    const VITE_ELECTRON_TEMPLATES = ['Vanilla', 'Vue', 'React', 'Svelte', 'Solid'];
+    private const array VITE_ELECTRON_TEMPLATES = [
+        'Vanilla',
+        'Vue',
+        'React',
+        'Svelte',
+        'Solid',
+    ];
 
     /**
      * [List of templates available to create vite projects]
      *
      * @const VITE_TEMPLATES
      */
-    const VITE_TEMPLATES = ['Vanilla', 'Vue', 'React', 'Preact', 'Lit', 'Svelte', 'Solid', 'Qwik', 'Electron'];
+    private const array VITE_TEMPLATES = [
+        'Vanilla',
+        'Vue',
+        'React',
+        'Preact',
+        'Lit',
+        'Svelte',
+        'Solid',
+        'Qwik',
+        'Electron',
+    ];
 
     /**
      * [List of languages available to create a project]
      *
      * @const TYPES
      */
-    const TYPES = ['js', 'ts'];
+    private const array TYPES = [
+        'js',
+        'ts',
+    ];
 
     /**
      * [FileWriter class object]
@@ -58,9 +78,7 @@ class NpmInitCommand extends MenuCommand
      */
     private Kernel $kernel;
 
-    /**
-     * @required
-     * */
+    #[Inject]
     public function setFileWriter(FileWriter $fileWriter): NpmInitCommand
     {
         $this->fileWriter = $fileWriter;
@@ -68,9 +86,7 @@ class NpmInitCommand extends MenuCommand
         return $this;
     }
 
-    /**
-     * @required
-     * */
+    #[Inject]
     public function setKernel(Kernel $kernel): NpmInitCommand
     {
         $this->kernel = $kernel;
@@ -104,11 +120,9 @@ class NpmInitCommand extends MenuCommand
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int 0 if everything went fine, or an exit code
+     * @return int
      *
-     * @throws LogicException When this abstract method is not implemented
-     *
-     * @see setCode()
+     * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -233,12 +247,6 @@ class NpmInitCommand extends MenuCommand
      */
     private function setViteConfig(string $project, int $rowNumber, array $config): void
     {
-        // $this->classFactory
-        // ->create('', 'env', "vite/{$project}/")
-        // ->add('VITE_SERVER_URL="' . $_ENV['SERVER_URL_AUD'] . '"' . "\n")
-        // ->add('VITE_SERVER_URL_AUD="' . $_ENV['SERVER_URL'] . '"')
-        // ->close();
-
         $replace = [$rowNumber => $config];
 
         if (isSuccess($this->store->exist("vite/{$project}/vite.config.js"))) {

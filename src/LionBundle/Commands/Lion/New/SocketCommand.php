@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\New;
 
+use DI\Attribute\Inject;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Files\Store;
@@ -35,9 +36,7 @@ class SocketCommand extends Command
      */
     private Store $store;
 
-    /**
-     * @required
-     * */
+    #[Inject]
     public function setClassFactory(ClassFactory $classFactory): SocketCommand
     {
         $this->classFactory = $classFactory;
@@ -45,9 +44,7 @@ class SocketCommand extends Command
         return $this;
     }
 
-    /**
-     * @required
-     * */
+    #[Inject]
     public function setStore(Store $store): SocketCommand
     {
         $this->store = $store;

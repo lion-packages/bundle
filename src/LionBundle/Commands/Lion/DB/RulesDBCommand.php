@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\DB;
 
+use DI\Attribute\Inject;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Bundle\Helpers\DatabaseEngine;
 use Lion\Bundle\Helpers\FileWriter;
 use Lion\Command\Command;
 use Lion\Database\Connection;
+use LogicException;
 use stdClass;
+use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -40,9 +43,7 @@ class RulesDBCommand extends MenuCommand
      */
     private DatabaseEngine $databaseEngine;
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setFileWriter(FileWriter $fileWriter): RulesDBCommand
     {
         $this->fileWriter = $fileWriter;
@@ -50,9 +51,7 @@ class RulesDBCommand extends MenuCommand
         return $this;
     }
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setDatabaseEngine(DatabaseEngine $databaseEngine): RulesDBCommand
     {
         $this->databaseEngine = $databaseEngine;
@@ -86,7 +85,7 @@ class RulesDBCommand extends MenuCommand
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int [0 if everything went fine, or an exit code]
+     * @return int
      *
      * @throws LogicException [When this abstract method is not implemented]
      */
@@ -171,6 +170,7 @@ class RulesDBCommand extends MenuCommand
     /**
      * Generate rules for an entity
      *
+     * @param string $driver [Database Engine Type]
      * @param string $connectionPascal [Connection name in PascalCase format]
      * @param string $entityPascal [Entity name in PascalCase format]
      * @param stdClass $column [Property object]
@@ -180,6 +180,8 @@ class RulesDBCommand extends MenuCommand
      * implemented by all Output classes]
      *
      * @return void
+     *
+     * @throws ExceptionInterface
      */
     private function generateRule(
         string $driver,

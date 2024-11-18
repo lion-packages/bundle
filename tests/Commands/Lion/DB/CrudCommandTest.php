@@ -41,14 +41,14 @@ class CrudCommandTest extends Test
         $container = new Container();
 
         $kernel->commandsOnObjects([
-            $container->injectDependencies(new TestCommand()),
-            $container->injectDependencies(new ModelCommand()),
-            $container->injectDependencies(new ControllerCommand()),
-            $container->injectDependencies(new RulesCommand()),
-            $container->injectDependencies(new CapsuleCommand()),
-            $container->injectDependencies(new RulesDBCommand()),
-            $container->injectDependencies(new DBCapsuleCommand()),
-            $container->injectDependencies(new CrudCommand())
+            $container->resolve(TestCommand::class),
+            $container->resolve(ModelCommand::class),
+            $container->resolve(ControllerCommand::class),
+            $container->resolve(RulesCommand::class),
+            $container->resolve(CapsuleCommand::class),
+            $container->resolve(RulesDBCommand::class),
+            $container->resolve(DBCapsuleCommand::class),
+            $container->resolve(CrudCommand::class),
         ]);
 
         $this->commandTester = new CommandTester($kernel->getApplication()->find('db:crud'));

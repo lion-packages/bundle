@@ -9,6 +9,7 @@ use Lion\Bundle\Helpers\Commands\Schedule\TaskQueue;
 use Lion\Bundle\Helpers\Redis;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
+use ReflectionException;
 use Tests\Providers\ExampleProvider;
 
 class TaskQueueTest extends Test
@@ -21,6 +22,9 @@ class TaskQueueTest extends Test
     private TaskQueue $taskQueue;
     private Redis $redis;
 
+    /**
+     * @throws ReflectionException
+     */
     protected function setUp(): void
     {
         $this->redis = new Redis();
@@ -36,6 +40,9 @@ class TaskQueueTest extends Test
         $this->redis->empty();
     }
 
+    /**
+     * @throws ReflectionException
+     */
     #[Testing]
     public function setRedis(): void
     {
@@ -102,7 +109,8 @@ class TaskQueueTest extends Test
         $this->assertSame(self::DATA, $json['data']);
     }
 
-    public function testPause(): void
+    #[Testing]
+    public function pause(): void
     {
         $initialDate = now();
 

@@ -9,6 +9,7 @@ use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
 use PHPUnit\Framework\Attributes\TestWith;
 use Predis\Client;
+use ReflectionException;
 
 class RedisTest extends Test
 {
@@ -16,6 +17,9 @@ class RedisTest extends Test
 
     private Redis $redis;
 
+    /**
+     * @throws ReflectionException
+     */
     protected function setUp(): void
     {
         $this->redis = new Redis();
@@ -23,6 +27,9 @@ class RedisTest extends Test
         $this->initReflection($this->redis);
     }
 
+    /**
+     * @throws ReflectionException
+     */
     #[Testing]
     public function construct(): void
     {
@@ -35,6 +42,9 @@ class RedisTest extends Test
         $this->assertInstanceOf(Client::class, $this->redis->getClient());
     }
 
+    /**
+     * @throws ReflectionException
+     */
     #[Testing]
     public function connect(): void
     {
@@ -52,6 +62,9 @@ class RedisTest extends Test
         $this->assertTrue($connected);
     }
 
+    /**
+     * @throws ReflectionException
+     */
     #[Testing]
     #[TestWith(['data' => ['name' => 'root']])]
     #[TestWith(['data' => ['name' => 'lion']])]
@@ -65,6 +78,9 @@ class RedisTest extends Test
         $this->assertSame($return['name'], $data['name']);
     }
 
+    /**
+     * @throws ReflectionException
+     */
     #[Testing]
     public function toArrayWithParamNull(): void
     {
@@ -74,6 +90,9 @@ class RedisTest extends Test
         $this->assertempty($return);
     }
 
+    /**
+     * @throws ReflectionException
+     */
     #[Testing]
     public function setTime(): void
     {
@@ -83,6 +102,9 @@ class RedisTest extends Test
         $this->assertSame($seconds, $this->getPrivateProperty('seconds'));
     }
 
+    /**
+     * @throws ReflectionException
+     */
     #[Testing]
     #[TestWith(['key' => 'data', 'json' => ['name' => 'root']])]
     #[TestWith(['key' => 'data', 'json' => ['name' => 'lion']])]

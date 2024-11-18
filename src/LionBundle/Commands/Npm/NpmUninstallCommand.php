@@ -9,8 +9,6 @@ use Lion\Bundle\Commands\Lion\Npm\NpmUninstallCommand as LionNpmUninstallCommand
 /**
  * Uninstall the Vite.JS project dependencies
  *
- * @property Kernel $Kernel [kernel class object]
- *
  * @package Lion\Bundle\Commands\Lion\Npm
  */
 class NpmUninstallCommand extends LionNpmUninstallCommand

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\New;
 
+use DI\Attribute\Inject;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Files\Store;
@@ -58,9 +59,7 @@ class ModelCommand extends Command
      */
     private Str $str;
 
-    /**
-     * @required
-     * */
+    #[Inject]
     public function setClassFactory(ClassFactory $classFactory): ModelCommand
     {
         $this->classFactory = $classFactory;
@@ -68,9 +67,7 @@ class ModelCommand extends Command
         return $this;
     }
 
-    /**
-     * @required
-     * */
+    #[Inject]
     public function setStore(Store $store): ModelCommand
     {
         $this->store = $store;
@@ -78,9 +75,7 @@ class ModelCommand extends Command
         return $this;
     }
 
-    /**
-     * @required
-     * */
+    #[Inject]
     public function setStr(Str $str): ModelCommand
     {
         $this->str = $str;

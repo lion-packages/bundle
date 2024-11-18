@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Lion\Bundle\Commands\Lion\Route;
 
 use Carbon\Carbon;
+use DI\Attribute\Inject;
+use GuzzleHttp\Exception\GuzzleException;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\PostmanCollection;
 use Lion\Bundle\Helpers\Http\Routes;
@@ -12,6 +14,7 @@ use Lion\Command\Command;
 use Lion\Files\Store;
 use Lion\Helpers\Str;
 use Lion\Route\Route;
+use LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -69,9 +72,7 @@ class PostmanCollectionCommand extends Command
      */
     private string $jsonName;
 
-    /**
-     * @required
-     * */
+    #[Inject]
     public function setClassFactory(ClassFactory $classFactory): PostmanCollectionCommand
     {
         $this->classFactory = $classFactory;
@@ -79,9 +80,7 @@ class PostmanCollectionCommand extends Command
         return $this;
     }
 
-    /**
-     * @required
-     * */
+    #[Inject]
     public function setPostmanCollection(PostmanCollection $postmanCollection): PostmanCollectionCommand
     {
         $this->postmanCollection = $postmanCollection;
@@ -89,9 +88,7 @@ class PostmanCollectionCommand extends Command
         return $this;
     }
 
-    /**
-     * @required
-     * */
+    #[Inject]
     public function setStore(Store $store): PostmanCollectionCommand
     {
         $this->store = $store;
@@ -99,9 +96,7 @@ class PostmanCollectionCommand extends Command
         return $this;
     }
 
-    /**
-     * @required
-     * */
+    #[Inject]
     public function setStr(Str $str): PostmanCollectionCommand
     {
         $this->str = $str;
@@ -134,11 +129,10 @@ class PostmanCollectionCommand extends Command
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int 0 if everything went fine, or an exit code
+     * @return int
      *
-     * @throws LogicException When this abstract method is not implemented
-     *
-     * @see setCode()
+     * @throws LogicException [When this abstract method is not implemented]
+     * @throws GuzzleException
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -183,6 +177,8 @@ class PostmanCollectionCommand extends Command
      * Initialize the parameters for the generation of the collection
      *
      * @return void
+     *
+     * @throws GuzzleException
      */
     private function fetchRoutes(): void
     {

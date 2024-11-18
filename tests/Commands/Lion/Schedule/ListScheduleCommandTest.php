@@ -12,21 +12,22 @@ use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
+use PHPUnit\Framework\Attributes\Test as Testing;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class ListScheduleCommandTest extends Test
 {
-    const URL_PATH = './app/Console/Cron/';
-    const URL_PATH_COMMAND = './app/Console/Commands/';
-    const NAMESPACE_CLASS = 'App\\Console\\Cron\\';
-    const CLASS_NAME = 'TestCron';
-    const CLASS_NAME_COMMAND = 'ExampleCommand';
-    const OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
-    const FILE_NAME = self::CLASS_NAME . '.php';
-    const FILE_NAME_COMMAND = self::CLASS_NAME_COMMAND . '.php';
-    const OUTPUT_MESSAGE = 'cron has been generated';
-    const OUTPUT_MESSAGE_COMMAND = 'command has been generated';
-    const CONFIGURE_OUTPUT_MESSAGE = 'example';
+    private const string URL_PATH = './app/Console/Cron/';
+    private const string URL_PATH_COMMAND = './app/Console/Commands/';
+    private const string NAMESPACE_CLASS = 'App\\Console\\Cron\\';
+    private const string CLASS_NAME = 'TestCron';
+    private const string CLASS_NAME_COMMAND = 'ExampleCommand';
+    private const string OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
+    private const string FILE_NAME = self::CLASS_NAME . '.php';
+    private const string FILE_NAME_COMMAND = self::CLASS_NAME_COMMAND . '.php';
+    private const string OUTPUT_MESSAGE = 'cron has been generated';
+    private const string OUTPUT_MESSAGE_COMMAND = 'command has been generated';
+    private const string CONFIGURE_OUTPUT_MESSAGE = 'example';
 
     private CommandTester $commandTester;
     private CommandTester $commandTesterCommand;
@@ -36,12 +37,18 @@ class ListScheduleCommandTest extends Test
     {
         $application = (new Kernel())->getApplication();
 
-        $application->add((new Container())->injectDependencies(new CommandsCommand()));
-        $application->add((new Container())->injectDependencies(new CronCommand()));
-        $application->add((new Container())->injectDependencies(new ListScheduleCommand()));
+        $container = new Container();
+
+        $application->add($container->resolve(CommandsCommand::class));
+
+        $application->add($container->resolve(CronCommand::class));
+
+        $application->add($container->resolve(ListScheduleCommand::class));
 
         $this->commandTesterCommand = new CommandTester($application->find('new:command'));
+
         $this->commandTester = new CommandTester($application->find('new:cron'));
+
         $this->commandTesterList = new CommandTester($application->find('schedule:list'));
 
         $this->createDirectory(self::URL_PATH);
@@ -52,7 +59,8 @@ class ListScheduleCommandTest extends Test
         $this->rmdirRecursively('./app/');
     }
 
-    public function testExecute(): void
+    #[Testing]
+    public function execute(): void
     {
         $this->assertSame(
             Command::SUCCESS,

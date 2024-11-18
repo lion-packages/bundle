@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion;
 
+use DI\Attribute\Inject;
 use Lion\Bundle\Helpers\Commands\ComposerFactory;
 use Lion\Command\Command;
 use Lion\Helpers\Arr;
@@ -53,9 +54,7 @@ class InfoCommand extends Command
      */
     private ComposerFactory $composerFactory;
 
-    /**
-     * @required
-     * */
+    #[Inject]
     public function setArr(Arr $arr): InfoCommand
     {
         $this->arr = $arr;
@@ -63,9 +62,7 @@ class InfoCommand extends Command
         return $this;
     }
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setComposerFactory(ComposerFactory $composerFactory): InfoCommand
     {
         $this->composerFactory = $composerFactory;
@@ -98,7 +95,7 @@ class InfoCommand extends Command
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int [0 if everything went fine, or an exit code]
+     * @return int
      *
      * @throws LogicException [When this abstract method is not implemented]
      */

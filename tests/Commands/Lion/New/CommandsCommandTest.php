@@ -9,23 +9,26 @@ use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
+use PHPUnit\Framework\Attributes\Test as Testing;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class CommandsCommandTest extends Test
 {
-    const URL_PATH = './app/Console/Commands/';
-    const NAMESPACE_CLASS = 'App\\Console\\Commands\\';
-    const CLASS_NAME = 'TestCommand';
-    const OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
-    const FILE_NAME = self::CLASS_NAME . '.php';
-    const OUTPUT_MESSAGE = 'command has been generated';
+    private const string URL_PATH = './app/Console/Commands/';
+    private const string NAMESPACE_CLASS = 'App\\Console\\Commands\\';
+    private const string CLASS_NAME = 'TestCommand';
+    private const string OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
+    private const string FILE_NAME = self::CLASS_NAME . '.php';
+    private const string OUTPUT_MESSAGE = 'command has been generated';
 
     private CommandTester $commandTester;
 
     protected function setUp(): void
     {
         $application = (new Kernel())->getApplication();
-        $application->add((new Container())->injectDependencies(new CommandsCommand()));
+
+        $application->add((new Container())->resolve(CommandsCommand::class));
+
         $this->commandTester = new CommandTester($application->find('new:command'));
 
         $this->createDirectory(self::URL_PATH);
@@ -36,7 +39,8 @@ class CommandsCommandTest extends Test
         $this->rmdirRecursively('./app/');
     }
 
-    public function testExecute(): void
+    #[Testing]
+    public function execute(): void
     {
         $this->assertSame(Command::SUCCESS, $this->commandTester->execute(['new-command' => self::CLASS_NAME]));
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());

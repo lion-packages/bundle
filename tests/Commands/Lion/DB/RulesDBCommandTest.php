@@ -21,12 +21,12 @@ class RulesDBCommandTest extends Test
 {
     use ConnectionProviderTrait;
 
-    const ENTITY = 'users';
-    const IDRULE_NAMESPACE = 'App\\Rules\\LionDatabase\\MySQL\\Users\\IdRule';
-    const NAMERULE_NAMESPACE = 'App\\Rules\\LionDatabase\\MySQL\\Users\\NameRule';
-    const LASTNAMERULE_NAMESPACE_REQUIRED = 'App\\Rules\\LionDatabase\\MySQL\\Users\\LastNameRequiredRule';
-    const LASTNAMERULE_NAMESPACE_OPTIONAL = 'App\\Rules\\LionDatabase\\MySQL\\Users\\LastNameOptionalRule';
-    const EMAILRULE_NAMESPACE = 'App\\Rules\\LionDatabase\\MySQL\\Users\\EmailRule';
+    private const string ENTITY = 'users';
+    private const string IDRULE_NAMESPACE = 'App\\Rules\\LionDatabase\\MySQL\\Users\\IdRule';
+    private const string NAMERULE_NAMESPACE = 'App\\Rules\\LionDatabase\\MySQL\\Users\\NameRule';
+    private const string LASTNAMERULE_NAMESPACE_REQUIRED = 'App\\Rules\\LionDatabase\\MySQL\\Users\\LastNameRequiredRule';
+    private const string LASTNAMERULE_NAMESPACE_OPTIONAL = 'App\\Rules\\LionDatabase\\MySQL\\Users\\LastNameOptionalRule';
+    private const string EMAILRULE_NAMESPACE = 'App\\Rules\\LionDatabase\\MySQL\\Users\\EmailRule';
 
     private CommandTester $commandTester;
 
@@ -38,9 +38,11 @@ class RulesDBCommandTest extends Test
 
         $application = new Application();
 
-        $application->add((new Container())->injectDependencies(new RulesCommand()));
+        $container = new Container();
 
-        $application->add((new Container())->injectDependencies(new RulesDBCommand()));
+        $application->add($container->resolve(RulesCommand::class));
+
+        $application->add($container->resolve(RulesDBCommand::class));
 
         $this->commandTester = new CommandTester($application->find('db:rules'));
     }

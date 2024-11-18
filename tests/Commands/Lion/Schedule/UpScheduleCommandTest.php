@@ -15,6 +15,7 @@ use Lion\Files\Store;
 use Lion\Helpers\Str;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
+use ReflectionException;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -37,6 +38,9 @@ class UpScheduleCommandTest extends Test
     private CommandTester $commandTesterUp;
     private UpScheduleCommand $upScheduleCommand;
 
+    /**
+     * @throws ReflectionException
+     */
     protected function setUp(): void
     {
         $application = new Application();
@@ -67,7 +71,6 @@ class UpScheduleCommandTest extends Test
                     (new ClassFactory())
                         ->setStore(new Store())
                 )
-                ->setContainer(new Container())
                 ->setStore(new Store())
                 ->setStr(new Str())
         );

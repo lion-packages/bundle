@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\New;
 
+use DI\Attribute\Inject;
 use Lion\Command\Command;
 use Lion\Security\AES;
+use LogicException;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -25,7 +27,9 @@ class AESCommand extends Command
      *
      * @const array AES_METHODS
      */
-    const AES_METHODS = [AES::AES_256_CBC];
+    private const array AES_METHODS = [
+        AES::AES_256_CBC,
+    ];
 
     /**
      * [AES class object]
@@ -34,9 +38,7 @@ class AESCommand extends Command
      */
     private AES $aes;
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setAES(AES $aes): AESCommand
     {
         $this->aes = $aes;
@@ -69,11 +71,9 @@ class AESCommand extends Command
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int 0 if everything went fine, or an exit code
+     * @return int
      *
-     * @throws LogicException When this abstract method is not implemented
-     *
-     * @see setCode()
+     * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
