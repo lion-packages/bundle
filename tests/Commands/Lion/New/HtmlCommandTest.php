@@ -11,16 +11,17 @@ use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
+use PHPUnit\Framework\Attributes\Test as Testing;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class HtmlCommandTest extends Test
 {
-    const URL_PATH = './app/Html/';
-    const NAMESPACE_CLASS = 'App\\Html\\';
-    const CLASS_NAME = 'TestHtml';
-    const OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
-    const FILE_NAME = self::CLASS_NAME . '.php';
-    const OUTPUT_MESSAGE = 'html has been generated';
+    private const string URL_PATH = './app/Html/';
+    private const string NAMESPACE_CLASS = 'App\\Html\\';
+    private const string CLASS_NAME = 'TestHtml';
+    private const string OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
+    private const string FILE_NAME = self::CLASS_NAME . '.php';
+    private const string OUTPUT_MESSAGE = 'html has been generated';
 
     private CommandTester $commandTester;
 
@@ -28,7 +29,7 @@ class HtmlCommandTest extends Test
     {
         $application = (new Kernel())->getApplication();
 
-        $application->add((new Container())->injectDependencies(new HtmlCommand()));
+        $application->add((new Container())->resolve(HtmlCommand::class));
 
         $this->commandTester = new CommandTester($application->find('new:html'));
 
@@ -40,7 +41,8 @@ class HtmlCommandTest extends Test
         $this->rmdirRecursively('./app/');
     }
 
-    public function testExecute(): void
+    #[Testing]
+    public function execute(): void
     {
         $this->assertSame(Command::SUCCESS, $this->commandTester->execute(['html' => self::CLASS_NAME]));
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());

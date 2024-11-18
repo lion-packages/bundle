@@ -9,16 +9,17 @@ use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
+use PHPUnit\Framework\Attributes\Test As Testing;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class ClassCommandTest extends Test
 {
-    const URL_PATH = './app/';
-    const NAMESPACE_CLASS = 'App\\';
-    const CLASS_NAME = 'TestClass';
-    const OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
-    const FILE_NAME = self::CLASS_NAME . '.php';
-    const OUTPUT_MESSAGE = 'class has been generated';
+    private const string URL_PATH = './app/';
+    private const string NAMESPACE_CLASS = 'App\\';
+    private const string CLASS_NAME = 'TestClass';
+    private const string OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
+    private const string FILE_NAME = self::CLASS_NAME . '.php';
+    private const string OUTPUT_MESSAGE = 'class has been generated';
 
     private CommandTester $commandTester;
 
@@ -26,7 +27,7 @@ class ClassCommandTest extends Test
     {
         $application = (new Kernel())->getApplication();
 
-        $application->add((new Container())->injectDependencies(new ClassCommand()));
+        $application->add((new Container())->resolve(ClassCommand::class));
 
         $this->commandTester = new CommandTester($application->find('new:class'));
 
@@ -38,7 +39,8 @@ class ClassCommandTest extends Test
         $this->rmdirRecursively(self::URL_PATH);
     }
 
-    public function testExecute(): void
+    #[Testing]
+    public function execute(): void
     {
         $this->assertSame(Command::SUCCESS, $this->commandTester->execute(['class' => self::CLASS_NAME]));
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());

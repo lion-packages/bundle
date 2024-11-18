@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\Sockets;
 
+use DI\Attribute\Inject;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Interface\SocketInterface;
 use Lion\Command\Command;
-use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
+use LogicException;
 use Ratchet\Http\HttpServer;
 use Ratchet\Server\IoServer;
 use Ratchet\WebSocket\WsServer;
@@ -21,7 +22,6 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 /**
  * Initialize a socket
  *
- * @property Container $container [Container class object]
  * @property Store $store [Store class object]
  *
  * @package Lion\Bundle\Commands\Lion\Sockets
@@ -29,32 +29,13 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 class ServerSocketCommand extends Command
 {
     /**
-     * [Container class object]
-     *
-     * @var Container $container
-     */
-    private Container $container;
-
-    /**
      * [Store class object]
      *
      * @var Store $store
      */
     private Store $store;
 
-    /**
-     * @required
-     * */
-    public function setContainer(Container $container): ServerSocketCommand
-    {
-        $this->container = $container;
-
-        return $this;
-    }
-
-    /**
-     * @required
-     * */
+    #[Inject]
     public function setStore(Store $store): ServerSocketCommand
     {
         $this->store = $store;
@@ -90,11 +71,9 @@ class ServerSocketCommand extends Command
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int 0 if everything went fine, or an exit code
+     * @return int
      *
-     * @throws LogicException When this abstract method is not implemented
-     *
-     * @see setCode()
+     * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -155,9 +134,9 @@ class ServerSocketCommand extends Command
     {
         $classList = [];
 
-        foreach ($this->container->getFiles('./app/Sockets/') as $file) {
+        foreach ($this->store->view('./app/Sockets/') as $file) {
             if (isSuccess($this->store->validate([$file], [ClassFactory::PHP_EXTENSION]))) {
-                $classList[] = $this->container->getNamespace($file, 'App\\Sockets\\', 'Sockets/');
+                $classList[] = getNamespaceFromFile($file, 'App\\Sockets\\', 'Sockets/');
             }
         }
 

@@ -7,13 +7,18 @@ namespace Tests\Helpers\Commands;
 use Lion\Bundle\Helpers\Commands\Html;
 use Lion\Files\Store;
 use Lion\Test\Test;
+use PHPUnit\Framework\Attributes\Test as Testing;
+use ReflectionException;
 
 class HtmlTest extends Test
 {
-    const REPLACE_TEXT = 'Lion-Bundle';
+    private const string REPLACE_TEXT = 'Lion-Bundle';
 
     private Html $html;
 
+    /**
+     * @throws ReflectionException
+     */
     protected function setUp(): void
     {
         $this->html = new Html();
@@ -21,7 +26,11 @@ class HtmlTest extends Test
         $this->initReflection($this->html);
     }
 
-    public function testAdd(): void
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
+    public function add(): void
     {
         $template = (new Store)->get('./tests/Providers/Helpers/Commands/HtmlTemplate.html');
 
@@ -30,7 +39,11 @@ class HtmlTest extends Test
         $this->assertSame($template, $this->getPrivateProperty('htmlTemplate'));
     }
 
-    public function testReplace(): void
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
+    public function replace(): void
     {
         $template = (new Store)->get('./tests/Providers/Helpers/Commands/HtmlTemplate.html');
 
@@ -45,7 +58,11 @@ class HtmlTest extends Test
         $this->assertSame($templateReplaced, $this->getPrivateProperty('htmlTemplate'));
     }
 
-    public function testGet(): void
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
+    public function get(): void
     {
         $template = (new Store)->get('./tests/Providers/Helpers/Commands/HtmlTemplate.html');
 

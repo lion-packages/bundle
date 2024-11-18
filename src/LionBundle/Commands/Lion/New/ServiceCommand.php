@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\New;
 
+use DI\Attribute\Inject;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Files\Store;
+use LogicException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -37,9 +39,7 @@ class ServiceCommand extends Command
      */
     private Store $store;
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setClassFactory(ClassFactory $classFactory): ServiceCommand
     {
         $this->classFactory = $classFactory;
@@ -47,9 +47,7 @@ class ServiceCommand extends Command
         return $this;
     }
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setStore(Store $store): ServiceCommand
     {
         $this->store = $store;
@@ -71,23 +69,21 @@ class ServiceCommand extends Command
     }
 
     /**
-     * Executes the current command.
+     * Executes the current command
      *
      * This method is not abstract because you can use this class
      * as a concrete class. In this case, instead of defining the
      * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method.
+     * a Closure to the setCode() method
      *
      * @param InputInterface $input [InputInterface is the interface implemented
      * by all input classes]
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int 0 if everything went fine, or an exit code
+     * @return int
      *
-     * @throws LogicException When this abstract method is not implemented
-     *
-     * @see setCode()
+     * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -106,7 +102,7 @@ class ServiceCommand extends Command
         $this->classFactory
             ->create($class, ClassFactory::PHP_EXTENSION, $folder)
             ->add(
-                <<<EOT
+                <<<PHP
                 <?php
 
                 declare(strict_types=1);
@@ -122,7 +118,7 @@ class ServiceCommand extends Command
                 {
                 }
 
-                EOT
+                PHP
             )
             ->close();
 

@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\DB;
 
+use DI\Attribute\Inject;
 use Lion\Bundle\Interface\SeedInterface;
 use Lion\Command\Command;
-use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
+use LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -15,7 +16,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Run the defined seeds
  *
- * @property Container $container [Container class object]
  * @property Store $store [Store class object]
  *
  * @package Lion\Bundle\Commands\Lion\DB
@@ -23,32 +23,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 class DBSeedCommand extends Command
 {
     /**
-     * [Container class object]
-     *
-     * @var Container $container
-     */
-    private Container $container;
-
-    /**
      * [Store class object]
      *
      * @var Store $store
      */
     private Store $store;
 
-    /**
-     * @required
-     * */
-    public function setContainer(Container $container): DBSeedCommand
-    {
-        $this->container = $container;
-
-        return $this;
-    }
-
-    /**
-     * @required
-     * */
+    #[Inject]
     public function setStore(Store $store): DBSeedCommand
     {
         $this->store = $store;
@@ -82,11 +63,9 @@ class DBSeedCommand extends Command
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int 0 if everything went fine, or an exit code
+     * @return int
      *
-     * @throws LogicException When this abstract method is not implemented
-     *
-     * @see setCode()
+     * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -101,9 +80,9 @@ class DBSeedCommand extends Command
         /** @var array<int, SeedInterface> $files */
         $files = [];
 
-        foreach ($this->container->getFiles('./database/Seed/') as $seed) {
+        foreach ($this->store->view('./database/Seed/') as $seed) {
             if (isSuccess($this->store->validate([$seed], ['php']))) {
-                $class = $this->container->getNamespace($seed, 'Database\\Seed\\', 'Seed/');
+                $class = getNamespaceFromFile($seed, 'Database\\Seed\\', 'Seed/');
 
                 /** @var SeedInterface $seedInterface */
                 $seedInterface = new $class();

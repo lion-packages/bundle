@@ -10,6 +10,7 @@ use Lion\Command\Command;
 use Lion\Helpers\Arr;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
+use ReflectionException;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -18,6 +19,9 @@ class InfoCommandTest extends Test
     private CommandTester $commandTester;
     private InfoCommand $infoCommand;
 
+    /**
+     * @throws ReflectionException
+     */
     protected function setUp(): void
     {
         $this->infoCommand = (new InfoCommand())

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\New;
 
+use DI\Attribute\Inject;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Files\Store;
@@ -57,9 +58,7 @@ class CapsuleCommand extends Command
      */
     private Arr $arr;
 
-    /**
-     * @required
-     * */
+    #[Inject]
     public function setClassFactory(ClassFactory $classFactory): CapsuleCommand
     {
         $this->classFactory = $classFactory;
@@ -67,9 +66,7 @@ class CapsuleCommand extends Command
         return $this;
     }
 
-    /**
-     * @required
-     * */
+    #[Inject]
     public function setStore(Store $store): CapsuleCommand
     {
         $this->store = $store;
@@ -77,9 +74,7 @@ class CapsuleCommand extends Command
         return $this;
     }
 
-    /**
-     * @required
-     * */
+    #[Inject]
     public function setStr(Str $str): CapsuleCommand
     {
         $this->str = $str;
@@ -87,9 +82,7 @@ class CapsuleCommand extends Command
         return $this;
     }
 
-    /**
-     * @required
-     * */
+    #[Inject]
     public function setArr(Arr $arr): CapsuleCommand
     {
         $this->arr = $arr;

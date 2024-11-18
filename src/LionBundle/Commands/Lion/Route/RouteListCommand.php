@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\Route;
 
+use DI\Attribute\Inject;
+use GuzzleHttp\Exception\GuzzleException;
 use Lion\Bundle\Helpers\Http\Routes;
 use Lion\Command\Command;
 use Lion\Helpers\Arr;
 use Lion\Helpers\Str;
 use Lion\Route\Middleware;
 use Lion\Route\Route;
+use LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\Table;
@@ -60,9 +63,7 @@ class RouteListCommand extends Command
      */
     private array $configMiddleware = [];
 
-    /**
-     * @required
-     * */
+    #[Inject]
     public function setArr(Arr $arr): RouteListCommand
     {
         $this->arr = $arr;
@@ -70,9 +71,7 @@ class RouteListCommand extends Command
         return $this;
     }
 
-    /**
-     * @required
-     * */
+    #[Inject]
     public function setStr(Str $str): RouteListCommand
     {
         $this->str = $str;
@@ -105,11 +104,10 @@ class RouteListCommand extends Command
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int 0 if everything went fine, or an exit code
+     * @return int
      *
-     * @throws LogicException When this abstract method is not implemented
-     *
-     * @see setCode()
+     * @throws LogicException [When this abstract method is not implemented]
+     * @throws GuzzleException
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -125,7 +123,7 @@ class RouteListCommand extends Command
             foreach ($methods as $keyMethods => $method) {
                 $routeUrl = $this->str->of("/{$route}")->replace("//", "/")->get();
 
-                if ($method['handler']['callback'] != false) {
+                if ($method['handler']['callback']) {
                     $rows[] = [
                         $this->warningOutput($keyMethods),
                         $routeUrl,
@@ -134,7 +132,7 @@ class RouteListCommand extends Command
                     ];
                 }
 
-                if ($method['handler']['controller'] != false) {
+                if ($method['handler']['controller']) {
                     $rows[] = [
                         $this->warningOutput($keyMethods),
                         $routeUrl,
@@ -207,6 +205,8 @@ class RouteListCommand extends Command
      * routes
      *
      * @return void
+     *
+     * @throws GuzzleException
      */
     private function fetchRoutes(): void
     {

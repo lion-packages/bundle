@@ -10,13 +10,14 @@ use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
+use PHPUnit\Framework\Attributes\Test as Testing;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class NpmUpdateCommandTest extends Test
 {
-    const PROJECT_NAME = 'test-app';
-    const OUTPUT_MESSAGE_INIT_PROJECT = 'project has been generated successfully';
-    const OUTPUT_MESSAGE_UPDATE = 'dependencies have been updated';
+    private const string PROJECT_NAME = 'test-app';
+    private const string OUTPUT_MESSAGE_INIT_PROJECT = 'project has been generated successfully';
+    private const string OUTPUT_MESSAGE_UPDATE = 'dependencies have been updated';
 
     private CommandTester $commandTesterNpmIn;
     private CommandTester $commandTesterNpmU;
@@ -24,10 +25,15 @@ class NpmUpdateCommandTest extends Test
     protected function setUp(): void
     {
         $application = (new Kernel())->getApplication();
-        $application->add((new Container())->injectDependencies(new NpmInitCommand()));
-        $application->add((new Container())->injectDependencies(new NpmUpdateCommand()));
+
+        $container = new Container();
+
+        $application->add($container->resolve(NpmInitCommand::class));
+
+        $application->add($container->resolve(NpmUpdateCommand::class));
 
         $this->commandTesterNpmIn = new CommandTester($application->find('npm:init'));
+
         $this->commandTesterNpmU = new CommandTester($application->find('npm:update'));
     }
 
@@ -36,7 +42,8 @@ class NpmUpdateCommandTest extends Test
         $this->rmdirRecursively('./vite/');
     }
 
-    public function testExecute(): void
+    #[Testing]
+    public function execute(): void
     {
         $this->assertSame(Command::SUCCESS, $this->commandTesterNpmIn->execute(['project' => self::PROJECT_NAME]));
         $this->assertStringContainsString(self::OUTPUT_MESSAGE_INIT_PROJECT, $this->commandTesterNpmIn->getDisplay());

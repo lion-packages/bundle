@@ -9,8 +9,6 @@ use Lion\Bundle\Commands\Lion\Npm\NpmUpdateCommand as LionNpmUpdateCommand;
 /**
  * Update Vite.JS project dependencies
  *
- * @property Kernel $Kernel [kernel class object]
- *
  * @package Lion\Bundle\Commands\Lion\Npm
  */
 class NpmUpdateCommand extends LionNpmUpdateCommand

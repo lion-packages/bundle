@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\Npm;
 
+use DI\Attribute\Inject;
+use Exception;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
+use LogicException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -27,9 +30,7 @@ class NpmInstallCommand extends MenuCommand
      */
     private Kernel $kernel;
 
-    /**
-     * @required
-     * */
+    #[Inject]
     public function setKernel(Kernel $kernel): NpmInstallCommand
     {
         $this->kernel = $kernel;
@@ -63,11 +64,10 @@ class NpmInstallCommand extends MenuCommand
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int 0 if everything went fine, or an exit code
+     * @return int
      *
-     * @throws LogicException When this abstract method is not implemented
-     *
-     * @see setCode()
+     * @throws Exception
+     * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {

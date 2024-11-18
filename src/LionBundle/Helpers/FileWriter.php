@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Helpers;
 
+use DI\Attribute\Inject;
 use Lion\Helpers\Str;
 
 /**
@@ -22,10 +23,8 @@ class FileWriter
      */
     private Str $str;
 
-    /**
-     * @required
-     */
-    public function setStr(Str $str)
+    #[Inject]
+    public function setStr(Str $str): void
     {
         $this->str = $str;
     }

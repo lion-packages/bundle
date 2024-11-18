@@ -13,6 +13,8 @@ use Lion\Dependency\Injection\Container;
 use Lion\Request\Http;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test as Testing;
+use ReflectionException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -24,20 +26,22 @@ class MenuCommandTest extends Test
     use ConnectionProviderTrait;
     use MenuCommandProviderTrait;
 
-    const VITE_PATH = './vite/';
-    const PROJECT_PATH = 'example-project/';
-    const PROJECT_PATH_SECOND = 'example-project-second/';
-    const PROJECT_NAME = 'example-project';
-    const PROJECT_NAME_SECOND = 'example-project-second';
+    private const string VITE_PATH = './vite/';
+    private const string PROJECT_PATH = 'example-project/';
+    private const string PROJECT_PATH_SECOND = 'example-project-second/';
+    private const string PROJECT_NAME = 'example-project';
+    private const string PROJECT_NAME_SECOND = 'example-project-second';
 
     private MenuCommand $menuCommand;
 
+    /**
+     * @throws ReflectionException
+     */
     protected function setUp(): void
     {
         $this->runDatabaseConnections();
 
-        $this->menuCommand = (new Container())
-            ->injectDependencies(new MenuCommand());
+        $this->menuCommand = (new Container())->resolve(MenuCommand::class);
 
         $this->initReflection($this->menuCommand);
     }
@@ -49,7 +53,8 @@ class MenuCommandTest extends Test
         $this->rmdirRecursively(self::VITE_PATH);
     }
 
-    public function testSelectedProjectNotAvailable(): void
+    #[Testing]
+    public function selectedProjectNotAvailable(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('there are no projects available');
@@ -77,15 +82,15 @@ class MenuCommandTest extends Test
         $application = (new Kernel())
             ->getApplication();
 
-        $application->add((new Container())
-            ->injectDependencies($command));
+        $application->add((new Container())->resolve($command::class));
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
         $commandTester->execute([]);
     }
 
-    public function testSelectedProjectWithSingleProject(): void
+    #[Testing]
+    public function selectedProjectWithSingleProject(): void
     {
         $this->createDirectory(self::VITE_PATH . self::PROJECT_PATH);
 
@@ -108,7 +113,7 @@ class MenuCommandTest extends Test
 
         $application = (new Kernel())->getApplication();
 
-        $application->add((new Container())->injectDependencies($command));
+        $application->add((new Container())->resolve($command::class));
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -116,7 +121,8 @@ class MenuCommandTest extends Test
         $this->assertStringContainsString(('(' . self::PROJECT_NAME . ')'), $commandTester->getDisplay());
     }
 
-    public function testSelectedProjectWithMultipleProjects(): void
+    #[Testing]
+    public function selectedProjectWithMultipleProjects(): void
     {
         $this->createDirectory(self::VITE_PATH . self::PROJECT_PATH);
 
@@ -142,8 +148,7 @@ class MenuCommandTest extends Test
         $application = (new Kernel())
             ->getApplication();
 
-        $application->add((new Container())
-            ->injectDependencies($command));
+        $application->add((new Container())->resolve($command::class));
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -151,12 +156,23 @@ class MenuCommandTest extends Test
         $this->assertStringContainsString(('(' . self::PROJECT_NAME_SECOND . ')'), $commandTester->getDisplay());
     }
 
+    #[Testing]
     #[DataProvider('selectedTemplateProvider')]
-    public function testSelectedTemplate(string $output, array $inputs): void
+    public function selectedTemplate(string $output, array $inputs): void
     {
         $command = new class extends MenuCommand
         {
-            const VITE_TEMPLATES = ['Vanilla', 'Vue', 'React', 'Preact', 'Lit', 'Svelte', 'Solid', 'Qwik', 'Electron'];
+            private const array VITE_TEMPLATES = [
+                'Vanilla',
+                'Vue',
+                'React',
+                'Preact',
+                'Lit',
+                'Svelte',
+                'Solid',
+                'Qwik',
+                'Electron',
+            ];
 
             protected function configure(): void
             {
@@ -175,7 +191,7 @@ class MenuCommandTest extends Test
 
         $application = (new Kernel())->getApplication();
 
-        $application->add((new Container())->injectDependencies($command));
+        $application->add((new Container())->resolve($command::class));
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -183,11 +199,15 @@ class MenuCommandTest extends Test
         $this->assertStringContainsString($output, $commandTester->getDisplay());
     }
 
-    public function testSelectedTypes(): void
+    #[Testing]
+    public function selectedTypes(): void
     {
         $command = new class extends MenuCommand
         {
-            const TYPES = ['js', 'ts'];
+            private const array TYPES = [
+                'js',
+                'ts',
+            ];
 
             protected function configure(): void
             {
@@ -204,11 +224,9 @@ class MenuCommandTest extends Test
             }
         };
 
-        $application = (new Kernel())
-            ->getApplication();
+        $application = (new Kernel())->getApplication();
 
-        $application->add((new Container())
-            ->injectDependencies($command));
+        $application->add((new Container())->resolve($command::class));
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -218,11 +236,15 @@ class MenuCommandTest extends Test
         $this->assertStringContainsString("(ts)", $commandTester->getDisplay());
     }
 
-    public function testSelectConnection(): void
+    #[Testing]
+    public function selectConnection(): void
     {
         $command = new class extends MenuCommand
         {
-            const TYPES = ['js', 'ts'];
+            private const array TYPES = [
+                'js',
+                'ts',
+            ];
 
             protected function configure(): void
             {
@@ -239,11 +261,9 @@ class MenuCommandTest extends Test
             }
         };
 
-        $application = (new Kernel())
-            ->getApplication();
+        $application = (new Kernel())->getApplication();
 
-        $application->add((new Container())
-            ->injectDependencies($command));
+        $application->add((new Container())->resolve($command::class));
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -259,11 +279,15 @@ class MenuCommandTest extends Test
         $this->assertArrayNotHasKey('SELECTED_CONNECTION', $_ENV);
     }
 
-    public function testSelectConnectionDefault(): void
+    #[Testing]
+    public function selectConnectionDefault(): void
     {
         $command = new class extends MenuCommand
         {
-            const TYPES = ['js', 'ts'];
+            private const array TYPES = [
+                'js',
+                'ts',
+            ];
 
             protected function configure(): void
             {
@@ -292,11 +316,9 @@ class MenuCommandTest extends Test
 
         $this->assertArrayNotHasKey('lion_database_test', $connections);
 
-        $application = (new Kernel())
-            ->getApplication();
+        $application = (new Kernel())->getApplication();
 
-        $application->add((new Container())
-            ->injectDependencies($command));
+        $application->add((new Container())->resolve($command::class));
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -316,11 +338,15 @@ class MenuCommandTest extends Test
         $this->assertArrayHasKey('lion_database_test', $connections);
     }
 
-    public function testSelectConnectionByEnviromentEmpty(): void
+    #[Testing]
+    public function selectConnectionByEnviromentEmpty(): void
     {
         $command = new class extends MenuCommand
         {
-            const TYPES = ['js', 'ts'];
+            private const array TYPES = [
+                'js',
+                'ts',
+            ];
 
             protected function configure(): void
             {
@@ -339,7 +365,7 @@ class MenuCommandTest extends Test
 
         $application = (new Kernel())->getApplication();
 
-        $application->add((new Container())->injectDependencies($command));
+        $application->add((new Container())->resolve($command::class));
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -352,11 +378,15 @@ class MenuCommandTest extends Test
         $this->assertArrayNotHasKey('SELECTED_CONNECTION', $_ENV);
     }
 
-    public function testSelectConnectionByEnviromentNotEmpty(): void
+    #[Testing]
+    public function selectConnectionByEnviromentNotEmpty(): void
     {
         $command = new class extends MenuCommand
         {
-            const TYPES = ['js', 'ts'];
+            private const array TYPES = [
+                'js',
+                'ts',
+            ];
 
             protected function configure(): void
             {
@@ -375,7 +405,7 @@ class MenuCommandTest extends Test
 
         $application = (new Kernel())->getApplication();
 
-        $application->add((new Container())->injectDependencies($command));
+        $application->add((new Container())->resolve($command::class));
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -391,14 +421,19 @@ class MenuCommandTest extends Test
         $this->assertArrayNotHasKey('SELECTED_CONNECTION', $_ENV);
     }
 
-    public function testSelectMigrationType(): void
+    #[Testing]
+    public function selectMigrationType(): void
     {
         $command = new class extends MenuCommand
         {
-            const TABLE = 'Table';
-            const VIEW = 'View';
-            const STORE_PROCEDURE = 'Store-Procedure';
-            const OPTIONS = [self::TABLE, self::VIEW, self::STORE_PROCEDURE];
+            private const string TABLE = 'Table';
+            private const string VIEW = 'View';
+            private const string STORE_PROCEDURE = 'Store-Procedure';
+            private const array OPTIONS = [
+                self::TABLE,
+                self::VIEW,
+                self::STORE_PROCEDURE,
+            ];
 
             protected function configure(): void
             {
@@ -417,7 +452,7 @@ class MenuCommandTest extends Test
 
         $application = (new Kernel())->getApplication();
 
-        $application->add((new Container())->injectDependencies($command));
+        $application->add((new Container())->resolve($command::class));
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 

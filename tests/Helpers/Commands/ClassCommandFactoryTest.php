@@ -9,6 +9,7 @@ use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
+use PHPUnit\Framework\Attributes\Test as Testing;
 
 class ClassCommandFactoryTest extends Test
 {
@@ -16,11 +17,11 @@ class ClassCommandFactoryTest extends Test
 
     protected function setUp(): void
     {
-        $this->classCommandFactory = (new Container())
-            ->injectDependencies(new ClassCommandFactory());
+        $this->classCommandFactory = (new Container())->resolve(ClassCommandFactory::class);
     }
 
-    public function testExecute(): void
+    #[Testing]
+    public function execute(): void
     {
         $return = $this->classCommandFactory->execute(function () {
             return Command::SUCCESS;
@@ -30,7 +31,8 @@ class ClassCommandFactoryTest extends Test
         $this->assertSame(Command::SUCCESS, $return);
     }
 
-    public function testGetFactories(): void
+    #[Testing]
+    public function getFactories(): void
     {
         $code = uniqid('code-');
 
@@ -47,7 +49,8 @@ class ClassCommandFactoryTest extends Test
         $this->assertInstanceOf(ClassFactory::class, $row);
     }
 
-    public function testSetFactories(): void
+    #[Testing]
+    public function setFactories(): void
     {
         $code = uniqid('code-');
 
@@ -64,7 +67,8 @@ class ClassCommandFactoryTest extends Test
         $this->assertInstanceOf(ClassFactory::class, $row);
     }
 
-    public function testGetFactory(): void
+    #[Testing]
+    public function getFactory(): void
     {
         $code = uniqid('code-');
 
@@ -76,7 +80,8 @@ class ClassCommandFactoryTest extends Test
         $this->assertInstanceOf(ClassFactory::class, $factory);
     }
 
-    public function testGetData(): void
+    #[Testing]
+    public function getData(): void
     {
         $code = uniqid('code-');
 

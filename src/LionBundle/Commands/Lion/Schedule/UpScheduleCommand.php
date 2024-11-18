@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\Schedule;
 
+use DI\Attribute\Inject;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\Schedule\Schedule;
 use Lion\Bundle\Interface\ScheduleInterface;
 use Lion\Command\Command;
-use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
 use Lion\Helpers\Str;
 use LogicException;
@@ -22,7 +22,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @property ClassFactory $classFactory [Fabricates the data provided to
  * manipulate information (folder, class, namespace)]
- * @property Container $container [Container to generate dependency injection]
  * @property Store $store [Manipulate system files]
  * @property Str $str [Modify and construct strings with different formats]
  *
@@ -39,13 +38,6 @@ class UpScheduleCommand extends Command
     private ClassFactory $classFactory;
 
     /**
-     * [Container to generate dependency injection]
-     *
-     * @var Container $container
-     */
-    private Container $container;
-
-    /**
      * [Manipulate system files]
      *
      * @var Store $store
@@ -59,9 +51,7 @@ class UpScheduleCommand extends Command
      */
     private Str $str;
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setClassFactory(ClassFactory $classFactory): UpScheduleCommand
     {
         $this->classFactory = $classFactory;
@@ -69,19 +59,7 @@ class UpScheduleCommand extends Command
         return $this;
     }
 
-    /**
-     * @required
-     */
-    public function setContainer(Container $container): UpScheduleCommand
-    {
-        $this->container = $container;
-
-        return $this;
-    }
-
-    /**
-     * @required
-     */
+    #[Inject]
     public function setStore(Store $store): UpScheduleCommand
     {
         $this->store = $store;
@@ -89,9 +67,7 @@ class UpScheduleCommand extends Command
         return $this;
     }
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setStr(Str $str): UpScheduleCommand
     {
         $this->str = $str;
@@ -139,9 +115,9 @@ class UpScheduleCommand extends Command
         /** @var array<int, ScheduleInterface> $files */
         $files = [];
 
-        foreach ($this->container->getFiles('app/Console/Cron/') as $file) {
+        foreach ($this->store->view('app/Console/Cron/') as $file) {
             if (isSuccess($this->store->validate([$file], ['php']))) {
-                $namespace = $this->container->getNamespace(
+                $namespace = getNamespaceFromFile(
                     $this->store->normalizePath($file),
                     'App\\Console\\Cron\\',
                     $this->store->normalizePath('Cron/')

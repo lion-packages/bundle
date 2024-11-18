@@ -9,9 +9,13 @@ use Lion\Bundle\Helpers\Commands\Schedule\Task;
 use Lion\Request\Http;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
+use ReflectionException;
 
 class TaskTest extends Test
 {
+    /**
+     * @throws ReflectionException
+     */
     #[Testing]
     public function construct(): void
     {

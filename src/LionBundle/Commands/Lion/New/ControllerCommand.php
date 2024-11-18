@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\New;
 
+use DI\Attribute\Inject;
 use Lion\Bundle\Helpers\Commands\ClassCommandFactory;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
@@ -66,9 +67,7 @@ class ControllerCommand extends Command
      */
     private ClassCommandFactory $classCommandFactory;
 
-    /**
-     * @required
-     * */
+    #[Inject]
     public function setStr(Str $str): ControllerCommand
     {
         $this->str = $str;
@@ -76,9 +75,7 @@ class ControllerCommand extends Command
         return $this;
     }
 
-    /**
-     * @required
-     * */
+    #[Inject]
     public function setClassCommandFactory(ClassCommandFactory $classCommandFactory): ControllerCommand
     {
         $this->classCommandFactory = $classCommandFactory;

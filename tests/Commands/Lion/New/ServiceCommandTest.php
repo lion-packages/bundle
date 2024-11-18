@@ -9,16 +9,17 @@ use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
+use PHPUnit\Framework\Attributes\Test as Testing;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class ServiceCommandTest extends Test
 {
-    const URL_PATH = './app/Http/Services/';
-    const NAMESPACE_CLASS = 'App\\Http\\Services\\';
-    const CLASS_NAME = 'TestService';
-    const OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
-    const FILE_NAME = self::CLASS_NAME . '.php';
-    const OUTPUT_MESSAGE = 'service has been generated';
+    private const string URL_PATH = './app/Http/Services/';
+    private const string NAMESPACE_CLASS = 'App\\Http\\Services\\';
+    private const string CLASS_NAME = 'TestService';
+    private const string OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
+    private const string FILE_NAME = self::CLASS_NAME . '.php';
+    private const string OUTPUT_MESSAGE = 'service has been generated';
 
     private CommandTester $commandTester;
 
@@ -26,7 +27,7 @@ class ServiceCommandTest extends Test
     {
         $application = (new Kernel())->getApplication();
 
-        $application->add((new Container())->injectDependencies(new ServiceCommand()));
+        $application->add((new Container())->resolve(ServiceCommand::class));
 
         $this->commandTester = new CommandTester($application->find('new:service'));
 
@@ -38,7 +39,8 @@ class ServiceCommandTest extends Test
         $this->rmdirRecursively('./app/');
     }
 
-    public function testExecute(): void
+    #[Testing]
+    public function execute(): void
     {
         $this->assertSame(Command::SUCCESS, $this->commandTester->execute(['service' => self::CLASS_NAME]));
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());

@@ -30,7 +30,7 @@ class ShowDatabasesCommandTest extends Test
 
         $application = new Application();
 
-        $application->add((new Container())->injectDependencies(new ShowDatabasesCommand()));
+        $application->add((new Container())->resolve(ShowDatabasesCommand::class));
 
         $this->commandTester = new CommandTester($application->find('db:show'));
     }

@@ -10,6 +10,7 @@ use Lion\Exceptions\Exception;
 use Lion\Request\Http;
 use Lion\Request\Status;
 use Lion\Test\Test;
+use PHPUnit\Framework\Attributes\Test as Testing;
 
 class RouteMiddlewareTest extends Test
 {
@@ -23,7 +24,8 @@ class RouteMiddlewareTest extends Test
     /**
      * @throws Exception
      */
-    public function testProtectRouteListWithoutHeader(): void
+    #[Testing]
+    public function protectRouteListWithoutHeader(): void
     {
         $this
             ->exception(MiddlewareException::class)
@@ -38,7 +40,8 @@ class RouteMiddlewareTest extends Test
     /**
      * @throws Exception
      */
-    public function testProtectedRouteListDiferentHash(): void
+    #[Testing]
+    public function protectedRouteListDiferentHash(): void
     {
         $this
             ->exception(MiddlewareException::class)

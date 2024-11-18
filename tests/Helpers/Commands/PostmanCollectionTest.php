@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Tests\Helpers\Commands;
 
+use GuzzleHttp\Exception\GuzzleException;
 use Lion\Bundle\Helpers\Commands\PostmanCollection;
 use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
 use Lion\Request\Http;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test as Testing;
+use ReflectionException;
 use Tests\Providers\Helpers\PostmanCollectionProviderTrait;
 
 class PostmanCollectionTest extends Test
@@ -32,47 +35,69 @@ class PostmanCollectionTest extends Test
 
     private PostmanCollection $postmanCollection;
 
+    /**
+     * @throws ReflectionException
+     */
     protected function setUp(): void
     {
-        $this->postmanCollection = (new Container())
-            ->injectDependencies(new PostmanCollection());
+        $this->postmanCollection = (new Container())->resolve(PostmanCollection::class);
 
         $this->initReflection($this->postmanCollection);
     }
 
-    public function testInit(): void
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
+    public function init(): void
     {
         $this->postmanCollection->init(self::HOST);
 
         $this->assertSame(self::POSTMAN_CONFIG, $this->getPrivateProperty('postman'));
     }
 
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
     #[DataProvider('addValuesParamProvider')]
-    public function testAddValuesParam(string $params, string $value, string $key, bool $index, string $return): void
+    public function addValuesParam(string $params, string $value, string $key, bool $index, string $return): void
     {
         $returnMethod = $this->getPrivateMethod('addValuesParam', [$params, $value, $key, $index]);
 
         $this->assertSame($return, $returnMethod);
     }
 
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
     #[DataProvider('createQueryParamsProvider')]
-    public function testCreateQueryParams(string $jsonParams, array $return): void
+    public function createQueryParams(string $jsonParams, array $return): void
     {
         $returnMethod = $this->getPrivateMethod('createQueryParams', [$jsonParams]);
 
         $this->assertSame($return, $returnMethod);
     }
 
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
     #[DataProvider('addParamsProvider')]
-    public function testAddParams(array $rules, array|string $return): void
+    public function addParams(array $rules, array|string $return): void
     {
         $returnMethod = $this->getPrivateMethod('addParams', [$rules]);
 
         $this->assertSame($return, $returnMethod);
     }
 
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
     #[DataProvider('addPatchProvider')]
-    public function testAddPatch(string $name, string $route, array $params, array $return): void
+    public function addPatch(string $name, string $route, array $params, array $return): void
     {
         $this->postmanCollection->init(self::HOST);
 
@@ -83,8 +108,12 @@ class PostmanCollectionTest extends Test
         $this->assertSame($return, $returnMethod);
     }
 
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
     #[DataProvider('addGetProvider')]
-    public function testAddGet(string $name, string $route, array $params, array $return): void
+    public function addGet(string $name, string $route, array $params, array $return): void
     {
         $this->postmanCollection->init(self::HOST);
 
@@ -95,8 +124,12 @@ class PostmanCollectionTest extends Test
         $this->assertSame($return, $returnMethod);
     }
 
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
     #[DataProvider('addDeleteProvider')]
-    public function testAddDelete(string $name, string $route, array $params, array $return): void
+    public function addDelete(string $name, string $route, array $params, array $return): void
     {
         $this->postmanCollection->init(self::HOST);
 
@@ -107,8 +140,12 @@ class PostmanCollectionTest extends Test
         $this->assertSame($return, $returnMethod);
     }
 
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
     #[DataProvider('addPostProvider')]
-    public function testAddPost(string $name, string $route, array $params, array $return): void
+    public function addPost(string $name, string $route, array $params, array $return): void
     {
         $this->postmanCollection->init(self::HOST);
 
@@ -119,8 +156,12 @@ class PostmanCollectionTest extends Test
         $this->assertSame($return, $returnMethod);
     }
 
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
     #[DataProvider('addPutProvider')]
-    public function testAddPut(string $name, string $route, array $params, array $return): void
+    public function addPut(string $name, string $route, array $params, array $return): void
     {
         $this->postmanCollection->init(self::HOST);
 
@@ -131,8 +172,12 @@ class PostmanCollectionTest extends Test
         $this->assertSame($return, $returnMethod);
     }
 
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
     #[DataProvider('addRequestProvider')]
-    public function testAddRequest(string $name, string $route, string $method, array $params, array $return): void
+    public function addRequest(string $name, string $route, string $method, array $params, array $return): void
     {
         $this->postmanCollection->init(self::HOST);
 
@@ -143,7 +188,12 @@ class PostmanCollectionTest extends Test
         $this->assertSame($return, $returnMethod);
     }
 
-    public function testAddRoutes(): void
+    /**
+     * @throws ReflectionException
+     * @throws GuzzleException
+     */
+    #[Testing]
+    public function addRoutes(): void
     {
         $routes = json_decode(
             fetch(Http::GET, (self::HOST . '/route-list'), [
@@ -169,7 +219,12 @@ class PostmanCollectionTest extends Test
         $this->assertJsonStringEqualsJsonFile('./tests/Providers/Helpers/Commands/AddRoutesProvider.json', $addRoutes);
     }
 
-    public function testCreateCollection(): void
+    /**
+     * @throws ReflectionException
+     * @throws GuzzleException
+     */
+    #[Testing]
+    public function createCollection(): void
     {
         $routes = json_decode(
             fetch(Http::GET, (self::HOST . '/route-list'), [
@@ -204,7 +259,12 @@ class PostmanCollectionTest extends Test
         $this->assertJsonStringEqualsJsonString(json_encode($jsonProvider['item']), json_encode($collection));
     }
 
-    public function testGetRoutes(): void
+    /**
+     * @throws ReflectionException
+     * @throws GuzzleException
+     */
+    #[Testing]
+    public function getRoutes(): void
     {
         $routes = json_decode(
             fetch(Http::GET, (self::HOST . '/route-list'), [
@@ -234,7 +294,12 @@ class PostmanCollectionTest extends Test
         $this->assertJsonStringEqualsJsonFile('./tests/Providers/Helpers/Commands/GetRoutesProvider.json', $getRoutes);
     }
 
-    public function testGetItems(): void
+    /**
+     * @throws ReflectionException
+     * @throws GuzzleException
+     */
+    #[Testing]
+    public function getItems(): void
     {
         $routes = json_decode(
             fetch(Http::GET, (self::HOST . '/route-list'), [
@@ -263,8 +328,12 @@ class PostmanCollectionTest extends Test
         );
     }
 
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
     #[DataProvider('reverseArrayProvider')]
-    public function testReverseArray(array $items, array $return): void
+    public function reverseArray(array $items, array $return): void
     {
         $returnMethod = $this->getPrivateMethod('reverseArray', [$items]);
 

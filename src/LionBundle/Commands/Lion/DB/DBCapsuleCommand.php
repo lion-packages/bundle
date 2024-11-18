@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\DB;
 
+use DI\Attribute\Inject;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Bundle\Helpers\DatabaseEngine;
@@ -41,9 +42,7 @@ class DBCapsuleCommand extends MenuCommand
      */
     private DatabaseEngine $databaseEngine;
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setClassFactory(ClassFactory $classFactory): DBCapsuleCommand
     {
         $this->classFactory = $classFactory;
@@ -51,9 +50,7 @@ class DBCapsuleCommand extends MenuCommand
         return $this;
     }
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setDatabaseEngine(DatabaseEngine $databaseEngine): DBCapsuleCommand
     {
         $this->databaseEngine = $databaseEngine;

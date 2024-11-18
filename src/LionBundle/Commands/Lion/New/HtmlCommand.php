@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\New;
 
+use DI\Attribute\Inject;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Files\Store;
@@ -38,17 +39,13 @@ class HtmlCommand extends Command
      */
     private Store $store;
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setClassFactory(ClassFactory $classFactory): void
     {
         $this->classFactory = $classFactory;
     }
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setStore(Store $store): void
     {
         $this->store = $store;
@@ -80,7 +77,7 @@ class HtmlCommand extends Command
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int [0 if everything went fine, or an exit code]
+     * @return int
      *
      * @throws LogicException [When this abstract method is not implemented]
      */

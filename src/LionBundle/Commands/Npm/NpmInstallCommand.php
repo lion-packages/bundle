@@ -9,8 +9,6 @@ use Lion\Bundle\Commands\Lion\Npm\NpmInstallCommand as LionNpmInstallCommand;
 /**
  * Install the Vite.JS project dependencies
  *
- * @property Kernel $Kernel [kernel class object]
- *
  * @package Lion\Bundle\Commands\Lion\Npm
  */
 class NpmInstallCommand extends LionNpmInstallCommand

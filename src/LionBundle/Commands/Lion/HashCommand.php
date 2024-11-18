@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion;
 
+use DI\Attribute\Inject;
 use Lion\Command\Command;
 use Lion\Security\Validation;
+use LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -25,9 +27,7 @@ class HashCommand extends Command
      */
     private Validation $validation;
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setValidation(Validation $validation): HashCommand
     {
         $this->validation = $validation;
@@ -60,11 +60,9 @@ class HashCommand extends Command
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int 0 if everything went fine, or an exit code
+     * @return int
      *
-     * @throws LogicException When this abstract method is not implemented
-     *
-     * @see setCode()
+     * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {

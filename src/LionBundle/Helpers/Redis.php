@@ -43,7 +43,7 @@ class Redis
      */
     public function __construct(array $options = [])
     {
-        $this->client =  new Client(!empty($options) ?  $options : [
+        $this->client = new Client(!empty($options) ?  $options : [
             'scheme' => env('REDIS_SCHEME'),
             'host' => env('REDIS_HOST'),
             'port' => env('REDIS_PORT'),

@@ -9,17 +9,18 @@ use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
+use PHPUnit\Framework\Attributes\Test as Testing;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class FactoryCommandTest extends Test
 {
-    const URL_PATH = './database/Factory/';
-    const NAMESPACE_CLASS = 'Database\\Factory\\';
-    const CLASS_NAME = 'TestFactory';
-    const OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
-    const FILE_NAME = self::CLASS_NAME . '.php';
-    const OUTPUT_MESSAGE = 'factory has been generated';
-    const METHOD = ['columns', 'definition'];
+    private const string URL_PATH = './database/Factory/';
+    private const string NAMESPACE_CLASS = 'Database\\Factory\\';
+    private const string CLASS_NAME = 'TestFactory';
+    private const string OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
+    private const string FILE_NAME = self::CLASS_NAME . '.php';
+    private const string OUTPUT_MESSAGE = 'factory has been generated';
+    private const array METHOD = ['columns', 'definition'];
 
     private CommandTester $commandTester;
 
@@ -27,7 +28,7 @@ class FactoryCommandTest extends Test
     {
         $application = (new Kernel())->getApplication();
 
-        $application->add((new Container())->injectDependencies(new FactoryCommand()));
+        $application->add((new Container())->resolve(FactoryCommand::class));
 
         $this->commandTester = new CommandTester($application->find('new:factory'));
 
@@ -39,7 +40,8 @@ class FactoryCommandTest extends Test
         $this->rmdirRecursively('./app/');
     }
 
-    public function testExecute(): void
+    #[Testing]
+    public function execute(): void
     {
         $this->assertSame(Command::SUCCESS, $this->commandTester->execute(['factory' => self::CLASS_NAME]));
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());

@@ -12,20 +12,21 @@ use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
+use PHPUnit\Framework\Attributes\Test as Testing;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class FreshMigrationsCommandTest extends Test
 {
-    const OUTPUT_SEED_CREATE_MESSAGE = 'seed has been generated';
-    const OUTPUT_MESSAGE = 'Migrations executed successfully';
-    const OUTPUT_SEED_MESSAGE = 'seeds executed';
-    const OUTPUT_MIGRATION_CREATE_MESSAGE = 'migration has been generated';
-    const SEED_NAMESPACE = 'Database\\Seed\\';
-    const SEED_CLASS = 'ExampleSeed';
-    const SEED_PATH = './database/Seed/';
-    const SEED_FILE = self::SEED_PATH . 'ExampleSeed.php';
-    const SEED_OBJECT = self::SEED_NAMESPACE . self::SEED_CLASS;
-    const SEED_METHODS = ['run'];
+    private const string OUTPUT_SEED_CREATE_MESSAGE = 'seed has been generated';
+    private const string OUTPUT_MESSAGE = 'Migrations executed successfully';
+    private const string OUTPUT_SEED_MESSAGE = 'seeds executed';
+    private const string OUTPUT_MIGRATION_CREATE_MESSAGE = 'migration has been generated';
+    private const string SEED_NAMESPACE = 'Database\\Seed\\';
+    private const string SEED_CLASS = 'ExampleSeed';
+    private const string SEED_PATH = './database/Seed/';
+    private const string SEED_FILE = self::SEED_PATH . 'ExampleSeed.php';
+    private const string SEED_OBJECT = self::SEED_NAMESPACE . self::SEED_CLASS;
+    private const array SEED_METHODS = ['run'];
 
     private CommandTester $commandTesterNew;
     private CommandTester $commandTesterSeed;
@@ -38,10 +39,10 @@ class FreshMigrationsCommandTest extends Test
         $container = new Container();
 
         $kernel->commandsOnObjects([
-            $container->injectDependencies(new DBSeedCommand()),
-            $container->injectDependencies(new SeedCommand()),
-            $container->injectDependencies(new MigrationCommand()),
-            $container->injectDependencies(new FreshMigrationsCommand()),
+            $container->resolve(DBSeedCommand::class),
+            $container->resolve(SeedCommand::class),
+            $container->resolve(MigrationCommand::class),
+            $container->resolve(FreshMigrationsCommand::class),
         ]);
 
         $this->commandTesterNew = new CommandTester($kernel->getApplication()->find('new:migration'));
@@ -58,7 +59,8 @@ class FreshMigrationsCommandTest extends Test
         $this->rmdirRecursively('./database/');
     }
 
-    public function testExecute(): void
+    #[Testing]
+    public function execute(): void
     {
         $this->assertSame(Command::SUCCESS, $this->commandTesterNew->execute(['migration' => 'test']));
         $this->assertStringContainsString(self::OUTPUT_MIGRATION_CREATE_MESSAGE, $this->commandTesterNew->getDisplay());
@@ -66,7 +68,8 @@ class FreshMigrationsCommandTest extends Test
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTesterFresh->getDisplay());
     }
 
-    public function testExecuteWithSeed(): void
+    #[Testing]
+    public function executeWithSeed(): void
     {
         $this->assertSame(Command::SUCCESS, $this->commandTesterSeed->execute(['seed' => self::SEED_CLASS]));
         $this->assertStringContainsString(self::OUTPUT_SEED_CREATE_MESSAGE, $this->commandTesterSeed->getDisplay());

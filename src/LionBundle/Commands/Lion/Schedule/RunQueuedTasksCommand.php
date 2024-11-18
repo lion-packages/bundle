@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\Schedule;
 
+use DI\Attribute\Inject;
 use Lion\Bundle\Enums\LogTypeEnum;
 use Lion\Bundle\Helpers\Commands\Schedule\TaskQueue;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
@@ -37,9 +38,7 @@ class RunQueuedTasksCommand extends MenuCommand
      */
     private TaskQueue $taskQueue;
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setContainer(Container $container): RunQueuedTasksCommand
     {
         $this->container = $container;
@@ -47,9 +46,7 @@ class RunQueuedTasksCommand extends MenuCommand
         return $this;
     }
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setTaskQueue(TaskQueue $taskQueue): RunQueuedTasksCommand
     {
         $this->taskQueue = $taskQueue;
@@ -113,8 +110,8 @@ class RunQueuedTasksCommand extends MenuCommand
                 json_decode(json([
                     'class' => "{$queue['namespace']}::{$queue['method']}",
                     'params' => $queue['data'],
-                    'return' => $this->container->injectDependenciesMethod(
-                        new $queue['namespace'],
+                    'return' => $this->container->callMethod(
+                        $this->container->resolve($queue['namespace']),
                         $queue['method'],
                         ['queue' => $queue, ...$queue['data']]
                     )

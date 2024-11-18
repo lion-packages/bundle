@@ -9,28 +9,37 @@ use Lion\Bundle\Helpers\FileWriter;
 use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test as Testing;
+use ReflectionException;
 use Tests\Providers\Helpers\FileWriterProviderTrait;
 
 class FileWriterTest extends Test
 {
     use FileWriterProviderTrait;
 
-    const FILE_NAME = 'example.json';
+    private const string FILE_NAME = 'example.json';
 
     private FileWriter $fileWriter;
     private ClassFactory $classFactory;
 
+    /**
+     * @throws ReflectionException
+     */
     protected function setUp(): void
     {
         $container = new Container();
 
-        $this->fileWriter = $container->injectDependencies(new FileWriter());
+        $this->fileWriter = $container->resolve(FileWriter::class);
 
-        $this->classFactory = $container->injectDependencies(new ClassFactory());
+        $this->classFactory = $container->resolve(ClassFactory::class);
 
         $this->initReflection($this->fileWriter);
     }
 
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
     #[DataProvider('replaceContentProvider')]
     public function testReplaceContent(array $row, string $modifiedLine, string $originalLine): void
     {
@@ -40,8 +49,9 @@ class FileWriterTest extends Test
         $this->assertEquals($modifiedLine, $returnMethod);
     }
 
+    #[Testing]
     #[DataProvider('readFileRowsProvider')]
-    public function testReadFileRows(array $rows, string $return): void
+    public function readFileRows(array $rows, string $return): void
     {
         $this->classFactory
             ->create('example', ClassFactory::JSON_EXTENSION, './')
@@ -66,8 +76,9 @@ class FileWriterTest extends Test
         $this->assertFileDoesNotExist(self::FILE_NAME);
     }
 
+    #[Testing]
     #[DataProvider('readFileRowsWithMultipleRowsProvider')]
-    public function testReadFileRowsWithMultipleRows(array $rows, string $return): void
+    public function readFileRowsWithMultipleRows(array $rows, string $return): void
     {
         $this->classFactory
             ->create('example', ClassFactory::JSON_EXTENSION, './')
@@ -92,8 +103,9 @@ class FileWriterTest extends Test
         $this->assertFileDoesNotExist(self::FILE_NAME);
     }
 
+    #[Testing]
     #[DataProvider('readFileRowsRemoveRowsProvider')]
-    public function testReadFileRowsRemoveRows(array $rows, string $return): void
+    public function readFileRowsRemoveRows(array $rows, string $return): void
     {
         $this->classFactory
             ->create('example', ClassFactory::JSON_EXTENSION, './')

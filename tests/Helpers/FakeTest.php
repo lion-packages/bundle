@@ -7,6 +7,7 @@ namespace Tests\Helpers;
 use Faker\Generator;
 use Lion\Bundle\Helpers\Fake;
 use Lion\Test\Test;
+use PHPUnit\Framework\Attributes\Test as Testing;
 
 class FakeTest extends Test
 {
@@ -17,7 +18,8 @@ class FakeTest extends Test
         $this->fake = new Fake();
     }
 
-    public function testGet(): void
+    #[Testing]
+    public function get(): void
     {
         $this->assertInstanceOf(Generator::class, $this->fake->get());
     }

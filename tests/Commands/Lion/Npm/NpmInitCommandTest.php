@@ -9,20 +9,23 @@ use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
+use PHPUnit\Framework\Attributes\Test as Testing;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class NpmInitCommandTest extends Test
 {
-    const PROJECT_NAME = 'test-app';
-    const OUTPUT_MESSAGE = 'project has been generated successfully';
-    const OUTPUT_MESSAGE_ERROR = 'a resource with this name already exists';
+    private const string PROJECT_NAME = 'test-app';
+    private const string OUTPUT_MESSAGE = 'project has been generated successfully';
+    private const string OUTPUT_MESSAGE_ERROR = 'a resource with this name already exists';
 
     private CommandTester $commandTester;
 
     protected function setUp(): void
     {
         $application = (new Kernel())->getApplication();
-        $application->add((new Container())->injectDependencies(new NpmInitCommand()));
+
+        $application->add((new Container())->resolve(NpmInitCommand::class));
+
         $this->commandTester = new CommandTester($application->find('npm:init'));
     }
 
@@ -31,7 +34,8 @@ class NpmInitCommandTest extends Test
         $this->rmdirRecursively('./vite/');
     }
 
-    public function testExecute(): void
+    #[Testing]
+    public function execute(): void
     {
         $commandExecute = $this->commandTester->setInputs([2, 0])->execute(['project' => self::PROJECT_NAME]);
 
@@ -39,7 +43,8 @@ class NpmInitCommandTest extends Test
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
     }
 
-    public function testExecuteExistProject(): void
+    #[Testing]
+    public function executeExistProject(): void
     {
         $commandExecute = $this->commandTester->setInputs([2, 0])->execute(['project' => self::PROJECT_NAME]);
 
@@ -49,7 +54,8 @@ class NpmInitCommandTest extends Test
         $this->assertStringContainsString(self::OUTPUT_MESSAGE_ERROR, $this->commandTester->getDisplay());
     }
 
-    public function testExecuteElectronVite(): void
+    #[Testing]
+    public function executeElectronVite(): void
     {
         $commandExecute = $this->commandTester->setInputs([8, 2, 0])->execute(['project' => self::PROJECT_NAME]);
 

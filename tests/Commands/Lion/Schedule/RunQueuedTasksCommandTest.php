@@ -8,6 +8,7 @@ use Lion\Bundle\Commands\Lion\Schedule\RunQueuedTasksCommand;
 use Lion\Bundle\Helpers\Commands\Schedule\TaskQueue;
 use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
+use ReflectionException;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use PHPUnit\Framework\Attributes\Test as Testing;
@@ -20,6 +21,9 @@ class RunQueuedTasksCommandTest extends Test
     private CommandTester $commandTester;
     private RunQueuedTasksCommand $runQueuedTasksCommand;
 
+    /**
+     * @throws ReflectionException
+     */
     protected function setUp(): void
     {
         $this->runDatabaseConnections();

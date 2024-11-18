@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\Schedule;
 
+use DI\Attribute\Inject;
 use Lion\Bundle\Helpers\Commands\Schedule\Schedule;
 use Lion\Bundle\Interface\ScheduleInterface;
 use Lion\Command\Command;
-use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
 use Lion\Helpers\Str;
+use LogicException;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,7 +19,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Displays a table with available scheduled tasks
  *
- * @property Container $container [Container class object]
  * @property Store $store [Store class object]
  * @property Str $str [Str class object]
  *
@@ -26,13 +26,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ListScheduleCommand extends Command
 {
-    /**
-     * [Container class object]
-     *
-     * @var Container $container
-     */
-    private Container $container;
-
     /**
      * [Store class object]
      *
@@ -47,19 +40,7 @@ class ListScheduleCommand extends Command
      */
     private Str $str;
 
-    /**
-     * @required
-     */
-    public function setContainer(Container $container): ListScheduleCommand
-    {
-        $this->container = $container;
-
-        return $this;
-    }
-
-    /**
-     * @required
-     */
+    #[Inject]
     public function setStore(Store $store): ListScheduleCommand
     {
         $this->store = $store;
@@ -67,9 +48,7 @@ class ListScheduleCommand extends Command
         return $this;
     }
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setStr(Str $str): ListScheduleCommand
     {
         $this->str = $str;
@@ -104,9 +83,7 @@ class ListScheduleCommand extends Command
      *
      * @return int 0 if everything went fine, or an exit code
      *
-     * @throws LogicException When this abstract method is not implemented
-     *
-     * @see setCode()
+     * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -121,9 +98,9 @@ class ListScheduleCommand extends Command
 
         $size = 0;
 
-        foreach ($this->container->getFiles('app/Console/Cron/') as $file) {
+        foreach ($this->store->view('app/Console/Cron/') as $file) {
             if (isSuccess($this->store->validate([$file], ['php']))) {
-                $namespace = $this->container->getNamespace(
+                $namespace = getNamespaceFromFile(
                     (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? str_replace('\\', '/', $file) : $file),
                     'App\\Console\\Cron\\',
                     $this->store->normalizePath('Cron/')

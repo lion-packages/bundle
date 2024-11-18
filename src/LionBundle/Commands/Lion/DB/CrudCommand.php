@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\DB;
 
+use DI\Attribute\Inject;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Bundle\Helpers\DatabaseEngine;
@@ -60,9 +61,7 @@ class CrudCommand extends MenuCommand
      */
     private DatabaseEngine $databaseEngine;
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setFileWriter(FileWriter $fileWriter): CrudCommand
     {
         $this->fileWriter = $fileWriter;
@@ -70,9 +69,7 @@ class CrudCommand extends MenuCommand
         return $this;
     }
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setClassFactory(ClassFactory $classFactory): CrudCommand
     {
         $this->classFactory = $classFactory;
@@ -80,9 +77,7 @@ class CrudCommand extends MenuCommand
         return $this;
     }
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setDatabaseEngine(DatabaseEngine $databaseEngine): CrudCommand
     {
         $this->databaseEngine = $databaseEngine;

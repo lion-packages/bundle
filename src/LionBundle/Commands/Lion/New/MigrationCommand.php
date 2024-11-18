@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\New;
 
+use DI\Attribute\Inject;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\Migrations\MigrationFactory;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
@@ -84,9 +85,7 @@ class MigrationCommand extends MenuCommand
      */
     private DatabaseEngine $databaseEngine;
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setClassFactory(ClassFactory $classFactory): MigrationCommand
     {
         $this->classFactory = $classFactory;
@@ -94,9 +93,7 @@ class MigrationCommand extends MenuCommand
         return $this;
     }
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setMigrationFactory(MigrationFactory $migrationFactory): MigrationCommand
     {
         $this->migrationFactory = $migrationFactory;
@@ -104,9 +101,7 @@ class MigrationCommand extends MenuCommand
         return $this;
     }
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setDatabaseEngine(DatabaseEngine $databaseEngine): MigrationCommand
     {
         $this->databaseEngine = $databaseEngine;

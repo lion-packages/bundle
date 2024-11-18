@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Helpers\Commands;
 
+use DI\Attribute\Inject;
 use Lion\Helpers\Arr;
 
 /**
@@ -30,9 +31,7 @@ class ComposerFactory
      */
     private array $libraries = [];
 
-    /**
-     * @required
-     */
+    #[Inject]
     public function setArr(Arr $arr): ComposerFactory
     {
         $this->arr = $arr;

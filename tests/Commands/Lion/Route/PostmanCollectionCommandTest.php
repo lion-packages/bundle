@@ -10,32 +10,29 @@ use Lion\Bundle\Commands\Lion\Route\PostmanCollectionCommand;
 use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\Dependency\Injection\Container;
-use Lion\Files\Store;
 use Lion\Test\Test;
+use PHPUnit\Framework\Attributes\Test as Testing;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class PostmanCollectionCommandTest extends Test
 {
     private const string URL_PATH = './storage/postman/';
-    private const string OUTPUT_MESSAGE = 'Exported in';
-    private const string NAMESPACE_RULE = 'App\\Rules\\UsersNameRule';
     private const string CLASS_NAME_RULE = 'UsersNameRule';
 
     private CommandTester $commandTester;
     private CommandTester $commandTesterRule;
-    private Store $store;
 
     protected function setUp(): void
     {
         $this->createDirectory(self::URL_PATH);
 
-        $this->store = new Store();
-
         $application = (new Kernel)->getApplication();
 
-        $application->add((new Container)->injectDependencies(new RulesCommand()));
+        $container = new Container();
 
-        $application->add((new Container)->injectDependencies(new PostmanCollectionCommand()));
+        $application->add($container->resolve(RulesCommand::class));
+
+        $application->add($container->resolve(PostmanCollectionCommand::class));
 
         $this->commandTester = new CommandTester($application->find('route:postman'));
 
@@ -49,7 +46,8 @@ class PostmanCollectionCommandTest extends Test
         $this->rmdirRecursively('./app/');
     }
 
-    public function testExecute(): void
+    #[Testing]
+    public function execute(): void
     {
         $this->assertSame(Command::SUCCESS, $this->commandTesterRule->execute(['rule' => self::CLASS_NAME_RULE]));
 

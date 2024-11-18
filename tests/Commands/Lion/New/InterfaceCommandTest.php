@@ -9,21 +9,24 @@ use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
+use PHPUnit\Framework\Attributes\Test as Testing;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class InterfaceCommandTest extends Test
 {
-    const URL_PATH = './app/Interfaces/';
-    const CLASS_NAME = 'TestInterface';
-    const FILE_NAME = self::CLASS_NAME . '.php';
-    const OUTPUT_MESSAGE = 'interface has been generated';
+    private const string URL_PATH = './app/Interfaces/';
+    private const string CLASS_NAME = 'TestInterface';
+    private const string FILE_NAME = self::CLASS_NAME . '.php';
+    private const string OUTPUT_MESSAGE = 'interface has been generated';
 
     private CommandTester $commandTester;
 
     protected function setUp(): void
     {
         $application = (new Kernel())->getApplication();
-        $application->add((new Container())->injectDependencies(new InterfaceCommand()));
+
+        $application->add((new Container())->resolve(InterfaceCommand::class));
+
         $this->commandTester = new CommandTester($application->find('new:interface'));
 
         $this->createDirectory(self::URL_PATH);
@@ -34,7 +37,8 @@ class InterfaceCommandTest extends Test
         $this->rmdirRecursively('./app/');
     }
 
-    public function testExecute(): void
+    #[Testing]
+    public function execute(): void
     {
         $this->assertSame(Command::SUCCESS, $this->commandTester->execute(['interface' => self::CLASS_NAME]));
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
