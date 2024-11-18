@@ -12,6 +12,8 @@ use Lion\Bundle\Helpers\FileWriter;
 use Lion\Command\Command;
 use Lion\Database\Connection;
 use Lion\Database\Driver;
+use LogicException;
+use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -113,9 +115,10 @@ class CrudCommand extends MenuCommand
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int [0 if everything went fine, or an exit code]
+     * @return int
      *
-     * @throws LogicException [When this abstract method is not implemented]
+     * @throws LogicException|ExceptionInterface [When this abstract method is
+     * not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -171,6 +174,8 @@ class CrudCommand extends MenuCommand
      * implemented by all Output classes]
      *
      * @return void
+     *
+     * @throws ExceptionInterface
      */
     private function addDBRules(string $entity, OutputInterface $output): void
     {
@@ -197,6 +202,8 @@ class CrudCommand extends MenuCommand
      * implemented by all Output classes]
      *
      * @return void
+     *
+     * @throws ExceptionInterface
      */
     private function addControllerAndModel(
         string $driver,

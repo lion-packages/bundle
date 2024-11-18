@@ -10,6 +10,8 @@ use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Files\Store;
 use Lion\Helpers\Str;
+use LogicException;
+use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -110,9 +112,10 @@ class ControllerCommand extends Command
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int 0 if everything went fine, or an exit code
+     * @return int
      *
-     * @throws LogicException When this abstract method is not implemented
+     * @throws LogicException [When this abstract method is not implemented]
+     * @throws ExceptionInterface
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -165,12 +168,13 @@ class ControllerCommand extends Command
                     );
 
                 if ('none' != $model) {
-                    $factoryController->add("\nuse {$dataModel->namespace}\\{$dataModel->class};\n");
+                    $factoryController->add("\nuse {$dataModel->namespace}\\{$dataModel->class};");
                 }
 
                 $factoryController
                     ->add(
                         <<<EOT
+
                         use Lion\Database\Interface\DatabaseCapsuleInterface;
                         use stdClass;
 
