@@ -1,8 +1,8 @@
 <p align="center">
   <a href="https://lion-client.vercel.app/" target="_blank">
-    <img 
-         src="https://user-images.githubusercontent.com/56183278/230516080-096130be-e474-4f3a-a78a-44d3973ff715.png" 
-         width="300" 
+    <img
+         src="https://github.com/lion-packages/mailer/assets/132396080/b4a5f07a-0035-4f07-b998-ef3adb32eaec"
+         width="300"
          alt="Lion-Framework Logo"
     >
   </a>
@@ -17,7 +17,7 @@
 
 ## Install
 
-```shell
+```bash
 composer require lion/bundle
 ```
 
