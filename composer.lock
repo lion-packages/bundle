@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0dc5f3d987ef9a0486ca7651dc0e8815",
+    "content-hash": "e0abbd7dd63542138cd546780017e528",
     "packages": [
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -1075,16 +1075,16 @@
         },
         {
             "name": "lion/route",
-            "version": "v11.4.0",
+            "version": "v11.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/route.git",
-                "reference": "279eca4f1e3f9524d25bf7f36bf19af865246688"
+                "reference": "bd58a08d2fc25720b6ec9e04f0a5719749c4f3d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/route/zipball/279eca4f1e3f9524d25bf7f36bf19af865246688",
-                "reference": "279eca4f1e3f9524d25bf7f36bf19af865246688",
+                "url": "https://api.github.com/repos/lion-packages/route/zipball/bd58a08d2fc25720b6ec9e04f0a5719749c4f3d5",
+                "reference": "bd58a08d2fc25720b6ec9e04f0a5719749c4f3d5",
                 "shasum": ""
             },
             "require": {
@@ -1113,9 +1113,9 @@
             "description": "This library has quick router usage with regular expressions.",
             "support": {
                 "issues": "https://github.com/lion-packages/route/issues",
-                "source": "https://github.com/lion-packages/route/tree/v11.4.0"
+                "source": "https://github.com/lion-packages/route/tree/v11.5.0"
             },
-            "time": "2024-11-18T15:03:38+00:00"
+            "time": "2024-11-19T12:47:11+00:00"
         },
         {
             "name": "lion/security",
