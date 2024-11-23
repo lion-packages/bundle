@@ -18,6 +18,7 @@ use Lion\Helpers\Arr;
 use Lion\Helpers\Str;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
+use ReflectionException;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tests\Providers\ConnectionProviderTrait;
@@ -40,6 +41,9 @@ class MigrationCommandTest extends Test
     private CommandTester $commandTester;
     private MigrationCommand $migrationCommand;
 
+    /**
+     * @throws ReflectionException
+     */
     protected function setUp(): void
     {
         $this->runDatabaseConnections();
