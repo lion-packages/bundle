@@ -96,7 +96,7 @@ class Migrations
                 $namespace = $this->store->getNamespaceFromFile($migration, 'Database\\Migrations\\', 'Migrations/');
 
                 if (!isset($this->loadedMigrations[$migration])) {
-                    $this->loadedMigrations[$migration] = include($migration);
+                    $this->loadedMigrations[$migration] = new $namespace();
                 }
 
                 $tableMigration = $this->loadedMigrations[$migration];

@@ -30,6 +30,7 @@ class MigrationsTest extends Test
 
     private const string MIGRATION_NAME = 'test-migration';
     private const string CLASS_NAME = 'TestMigration';
+    private const string CLASS_NAMESPACE = 'Database\\Migrations\\LionDatabase\\MySQL\\Tables\\';
     private const string URL_PATH_MYSQL_TABLE = './database/Migrations/LionDatabase/MySQL/Tables/';
     private const string FILE_NAME = self::CLASS_NAME . '.php';
     private const string OUTPUT_MESSAGE = 'migration has been generated';
@@ -96,7 +97,7 @@ class MigrationsTest extends Test
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH_MYSQL_TABLE . self::FILE_NAME);
 
-        $objClass = include(self::URL_PATH_MYSQL_TABLE . self::FILE_NAME);
+        $objClass = new (self::CLASS_NAMESPACE . self::CLASS_NAME)();
 
         $this->assertInstances($objClass, [
             MigrationUpInterface::class,
@@ -134,19 +135,12 @@ class MigrationsTest extends Test
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH_MYSQL_TABLE . self::FILE_NAME);
 
-        $objClass = include(self::URL_PATH_MYSQL_TABLE . self::FILE_NAME);
+        $objClass = new (self::CLASS_NAMESPACE . self::CLASS_NAME)();
 
         $this->assertInstances($objClass, [
             MigrationUpInterface::class,
             TableInterface::class,
         ]);
-
-        $namespace = $this->store->getNamespaceFromFile(
-            (self::URL_PATH_MYSQL_TABLE . self::FILE_NAME),
-            'Database\\Migrations\\',
-            'Migrations/'
-        );
-
         $list = $this->migrations->getMigrations();
 
         $this->assertIsArray($list);
@@ -155,7 +149,11 @@ class MigrationsTest extends Test
         $this->assertArrayHasKey(ViewInterface::class, $list);
         $this->assertArrayHasKey(StoreProcedureInterface::class, $list);
         $this->assertNotEmpty($list[TableInterface::class]);
-        $this->assertisobject($list[TableInterface::class][$namespace]);
-        $this->assertInstanceOf(TableInterface::class, $list[TableInterface::class][$namespace]);
+        $this->assertisobject($list[TableInterface::class][self::CLASS_NAMESPACE . self::CLASS_NAME]);
+
+        $this->assertInstanceOf(
+            TableInterface::class,
+            $list[TableInterface::class][self::CLASS_NAMESPACE . self::CLASS_NAME]
+        );
     }
 }

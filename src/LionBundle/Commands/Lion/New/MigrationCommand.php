@@ -163,7 +163,7 @@ class MigrationCommand extends MenuCommand
 
         $dbPascal = $this->str->of($connectionName)->replace('-', ' ')->replace('_', ' ')->pascal()->trim()->get();
 
-        $dataMigration = $this->getBody($selectedType, $dbPascal, $driver);
+        $dataMigration = $this->getBody($migrationPascal, $selectedType, $dbPascal, $driver);
 
         $this->store->folder($dataMigration->path);
 
@@ -187,13 +187,14 @@ class MigrationCommand extends MenuCommand
     /**
      * Gets the data to generate the body of the selected migration type
      *
+     * @param string $className [Class name]
      * @param string $selectedType [Type of migration]
      * @param string $dbPascal [Database in PascalCase format]
      * @param string $driver [Database Engine Type]
      *
      * @return stdClass
      */
-    private function getBody(string $selectedType, string $dbPascal, string $driver): stdClass
+    private function getBody(string $className, string $selectedType, string $dbPascal, string $driver): stdClass
     {
         $body = '';
 
@@ -203,9 +204,15 @@ class MigrationCommand extends MenuCommand
             $path = "database/Migrations/{$dbPascal}/{$driver}/Tables/";
 
             if ($this->databaseEngine->getDriver(Driver::MYSQL) === $driver) {
-                $body = $this->migrationFactory->getMySQLTableBody();
+                $body = $this->migrationFactory->getMySQLTableBody(
+                    $className,
+                    "Database\\Migrations\\{$dbPascal}\\{$driver}\\Tables"
+                );
             } elseif ($this->databaseEngine->getDriver(Driver::POSTGRESQL) === $driver) {
-                $body = $this->migrationFactory->getPostgreSQLTableBody();
+                $body = $this->migrationFactory->getPostgreSQLTableBody(
+                    $className,
+                    "Database\\Migrations\\{$dbPascal}\\{$driver}\\Tables"
+                );
             }
         }
 
@@ -213,9 +220,15 @@ class MigrationCommand extends MenuCommand
             $path = "database/Migrations/{$dbPascal}/{$driver}/Views/";
 
             if ($this->databaseEngine->getDriver(Driver::MYSQL) === $driver) {
-                $body = $this->migrationFactory->getMySQLViewBody();
+                $body = $this->migrationFactory->getMySQLViewBody(
+                    $className,
+                    "Database\\Migrations\\{$dbPascal}\\{$driver}\\Views"
+                );
             } elseif ($this->databaseEngine->getDriver(Driver::POSTGRESQL) === $driver) {
-                $body = $this->migrationFactory->getPostgreSQLViewBody();
+                $body = $this->migrationFactory->getPostgreSQLViewBody(
+                    $className,
+                    "Database\\Migrations\\{$dbPascal}\\{$driver}\\Views"
+                );
             }
         }
 
@@ -223,9 +236,15 @@ class MigrationCommand extends MenuCommand
             $path = "database/Migrations/{$dbPascal}/{$driver}/StoreProcedures/";
 
             if ($this->databaseEngine->getDriver(Driver::MYSQL) === $driver) {
-                $body = $this->migrationFactory->getMySQLStoreProcedureBody();
+                $body = $this->migrationFactory->getMySQLStoreProcedureBody(
+                    $className,
+                    "Database\\Migrations\\{$dbPascal}\\{$driver}\\StoreProcedures"
+                );
             } elseif ($this->databaseEngine->getDriver(Driver::POSTGRESQL) === $driver) {
-                $body = $this->migrationFactory->getPostgreSQLStoreProcedureBody();
+                $body = $this->migrationFactory->getPostgreSQLStoreProcedureBody(
+                    $className,
+                    "Database\\Migrations\\{$dbPascal}\\{$driver}\\StoreProcedures"
+                );
             }
         }
 
