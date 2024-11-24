@@ -9,6 +9,7 @@ use Lion\Bundle\Interface\Migrations\StoreProcedureInterface;
 use Lion\Bundle\Interface\Migrations\TableInterface;
 use Lion\Bundle\Interface\Migrations\ViewInterface;
 use Lion\Bundle\Interface\MigrationUpInterface;
+use Lion\Bundle\Interface\SeedInterface;
 use Lion\Command\Command;
 use Lion\Files\Store;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -49,9 +50,10 @@ class Migrations
     /**
      * Sorts the list of elements by the value defined in the INDEX constant
      *
-     * @param array<string, MigrationUpInterface> $list [Class List]
+     * @param array<string, MigrationUpInterface|SeedInterface> $list [Class
+     * List]
      *
-     * @return array<string, MigrationUpInterface>
+     * @return array<string, MigrationUpInterface|SeedInterface>
      *
      * @internal
      */
