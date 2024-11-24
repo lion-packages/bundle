@@ -17,7 +17,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Manages the processes of creating or executing migrations
  *
  * @property Store $store [Manipulate system files]
- * @property array $loadedMigrations [Stores already loaded migrations]
+ * @property array<string, MigrationUpInterface> $loadedMigrations [Stores
+ * already loaded migrations]
  *
  * @package Lion\Bundle\Helpers\Commands\Migrations
  */
@@ -48,15 +49,15 @@ class Migrations
     /**
      * Sorts the list of elements by the value defined in the INDEX constant
      *
-     * @param array<string, MigrationUpInterface> $files [Class List]
+     * @param array<string, MigrationUpInterface> $list [Class List]
      *
      * @return array<string, MigrationUpInterface>
      *
      * @internal
      */
-    public function orderList(array $files): array
+    public function orderList(array $list): array
     {
-        uasort($files, function ($classA, $classB) {
+        uasort($list, function ($classA, $classB) {
             $namespaceA = $classA::class;
 
             $namespaceB = $classB::class;
@@ -72,7 +73,7 @@ class Migrations
             return $classA::INDEX <=> $classB::INDEX;
         });
 
-        return $files;
+        return $list;
     }
 
     /**
@@ -147,5 +148,65 @@ class Migrations
                 }
             }
         }
+    }
+
+    /**
+     * Run the migrations
+     *
+     * @param array<int, string> $list [List of classes]
+     *
+     * @return void
+     */
+    public function executeMigrationsGroup(array $list): void
+    {
+        /** @var array<string, array<int, MigrationUpInterface>> $migrations */
+        $migrations = [
+            TableInterface::class => [],
+            ViewInterface::class => [],
+            StoreProcedureInterface::class => [],
+        ];
+
+        foreach ($list as $namespace) {
+            /** @var MigrationUpInterface $classObject */
+            $classObject = new $namespace();
+
+            if ($classObject instanceof TableInterface) {
+                $migrations[TableInterface::class][$namespace] = $classObject;
+            }
+
+            if ($classObject instanceof ViewInterface) {
+                $migrations[ViewInterface::class][$namespace] = $classObject;
+            }
+
+            if ($classObject instanceof StoreProcedureInterface) {
+                $migrations[StoreProcedureInterface::class][$namespace] = $classObject;
+            }
+        }
+
+        $execute = function (MigrationUpInterface $migration, string $namespace): void {
+            $response = $migration->up();
+
+            echo("\033[0;33m\t>> MIGRATION: {$namespace}\033[0m\n");
+
+            if (isError($response)) {
+                echo("\033[0;31m\t>> MIGRATION: {$response->message}\033[0m\n");
+            } else {
+                echo("\033[0;32m\t>> MIGRATION: {$response->message}\033[0m\n");
+            }
+        };
+
+        $run = function (array $list) use ($execute): void {
+            foreach ($list as $namespace => $migration) {
+                $execute($migration, $namespace);
+            }
+        };
+
+        $run($this->orderList($migrations[TableInterface::class]));
+
+        $run($migrations[ViewInterface::class]);
+
+        $run($migrations[StoreProcedureInterface::class]);
+
+        echo("\n\033[0;36m\t>> Migration group executed successfully\033[0m \n");
     }
 }
