@@ -30,7 +30,9 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Tests\\": "tests/",
+            "Database\\Seeds\\": "database/Seeds/",
+            "Database\\Migrations\\": "database/Migrations/"
         },
         "files": [
             "src/LionBundle/Helpers/Bundle/constants.php",

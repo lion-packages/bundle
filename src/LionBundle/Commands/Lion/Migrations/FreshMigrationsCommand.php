@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\Migrations;
 
+use DI\Attribute\Inject;
+use Lion\Bundle\Helpers\Commands\Migrations\Migrations;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Bundle\Interface\Migrations\StoreProcedureInterface;
 use Lion\Bundle\Interface\Migrations\TableInterface;
@@ -14,7 +16,6 @@ use Lion\Database\Connection;
 use Lion\Database\Driver;
 use Lion\Database\Drivers\PostgreSQL;
 use Lion\Database\Drivers\Schema\MySQL as Schema;
-use Lion\Files\Store;
 use LogicException;
 use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -26,8 +27,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Drop all tables and re-run all migrations
  *
  * @property OutputInterface $output [OutputInterface is the interface
- * implemented by all Output classes]
- * @property Store $store [Store class object]
+ * * implemented by all Output classes]
+ * @property Migrations $migrations [Manages the processes of creating or
+ * executing migrations]
  *
  * @package Lion\Bundle\Commands\Lion\Migrations
  */
@@ -41,6 +43,21 @@ class FreshMigrationsCommand extends MenuCommand
     private OutputInterface $output;
 
     /**
+     * [Manages the processes of creating or executing migrations]
+     *
+     * @var Migrations $migrations
+     */
+    private Migrations $migrations;
+
+    #[Inject]
+    public function setMigrations(Migrations $migrations): FreshMigrationsCommand
+    {
+        $this->migrations = $migrations;
+
+        return $this;
+    }
+
+    /**
      * Configures the current command
      *
      * @return void
@@ -51,26 +68,6 @@ class FreshMigrationsCommand extends MenuCommand
             ->setName('migrate:fresh')
             ->setDescription('Drop all tables and re-run all migrations')
             ->addOption('seed', 's', InputOption::VALUE_OPTIONAL, 'Do you want to run the seeds?', 'none');
-    }
-
-    /**
-     * Initializes the command after the input has been bound and before the
-     * input is validated
-     *
-     * This is mainly useful when a lot of commands extends one main command
-     * where some things need to be initialized based on the input arguments and
-     * options
-     *
-     * @param InputInterface $input [InputInterface is the interface implemented
-     * by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
-     *
-     * @return void
-     */
-    protected function initialize(InputInterface $input, OutputInterface $output): void
-    {
-        $this->output = $output;
     }
 
     /**
@@ -93,6 +90,8 @@ class FreshMigrationsCommand extends MenuCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $this->output = $output;
+
         if (isError($this->store->exist('./database/Migrations/'))) {
             $output->writeln($this->errorOutput("\t>> MIGRATION: there are no defined migration routes"));
 
@@ -102,7 +101,7 @@ class FreshMigrationsCommand extends MenuCommand
         $this->dropTables();
 
         /** @var array<string, array<string, MigrationUpInterface>> $migrations */
-        $migrations = $this->getMigrations();
+        $migrations = $this->migrations->getMigrations();
 
         if (empty($migrations)) {
             $output->writeln($this->warningOutput("\t>> MIGRATION: no migrations available"));
@@ -110,11 +109,11 @@ class FreshMigrationsCommand extends MenuCommand
             return Command::INVALID;
         }
 
-        $this->executeMigrations($this->orderList($migrations[TableInterface::class]));
+        $this->migrations->executeMigrations($this, $output, $this->migrations->orderList($migrations[TableInterface::class]));
 
-        $this->executeMigrations($migrations[ViewInterface::class]);
+        $this->migrations->executeMigrations($this, $output, $migrations[ViewInterface::class]);
 
-        $this->executeMigrations($migrations[StoreProcedureInterface::class]);
+        $this->migrations->executeMigrations($this, $output, $migrations[StoreProcedureInterface::class]);
 
         $output->writeln($this->infoOutput("\n\t>> Migrations executed successfully"));
 
@@ -133,46 +132,11 @@ class FreshMigrationsCommand extends MenuCommand
     }
 
     /**
-     * Gets defined migrations categorized by type
-     *
-     * @return array<string, array<string, MigrationUpInterface>>
-     */
-    private function getMigrations(): array
-    {
-        /** @var array<string, array<string, MigrationUpInterface>> $allMigrations */
-        $allMigrations = [
-            TableInterface::class => [],
-            ViewInterface::class => [],
-            StoreProcedureInterface::class => [],
-        ];
-
-        foreach ($this->store->getFiles('./database/Migrations/') as $migration) {
-            if (isSuccess($this->store->validate([$migration], ['php']))) {
-                $namespace = $this->store->getNamespaceFromFile($migration, 'Database\\Migrations\\', 'Migrations/');
-
-                $tableMigration = include_once($migration);
-
-                if ($tableMigration instanceof TableInterface) {
-                    $allMigrations[TableInterface::class][$namespace] = $tableMigration;
-                }
-
-                if ($tableMigration instanceof ViewInterface) {
-                    $allMigrations[ViewInterface::class][$namespace] = $tableMigration;
-                }
-
-                if ($tableMigration instanceof StoreProcedureInterface) {
-                    $allMigrations[StoreProcedureInterface::class][$namespace] = $tableMigration;
-                }
-            }
-        }
-
-        return $allMigrations;
-    }
-
-    /**
      * Clears all tables of all available connections
      *
      * @return void
+     *
+     * @internal
      */
     private function dropTables(): void
     {
@@ -209,58 +173,6 @@ class FreshMigrationsCommand extends MenuCommand
                 $this->output->writeln(
                     $this->errorOutput("\t>> DATABASE: {$response->message} [{$connection['type']}]")
                 );
-            }
-        }
-    }
-
-    /**
-     * Sorts the list of elements by the value defined in the INDEX constant
-     *
-     * @param array<string, MigrationUpInterface> $files [Class List]
-     *
-     * @return array<string, MigrationUpInterface>
-     */
-    private function orderList(array $files): array
-    {
-        uasort($files, function ($classA, $classB) {
-            $namespaceA = $classA::class;
-
-            $namespaceB = $classB::class;
-
-            if (!defined($namespaceA . "::INDEX")) {
-                return -1;
-            }
-
-            if (!defined($namespaceB . "::INDEX")) {
-                return -1;
-            }
-
-            return $classA::INDEX <=> $classB::INDEX;
-        });
-
-        return $files;
-    }
-
-    /**
-     * Run the migrations
-     *
-     * @param array<int, MigrationUpInterface> $files [List of migration files]
-     *
-     * @return void
-     */
-    private function executeMigrations(array $files): void
-    {
-        foreach ($files as $namespace => $classObject) {
-            if ($classObject instanceof MigrationUpInterface) {
-                $response = $classObject->up();
-
-                $this->output->writeln($this->warningOutput("\t>> MIGRATION: {$namespace}"));
-
-                if (isError($response)) {
-                    $this->output->writeln($this->errorOutput("\t>> MIGRATION: {$response->message}"));
-                } else {
-                    $this->output->writeln($this->successOutput("\t>> MIGRATION: {$response->message}"));
-                }
             }
         }
     }

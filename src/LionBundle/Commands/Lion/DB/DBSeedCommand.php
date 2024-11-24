@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lion\Bundle\Commands\Lion\DB;
 
 use DI\Attribute\Inject;
+use Lion\Bundle\Helpers\Commands\Migrations\Migrations;
 use Lion\Bundle\Interface\SeedInterface;
 use Lion\Command\Command;
 use Lion\Files\Store;
@@ -17,6 +18,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Run the defined seeds
  *
  * @property Store $store [Store class object]
+ * @property Migrations $migrations [Manages the processes of creating or
+ * executing migrations]
  *
  * @package Lion\Bundle\Commands\Lion\DB
  */
@@ -29,10 +32,25 @@ class DBSeedCommand extends Command
      */
     private Store $store;
 
+    /**
+     * [Manages the processes of creating or executing migrations]
+     *
+     * @var Migrations $migrations
+     */
+    private Migrations $migrations;
+
     #[Inject]
     public function setStore(Store $store): DBSeedCommand
     {
         $this->store = $store;
+
+        return $this;
+    }
+
+    #[Inject]
+    public function setMigrations(Migrations $migrations): DBSeedCommand
+    {
+        $this->migrations = $migrations;
 
         return $this;
     }
@@ -91,7 +109,7 @@ class DBSeedCommand extends Command
             }
         }
 
-        foreach ($this->orderList($files) as $seedInterface) {
+        foreach ($this->migrations->orderList($files) as $seedInterface) {
             $output->writeln($this->warningOutput("\t>>  SEED: " . $seedInterface::class));
 
             for ($i = 0; $i < $end; $i++) {
@@ -108,32 +126,5 @@ class DBSeedCommand extends Command
         $output->writeln($this->infoOutput("\n\t>>  SEED: seeds executed"));
 
         return Command::SUCCESS;
-    }
-
-    /**
-     * Sorts the list of elements by the value defined in the INDEX constant
-     *
-     * @param  array $files [Class List]
-     *
-     * @return array<SeedInterface>
-     */
-    private function orderList(array $files): array
-    {
-        uasort($files, function ($classA, $classB) {
-            $namespaceA = $classA::class;
-            $namespaceB = $classB::class;
-
-            if (!defined($namespaceA . "::INDEX")) {
-                return -1;
-            }
-
-            if (!defined($namespaceB . "::INDEX")) {
-                return -1;
-            }
-
-            return $classA::INDEX <=> $classB::INDEX;
-        });
-
-        return $files;
     }
 }

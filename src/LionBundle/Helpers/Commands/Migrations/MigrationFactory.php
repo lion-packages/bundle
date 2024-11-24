@@ -14,22 +14,30 @@ class MigrationFactory
     /**
      * Returns the body of the migration of type table
      *
+     * @param string $className [Class name]
+     * @param string $namespace [Class namespace]
+     *
      * @return string
      */
-    public function getMySQLTableBody(): string
+    public function getMySQLTableBody(string $className, string $namespace): string
     {
         return <<<PHP
         <?php
 
         declare(strict_types=1);
 
+        namespace {$namespace};
+
         use Lion\Bundle\Interface\Migrations\TableInterface;
         use Lion\Database\Drivers\Schema\MySQL as Schema;
+        use stdClass;
 
         /**
          * Description
+         *
+         * @package {$namespace}
          */
-        return new class implements TableInterface
+        class {$className} implements TableInterface
         {
             /**
              * [Index number for seed execution priority]
@@ -57,22 +65,30 @@ class MigrationFactory
     /**
      * Returns the body of the migration of type table
      *
+     * @param string $className [Class name]
+     * @param string $namespace [Class namespace]
+     *
      * @return string
      */
-    public function getPostgreSQLTableBody(): string
+    public function getPostgreSQLTableBody(string $className, string $namespace): string
     {
         return <<<PHP
         <?php
 
         declare(strict_types=1);
 
+        namespace {$namespace};
+
         use Lion\Bundle\Interface\Migrations\TableInterface;
         use Lion\Database\Drivers\PostgreSQL;
+        use stdClass;
 
         /**
          * Description
+         *
+         * @package {$namespace}
          */
-        return new class implements TableInterface
+        class {$className} implements TableInterface
         {
             /**
              * [Index number for seed execution priority]
@@ -102,23 +118,31 @@ class MigrationFactory
     /**
      * Returns the body of the migration of type view
      *
+     * @param string $className [Class name]
+     * @param string $namespace [Class namespace]
+     *
      * @return string
      */
-    public function getMySQLViewBody(): string
+    public function getMySQLViewBody(string $className, string $namespace): string
     {
         return <<<PHP
         <?php
 
         declare(strict_types=1);
 
+        namespace {$namespace};
+
         use Lion\Bundle\Interface\Migrations\ViewInterface;
         use Lion\Database\Drivers\MySQL;
         use Lion\Database\Drivers\Schema\MySQL as Schema;
+        use stdClass;
 
         /**
          * Description
+         *
+         * @package {$namespace}
          */
-        return new class implements ViewInterface
+        class {$className} implements ViewInterface
         {
             /**
              * {@inheritdoc}
@@ -141,22 +165,30 @@ class MigrationFactory
     /**
      * Returns the body of the migration of type view
      *
+     * @param string $className [Class name]
+     * @param string $namespace [Class namespace]
+     *
      * @return string
      */
-    public function getPostgreSQLViewBody(): string
+    public function getPostgreSQLViewBody(string $className, string $namespace): string
     {
         return <<<PHP
         <?php
 
         declare(strict_types=1);
 
+        namespace {$namespace};
+
         use Lion\Bundle\Interface\Migrations\ViewInterface;
         use Lion\Database\Drivers\PostgreSQL;
+        use stdClass;
 
         /**
          * Description
+         *
+         * @package {$namespace}
          */
-        return new class implements ViewInterface
+        class {$className} implements ViewInterface
         {
             /**
              * {@inheritdoc}
@@ -179,23 +211,31 @@ class MigrationFactory
     /**
      * Returns the body of the migration of type store-procedure
      *
+     * @param string $className [Class name]
+     * @param string $namespace [Class namespace]
+     *
      * @return string
      */
-    public function getMySQLStoreProcedureBody(): string
+    public function getMySQLStoreProcedureBody(string $className, string $namespace): string
     {
         return <<<PHP
         <?php
 
         declare(strict_types=1);
 
+        namespace {$namespace};
+
         use Lion\Bundle\Interface\Migrations\StoreProcedureInterface;
         use Lion\Database\Drivers\MySQL;
         use Lion\Database\Drivers\Schema\MySQL as Schema;
+        use stdClass;
 
         /**
          * Description
+         *
+         * @package {$namespace}
          */
-        return new class implements StoreProcedureInterface
+        class {$className} implements StoreProcedureInterface
         {
             /**
              * {@inheritdoc}
@@ -220,22 +260,30 @@ class MigrationFactory
     /**
      * Returns the body of the migration of type store-procedure
      *
+     * @param string $className [Class name]
+     * @param string $namespace [Class namespace]
+     *
      * @return string
      */
-    public function getPostgreSQLStoreProcedureBody(): string
+    public function getPostgreSQLStoreProcedureBody(string $className, string $namespace): string
     {
         return <<<PHP
         <?php
 
         declare(strict_types=1);
 
+        namespace {$namespace};
+
         use Lion\Bundle\Interface\Migrations\StoreProcedureInterface;
         use Lion\Database\Drivers\PostgreSQL;
+        use stdClass;
 
         /**
          * Description
+         *
+         * @package {$namespace}
          */
-        return new class implements StoreProcedureInterface
+        class {$className} implements StoreProcedureInterface
         {
             /**
              * {@inheritdoc}

@@ -10,18 +10,25 @@ trait MigrationsFactoryProviderTrait
     {
         return [
             [
+                'className' => 'Test',
+                'namespace' => 'Database\\Migrations\\LionDatabase\\MySQL\\Tables',
                 'body' => <<<PHP
                 <?php
 
                 declare(strict_types=1);
 
+                namespace Database\Migrations\LionDatabase\MySQL\Tables;
+
                 use Lion\Bundle\Interface\Migrations\TableInterface;
                 use Lion\Database\Drivers\Schema\MySQL as Schema;
+                use stdClass;
 
                 /**
                  * Description
+                 *
+                 * @package Database\Migrations\LionDatabase\MySQL\Tables
                  */
-                return new class implements TableInterface
+                class Test implements TableInterface
                 {
                     /**
                      * [Index number for seed execution priority]
@@ -52,18 +59,25 @@ trait MigrationsFactoryProviderTrait
     {
         return [
             [
+                'className' => 'Test',
+                'namespace' => 'Database\\Migrations\\LionDatabase\\PostgreSQL\\Tables',
                 'body' => <<<PHP
                 <?php
 
                 declare(strict_types=1);
 
+                namespace Database\Migrations\LionDatabase\PostgreSQL\Tables;
+
                 use Lion\Bundle\Interface\Migrations\TableInterface;
                 use Lion\Database\Drivers\PostgreSQL;
+                use stdClass;
 
                 /**
                  * Description
+                 *
+                 * @package Database\Migrations\LionDatabase\PostgreSQL\Tables
                  */
-                return new class implements TableInterface
+                class Test implements TableInterface
                 {
                     /**
                      * [Index number for seed execution priority]
@@ -96,19 +110,26 @@ trait MigrationsFactoryProviderTrait
     {
         return [
             [
+                'className' => 'Test',
+                'namespace' => 'Database\\Migrations\\LionDatabase\\MySQL\\Views',
                 'body' => <<<PHP
                 <?php
 
                 declare(strict_types=1);
 
+                namespace Database\Migrations\LionDatabase\MySQL\Views;
+
                 use Lion\Bundle\Interface\Migrations\ViewInterface;
                 use Lion\Database\Drivers\MySQL;
                 use Lion\Database\Drivers\Schema\MySQL as Schema;
+                use stdClass;
 
                 /**
                  * Description
+                 *
+                 * @package Database\Migrations\LionDatabase\MySQL\Views
                  */
-                return new class implements ViewInterface
+                class Test implements ViewInterface
                 {
                     /**
                      * {@inheritdoc}
@@ -134,18 +155,25 @@ trait MigrationsFactoryProviderTrait
     {
         return [
             [
+                'className' => 'Test',
+                'namespace' => 'Database\\Migrations\\LionDatabase\\PostgreSQL\\Views',
                 'body' => <<<PHP
                 <?php
 
                 declare(strict_types=1);
 
+                namespace Database\Migrations\LionDatabase\PostgreSQL\Views;
+
                 use Lion\Bundle\Interface\Migrations\ViewInterface;
                 use Lion\Database\Drivers\PostgreSQL;
+                use stdClass;
 
                 /**
                  * Description
+                 *
+                 * @package Database\Migrations\LionDatabase\PostgreSQL\Views
                  */
-                return new class implements ViewInterface
+                class Test implements ViewInterface
                 {
                     /**
                      * {@inheritdoc}
@@ -171,19 +199,26 @@ trait MigrationsFactoryProviderTrait
     {
         return [
             [
+                'className' => 'Test',
+                'namespace' => 'Database\\Migrations\\LionDatabase\\MySQL\\StoreProcedures',
                 'body' => <<<PHP
                 <?php
 
                 declare(strict_types=1);
 
+                namespace Database\Migrations\LionDatabase\MySQL\StoreProcedures;
+
                 use Lion\Bundle\Interface\Migrations\StoreProcedureInterface;
                 use Lion\Database\Drivers\MySQL;
                 use Lion\Database\Drivers\Schema\MySQL as Schema;
+                use stdClass;
 
                 /**
                  * Description
+                 *
+                 * @package Database\Migrations\LionDatabase\MySQL\StoreProcedures
                  */
-                return new class implements StoreProcedureInterface
+                class Test implements StoreProcedureInterface
                 {
                     /**
                      * {@inheritdoc}
@@ -211,18 +246,25 @@ trait MigrationsFactoryProviderTrait
     {
         return [
             [
+                'className' => 'Test',
+                'namespace' => 'Database\\Migrations\\LionDatabase\\PostgreSQL\\StoreProcedures',
                 'body' => <<<PHP
                 <?php
 
                 declare(strict_types=1);
 
+                namespace Database\Migrations\LionDatabase\PostgreSQL\StoreProcedures;
+
                 use Lion\Bundle\Interface\Migrations\StoreProcedureInterface;
                 use Lion\Database\Drivers\PostgreSQL;
+                use stdClass;
 
                 /**
                  * Description
+                 *
+                 * @package Database\Migrations\LionDatabase\PostgreSQL\StoreProcedures
                  */
-                return new class implements StoreProcedureInterface
+                class Test implements StoreProcedureInterface
                 {
                     /**
                      * {@inheritdoc}

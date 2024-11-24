@@ -18,6 +18,7 @@ use Lion\Helpers\Arr;
 use Lion\Helpers\Str;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
+use ReflectionException;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tests\Providers\ConnectionProviderTrait;
@@ -28,6 +29,12 @@ class MigrationCommandTest extends Test
 
     private const string MIGRATION_NAME = 'test-migration';
     private const string CLASS_NAME = 'TestMigration';
+    private const string NAMESPACE_MYSQL_TABLE = 'Database\\Migrations\\LionDatabase\\MySQL\\Tables\\';
+    private const string NAMESPACE_MYSQL_VIEW = 'Database\\Migrations\\LionDatabase\\MySQL\\Views\\';
+    private const string NAMESPACE_MYSQL_STORE_PROCEDURES = 'Database\\Migrations\\LionDatabase\\MySQL\\StoreProcedures\\';
+    private const string NAMESPACE_POSTGRESQL_TABLE = 'Database\\Migrations\\LionDatabase\\PostgreSQL\\Tables\\';
+    private const string NAMESPACE_POSTGRESQL_VIEW = 'Database\\Migrations\\LionDatabase\\PostgreSQL\\Views\\';
+    private const string NAMESPACE_POSTGRESQL_STORE_PROCEDURES = 'Database\\Migrations\\LionDatabase\\PostgreSQL\\StoreProcedures\\';
     private const string URL_PATH_MYSQL_TABLE = './database/Migrations/LionDatabase/MySQL/Tables/';
     private const string URL_PATH_MYSQL_VIEW = './database/Migrations/LionDatabase/MySQL/Views/';
     private const string URL_PATH_MYSQL_STORE_PROCEDURES = './database/Migrations/LionDatabase/MySQL/StoreProcedures/';
@@ -40,6 +47,9 @@ class MigrationCommandTest extends Test
     private CommandTester $commandTester;
     private MigrationCommand $migrationCommand;
 
+    /**
+     * @throws ReflectionException
+     */
     protected function setUp(): void
     {
         $this->runDatabaseConnections();
@@ -115,7 +125,7 @@ class MigrationCommandTest extends Test
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH_MYSQL_TABLE . self::FILE_NAME);
 
-        $objClass = include_once(self::URL_PATH_MYSQL_TABLE . self::FILE_NAME);
+        $objClass = new (self::NAMESPACE_MYSQL_TABLE . self::CLASS_NAME)();
 
         $this->assertInstances($objClass, [
             MigrationUpInterface::class,
@@ -134,7 +144,7 @@ class MigrationCommandTest extends Test
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH_MYSQL_VIEW . self::FILE_NAME);
 
-        $objClass = include_once(self::URL_PATH_MYSQL_VIEW . self::FILE_NAME);
+        $objClass = new (self::NAMESPACE_MYSQL_VIEW . self::CLASS_NAME)();
 
         $this->assertInstances($objClass, [
             MigrationUpInterface::class,
@@ -153,7 +163,7 @@ class MigrationCommandTest extends Test
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH_MYSQL_STORE_PROCEDURES . self::FILE_NAME);
 
-        $objClass = include_once(self::URL_PATH_MYSQL_STORE_PROCEDURES . self::FILE_NAME);
+        $objClass = new (self::NAMESPACE_MYSQL_STORE_PROCEDURES . self::CLASS_NAME)();
 
         $this->assertInstances($objClass, [
             MigrationUpInterface::class,
@@ -172,7 +182,7 @@ class MigrationCommandTest extends Test
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH_POSTGRESQL_TABLE . self::FILE_NAME);
 
-        $objClass = include_once(self::URL_PATH_POSTGRESQL_TABLE . self::FILE_NAME);
+        $objClass = new (self::NAMESPACE_POSTGRESQL_TABLE . self::CLASS_NAME)();
 
         $this->assertInstances($objClass, [
             MigrationUpInterface::class,
@@ -191,7 +201,7 @@ class MigrationCommandTest extends Test
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH_POSTGRESQL_VIEW . self::FILE_NAME);
 
-        $objClass = include_once(self::URL_PATH_POSTGRESQL_VIEW . self::FILE_NAME);
+        $objClass = new (self::NAMESPACE_POSTGRESQL_VIEW . self::CLASS_NAME)();
 
         $this->assertInstances($objClass, [
             MigrationUpInterface::class,
@@ -210,7 +220,7 @@ class MigrationCommandTest extends Test
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH_POSTGRESQL_STORE_PROCEDURES . self::FILE_NAME);
 
-        $objClass = include_once(self::URL_PATH_POSTGRESQL_STORE_PROCEDURES . self::FILE_NAME);
+        $objClass = new (self::NAMESPACE_POSTGRESQL_STORE_PROCEDURES . self::CLASS_NAME)();
 
         $this->assertInstances($objClass, [
             MigrationUpInterface::class,
