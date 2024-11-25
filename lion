@@ -21,7 +21,6 @@ use Dotenv\Dotenv;
 use Lion\Bundle\Commands\CommandHandler;
 use Lion\Database\Driver;
 use Lion\Files\Store;
-use Lion\Mailer\Mailer;
 
 /**
  * -----------------------------------------------------------------------------
@@ -70,37 +69,6 @@ Driver::run([
         ],
     ],
 ]);
-
-/**
- * -----------------------------------------------------------------------------
- * Start mail service
- * -----------------------------------------------------------------------------
- * describe connections to establish connecting to multiple databases
- * -----------------------------------------------------------------------------
- **/
-
-Mailer::initialize([
-    env('MAIL_NAME', 'lion-app') => [
-        'name' => env('MAIL_NAME', 'lion-app'),
-        'type' => env('MAIL_TYPE', 'symfony'),
-        'host' => env('MAIL_HOST', 'mailhog'),
-        'username' => env('MAIL_USER_NAME', 'lion-app'),
-        'password' => env('MAIL_PASSWORD', 'lion'),
-        'port' => (int) env('MAIL_PORT', 1025),
-        'encryption' => env('MAIL_ENCRYPTION', 'tls'),
-        'debug' => env('MAIL_DEBUG', false)
-    ],
-    env('MAIL_NAME_SUPP', 'lion-app') => [
-        'name' => env('MAIL_NAME_SUPP', 'lion-app'),
-        'type' => env('MAIL_TYPE_SUPP', 'symfony'),
-        'host' => env('MAIL_HOST_SUPP', 'mailhog'),
-        'username' => env('MAIL_USER_NAME_SUPP', 'lion-app'),
-        'password' => env('MAIL_PASSWORD_SUPP', 'lion'),
-        'port' => (int) env('MAIL_PORT_SUPP', 1025),
-        'encryption' => env('MAIL_ENCRYPTION_SUPP', 'tls'),
-        'debug' => env('MAIL_DEBUG_SUPP', false)
-    ]
-], env('MAIL_NAME', 'lion-app'));
 
 /**
  * -----------------------------------------------------------------------------
