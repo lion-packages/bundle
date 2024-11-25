@@ -107,7 +107,7 @@ class TestCommand extends Command
 
                 namespace {$namespace};
 
-                use Lion\Bundle\Test;
+                use Lion\Bundle\Test\Test;
                 use PHPUnit\Framework\Attributes\Test as Testing;
 
                 class {$class} extends Test

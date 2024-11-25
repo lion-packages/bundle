@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lion\Bundle;
+namespace Lion\Bundle\Test;
 
 use Lion\Bundle\Helpers\Commands\Migrations\Migrations;
 use Lion\Bundle\Helpers\Commands\Seeds\Seeds;
