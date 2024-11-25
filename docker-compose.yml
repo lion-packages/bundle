@@ -44,16 +44,6 @@ services:
         networks:
             - lion
 
-    mailhog:
-        image: mailhog/mailhog
-        container_name: bundle-mailhog
-        restart: unless-stopped
-        ports:
-            - "8025:8025"
-            - "1025:1025"
-        networks:
-            - lion
-
     mysql:
         image: mysql
         container_name: bundle-mysql
@@ -107,12 +97,15 @@ services:
             PGADMIN_DEFAULT_PASSWORD: lion
         depends_on:
             - postgres
+        volumes:
+            - pgadmin_data:/var/lib/pgadmin
         networks:
             - lion
 
 volumes:
     mysql_data:
     postgres_data:
+    pgadmin_data:
     redis_data:
         driver: local
 
