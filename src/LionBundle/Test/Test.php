@@ -6,6 +6,7 @@ namespace Lion\Bundle\Test;
 
 use Lion\Bundle\Helpers\Commands\Migrations\Migrations;
 use Lion\Bundle\Helpers\Commands\Seeds\Seeds;
+use Lion\Bundle\Interface\CapsuleInterface;
 use Lion\Test\Test as Testing;
 
 /**
@@ -64,5 +65,23 @@ class Test extends Testing
         }
 
         $this->seeds->executeSeedsGroup($seeds);
+    }
+
+    /**
+     * Checks two aspects of an object that implements the CapsuleInterface
+     * interface
+     *
+     * @param CapsuleInterface $capsuleInterface [Implement abstract methods for
+     * capsule classes]
+     * @param string $entity [Entity name]
+     *
+     * @return void
+     */
+    public function assertCapsule(CapsuleInterface $capsuleInterface, string $entity): void
+    {
+        $this->assertInstanceOf(CapsuleInterface::class, $capsuleInterface->capsule());
+        $this->assertIsArray($capsuleInterface->jsonSerialize());
+        $this->assertIsString($capsuleInterface->getTableName());
+        $this->assertSame($entity, $capsuleInterface->getTableName());
     }
 }
