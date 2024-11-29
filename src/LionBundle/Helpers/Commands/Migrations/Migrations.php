@@ -185,21 +185,14 @@ class Migrations
             }
         }
 
-        $execute = function (MigrationUpInterface $migration, string $namespace): void {
-            $response = $migration->up();
-
-            echo("\033[0;33m\t>> MIGRATION: {$namespace}\033[0m\n");
-
-            if (isError($response)) {
-                echo("\033[0;31m\t>> MIGRATION: {$response->message}\033[0m\n");
-            } else {
-                echo("\033[0;32m\t>> MIGRATION: {$response->message}\033[0m\n");
-            }
-        };
-
-        $run = function (array $list) use ($execute): void {
-            foreach ($list as $namespace => $migration) {
-                $execute($migration, $namespace);
+        /**
+         * @param array<string, MigrationUpInterface> $list
+         *
+         * @return void
+         */
+        $run = function (array $list): void {
+            foreach ($list as $migration) {
+                $migration->up();
             }
         };
 
@@ -208,7 +201,5 @@ class Migrations
         $run($migrations[ViewInterface::class]);
 
         $run($migrations[StoreProcedureInterface::class]);
-
-        echo("\n\033[0;36m\t>> Migration group executed successfully\033[0m \n");
     }
 }
