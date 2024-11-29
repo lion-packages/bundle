@@ -7,11 +7,13 @@ namespace Lion\Bundle\Test;
 use Lion\Bundle\Helpers\Commands\Migrations\Migrations;
 use Lion\Bundle\Helpers\Commands\Seeds\Seeds;
 use Lion\Bundle\Interface\CapsuleInterface;
+use Lion\Dependency\Injection\Container;
 use Lion\Test\Test as Testing;
 
 /**
  * Extend testing functions
  *
+ * @property Container|null $container [Dependency Injection Container Wrapper]
  * @property Migrations|null $migrations [Manages the processes of creating or
  * executing migrations]
  * @property Seeds|null $seeds [Manages the processes of creating or executing
@@ -21,6 +23,13 @@ use Lion\Test\Test as Testing;
  */
 class Test extends Testing
 {
+    /**
+     * [Dependency Injection Container Wrapper]
+     *
+     * @var Container|null $container
+     */
+    private ?Container $container = null;
+
     /**
      * [Manages the processes of creating or executing migrations]
      *
@@ -44,8 +53,12 @@ class Test extends Testing
      */
     protected function executeMigrationsGroup(array $migrations): void
     {
+        if (NULL_VALUE === $this->container) {
+            $this->container = new Container();
+        }
+
         if (NULL_VALUE === $this->migrations) {
-            $this->migrations = new Migrations();
+            $this->migrations = $this->container->resolve(Migrations::class);
         }
 
         $this->migrations->executeMigrationsGroup($migrations);
@@ -60,8 +73,12 @@ class Test extends Testing
      */
     protected function executeSeedsGroup(array $seeds): void
     {
+        if (NULL_VALUE === $this->container) {
+            $this->container = new Container();
+        }
+
         if (NULL_VALUE === $this->seeds) {
-            $this->seeds = new Seeds();
+            $this->seeds = $this->container->resolve(Seeds::class);
         }
 
         $this->seeds->executeSeedsGroup($seeds);
