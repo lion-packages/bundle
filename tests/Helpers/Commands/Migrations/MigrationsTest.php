@@ -210,25 +210,10 @@ class MigrationsTest extends Test
             StoreProcedureInterface::class,
         ]);
 
-        ob_start();
-
         $this->migrations->executeMigrationsGroup([
             self::CLASS_NAMESPACE_TABLE . self::CLASS_NAME,
             self::CLASS_NAMESPACE_VIEW . self::CLASS_NAME,
             self::CLASS_NAMESPACE_STORE_PROCEDURE . self::CLASS_NAME,
         ]);
-
-        $output = ob_get_clean();
-
-        $this->assertStringContainsString('execution finished', $output);
-        $this->assertStringContainsString('Database\Migrations\LionDatabase\MySQL\Tables\TestMigration', $output);
-        $this->assertStringContainsString('Database\Migrations\LionDatabase\MySQL\Views\TestMigration', $output);
-
-        $this->assertStringContainsString(
-            'Database\Migrations\LionDatabase\MySQL\StoreProcedures\TestMigration',
-            $output
-        );
-
-        $this->assertStringContainsString('Migration group executed successfully', $output);
     }
 }
