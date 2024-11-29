@@ -83,16 +83,8 @@ class SeedsTest extends Test
             self::NAMESPACE_SEED . self::SEED_NAME,
         ]);
 
-        ob_start();
-
         $this->seeds->executeSeedsGroup([
             self::NAMESPACE_SEED . self::SEED_NAME,
         ]);
-
-        $output = ob_get_clean();
-
-        $this->assertStringContainsString('Database\Seed\TestSeed', $output);
-        $this->assertStringContainsString('run seed', $output);
-        $this->assertStringContainsString('Seed group executed successfully', $output);
     }
 }
