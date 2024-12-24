@@ -50,7 +50,7 @@ SHELL ["/bin/bash", "--login", "-i", "-c"]
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash \
     && source /home/lion/.bashrc \
     && nvm install 20 \
-    && npm install -g npm@10
+    && npm install -g npm@11
 
 # Install OhMyZsh
 RUN sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"

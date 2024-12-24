@@ -2,23 +2,20 @@
 
 declare(strict_types=1);
 
-use GuzzleHttp\Client;
 use Lion\Helpers\Arr;
 use Lion\Helpers\Str;
 use Lion\Request\Request;
 use Lion\Request\Response;
 
 /**
- * [Object of the GuzzleHttp Client class]
- *
- * @var Client
+ * [Object with properties captured in an HTTP request]
  */
-const client = new Client();
+define('request', (new Request())->capture());
 
 /**
  * [Object with properties captured in an HTTP request]
  */
-define('request', (new Request())->capture());
+define('ssl', (new Request())->capture());
 
 /**
  * [Object of Response class to generate response objects]

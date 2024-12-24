@@ -5,11 +5,13 @@ declare(strict_types=1);
 use Carbon\Carbon;
 use Faker\Factory;
 use Faker\Generator;
+use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
 use Lion\Bundle\Enums\LogTypeEnum;
 use Lion\Bundle\Helpers\Env;
 use Lion\Bundle\Helpers\Fake;
+use Lion\Bundle\Helpers\Http\Fetch;
 use Lion\Files\Store;
 use Lion\Request\Http;
 use Lion\Request\Request;
@@ -56,20 +58,22 @@ if (!function_exists('now')) {
 
 if (!function_exists('fetch')) {
     /**
-     * Function to make HTTP requests with guzzlehttp
+     * Function to make HTTP requests with GuzzleHttp
      *
-     * @param string $method [HTTP protocol]
-     * @param string $uri [URL to make the request]
-     * @param array $options [Options to send through the request, such as
-     * headers or parameters]
+     * @param Fetch $fetch [Defines parameters for consuming HTTP requests with
+     * GuzzleHttp]
      *
      * @return Response
      *
      * @throws GuzzleException
      */
-    function fetch(string $method, string $uri, array $options = []): Response
+    function fetch(Fetch $fetch): Response
     {
-        return client->request($method, $uri, $options);
+        $client = new Client(
+            null === $fetch->getFetchConfiguration() ? [] : $fetch->getFetchConfiguration()->getConfiguration()
+        );
+
+        return $client->request($fetch->getHttpMethod(), $fetch->getUri(), $fetch->getOptions());
     }
 }
 

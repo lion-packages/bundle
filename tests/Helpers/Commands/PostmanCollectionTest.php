@@ -6,6 +6,7 @@ namespace Tests\Helpers\Commands;
 
 use GuzzleHttp\Exception\GuzzleException;
 use Lion\Bundle\Helpers\Commands\PostmanCollection;
+use Lion\Bundle\Helpers\Http\Fetch;
 use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
 use Lion\Request\Http;
@@ -196,11 +197,13 @@ class PostmanCollectionTest extends Test
     public function addRoutes(): void
     {
         $routes = json_decode(
-            fetch(Http::GET, (self::HOST . '/route-list'), [
-                'headers' => [
-                    'Lion-Auth' => $_ENV['SERVER_HASH']
-                ]
-            ])
+            fetch(
+                new Fetch(Http::GET, (self::HOST . '/route-list'), [
+                    'headers' => [
+                        'Lion-Auth' => $_ENV['SERVER_HASH'],
+                    ],
+                ])
+            )
                 ->getBody()
                 ->getContents(),
             true
@@ -227,11 +230,13 @@ class PostmanCollectionTest extends Test
     public function createCollection(): void
     {
         $routes = json_decode(
-            fetch(Http::GET, (self::HOST . '/route-list'), [
-                'headers' => [
-                    'Lion-Auth' => $_ENV['SERVER_HASH']
-                ]
-            ])
+            fetch(
+                new Fetch(Http::GET, (self::HOST . '/route-list'), [
+                    'headers' => [
+                        'Lion-Auth' => $_ENV['SERVER_HASH'],
+                    ],
+                ])
+            )
                 ->getBody()
                 ->getContents(),
             true
@@ -267,11 +272,13 @@ class PostmanCollectionTest extends Test
     public function getRoutes(): void
     {
         $routes = json_decode(
-            fetch(Http::GET, (self::HOST . '/route-list'), [
-                'headers' => [
-                    'Lion-Auth' => $_ENV['SERVER_HASH']
-                ]
-            ])
+            fetch(
+                new Fetch(Http::GET, (self::HOST . '/route-list'), [
+                    'headers' => [
+                        'Lion-Auth' => $_ENV['SERVER_HASH'],
+                    ],
+                ])
+            )
                 ->getBody()
                 ->getContents(),
             true
@@ -302,11 +309,13 @@ class PostmanCollectionTest extends Test
     public function getItems(): void
     {
         $routes = json_decode(
-            fetch(Http::GET, (self::HOST . '/route-list'), [
-                'headers' => [
-                    'Lion-Auth' => $_ENV['SERVER_HASH']
-                ]
-            ])
+            fetch(
+                new Fetch(Http::GET, (self::HOST . '/route-list'), [
+                    'headers' => [
+                        'Lion-Auth' => $_ENV['SERVER_HASH'],
+                    ],
+                ])
+            )
                 ->getBody()
                 ->getContents(),
             true

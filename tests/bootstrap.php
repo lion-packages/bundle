@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 define('LION_START', microtime(true));
 
-define('IS_INDEX', false);
-
 /**
  * -----------------------------------------------------------------------------
  * Register The Auto Loader
@@ -19,6 +17,10 @@ require_once(__DIR__ . '/../vendor/autoload.php');
 
 use Dotenv\Dotenv;
 use Lion\Files\Store;
+
+define('IS_INDEX', false);
+
+define('DEVELOPMENT_ENVIRONMENT', 'dev' === env('DEVELOPMENT_ENVIRONMENT'));
 
 /**
  * -----------------------------------------------------------------------------

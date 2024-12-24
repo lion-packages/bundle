@@ -9,6 +9,7 @@ use DI\Attribute\Inject;
 use GuzzleHttp\Exception\GuzzleException;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\PostmanCollection;
+use Lion\Bundle\Helpers\Http\Fetch;
 use Lion\Bundle\Helpers\Http\Routes;
 use Lion\Command\Command;
 use Lion\Files\Store;
@@ -187,11 +188,15 @@ class PostmanCollectionCommand extends Command
         $this->jsonName = $this->str->of(Carbon::now()->format('Y_m_d'))->concat('_lion_collection')->lower()->get();
 
         $this->routes = json_decode(
-            fetch(Route::GET, ($_ENV['SERVER_URL'] . '/route-list'), [
-                'headers' => [
-                    'Lion-Auth' => $_ENV['SERVER_HASH']
-                ]
-            ])->getBody()->getContents(),
+            fetch(
+                new Fetch(Route::GET, ($_ENV['SERVER_URL'] . '/route-list'), [
+                    'headers' => [
+                        'Lion-Auth' => $_ENV['SERVER_HASH'],
+                    ],
+                ])
+            )
+                ->getBody()
+                ->getContents(),
             true
         );
 

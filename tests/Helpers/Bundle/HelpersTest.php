@@ -9,6 +9,7 @@ use DateTimeZone;
 use Faker\Generator;
 use GuzzleHttp\Exception\GuzzleException;
 use Lion\Bundle\Enums\LogTypeEnum;
+use Lion\Bundle\Helpers\Http\Fetch;
 use Lion\Request\Http;
 use Lion\Request\Status;
 use Lion\Security\AES;
@@ -86,7 +87,9 @@ class HelpersTest extends Test
      */
     public function testFetch(): void
     {
-        $fetchResponse = fetch(Http::GET, env('SERVER_URL'))->getBody()->getContents();
+        $fetchResponse = fetch(new Fetch(Http::GET, env('SERVER_URL')))
+            ->getBody()
+            ->getContents();
 
         $response = json_decode($fetchResponse, true);
 

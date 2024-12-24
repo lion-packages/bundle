@@ -6,6 +6,7 @@ namespace Lion\Bundle\Commands\Lion\Route;
 
 use DI\Attribute\Inject;
 use GuzzleHttp\Exception\GuzzleException;
+use Lion\Bundle\Helpers\Http\Fetch;
 use Lion\Bundle\Helpers\Http\Routes;
 use Lion\Command\Command;
 use Lion\Helpers\Arr;
@@ -211,11 +212,15 @@ class RouteListCommand extends Command
     private function fetchRoutes(): void
     {
         $this->routes = json_decode(
-            fetch(Route::GET, ($_ENV['SERVER_URL'] . '/route-list'), [
-                'headers' => [
-                    'Lion-Auth' => $_ENV['SERVER_HASH']
-                ]
-            ])->getBody()->getContents(),
+            fetch(
+                new Fetch(Route::GET, ($_ENV['SERVER_URL'] . '/route-list'), [
+                    'headers' => [
+                        'Lion-Auth' => $_ENV['SERVER_HASH'],
+                    ],
+                ])
+            )
+                ->getBody()
+                ->getContents(),
             true
         );
 
