@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 define('LION_START', microtime(true));
 
-define('IS_INDEX', false);
+define('IS_INDEX', true);
+
+define('DEVELOPMENT_ENVIRONMENT', 'dev' === env('DEVELOPMENT_ENVIRONMENT'));
 
 /**
  * -----------------------------------------------------------------------------

@@ -42,6 +42,8 @@ class Fetch
      * Returns an HTTP configuration object
      *
      * @return FetchConfiguration|null
+     *
+     * @internal
      */
     public function getFetchConfiguration(): ?FetchConfiguration
     {
@@ -67,6 +69,8 @@ class Fetch
      * Returns the HTTP method of the HTTP request
      *
      * @return string
+     *
+     * @internal
      */
     public function getHttpMethod(): string
     {
@@ -77,6 +81,8 @@ class Fetch
      * Returns the URI of the HTTP request
      *
      * @return string
+     *
+     * @internal
      */
     public function getUri(): string
     {
@@ -87,6 +93,8 @@ class Fetch
      * Returns the data from the HTTP request
      *
      * @return array<string, mixed>
+     *
+     * @internal
      */
     public function getOptions(): array
     {
