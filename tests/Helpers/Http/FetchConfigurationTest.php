@@ -21,9 +21,7 @@ class FetchConfigurationTest extends Test
             'verify' => true,
         ];
 
-        $fetchConfiguration = new FetchConfiguration($configuration);
-
-        $this->initReflection($fetchConfiguration);
+        $this->initReflection(new FetchConfiguration($configuration));
 
         $this->assertSame($configuration, $this->getPrivateProperty('configuration'));
     }
