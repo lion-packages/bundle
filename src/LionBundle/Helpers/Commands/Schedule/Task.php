@@ -48,15 +48,15 @@ class Task
      */
     public function __construct(?string $namespace = null, ?string $method = null, ?array $data = [])
     {
-        if (NULL_VALUE === $namespace) {
+        if (null === $namespace) {
             throw new InvalidArgumentException('namespace is null', Http::INTERNAL_SERVER_ERROR);
         }
 
-        if (NULL_VALUE === $method) {
+        if (null === $method) {
             throw new InvalidArgumentException('method is null', Http::INTERNAL_SERVER_ERROR);
         }
 
-        if (NULL_VALUE === $data) {
+        if (null === $data) {
             throw new InvalidArgumentException('data is null', Http::INTERNAL_SERVER_ERROR);
         }
 

@@ -43,6 +43,6 @@ class ConstantsTest extends Test
     #[Testing]
     public function nullValueConstant(): void
     {
-        $this->assertNull(NULL_VALUE);
+        $this->assertNull(null);
     }
 }

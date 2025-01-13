@@ -53,11 +53,11 @@ class Test extends Testing
      */
     protected function executeMigrationsGroup(array $migrations): void
     {
-        if (NULL_VALUE === $this->container) {
+        if (null === $this->container) {
             $this->container = new Container();
         }
 
-        if (NULL_VALUE === $this->migrations) {
+        if (null === $this->migrations) {
             $this->migrations = $this->container->resolve(Migrations::class);
         }
 
@@ -73,11 +73,11 @@ class Test extends Testing
      */
     protected function executeSeedsGroup(array $seeds): void
     {
-        if (NULL_VALUE === $this->container) {
+        if (null === $this->container) {
             $this->container = new Container();
         }
 
-        if (NULL_VALUE === $this->seeds) {
+        if (null === $this->seeds) {
             $this->seeds = $this->container->resolve(Seeds::class);
         }
 
