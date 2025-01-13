@@ -6,8 +6,6 @@ define('LION_START', microtime(true));
 
 define('IS_INDEX', true);
 
-define('DEVELOPMENT_ENVIRONMENT', 'dev' === env('DEVELOPMENT_ENVIRONMENT'));
-
 /**
  * -----------------------------------------------------------------------------
  * Register The Auto Loader
@@ -27,7 +25,6 @@ use Lion\Bundle\Helpers\Commands\Schedule\TaskQueue;
 use Lion\Bundle\Helpers\Http\Routes;
 use Lion\Database\Driver;
 use Lion\Files\Store;
-use Lion\Mailer\Mailer;
 use Tests\Providers\ExampleProvider;
 
 /**
@@ -57,7 +54,7 @@ Driver::run([
             'port' => env('DB_PORT'),
             'dbname' => env('DB_NAME'),
             'user' => env('DB_USER'),
-            'password' => env('DB_PASSWORD')
+            'password' => env('DB_PASSWORD'),
         ],
         env('DB_NAME_TEST') => [
             'type' => env('DB_TYPE_TEST'),
@@ -65,9 +62,9 @@ Driver::run([
             'port' => env('DB_PORT_TEST'),
             'dbname' => env('DB_NAME'),
             'user' => env('DB_USER_TEST'),
-            'password' => env('DB_PASSWORD_TEST')
-        ]
-    ]
+            'password' => env('DB_PASSWORD_TEST'),
+        ],
+    ],
 ]);
 
 /**

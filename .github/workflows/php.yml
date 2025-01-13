@@ -1,10 +1,9 @@
-name: Lion-Test (CI Workflow)
+name: Lion-Bundle (CI Workflow)
 
 on:
   push:
     branches:
-      - actions-sleon
-      - actions-saco
+      - main
   pull_request:
     branches:
       - main
@@ -34,43 +33,23 @@ jobs:
           php-version: '8.4'
           extensions: mbstring, gd, zip
 
+      - name: Composer Install
+        run: composer install
+
       - name: Composer Validate
         run: composer validate --strict
 
       - name: Composer Check for vulnerabilities
         run: composer audit --locked
 
-      - name: Composer Install
-        run: composer install
-
       - name: Composer Dump-Autoload
         run: composer dump-autoload --optimize --strict-psr
-
-  docker-validation:
-    runs-on: ubuntu-latest
-    name: Docker Validation
-
-    steps:
-      - name: Check out the repository
-        uses: actions/checkout@v4
-
-      - name: Cache Docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
-
-      - name: Validate Docker Compose configuration
-        run: docker compose config
 
   code-analyze:
     runs-on: ubuntu-latest
     name: PHP Code Analyze
     needs:
       - composer-validation
-      - docker-validation
 
     steps:
       - name: Check out the repository
@@ -94,34 +73,88 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     name: PHP Tests
-    needs: code-analyze
+    needs:
+      - code-analyze
+
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+
+      mysql:
+        image: mysql
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_DATABASE: lion_database
+          MYSQL_ROOT_PASSWORD: lion
+          MYSQL_PASSWORD: lion
+
+      postgres:
+        image: postgres
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_DB: lion_database
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: lion
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Tear down containers
-        run: docker compose down --volumes --remove-orphans
-
-      - name: Stop running Docker containers (if any)
+      - name: Install system dependencies
         run: |
-          docker ps -q | xargs -r docker stop
-          docker ps -aq | xargs -r docker rm
+          sudo apt-get update -y
+          sudo apt-get install -y git curl wget unzip libpq-dev libpng-dev libzip-dev zlib1g-dev libonig-dev libevent-dev libssl-dev
+          sudo apt-get clean
 
-      - name: Build the Docker image
-        run: docker build -t bundle-app .
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          extensions: mbstring, gd, zip, pdo, pdo_mysql, pdo_pgsql, redis, xdebug
+          coverage: xdebug
+          ini-values: |
+            xdebug.mode=develop,coverage,debug
+            xdebug.start_with_request=yes
+            xdebug.log_level=0
+          tools: composer
 
-      - name: Start services using Docker Compose
+      - name: Setup NodeJS and NPM
         run: |
-          docker compose -f docker-compose.yml up -d
-        env:
-          COMPOSE_PROJECT_NAME: test
+          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # Esto carga nvm
+          [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # Esto carga nvm bash_completion
+          nvm install 20
+          nvm use 20
+          npm install -g npm@11
 
-      - name: Install Composer dependencies
-        run: docker exec bundle-app composer install
+      - name: Copy .env.actions to .env
+        run: |
+          if [ -f .env.actions ]; then
+            cp .env.actions .env
+          else
+            echo ".env.actions not found! Please make sure the file exists."
+            exit 1
+          fi
 
-      - name: Run PHP Tests
-        run: docker exec bundle-app php vendor/bin/phpunit
+      - name: Install php dependencies
+        run: composer install
+
+      - name: Start PHP built-in server
+        run: |
+          nohup php -S 0.0.0.0:8000 -t public &
+
+      - name: Generate RSA Key's
+        run: php lion new:rsa
+
+      - name: Run tests
+        run: php lion test

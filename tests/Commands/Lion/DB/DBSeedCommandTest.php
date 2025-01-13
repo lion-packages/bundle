@@ -12,12 +12,9 @@ use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
 use Symfony\Component\Console\Tester\CommandTester;
-use Tests\Providers\ConnectionProviderTrait;
 
 class DBSeedCommandTest extends Test
 {
-    use ConnectionProviderTrait;
-
     private const string URL_PATH = './database/Seed/';
     private const string NAMESPACE_CLASS = 'Database\\Seed\\';
     private const string CLASS_NAME = 'TestSeed';
@@ -32,8 +29,6 @@ class DBSeedCommandTest extends Test
 
     protected function setUp(): void
     {
-        $this->runDatabaseConnections();
-
         $this->createDirectory(self::URL_PATH);
 
         $application = (new Kernel())->getApplication();

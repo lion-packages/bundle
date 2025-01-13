@@ -59,13 +59,13 @@ class RSACommand extends Command
      *
      * @return void
      */
-	protected function configure(): void
-	{
-		$this
+    protected function configure(): void
+    {
+        $this
             ->setName('new:rsa')
             ->setDescription('Command required to create public and private keys for RSA encryptions')
             ->addOption('path', 'p', InputOption::VALUE_REQUIRED, 'Save to a specific path?');
-	}
+    }
 
     /**
      * Executes the current command
@@ -80,13 +80,13 @@ class RSACommand extends Command
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int [0 if everything went fine, or an exit code]
+     * @return int
      *
      * @throws Exception
      * @throws LogicException [When this abstract method is not implemented]
      */
-	protected function execute(InputInterface $input, OutputInterface $output): int
-	{
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
         $path = $input->getOption('path');
 
         $this->rsa->config([
@@ -106,6 +106,6 @@ class RSACommand extends Command
 
         $output->writeln($this->successOutput("\t>>  RSA KEYS: Exported in {$this->rsa->getUrlPath()}private.key"));
 
-		return Command::SUCCESS;
-	}
+        return Command::SUCCESS;
+    }
 }

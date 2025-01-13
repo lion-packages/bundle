@@ -164,7 +164,7 @@ class UpScheduleCommand extends Command
             }
 
             /** @var Command $commandObject */
-            $commandObject = new $config['command'];
+            $commandObject = new $config['command']();
 
             $command = "{$config['cron']} lion cd {$_ENV['CRONTAB_PROJECT_PATH']} && ";
 
@@ -183,7 +183,9 @@ class UpScheduleCommand extends Command
 
             $this->store->folder($this->store->normalizePath('./storage/logs/cron/'));
 
-            if (isError($this->store->exist($this->store->normalizePath('./storage/logs/cron/') . $config['logName']))) {
+            $exist = $this->store->exist($this->store->normalizePath('./storage/logs/cron/') . $config['logName']);
+
+            if (isError($exist)) {
                 $this->classFactory
                     ->create(
                         $config['logName'],

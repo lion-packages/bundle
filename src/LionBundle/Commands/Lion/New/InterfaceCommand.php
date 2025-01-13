@@ -58,13 +58,13 @@ class InterfaceCommand extends Command
      *
      * @return void
      */
-	protected function configure(): void
-	{
-		$this
+    protected function configure(): void
+    {
+        $this
             ->setName('new:interface')
             ->setDescription('Command required for interface creation')
             ->addArgument('interface', InputArgument::OPTIONAL, 'Interface name', 'ExampleInterface');
-	}
+    }
 
     /**
      * Executes the current command
@@ -83,8 +83,8 @@ class InterfaceCommand extends Command
      *
      * @throws LogicException [When this abstract method is not implemented]
      */
-	protected function execute(InputInterface $input, OutputInterface $output): int
-	{
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
         $interface = $input->getArgument('interface');
 
         $this->classFactory->classFactory('app/Interfaces/', $interface);
@@ -129,5 +129,5 @@ class InterfaceCommand extends Command
         );
 
         return Command::SUCCESS;
-	}
+    }
 }

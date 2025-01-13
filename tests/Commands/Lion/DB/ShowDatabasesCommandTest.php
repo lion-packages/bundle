@@ -11,12 +11,9 @@ use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
-use Tests\Providers\ConnectionProviderTrait;
 
 class ShowDatabasesCommandTest extends Test
 {
-    use ConnectionProviderTrait;
-
     private const string MYSQL = 'mysql';
     private const string PORT = '3306';
     private const string DATABASE_NAME = 'lion_database';
@@ -26,8 +23,6 @@ class ShowDatabasesCommandTest extends Test
 
     protected function setUp(): void
     {
-        $this->runDatabaseConnections();
-
         $application = new Application();
 
         $application->add((new Container())->resolve(ShowDatabasesCommand::class));

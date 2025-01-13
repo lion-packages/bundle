@@ -132,7 +132,7 @@ class ListScheduleCommand extends Command
                 }
 
                 /** @var Command $command */
-                $command = new $config['command'];
+                $command = new $config['command']();
 
                 $rows[] = [
                     $this->errorOutput($config['cron']),

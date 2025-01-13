@@ -258,7 +258,9 @@ class CrudCommand extends MenuCommand
             ],
             20 => [
                 'replace' => true,
-                'content' => "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . ' [Parameter Description]',
+                'content' => (
+                    "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . ' [Parameter Description]'
+                ),
                 'search' => '*'
             ],
             25 => [
@@ -273,7 +275,9 @@ class CrudCommand extends MenuCommand
             ],
             44 => [
                 'replace' => true,
-                'content' => "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . ' [Parameter Description]',
+                'content' => (
+                    "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . ' [Parameter Description]'
+                ),
                 'search' => '*'
             ],
             50 => [
@@ -288,7 +292,9 @@ class CrudCommand extends MenuCommand
             ],
             57 => [
                 'replace' => true,
-                'content' => "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . ' [Parameter Description]',
+                'content' => (
+                    "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . ' [Parameter Description]'
+                ),
                 'search' => '*'
             ],
             63 => [
@@ -317,7 +323,8 @@ class CrudCommand extends MenuCommand
             foreach ($gettersCallModel as $keyGetterCallModel => $method) {
                 foreach ($method as $name) {
                     $listGettersCallModel[$keyGetterCallModel] .= $this->str
-                        ->lt()->lt()->lt()->concat('$')->concat(lcfirst($entityPascal))->concat("->{$name}()")->concat(',')
+                        ->lt()->lt()->lt()
+                        ->concat('$')->concat(lcfirst($entityPascal))->concat("->{$name}()")->concat(',')
                         ->ln()
                         ->get();
                 }
@@ -331,8 +338,8 @@ class CrudCommand extends MenuCommand
                 20 => [
                     'replace' => true,
                     'content' => (
-                        "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . " [Parameter Description]\n" .
-                        "\t *"
+                        "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) .
+                        " [Parameter Description]\n\t *"
                     ),
                     'search' => '*',
                 ],
@@ -362,8 +369,8 @@ class CrudCommand extends MenuCommand
                 43 => [
                     'replace' => true,
                     'content' => (
-                        "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . " [Parameter Description]\n" .
-                        "\t *"
+                        "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) .
+                        " [Parameter Description]\n\t *"
                     ),
                     'search' => '*',
                 ],
@@ -388,8 +395,8 @@ class CrudCommand extends MenuCommand
                 54 => [
                     'replace' => true,
                     'content' => (
-                        "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . " [Parameter Description]\n" .
-                        "\t *"
+                        "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) .
+                        " [Parameter Description]\n\t *"
                     ),
                     'search' => '*',
                 ],
@@ -429,8 +436,8 @@ class CrudCommand extends MenuCommand
                     'replace' => true,
                     'search' => '*',
                     'content' => (
-                        "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . " [Parameter Description]\n" .
-                        "\t *"
+                        "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) .
+                        " [Parameter Description]\n\t *"
                     ),
                 ],
                 23 => [
@@ -462,8 +469,8 @@ class CrudCommand extends MenuCommand
                 43 => [
                     'replace' => true,
                     'content' => (
-                        "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . " [Parameter Description]\n" .
-                        "\t *"
+                        "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) .
+                        " [Parameter Description]\n\t *"
                     ),
                     'search' => '*',
                 ],
@@ -488,8 +495,8 @@ class CrudCommand extends MenuCommand
                 54 => [
                     'replace' => true,
                     'content' => (
-                        "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) . " [Parameter Description]\n" .
-                        "\t *"
+                        "*\n\t * @param {$entityPascal} " . '$' . lcfirst($entityPascal) .
+                        " [Parameter Description]\n\t *"
                     ),
                     'search' => '*',
                 ],
@@ -526,6 +533,8 @@ class CrudCommand extends MenuCommand
      * implemented by all Output classes]
      *
      * @return void
+     *
+     * @throws ExceptionInterface
      */
     private function addCapsule(
         string $driver,
@@ -590,7 +599,7 @@ class CrudCommand extends MenuCommand
             }
         }
 
-        foreach ($columns as $key => $column) {
+        foreach ($columns as $column) {
             if ('PRI' === $column->Key) {
                 $methods['update'] = [
                     ...$this->arr->of($methods['update'])->where(fn ($value, $key) => $key != 0)->get(),

@@ -262,7 +262,8 @@ class ClassFactory
                 'type' => (object) [
                     'camel' => ($finalVisibility . "?{$type} $" . "{$camel} = null;"),
                     'snake' => (
-                        "/**\n\t * [Property for {$propertyName}]\n\t *\n\t * @var {$type}|null $" . "{$snake}\n\t */\n" .
+                        "/**\n\t * [Property for {$propertyName}]\n\t *\n\t * @var {$type}|null $" .
+                        "{$snake}\n\t */\n" .
                         "\t{$finalVisibility}?{$type} $" . "{$snake} = null;\n"
                     )
                 ],

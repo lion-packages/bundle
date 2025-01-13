@@ -22,8 +22,6 @@ use Lion\Files\Store;
 
 define('IS_INDEX', false);
 
-define('DEVELOPMENT_ENVIRONMENT', 'dev' === env('DEVELOPMENT_ENVIRONMENT'));
-
 /**
  * -----------------------------------------------------------------------------
  * Register environment variable loader automatically

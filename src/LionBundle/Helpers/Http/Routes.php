@@ -41,6 +41,6 @@ class Routes
     {
         self::$middleware = $middleware;
 
-        return new static;
+        return new static();
     }
 }

@@ -47,6 +47,10 @@ USER lion
 SHELL ["/bin/bash", "--login", "-i", "-c"]
 
 # Install nvm, Node.js and npm
+ENV NVM_DIR="/home/lion/.nvm"
+
+ENV PATH="$NVM_DIR/versions/node/v20/bin:$PATH"
+
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash \
     && source /home/lion/.bashrc \
     && nvm install 20 \

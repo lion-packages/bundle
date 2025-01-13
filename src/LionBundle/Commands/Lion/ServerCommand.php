@@ -23,14 +23,14 @@ class ServerCommand extends Command
      *
      * @return void
      */
-	protected function configure(): void
+    protected function configure(): void
     {
-		$this
+        $this
             ->setName('serve')
             ->setDescription('Created command to start server locally')
             ->addOption('port', 'p', InputOption::VALUE_OPTIONAL, 'Do you want to set your own port?', 8000)
             ->addOption('host', 's', InputOption::VALUE_OPTIONAL, 'Do you want to set your own host?', 'localhost');
-	}
+    }
 
     /**
      * Executes the current command
@@ -49,9 +49,9 @@ class ServerCommand extends Command
      *
      * @throws LogicException [When this abstract method is not implemented]
      */
-	protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-		$port = $input->getOption('port');
+        $port = $input->getOption('port');
 
         $host = $input->getOption('host');
 
@@ -76,5 +76,5 @@ class ServerCommand extends Command
         ProcessCommand::run("php -S {$host}:{$port} -t public");
 
         return Command::SUCCESS;
-	}
+    }
 }
