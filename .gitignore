@@ -15,3 +15,4 @@
 /database/
 test.txt
 supervisord.pid
+composer.lock
