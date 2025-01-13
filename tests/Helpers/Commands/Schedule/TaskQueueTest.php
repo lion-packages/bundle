@@ -112,10 +112,12 @@ class TaskQueueTest extends Test
     #[Testing]
     public function pause(): void
     {
-        $initialDate = now();
+        $initialTime = microtime(true);
 
         $this->taskQueue->pause(self::TASK_QUEUE_TIME);
 
-        $this->assertSame(self::TASK_QUEUE_TIME,  now()->diffInSeconds($initialDate));
+        $elapsedTime = microtime(true) - $initialTime;
+
+        $this->assertEqualsWithDelta(self::TASK_QUEUE_TIME, $elapsedTime, 0.1);
     }
 }
