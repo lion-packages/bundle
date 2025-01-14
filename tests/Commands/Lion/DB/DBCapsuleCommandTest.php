@@ -13,12 +13,9 @@ use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
-use Tests\Providers\ConnectionProviderTrait;
 
 class DBCapsuleCommandTest extends Test
 {
-    use ConnectionProviderTrait;
-
     private const string URL_PATH = './database/Class/LionDatabase/MySQL/';
     private const string NAMESPACE_CLASS = 'Database\\Class\\LionDatabase\\MySQL\\';
     private const string ENTITY = 'test';
@@ -30,8 +27,6 @@ class DBCapsuleCommandTest extends Test
 
     protected function setUp(): void
     {
-        $this->runDatabaseConnections();
-
         $this->createDirectory(self::URL_PATH);
 
         $this->createTables();

@@ -18,12 +18,10 @@ use ReflectionException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
-use Tests\Providers\ConnectionProviderTrait;
 use Tests\Providers\Helpers\MenuCommandProviderTrait;
 
 class MenuCommandTest extends Test
 {
-    use ConnectionProviderTrait;
     use MenuCommandProviderTrait;
 
     private const string VITE_PATH = './vite/';
@@ -39,8 +37,6 @@ class MenuCommandTest extends Test
      */
     protected function setUp(): void
     {
-        $this->runDatabaseConnections();
-
         $this->menuCommand = (new Container())->resolve(MenuCommand::class);
 
         $this->initReflection($this->menuCommand);

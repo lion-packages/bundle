@@ -84,7 +84,7 @@ class RedisTest extends Test
     #[Testing]
     public function toArrayWithParamNull(): void
     {
-        $return = $this->getPrivateMethod('toArray', [NULL_VALUE]);
+        $return = $this->getPrivateMethod('toArray', [null]);
 
         $this->assertIsArray($return);
         $this->assertempty($return);

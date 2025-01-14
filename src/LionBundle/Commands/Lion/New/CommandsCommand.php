@@ -200,7 +200,9 @@ class CommandsCommand extends Command
 
         $output->writeln($this->warningOutput("\t>>  COMMAND: {$class}"));
 
-        $output->writeln($this->successOutput("\t>>  COMMAND: the '{$namespace}\\{$class}' command has been generated"));
+        $output->writeln(
+            $this->successOutput("\t>>  COMMAND: the '{$namespace}\\{$class}' command has been generated")
+        );
 
         return Command::SUCCESS;
     }

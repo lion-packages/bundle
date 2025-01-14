@@ -1,4 +1,4 @@
-FROM php:8.3-apache
+FROM php:8.4-apache
 
 ARG DEBIAN_FRONTEND=noninteractive
 # ----------------------------------------------------------------------------------------------------------------------
@@ -47,6 +47,10 @@ USER lion
 SHELL ["/bin/bash", "--login", "-i", "-c"]
 
 # Install nvm, Node.js and npm
+ENV NVM_DIR="/home/lion/.nvm"
+
+ENV PATH="$NVM_DIR/versions/node/v20/bin:$PATH"
+
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash \
     && source /home/lion/.bashrc \
     && nvm install 20 \
@@ -60,10 +64,17 @@ USER root
 SHELL ["/bin/bash", "--login", "-c"]
 
 # Install logo-ls
-RUN wget https://github.com/Yash-Handa/logo-ls/releases/download/v1.3.7/logo-ls_amd64.deb \
-    && dpkg -i logo-ls_amd64.deb \
-    && rm logo-ls_amd64.deb \
-    && curl https://raw.githubusercontent.com/UTFeight/logo-ls-modernized/master/INSTALL | bash
+RUN ARCH=$(uname -m) && \
+    if [ "$ARCH" = "x86_64" ]; then \
+        wget https://github.com/Yash-Handa/logo-ls/releases/download/v1.3.7/logo-ls_amd64.deb; \
+    elif [ "$ARCH" = "aarch64" ]; then \
+        wget https://github.com/Yash-Handa/logo-ls/releases/download/v1.3.7/logo-ls_arm64.deb; \
+    else \
+        echo "Unsupported architecture: $ARCH" && exit 1; \
+    fi && \
+    dpkg -i logo-ls_*.deb && \
+    rm logo-ls_*.deb && \
+    curl https://raw.githubusercontent.com/UTFeight/logo-ls-modernized/master/INSTALL | bash
 
 # Add configuration in .zshrc
 RUN echo 'export NVM_DIR="$HOME/.nvm"' >> /home/lion/.zshrc \

@@ -103,7 +103,7 @@ class NpmInitCommand extends MenuCommand
     {
         $this
             ->setName('npm:init')
-            ->setDescription('Command to create Javascript projects with Vite.JS (Vanilla/Vue/React/Preact/Lit/Svelte/Solid/Qwik/Electron)')
+            ->setDescription('Command to create Javascript projects with Vite.JS')
             ->addArgument('project', InputArgument::OPTIONAL, "Project's name", 'vite-project');
     }
 
@@ -149,7 +149,10 @@ class NpmInitCommand extends MenuCommand
 
             $this->setViteConfig($project, 18, [
                 'replace' => true,
-                'content' => "],\n    server: {\n      host: true,\n      port: 5173,\n      watch: {\n        usePolling: true\n      }\n    }",
+                'content' => (
+                    "],\n    server: {\n      host: true,\n      port: 5173,\n      watch: {\n        " .
+                    "usePolling: true\n      }\n    }"
+                ),
                 'search' => ']'
             ]);
         } else {
@@ -157,7 +160,10 @@ class NpmInitCommand extends MenuCommand
 
             $this->setViteConfig($project, 6, [
                 'replace' => true,
-                'content' => ",\n  server: {\n    host: true,\n    port: 5173,\n    watch: {\n      usePolling: true\n    }\n  }",
+                'content' => (
+                    ",\n  server: {\n    host: true,\n    port: 5173,\n    watch: {\n      " .
+                    "usePolling: true\n    }\n  }"
+                ),
                 'search' => ','
             ]);
         }

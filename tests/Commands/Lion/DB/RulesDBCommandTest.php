@@ -15,12 +15,9 @@ use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
-use Tests\Providers\ConnectionProviderTrait;
 
 class RulesDBCommandTest extends Test
 {
-    use ConnectionProviderTrait;
-
     private const string ENTITY = 'users';
     private const string IDRULE_NAMESPACE = 'App\\Rules\\LionDatabase\\MySQL\\Users\\IdRule';
     private const string NAMERULE_NAMESPACE = 'App\\Rules\\LionDatabase\\MySQL\\Users\\NameRule';
@@ -32,8 +29,6 @@ class RulesDBCommandTest extends Test
 
     protected function setUp(): void
     {
-        $this->runDatabaseConnections();
-
         $this->createTables();
 
         $application = new Application();

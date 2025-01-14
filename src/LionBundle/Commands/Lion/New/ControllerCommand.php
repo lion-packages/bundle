@@ -248,7 +248,8 @@ class ControllerCommand extends Command
 
                 $output->writeln(
                     $this->successOutput(
-                        "\t>>  CONTROLLER: the '{$dataController->namespace}\\{$dataController->class}' controller has been generated"
+                        "\t>>  CONTROLLER: the '{$dataController->namespace}\\{$dataController->class}' " .
+                        'controller has been generated'
                     )
                 );
 

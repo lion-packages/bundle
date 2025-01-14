@@ -88,7 +88,7 @@ class RunQueuedTasksCommand extends MenuCommand
         while (true) {
             $json = $this->taskQueue->get();
 
-            if (NULL_VALUE === $json) {
+            if (null === $json) {
                 $output->writeln($this->infoOutput("\t>> SCHEDULE: no queued tasks available"));
 
                 $this->taskQueue->pause(60);

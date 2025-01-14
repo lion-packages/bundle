@@ -21,12 +21,9 @@ use PHPUnit\Framework\Attributes\Test as Testing;
 use ReflectionException;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
-use Tests\Providers\ConnectionProviderTrait;
 
 class MigrationCommandTest extends Test
 {
-    use ConnectionProviderTrait;
-
     private const string MIGRATION_NAME = 'test-migration';
     private const string CLASS_NAME = 'TestMigration';
     private const string NAMESPACE_MYSQL_TABLE = 'Database\\Migrations\\LionDatabase\\MySQL\\Tables\\';
@@ -52,8 +49,6 @@ class MigrationCommandTest extends Test
      */
     protected function setUp(): void
     {
-        $this->runDatabaseConnections();
-
         $this->migrationCommand = (new MigrationCommand())
             ->setArr(new Arr())
             ->setStore(new Store())

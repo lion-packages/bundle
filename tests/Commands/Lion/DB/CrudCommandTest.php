@@ -20,20 +20,15 @@ use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
 use Symfony\Component\Console\Tester\CommandTester;
-use Tests\Providers\ConnectionProviderTrait;
 
 class CrudCommandTest extends Test
 {
-    use ConnectionProviderTrait;
-
     private const string ENTITY = 'users';
 
     private CommandTester $commandTester;
 
     protected function setUp(): void
     {
-        $this->runDatabaseConnections();
-
         $this->createTables();
 
         $kernel = new Kernel();

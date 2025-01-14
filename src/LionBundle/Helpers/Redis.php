@@ -83,7 +83,7 @@ class Redis
      */
     private function toArray(?string $data): array
     {
-        return NULL_VALUE === $data ? [] : json_decode($data, true);
+        return null === $data ? [] : json_decode($data, true);
     }
 
     /**

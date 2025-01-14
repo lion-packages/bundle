@@ -37,7 +37,7 @@ class TestCommand extends Command
      */
     private Store $store;
 
-	#[Inject]
+    #[Inject]
     public function setClassFactory(ClassFactory $classFactory): TestCommand
     {
         $this->classFactory = $classFactory;
@@ -58,13 +58,13 @@ class TestCommand extends Command
      *
      * @return void
      */
-	protected function configure(): void
+    protected function configure(): void
     {
-		$this
+        $this
             ->setName('new:test')
             ->setDescription('Command required for the creation of new test')
             ->addArgument('test', InputArgument::OPTIONAL, 'Test name', 'ExampleTest');
-	}
+    }
 
     /**
      * Executes the current command
@@ -83,7 +83,7 @@ class TestCommand extends Command
      *
      * @throws LogicException [When this abstract method is not implemented]
      */
-	protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $test = $input->getArgument('test');
 
@@ -95,9 +95,9 @@ class TestCommand extends Command
 
         $namespace = $this->classFactory->getNamespace();
 
-		$this->store->folder($folder);
+        $this->store->folder($folder);
 
-		$this->classFactory
+        $this->classFactory
             ->create($class, ClassFactory::PHP_EXTENSION, $folder)
             ->add(
                 <<<PHP

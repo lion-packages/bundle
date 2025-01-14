@@ -20,7 +20,8 @@ class FetchConfiguration
      */
     public function __construct(
         private readonly array $configuration = []
-    ) {}
+    ) {
+    }
 
     /**
      * Returns configuration data

@@ -83,10 +83,10 @@ class FreshMigrationsCommand extends MenuCommand
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int [0 if everything went fine, or an exit code]
+     * @return int
      *
-     * @throws LogicException [When this abstract method is not implemented]
      * @throws ExceptionInterface
+     * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -109,7 +109,11 @@ class FreshMigrationsCommand extends MenuCommand
             return Command::INVALID;
         }
 
-        $this->migrations->executeMigrations($this, $output, $this->migrations->orderList($migrations[TableInterface::class]));
+        $this->migrations->executeMigrations(
+            $this,
+            $output,
+            $this->migrations->orderList($migrations[TableInterface::class])
+        );
 
         $this->migrations->executeMigrations($this, $output, $migrations[ViewInterface::class]);
 

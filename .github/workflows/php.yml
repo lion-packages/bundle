@@ -1,0 +1,160 @@
+name: Lion-Bundle (CI Workflow)
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: "15 0 * * *"
+
+jobs:
+  composer-validation:
+    runs-on: ubuntu-latest
+    name: Composer Validation
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, gd, zip
+
+      - name: Composer Install
+        run: composer install
+
+      - name: Composer Validate
+        run: composer validate --strict
+
+      - name: Composer Check for vulnerabilities
+        run: composer audit --locked
+
+      - name: Composer Dump-Autoload
+        run: composer dump-autoload --optimize --strict-psr
+
+  code-analyze:
+    runs-on: ubuntu-latest
+    name: PHP Code Analyze
+    needs:
+      - composer-validation
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, gd, zip
+
+      - name: Composer Install
+        run: composer install
+
+      - name: PHP CodeSnifer (Src)
+        run: php -d memory_limit=-1 vendor/bin/phpcs --standard=PSR12 src/
+
+      # - name: PHPStan (Src)
+        # run: php -d memory_limit=-1 vendor/bin/phpstan analyse --level max src
+
+  tests:
+    runs-on: ubuntu-latest
+    name: PHP Tests
+    needs:
+      - code-analyze
+
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+
+      mysql:
+        image: mysql
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_DATABASE: lion_database
+          MYSQL_ROOT_PASSWORD: lion
+          MYSQL_PASSWORD: lion
+
+      postgres:
+        image: postgres
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_DB: lion_database
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: lion
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y git curl wget unzip libpq-dev libpng-dev libzip-dev zlib1g-dev libonig-dev libevent-dev libssl-dev
+          sudo apt-get clean
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          extensions: mbstring, gd, zip, pdo, pdo_mysql, pdo_pgsql, redis, xdebug
+          coverage: xdebug
+          ini-values: |
+            xdebug.mode=develop,coverage,debug
+            xdebug.start_with_request=yes
+            xdebug.log_level=0
+          tools: composer
+
+      - name: Setup NodeJS and NPM
+        run: |
+          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # Esto carga nvm
+          [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # Esto carga nvm bash_completion
+          nvm install 20
+          nvm use 20
+          npm install -g npm@11
+
+      - name: Copy .env.actions to .env
+        run: |
+          if [ -f .env.actions ]; then
+            cp .env.actions .env
+          else
+            echo ".env.actions not found! Please make sure the file exists."
+            exit 1
+          fi
+
+      - name: Install php dependencies
+        run: composer install
+
+      - name: Start PHP built-in server
+        run: |
+          nohup php -S 0.0.0.0:8000 -t public &
+
+      - name: Generate RSA Key's
+        run: php lion new:rsa
+
+      - name: Run tests
+        run: php lion test

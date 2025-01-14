@@ -117,7 +117,7 @@ if (!function_exists('finish')) {
      */
     function finish(mixed $response = null): void
     {
-        response->finish(null === $response ? success() : $response);
+        RESPONSE->finish(null === $response ? success() : $response);
     }
 }
 
@@ -138,7 +138,7 @@ if (!function_exists('response')) {
         int $code = Http::OK,
         mixed $data = null
     ): stdClass {
-        return response->custom($status, $message, $code, $data);
+        return RESPONSE->custom($status, $message, $code, $data);
     }
 }
 
@@ -154,7 +154,7 @@ if (!function_exists('success')) {
      */
     function success(?string $message = null, int $code = Http::OK, mixed $data = null): stdClass
     {
-        return response->success($message, $code, $data);
+        return RESPONSE->success($message, $code, $data);
     }
 }
 
@@ -170,7 +170,7 @@ if (!function_exists('error')) {
      */
     function error(?string $message = null, int $code = Http::INTERNAL_SERVER_ERROR, mixed $data = null): stdClass
     {
-        return response->error($message, $code, $data);
+        return RESPONSE->error($message, $code, $data);
     }
 }
 
@@ -186,7 +186,7 @@ if (!function_exists('warning')) {
      */
     function warning(?string $message = null, int $code = Http::OK, mixed $data = null): stdClass
     {
-        return response->warning($message, $code, $data);
+        return RESPONSE->warning($message, $code, $data);
     }
 }
 
@@ -202,7 +202,7 @@ if (!function_exists('info')) {
      */
     function info(?string $message = null, int $code = Http::OK, mixed $data = null): stdClass
     {
-        return response->info($message, $code, $data);
+        return RESPONSE->info($message, $code, $data);
     }
 }
 
@@ -293,7 +293,7 @@ if (!function_exists('isError')) {
             return false;
         }
 
-        return in_array($response->status, response->getErrors());
+        return in_array($response->status, RESPONSE->getErrors());
     }
 }
 

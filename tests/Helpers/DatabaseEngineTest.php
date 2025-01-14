@@ -9,18 +9,13 @@ use Lion\Database\Driver;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
 use PHPUnit\Framework\Attributes\TestWith;
-use Tests\Providers\ConnectionProviderTrait;
 
 class DatabaseEngineTest extends Test
 {
-    use ConnectionProviderTrait;
-
     private DatabaseEngine $databaseEngine;
 
     protected function setUp(): void
     {
-        $this->runDatabaseConnections();
-
         $this->databaseEngine = new DatabaseEngine();
     }
 

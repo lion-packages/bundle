@@ -36,7 +36,8 @@ class Fetch
         private readonly string $httpMethod,
         private readonly string $uri,
         private readonly array $options = []
-    ) {}
+    ) {
+    }
 
     /**
      * Returns an HTTP configuration object

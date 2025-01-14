@@ -143,7 +143,7 @@ class MigrationCommand extends MenuCommand
     {
         $migration = $input->getArgument('migration');
 
-        if (str->of($migration)->test("/.*\//")) {
+        if (STR->of($migration)->test("/.*\//")) {
             $output->writeln($this->errorOutput("\t>>  migration cannot be inside subfolders"));
 
             return Command::INVALID;
@@ -177,7 +177,8 @@ class MigrationCommand extends MenuCommand
 
         $output->writeln(
             $this->successOutput(
-                "\t>>  MIGRATION: the '{$this->classFactory->getNamespace()}\\{$this->classFactory->getClass()}' migration has been generated"
+                "\t>>  MIGRATION: the '{$this->classFactory->getNamespace()}\\{$this->classFactory->getClass()}' " .
+                'migration has been generated'
             )
         );
 
