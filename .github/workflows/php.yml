@@ -122,7 +122,7 @@ jobs:
           extensions: mbstring, gd, zip, pdo, pdo_mysql, pdo_pgsql, redis, xdebug
           coverage: xdebug
           ini-values: |
-            xdebug.mode=develop,coverage,debug
+            xdebug.mode=coverage
             xdebug.start_with_request=yes
             xdebug.log_level=0
           tools: composer
@@ -157,4 +157,10 @@ jobs:
         run: php lion new:rsa
 
       - name: Run tests
-        run: php lion test
+        run: php lion test --report
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          files: tests/build/logs/clover.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
