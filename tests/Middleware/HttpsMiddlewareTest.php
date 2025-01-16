@@ -5,35 +5,35 @@ declare(strict_types=1);
 namespace Tests\Middleware;
 
 use Lion\Bundle\Exceptions\MiddlewareException;
-use Lion\Bundle\Middleware\RouteMiddleware;
+use Lion\Bundle\Middleware\HttpsMiddleware;
 use Lion\Exceptions\Exception;
 use Lion\Request\Http;
 use Lion\Request\Status;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
 
-class RouteMiddlewareTest extends Test
+class HttpsMiddlewareTest extends Test
 {
-    private RouteMiddleware $routeMiddleware;
+    private HttpsMiddleware $httpsMiddleware;
 
     protected function setUp(): void
     {
-        $this->routeMiddleware = new RouteMiddleware();
+        $this->httpsMiddleware = new HttpsMiddleware();
     }
 
     /**
      * @throws Exception
      */
     #[Testing]
-    public function protectRouteListWithoutHeader(): void
+    public function httpsNotExistHttps(): void
     {
         $this
             ->exception(MiddlewareException::class)
-            ->exceptionMessage('secure hash not found')
+            ->exceptionMessage('the HTTPS protocol header is not set, the connection must be secure (HTTPS)')
             ->exceptionStatus(Status::ERROR)
-            ->exceptionCode(Http::UNAUTHORIZED)
+            ->exceptionCode(Http::FORBIDDEN)
             ->expectLionException(function (): void {
-                $this->routeMiddleware->protectRouteList();
+                $this->httpsMiddleware->https();
             });
     }
 
@@ -41,17 +41,19 @@ class RouteMiddlewareTest extends Test
      * @throws Exception
      */
     #[Testing]
-    public function protectedRouteListDiferentHash(): void
+    public function httpsNotValidHttps(): void
     {
         $this
             ->exception(MiddlewareException::class)
-            ->exceptionMessage('you do not have access to this resource')
+            ->exceptionMessage('the connection is not marked as secure (HTTPS is not active)')
             ->exceptionStatus(Status::ERROR)
-            ->exceptionCode(Http::UNAUTHORIZED)
+            ->exceptionCode(Http::FORBIDDEN)
             ->expectLionException(function (): void {
-                $_SERVER['HTTP_LION_AUTH'] = 'ff1d1bcda9afa5873bdc8205c11e880a43351ea56dc059f6544116961f6f5c0e';
+                $_SERVER['HTTPS'] = 'off';
 
-                $this->routeMiddleware->protectRouteList();
+                $this->httpsMiddleware->https();
             });
+
+        $this->assertHeaderNotHasKey('HTTPS');
     }
 }
