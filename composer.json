@@ -71,8 +71,7 @@
         "lion/test": "^3.1",
         "phpstan/phpstan": "^2.1",
         "phpunit/phpunit": "^11.5",
-        "squizlabs/php_codesniffer": "^3.11",
-        "symfony/mailer": "^7.2"
+        "squizlabs/php_codesniffer": "^3.11"
     },
     "suggest": {
         "ext-gd": "Required to use LionSpreadsheet.",
