@@ -24,7 +24,7 @@ class MenuCommandTest extends Test
 {
     use MenuCommandProviderTrait;
 
-    private const string VITE_PATH = './vite/';
+    private const string VITE_PATH = 'resources/';
     private const string PROJECT_PATH = 'example-project/';
     private const string PROJECT_PATH_SECOND = 'example-project-second/';
     private const string PROJECT_NAME = 'example-project';

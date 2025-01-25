@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Lion\Bundle\Commands\Lion\Npm;
 
 use Exception;
@@ -46,7 +48,7 @@ class NpmRunTestCommand extends MenuCommand
     {
         $project = $this->selectedProject($input, $output);
 
-        ProcessCommand::run("cd ./vite/{$project} && npm run test");
+        ProcessCommand::run("cd resources/{$project} && npm run test");
 
         return Command::SUCCESS;
     }

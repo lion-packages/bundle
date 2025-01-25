@@ -16,14 +16,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Update Vite.JS project dependencies
  *
- * @property Kernel $Kernel [kernel class object]
+ * @property Kernel $Kernel [Adds functions to execute commands, allows you to
+ * create an Application object to run applications with your custom commands]
  *
  * @package Lion\Bundle\Commands\Lion\Npm
  */
 class NpmUpdateCommand extends MenuCommand
 {
     /**
-     * [Kernel class object]
+     * [Adds functions to execute commands, allows you to create an Application
+     * object to run applications with your custom commands]
      *
      * @property Kernel $kernel
      */
@@ -71,11 +73,11 @@ class NpmUpdateCommand extends MenuCommand
     {
         $project = $this->selectedProject($input, $output);
 
-        $this->kernel->execute("cd vite/{$project}/ && npm update", false);
+        $this->kernel->execute("cd resources/{$project}/ && npm update", false);
 
-        $output->writeln($this->warningOutput("\n\t>>  VITE: {$project}"));
+        $output->writeln($this->warningOutput("\n\t>>  RESOURCES: {$project}"));
 
-        $output->writeln($this->successOutput("\t>>  VITE: dependencies have been updated"));
+        $output->writeln($this->successOutput("\t>>  RESOURCES: dependencies have been updated"));
 
         return Command::SUCCESS;
     }

@@ -31,7 +31,7 @@ class NpmInitCommandTest extends Test
 
     protected function tearDown(): void
     {
-        $this->rmdirRecursively('./vite/');
+        $this->rmdirRecursively('resources/');
     }
 
     #[Testing]
