@@ -16,14 +16,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Generate the dist of the Vite.JS project
  *
- * @property Kernel $Kernel [kernel class object]
+ * @property Kernel $Kernel [Adds functions to execute commands, allows you to
+ * create an Application object to run applications with your custom commands]
  *
  * @package Lion\Bundle\Commands\Lion\Npm
  */
 class NpmRunBuildCommand extends MenuCommand
 {
     /**
-     * [Kernel class object]
+     * [Adds functions to execute commands, allows you to create an Application
+     * object to run applications with your custom commands]
      *
      * @property Kernel $kernel
      */
@@ -71,13 +73,13 @@ class NpmRunBuildCommand extends MenuCommand
     {
         $project = $this->selectedProject($input, $output);
 
-        $projectPath = "vite/{$project}/";
+        $projectPath = "resources/{$project}/";
 
         $this->kernel->execute("cd {$projectPath} && npm run build", false);
 
-        $output->writeln($this->warningOutput("\n\t>>  VITE: {$project}"));
+        $output->writeln($this->warningOutput("\n\t>>  RESOURCES: {$project}"));
 
-        $output->writeln($this->successOutput("\t>>  VITE: project dist has been generated: {$projectPath}"));
+        $output->writeln($this->successOutput("\t>>  RESOURCES: project dist has been generated: {$projectPath}"));
 
         return Command::SUCCESS;
     }

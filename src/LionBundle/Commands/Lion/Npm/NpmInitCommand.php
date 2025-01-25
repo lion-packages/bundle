@@ -17,8 +17,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Initialize a project with Vite.JS
  *
- * @property FileWriter $fileWriter [FileWriter class object]
- * @property Kernel $Kernel [kernel class object]
+ * @property Kernel $Kernel [Adds functions to execute commands, allows you to
+ * create an Application object to run applications with your custom commands]
  *
  * @package Lion\Bundle\Commands\Lion\Npm
  */
@@ -65,26 +65,12 @@ class NpmInitCommand extends MenuCommand
     ];
 
     /**
-     * [FileWriter class object]
-     *
-     * @property FileWriter $fileWriter
-     */
-    private FileWriter $fileWriter;
-
-    /**
-     * [Kernel class object]
+     * [Adds functions to execute commands, allows you to create an Application
+     * object to run applications with your custom commands]
      *
      * @property Kernel $kernel
      */
     private Kernel $kernel;
-
-    #[Inject]
-    public function setFileWriter(FileWriter $fileWriter): NpmInitCommand
-    {
-        $this->fileWriter = $fileWriter;
-
-        return $this;
-    }
 
     #[Inject]
     public function setKernel(Kernel $kernel): NpmInitCommand
@@ -104,7 +90,7 @@ class NpmInitCommand extends MenuCommand
         $this
             ->setName('npm:init')
             ->setDescription('Command to create Javascript projects with Vite.JS')
-            ->addArgument('project', InputArgument::OPTIONAL, "Project's name", 'vite-project');
+            ->addArgument('project', InputArgument::OPTIONAL, "Project's name", 'app');
     }
 
     /**
@@ -128,56 +114,34 @@ class NpmInitCommand extends MenuCommand
     {
         $project = $this->str->of($input->getArgument('project'))->trim()->replace('_', '-')->replace(' ', '-')->get();
 
-        if (isSuccess($this->store->exist("vite/{$project}/"))) {
-            $output->writeln($this->warningOutput("\t>>  VITE: a resource with this name already exists"));
+        if (isSuccess($this->store->exist("resources/{$project}/"))) {
+            $output->writeln($this->warningOutput("\t>>  RESOURCES: a resource with this name already exists"));
 
             return Command::FAILURE;
         }
 
-        $this->store->folder('vite/');
+        $this->store->folder('resources/');
 
         $template = $this->str
-            ->of($this->selectedTemplate($input, $output, self::VITE_TEMPLATES, 'React', 2))->lower()
+            ->of($this->selectedTemplate($input, $output, self::VITE_TEMPLATES))
+            ->lower()
             ->get();
 
         if ('electron' === $template) {
             $electronTemplate = $this->str
-                ->of($this->selectedTemplate($input, $output, self::VITE_ELECTRON_TEMPLATES, 'React', 2))->lower()
+                ->of($this->selectedTemplate($input, $output, self::VITE_ELECTRON_TEMPLATES))
+                ->lower()
                 ->get();
 
             $this->createElectronViteProject($input, $output, $project, $electronTemplate);
-
-            $this->setViteConfig($project, 18, [
-                'replace' => true,
-                'content' => (
-                    "],\n    server: {\n      host: true,\n      port: 5173,\n      watch: {\n        " .
-                    "usePolling: true\n      }\n    }"
-                ),
-                'search' => ']'
-            ]);
         } else {
             $this->createViteProject($input, $output, $project, $template);
-
-            $this->setViteConfig($project, 6, [
-                'replace' => true,
-                'content' => (
-                    ",\n  server: {\n    host: true,\n    port: 5173,\n    watch: {\n      " .
-                    "usePolling: true\n    }\n  }"
-                ),
-                'search' => ','
-            ]);
         }
 
-        $output->writeln($this->warningOutput("\t>>  VITE: {$project}"));
+        $output->writeln($this->warningOutput("\t>>  RESOURCES: {$project}"));
 
         $output->writeln(
-            $this->successOutput("\t>>  VITE: vite 'vite/{$project}/' project has been generated successfully")
-        );
-
-        $output->writeln($this->warningOutput("\t>>  VITE: add your configuration in the vite.config"));
-
-        $output->writeln(
-            $this->warningOutput("\t>>  VITE: server: { host: true, port: 5173, watch: { usePolling: true } }")
+            $this->successOutput("\t>>  RESOURCES: 'resources/{$project}/' project has been generated successfully")
         );
 
         return Command::SUCCESS;
@@ -203,13 +167,11 @@ class NpmInitCommand extends MenuCommand
     ): void {
         $type = $this->selectedTypes($input, $output, self::TYPES);
 
-        $commandCreate = "cd vite/ && echo | npm create vite@latest {$project}";
+        $commandCreate = "cd resources/ && echo | npm create vite@latest {$project}";
 
         $commandCreate .= " -- --template {$template}" . ('js' === $type ? '' : '-ts');
 
         $this->kernel->execute($this->str->of($commandCreate)->trim()->get(), false);
-
-        $this->kernel->execute("cd vite/{$project} && npm install", false);
     }
 
     /**
@@ -232,43 +194,10 @@ class NpmInitCommand extends MenuCommand
     ): void {
         $type = $this->selectedTypes($input, $output, self::TYPES);
 
-        $commandCreate = "cd vite/ && echo | npm create @quick-start/electron";
+        $commandCreate = "cd resources/ && echo | npm create @quick-start/electron";
 
         $commandCreate .= " {$project} -- --template {$template}" . ('js' === $type ? '' : '-ts') . ' --skip';
 
         $this->kernel->execute($commandCreate, false);
-
-        $this->kernel->execute("cd vite/{$project} && npm install", false);
-    }
-
-    /**
-     * Adds the configuration required to run a vite project in a Docker
-     * environment
-     *
-     * @param string $project [Project's name]
-     * @param int $rowNumber [File row number]
-     * @param array $config [Settings to replace in configuration files]
-     *
-     * @return void
-     */
-    private function setViteConfig(string $project, int $rowNumber, array $config): void
-    {
-        $replace = [$rowNumber => $config];
-
-        if (isSuccess($this->store->exist("vite/{$project}/vite.config.js"))) {
-            $this->fileWriter->readFileRows("vite/{$project}/vite.config.js", $replace);
-        }
-
-        if (isSuccess($this->store->exist("vite/{$project}/vite.config.ts"))) {
-            $this->fileWriter->readFileRows("vite/{$project}/vite.config.ts", $replace);
-        }
-
-        if (isSuccess($this->store->exist("vite/{$project}/electron.vite.config.mjs"))) {
-            $this->fileWriter->readFileRows("vite/{$project}/electron.vite.config.mjs", $replace);
-        }
-
-        if (isSuccess($this->store->exist("vite/{$project}/electron.vite.config.ts"))) {
-            $this->fileWriter->readFileRows("vite/{$project}/electron.vite.config.ts", $replace);
-        }
     }
 }

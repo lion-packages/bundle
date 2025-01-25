@@ -75,16 +75,17 @@ class NpmInstallCommand extends MenuCommand
 
         $packages = $this->str->of($this->arr->of($input->getArgument('packages'))->join(' '))->trim()->get();
 
-        $this->kernel->execute($this->str->of("cd vite/{$project}/ && npm install {$packages}")->trim()->get(), false);
+        $this->kernel
+            ->execute($this->str->of("cd resources/{$project}/ && npm install {$packages}")->trim()->get(), false);
 
-        $output->writeln($this->warningOutput("\n\t>>  VITE: {$project}"));
+        $output->writeln($this->warningOutput("\n\t>>  RESOURCES: {$project}"));
 
         if ('' != $packages) {
             $join = $this->arr->of(explode(' ', $packages))->join(', ');
 
-            $output->writeln($this->successOutput("\t>>  VITE: dependencies have been installed: {$join}"));
+            $output->writeln($this->successOutput("\t>>  RESOURCES: dependencies have been installed: {$join}"));
         } else {
-            $output->writeln($this->successOutput("\t>>  VITE: dependencies have been installed"));
+            $output->writeln($this->successOutput("\t>>  RESOURCES: dependencies have been installed"));
         }
 
         return Command::SUCCESS;

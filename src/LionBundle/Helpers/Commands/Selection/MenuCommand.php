@@ -96,9 +96,9 @@ class MenuCommand extends Command
     {
         $projects = [];
 
-        foreach ($this->store->view('./vite/') as $folder) {
+        foreach ($this->store->view('resources/') as $folder) {
             if (is_dir($folder) && $folder != '.' && $folder != '..') {
-                $split = $this->str->of($folder)->split('vite/');
+                $split = $this->str->of($folder)->split('resources/');
 
                 $projects[] = end($split);
             }

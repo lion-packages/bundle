@@ -17,14 +17,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Uninstall the Vite.JS project dependencies
  *
- * @property Kernel $Kernel [kernel class object]
+ * @property Kernel $Kernel [Adds functions to execute commands, allows you to
+ * create an Application object to run applications with your custom commands]
  *
  * @package Lion\Bundle\Commands\Lion\Npm
  */
 class NpmUninstallCommand extends MenuCommand
 {
     /**
-     * [Kernel class object]
+     * [Adds functions to execute commands, allows you to create an Application
+     * object to run applications with your custom commands]
      *
      * @property Kernel $kernel
      */
@@ -78,14 +80,14 @@ class NpmUninstallCommand extends MenuCommand
         $packages = $this->str->of($packages)->trim()->get();
 
         $this->kernel->execute(
-            $this->str->of("cd vite/{$project}/ && npm uninstall {$packages}")->trim()->get(),
+            $this->str->of("cd resources/{$project}/ && npm uninstall {$packages}")->trim()->get(),
             false
         );
 
-        $output->writeln($this->warningOutput("\n\t>>  VITE: {$project}"));
+        $output->writeln($this->warningOutput("\n\t>>  RESOURCES: {$project}"));
 
         $output->writeln($this->successOutput(
-            "\t>>  VITE: dependencies have been uninstalled: {$this->arr->of(explode(' ',$packages))->join(', ')}"
+            "\t>>  RESOURCES: dependencies have been uninstalled: {$this->arr->of(explode(' ', $packages))->join(', ')}"
         ));
 
         return Command::SUCCESS;

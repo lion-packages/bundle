@@ -52,7 +52,7 @@ class NpmRunDevCommand extends MenuCommand
     {
         $project = $this->selectedProject($input, $output);
 
-        ProcessCommand::run("cd ./vite/{$project} && npm run dev");
+        ProcessCommand::run("cd resources/{$project} && npm run dev");
 
         return Command::SUCCESS;
     }
