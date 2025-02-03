@@ -6,24 +6,33 @@ namespace Lion\Bundle\Commands\Lion\Npm;
 
 use DI\Attribute\Inject;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
-use Lion\Bundle\Helpers\FileWriter;
-use Lion\Command\Command;
 use Lion\Command\Kernel;
 use LogicException;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Initialize a project with Vite.JS
+ * Initialize a project with Vite.JS/Astro
  *
  * @property Kernel $Kernel [Adds functions to execute commands, allows you to
  * create an Application object to run applications with your custom commands]
+ * @property string $project [Project name]
  *
  * @package Lion\Bundle\Commands\Lion\Npm
  */
 class NpmInitCommand extends MenuCommand
 {
+    /**
+     * [List of available project templates]
+     *
+     * @const PROJECTS_TEMPLATE
+     */
+    private const array PROJECTS_TEMPLATE = [
+        'Vite.JS',
+        'Astro',
+    ];
     /**
      * [List of templates available to create electron-vite projects]
      *
@@ -72,6 +81,13 @@ class NpmInitCommand extends MenuCommand
      */
     private Kernel $kernel;
 
+    /**
+     * [Project name]
+     *
+     * @var string $project
+     */
+    private string $project;
+
     #[Inject]
     public function setKernel(Kernel $kernel): NpmInitCommand
     {
@@ -89,8 +105,28 @@ class NpmInitCommand extends MenuCommand
     {
         $this
             ->setName('npm:init')
-            ->setDescription('Command to create Javascript projects with Vite.JS')
+            ->setDescription('Command to create Javascript projects with Vite.JS/Astro')
             ->addArgument('project', InputArgument::OPTIONAL, "Project's name", 'app');
+    }
+
+    /**
+     * Initializes the command after the input has been bound and before the
+     * input is validated
+     *
+     * This is mainly useful when a lot of commands extends one main command
+     * where some things need to be initialized based on the input arguments and
+     * options
+     *
+     * @param InputInterface $input [InputInterface is the interface implemented
+     * by all input classes]
+     * @param OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     *
+     * @return void
+     */
+    protected function initialize(InputInterface $input, OutputInterface $output): void
+    {
+        parent::initialize($input, $output);
     }
 
     /**
@@ -112,9 +148,15 @@ class NpmInitCommand extends MenuCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $project = $this->str->of($input->getArgument('project'))->trim()->replace('_', '-')->replace(' ', '-')->get();
+        $this->project = $this->str
+            ->of($input->getArgument('project'))
+            ->trim()
+            ->replace('_', '-')
+            ->replace(' ', '-')
+            ->trim()
+            ->get();
 
-        if (isSuccess($this->store->exist("resources/{$project}/"))) {
+        if (isSuccess($this->store->exist("resources/{$this->project}/"))) {
             $output->writeln($this->warningOutput("\t>>  RESOURCES: a resource with this name already exists"));
 
             return Command::FAILURE;
@@ -122,82 +164,94 @@ class NpmInitCommand extends MenuCommand
 
         $this->store->folder('resources/');
 
-        $template = $this->str
-            ->of($this->selectedTemplate($input, $output, self::VITE_TEMPLATES))
-            ->lower()
-            ->get();
+        $this->initProjects();
 
-        if ('electron' === $template) {
-            $electronTemplate = $this->str
-                ->of($this->selectedTemplate($input, $output, self::VITE_ELECTRON_TEMPLATES))
-                ->lower()
-                ->get();
+        $output->writeln($this->warningOutput("\t>>  RESOURCES: {$this->project}"));
 
-            $this->createElectronViteProject($input, $output, $project, $electronTemplate);
-        } else {
-            $this->createViteProject($input, $output, $project, $template);
-        }
-
-        $output->writeln($this->warningOutput("\t>>  RESOURCES: {$project}"));
-
-        $output->writeln(
-            $this->successOutput("\t>>  RESOURCES: 'resources/{$project}/' project has been generated successfully")
-        );
+        $output->writeln($this->successOutput(
+            "\t>>  RESOURCES: 'resources/{$this->project}/' project has been generated successfully"
+        ));
 
         return Command::SUCCESS;
     }
 
     /**
+     * Initializes the projects to be created
+     *
+     * @return void
+     */
+    private function initProjects(): void
+    {
+        $projectType = $this->selectedTemplate($this->input, $this->output, self::PROJECTS_TEMPLATE, 'Vite.JS', 0);
+
+        if ('Astro' === $projectType) {
+            $this->createAstroProject();
+        } else {
+            $template = $this->str
+                ->of($this->selectedTemplate($this->input, $this->output, self::VITE_TEMPLATES))
+                ->lower()
+                ->get();
+
+            if ('electron' === $template) {
+                $electronTemplate = $this->str
+                    ->of($this->selectedTemplate($this->input, $this->output, self::VITE_ELECTRON_TEMPLATES))
+                    ->lower()
+                    ->get();
+
+                $this->createElectronViteProject($electronTemplate);
+            } else {
+                $this->createViteProject($template);
+            }
+        }
+    }
+
+    /**
+     * Starting an Astro Project
+     *
+     * @return void
+     */
+    private function createAstroProject(): void
+    {
+        $command = "cd resources/ && echo | npm create astro@latest {$this->project} ";
+
+        $command .= "-- --no-install --no-git --yes --skip-houston";
+
+        $this->kernel->execute($command, false);
+    }
+
+    /**
      * Create a vite project and install its dependencies
      *
-     * @param InputInterface $input [InputInterface is the interface
-     * implemented by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
-     * @param string $project [Project's name]
      * @param string $template [Project template]
      *
      * @return void
      */
-    private function createViteProject(
-        InputInterface $input,
-        OutputInterface $output,
-        string $project,
-        string $template
-    ): void {
-        $type = $this->selectedTypes($input, $output, self::TYPES);
+    private function createViteProject(string $template): void
+    {
+        $type = $this->selectedTypes($this->input, $this->output, self::TYPES);
 
-        $commandCreate = "cd resources/ && echo | npm create vite@latest {$project}";
+        $command = "cd resources/ && echo | npm create vite@latest {$this->project}";
 
-        $commandCreate .= " -- --template {$template}" . ('js' === $type ? '' : '-ts');
+        $command .= " -- --template {$template}" . ('js' === $type ? '' : '-ts');
 
-        $this->kernel->execute($this->str->of($commandCreate)->trim()->get(), false);
+        $this->kernel->execute($command, false);
     }
 
     /**
      * Create an electron-vite project and install its dependencies
      *
-     * @param InputInterface $input [InputInterface is the interface
-     * implemented by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
-     * @param string $project [Project's name]
      * @param string $template [Project template]
      *
      * @return void
      */
-    private function createElectronViteProject(
-        InputInterface $input,
-        OutputInterface $output,
-        string $project,
-        string $template
-    ): void {
-        $type = $this->selectedTypes($input, $output, self::TYPES);
+    private function createElectronViteProject(string $template): void
+    {
+        $type = $this->selectedTypes($this->input, $this->output, self::TYPES);
 
-        $commandCreate = "cd resources/ && echo | npm create @quick-start/electron";
+        $command = "cd resources/ && echo | npm create @quick-start/electron";
 
-        $commandCreate .= " {$project} -- --template {$template}" . ('js' === $type ? '' : '-ts') . ' --skip';
+        $command .= " {$this->project} -- --template {$template}" . ('js' === $type ? '' : '-ts') . ' --skip';
 
-        $this->kernel->execute($commandCreate, false);
+        $this->kernel->execute($command, false);
     }
 }

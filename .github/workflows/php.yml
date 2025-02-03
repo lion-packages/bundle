@@ -157,7 +157,7 @@ jobs:
         run: php lion new:rsa
 
       - name: Run tests
-        run: php lion test --report
+        run: php vendor/bin/phpunit --coverage-clover tests/build/logs/clover.xml --coverage-html tests/build/coverage
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5

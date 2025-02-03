@@ -7,7 +7,6 @@ namespace Tests\Helpers\Commands\Selection;
 use Exception;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Command\Command;
-use Lion\Command\Kernel;
 use Lion\Database\Drivers\MySQL as DB;
 use Lion\Dependency\Injection\Container;
 use Lion\Request\Http;
@@ -15,6 +14,7 @@ use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test as Testing;
 use ReflectionException;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -24,12 +24,13 @@ class MenuCommandTest extends Test
 {
     use MenuCommandProviderTrait;
 
-    private const string VITE_PATH = 'resources/';
+    private const string RESOURCES_PATH = 'resources/';
     private const string PROJECT_PATH = 'example-project/';
     private const string PROJECT_PATH_SECOND = 'example-project-second/';
     private const string PROJECT_NAME = 'example-project';
     private const string PROJECT_NAME_SECOND = 'example-project-second';
 
+    private Container $container;
     private MenuCommand $menuCommand;
 
     /**
@@ -37,7 +38,9 @@ class MenuCommandTest extends Test
      */
     protected function setUp(): void
     {
-        $this->menuCommand = (new Container())->resolve(MenuCommand::class);
+        $this->container = new Container();
+
+        $this->menuCommand = $this->container->resolve(MenuCommand::class);
 
         $this->initReflection($this->menuCommand);
     }
@@ -46,7 +49,7 @@ class MenuCommandTest extends Test
     {
         unset($_ENV['SELECTED_CONNECTION']);
 
-        $this->rmdirRecursively(self::VITE_PATH);
+        $this->rmdirRecursively(self::RESOURCES_PATH);
     }
 
     #[Testing]
@@ -56,7 +59,7 @@ class MenuCommandTest extends Test
         $this->expectExceptionMessage('there are no projects available');
         $this->expectExceptionCode(Http::INTERNAL_SERVER_ERROR);
 
-        $this->createDirectory(self::VITE_PATH);
+        $this->createDirectory(self::RESOURCES_PATH);
 
         $command = new class extends MenuCommand
         {
@@ -75,10 +78,9 @@ class MenuCommandTest extends Test
             }
         };
 
-        $application = (new Kernel())
-            ->getApplication();
+        $application = new Application();
 
-        $application->add((new Container())->resolve($command::class));
+        $application->add($this->container->resolve($command::class));
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -88,7 +90,7 @@ class MenuCommandTest extends Test
     #[Testing]
     public function selectedProjectWithSingleProject(): void
     {
-        $this->createDirectory(self::VITE_PATH . self::PROJECT_PATH);
+        $this->createDirectory(self::RESOURCES_PATH . self::PROJECT_PATH);
 
         $command = new class extends MenuCommand
         {
@@ -107,9 +109,9 @@ class MenuCommandTest extends Test
             }
         };
 
-        $application = (new Kernel())->getApplication();
+        $application = new Application();
 
-        $application->add((new Container())->resolve($command::class));
+        $application->add($this->container->resolve($command::class));
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -120,9 +122,9 @@ class MenuCommandTest extends Test
     #[Testing]
     public function selectedProjectWithMultipleProjects(): void
     {
-        $this->createDirectory(self::VITE_PATH . self::PROJECT_PATH);
+        $this->createDirectory(self::RESOURCES_PATH . self::PROJECT_PATH);
 
-        $this->createDirectory(self::VITE_PATH . self::PROJECT_PATH_SECOND);
+        $this->createDirectory(self::RESOURCES_PATH . self::PROJECT_PATH_SECOND);
 
         $command = new class extends MenuCommand
         {
@@ -141,14 +143,13 @@ class MenuCommandTest extends Test
             }
         };
 
-        $application = (new Kernel())
-            ->getApplication();
+        $application = new Application();
 
-        $application->add((new Container())->resolve($command::class));
+        $application->add($this->container->resolve($command::class));
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
-        $this->assertSame(Command::SUCCESS, $commandTester->setInputs(["0"])->execute([]));
+        $this->assertSame(Command::SUCCESS, $commandTester->setInputs(['0'])->execute([]));
         $this->assertStringContainsString(('(' . self::PROJECT_NAME_SECOND . ')'), $commandTester->getDisplay());
     }
 
@@ -185,9 +186,9 @@ class MenuCommandTest extends Test
             }
         };
 
-        $application = (new Kernel())->getApplication();
+        $application = new Application();
 
-        $application->add((new Container())->resolve($command::class));
+        $application->add($this->container->resolve($command::class));
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -220,9 +221,9 @@ class MenuCommandTest extends Test
             }
         };
 
-        $application = (new Kernel())->getApplication();
+        $application = new Application();
 
-        $application->add((new Container())->resolve($command::class));
+        $application->add($this->container->resolve($command::class));
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -257,9 +258,9 @@ class MenuCommandTest extends Test
             }
         };
 
-        $application = (new Kernel())->getApplication();
+        $application = new Application();
 
-        $application->add((new Container())->resolve($command::class));
+        $application->add($this->container->resolve($command::class));
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -312,9 +313,9 @@ class MenuCommandTest extends Test
 
         $this->assertArrayNotHasKey('lion_database_test', $connections);
 
-        $application = (new Kernel())->getApplication();
+        $application = new Application();
 
-        $application->add((new Container())->resolve($command::class));
+        $application->add($this->container->resolve($command::class));
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -359,9 +360,9 @@ class MenuCommandTest extends Test
             }
         };
 
-        $application = (new Kernel())->getApplication();
+        $application = new Application();
 
-        $application->add((new Container())->resolve($command::class));
+        $application->add($this->container->resolve($command::class));
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -399,9 +400,9 @@ class MenuCommandTest extends Test
             }
         };
 
-        $application = (new Kernel())->getApplication();
+        $application = new Application();
 
-        $application->add((new Container())->resolve($command::class));
+        $application->add($this->container->resolve($command::class));
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -446,9 +447,9 @@ class MenuCommandTest extends Test
             }
         };
 
-        $application = (new Kernel())->getApplication();
+        $application = new Application();
 
-        $application->add((new Container())->resolve($command::class));
+        $application->add($this->container->resolve($command::class));
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
