@@ -15,6 +15,7 @@ services:
             - "8002:8002"
             - "9000:9000"
             - "5173:5173"
+            - "4321:4321"
         volumes:
             - ./:/var/www/html
             - /var/run/dbus:/var/run/dbus

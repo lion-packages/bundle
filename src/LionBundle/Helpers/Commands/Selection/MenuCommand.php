@@ -26,13 +26,27 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
  * Command class for selecting different types of selection menu
  *
  * @property Arr $arr [Modify and build arrays with different indexes or values]
- * @property Store $store [Store class object]
+ * @property Store $store [Manipulate system files]
  * @property Str $str [Modify and construct strings with different formats]
  *
  * @package Lion\Bundle\Helpers\Commands\Selection
  */
 class MenuCommand extends Command
 {
+    /**
+     * [InputInterface is the interface implemented by all input classes]
+     *
+     * @var InputInterface $input
+     */
+    protected InputInterface $input;
+
+    /**
+     * [OutputInterface is the interface implemented by all Output classes]
+     *
+     * @var OutputInterface $output
+     */
+    protected OutputInterface $output;
+
     /**
      * [Modify and build arrays with different indexes or values]
      *
@@ -41,7 +55,7 @@ class MenuCommand extends Command
     protected Arr $arr;
 
     /**
-     * [Store class object]
+     * [Manipulate system files]
      *
      * @var Store $store
      */
@@ -79,6 +93,28 @@ class MenuCommand extends Command
     }
 
     /**
+     * Initializes the command after the input has been bound and before the
+     * input is validated
+     *
+     * This is mainly useful when a lot of commands extends one main command
+     * where some things need to be initialized based on the input arguments and
+     * options
+     *
+     * @param InputInterface $input [InputInterface is the interface implemented
+     * by all input classes]
+     * @param OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     *
+     * @return void
+     */
+    protected function initialize(InputInterface $input, OutputInterface $output): void
+    {
+        $this->input = $input;
+
+        $this->output = $output;
+    }
+
+    /**
      * Selection menu to obtain a Vite.JS project
      *
      * @param InputInterface $input [InputInterface is the interface
@@ -97,16 +133,18 @@ class MenuCommand extends Command
         $projects = [];
 
         foreach ($this->store->view('resources/') as $folder) {
-            if (is_dir($folder) && $folder != '.' && $folder != '..') {
-                $split = $this->str->of($folder)->split('resources/');
+            $split = $this->str
+                ->of($folder)
+                ->split('resources/');
 
-                $projects[] = end($split);
+            $project = end($split);
+
+            if ($project != '.' && $project != '..') {
+                $projects[] = $project;
             }
         }
 
         if (empty($projects)) {
-            $output->writeln($this->warningOutput('(default: ' . reset($projects) . ')'));
-
             throw new Exception('there are no projects available', Http::INTERNAL_SERVER_ERROR);
         }
 

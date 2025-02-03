@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Commands\Lion\Npm;
 
+use DI\DependencyException;
+use DI\NotFoundException;
 use Lion\Bundle\Commands\Lion\Npm\NpmInitCommand;
 use Lion\Bundle\Commands\Lion\Npm\NpmInstallCommand;
 use Lion\Command\Command;
@@ -22,6 +24,10 @@ class NpmInstallCommandTest extends Test
     private CommandTester $commandTesterNpmIn;
     private CommandTester $commandTesterNpmI;
 
+    /**
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
     protected function setUp(): void
     {
         $application = (new Kernel())->getApplication();

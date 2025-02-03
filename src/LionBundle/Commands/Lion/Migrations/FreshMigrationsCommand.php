@@ -26,8 +26,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Drop all tables and re-run all migrations
  *
- * @property OutputInterface $output [OutputInterface is the interface
- * * implemented by all Output classes]
  * @property Migrations $migrations [Manages the processes of creating or
  * executing migrations]
  *
@@ -35,13 +33,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class FreshMigrationsCommand extends MenuCommand
 {
-    /**
-     * [OutputInterface is the interface implemented by all Output classes]
-     *
-     * @var OutputInterface $output
-     */
-    private OutputInterface $output;
-
     /**
      * [Manages the processes of creating or executing migrations]
      *
@@ -71,6 +62,26 @@ class FreshMigrationsCommand extends MenuCommand
     }
 
     /**
+     * Initializes the command after the input has been bound and before the
+     * input is validated
+     *
+     * This is mainly useful when a lot of commands extends one main command
+     * where some things need to be initialized based on the input arguments and
+     * options
+     *
+     * @param InputInterface $input [InputInterface is the interface implemented
+     * by all input classes]
+     * @param OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     *
+     * @return void
+     */
+    protected function initialize(InputInterface $input, OutputInterface $output): void
+    {
+        parent::initialize($input, $output);
+    }
+
+    /**
      * Executes the current command
      *
      * This method is not abstract because you can use this class
@@ -90,8 +101,6 @@ class FreshMigrationsCommand extends MenuCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->output = $output;
-
         if (isError($this->store->exist('./database/Migrations/'))) {
             $output->writeln($this->errorOutput("\t>> MIGRATION: there are no defined migration routes"));
 

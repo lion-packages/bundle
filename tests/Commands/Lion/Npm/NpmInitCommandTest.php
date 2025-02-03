@@ -10,6 +10,7 @@ use Lion\Command\Kernel;
 use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
+use ReflectionException;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class NpmInitCommandTest extends Test
@@ -34,10 +35,33 @@ class NpmInitCommandTest extends Test
         $this->rmdirRecursively('resources/');
     }
 
+    /**
+     * @throws ReflectionException
+     */
     #[Testing]
-    public function execute(): void
+    public function setKernel(): void
     {
-        $commandExecute = $this->commandTester->setInputs([2, 0])->execute(['project' => self::PROJECT_NAME]);
+        $npmInitCommand = new NpmInitCommand();
+
+        $this->initReflection($npmInitCommand);
+
+        $this->assertInstanceOf(NpmInitCommand::class, $npmInitCommand->setKernel(new Kernel()));
+        $this->assertInstanceOf(Kernel::class, $this->getPrivateProperty('kernel'));
+    }
+
+    #[Testing]
+    public function executeViteProject(): void
+    {
+        $commandExecute = $this->commandTester->setInputs([0, 2, 0])->execute(['project' => self::PROJECT_NAME]);
+
+        $this->assertSame(Command::SUCCESS, $commandExecute);
+        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
+    }
+
+    #[Testing]
+    public function executeAstroProject(): void
+    {
+        $commandExecute = $this->commandTester->setInputs([1])->execute(['project' => self::PROJECT_NAME]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
@@ -46,7 +70,7 @@ class NpmInitCommandTest extends Test
     #[Testing]
     public function executeExistProject(): void
     {
-        $commandExecute = $this->commandTester->setInputs([2, 0])->execute(['project' => self::PROJECT_NAME]);
+        $commandExecute = $this->commandTester->setInputs([0, 2, 0])->execute(['project' => self::PROJECT_NAME]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
@@ -57,7 +81,7 @@ class NpmInitCommandTest extends Test
     #[Testing]
     public function executeElectronVite(): void
     {
-        $commandExecute = $this->commandTester->setInputs([8, 2, 0])->execute(['project' => self::PROJECT_NAME]);
+        $commandExecute = $this->commandTester->setInputs([0, 8, 2, 0])->execute(['project' => self::PROJECT_NAME]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
