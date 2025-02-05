@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Commands\Lion\Route;
 
-use Carbon\Carbon;
 use Lion\Bundle\Commands\Lion\New\RulesCommand;
 use Lion\Bundle\Commands\Lion\Route\PostmanCollectionCommand;
 use Lion\Command\Command;
@@ -53,7 +52,7 @@ class PostmanCollectionCommandTest extends Test
 
         $this->assertSame(Command::SUCCESS, $this->commandTester->execute([]));
 
-        $jsonFile = self::URL_PATH . Carbon::now()->format('Y_m_d') . '_lion_collection.json';
+        $jsonFile = self::URL_PATH . now()->format('Y_m_d') . '_lion_collection.json';
 
         $this->assertFileExists($jsonFile);
 

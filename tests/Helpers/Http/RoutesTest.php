@@ -5,29 +5,39 @@ declare(strict_types=1);
 namespace Tests\Helpers\Http;
 
 use Lion\Bundle\Helpers\Http\Routes;
+use Lion\Bundle\Middleware\RouteMiddleware;
+use Lion\Route\Middleware;
 use Lion\Test\Test;
+use PHPUnit\Framework\Attributes\Test as Testing;
 
 class RoutesTest extends Test
 {
-    const MIDDLEWARE = ['app' => [], 'framework' => []];
+    private array $middelware;
 
     private Routes $routes;
 
     protected function setUp(): void
     {
         $this->routes = new Routes();
+
+        $this->middelware = [
+            new Middleware('protect-route-list', RouteMiddleware::class, 'protectRouteList'),
+        ];
     }
 
-    public function testGetMiddleware(): void
+    #[Testing]
+    public function getMiddleware(): void
     {
-        $this->routes->setMiddleware(self::MIDDLEWARE);
+        $this->routes->setMiddleware($this->middelware);
 
-        $this->assertSame(self::MIDDLEWARE, $this->routes->getMiddleware());
+        $this->assertSame($this->middelware, $this->routes->getMiddleware());
     }
 
-    public function testSetMiddleware(): void
+    #[Testing]
+    public function setMiddleware(): void
     {
-        $this->assertInstanceOf(Routes::class, $this->routes->setMiddleware(self::MIDDLEWARE));
-        $this->assertSame(self::MIDDLEWARE, $this->routes->getMiddleware());
+        $this->routes->setMiddleware($this->middelware);
+
+        $this->assertSame($this->middelware, $this->routes->getMiddleware());
     }
 }

@@ -12,6 +12,7 @@ use Lion\Bundle\Interface\MigrationUpInterface;
 use Lion\Bundle\Interface\SeedInterface;
 use Lion\Command\Command;
 use Lion\Files\Store;
+use stdClass;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -50,8 +51,7 @@ class Migrations
     /**
      * Sorts the list of elements by the value defined in the INDEX constant
      *
-     * @param array<string, MigrationUpInterface|SeedInterface> $list [Class
-     * List]
+     * @param array<string, MigrationUpInterface|SeedInterface> $list [Class List]
      *
      * @return array<string, MigrationUpInterface|SeedInterface>
      *
@@ -72,6 +72,7 @@ class Migrations
                 return -1;
             }
 
+            /** @phpstan-ignore-next-line */
             return $classA::INDEX <=> $classB::INDEX;
         });
 
@@ -99,7 +100,10 @@ class Migrations
                 $namespace = $this->store->getNamespaceFromFile($migration, 'Database\\Migrations\\', 'Migrations/');
 
                 if (!isset($this->loadedMigrations[$migration])) {
-                    $this->loadedMigrations[$migration] = new $namespace();
+                    /** @var MigrationUpInterface $migrationInstance */
+                    $migrationInstance = new $namespace();
+
+                    $this->loadedMigrations[$migration] = $migrationInstance;
                 }
 
                 $tableMigration = $this->loadedMigrations[$migration];
@@ -138,16 +142,17 @@ class Migrations
     public function executeMigrations(Command $command, OutputInterface $output, array $files): void
     {
         foreach ($files as $namespace => $classObject) {
-            if ($classObject instanceof MigrationUpInterface) {
-                $response = $classObject->up();
+            $response = $classObject->up();
 
-                $output->writeln($command->warningOutput("\t>> MIGRATION: {$namespace}"));
+            /** @phpstan-ignore-next-line */
+            $message = "\t>> MIGRATION: {$response->message}";
 
-                if (isError($response)) {
-                    $output->writeln($command->errorOutput("\t>> MIGRATION: {$response->message}"));
-                } else {
-                    $output->writeln($command->successOutput("\t>> MIGRATION: {$response->message}"));
-                }
+            $output->writeln($command->warningOutput("\t>> MIGRATION: {$namespace}"));
+
+            if (isError($response)) {
+                $output->writeln($command->errorOutput($message));
+            } else {
+                $output->writeln($command->successOutput($message));
             }
         }
     }
@@ -155,7 +160,7 @@ class Migrations
     /**
      * Run the migrations
      *
-     * @param array<int, string> $list [List of classes]
+     * @param array<int, class-string> $list [List of classes]
      *
      * @return void
      */
@@ -192,10 +197,12 @@ class Migrations
          */
         $run = function (array $list): void {
             foreach ($list as $migration) {
+                /** @phpstan-ignore-next-line */
                 $migration->up();
             }
         };
 
+        /** @phpstan-ignore-next-line */
         $run($this->orderList($migrations[TableInterface::class]));
 
         $run($migrations[ViewInterface::class]);

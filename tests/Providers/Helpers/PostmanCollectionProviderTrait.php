@@ -118,7 +118,7 @@ trait PostmanCollectionProviderTrait
         return [
             [
                 'rules' => [],
-                'return' => ""
+                'return' => '',
             ],
             [
                 'rules' => [
@@ -133,7 +133,7 @@ trait PostmanCollectionProviderTrait
                         public string $field = 'last_name';
 
                         public string $value = 'lion';
-                    }
+                    },
                 ],
                 'return' => '{"name":"root","last_name":"lion"}',
             ],
@@ -156,10 +156,10 @@ trait PostmanCollectionProviderTrait
                         public string $field = 'rol';
 
                         public string $value = '';
-                    }
+                    },
                 ],
                 'return' => '{"name":"root","rol":""}',
-            ]
+            ],
         ];
     }
 

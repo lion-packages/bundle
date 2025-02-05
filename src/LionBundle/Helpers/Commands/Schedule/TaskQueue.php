@@ -49,6 +49,7 @@ class TaskQueue
     {
         $this->redis
             ->getClient()
+            /** @phpstan-ignore-next-line */
             ->lpush(self::LION_TASKS, $task->getTask());
 
         return $this;

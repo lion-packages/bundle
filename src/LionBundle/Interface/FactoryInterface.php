@@ -21,7 +21,7 @@ interface FactoryInterface
     /**
      * Define the model's default state
      *
-     * @return array
+     * @return array<int|string, mixed>
      **/
     public static function definition(): array;
 }

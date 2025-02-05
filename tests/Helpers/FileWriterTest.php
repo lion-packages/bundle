@@ -41,12 +41,14 @@ class FileWriterTest extends Test
      */
     #[Testing]
     #[DataProvider('replaceContentProvider')]
-    public function testReplaceContent(array $row, string $modifiedLine, string $originalLine): void
+    public function testReplaceContent(array $row, string $originalLine, string $return): void
     {
-        $returnMethod = $this->getPrivateMethod('replaceContent', [$row, $modifiedLine, $originalLine]);
+        $returnMethod = $this->getPrivateMethod('replaceContent', [
+            'row' => $row,
+            'originalLine' => $originalLine,
+        ]);
 
-        $this->assertEquals(strlen($modifiedLine), strlen($returnMethod));
-        $this->assertEquals($modifiedLine, $returnMethod);
+        $this->assertSame($return, $returnMethod);
     }
 
     #[Testing]

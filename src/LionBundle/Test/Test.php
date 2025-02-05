@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Test;
 
+use DI\DependencyException;
+use DI\NotFoundException;
 use Lion\Bundle\Helpers\Commands\Migrations\Migrations;
 use Lion\Bundle\Helpers\Commands\Seeds\Seeds;
 use Lion\Bundle\Interface\CapsuleInterface;
@@ -47,9 +49,12 @@ class Test extends Testing
     /**
      * Run a group of migrations
      *
-     * @param array<int, string> $migrations [List of classes]
+     * @param array<int, class-string> $migrations [List of classes]
      *
      * @return void
+     *
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     protected function executeMigrationsGroup(array $migrations): void
     {
@@ -58,7 +63,10 @@ class Test extends Testing
         }
 
         if (null === $this->migrations) {
-            $this->migrations = $this->container->resolve(Migrations::class);
+            /** @var Migrations $migrationsInstance */
+            $migrationsInstance = $this->container->resolve(Migrations::class);
+
+            $this->migrations = $migrationsInstance;
         }
 
         $this->migrations->executeMigrationsGroup($migrations);
@@ -67,9 +75,12 @@ class Test extends Testing
     /**
      * Run a group of seeds
      *
-     * @param array $seeds [List of classes]
+     * @param array<int, class-string> $seeds [List of classes]
      *
      * @return void
+     *
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     protected function executeSeedsGroup(array $seeds): void
     {
@@ -78,7 +89,10 @@ class Test extends Testing
         }
 
         if (null === $this->seeds) {
-            $this->seeds = $this->container->resolve(Seeds::class);
+            /** @var Seeds $seedsInstance */
+            $seedsInstance = $this->container->resolve(Seeds::class);
+
+            $this->seeds = $seedsInstance;
         }
 
         $this->seeds->executeSeedsGroup($seeds);
@@ -98,7 +112,6 @@ class Test extends Testing
     {
         $this->assertInstanceOf(CapsuleInterface::class, $capsuleInterface->capsule());
         $this->assertIsArray($capsuleInterface->jsonSerialize());
-        $this->assertIsString($capsuleInterface->getTableName());
         $this->assertSame($entity, $capsuleInterface->getTableName());
     }
 }

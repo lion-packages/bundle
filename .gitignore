@@ -5,7 +5,7 @@
 /vendor/
 /storage/**/*.key
 /storage/**/*.log
-/storage/postman/*.json
+/storage/postman/
 /tests/build/
 /vite/
 /app/
