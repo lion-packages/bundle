@@ -132,15 +132,19 @@ class MenuCommand extends Command
     {
         $projects = [];
 
-        foreach ($this->store->view('resources/') as $folder) {
-            $split = $this->str
-                ->of($folder)
-                ->split('resources/');
+        $resources = $this->store->view('resources/');
 
-            $project = end($split);
+        if (is_array($resources)) {
+            foreach ($resources as $folder) {
+                $split = $this->str
+                    ->of($folder)
+                    ->split('resources/');
 
-            if ($project != '.' && $project != '..') {
-                $projects[] = $project;
+                $project = end($split);
+
+                if ($project != '.' && $project != '..') {
+                    $projects[] = $project;
+                }
             }
         }
 
@@ -148,24 +152,28 @@ class MenuCommand extends Command
             throw new Exception('there are no projects available', Http::INTERNAL_SERVER_ERROR);
         }
 
-        if (count($projects) <= 1) {
-            $output->writeln($this->warningOutput('(default: ' . reset($projects) . ')'));
+        /** @var string $defaultProject */
+        $defaultProject = reset($projects);
 
-            return reset($projects);
+        if (count($projects) <= 1) {
+            $output->writeln($this->warningOutput('(default: ' . $defaultProject . ')'));
+
+            return $defaultProject;
         }
 
         /** @var QuestionHelper $helper */
         $helper = $this->getHelper('question');
 
-        return $helper->ask(
-            $input,
-            $output,
-            new ChoiceQuestion(
-                ('Select project ' . $this->warningOutput('(default: ' . reset($projects) . ')')),
-                $projects,
-                0
-            )
+        $choiseQuestion = new ChoiceQuestion(
+            ('Select project ' . $this->warningOutput('(default: ' . $defaultProject . ')')),
+            $projects,
+            0
         );
+
+        /** @var string $response */
+        $response = $helper->ask($input, $output, $choiseQuestion);
+
+        return $response;
     }
 
     /**
@@ -175,7 +183,7 @@ class MenuCommand extends Command
      * implemented by all input classes]
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
-     * @param array $templates [List of available templates]
+     * @param array<int, string> $templates [List of available templates]
      * @param string $defaultTemplate [Default template]
      * @param int $defaultIndex [Default index]
      *
@@ -194,12 +202,15 @@ class MenuCommand extends Command
         $helper = $this->getHelper('question');
 
         $choiceQuestion = new ChoiceQuestion(
-            "Select the type of template {$this->warningOutput("(default: {$defaultTemplate})")}",
+            "Select the type of template {$this->warningOutput("(default: '{$defaultTemplate}')")}",
             $templates,
             $defaultIndex
         );
 
-        return $helper->ask($input, $output, $choiceQuestion);
+        /** @var string $template */
+        $template = $helper->ask($input, $output, $choiceQuestion);
+
+        return $template;
     }
 
     /**
@@ -209,7 +220,7 @@ class MenuCommand extends Command
      * implemented by all input classes]
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
-     * @param array $types [description]
+     * @param array<int, string> $types [description]
      *
      * @return string
      *
@@ -220,11 +231,12 @@ class MenuCommand extends Command
         /** @var QuestionHelper $helper */
         $helper = $this->getHelper('question');
 
-        return $helper->ask(
-            $input,
-            $output,
-            new ChoiceQuestion("Select type {$this->warningOutput('(default: js)')}", $types, 0)
-        );
+        $choiceQuestion = new ChoiceQuestion("Select type {$this->warningOutput("(default: 'js')")}", $types, 0);
+
+        /** @var string $type */
+        $type = $helper->ask($input, $output, $choiceQuestion);
+
+        return $type;
     }
 
     /**
@@ -246,19 +258,25 @@ class MenuCommand extends Command
 
         $connections = Connection::getConnections();
 
-        $selectedConnection = null;
-
         $connectionKeys = array_keys($connections);
 
+        /** @var string $defaultConnection */
         $defaultConnection = reset($connectionKeys);
 
         if ($this->arr->of($connections)->length() > 1) {
+            /** @var array<int, string> $choiseConnections */
+            $choiseConnections = $this->arr
+                ->of($connections)
+                ->keys()
+                ->get();
+
             $choiseQuestion = new ChoiceQuestion(
                 'Select a connection ' . $this->warningOutput("(default: {$defaultConnection})"),
-                $this->arr->of($connections)->keys()->get(),
+                $choiseConnections,
                 0
             );
 
+            /** @var string $selectedConnection */
             $selectedConnection = $helper->ask($input, $output, $choiseQuestion);
         } else {
             $output->writeln($this->warningOutput("default connection: ({$defaultConnection})"));
@@ -285,11 +303,11 @@ class MenuCommand extends Command
      */
     protected function selectConnectionByEnviroment(InputInterface $input, OutputInterface $output): string
     {
-        if (empty($_ENV['SELECTED_CONNECTION'])) {
-            return $this->selectConnection($input, $output);
-        } else {
+        if (!empty($_ENV['SELECTED_CONNECTION']) && is_string($_ENV['SELECTED_CONNECTION'])) {
             return $_ENV['SELECTED_CONNECTION'];
         }
+
+        return $this->selectConnection($input, $output);
     }
 
     /**
@@ -299,7 +317,7 @@ class MenuCommand extends Command
      * implemented by all input classes]
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
-     * @param array $options [List of available migration types]
+     * @param array<int, string> $options [List of available migration types]
      *
      * @return string
      *
@@ -310,11 +328,16 @@ class MenuCommand extends Command
         /** @var QuestionHelper $helper */
         $helper = $this->getHelper('question');
 
-        return $helper->ask(
-            $input,
-            $output,
-            new ChoiceQuestion("Select the type of migration {$this->warningOutput('(default: Table)')}", $options, 0)
+        $choiceQuestion = new ChoiceQuestion(
+            "Select the type of migration {$this->warningOutput('(default: Table)')}",
+            $options,
+            0
         );
+
+        /** @var string $migrationType */
+        $migrationType = $helper->ask($input, $output, $choiceQuestion);
+
+        return $migrationType;
     }
 
     /**
@@ -419,15 +442,12 @@ class MenuCommand extends Command
      * @param string $selectedConnection [Database connection]
      * @param string $entity [Entity name]
      *
-     * @return stdClass|array|DatabaseCapsuleInterface
+     * @return array<stdClass|array<int|string, mixed>|DatabaseCapsuleInterface>|stdClass
      *
      * @internal
      */
-    protected function getTableForeigns(
-        string $driver,
-        string $selectedConnection,
-        string $entity
-    ): stdClass|array|DatabaseCapsuleInterface {
+    protected function getTableForeigns(string $driver, string $selectedConnection, string $entity): array|stdClass
+    {
         if (Driver::MYSQL === $driver) {
             return MySQL::connection($selectedConnection)
                 ->table('INFORMATION_SCHEMA.KEY_COLUMN_USAGE', false)
@@ -465,9 +485,9 @@ class MenuCommand extends Command
      *
      * @param string $connectionName [Connection name]
      *
-     * @return stdClass|array
+     * @return array<stdClass|array<int|string, mixed>|DatabaseCapsuleInterface>|stdClass
      */
-    protected function getTables(string $connectionName): stdClass|array
+    protected function getTables(string $connectionName): array|stdClass
     {
         $connections = Connection::getConnections();
 

@@ -44,7 +44,7 @@ class ProcessCommand
 
             $process->run();
         } else {
-            $process->run(function ($type, $buffer): void {
+            $process->run(function ($type, string $buffer): void {
                 echo $buffer;
             });
         }

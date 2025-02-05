@@ -33,7 +33,7 @@ class TaskTest extends Test
     public function constructInvalidNamespace(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('namespace is null');
+        $this->expectExceptionMessage('Namespace is null');
         $this->expectExceptionCode(Http::INTERNAL_SERVER_ERROR);
 
         new Task();
@@ -53,10 +53,10 @@ class TaskTest extends Test
     public function constructInvalidData(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('data is null');
+        $this->expectExceptionMessage('The data is empty');
         $this->expectExceptionCode(Http::INTERNAL_SERVER_ERROR);
 
-        new Task(self::class, 'construct', null);
+        new Task(self::class, 'construct');
     }
 
     #[Testing]

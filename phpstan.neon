@@ -1,0 +1,5 @@
+parameters:
+    level: max
+
+    excludePaths:
+        - %currentWorkingDirectory%/src/LionBundle/Traits/

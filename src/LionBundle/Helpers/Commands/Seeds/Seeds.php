@@ -42,7 +42,7 @@ class Seeds
      */
     public function executeSeedsGroup(array $list): void
     {
-        /** @var array<string, SeedInterface> $migrations */
+        /** @var array<string, SeedInterface> $seeds */
         $seeds = [];
 
         foreach ($list as $namespace) {
@@ -59,10 +59,15 @@ class Seeds
          */
         $run = function (array $list): void {
             foreach ($list as $seed) {
-                $seed->run();
+                if ($seed instanceof SeedInterface) {
+                    $seed->run();
+                }
             }
         };
 
-        $run($this->migrations->orderList($seeds));
+        /** @var array<string, SeedInterface> $orderSeeds */
+        $orderSeeds = $this->migrations->orderList($seeds);
+
+        $run($orderSeeds);
     }
 }

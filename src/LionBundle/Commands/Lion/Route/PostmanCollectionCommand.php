@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\Route;
 
-use Carbon\Carbon;
 use DI\Attribute\Inject;
 use GuzzleHttp\Exception\GuzzleException;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\PostmanCollection;
 use Lion\Bundle\Helpers\Http\Fetch;
-use Lion\Bundle\Helpers\Http\Routes;
 use Lion\Command\Command;
 use Lion\Files\Store;
 use Lion\Helpers\Str;
@@ -141,7 +139,9 @@ class PostmanCollectionCommand extends Command
 
         $this->postmanCollection->addRoutes($this->routes);
 
-        $path = storage_path('postman/', false);
+        $this->postmanCollection->generateItems();
+
+        $path = storage_path('postman/');
 
         $this->store->folder($path);
 
@@ -185,20 +185,41 @@ class PostmanCollectionCommand extends Command
     {
         $this->postmanCollection->init($_ENV['SERVER_URL']);
 
-        $this->jsonName = $this->str->of(Carbon::now()->format('Y_m_d'))->concat('_lion_collection')->lower()->get();
+        $this->jsonName = $this->str
+            ->of(now()->format('Y_m_d'))
+            ->concat('_lion_collection')
+            ->lower()
+            ->get();
 
-        $this->routes = json_decode(
-            fetch(
-                new Fetch(Route::GET, ($_ENV['SERVER_URL'] . '/route-list'), [
-                    'headers' => [
-                        'Lion-Auth' => $_ENV['SERVER_HASH'],
-                    ],
-                ])
-            )
-                ->getBody()
-                ->getContents(),
-            true
-        );
+        $json = fetch(
+            new Fetch(Route::GET, ($_ENV['SERVER_URL'] . '/route-list'), [
+                'headers' => [
+                    'Lion-Auth' => $_ENV['SERVER_HASH'],
+                ],
+            ])
+        )
+            ->getBody()
+            ->getContents();
+
+        $decode = json_decode($json, true);
+
+        /**
+         * @var array{
+         *     array<string, array{
+         *          filters: array<int, string>,
+         *          handler: array{
+         *              controller: bool|array{
+         *                  name: string,
+         *                  function: string
+         *              },
+         *              callback: bool
+         *          }
+         *     }>
+         * } $routes
+         */
+        $routes = $decode;
+
+        $this->routes = $routes;
 
         array_pop($this->routes);
     }

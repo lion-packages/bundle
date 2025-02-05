@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Helpers\Commands;
 
+use DI\DependencyException;
+use DI\NotFoundException;
 use GuzzleHttp\Exception\GuzzleException;
 use Lion\Bundle\Helpers\Commands\PostmanCollection;
 use Lion\Bundle\Helpers\Http\Fetch;
@@ -23,25 +25,27 @@ class PostmanCollectionTest extends Test
     private const string HOST = 'http://127.0.0.1:8000';
     private const array POSTMAN_CONFIG = [
         'params' => [
-            'routes' => [],
-            'items' => [],
             'host' => [
                 'url' => self::HOST,
                 'params' => [
-                    'host' => ["{{base_url}}"]
-                ]
-            ]
-        ]
+                    'host' => [
+                        "{{base_url}}",
+                    ],
+                ],
+            ],
+        ],
     ];
 
     private PostmanCollection $postmanCollection;
 
     /**
      * @throws ReflectionException
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     protected function setUp(): void
     {
-        $this->postmanCollection = (new Container())->resolve(PostmanCollection::class);
+        $this->postmanCollection = new Container()->resolve(PostmanCollection::class);
 
         $this->initReflection($this->postmanCollection);
     }
@@ -88,7 +92,9 @@ class PostmanCollectionTest extends Test
     #[DataProvider('addParamsProvider')]
     public function addParams(array $rules, array|string $return): void
     {
-        $returnMethod = $this->getPrivateMethod('addParams', [$rules]);
+        $returnMethod = $this->getPrivateMethod('addParams', [
+            'rules' => $rules,
+        ]);
 
         $this->assertSame($return, $returnMethod);
     }
@@ -217,6 +223,8 @@ class PostmanCollectionTest extends Test
 
         $this->postmanCollection->addRoutes($routes);
 
+        $this->postmanCollection->generateItems();
+
         $addRoutes = json_encode($this->getPrivateProperty('postman'), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
         $this->assertJsonStringEqualsJsonFile('./tests/Providers/Helpers/Commands/AddRoutesProvider.json', $addRoutes);
@@ -250,6 +258,8 @@ class PostmanCollectionTest extends Test
 
         $this->postmanCollection->addRoutes($routes);
 
+        $this->postmanCollection->generateItems();
+
         $addRoutes = json_encode($this->getPrivateProperty('postman'), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
         $this->assertJsonStringEqualsJsonFile('./tests/Providers/Helpers/Commands/AddRoutesProvider.json', $addRoutes);
@@ -257,7 +267,7 @@ class PostmanCollectionTest extends Test
         $collection = $this->postmanCollection->createCollection($this->postmanCollection->getItems());
 
         $jsonProvider = json_decode(
-            (new Store())->get('./tests/Providers/Helpers/Commands/PostmanProvider.json'),
+            new Store()->get('./tests/Providers/Helpers/Commands/PostmanProvider.json'),
             true
         );
 
@@ -291,6 +301,8 @@ class PostmanCollectionTest extends Test
         $this->assertSame(self::POSTMAN_CONFIG, $this->getPrivateProperty('postman'));
 
         $this->postmanCollection->addRoutes($routes);
+
+        $this->postmanCollection->generateItems();
 
         $addRoutes = json_encode($this->getPrivateProperty('postman'), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
@@ -329,7 +341,9 @@ class PostmanCollectionTest extends Test
 
         $this->postmanCollection->addRoutes($routes);
 
-        $jsonProvider = json_decode((new Store())->get('./tests/Providers/Helpers/Commands/AddRoutesProvider.json'), true);
+        $this->postmanCollection->generateItems();
+
+        $jsonProvider = json_decode(new Store()->get('./tests/Providers/Helpers/Commands/AddRoutesProvider.json'), true);
 
         $this->assertJsonStringEqualsJsonString(
             json_encode($jsonProvider['params']['items']),

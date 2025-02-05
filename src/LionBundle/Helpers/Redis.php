@@ -40,6 +40,16 @@ class Redis
 
     /**
      * Class Constructor
+     *
+     * @param array{
+     *     scheme?: string,
+     *     host?: string,
+     *     port?: int|string,
+     *     parameters?: array{
+     *         password?: string,
+     *         database?: int|string
+     *     }
+     * } $options [Configuration data for connecting to Redis]
      */
     public function __construct(array $options = [])
     {
@@ -77,13 +87,13 @@ class Redis
     /**
      * Converts string in JSON format to array
      *
-     * @param string|null $data [String in JSON format]
+     * @param string $data [String in JSON format]
      *
-     * @return array
+     * @return mixed
      */
-    private function toArray(?string $data): array
+    private function toArray(string $data): mixed
     {
-        return null === $data ? [] : json_decode($data, true);
+        return json_decode($data, true);
     }
 
     /**
@@ -132,19 +142,18 @@ class Redis
      *
      * @param string $key [Index name]
      *
-     * @return array|null
+     * @return mixed
      */
-    public function get(string $key): ?array
+    public function get(string $key): mixed
     {
         $this->connect();
 
         $key = trim($key);
 
-        if (!$this->client->exists($key)) {
-            return null;
-        }
+        /** @var string $value */
+        $value = $this->client->get($key);
 
-        return $this->toArray($this->client->get($key));
+        return empty($value) ? null : $this->toArray($value);
     }
 
     /**

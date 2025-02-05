@@ -24,6 +24,7 @@
 >
     <php>
         <env name="APP_ENV" value="testing" />
+
         <ini name="date.timezone" value="America/Bogota" />
         <ini name="intl.default_locale" value="C.UTF-8" />
         <ini name="memory_limit" value="2048M" />
@@ -43,34 +44,6 @@
     <testsuites>
         <testsuite name="All-Test">
             <directory>tests/</directory>
-        </testsuite>
-
-        <testsuite name="Commands">
-            <directory>tests/Commands/</directory>
-        </testsuite>
-
-        <testsuite name="Enums">
-            <directory>tests/Enums/</directory>
-        </testsuite>
-
-        <testsuite name="Exceptions">
-            <directory>tests/Exceptions/</directory>
-        </testsuite>
-
-        <testsuite name="Helpers">
-            <directory>tests/Helpers/</directory>
-        </testsuite>
-
-        <testsuite name="Middleware">
-            <directory>tests/Middleware/</directory>
-        </testsuite>
-
-        <testsuite name="Traits">
-            <directory>tests/Traits/</directory>
-        </testsuite>
-
-        <testsuite name="Mailhog">
-            <file>tests/MailhogTest.php</file>
         </testsuite>
     </testsuites>
 </phpunit>

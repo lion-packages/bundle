@@ -82,18 +82,6 @@ class RedisTest extends Test
      * @throws ReflectionException
      */
     #[Testing]
-    public function toArrayWithParamNull(): void
-    {
-        $return = $this->getPrivateMethod('toArray', [null]);
-
-        $this->assertIsArray($return);
-        $this->assertempty($return);
-    }
-
-    /**
-     * @throws ReflectionException
-     */
-    #[Testing]
     public function setTime(): void
     {
         $seconds = (int) fake()->numerify('##');

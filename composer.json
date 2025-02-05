@@ -52,7 +52,7 @@
         "fakerphp/faker": "^1.23",
         "guzzlehttp/guzzle": "^7.9",
         "lion/command": "^5.1",
-        "lion/database": "^11.2",
+        "lion/database": "^11.3",
         "lion/dependency-injection": "^4.2",
         "lion/exceptions": "^2.0",
         "lion/files": "^8.1",
@@ -74,7 +74,7 @@
         "squizlabs/php_codesniffer": "^3.11"
     },
     "suggest": {
-        "ext-gd": "Required to use LionSpreadsheet.",
+        "ext-gd": "Required to use spreadsheet/files.",
         "ext-pdo": "Required to use all database features.",
         "ext-redis": "Required to use the Redis cache.",
         "fakerphp/faker": "Required to use the factory builder.",

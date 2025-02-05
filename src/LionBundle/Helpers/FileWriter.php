@@ -10,8 +10,6 @@ use Lion\Helpers\Str;
 /**
  * Class that allows writing system files
  *
- * @property Str $str [Str class object]
- *
  * @package Lion\Bundle\Helpers
  */
 class FileWriter
@@ -32,15 +30,21 @@ class FileWriter
     /**
      * Replaces the content of a string with another
      *
-     * @param array $row [Row to modify]
-     * @param string $modifiedLine [Modified row content]
+     * @param array{
+     *     search: string,
+     *     content: string
+     * } $row [Row to modify]
      * @param string $originalLine [Original row content]
      *
      * @return string
      */
-    private function replaceContent(array $row, string $modifiedLine, string $originalLine): string
+    private function replaceContent(array $row, string $originalLine): string
     {
-        $newLine = $this->str->of($originalLine)->replace($row['search'], $row['content'])->get();
+        /** @var string $newLine */
+        $newLine = $this->str
+            ->of($originalLine)
+            ->replace($row['search'], $row['content'])
+            ->get();
 
         return str_pad($newLine, strlen($originalLine));
     }
@@ -49,46 +53,76 @@ class FileWriter
      * Reads all rows from a file and modifies them as defined
      *
      * @param string $path [Defined route]
-     * @param array $rows [list of rows to modify]
+     * @param array<int, array{
+     *     replace?: bool,
+     *     remove?: bool,
+     *     content?: string,
+     *     search?: string,
+     *     multiple?: array<int, array{
+     *         content?: string,
+     *         search?: string
+     *     }>
+     * }> $rows [list of rows to modify]
      *
      * @return void
      */
     public function readFileRows(string $path, array $rows): void
     {
+        /** @var resource $file */
         $file = fopen($path, 'r+');
 
+        /** @var list<string> $rowsFile */
         $rowsFile = file($path);
 
+        /**
+         * @var array{
+         *     replace?: bool,
+         *     remove?: bool,
+         *     content?: string,
+         *     search?: string,
+         *     multiple?: array<int, array{
+         *         content?: string,
+         *         search?: string
+         *     }>
+         * } $row
+         */
         foreach ($rows as $key => $row) {
             if ($key >= 1 && $key <= count($rowsFile)) {
                 fseek($file, 0);
 
-                if (isset($row['remove'])) {
-                    $total = $key - 1;
+                $total = $key - 1;
 
+                $modifiedLine = '';
+
+                if (isset($row['remove'])) {
                     unset($rowsFile[$total]);
                 } else {
-                    $total = $key - 1;
-
                     $originalLine = $rowsFile[$total];
 
-                    $modifiedLine = '';
-
-                    if ($row['replace'] === false) {
+                    if (isset($row['replace'], $row['content']) && !$row['replace']) {
                         $modifiedLine = str_pad($row['content'], strlen($originalLine));
-                    } else {
+                    }
+
+                    if (isset($row['replace']) && $row['replace']) {
                         if (isset($row['multiple'])) {
-                            foreach ($row['multiple'] as $key => $content) {
-                                $originalLine = $this->replaceContent(
-                                    $content,
-                                    ($key === 0 ? $originalLine : $modifiedLine),
-                                    $originalLine
-                                );
+                            /**
+                             * @var array{
+                             *     search: string,
+                             *     content: string
+                             * } $content
+                             */
+                            foreach ($row['multiple'] as $content) {
+                                $originalLine = $this->replaceContent($content, $originalLine);
                             }
 
                             $modifiedLine = $originalLine;
                         } else {
-                            $modifiedLine = $this->replaceContent($row, $modifiedLine, $originalLine);
+                            if (isset($row['search'], $row['content'])) {
+                                $modifiedLine = $this->replaceContent([
+                                    'search' => $row['search'],
+                                    'content' => $row['content'],
+                                ], $originalLine);
+                            }
                         }
                     }
 

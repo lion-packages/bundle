@@ -10,10 +10,6 @@ use Lion\Request\Http;
 /**
  * Tasks class to encapsulate tasks in queue
  *
- * @property string|null $namespace [Property for namespace]
- * @property string|null $method [Property for method]
- * @property array|null $data [Property for data]
- *
  * @package Lion\Bundle\Helpers\Commands\Schedule
  */
 class Task
@@ -35,29 +31,31 @@ class Task
     /**
      * [Property for data]
      *
-     * @var array|null $data
+     * @var array<int|string, mixed> $data
      */
-    private ?array $data = null;
+    private array $data;
 
     /**
      * Class Constructor
      *
      * @param string|null $namespace [Property for namespace]
      * @param string|null $method [Property for method]
-     * @param array|null $data [Property for data]
+     * @param array<int|string, mixed> $data [Property for data]
+     *
+     * @throws InvalidArgumentException
      */
-    public function __construct(?string $namespace = null, ?string $method = null, ?array $data = [])
+    public function __construct(?string $namespace = null, ?string $method = null, array $data = [])
     {
         if (null === $namespace) {
-            throw new InvalidArgumentException('namespace is null', Http::INTERNAL_SERVER_ERROR);
+            throw new InvalidArgumentException('Namespace is null', Http::INTERNAL_SERVER_ERROR);
         }
 
         if (null === $method) {
-            throw new InvalidArgumentException('method is null', Http::INTERNAL_SERVER_ERROR);
+            throw new InvalidArgumentException('The method is null', Http::INTERNAL_SERVER_ERROR);
         }
 
-        if (null === $data) {
-            throw new InvalidArgumentException('data is null', Http::INTERNAL_SERVER_ERROR);
+        if (empty($data)) {
+            throw new InvalidArgumentException('The data is empty', Http::INTERNAL_SERVER_ERROR);
         }
 
         $this->namespace = $namespace;

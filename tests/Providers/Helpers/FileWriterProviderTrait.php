@@ -14,8 +14,8 @@ trait FileWriterProviderTrait
                     'search' => 'Search',
                     'content' => 'Replacement'
                 ],
-                'modifiedLine' => 'Original Replacement Line',
                 'originalLine' => 'Original Search Line',
+                'return' => 'Original Replacement Line',
             ],
         ];
     }

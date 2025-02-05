@@ -7,13 +7,6 @@ namespace Lion\Bundle\Helpers\Commands\Schedule;
 /**
  * Create settings for scheduled tasks
  *
- * @property string $cron [Define crontab configuration]
- * @property string $command [Command defined for execution]
- * @property array $options [Defines the command options and arguments for
- * execution]
- * @property string $logName [Defines the name of the log file to record the
- * outputs]
- *
  * @package Lion\Bundle\Helpers\Commands\Schedule
  */
 class Schedule
@@ -35,7 +28,7 @@ class Schedule
     /**
      * [Defines the command options and arguments for execution]
      *
-     * @var array $options
+     * @var array<string, string> $options
      */
     private array $options;
 
@@ -64,7 +57,7 @@ class Schedule
      * Define the command
      *
      * @param string $command [Command defined for execution]
-     * @param array $options [Defines the command options and arguments for
+     * @param array<string, string> $options [Defines the command options and arguments for
      * execution]
      *
      * @return Schedule
@@ -96,7 +89,12 @@ class Schedule
     /**
      * Returns the configuration of the scheduled task
      *
-     * @return array
+     * @return array{
+     *     cron: string,
+     *     command: string,
+     *     options: array<string, string>,
+     *     logName: string
+     * }
      */
     public function getConfig(): array
     {
