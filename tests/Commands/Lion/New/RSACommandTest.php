@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace Tests\Commands\Lion\New;
 
+use DI\DependencyException;
+use DI\NotFoundException;
 use Lion\Bundle\Commands\Lion\New\RSACommand;
 use Lion\Command\Command;
+use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
 use Lion\Security\RSA;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
+use ReflectionException;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -19,24 +23,52 @@ class RSACommandTest extends Test
     private const string OUTPUT_MESSAGE = 'public and private';
 
     private CommandTester $commandTester;
-    private RSACommand $rSACommand;
+    private RSACommand $rsaCommand;
 
+    /**
+     * @throws DependencyException
+     * @throws NotFoundException
+     * @throws ReflectionException
+     */
     protected function setUp(): void
     {
+        /** @var RSACommand $rsaCommand */
+        $rsaCommand = new Container()->resolve(RSACommand::class);
+
+        $this->rsaCommand = $rsaCommand;
+
         $application = new Application();
 
-        $this->rSACommand = (new RSACommand())
-            ->setRSA(new RSA())
-            ->setStore(new Store());
-
-        $application->add($this->rSACommand);
+        $application->add($this->rsaCommand);
 
         $this->commandTester = new CommandTester($application->find('new:rsa'));
+
+        $this->initReflection($this->rsaCommand);
     }
 
     protected function tearDown(): void
     {
         $this->rmdirRecursively('./storage/keys/');
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
+    public function setRSA(): void
+    {
+        $this->assertInstanceOf(RSACommand::class, $this->rsaCommand->setRSA(new RSA()));
+        $this->assertInstanceOf(RSA::class, $this->getPrivateProperty('rsa'));
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
+    public function setStore(): void
+    {
+        $this->assertInstanceOf(RSACommand::class, $this->rsaCommand->setStore(new Store()));
+        $this->assertInstanceOf(Store::class, $this->getPrivateProperty('store'));
     }
 
     #[Testing]

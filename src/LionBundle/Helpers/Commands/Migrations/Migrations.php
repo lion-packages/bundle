@@ -12,15 +12,10 @@ use Lion\Bundle\Interface\MigrationUpInterface;
 use Lion\Bundle\Interface\SeedInterface;
 use Lion\Command\Command;
 use Lion\Files\Store;
-use stdClass;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Manages the processes of creating or executing migrations
- *
- * @property Store $store [Manipulate system files]
- * @property array<string, MigrationUpInterface> $loadedMigrations [Stores
- * already loaded migrations]
  *
  * @package Lion\Bundle\Helpers\Commands\Migrations
  */
@@ -56,6 +51,8 @@ class Migrations
      * @return array<string, MigrationUpInterface|SeedInterface>
      *
      * @internal
+     *
+     * @codeCoverageIgnore
      */
     public function orderList(array $list): array
     {

@@ -15,6 +15,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Run the local vite environment for development
  *
  * @package Lion\Bundle\Commands\Lion\Npm
+ *
+ * @codeCoverageIgnore
  */
 class NpmRunDevCommand extends MenuCommand
 {

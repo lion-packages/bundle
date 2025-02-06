@@ -14,10 +14,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * RunQueuedTasksCommand description
- *
- * @property Container $container [Container to generate dependency injection]
- * @property TaskQueue $taskQueue [Manage server queued task processes]
+ * Allows queued tasks to run in the background
  *
  * @package Lion\Bundle\Commands\Lion\Schedule
  */
@@ -81,6 +78,8 @@ class RunQueuedTasksCommand extends MenuCommand
      * @return int [0 if everything went fine, or an exit code]
      *
      * @throws LogicException [When this abstract method is not implemented]
+     *
+     * @codeCoverageIgnore
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {

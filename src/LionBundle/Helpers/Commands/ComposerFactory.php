@@ -89,6 +89,8 @@ class ComposerFactory
      * @param array<int, string> $extensions [Extensions that should be ignored]
      *
      * @return ComposerFactory
+     *
+     * @codeCoverageIgnore
      */
     public function libraries(stdClass $composerJson, array $extensions): ComposerFactory
     {
@@ -145,6 +147,8 @@ class ComposerFactory
      * @param array<int, string> $extensions [Extensions that should be ignored]
      *
      * @return ComposerFactory
+     *
+     * @codeCoverageIgnore
      */
     public function librariesDev(stdClass $composerJson, array $extensions): ComposerFactory
     {

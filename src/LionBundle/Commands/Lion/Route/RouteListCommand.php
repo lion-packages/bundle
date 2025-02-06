@@ -62,7 +62,7 @@ class RouteListCommand extends Command
     /**
      * [List of defined Middleware]
      *
-     * @var array<Middleware> $configMiddleware
+     * @var array<int, Middleware> $configMiddleware
      */
     private array $configMiddleware = [];
 
@@ -111,6 +111,8 @@ class RouteListCommand extends Command
      *
      * @throws LogicException [When this abstract method is not implemented]
      * @throws GuzzleException
+     *
+     * @codeCoverageIgnore
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {

@@ -4,13 +4,20 @@ declare(strict_types=1);
 
 namespace Tests\Commands\Lion\Route;
 
+use DI\DependencyException;
+use DI\NotFoundException;
 use Lion\Bundle\Commands\Lion\New\RulesCommand;
 use Lion\Bundle\Commands\Lion\Route\PostmanCollectionCommand;
-use Lion\Command\Command;
-use Lion\Command\Kernel;
+use Lion\Bundle\Helpers\Commands\ClassFactory;
+use Lion\Bundle\Helpers\Commands\PostmanCollection;
 use Lion\Dependency\Injection\Container;
+use Lion\Files\Store;
+use Lion\Helpers\Str;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
+use ReflectionException;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class PostmanCollectionCommandTest extends Test
@@ -20,22 +27,38 @@ class PostmanCollectionCommandTest extends Test
 
     private CommandTester $commandTester;
     private CommandTester $commandTesterRule;
+    private PostmanCollectionCommand $postmanCollectionCommand;
 
+    /**
+     * @throws DependencyException
+     * @throws NotFoundException
+     * @throws ReflectionException
+     */
     protected function setUp(): void
     {
         $this->createDirectory(self::URL_PATH);
 
-        $application = (new Kernel)->getApplication();
+        $application = new Application();
 
         $container = new Container();
 
-        $application->add($container->resolve(RulesCommand::class));
+        /** @var RulesCommand $rulesCommand */
+        $rulesCommand = $container->resolve(RulesCommand::class);
 
-        $application->add($container->resolve(PostmanCollectionCommand::class));
+        /** @var PostmanCollectionCommand $postmanCollectionCommand */
+        $postmanCollectionCommand = $container->resolve(PostmanCollectionCommand::class);
+
+        $this->postmanCollectionCommand = $postmanCollectionCommand;
+
+        $application->add($rulesCommand);
+
+        $application->add($this->postmanCollectionCommand);
 
         $this->commandTester = new CommandTester($application->find('route:postman'));
 
         $this->commandTesterRule = new CommandTester($application->find('new:rule'));
+
+        $this->initReflection($this->postmanCollectionCommand);
     }
 
     protected function tearDown(): void
@@ -43,6 +66,62 @@ class PostmanCollectionCommandTest extends Test
         $this->rmdirRecursively(self::URL_PATH);
 
         $this->rmdirRecursively('./app/');
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
+    public function setClassFactory(): void
+    {
+        $this->assertInstanceOf(
+            PostmanCollectionCommand::class,
+            $this->postmanCollectionCommand->setClassFactory(new ClassFactory())
+        );
+
+        $this->assertInstanceOf(ClassFactory::class, $this->getPrivateProperty('classFactory'));
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
+    public function setPostmanCollection(): void
+    {
+        $this->assertInstanceOf(
+            PostmanCollectionCommand::class,
+            $this->postmanCollectionCommand->setPostmanCollection(new PostmanCollection())
+        );
+
+        $this->assertInstanceOf(PostmanCollection::class, $this->getPrivateProperty('postmanCollection'));
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
+    public function setStore(): void
+    {
+        $this->assertInstanceOf(
+            PostmanCollectionCommand::class,
+            $this->postmanCollectionCommand->setStore(new Store())
+        );
+
+        $this->assertInstanceOf(Store::class, $this->getPrivateProperty('store'));
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
+    public function setStr(): void
+    {
+        $this->assertInstanceOf(
+            PostmanCollectionCommand::class,
+            $this->postmanCollectionCommand->setStr(new Str())
+        );
+
+        $this->assertInstanceOf(Str::class, $this->getPrivateProperty('str'));
     }
 
     #[Testing]

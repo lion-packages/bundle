@@ -17,9 +17,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Generate a rule
  *
- * @property ClassFactory $classFactory [ClassFactory class object]
- * @property Store $store [Store class object]
- *
  * @package Lion\Bundle\Commands\Lion\New
  */
 class RulesCommand extends Command

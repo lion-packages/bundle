@@ -7,7 +7,6 @@ use Faker\Factory;
 use Faker\Generator;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Psr7\Response;
 use Lion\Bundle\Enums\LogTypeEnum;
 use Lion\Bundle\Helpers\Env;
 use Lion\Bundle\Helpers\Fake;

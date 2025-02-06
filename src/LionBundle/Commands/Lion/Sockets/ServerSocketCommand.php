@@ -23,6 +23,8 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
  * Initialize a socket
  *
  * @package Lion\Bundle\Commands\Lion\Sockets
+ *
+ * @codeCoverageIgnore
  */
 class ServerSocketCommand extends Command
 {
