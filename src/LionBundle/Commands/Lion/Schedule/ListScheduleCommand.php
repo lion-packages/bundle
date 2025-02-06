@@ -19,9 +19,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Displays a table with available scheduled tasks
  *
- * @property Store $store [Store class object]
- * @property Str $str [Str class object]
- *
  * @package Lion\Bundle\Commands\Lion\Schedule
  */
 class ListScheduleCommand extends Command
@@ -90,20 +87,23 @@ class ListScheduleCommand extends Command
         if (isError($this->store->exist('app/Console/Cron/'))) {
             $output->writeln($this->errorOutput("\t>> SCHEDULE: no scheduled tasks defined"));
 
-            return Command::FAILURE;
+            return parent::FAILURE;
         }
 
-        /** @var array<ScheduleInterface> $rows */
+        /** @var array<int, array<int, string>|TableSeparator> $rows */
         $rows = [];
+
+        /** @var non-empty-string $crontPath */
+        $crontPath = $this->store->normalizePath('Cron/');
 
         $size = 0;
 
         foreach ($this->store->getFiles('app/Console/Cron/') as $file) {
             if (isSuccess($this->store->validate([$file], ['php']))) {
                 $namespace = $this->store->getNamespaceFromFile(
-                    (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? str_replace('\\', '/', $file) : $file),
+                    $this->store->normalizePath($file),
                     'App\\Console\\Cron\\',
-                    $this->store->normalizePath('Cron/')
+                    $crontPath
                 );
 
                 /** @var ScheduleInterface $cronClass */
@@ -134,9 +134,12 @@ class ListScheduleCommand extends Command
                 /** @var Command $command */
                 $command = new $config['command']();
 
+                /** @var string $commandName */
+                $commandName = $command->getName();
+
                 $rows[] = [
                     $this->errorOutput($config['cron']),
-                    $this->warningOutput($command->getName()),
+                    $this->warningOutput($commandName),
                     $this->warningOutput('' === $options ? 'N/A' : $options),
                     $this->infoOutput($config['logName']),
                 ];

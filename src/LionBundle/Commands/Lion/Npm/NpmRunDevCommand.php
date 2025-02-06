@@ -54,6 +54,6 @@ class NpmRunDevCommand extends MenuCommand
 
         ProcessCommand::run("cd resources/{$project} && npm run dev");
 
-        return Command::SUCCESS;
+        return parent::SUCCESS;
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lion\Bundle\Commands\Lion\New;
 
 use DI\Attribute\Inject;
+use Exception;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Files\Store;
@@ -16,11 +17,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Generate a Request class
- *
- * @property ClassFactory $classFactory [Fabricates the data provided to
- * manipulate information (folder, class, namespace)]
- * @property Store $store [Manipulate system files]
- * @property Str $str [Modify and construct strings with different formats]
  *
  * @package Lion\Bundle\Commands\Lion\New
  */
@@ -39,7 +35,8 @@ class ModelCommand extends Command
     ];
 
     /**
-     * [ClassFactory class object]
+     * [Fabricates the data provided to manipulate information (folder, class,
+     * namespace)]
      *
      * @var ClassFactory $classFactory
      */
@@ -109,12 +106,14 @@ class ModelCommand extends Command
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int [0 if everything went fine, or an exit code]
+     * @return int
      *
+     * @throws Exception
      * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        /** @var string $model */
         $model = $input->getArgument('model');
 
         $this->classFactory->classFactory('app/Models/', $model);
@@ -152,8 +151,16 @@ class ModelCommand extends Command
             );
 
         foreach (self::METHODS as $method) {
+            /** @var string $methodName */
+            $methodName = $this->str
+                ->of($method . $class)
+                ->replace('Model', '')
+                ->replace('model', '')
+                ->concat('DB')
+                ->get();
+
             $customMethod = $this->classFactory->getCustomMethod(
-                $this->str->of($method . $class)->replace('Model', '')->replace('model', '')->concat('DB')->get(),
+                $methodName,
                 $method === 'read' ? 'stdClass|array|DatabaseCapsuleInterface' : 'stdClass',
                 '',
                 (
@@ -174,6 +181,6 @@ class ModelCommand extends Command
 
         $output->writeln($this->successOutput("\t>>  MODEL: the '{$namespace}\\{$class}' model has been generated"));
 
-        return Command::SUCCESS;
+        return parent::SUCCESS;
     }
 }

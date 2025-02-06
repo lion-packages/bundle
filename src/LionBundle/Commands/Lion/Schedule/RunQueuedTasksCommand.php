@@ -8,7 +8,6 @@ use DI\Attribute\Inject;
 use Lion\Bundle\Enums\LogTypeEnum;
 use Lion\Bundle\Helpers\Commands\Schedule\TaskQueue;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
-use Lion\Command\Command;
 use Lion\Dependency\Injection\Container;
 use LogicException;
 use Symfony\Component\Console\Input\InputInterface;
@@ -85,6 +84,7 @@ class RunQueuedTasksCommand extends MenuCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        /** @phpstan-ignore-next-line */
         while (true) {
             $json = $this->taskQueue->get();
 
@@ -96,6 +96,12 @@ class RunQueuedTasksCommand extends MenuCommand
                 continue;
             }
 
+            /** @var array{
+             *     id: string,
+             *     namespace: string,
+             *     method: string,
+             *     data: array<string, mixed>
+             * } $queue */
             $queue = json_decode($json, true);
 
             $output->writeln(
@@ -104,19 +110,20 @@ class RunQueuedTasksCommand extends MenuCommand
                 )
             );
 
-            logger(
-                "TASK: {$queue['id']}",
-                LogTypeEnum::INFO,
-                json_decode(json([
-                    'class' => "{$queue['namespace']}::{$queue['method']}",
-                    'params' => $queue['data'],
-                    'return' => $this->container->callMethod(
-                        $this->container->resolve($queue['namespace']),
-                        $queue['method'],
-                        ['queue' => $queue, ...$queue['data']]
-                    )
-                ]), true)
-            );
+            $json = [
+                'class' => "{$queue['namespace']}::{$queue['method']}",
+                'params' => $queue['data'],
+                'return' => $this->container->callMethod(
+                    $this->container->resolve($queue['namespace']),
+                    $queue['method'],
+                    [
+                        'queue' => $queue,
+                        ...$queue['data'],
+                    ],
+                ),
+            ];
+
+            logger("TASK: {$queue['id']}", LogTypeEnum::INFO, $json);
 
             $output->writeln(
                 $this->successOutput(
@@ -124,7 +131,5 @@ class RunQueuedTasksCommand extends MenuCommand
                 )
             );
         }
-
-        return Command::SUCCESS;
     }
 }

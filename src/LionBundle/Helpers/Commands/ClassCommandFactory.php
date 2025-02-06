@@ -6,16 +6,14 @@ namespace Lion\Bundle\Helpers\Commands;
 
 use Closure;
 use DI\Attribute\Inject;
+use DI\DependencyException;
+use DI\NotFoundException;
 use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
 use stdClass;
 
 /**
  * Allows adding several ClassFactory type objects for multiple management
- *
- * @property Container $container [Container to generate dependency injection]
- * @property Store $store [Manipulate system files]
- * @property array<ClassFactory> $factories [List of available factories]
  *
  * @package Lion\Bundle\Helpers\Commands
  */
@@ -38,7 +36,7 @@ class ClassCommandFactory
     /**
      * [List of available factories]
      *
-     * @var array<ClassFactory> $factories;
+     * @var array<string, ClassFactory> $factories;
      */
     private array $factories;
 
@@ -67,13 +65,16 @@ class ClassCommandFactory
      */
     public function execute(Closure $process): int
     {
-        return $process($this, $this->store);
+        /** @var int $return */
+        $return = $process($this, $this->store);
+
+        return $return;
     }
 
     /**
      * Gets the list of defined factories
      *
-     * @return array<ClassFactory>
+     * @return array<string, ClassFactory>
      */
     public function getFactories(): array
     {
@@ -86,11 +87,17 @@ class ClassCommandFactory
      * @param array<string> $factories [List of available factories]
      *
      * @return ClassCommandFactory
+     *
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     public function setFactories(array $factories): ClassCommandFactory
     {
         foreach ($factories as $classFactory) {
-            $this->factories[$classFactory] = $this->container->resolve(ClassFactory::class);
+            /** @var ClassFactory $classFactoryInstance */
+            $classFactoryInstance = $this->container->resolve(ClassFactory::class);
+
+            $this->factories[$classFactory] = $classFactoryInstance;
         }
 
         return $this;
@@ -111,8 +118,9 @@ class ClassCommandFactory
     /**
      * Gets the data obtained with the ClassFactory(folder, class, namespace)
      *
-     * @param ClassFactory $classFactory [description]
-     * @param array $data [description]
+     * @param ClassFactory $classFactory [Fabricates the data provided to
+     * manipulate information (folder, class, namespace)]
+     * @param array{ path: string, class: string } $data [Class data]
      *
      * @return stdClass
      */
@@ -123,7 +131,7 @@ class ClassCommandFactory
         return (object) [
             'folder' => $classFactory->getFolder(),
             'class' => $classFactory->getClass(),
-            'namespace' => $classFactory->getNamespace()
+            'namespace' => $classFactory->getNamespace(),
         ];
     }
 }

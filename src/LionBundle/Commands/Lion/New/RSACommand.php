@@ -17,22 +17,20 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Generate public and private keys with RSA
  *
- * @property RSA $rsa [RSA class object]
- * @property Store $store [Store class object]
- *
  * @package Lion\Bundle\Commands\Lion\New
  */
 class RSACommand extends Command
 {
     /**
-     * [RSA class object]
+     * [Allows you to generate the required configuration for public and private
+     * keys, has methods that allow you to encrypt and decrypt data with RSA]
      *
      * @var RSA $rsa
      */
     private RSA $rsa;
 
     /**
-     * [Store class object]
+     * [Manipulate system files]
      *
      * @var Store $store
      */
@@ -87,25 +85,37 @@ class RSACommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        /** @var string|null $path */
         $path = $input->getOption('path');
+
+        /** @var string $rsaPrivateKeyBits */
+        $rsaPrivateKeyBits = $_ENV['RSA_PRIVATE_KEY_BITS'];
+
+        /** @var string $rsaPath */
+        $rsaPath = $_ENV['RSA_PATH'];
+
+        /** @var string $rsaDefaultMd */
+        $rsaDefaultMd = $_ENV['RSA_DEFAULT_MD'];
 
         $this->rsa->config([
             'urlPath' => null === $path ? $this->rsa->getUrlPath() : storage_path($path),
-            'rsaConfig' => $_ENV['RSA_PATH'],
-            'rsaPrivateKeyBits' => (int) $_ENV['RSA_PRIVATE_KEY_BITS'],
-            'rsaDefaultMd' => $_ENV['RSA_DEFAULT_MD']
+            'rsaConfig' => $rsaPath,
+            'rsaPrivateKeyBits' => (int) $rsaPrivateKeyBits,
+            'rsaDefaultMd' => $rsaDefaultMd,
         ]);
 
-        $this->store->folder($this->rsa->getUrlPath());
+        $urlPath = $this->rsa->getUrlPath();
+
+        $this->store->folder($urlPath);
 
         $this->rsa->create();
 
         $output->writeln($this->warningOutput("\t>>  RSA KEYS: public and private"));
 
-        $output->writeln($this->successOutput("\t>>  RSA KEYS: Exported in {$this->rsa->getUrlPath()}public.key"));
+        $output->writeln($this->successOutput("\t>>  RSA KEYS: Exported in {$urlPath}public.key"));
 
-        $output->writeln($this->successOutput("\t>>  RSA KEYS: Exported in {$this->rsa->getUrlPath()}private.key"));
+        $output->writeln($this->successOutput("\t>>  RSA KEYS: Exported in {$urlPath}private.key"));
 
-        return Command::SUCCESS;
+        return parent::SUCCESS;
     }
 }

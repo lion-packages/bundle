@@ -15,6 +15,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Initialize the local server with PHP
  *
  * @package Lion\Bundle\Commands\Lion
+ *
+ * @codeCoverageIgnore
  */
 class ServerCommand extends Command
 {
@@ -51,8 +53,13 @@ class ServerCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        /** @phpstan-ignore-next-line */
+        $time = number_format((microtime(true) - LION_START), 3);
+
+        /** @var string $port */
         $port = $input->getOption('port');
 
+        /** @var string $host */
         $host = $input->getOption('host');
 
         $url = "{$host}:{$port}";
@@ -63,7 +70,7 @@ class ServerCommand extends Command
 
         $output->write($this->successOutput("\nLion-Framework "));
 
-        $output->writeln("ready in " . number_format((microtime(true) - LION_START), 3) . " ms\n");
+        $output->writeln("ready in {$time} ms\n");
 
         $output->writeln("\t>>  LOCAL: Server running on " . $this->warningOutput("{$link}"));
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lion\Bundle\Commands\Lion\New;
 
 use DI\Attribute\Inject;
+use Exception;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Files\Store;
@@ -81,15 +82,20 @@ class SHFileCommand extends Command
      *
      * @return int
      *
+     * @throws Exception
      * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        /** @var string $sh */
         $sh = $input->getArgument('sh');
 
         $this->store->folder('storage/sh/');
 
-        $this->classFactory->create($sh, ClassFactory::SH_EXTENSION, 'storage/sh/')->add("#!/bin/bash\n")->close();
+        $this->classFactory
+            ->create($sh, ClassFactory::SH_EXTENSION, 'storage/sh/')
+            ->add("#!/bin/bash\n")
+            ->close();
 
         chmod("storage/sh/{$sh}.sh", 0755);
 

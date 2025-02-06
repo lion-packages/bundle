@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lion\Bundle\Commands\Lion\New;
 
 use DI\Attribute\Inject;
+use Exception;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Files\Store;
@@ -15,10 +16,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Generate an Service
- *
- * @property ClassFactory $classFactory [Fabricates the data provided to
- * manipulate information (folder, class, namespace)]
- * @property Store $store [Store class object]
  *
  * @package App\Console\Commands
  */
@@ -33,7 +30,7 @@ class ServiceCommand extends Command
     private ClassFactory $classFactory;
 
     /**
-     * [Store class object]
+     * [Manipulate system files]
      *
      * @var Store $store
      */
@@ -83,10 +80,12 @@ class ServiceCommand extends Command
      *
      * @return int
      *
+     * @throws Exception
      * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        /** @var string $service */
         $service = $input->getArgument('service');
 
         $this->classFactory->classFactory('app/Http/Services/', $service);
@@ -128,6 +127,6 @@ class ServiceCommand extends Command
             $this->successOutput("\t>>  SERVICE: the '{$namespace}\\{$class}' service has been generated")
         );
 
-        return Command::SUCCESS;
+        return parent::SUCCESS;
     }
 }

@@ -7,7 +7,6 @@ namespace Lion\Bundle\Commands\Lion\Npm;
 use DI\Attribute\Inject;
 use Exception;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
-use Lion\Command\Command;
 use Lion\Command\Kernel;
 use LogicException;
 use Symfony\Component\Console\Input\InputArgument;
@@ -16,9 +15,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Uninstall the Vite.JS project dependencies
- *
- * @property Kernel $Kernel [Adds functions to execute commands, allows you to
- * create an Application object to run applications with your custom commands]
  *
  * @package Lion\Bundle\Commands\Lion\Npm
  */
@@ -75,14 +71,26 @@ class NpmUninstallCommand extends MenuCommand
     {
         $project = $this->selectedProject($input, $output);
 
-        $packages = $this->arr->of($input->getArgument('packages'))->join(' ');
+        /** @var array<int, string> $packagesList */
+        $packagesList = $input->getArgument('packages');
 
-        $packages = $this->str->of($packages)->trim()->get();
+        $packagesString = $this->arr
+            ->of($packagesList)
+            ->join(' ');
 
-        $this->kernel->execute(
-            $this->str->of("cd resources/{$project}/ && npm uninstall {$packages}")->trim()->get(),
-            false
-        );
+        /** @var string $packages */
+        $packages = $this->str
+            ->of($packagesString)
+            ->trim()
+            ->get();
+
+        /** @var string $command */
+        $command = $this->str
+            ->of("cd resources/{$project}/ && npm uninstall {$packages}")
+            ->trim()
+            ->get();
+
+        $this->kernel->execute($command, false);
 
         $output->writeln($this->warningOutput("\n\t>>  RESOURCES: {$project}"));
 
@@ -90,6 +98,6 @@ class NpmUninstallCommand extends MenuCommand
             "\t>>  RESOURCES: dependencies have been uninstalled: {$this->arr->of(explode(' ', $packages))->join(', ')}"
         ));
 
-        return Command::SUCCESS;
+        return parent::SUCCESS;
     }
 }

@@ -17,7 +17,7 @@ use Lion\Request\Response;
 /**
  * [Object with properties captured in an HTTP request]
  */
-define('REQUEST', (new Request())->capture());
+define('REQUEST', new Request()->capture());
 
 /**
  * [Object of Response class to generate response objects]
