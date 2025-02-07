@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lion\Bundle\Commands\Lion\New;
 
 use DI\Attribute\Inject;
+use Exception;
 use Lion\Bundle\Helpers\Commands\ClassCommandFactory;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
@@ -20,10 +21,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Generate a Controller class
- *
- * @property ClassCommandFactory $classCommandFactory [ClassCommandFactory class
- * object]
- * @property Str $str [Modify and construct strings with different formats]
  *
  * @package Lion\Bundle\Commands\Lion\New
  */
@@ -63,7 +60,7 @@ class ControllerCommand extends Command
     private Str $str;
 
     /**
-     * [ClassCommandFactory class object]
+     * [Allows adding several ClassFactory type objects for multiple management]
      *
      * @var ClassCommandFactory $classCommandFactory
      */
@@ -114,19 +111,23 @@ class ControllerCommand extends Command
      *
      * @return int
      *
-     * @throws LogicException [When this abstract method is not implemented]
+     * @throws Exception
      * @throws ExceptionInterface
+     * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         return $this->classCommandFactory
             ->setFactories(['controller', 'model'])
             ->execute(function (ClassCommandFactory $classFactory, Store $store) use ($input, $output): int {
+                /** @var string $controller */
                 $controller = $input->getArgument('controller');
 
+                /** @var string|null $model */
                 $model = $input->getOption('model');
 
                 if (null === $model) {
+                    /** @var string $model */
                     $model = $this->str
                         ->of($model)
                         ->concat($controller)
@@ -150,25 +151,40 @@ class ControllerCommand extends Command
                     'class' => $model,
                 ]);
 
-                $camelModelClass = lcfirst($dataModel->class);
+                /** @var string $controllerClass */
+                $controllerClass = $dataController->class;
 
-                $store->folder($dataController->folder);
+                /** @var string $controllerPath */
+                $controllerPath = $dataController->folder;
+
+                /** @var string $controllerNamespace */
+                $controllerNamespace = $dataController->namespace;
+
+                /** @var string $modelClass */
+                $modelClass = $dataModel->class;
+
+                /** @var string $modelNamespace */
+                $modelNamespace = $dataModel->namespace;
+
+                $camelModelClass = lcfirst($modelClass);
+
+                $store->folder($controllerPath);
 
                 $factoryController
-                    ->create($dataController->class, ClassFactory::PHP_EXTENSION, $dataController->folder)
+                    ->create($controllerClass, ClassFactory::PHP_EXTENSION, $controllerPath)
                     ->add(
                         <<<PHP
                         <?php
 
                         declare(strict_types=1);
 
-                        namespace {$dataController->namespace};
+                        namespace {$controllerNamespace};
 
                         PHP
                     );
 
                 if ('none' != $model) {
-                    $factoryController->add("\nuse {$dataModel->namespace}\\{$dataModel->class};");
+                    $factoryController->add("\nuse {$modelNamespace}\\{$modelClass};");
                 }
 
                 $factoryController
@@ -179,19 +195,25 @@ class ControllerCommand extends Command
                         use stdClass;
 
                         /**
-                         * Description of Controller '{$dataController->class}'
+                         * Description of Controller '{$controllerClass}'
                          *
-                         * @package {$dataController->namespace}
+                         * @package {$controllerNamespace}
                          */
-                        class {$dataController->class}
+                        class {$controllerClass}
                         {\n
                         EOT
                     );
 
                 foreach (self::METHODS as $method) {
-                    $customMethod = '';
+                    /** @var string $controllerMethod */
+                    $controllerMethod = $this->str
+                        ->of($method . $controllerClass)
+                        ->replace('Controller', '')
+                        ->replace('controller', '')
+                        ->get();
 
                     if ('none' != $model) {
+                        /** @var string $modelMethod */
                         $modelMethod = $this->str
                             ->of('return ')
                             ->concat('$')
@@ -200,24 +222,20 @@ class ControllerCommand extends Command
                             ->get();
 
                         $modelMethod .= $this->str
-                            ->of($method . $dataModel->class)
+                            ->of($method . $modelClass)
                             ->replace('Model', '')
                             ->replace('model', '')
                             ->concat('DB();')
                             ->get();
 
                         $customMethod = $factoryController->getCustomMethod(
-                            $this->str
-                                ->of($method . $dataController->class)
-                                ->replace('Controller', '')
-                                ->replace('controller', '')
-                                ->get(),
+                            $controllerMethod,
                             $method === 'read' ? 'stdClass|array|DatabaseCapsuleInterface' : 'stdClass',
                             (
                                 in_array($method, ['update', 'delete'], true) ? (
-                                    $dataModel->class . ' $' . $camelModelClass . ', string $id'
+                                    $modelClass . ' $' . $camelModelClass . ', string $id'
                                 ) : (
-                                    $dataModel->class . ' $' . $camelModelClass
+                                    $modelClass . ' $' . $camelModelClass
                                 )
                             ),
                             $modelMethod,
@@ -226,11 +244,7 @@ class ControllerCommand extends Command
                         );
                     } else {
                         $customMethod = $factoryController->getCustomMethod(
-                            $this->str
-                                ->of($method . $dataController->class)
-                                ->replace('Controller', '')
-                                ->replace('controller', '')
-                                ->get(),
+                            $controllerMethod,
                             $method === 'read' ? 'stdClass|array|DatabaseCapsuleInterface' : 'stdClass',
                             (in_array($method, ['update', 'delete'], true) ? 'string $id' : ''),
                             $method === 'read' ? "return [];" : "return success();",
@@ -244,20 +258,28 @@ class ControllerCommand extends Command
 
                 $factoryController->add("}\n")->close();
 
-                $output->writeln($this->warningOutput("\t>>  CONTROLLER: {$dataController->class}"));
+                $output->writeln($this->warningOutput("\t>>  CONTROLLER: {$controllerClass}"));
 
                 $output->writeln(
                     $this->successOutput(
-                        "\t>>  CONTROLLER: the '{$dataController->namespace}\\{$dataController->class}' " .
+                        "\t>>  CONTROLLER: the '{$controllerNamespace}\\{$controllerClass}' " .
                         'controller has been generated'
                     )
                 );
 
                 if ('none' != $model) {
-                    $this->getApplication()->find('new:model')->run(new ArrayInput(['model' => $model]), $output);
+                    $arrayInput = [
+                        'model' => $model,
+                    ];
+
+                    /** @phpstan-ignore-next-line */
+                    $this
+                        ->getApplication()
+                        ->find('new:model')
+                        ->run(new ArrayInput($arrayInput), $output);
                 }
 
-                return Command::SUCCESS;
+                return parent::SUCCESS;
             });
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lion\Bundle\Commands\Lion\New;
 
 use DI\Attribute\Inject;
+use Exception;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Files\Store;
@@ -15,9 +16,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Generate an interface
- *
- * @property ClassFactory $classFactory [ClassFactory class object]
- * @property Store $store [Store class object]
  *
  * @package Lion\Bundle\Commands\Lion\New
  */
@@ -81,10 +79,12 @@ class InterfaceCommand extends Command
      *
      * @return int
      *
+     * @throws Exception
      * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        /** @var string $interface */
         $interface = $input->getArgument('interface');
 
         $this->classFactory->classFactory('app/Interfaces/', $interface);
@@ -128,6 +128,6 @@ class InterfaceCommand extends Command
             )
         );
 
-        return Command::SUCCESS;
+        return parent::SUCCESS;
     }
 }

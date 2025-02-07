@@ -8,6 +8,7 @@ use DI\Attribute\Inject;
 use Lion\Command\Command;
 use Lion\Helpers\Arr;
 use Lion\Database\Drivers\MySQL as DB;
+use LogicException;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -15,14 +16,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Gets a list of all available database connections
  *
- * @property Arr $arr [Arr class object]
- *
  * @package Lion\Bundle\Commands\Lion\DB
  */
 class ShowDatabasesCommand extends Command
 {
     /**
-     * [Arr class object]
+     * [Modify and build arrays with different indexes or values]
      *
      * @var Arr $arr
      */
@@ -61,7 +60,7 @@ class ShowDatabasesCommand extends Command
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int [0 if everything went fine, or an exit code]
+     * @return int
      *
      * @throws LogicException [When this abstract method is not implemented]
      */
@@ -74,27 +73,17 @@ class ShowDatabasesCommand extends Command
         $listConnections = [];
 
         foreach ($connections as $connectionName => $connection) {
-            $item = [
+            $listConnections[] = [
                 'connectionName' => $this->infoOutput($connectionName),
                 'type' => "<fg=#FFB63E>{$connection['type']}</>",
                 'host' => $connection['host'],
                 'port' => $connection['port'],
-                'dbname' => '',
+                'dbname' => $connection['dbname'],
                 'user' => $connection['user']
             ];
-
-            $item['dbname'] = $connection['dbname'];
-
-            // if ($connection['dbname'] === $connections['default']) {
-            //     $item['dbname'] = "{$connection['dbname']} <fg=#FFB63E>(default)</>";
-            // } else {
-            //     $item['dbname'] = $connection['dbname'];
-            // }
-
-            $listConnections[] = $item;
         }
 
-        (new Table($output))
+        new Table($output)
             ->setHeaderTitle('<info> DATABASE CONNECTIONS </info>')
             ->setHeaders([
                 'CONNECTION NAME',
@@ -115,6 +104,6 @@ class ShowDatabasesCommand extends Command
             ->setRows($listConnections)
             ->render();
 
-        return Command::SUCCESS;
+        return parent::SUCCESS;
     }
 }

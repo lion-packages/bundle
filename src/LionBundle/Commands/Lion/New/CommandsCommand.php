@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lion\Bundle\Commands\Lion\New;
 
 use DI\Attribute\Inject;
+use Exception;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Files\Store;
@@ -16,22 +17,20 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Generate a Command class to execute commands
  *
- * @property ClassFactory $classFactory [ClassFactory class object]
- * @property Store $store [Store class object]
- *
  * @package Lion\Bundle\Commands\Lion\New
  */
 class CommandsCommand extends Command
 {
     /**
-     * [ClassFactory class object]
+     * [Fabricates the data provided to manipulate information (folder, class,
+     * namespace)]
      *
      * @var ClassFactory $classFactory
      */
     private ClassFactory $classFactory;
 
     /**
-     * [Store class object]
+     * [Manipulate system files]
      *
      * @var Store $store
      */
@@ -81,10 +80,12 @@ class CommandsCommand extends Command
      *
      * @return int [0 if everything went fine, or an exit code]
      *
+     * @throws Exception
      * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        /** @var string $command */
         $command = $input->getArgument('new-command');
 
         $this->classFactory->classFactory('app/Console/Commands/', $command);
@@ -100,7 +101,7 @@ class CommandsCommand extends Command
         $this->classFactory
             ->create($class, ClassFactory::PHP_EXTENSION, $folder)
             ->add(
-                <<<EOT
+                <<<PHP
                 <?php
 
                 declare(strict_types=1);
@@ -194,7 +195,7 @@ class CommandsCommand extends Command
                     }
                 }
 
-                EOT
+                PHP
             )
             ->close();
 
@@ -204,6 +205,6 @@ class CommandsCommand extends Command
             $this->successOutput("\t>>  COMMAND: the '{$namespace}\\{$class}' command has been generated")
         );
 
-        return Command::SUCCESS;
+        return parent::SUCCESS;
     }
 }
