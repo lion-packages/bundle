@@ -4,23 +4,21 @@ declare(strict_types=1);
 
 namespace Tests\Helpers\Commands\Migrations;
 
+use DI\DependencyException;
+use DI\NotFoundException;
 use Lion\Bundle\Commands\Lion\New\MigrationCommand;
-use Lion\Bundle\Helpers\Commands\ClassFactory;
-use Lion\Bundle\Helpers\Commands\Migrations\MigrationFactory;
 use Lion\Bundle\Helpers\Commands\Migrations\Migrations;
-use Lion\Bundle\Helpers\DatabaseEngine;
 use Lion\Bundle\Interface\Migrations\StoreProcedureInterface;
 use Lion\Bundle\Interface\Migrations\TableInterface;
 use Lion\Bundle\Interface\Migrations\ViewInterface;
 use Lion\Bundle\Interface\MigrationUpInterface;
-use Lion\Command\Command;
+use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
-use Lion\Helpers\Arr;
-use Lion\Helpers\Str;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
 use ReflectionException;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class MigrationsTest extends Test
@@ -29,7 +27,8 @@ class MigrationsTest extends Test
     private const string CLASS_NAME = 'TestMigration';
     private const string CLASS_NAMESPACE_TABLE = 'Database\\Migrations\\LionDatabase\\MySQL\\Tables\\';
     private const string CLASS_NAMESPACE_VIEW = 'Database\\Migrations\\LionDatabase\\MySQL\\Views\\';
-    private const string CLASS_NAMESPACE_STORE_PROCEDURE = 'Database\\Migrations\\LionDatabase\\MySQL\\StoreProcedures\\';
+    private const string CLASS_NAMESPACE_STORE_PROCEDURE =
+        'Database\\Migrations\\LionDatabase\\MySQL\\StoreProcedures\\';
     private const string URL_PATH_MYSQL_TABLE = './database/Migrations/LionDatabase/MySQL/Tables/';
     private const string URL_PATH_MYSQL_VIEW = './database/Migrations/LionDatabase/MySQL/Views/';
     private const string URL_PATH_MYSQL_STORE_PROCEDURE = './database/Migrations/LionDatabase/MySQL/StoreProcedures/';
@@ -41,25 +40,23 @@ class MigrationsTest extends Test
     private Store $store;
 
     /**
+     * @throws NotFoundException
      * @throws ReflectionException
+     * @throws DependencyException
      */
     protected function setUp(): void
     {
         $this->store = new Store();
 
-        $this->migrations = (new Migrations())
-            ->setStore($this->store);
+        $container = new Container();
 
-        $migrationCommand = (new MigrationCommand())
-            ->setArr(new Arr())
-            ->setStore($this->store)
-            ->setStr(new Str())
-            ->setClassFactory(
-                (new ClassFactory())
-                    ->setStore($this->store)
-            )
-            ->setMigrationFactory(new MigrationFactory())
-            ->setDatabaseEngine(new DatabaseEngine());
+        /** @var Migrations $migrations */
+        $migrations = $container->resolve(Migrations::class);
+
+        $this->migrations = $migrations;
+
+        /** @var MigrationCommand $migrationCommand */
+        $migrationCommand = $container->resolve(MigrationCommand::class);
 
         $application = new Application();
 
@@ -89,71 +86,138 @@ class MigrationsTest extends Test
     public function orderList(): void
     {
         $commandExecute = $this->commandTester
-            ->setInputs(['0', '0'])
-            ->execute(['migration' => self::MIGRATION_NAME]);
+            ->setInputs([
+                '0',
+                '0',
+            ])
+            ->execute([
+                'migration' => self::MIGRATION_NAME,
+            ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH_MYSQL_TABLE . self::FILE_NAME);
 
-        $objClass = new (self::CLASS_NAMESPACE_TABLE . self::CLASS_NAME)();
+        /** @phpstan-ignore-next-line */
+        $tableMigration = new (self::CLASS_NAMESPACE_TABLE . self::CLASS_NAME)();
 
-        $this->assertInstances($objClass, [
+        /** @phpstan-ignore-next-line */
+        $this->assertInstances($tableMigration, [
             MigrationUpInterface::class,
             TableInterface::class,
         ]);
 
-        $namespace = $this->store->getNamespaceFromFile(
+        $tableNamespace = $this->store->getNamespaceFromFile(
             (self::URL_PATH_MYSQL_TABLE . self::FILE_NAME),
             'Database\\Migrations\\',
             'Migrations/'
         );
 
+        /** @var array<string, MigrationUpInterface> $migrations */
         $migrations = [
-            $namespace => $objClass
+            $tableNamespace => $tableMigration,
         ];
 
         $list = $this->migrations->orderList($migrations);
 
-        $this->assertIsArray($list);
         $this->assertNotEmpty($list);
-        $this->assertArrayHasKey($namespace, $list);
+        $this->assertArrayHasKey($tableNamespace, $list);
         $this->assertSame($migrations, $list);
-        $this->assertIsObject($list[$namespace]);
-        $this->assertInstanceOf(TableInterface::class, $list[$namespace]);
+        $this->assertInstanceOf(TableInterface::class, $list[$tableNamespace]);
     }
 
     #[Testing]
     public function getMigrations(): void
     {
         $commandExecute = $this->commandTester
-            ->setInputs(['0', '0'])
-            ->execute(['migration' => self::MIGRATION_NAME]);
+            ->setInputs([
+                '0',
+                '0',
+            ])
+            ->execute([
+                'migration' => self::MIGRATION_NAME,
+            ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH_MYSQL_TABLE . self::FILE_NAME);
 
-        $objClass = new (self::CLASS_NAMESPACE_TABLE . self::CLASS_NAME)();
+        /** @phpstan-ignore-next-line */
+        $tableMigration = new (self::CLASS_NAMESPACE_TABLE . self::CLASS_NAME)();
 
-        $this->assertInstances($objClass, [
+        /** @phpstan-ignore-next-line */
+        $this->assertInstances($tableMigration, [
             MigrationUpInterface::class,
             TableInterface::class,
         ]);
 
+        $commandExecute = $this->commandTester
+            ->setInputs([
+                '0',
+                '1',
+            ])
+            ->execute([
+                'migration' => self::MIGRATION_NAME,
+            ]);
+
+        $this->assertSame(Command::SUCCESS, $commandExecute);
+        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
+        $this->assertFileExists(self::URL_PATH_MYSQL_VIEW . self::FILE_NAME);
+
+        /** @phpstan-ignore-next-line */
+        $viewMigration = new (self::CLASS_NAMESPACE_VIEW . self::CLASS_NAME)();
+
+        /** @phpstan-ignore-next-line */
+        $this->assertInstances($viewMigration, [
+            MigrationUpInterface::class,
+            ViewInterface::class,
+        ]);
+
+        $commandExecute = $this->commandTester
+            ->setInputs([
+                '0',
+                '2',
+            ])
+            ->execute([
+                'migration' => self::MIGRATION_NAME,
+            ]);
+
+        $this->assertSame(Command::SUCCESS, $commandExecute);
+        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
+        $this->assertFileExists(self::URL_PATH_MYSQL_STORE_PROCEDURE . self::FILE_NAME);
+
+        /** @phpstan-ignore-next-line */
+        $viewMigration = new (self::CLASS_NAMESPACE_STORE_PROCEDURE . self::CLASS_NAME)();
+
+        /** @phpstan-ignore-next-line */
+        $this->assertInstances($viewMigration, [
+            MigrationUpInterface::class,
+            StoreProcedureInterface::class,
+        ]);
+
         $list = $this->migrations->getMigrations();
 
-        $this->assertIsArray($list);
         $this->assertNotEmpty($list);
         $this->assertArrayHasKey(TableInterface::class, $list);
         $this->assertArrayHasKey(ViewInterface::class, $list);
         $this->assertArrayHasKey(StoreProcedureInterface::class, $list);
         $this->assertNotEmpty($list[TableInterface::class]);
-        $this->assertisobject($list[TableInterface::class][self::CLASS_NAMESPACE_TABLE . self::CLASS_NAME]);
+        $this->assertNotEmpty($list[ViewInterface::class]);
+        $this->assertNotEmpty($list[StoreProcedureInterface::class]);
 
         $this->assertInstanceOf(
             TableInterface::class,
             $list[TableInterface::class][self::CLASS_NAMESPACE_TABLE . self::CLASS_NAME]
+        );
+
+        $this->assertInstanceOf(
+            ViewInterface::class,
+            $list[ViewInterface::class][self::CLASS_NAMESPACE_VIEW . self::CLASS_NAME]
+        );
+
+        $this->assertInstanceOf(
+            StoreProcedureInterface::class,
+            $list[StoreProcedureInterface::class][self::CLASS_NAMESPACE_STORE_PROCEDURE . self::CLASS_NAME]
         );
     }
 

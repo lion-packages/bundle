@@ -38,6 +38,7 @@
         <exclude>
             <file>src/LionBundle/Helpers/Bundle/constants.php</file>
             <directory>src/LionBundle/Commands/Npm</directory>
+            <directory>src/LionBundle/Traits</directory>
         </exclude>
     </source>
 

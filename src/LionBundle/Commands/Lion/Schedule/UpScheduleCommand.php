@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lion\Bundle\Commands\Lion\Schedule;
 
 use DI\Attribute\Inject;
+use Exception;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\Schedule\Schedule;
 use Lion\Bundle\Interface\ScheduleInterface;
@@ -19,11 +20,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Add scheduled tasks in crontab
- *
- * @property ClassFactory $classFactory [Fabricates the data provided to
- * manipulate information (folder, class, namespace)]
- * @property Store $store [Manipulate system files]
- * @property Str $str [Modify and construct strings with different formats]
  *
  * @package Lion\Bundle\Commands\Lion\Schedule
  */
@@ -100,8 +96,9 @@ class UpScheduleCommand extends Command
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int [0 if everything went fine, or an exit code]
+     * @return int
      *
+     * @throws Exception
      * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -109,18 +106,21 @@ class UpScheduleCommand extends Command
         if (isError($this->store->exist('app/Console/Cron/'))) {
             $output->writeln($this->errorOutput("\t>> SCHEDULE: no scheduled tasks defined"));
 
-            return Command::FAILURE;
+            return parent::FAILURE;
         }
 
         /** @var array<int, ScheduleInterface> $files */
         $files = [];
+
+        /** @var non-empty-string $cronPath */
+        $cronPath = $this->store->normalizePath('Cron/');
 
         foreach ($this->store->getFiles('app/Console/Cron/') as $file) {
             if (isSuccess($this->store->validate([$file], ['php']))) {
                 $namespace = $this->store->getNamespaceFromFile(
                     $this->store->normalizePath($file),
                     'App\\Console\\Cron\\',
-                    $this->store->normalizePath('Cron/')
+                    $cronPath
                 );
 
                 /** @var ScheduleInterface $cronClass */
@@ -133,7 +133,7 @@ class UpScheduleCommand extends Command
         if (empty($files)) {
             $output->writeln($this->infoOutput("\t>> SCHEDULE: No scheduled tasks available"));
 
-            return Command::SUCCESS;
+            return parent::SUCCESS;
         }
 
         $data = [];
@@ -166,13 +166,19 @@ class UpScheduleCommand extends Command
             /** @var Command $commandObject */
             $commandObject = new $config['command']();
 
-            $command = "{$config['cron']} lion cd {$_ENV['CRONTAB_PROJECT_PATH']} && ";
+            /** @var string $crontabProjectPath */
+            $crontabProjectPath = env('CRONTAB_PROJECT_PATH');
 
-            $command .= "{$_ENV['CRONTAB_PHP_PATH']} {$_ENV['CRONTAB_PROJECT_PATH']}lion {$commandObject->getName()}";
+            /** @var string $phpPath */
+            $phpPath = env('CRONTAB_PHP_PATH');
+
+            $command = "{$config['cron']} lion cd {$crontabProjectPath} && ";
+
+            $command .= "{$phpPath} {$crontabProjectPath}lion {$commandObject->getName()}";
 
             $command .= '' === $options ? '' : " {$options}";
 
-            $command .= " >> {$_ENV['CRONTAB_PROJECT_PATH']}storage/logs/cron/{$config['logName']}.log 2>&1";
+            $command .= " >> {$crontabProjectPath}storage/logs/cron/{$config['logName']}.log 2>&1";
 
             $data[] = [
                 $config['command'],
@@ -196,7 +202,10 @@ class UpScheduleCommand extends Command
             }
         }
 
-        $output->writeln($this->warningOutput("\t>> CRONTAB PATH: " . env('CRONTAB_PATH') . 'crontab'));
+        /** @var string $crontabPath */
+        $crontabPath = env('CRONTAB_PATH');
+
+        $output->writeln($this->warningOutput("\t>> CRONTAB PATH: {$crontabPath}crontab"));
 
         $output->writeln($this->infoOutput("\t>> CRON: sudo service cron status"));
 
@@ -204,12 +213,12 @@ class UpScheduleCommand extends Command
 
         $output->writeln($this->infoOutput("\t>> CRON: sudo service cron start"));
 
-        (new Table($output))
+        new Table($output)
             ->setHeaderTitle($this->successOutput(' CRONTAB '))
             ->setHeaders(['CLASS', 'CRON'])
             ->setRows($data)
             ->render();
 
-        return Command::SUCCESS;
+        return parent::SUCCESS;
     }
 }

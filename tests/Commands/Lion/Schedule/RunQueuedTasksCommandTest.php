@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Commands\Lion\Schedule;
 
+use DI\DependencyException;
+use DI\NotFoundException;
 use Lion\Bundle\Commands\Lion\Schedule\RunQueuedTasksCommand;
 use Lion\Bundle\Helpers\Commands\Schedule\TaskQueue;
 use Lion\Dependency\Injection\Container;
@@ -18,11 +20,15 @@ class RunQueuedTasksCommandTest extends Test
 
     /**
      * @throws ReflectionException
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     protected function setUp(): void
     {
-        $this->runQueuedTasksCommand = (new RunQueuedTasksCommand())
-            ->setContainer(new Container());
+        /** @var RunQueuedTasksCommand $runQueuedTasksCommand */
+        $runQueuedTasksCommand = new Container()->resolve(RunQueuedTasksCommand::class);
+
+        $this->runQueuedTasksCommand = $runQueuedTasksCommand;
 
         $application = new Application();
 
@@ -31,6 +37,9 @@ class RunQueuedTasksCommandTest extends Test
         $this->initReflection($this->runQueuedTasksCommand);
     }
 
+    /**
+     * @throws ReflectionException
+     */
     #[Testing]
     public function setContainer(): void
     {
@@ -42,6 +51,9 @@ class RunQueuedTasksCommandTest extends Test
         $this->assertInstanceOf(Container::class, $this->getPrivateProperty('container'));
     }
 
+    /**
+     * @throws ReflectionException
+     */
     #[Testing]
     public function setTaskQueue(): void
     {

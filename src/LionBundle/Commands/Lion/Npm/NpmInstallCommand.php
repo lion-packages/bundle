@@ -7,7 +7,6 @@ namespace Lion\Bundle\Commands\Lion\Npm;
 use DI\Attribute\Inject;
 use Exception;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
-use Lion\Command\Command;
 use Lion\Command\Kernel;
 use LogicException;
 use Symfony\Component\Console\Input\InputArgument;
@@ -16,8 +15,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Install the Vite.JS project dependencies
- *
- * @property Kernel $Kernel [kernel class object]
  *
  * @package Lion\Bundle\Commands\Lion\Npm
  */
@@ -73,10 +70,26 @@ class NpmInstallCommand extends MenuCommand
     {
         $project = $this->selectedProject($input, $output);
 
-        $packages = $this->str->of($this->arr->of($input->getArgument('packages'))->join(' '))->trim()->get();
+        /** @var array<int, string> $packagesList */
+        $packagesList = $input->getArgument('packages');
 
-        $this->kernel
-            ->execute($this->str->of("cd resources/{$project}/ && npm install {$packages}")->trim()->get(), false);
+        /** @var string $packages */
+        $packages = $this->str
+            ->of(
+                $this->arr
+                    ->of($packagesList)
+                    ->join(' ')
+            )
+            ->trim()
+            ->get();
+
+        /** @var string $command */
+        $command = $this->str
+            ->of("cd resources/{$project}/ && npm install {$packages}")
+            ->trim()
+            ->get();
+
+        $this->kernel->execute($command, false);
 
         $output->writeln($this->warningOutput("\n\t>>  RESOURCES: {$project}"));
 
@@ -88,6 +101,6 @@ class NpmInstallCommand extends MenuCommand
             $output->writeln($this->successOutput("\t>>  RESOURCES: dependencies have been installed"));
         }
 
-        return Command::SUCCESS;
+        return parent::SUCCESS;
     }
 }

@@ -7,7 +7,6 @@ use Faker\Factory;
 use Faker\Generator;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Psr7\Response;
 use Lion\Bundle\Enums\LogTypeEnum;
 use Lion\Bundle\Helpers\Env;
 use Lion\Bundle\Helpers\Fake;
@@ -20,6 +19,7 @@ use Lion\Security\JWT;
 use Monolog\Handler\StreamHandler;
 use Monolog\Level;
 use Monolog\Logger;
+use Psr\Http\Message\ResponseInterface;
 
 if (!function_exists('request')) {
     /**
@@ -32,7 +32,7 @@ if (!function_exists('request')) {
      */
     function request(string $key = ''): mixed
     {
-        $data = (new Request())->capture();
+        $data = new Request()->capture();
 
         if (!empty($key)) {
             return $data->$key ?? null;
@@ -63,11 +63,11 @@ if (!function_exists('fetch')) {
      * @param Fetch $fetch [Defines parameters for consuming HTTP requests with
      * GuzzleHttp]
      *
-     * @return Response
+     * @return ResponseInterface
      *
      * @throws GuzzleException
      */
-    function fetch(Fetch $fetch): Response
+    function fetch(Fetch $fetch): ResponseInterface
     {
         $client = new Client(
             null === $fetch->getFetchConfiguration() ? [] : $fetch->getFetchConfiguration()->getConfiguration()
@@ -87,6 +87,7 @@ if (!function_exists('storage_path')) {
      */
     function storage_path(string $path): string
     {
+        /** @phpstan-ignore-next-line */
         return !IS_INDEX ? "storage/{$path}" : "../storage/{$path}";
     }
 }
@@ -101,6 +102,7 @@ if (!function_exists('public_path')) {
      */
     function public_path(string $path): string
     {
+        /** @phpstan-ignore-next-line */
         return !IS_INDEX ? "public/{$path}" : $path;
     }
 }
@@ -226,7 +228,7 @@ if (!function_exists('logger')) {
      *
      * @param string $message [Message or content to add to the log record]
      * @param LogTypeEnum $logType [Log type]
-     * @param array $data [data to add to the log record]
+     * @param array<string, mixed> $data [data to add to the log record]
      *
      * @return void
      */
@@ -239,9 +241,9 @@ if (!function_exists('logger')) {
 
         $path = storage_path('logs/monolog/');
 
-        $fileName = "{$path}lion-" . Carbon::now()->format('Y-m-d') . '.log';
+        $fileName = "{$path}lion-" . now()->format('Y-m-d') . '.log';
 
-        (new Store())->folder($path);
+        new Store()->folder($path);
 
         $logger = new Logger('log');
 
@@ -268,10 +270,18 @@ if (!function_exists('json')) {
      * @param mixed $values [Values to convert to JSON]
      *
      * @return string
+     *
+     * @throws JsonException [If JSON format encoding fails]
      */
     function json(mixed $values): string
     {
-        return json_encode($values);
+        $json = json_encode($values);
+
+        if (!$json) {
+            throw new JsonException(json_last_error_msg(), 500);
+        }
+
+        return $json;
     }
 }
 
@@ -279,14 +289,18 @@ if (!function_exists('isError')) {
     /**
      * Function to check if a response object comes with errors
      *
-     * @param stdClass|array $response [Response object]
+     * @param mixed $response [Response object]
      *
      * @return bool
      */
-    function isError(stdClass|array $response): bool
+    function isError(mixed $response): bool
     {
         if (is_array($response)) {
             $response = (object) $response;
+        }
+
+        if (!$response instanceof stdClass) {
+            return false;
         }
 
         if (empty($response->status)) {
@@ -301,14 +315,18 @@ if (!function_exists('isSuccess')) {
     /**
      * Function to check if a response object is successful
      *
-     * @param stdClass|array $response [Response object]
+     * @param mixed $response [Response object]
      *
      * @return bool
      */
-    function isSuccess(stdClass|array $response): bool
+    function isSuccess(mixed $response): bool
     {
         if (is_array($response)) {
             $response = (object) $response;
+        }
+
+        if (!$response instanceof stdClass) {
+            return false;
         }
 
         if (empty($response->status)) {
@@ -327,7 +345,7 @@ if (!function_exists('jwt')) {
      */
     function jwt(): string|bool
     {
-        return (new JWT())->getJWT();
+        return new JWT()->getJWT();
     }
 }
 

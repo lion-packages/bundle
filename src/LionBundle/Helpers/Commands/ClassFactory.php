@@ -5,16 +5,13 @@ declare(strict_types=1);
 namespace Lion\Bundle\Helpers\Commands;
 
 use DI\Attribute\Inject;
+use Exception;
 use Lion\Files\Store;
 use stdClass;
 
 /**
  * Fabricates the data provided to manipulate information (folder, class,
  * namespace)
- *
- * @property Store $store [Manipulate system files]
- * @property string $namespace [Class namespace]
- * @property string $class [Class name]
  *
  * @package Lion\Bundle\Helpers\Commands
  */
@@ -99,6 +96,8 @@ class ClassFactory
      * that protocol is registered as a network URL, PHP will check to make sure
      * that allow_url_fopen is enabled. If it is switched off, PHP will emit a
      * warning and the fopen call will fail]
+     *
+     * @var resource $content
      */
     private $content;
 
@@ -133,6 +132,8 @@ class ClassFactory
      * @param string $filePermissions [File permissions]
      *
      * @return ClassFactory
+     *
+     * @throws Exception [If the file could not be opened]
      */
     public function create(
         string $fileName,
@@ -140,7 +141,13 @@ class ClassFactory
         string $path = '',
         string $filePermissions = 'w+b'
     ): ClassFactory {
-        $this->content = fopen($this->store->normalizePath("{$path}{$fileName}.{$extension}"), $filePermissions);
+        $content = fopen($this->store->normalizePath("{$path}{$fileName}.{$extension}"), $filePermissions);
+
+        if (false === $content) {
+            throw new Exception("Could not open file: {$path}{$fileName}.{$extension}", 1001);
+        }
+
+        $this->content = $content;
 
         return $this;
     }

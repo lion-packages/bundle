@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lion\Bundle\Commands\Lion\Route;
 
 use DI\Attribute\Inject;
+use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\PostmanCollection;
@@ -20,38 +21,41 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Generate JSON object structure for POSTMAN collections
  *
- * @property ClassFactory $classFactory [ClassFactory class object]
- * @property PostmanCollection $postmanCollection [PostmanCollection class object]
- * @property Store $store [Store class object]
- * @property Str $str [Str class object]
+ * @property ClassFactory $classFactory [Fabricates the data provided to
+ * manipulate information (folder, class, namespace)]
+ * @property PostmanCollection $postmanCollection [Generate structures to create
+ * Postman collections]
+ * @property Store $store [Manipulate system files]
+ * @property Str $str [Modify and construct strings with different formats]
  *
  * @package Lion\Bundle\Commands\Lion\Route
  */
 class PostmanCollectionCommand extends Command
 {
     /**
-     * [ClassFactory class object]
+     * [Fabricates the data provided to manipulate information (folder, class,
+     * namespace)]
      *
      * @var ClassFactory $classFactory
      */
     private ClassFactory $classFactory;
 
     /**
-     * [PostmanCollection class object]
+     * [Generate structures to create Postman collections]
      *
      * @var PostmanCollection $postmanCollection
      */
     private PostmanCollection $postmanCollection;
 
     /**
-     * [Store class object]
+     * [Manipulate system files]
      *
      * @var Store $store
      */
     private Store $store;
 
     /**
-     * [Str class object]
+     * [Modify and construct strings with different formats]
      *
      * @var Str $str
      */
@@ -60,7 +64,18 @@ class PostmanCollectionCommand extends Command
     /**
      * [List of defined web routes]
      *
-     * @var array $routes
+     * @var array{
+     *     array<string, array{
+     *          filters: array<int, string>,
+     *          handler: array{
+     *              controller: bool|array{
+     *                  name: string,
+     *                  function: string
+     *              },
+     *              callback: bool
+     *          }
+     *     }>
+     * } $routes
      */
     private array $routes;
 
@@ -70,6 +85,20 @@ class PostmanCollectionCommand extends Command
      * @var string $jsonName
      */
     private string $jsonName;
+
+    /**
+     * [Server URL]
+     *
+     * @var string $serverUrl
+     */
+    private string $serverUrl;
+
+    /**
+     * [Application Name]
+     *
+     * @var string $appName
+     */
+    private string $appName;
 
     #[Inject]
     public function setClassFactory(ClassFactory $classFactory): PostmanCollectionCommand
@@ -116,6 +145,34 @@ class PostmanCollectionCommand extends Command
     }
 
     /**
+     * Initializes the command after the input has been bound and before the
+     * input is validated
+     *
+     * This is mainly useful when a lot of commands extends one main command
+     * where some things need to be initialized based on the input arguments and
+     * options
+     *
+     * @param InputInterface $input [InputInterface is the interface implemented
+     * by all input classes]
+     * @param OutputInterface $output [OutputInterface is the interface
+     * implemented by all Output classes]
+     *
+     * @return void
+     */
+    protected function initialize(InputInterface $input, OutputInterface $output): void
+    {
+        /** @var string $serverUrl */
+        $serverUrl = env('SERVER_URL');
+
+        /** @var string $appName */
+        $appName = env('APP_NAME');
+
+        $this->serverUrl = $serverUrl;
+
+        $this->appName = $appName;
+    }
+
+    /**
      * Executes the current command
      *
      * This method is not abstract because you can use this class
@@ -130,6 +187,7 @@ class PostmanCollectionCommand extends Command
      *
      * @return int
      *
+     * @throws Exception
      * @throws LogicException [When this abstract method is not implemented]
      * @throws GuzzleException
      */
@@ -137,6 +195,7 @@ class PostmanCollectionCommand extends Command
     {
         $this->fetchRoutes();
 
+        /** @phpstan-ignore-next-line */
         $this->postmanCollection->addRoutes($this->routes);
 
         $this->postmanCollection->generateItems();
@@ -149,21 +208,25 @@ class PostmanCollectionCommand extends Command
             'variable' => [
                 [
                     'key' => 'base_url',
-                    'value' => $_ENV['SERVER_URL'],
+                    'value' => $this->serverUrl,
                     'type' => 'string'
                 ]
             ],
             'info' => [
-                'name' => $_ENV['APP_NAME'],
+                'name' => $this->appName,
                 'schema' => 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json'
             ],
+            /** @phpstan-ignore-next-line */
             'item' => $this->postmanCollection->createCollection($this->postmanCollection->getItems()),
             'event' => []
         ];
 
+        /** @var non-empty-string $json */
+        $json = json_encode($jsonData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+
         $this->classFactory
             ->create($this->jsonName, 'json', $path)
-            ->add(json_encode($jsonData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES))
+            ->add($json)
             ->add("\n")
             ->close();
 
@@ -183,25 +246,29 @@ class PostmanCollectionCommand extends Command
      */
     private function fetchRoutes(): void
     {
-        $this->postmanCollection->init($_ENV['SERVER_URL']);
+        /** @var string $serverHash */
+        $serverHash = env('SERVER_HASH');
 
-        $this->jsonName = $this->str
+        $this->postmanCollection->init($this->serverUrl);
+
+        /** @var string $jsonName */
+        $jsonName = $this->str
             ->of(now()->format('Y_m_d'))
             ->concat('_lion_collection')
             ->lower()
             ->get();
 
+        $this->jsonName = $jsonName;
+
         $json = fetch(
-            new Fetch(Route::GET, ($_ENV['SERVER_URL'] . '/route-list'), [
+            new Fetch(Route::GET, "{$this->serverUrl}/route-list", [
                 'headers' => [
-                    'Lion-Auth' => $_ENV['SERVER_HASH'],
+                    'Lion-Auth' => $serverHash,
                 ],
             ])
         )
             ->getBody()
             ->getContents();
-
-        $decode = json_decode($json, true);
 
         /**
          * @var array{
@@ -217,7 +284,7 @@ class PostmanCollectionCommand extends Command
          *     }>
          * } $routes
          */
-        $routes = $decode;
+        $routes = json_decode($json, true);
 
         $this->routes = $routes;
 

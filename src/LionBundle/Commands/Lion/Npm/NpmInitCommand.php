@@ -8,17 +8,12 @@ use DI\Attribute\Inject;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Command\Kernel;
 use LogicException;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Initialize a project with Vite.JS/Astro
- *
- * @property Kernel $Kernel [Adds functions to execute commands, allows you to
- * create an Application object to run applications with your custom commands]
- * @property string $project [Project name]
  *
  * @package Lion\Bundle\Commands\Lion\Npm
  */
@@ -148,18 +143,24 @@ class NpmInitCommand extends MenuCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->project = $this->str
-            ->of($input->getArgument('project'))
+        /** @var string $projectName */
+        $projectName = $input->getArgument('project');
+
+        /** @var string $project */
+        $project = $this->str
+            ->of($projectName)
             ->trim()
             ->replace('_', '-')
             ->replace(' ', '-')
             ->trim()
             ->get();
 
+        $this->project = $project;
+
         if (isSuccess($this->store->exist("resources/{$this->project}/"))) {
             $output->writeln($this->warningOutput("\t>>  RESOURCES: a resource with this name already exists"));
 
-            return Command::FAILURE;
+            return parent::FAILURE;
         }
 
         $this->store->folder('resources/');
@@ -172,7 +173,7 @@ class NpmInitCommand extends MenuCommand
             "\t>>  RESOURCES: 'resources/{$this->project}/' project has been generated successfully"
         ));
 
-        return Command::SUCCESS;
+        return parent::SUCCESS;
     }
 
     /**
@@ -187,12 +188,14 @@ class NpmInitCommand extends MenuCommand
         if ('Astro' === $projectType) {
             $this->createAstroProject();
         } else {
+            /** @var string $template */
             $template = $this->str
                 ->of($this->selectedTemplate($this->input, $this->output, self::VITE_TEMPLATES))
                 ->lower()
                 ->get();
 
             if ('electron' === $template) {
+                /** @var string $electronTemplate */
                 $electronTemplate = $this->str
                     ->of($this->selectedTemplate($this->input, $this->output, self::VITE_ELECTRON_TEMPLATES))
                     ->lower()

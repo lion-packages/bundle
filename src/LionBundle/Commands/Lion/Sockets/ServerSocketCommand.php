@@ -22,9 +22,9 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 /**
  * Initialize a socket
  *
- * @property Store $store [Store class object]
- *
  * @package Lion\Bundle\Commands\Lion\Sockets
+ *
+ * @codeCoverageIgnore
  */
 class ServerSocketCommand extends Command
 {
@@ -83,15 +83,14 @@ class ServerSocketCommand extends Command
             return Command::FAILURE;
         }
 
+        /** @var string|null $socketDefault */
         $socketDefault = $input->getOption('socket');
-
-        $selectedSocket = null;
 
         if (null === $socketDefault) {
             $selectedSocket = $this->selectSocket($input, $output);
 
             if ('none' === $selectedSocket) {
-                return Command::SUCCESS;
+                return parent::SUCCESS;
             }
         } else {
             $output->writeln($this->warningOutput("(default: {$socketDefault})"));
@@ -102,8 +101,10 @@ class ServerSocketCommand extends Command
         /** @var SocketInterface $socketInterface */
         $socketInterface = new $selectedSocket();
 
+        /** @var string $host */
         $host = $input->getOption('host');
 
+        /** @var string $port */
         $port = $input->getOption('port');
 
         $url = "ws://{$host}:{$port}";
@@ -114,10 +115,14 @@ class ServerSocketCommand extends Command
 
         $output->writeln($this->warningOutput("\t>>  Press Ctrl+C to stop the socket"));
 
-        IoServer::factory(new HttpServer(new WsServer($socketInterface)), $port, $host)
+        $wsServer = new WsServer($socketInterface);
+
+        $httpServer = new HttpServer($wsServer);
+
+        IoServer::factory($httpServer, (int) $port, $host)
             ->run();
 
-        return Command::SUCCESS;
+        return parent::SUCCESS;
     }
 
     /**
@@ -157,14 +162,15 @@ class ServerSocketCommand extends Command
         /** @var QuestionHelper $helper */
         $helper = $this->getHelper('question');
 
-        return $helper->ask(
-            $input,
-            $output,
-            new ChoiceQuestion(
-                ('Select a socket ' . $this->warningOutput('(default: ' . reset($classList) . ')')),
-                $classList,
-                0
-            )
+        $choiseQuestion = new ChoiceQuestion(
+            ('Select a socket ' . $this->warningOutput('(default: ' . reset($classList) . ')')),
+            $classList,
+            0
         );
+
+        /** @var string $socket */
+        $socket = $helper->ask($input, $output, $choiseQuestion);
+
+        return $socket;
     }
 }

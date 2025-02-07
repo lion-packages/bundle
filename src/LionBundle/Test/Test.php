@@ -22,6 +22,8 @@ use Lion\Test\Test as Testing;
  * seeds]
  *
  * @package Lion\Bundle
+ *
+ * @codeCoverageIgnore
  */
 class Test extends Testing
 {

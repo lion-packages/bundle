@@ -4,15 +4,20 @@ declare(strict_types=1);
 
 namespace Tests\Commands\Lion\Schedule;
 
+use DI\DependencyException;
+use DI\NotFoundException;
 use Lion\Bundle\Commands\Lion\New\CommandsCommand;
 use Lion\Bundle\Commands\Lion\New\CronCommand;
 use Lion\Bundle\Commands\Lion\Schedule\ListScheduleCommand;
 use Lion\Bundle\Interface\ScheduleInterface;
-use Lion\Command\Command;
-use Lion\Command\Kernel;
 use Lion\Dependency\Injection\Container;
+use Lion\Files\Store;
+use Lion\Helpers\Str;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
+use ReflectionException;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class ListScheduleCommandTest extends Test
@@ -32,18 +37,35 @@ class ListScheduleCommandTest extends Test
     private CommandTester $commandTester;
     private CommandTester $commandTesterCommand;
     private CommandTester $commandTesterList;
+    private ListScheduleCommand $listScheduleCommand;
 
+    /**
+     * @throws NotFoundException
+     * @throws DependencyException
+     * @throws ReflectionException
+     */
     protected function setUp(): void
     {
-        $application = (new Kernel())->getApplication();
+        $application = new Application();
 
         $container = new Container();
 
-        $application->add($container->resolve(CommandsCommand::class));
+        /** @var CommandsCommand $commandsCommand */
+        $commandsCommand = $container->resolve(CommandsCommand::class);
 
-        $application->add($container->resolve(CronCommand::class));
+        /** @var CronCommand $cronCommand */
+        $cronCommand = $container->resolve(CronCommand::class);
 
-        $application->add($container->resolve(ListScheduleCommand::class));
+        /** @var ListScheduleCommand $listScheduleCommand */
+        $listScheduleCommand = $container->resolve(ListScheduleCommand::class);
+
+        $this->listScheduleCommand = $listScheduleCommand;
+
+        $application->add($commandsCommand);
+
+        $application->add($cronCommand);
+
+        $application->add($this->listScheduleCommand);
 
         $this->commandTesterCommand = new CommandTester($application->find('new:command'));
 
@@ -52,11 +74,33 @@ class ListScheduleCommandTest extends Test
         $this->commandTesterList = new CommandTester($application->find('schedule:list'));
 
         $this->createDirectory(self::URL_PATH);
+
+        $this->initReflection($this->listScheduleCommand);
     }
 
     protected function tearDown(): void
     {
         $this->rmdirRecursively('./app/');
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
+    public function setStore(): void
+    {
+        $this->assertInstanceOf(ListScheduleCommand::class, $this->listScheduleCommand->setStore(new Store()));
+        $this->assertInstanceOf(Store::class, $this->getPrivateProperty('store'));
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
+    public function setStr(): void
+    {
+        $this->assertInstanceOf(ListScheduleCommand::class, $this->listScheduleCommand->setStr(new Str()));
+        $this->assertInstanceOf(Str::class, $this->getPrivateProperty('str'));
     }
 
     #[Testing]
@@ -73,10 +117,16 @@ class ListScheduleCommandTest extends Test
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH . self::FILE_NAME);
 
-        /** @var ScheduleInterface $cronObject */
+        /** @phpstan-ignore-next-line */
         $cronObject = new (self::OBJECT_NAME)();
 
-        $this->assertInstances($cronObject, [self::OBJECT_NAME, ScheduleInterface::class]);
+        /** @phpstan-ignore-next-line */
+        $this->assertInstances($cronObject, [
+            self::OBJECT_NAME,
+            ScheduleInterface::class,
+        ]);
+
+        /** @phpstan-ignore-next-line */
         $this->assertContains('schedule', get_class_methods($cronObject));
         $this->assertSame(Command::SUCCESS, $this->commandTesterList->execute([]));
         $this->assertStringContainsString(self::CONFIGURE_OUTPUT_MESSAGE, $this->commandTesterList->getDisplay());

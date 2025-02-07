@@ -25,10 +25,6 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 /**
  * Command class for selecting different types of selection menu
  *
- * @property Arr $arr [Modify and build arrays with different indexes or values]
- * @property Store $store [Manipulate system files]
- * @property Str $str [Modify and construct strings with different formats]
- *
  * @package Lion\Bundle\Helpers\Commands\Selection
  */
 class MenuCommand extends Command
@@ -490,6 +486,10 @@ class MenuCommand extends Command
     protected function getTables(string $connectionName): array|stdClass
     {
         $connections = Connection::getConnections();
+
+        if (empty($connections[$connectionName])) {
+            return [];
+        }
 
         if (Driver::MYSQL === $connections[$connectionName]['type']) {
             return MySQL::connection($connectionName)

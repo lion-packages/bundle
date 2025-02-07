@@ -4,18 +4,26 @@ declare(strict_types=1);
 
 namespace Tests\Helpers\Commands\Selection;
 
+use DI\DependencyException;
+use DI\NotFoundException;
 use Exception;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
-use Lion\Command\Command;
+use Lion\Database\Connection;
 use Lion\Database\Drivers\MySQL as DB;
 use Lion\Dependency\Injection\Container;
+use Lion\Files\Store;
+use Lion\Helpers\Arr;
+use Lion\Helpers\Str;
 use Lion\Request\Http;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test as Testing;
 use ReflectionException;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tests\Providers\Helpers\MenuCommandProviderTrait;
@@ -35,12 +43,17 @@ class MenuCommandTest extends Test
 
     /**
      * @throws ReflectionException
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     protected function setUp(): void
     {
         $this->container = new Container();
 
-        $this->menuCommand = $this->container->resolve(MenuCommand::class);
+        /** @var MenuCommand $menuCommand */
+        $menuCommand = $this->container->resolve(MenuCommand::class);
+
+        $this->menuCommand = $menuCommand;
 
         $this->initReflection($this->menuCommand);
     }
@@ -52,6 +65,55 @@ class MenuCommandTest extends Test
         $this->rmdirRecursively(self::RESOURCES_PATH);
     }
 
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
+    public function setArr(): void
+    {
+        $this->assertInstanceOf(MenuCommand::class, $this->menuCommand->setArr(new Arr()));
+        $this->assertInstanceOf(Arr::class, $this->getPrivateProperty('arr'));
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
+    public function setStr(): void
+    {
+        $this->assertInstanceOf(MenuCommand::class, $this->menuCommand->setStr(new Str()));
+        $this->assertInstanceOf(Str::class, $this->getPrivateProperty('str'));
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
+    public function initialize(): void
+    {
+        $this->getPrivateMethod('initialize', [
+            'input' => new StringInput('input'),
+            'output' => new BufferedOutput(),
+        ]);
+
+        $this->assertInstanceOf(StringInput::class, $this->getPrivateProperty('input'));
+        $this->assertInstanceOf(BufferedOutput::class, $this->getPrivateProperty('output'));
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
+    public function setStore(): void
+    {
+        $this->assertInstanceOf(MenuCommand::class, $this->menuCommand->setStore(new Store()));
+        $this->assertInstanceOf(Store::class, $this->getPrivateProperty('store'));
+    }
+
+    /**
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
     #[Testing]
     public function selectedProjectNotAvailable(): void
     {
@@ -78,9 +140,12 @@ class MenuCommandTest extends Test
             }
         };
 
+        /** @var MenuCommand $command */
+        $command = $this->container->resolve($command::class);
+
         $application = new Application();
 
-        $application->add($this->container->resolve($command::class));
+        $application->add($command);
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -276,16 +341,15 @@ class MenuCommandTest extends Test
         $this->assertArrayNotHasKey('SELECTED_CONNECTION', $_ENV);
     }
 
+    /**
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
     #[Testing]
     public function selectConnectionDefault(): void
     {
         $command = new class extends MenuCommand
         {
-            private const array TYPES = [
-                'js',
-                'ts',
-            ];
-
             protected function configure(): void
             {
                 $this->setName('test:menu:command');
@@ -301,21 +365,29 @@ class MenuCommandTest extends Test
             }
         };
 
+        /** @var MenuCommand $command */
+        $command = $this->container->resolve($command::class);
+
         $connections = DB::getConnections();
 
         $this->assertArrayHasKey('lion_database_test', $connections);
+        $this->assertArrayHasKey('lion_database_postgres', $connections);
 
-        $backupConnection = $connections['lion_database_test'];
+        $lionDatabaseTest = $connections['lion_database_test'];
+
+        $lionDatabasePostgres = $connections['lion_database_postgres'];
 
         DB::removeConnection('lion_database_test');
+        DB::removeConnection('lion_database_postgres');
 
         $connections = DB::getConnections();
 
         $this->assertArrayNotHasKey('lion_database_test', $connections);
+        $this->assertArrayNotHasKey('lion_database_postgres', $connections);
 
         $application = new Application();
 
-        $application->add($this->container->resolve($command::class));
+        $application->add($command);
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -327,7 +399,8 @@ class MenuCommandTest extends Test
 
         $this->assertArrayNotHasKey('SELECTED_CONNECTION', $_ENV);
 
-        DB::addConnection('lion_database_test', $backupConnection);
+        DB::addConnection('lion_database_test', $lionDatabaseTest);
+        DB::addConnection('lion_database_postgres', $lionDatabasePostgres);
 
         $connections = DB::getConnections();
 
@@ -459,5 +532,76 @@ class MenuCommandTest extends Test
         $this->assertStringContainsString("(View)", $commandTester->getDisplay());
         $this->assertSame(Command::SUCCESS, $commandTester->setInputs(["2"])->execute([]));
         $this->assertStringContainsString("(Store-Procedure)", $commandTester->getDisplay());
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
+    public function getTableColumnsIsEmpty(): void
+    {
+        $columns = $this->getPrivateMethod('getTableColumns', [
+            'driver' => 'not-exists',
+            'selectedConnection' => 'test',
+            'entity' => 'test',
+        ]);
+
+        $this->assertIsArray($columns);
+        $this->assertEmpty($columns);
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
+    public function getTableForeignsIsEmpty(): void
+    {
+        $foreigns = $this->getPrivateMethod('getTableForeigns', [
+            'driver' => 'not-exists',
+            'selectedConnection' => 'test',
+            'entity' => 'test',
+        ]);
+
+        $this->assertIsArray($foreigns);
+        $this->assertEmpty($foreigns);
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
+    public function getTablesConnectionNotExists(): void
+    {
+        $foreigns = $this->getPrivateMethod('getTables', [
+            'connectionName' => 'err-connection',
+        ]);
+
+        $this->assertIsArray($foreigns);
+        $this->assertEmpty($foreigns);
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
+    public function getTablesIsEmpty(): void
+    {
+        Connection::addConnection('err-connection', [
+            'type' => 'not-exists',
+            'host' => 'mysql',
+            'port' => 3306,
+            'dbname' => 'lion_database',
+            'user' => 'root',
+            'password' => 'lion',
+        ]);
+
+        $foreigns = $this->getPrivateMethod('getTables', [
+            'connectionName' => 'err-connection',
+        ]);
+
+        $this->assertIsArray($foreigns);
+        $this->assertEmpty($foreigns);
+
+        Connection::removeConnection('err-connection');
     }
 }

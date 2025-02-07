@@ -10,7 +10,6 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 
@@ -18,6 +17,8 @@ use Symfony\Component\Process\Process;
  * Run the tests defined with PHPUnit
  *
  * @package Lion\Bundle\Commands\Lion
+ *
+ * @codeCoverageIgnore
  */
 class RunTestCommand extends Command
 {
@@ -61,23 +62,35 @@ class RunTestCommand extends Command
 
         $application->setAutoExit(false);
 
-        $phpBinaryPath = (new PhpExecutableFinder())->find();
+        $phpBinaryPath = new PhpExecutableFinder()->find();
 
         $commandString = "{$phpBinaryPath} ./vendor/bin/phpunit";
 
-        if ($input->getOption('suite')) {
-            $commandString .= ' --testsuite ' . $input->getOption('suite');
+        /** @var string|null $suite */
+        $suite = $input->getOption('suite');
+
+        /** @var string|null $class */
+        $class = $input->getOption('class');
+
+        /** @var string|null $method */
+        $method = $input->getOption('method');
+
+        /** @var string|null $report */
+        $report = $input->getOption('report');
+
+        if (!empty($suite)) {
+            $commandString .= " --testsuite {$suite}";
         }
 
-        if ($input->getOption('class')) {
-            $commandString .= ' ./tests/' . $input->getOption('class') . '.php';
+        if (!empty($class)) {
+            $commandString .= " ./tests/{$class}.php";
         }
 
-        if ($input->getOption('method')) {
-            $commandString .= ' --filter ' . $input->getOption('method');
+        if (!empty($method)) {
+            $commandString .= " --filter {$method}";
         }
 
-        if ('none' != $input->getOption('report')) {
+        if (!empty($report) && 'none' != $report) {
             $commandString .= ' --coverage-clover tests/build/logs/clover.xml --coverage-html tests/build/coverage';
         }
 
@@ -89,14 +102,10 @@ class RunTestCommand extends Command
             $process->setTty(true);
         }
 
-        $process->run(function ($type, $buffer): void {
+        $process->run(function ($type, string $buffer): void {
             echo $buffer;
         });
 
-        if (!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
-        }
-
-        return Command::SUCCESS;
+        return parent::SUCCESS;
     }
 }

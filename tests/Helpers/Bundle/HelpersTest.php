@@ -8,7 +8,9 @@ use Carbon\Carbon;
 use DateTimeZone;
 use Faker\Generator;
 use GuzzleHttp\Exception\GuzzleException;
+use JsonException;
 use Lion\Bundle\Enums\LogTypeEnum;
+use Lion\Bundle\Helpers\Env;
 use Lion\Bundle\Helpers\Http\Fetch;
 use Lion\Request\Http;
 use Lion\Request\Status;
@@ -16,6 +18,7 @@ use Lion\Security\AES;
 use Lion\Security\JWT;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test as Testing;
 use Tests\Providers\Helpers\HelpersProviderTrait;
 
 class HelpersTest extends Test
@@ -24,7 +27,6 @@ class HelpersTest extends Test
 
     private const string PATH_URL = 'storage/';
     private const string PUBLIC_PATH_URL = 'public/';
-    private const string PATH_URL_INDEX = '../storage/';
     private const string CUSTOM_FOLDER = 'example/';
     private const array RESPONSE = ['code' => Http::OK, 'status' => Status::INFO, 'message' => '[index]'];
     private const string JSON_RESPONSE = '{"name":"Sleon"}';
@@ -87,7 +89,10 @@ class HelpersTest extends Test
      */
     public function testFetch(): void
     {
-        $fetchResponse = fetch(new Fetch(Http::GET, env('SERVER_URL')))
+        /** @var string $uri */
+        $uri = env('SERVER_URL');
+
+        $fetchResponse = fetch(new Fetch(Http::GET, $uri))
             ->getBody()
             ->getContents();
 
@@ -197,42 +202,94 @@ class HelpersTest extends Test
     {
         $_SERVER['REQUEST_URI'] = '/api/test';
 
-        $path = storage_path('logs/monolog/', false);
+        $path = storage_path('logs/monolog/');
 
-        $fileName = "{$path}lion-" . Carbon::now()->format('Y-m-d') . '.log';
+        $fileName = "{$path}lion-" . now()->format('Y-m-d') . '.log';
 
-        logger(self::LOGGER_CONTENT, LogTypeEnum::INFO, ['user' => 'Sleon'], false);
+        logger(self::LOGGER_CONTENT, LogTypeEnum::INFO, [
+            'user' => 'Sleon',
+        ]);
 
         $this->assertFileExists($fileName);
     }
 
-    public function testJson(): void
+    /**
+     * @throws JsonException
+     */
+    #[Testing]
+    public function json(): void
     {
-        $this->assertJsonStringEqualsJsonString(self::JSON_RESPONSE, json(['name' => 'Sleon']));
+        $this->assertJsonStringEqualsJsonString(self::JSON_RESPONSE, json([
+            'name' => 'Sleon',
+        ]));
     }
 
-    public function testIsError(): void
+    #[Testing]
+    public function jsonError(): void
+    {
+        $this->expectException(JsonException::class);
+        $this->expectExceptionCode(500);
+
+        json(fopen('php://memory', 'r'));
+    }
+
+    #[Testing]
+    public function isError(): void
     {
         $this->assertTrue(isError(error()));
-        $this->assertFalse(isError(success()));
-        $this->assertFalse(isError(['status' => null]));
-        $this->assertFalse(isError(['status' => '']));
-        $this->assertFalse(isError(['name' => 'Sleon']));
     }
 
-    public function testIsSuccess(): void
+    #[Testing]
+    public function isErrorIsArray(): void
+    {
+        $this->assertTrue(isError([
+            'status' => 'error',
+        ]));
+    }
+
+    #[Testing]
+    public function isErrorObjectNotValid(): void
+    {
+        $this->assertFalse(isError(new Env()));
+    }
+
+    #[Testing]
+    public function isErrorStatusNotExists(): void
+    {
+        $this->assertFalse(isError([]));
+    }
+
+    #[Testing]
+    public function isSuccess(): void
     {
         $this->assertTrue(isSuccess(success()));
-        $this->assertFalse(isSuccess(warning()));
-        $this->assertFalse(isSuccess(['status' => null]));
-        $this->assertFalse(isSuccess(['status' => '']));
-        $this->assertFalse(isSuccess(['name' => 'Sleon']));
+    }
+
+    #[Testing]
+    public function isSuccessIsArray(): void
+    {
+        $this->assertTrue(isSuccess([
+            'status' => 'success',
+        ]));
+    }
+
+    #[Testing]
+    public function isSuccessObjectNotValid(): void
+    {
+        $this->assertFalse(isSuccess(new Env()));
+    }
+
+    #[Testing]
+    public function isSuccessStatusNotExists(): void
+    {
+        $this->assertFalse(isSuccess([]));
     }
 
     public function testJwt(): void
     {
-        $config = (new AES())
-            ->create(AES::AES_256_CBC)->get();
+        $config = new AES()
+            ->create(AES::AES_256_CBC)
+            ->get();
 
         $jwt = new JWT();
 

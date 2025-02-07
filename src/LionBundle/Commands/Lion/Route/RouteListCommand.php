@@ -11,6 +11,7 @@ use Lion\Bundle\Helpers\Http\Routes;
 use Lion\Command\Command;
 use Lion\Helpers\Arr;
 use Lion\Helpers\Str;
+use Lion\Route\Helpers\Rules;
 use Lion\Route\Middleware;
 use Lion\Route\Route;
 use LogicException;
@@ -22,22 +23,19 @@ use Symfony\Component\Console\Helper\TableSeparator;
 /**
  * Shows a table with the defined web routes and their properties
  *
- * @property Arr $arr [Arr class object]
- * @property Str $str [Str class object]
- *
  * @package Lion\Bundle\Commands\Lion\Route
  */
 class RouteListCommand extends Command
 {
     /**
-     * [Arr class object]
+     * [Modify and build arrays with different indexes or values]
      *
      * @var Arr $arr
      */
     private Arr $arr;
 
     /**
-     * [Str class object]
+     * [Modify and construct strings with different formats]
      *
      * @var Str $str
      */
@@ -46,21 +44,25 @@ class RouteListCommand extends Command
     /**
      * [List of defined web routes]
      *
-     * @var array $routes
+     * @var array{
+     *     array<string, array{
+     *          filters: array<int, string>,
+     *          handler: array{
+     *              controller: bool|array{
+     *                  name: string,
+     *                  function: string
+     *              },
+     *              callback: bool
+     *          }
+     *     }>
+     * } $routes
      */
-    private array $routes = [];
-
-    /**
-     * [List of defined rules]
-     *
-     * @var array $rules
-     */
-    private array $rules = [];
+    private array $routes;
 
     /**
      * [List of defined Middleware]
      *
-     * @var array<Middleware> $configMiddleware
+     * @var array<int, Middleware> $configMiddleware
      */
     private array $configMiddleware = [];
 
@@ -109,6 +111,8 @@ class RouteListCommand extends Command
      *
      * @throws LogicException [When this abstract method is not implemented]
      * @throws GuzzleException
+     *
+     * @codeCoverageIgnore
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -137,7 +141,9 @@ class RouteListCommand extends Command
                     $rows[] = [
                         $this->warningOutput($keyMethods),
                         $routeUrl,
+                        /** @phpstan-ignore-next-line */
                         $method['handler']['controller']['name'],
+                        /** @phpstan-ignore-next-line */
                         $this->warningOutput($method['handler']['controller']['function'])
                     ];
                 }
@@ -146,33 +152,46 @@ class RouteListCommand extends Command
                     foreach ($method['filters'] as $filter) {
                         foreach ($this->configMiddleware as $middleware) {
                             if ($filter === $middleware->getMiddlewareName()) {
+                                /** @var string $methodClass */
+                                $methodClass = $middleware->getMethodClass();
+
                                 $rows[] = [
                                     $this->infoOutput('MIDDLEWARE:'),
                                     $this->infoOutput($filter),
                                     $middleware->getClass(),
-                                    $this->warningOutput($middleware->getMethodClass())
+                                    $this->warningOutput($methodClass)
                                 ];
                             }
                         }
                     }
                 }
 
+                /** @phpstan-ignore-next-line */
                 if (isset($this->rules[$keyMethods])) {
+                    /** @phpstan-ignore-next-line */
                     if (isset($this->rules[$keyMethods][$routeUrl])) {
+                        /** @phpstan-ignore-next-line */
                         foreach ($this->rules[$keyMethods][$routeUrl] as $keyUriRule => $classRule) {
+                            /** @var Rules $objectClassRule */
                             $objectClassRule = new $classRule();
-                            $requiredParam = $objectClassRule->disabled === false ? 'REQUIRED' : 'OPTIONAL';
 
-                            $rows[] = [
-                                $this->successOutput('PARAM:'),
-                                (
-                                    empty($objectClassRule->field)
-                                    ? $this->successOutput('(NAMELESS)')
-                                    : $this->successOutput($objectClassRule->field . " ({$requiredParam})")
-                                ),
-                                $objectClassRule::class,
-                                $this->warningOutput('passes')
-                            ];
+                            if (isset($objectClassRule->disabled, $objectClassRule->field)) {
+                                $requiredParam = $objectClassRule->disabled === false ? 'REQUIRED' : 'OPTIONAL';
+
+                                /** @var string $field */
+                                $field = $objectClassRule->field;
+
+                                $rows[] = [
+                                    $this->successOutput('PARAM:'),
+                                    (
+                                        empty($objectClassRule->field)
+                                            ? $this->successOutput('(NAMELESS)')
+                                            : $this->successOutput("{$field} ({$requiredParam})")
+                                    ),
+                                    $objectClassRule::class,
+                                    $this->warningOutput('passes')
+                                ];
+                            }
                         }
                     }
                 }
@@ -183,7 +202,7 @@ class RouteListCommand extends Command
             }
         }
 
-        (new Table($output))
+        new Table($output)
             ->setHeaderTitle($this->successOutput('ROUTES'))
             ->setFooterTitle(
                 $size > 1
@@ -198,7 +217,7 @@ class RouteListCommand extends Command
             ->setRows($rows)
             ->render();
 
-        return Command::SUCCESS;
+        return parent::SUCCESS;
     }
 
     /**
@@ -211,20 +230,39 @@ class RouteListCommand extends Command
      */
     private function fetchRoutes(): void
     {
-        $this->routes = json_decode(
-            fetch(
-                new Fetch(Route::GET, ($_ENV['SERVER_URL'] . '/route-list'), [
-                    'headers' => [
-                        'Lion-Auth' => $_ENV['SERVER_HASH'],
-                    ],
-                ])
-            )
-                ->getBody()
-                ->getContents(),
-            true
-        );
+        /** @var string $serverUrl */
+        $serverUrl = env('SERVER_URL');
 
-        array_pop($this->routes);
+        $fetchRoutes = fetch(
+            new Fetch(Route::GET, "{$serverUrl}/route-list", [
+                'headers' => [
+                    'Lion-Auth' => $_ENV['SERVER_HASH'],
+                ],
+            ])
+        )
+            ->getBody()
+            ->getContents();
+
+        /**
+         * @var array{
+         *     array<string, array{
+         *          filters: array<int, string>,
+         *          handler: array{
+         *              controller: bool|array{
+         *                  name: string,
+         *                  function: string
+         *              },
+         *              callback: bool
+         *          }
+         *     }>
+         * } $routes
+         */
+        $routes = json_decode($fetchRoutes, true);
+
+        array_pop($routes);
+
+        /** @phpstan-ignore-next-line */
+        $this->routes = $routes;
 
         $this->configMiddleware = Routes::getMiddleware();
     }
