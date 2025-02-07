@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace Tests\Commands\Lion;
 
+use DI\DependencyException;
+use DI\NotFoundException;
 use Lion\Bundle\Commands\Lion\InfoCommand;
 use Lion\Bundle\Helpers\Commands\ComposerFactory;
-use Lion\Command\Command;
+use Lion\Dependency\Injection\Container;
 use Lion\Helpers\Arr;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
 use ReflectionException;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class InfoCommandTest extends Test
@@ -21,15 +24,15 @@ class InfoCommandTest extends Test
 
     /**
      * @throws ReflectionException
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     protected function setUp(): void
     {
-        $this->infoCommand = (new InfoCommand())
-            ->setArr(new Arr())
-            ->setComposerFactory(
-                (new ComposerFactory())
-                    ->setArr(new Arr())
-            );
+        /** @var InfoCommand $infoCommand */
+        $infoCommand = new Container()->resolve(InfoCommand::class);
+
+        $this->infoCommand = $infoCommand;
 
         $application = new Application();
 
@@ -40,6 +43,9 @@ class InfoCommandTest extends Test
         $this->initReflection($this->infoCommand);
     }
 
+    /**
+     * @throws ReflectionException
+     */
     #[Testing]
     public function setArr(): void
     {
@@ -47,6 +53,9 @@ class InfoCommandTest extends Test
         $this->assertInstanceOf(Arr::class, $this->getPrivateProperty('arr'));
     }
 
+    /**
+     * @throws ReflectionException
+     */
     #[Testing]
     public function setComposerFactory(): void
     {

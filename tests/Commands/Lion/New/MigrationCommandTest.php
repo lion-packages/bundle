@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Commands\Lion\New;
 
+use DI\DependencyException;
+use DI\NotFoundException;
 use Lion\Bundle\Commands\Lion\New\MigrationCommand;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\Migrations\MigrationFactory;
@@ -12,14 +14,12 @@ use Lion\Bundle\Interface\Migrations\StoreProcedureInterface;
 use Lion\Bundle\Interface\Migrations\TableInterface;
 use Lion\Bundle\Interface\Migrations\ViewInterface;
 use Lion\Bundle\Interface\MigrationUpInterface;
-use Lion\Command\Command;
-use Lion\Files\Store;
-use Lion\Helpers\Arr;
-use Lion\Helpers\Str;
+use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
 use ReflectionException;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class MigrationCommandTest extends Test
@@ -28,16 +28,19 @@ class MigrationCommandTest extends Test
     private const string CLASS_NAME = 'TestMigration';
     private const string NAMESPACE_MYSQL_TABLE = 'Database\\Migrations\\LionDatabase\\MySQL\\Tables\\';
     private const string NAMESPACE_MYSQL_VIEW = 'Database\\Migrations\\LionDatabase\\MySQL\\Views\\';
-    private const string NAMESPACE_MYSQL_STORE_PROCEDURES = 'Database\\Migrations\\LionDatabase\\MySQL\\StoreProcedures\\';
+    private const string NAMESPACE_MYSQL_STORE_PROCEDURES =
+        'Database\\Migrations\\LionDatabase\\MySQL\\StoreProcedures\\';
     private const string NAMESPACE_POSTGRESQL_TABLE = 'Database\\Migrations\\LionDatabase\\PostgreSQL\\Tables\\';
     private const string NAMESPACE_POSTGRESQL_VIEW = 'Database\\Migrations\\LionDatabase\\PostgreSQL\\Views\\';
-    private const string NAMESPACE_POSTGRESQL_STORE_PROCEDURES = 'Database\\Migrations\\LionDatabase\\PostgreSQL\\StoreProcedures\\';
+    private const string NAMESPACE_POSTGRESQL_STORE_PROCEDURES =
+        'Database\\Migrations\\LionDatabase\\PostgreSQL\\StoreProcedures\\';
     private const string URL_PATH_MYSQL_TABLE = './database/Migrations/LionDatabase/MySQL/Tables/';
     private const string URL_PATH_MYSQL_VIEW = './database/Migrations/LionDatabase/MySQL/Views/';
     private const string URL_PATH_MYSQL_STORE_PROCEDURES = './database/Migrations/LionDatabase/MySQL/StoreProcedures/';
     private const string URL_PATH_POSTGRESQL_TABLE = './database/Migrations/LionDatabase/PostgreSQL/Tables/';
     private const string URL_PATH_POSTGRESQL_VIEW = './database/Migrations/LionDatabase/PostgreSQL/Views/';
-    private const string URL_PATH_POSTGRESQL_STORE_PROCEDURES = './database/Migrations/LionDatabase/PostgreSQL/StoreProcedures/';
+    private const string URL_PATH_POSTGRESQL_STORE_PROCEDURES =
+        './database/Migrations/LionDatabase/PostgreSQL/StoreProcedures/';
     private const string FILE_NAME = self::CLASS_NAME . '.php';
     private const string OUTPUT_MESSAGE = 'migration has been generated';
 
@@ -46,19 +49,15 @@ class MigrationCommandTest extends Test
 
     /**
      * @throws ReflectionException
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     protected function setUp(): void
     {
-        $this->migrationCommand = (new MigrationCommand())
-            ->setArr(new Arr())
-            ->setStore(new Store())
-            ->setStr(new Str())
-            ->setClassFactory(
-                (new ClassFactory())
-                    ->setStore(new Store())
-            )
-            ->setMigrationFactory(new MigrationFactory())
-            ->setDatabaseEngine(new DatabaseEngine());
+        /** @var MigrationCommand $migrationCommand */
+        $migrationCommand = new Container()->resolve(MigrationCommand::class);
+
+        $this->migrationCommand = $migrationCommand;
 
         $application = new Application();
 
@@ -74,6 +73,9 @@ class MigrationCommandTest extends Test
         $this->rmdirRecursively('./database/');
     }
 
+    /**
+     * @throws ReflectionException
+     */
     #[Testing]
     public function setClassFactory(): void
     {
@@ -81,6 +83,9 @@ class MigrationCommandTest extends Test
         $this->assertInstanceOf(ClassFactory::class, $this->getPrivateProperty('classFactory'));
     }
 
+    /**
+     * @throws ReflectionException
+     */
     #[Testing]
     public function setMigrationFactory(): void
     {
@@ -92,6 +97,9 @@ class MigrationCommandTest extends Test
         $this->assertInstanceOf(MigrationFactory::class, $this->getPrivateProperty('migrationFactory'));
     }
 
+    /**
+     * @throws ReflectionException
+     */
     #[Testing]
     public function setDatabaseEngine(): void
     {
@@ -106,22 +114,31 @@ class MigrationCommandTest extends Test
     #[Testing]
     public function executeIsInvalid(): void
     {
-        $this->assertSame(Command::INVALID, $this->commandTester->execute(['migration' => 'users/create-users']));
+        $this->assertSame(Command::INVALID, $this->commandTester->execute([
+            'migration' => 'users/create-users',
+        ]));
     }
 
     #[Testing]
     public function executeForMySQLTable(): void
     {
         $commandExecute = $this->commandTester
-            ->setInputs(['0', '0'])
-            ->execute(['migration' => self::MIGRATION_NAME]);
+            ->setInputs([
+                '0',
+                '0',
+            ])
+            ->execute([
+                'migration' => self::MIGRATION_NAME,
+            ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH_MYSQL_TABLE . self::FILE_NAME);
 
+        /** @phpstan-ignore-next-line */
         $objClass = new (self::NAMESPACE_MYSQL_TABLE . self::CLASS_NAME)();
 
+        /** @phpstan-ignore-next-line */
         $this->assertInstances($objClass, [
             MigrationUpInterface::class,
             TableInterface::class,
@@ -132,15 +149,22 @@ class MigrationCommandTest extends Test
     public function executeForMySQLView(): void
     {
         $commandExecute = $this->commandTester
-            ->setInputs(['0', '1'])
-            ->execute(['migration' => self::MIGRATION_NAME]);
+            ->setInputs([
+                '0',
+                '1',
+            ])
+            ->execute([
+                'migration' => self::MIGRATION_NAME,
+            ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH_MYSQL_VIEW . self::FILE_NAME);
 
+        /** @phpstan-ignore-next-line */
         $objClass = new (self::NAMESPACE_MYSQL_VIEW . self::CLASS_NAME)();
 
+        /** @phpstan-ignore-next-line */
         $this->assertInstances($objClass, [
             MigrationUpInterface::class,
             ViewInterface::class,
@@ -151,15 +175,22 @@ class MigrationCommandTest extends Test
     public function executeForMySQLStoreProcedure(): void
     {
         $commandExecute = $this->commandTester
-            ->setInputs(['0', '2'])
-            ->execute(['migration' => self::MIGRATION_NAME]);
+            ->setInputs([
+                '0',
+                '2',
+            ])
+            ->execute([
+                'migration' => self::MIGRATION_NAME,
+            ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH_MYSQL_STORE_PROCEDURES . self::FILE_NAME);
 
+        /** @phpstan-ignore-next-line */
         $objClass = new (self::NAMESPACE_MYSQL_STORE_PROCEDURES . self::CLASS_NAME)();
 
+        /** @phpstan-ignore-next-line */
         $this->assertInstances($objClass, [
             MigrationUpInterface::class,
             StoreProcedureInterface::class,
@@ -170,15 +201,22 @@ class MigrationCommandTest extends Test
     public function executeForPostgreSQLTable(): void
     {
         $commandExecute = $this->commandTester
-            ->setInputs(['2', '0'])
-            ->execute(['migration' => self::MIGRATION_NAME]);
+            ->setInputs([
+                '2',
+                '0',
+            ])
+            ->execute([
+                'migration' => self::MIGRATION_NAME,
+            ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH_POSTGRESQL_TABLE . self::FILE_NAME);
 
+        /** @phpstan-ignore-next-line */
         $objClass = new (self::NAMESPACE_POSTGRESQL_TABLE . self::CLASS_NAME)();
 
+        /** @phpstan-ignore-next-line */
         $this->assertInstances($objClass, [
             MigrationUpInterface::class,
             TableInterface::class,
@@ -189,15 +227,22 @@ class MigrationCommandTest extends Test
     public function executeForPostgreSQLView(): void
     {
         $commandExecute = $this->commandTester
-            ->setInputs(['2', '1'])
-            ->execute(['migration' => self::MIGRATION_NAME]);
+            ->setInputs([
+                '2',
+                '1',
+            ])
+            ->execute([
+                'migration' => self::MIGRATION_NAME,
+            ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH_POSTGRESQL_VIEW . self::FILE_NAME);
 
+        /** @phpstan-ignore-next-line */
         $objClass = new (self::NAMESPACE_POSTGRESQL_VIEW . self::CLASS_NAME)();
 
+        /** @phpstan-ignore-next-line */
         $this->assertInstances($objClass, [
             MigrationUpInterface::class,
             ViewInterface::class,
@@ -208,15 +253,22 @@ class MigrationCommandTest extends Test
     public function executeForPostgreSQLStoreProcedure(): void
     {
         $commandExecute = $this->commandTester
-            ->setInputs(['2', '2'])
-            ->execute(['migration' => self::MIGRATION_NAME]);
+            ->setInputs([
+                '2',
+                '2',
+            ])
+            ->execute([
+                'migration' => self::MIGRATION_NAME,
+            ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH_POSTGRESQL_STORE_PROCEDURES . self::FILE_NAME);
 
+        /** @phpstan-ignore-next-line */
         $objClass = new (self::NAMESPACE_POSTGRESQL_STORE_PROCEDURES . self::CLASS_NAME)();
 
+        /** @phpstan-ignore-next-line */
         $this->assertInstances($objClass, [
             MigrationUpInterface::class,
             StoreProcedureInterface::class,
