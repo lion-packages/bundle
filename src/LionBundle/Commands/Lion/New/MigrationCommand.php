@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Lion\Bundle\Commands\Lion\New;
 
 use DI\Attribute\Inject;
+use Exception;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\Migrations\MigrationFactory;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Bundle\Helpers\DatabaseEngine;
-use Lion\Command\Command;
 use Lion\Database\Connection;
 use Lion\Database\Driver;
 use LogicException;
@@ -20,12 +20,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Generate a migration for database structure control
- *
- * @property ClassFactory $classFactory [Fabricates the data provided to
- * manipulate information (folder, class, namespace)]
- * @property MigrationFactory $migrationFactory [Factory of the content of the generated migrations]
- * @property DatabaseEngine $databaseEngine [Manages basic database engine
- * processes]
  *
  * @package Lion\Bundle\Commands\Lion\New
  */
@@ -137,40 +131,69 @@ class MigrationCommand extends MenuCommand
      *
      * @return int [0 if everything went fine, or an exit code]
      *
+     * @throws Exception
      * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        /** @var string $migration */
         $migration = $input->getArgument('migration');
 
         if (STR->of($migration)->test("/.*\//")) {
             $output->writeln($this->errorOutput("\t>>  migration cannot be inside subfolders"));
 
-            return Command::INVALID;
+            return parent::INVALID;
         }
 
         $selectedConnection = $this->selectConnection($input, $output);
 
         $connectionName = Connection::getConnections()[$selectedConnection]['dbname'];
 
+        /** @var string $databaseEngineType */
         $databaseEngineType = $this->databaseEngine->getDatabaseEngineType($selectedConnection);
 
         $driver = $this->databaseEngine->getDriver($databaseEngineType);
 
         $selectedType = $this->selectMigrationType($input, $output, self::MIGRATIONS_OPTIONS);
 
-        $migrationPascal = $this->str->of($migration)->replace('-', ' ')->replace('_', ' ')->pascal()->trim()->get();
+        /** @var string $migrationPascal */
+        $migrationPascal = $this->str
+            ->of($migration)
+            ->replace('-', ' ')
+            ->replace('_', ' ')
+            ->pascal()
+            ->trim()
+            ->get();
 
-        $dbPascal = $this->str->of($connectionName)->replace('-', ' ')->replace('_', ' ')->pascal()->trim()->get();
+        /** @var string $dbPascal */
+        $dbPascal = $this->str
+            ->of($connectionName)
+            ->replace('-', ' ')
+            ->replace('_', ' ')
+            ->pascal()
+            ->trim()
+            ->get();
 
         $dataMigration = $this->getBody($migrationPascal, $selectedType, $dbPascal, $driver);
 
-        $this->store->folder($dataMigration->path);
+        /** @var string $path */
+        $path = $dataMigration->path;
+
+        /** @var string $body */
+        $body = $dataMigration->body;
+
+        /** @var string $add */
+        $add = $this->str
+            ->of($body)
+            ->replace('--NAME--', $migration)
+            ->get();
+
+        $this->store->folder($path);
 
         $this->classFactory
-            ->classFactory($dataMigration->path, $migrationPascal)
-            ->create($this->classFactory->getClass(), ClassFactory::PHP_EXTENSION, $dataMigration->path)
-            ->add($this->str->of($dataMigration->body)->replace('--NAME--', $migration)->get())
+            ->classFactory($path, $migrationPascal)
+            ->create($this->classFactory->getClass(), ClassFactory::PHP_EXTENSION, $path)
+            ->add($add)
             ->close();
 
         $output->writeln($this->warningOutput("\t>>  MIGRATION: {$this->classFactory->getClass()}"));
@@ -182,7 +205,7 @@ class MigrationCommand extends MenuCommand
             )
         );
 
-        return Command::SUCCESS;
+        return parent::SUCCESS;
     }
 
     /**

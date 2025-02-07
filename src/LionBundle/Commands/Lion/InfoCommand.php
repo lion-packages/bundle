@@ -9,16 +9,13 @@ use Lion\Bundle\Helpers\Commands\ComposerFactory;
 use Lion\Command\Command;
 use Lion\Helpers\Arr;
 use LogicException;
+use stdClass;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Shows the libraries installed in the project in a table
- *
- * @property Arr $arr [Modify and build arrays with different indexes or values]
- * @property ComposerFactory $composerFactory [Gets the list of installed
- * libraries and dev-libraries]
  *
  * @package Lion\Bundle\Commands\Lion
  */
@@ -101,22 +98,28 @@ class InfoCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $composerJson = json_decode(file_get_contents("composer.json"));
+        /** @var string $file */
+        $file = file_get_contents("composer.json");
+
+        /** @var stdClass $composerJson */
+        $composerJson = json_decode($file);
 
         $libraries = $this->composerFactory
             ->libraries($composerJson, self::EXTENSIONS)
             ->librariesDev($composerJson, self::EXTENSIONS)
             ->getLibraries();
 
-        $size = $this->arr->of($libraries)->length();
+        $size = $this->arr
+            ->of($libraries)
+            ->length();
 
-        (new Table($output))
+        new Table($output)
             ->setHeaderTitle($this->successOutput(' LIBRARIES '))
             ->setHeaders(['LIBRARY', 'VERSION', 'LICENSE', 'DEV', 'DESCRIPTION'])
             ->setFooterTitle($this->successOutput(" Showing [{$size}] libraries "))
             ->setRows($libraries)
             ->render();
 
-        return Command::SUCCESS;
+        return parent::SUCCESS;
     }
 }

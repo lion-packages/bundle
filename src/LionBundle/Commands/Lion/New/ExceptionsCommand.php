@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lion\Bundle\Commands\Lion\New;
 
 use DI\Attribute\Inject;
+use Exception;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Files\Store;
@@ -16,22 +17,20 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Generate Exception classes to handle exceptions
  *
- * @property ClassFactory $classFactory [ClassFactory class object]
- * @property Store $store [Store class object]
- *
  * @package Lion\Bundle\Commands\Lion\New
  */
 class ExceptionsCommand extends Command
 {
     /**
-     * [ClassFactory class object]
+     * [Fabricates the data provided to manipulate information (folder, class,
+     * namespace)]
      *
      * @var ClassFactory $classFactory
      */
     private ClassFactory $classFactory;
 
     /**
-     * [Store class object]
+     * [Manipulate system files]
      *
      * @var Store $store
      */
@@ -81,10 +80,12 @@ class ExceptionsCommand extends Command
      *
      * @return int
      *
+     * @throws Exception
      * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        /** @var string $exception */
         $exception = $input->getArgument('exception');
 
         $this->classFactory->classFactory('app/Exceptions/', $exception);
@@ -131,6 +132,6 @@ class ExceptionsCommand extends Command
             $this->successOutput("\t>>  EXCEPTION: the '{$namespace}\\{$class}' exception has been generated")
         );
 
-        return Command::SUCCESS;
+        return parent::SUCCESS;
     }
 }

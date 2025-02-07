@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lion\Bundle\Commands\Lion\New;
 
 use DI\Attribute\Inject;
+use Exception;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Files\Store;
@@ -15,10 +16,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Generate classes to generate templates in HTML
- *
- * @property ClassFactory $classFactory [Fabricates the data provided to
- * manipulate information (folder, class, namespace)]
- * @property Store $store [Store class object]
  *
  * @package Lion\Bundle\Commands\Lion\New
  */
@@ -33,22 +30,26 @@ class HtmlCommand extends Command
     private ClassFactory $classFactory;
 
     /**
-     * [Store class object]
+     * [Manipulate system files]
      *
      * @var Store $store
      */
     private Store $store;
 
     #[Inject]
-    public function setClassFactory(ClassFactory $classFactory): void
+    public function setClassFactory(ClassFactory $classFactory): HtmlCommand
     {
         $this->classFactory = $classFactory;
+
+        return $this;
     }
 
     #[Inject]
-    public function setStore(Store $store): void
+    public function setStore(Store $store): HtmlCommand
     {
         $this->store = $store;
+
+        return $this;
     }
 
     /**
@@ -79,10 +80,12 @@ class HtmlCommand extends Command
      *
      * @return int
      *
+     * @throws Exception
      * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        /** @var string $html */
         $html = $input->getArgument('html');
 
         $this->classFactory->classFactory('app/Html/', $html);
@@ -148,6 +151,6 @@ class HtmlCommand extends Command
 
         $output->writeln($this->successOutput("\t>>  HTML: the '{$namespace}\\{$class}' html has been generated"));
 
-        return Command::SUCCESS;
+        return parent::SUCCESS;
     }
 }

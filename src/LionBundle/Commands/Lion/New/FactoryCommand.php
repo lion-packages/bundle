@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lion\Bundle\Commands\Lion\New;
 
 use DI\Attribute\Inject;
+use Exception;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Files\Store;
@@ -16,22 +17,20 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Generate a factory to generate information
  *
- * @property ClassFactory $classFactory [ClassFactory class object]
- * @property Store $store [Store class object]
- *
  * @package Lion\Bundle\Commands\Lion\New
  */
 class FactoryCommand extends Command
 {
     /**
-     * [ClassFactory class object]
+     * [Fabricates the data provided to manipulate information (folder, class,
+     * namespace)]
      *
      * @var ClassFactory $classFactory
      */
     private ClassFactory $classFactory;
 
     /**
-     * [Store class object]
+     * [Manipulate system files]
      *
      * @var Store $store
      */
@@ -81,10 +80,12 @@ class FactoryCommand extends Command
      *
      * @return int
      *
+     * @throws Exception
      * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        /** @var string $factory */
         $factory = $input->getArgument('factory');
 
         $this->classFactory->classFactory('database/Factory/', $factory);
@@ -147,6 +148,6 @@ class FactoryCommand extends Command
             $this->successOutput("\t>>  FACTORY: the '{$namespace}\\{$class}' factory has been generated")
         );
 
-        return Command::SUCCESS;
+        return parent::SUCCESS;
     }
 }

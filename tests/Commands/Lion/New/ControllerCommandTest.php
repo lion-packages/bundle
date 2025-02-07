@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace Tests\Commands\Lion\New;
 
+use DI\DependencyException;
+use DI\NotFoundException;
 use Lion\Bundle\Commands\Lion\New\ControllerCommand;
 use Lion\Bundle\Commands\Lion\New\ModelCommand;
 use Lion\Bundle\Helpers\Commands\ClassCommandFactory;
-use Lion\Bundle\Helpers\Commands\ClassFactory;
-use Lion\Command\Command;
 use Lion\Dependency\Injection\Container;
-use Lion\Files\Store;
 use Lion\Helpers\Str;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
+use ReflectionException;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class ControllerCommandTest extends Test
@@ -44,36 +45,38 @@ class ControllerCommandTest extends Test
     ];
 
     private CommandTester $commandTester;
+    private ControllerCommand $controllerCommand;
 
+    /**
+     * @throws NotFoundException
+     * @throws ReflectionException
+     * @throws DependencyException
+     */
     protected function setUp(): void
     {
+        $container = new Container();
+
+        /** @var ControllerCommand $controllerCommand */
+        $controllerCommand = $container->resolve(ControllerCommand::class);
+
+        $this->controllerCommand = $controllerCommand;
+
+        /** @var ModelCommand $modelCommand */
+        $modelCommand = $container->resolve(ModelCommand::class);
+
         $application = new Application();
 
-        $application->add(
-            (new ControllerCommand())
-                ->setStr(new Str())
-                ->setClassCommandFactory(
-                    (new ClassCommandFactory())
-                        ->setContainer(new Container())
-                        ->setStore(new Store())
-                )
-        );
+        $application->add($this->controllerCommand);
 
-        $application->add(
-            (new ModelCommand())
-                ->setClassFactory(
-                    (new ClassFactory())
-                        ->setStore(new Store())
-                )
-                ->setStore(new Store())
-                ->setStr(new Str())
-        );
+        $application->add($modelCommand);
 
         $this->commandTester = new CommandTester($application->find('new:controller'));
 
         $this->createDirectory(ControllerCommand::PATH_CONTROLLER);
 
         $this->createDirectory(ControllerCommand::PATH_MODEL);
+
+        $this->initReflection($this->controllerCommand);
     }
 
     protected function tearDown(): void
@@ -81,16 +84,44 @@ class ControllerCommandTest extends Test
         $this->rmdirRecursively('./app/');
     }
 
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
+    public function setStr(): void
+    {
+        $this->assertInstanceOf(ControllerCommand::class, $this->controllerCommand->setStr(new Str()));
+        $this->assertInstanceOf(Str::class, $this->getPrivateProperty('str'));
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
+    public function setClassCommandFactory(): void
+    {
+        $this->assertInstanceOf(
+            ControllerCommand::class,
+            $this->controllerCommand->setClassCommandFactory(new ClassCommandFactory())
+        );
+
+        $this->assertInstanceOf(ClassCommandFactory::class, $this->getPrivateProperty('classCommandFactory'));
+    }
+
     #[Testing]
     public function execute(): void
     {
-        $this->assertSame(Command::SUCCESS, $this->commandTester->execute(['controller' => self::CLASS_NAME]));
+        $this->assertSame(Command::SUCCESS, $this->commandTester->execute([
+            'controller' => self::CLASS_NAME,
+        ]));
+
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(ControllerCommand::PATH_CONTROLLER . self::FILE_NAME);
 
+        /** @phpstan-ignore-next-line */
         $objClass = new (self::OBJECT_NAME)();
 
-        $this->assertIsObject($objClass);
+        /** @phpstan-ignore-next-line */
         $this->assertInstanceOf(self::OBJECT_NAME, $objClass);
         $this->assertSame(self::CONTROLLER_METHODS, get_class_methods($objClass));
     }
@@ -103,22 +134,23 @@ class ControllerCommandTest extends Test
             '--model' => null,
         ]);
 
-        $this->assertIsInt($commandExecute);
         $this->assertSame(Command::SUCCESS, $commandExecute);
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertStringContainsString(self::OUTPUT_MESSAGE_MODEL, $this->commandTester->getDisplay());
         $this->assertFileExists(ControllerCommand::PATH_CONTROLLER . self::FILE_NAME);
         $this->assertFileExists(ControllerCommand::PATH_MODEL . self::FILE_NAME_MODEL);
 
+        /** @phpstan-ignore-next-line */
         $objClass = new (self::OBJECT_NAME)();
 
-        $this->assertIsObject($objClass);
+        /** @phpstan-ignore-next-line */
         $this->assertInstanceOf(self::OBJECT_NAME, $objClass);
         $this->assertSame(self::CONTROLLER_METHODS, get_class_methods($objClass));
 
+        /** @phpstan-ignore-next-line */
         $objModelClass = new (self::OBJECT_NAME_MODEL)();
 
-        $this->assertIsObject($objModelClass);
+        /** @phpstan-ignore-next-line */
         $this->assertInstanceOf(self::OBJECT_NAME_MODEL, $objModelClass);
         $this->assertSame(self::MODEL_METHODS, get_class_methods($objModelClass));
     }
@@ -131,22 +163,23 @@ class ControllerCommandTest extends Test
             '--model' => self::CLASS_NAME_MODEL,
         ]);
 
-        $this->assertIsInt($commandExecute);
         $this->assertSame(Command::SUCCESS, $commandExecute);
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertStringContainsString(self::OUTPUT_MESSAGE_MODEL, $this->commandTester->getDisplay());
         $this->assertFileExists(ControllerCommand::PATH_CONTROLLER . self::FILE_NAME);
         $this->assertFileExists(ControllerCommand::PATH_MODEL . self::FILE_NAME_MODEL);
 
+        /** @phpstan-ignore-next-line */
         $objClass = new (self::OBJECT_NAME)();
 
-        $this->assertIsObject($objClass);
+        /** @phpstan-ignore-next-line */
         $this->assertInstanceOf(self::OBJECT_NAME, $objClass);
         $this->assertSame(self::CONTROLLER_METHODS, get_class_methods($objClass));
 
+        /** @phpstan-ignore-next-line */
         $objModelClass = new (self::OBJECT_NAME_MODEL)();
 
-        $this->assertIsObject($objModelClass);
+        /** @phpstan-ignore-next-line */
         $this->assertInstanceOf(self::OBJECT_NAME_MODEL, $objModelClass);
         $this->assertSame(self::MODEL_METHODS, get_class_methods($objModelClass));
     }
