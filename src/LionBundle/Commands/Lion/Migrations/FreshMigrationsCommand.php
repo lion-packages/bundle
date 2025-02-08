@@ -26,9 +26,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Drop all tables and re-run all migrations
  *
- * @property Migrations $migrations [Manages the processes of creating or
- * executing migrations]
- *
  * @package Lion\Bundle\Commands\Lion\Migrations
  */
 class FreshMigrationsCommand extends MenuCommand
@@ -104,7 +101,7 @@ class FreshMigrationsCommand extends MenuCommand
         if (isError($this->store->exist('./database/Migrations/'))) {
             $output->writeln($this->errorOutput("\t>> MIGRATION: there are no defined migration routes"));
 
-            return Command::FAILURE;
+            return parent::FAILURE;
         }
 
         $this->dropTables();
@@ -112,20 +109,17 @@ class FreshMigrationsCommand extends MenuCommand
         /** @var array<string, array<string, MigrationUpInterface>> $migrations */
         $migrations = $this->migrations->getMigrations();
 
-        if (empty($migrations)) {
-            $output->writeln($this->warningOutput("\t>> MIGRATION: no migrations available"));
-
-            return Command::INVALID;
-        }
-
         $this->migrations->executeMigrations(
             $this,
             $output,
+            /** @phpstan-ignore-next-line */
             $this->migrations->orderList($migrations[TableInterface::class])
         );
 
+        /** @phpstan-ignore-next-line */
         $this->migrations->executeMigrations($this, $output, $migrations[ViewInterface::class]);
 
+        /** @phpstan-ignore-next-line */
         $this->migrations->executeMigrations($this, $output, $migrations[StoreProcedureInterface::class]);
 
         $output->writeln($this->infoOutput("\n\t>> Migrations executed successfully"));
@@ -135,13 +129,14 @@ class FreshMigrationsCommand extends MenuCommand
         if ($seed != 'none') {
             $output->writeln('');
 
+            /** @phpstan-ignore-next-line */
             $this
                 ->getApplication()
                 ->find('db:seed')
                 ->run(new ArrayInput([]), $output);
         }
 
-        return Command::SUCCESS;
+        return parent::SUCCESS;
     }
 
     /**
@@ -150,6 +145,8 @@ class FreshMigrationsCommand extends MenuCommand
      * @return void
      *
      * @internal
+     *
+     * @codeCoverageIgnore
      */
     private function dropTables(): void
     {
@@ -168,12 +165,21 @@ class FreshMigrationsCommand extends MenuCommand
                 $tables = $this->getTables($connectionName);
 
                 if (!isset($tables->status)) {
-                    $tablesArr = $this->arr->of($tables)->tree('tablename')->keys()->join(', ');
+                    $tablesArr = $this->arr /** @phpstan-ignore-next-line */
+                        ->of($tables)
+                        ->tree('tablename')
+                        ->keys()
+                        ->join(', ');
+
+                    /** @var string $query */
+                    $query = $this->str
+                        ->of('DROP TABLE IF EXISTS ')
+                        ->concat($tablesArr)
+                        ->concat('CASCADE;')
+                        ->get();
 
                     $response = PostgreSQL::connection($connectionName)
-                        ->query(
-                            $this->str->of('DROP TABLE IF EXISTS ')->concat($tablesArr)->concat('CASCADE;')->get()
-                        )
+                        ->query($query)
                         ->execute();
                 }
             }
@@ -184,6 +190,7 @@ class FreshMigrationsCommand extends MenuCommand
                 );
 
                 $this->output->writeln(
+                    /** @phpstan-ignore-next-line */
                     $this->errorOutput("\t>> DATABASE: {$response->message} [{$connection['type']}]")
                 );
             }

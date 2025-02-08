@@ -8,6 +8,7 @@ use DI\Attribute\Inject;
 use Lion\Command\Command;
 use Lion\Security\AES;
 use LogicException;
+use stdClass;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -15,8 +16,6 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 
 /**
  * Generates the necessary configuration for symmetric encryption with AES
- *
- * @property AES $aes [AES class object]
  *
  * @package Lion\Bundle\Commands\Lion\New
  */
@@ -32,7 +31,9 @@ class AESCommand extends Command
     ];
 
     /**
-     * [AES class object]
+     * [It allows you to generate the configuration required for AES encryption
+     * and decryption, it has methods that allow you to encrypt and decrypt data
+     * with AES]
      *
      * @var AES $aes
      */
@@ -77,33 +78,49 @@ class AESCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $aesMethods = [...self::AES_METHODS];
+        $aesMethods = [
+            ...self::AES_METHODS,
+        ];
+
+        $default = reset($aesMethods);
 
         /** @var QuestionHelper $helper */
         $helper = $this->getHelper('question');
 
-        $aesMethod = $helper->ask(
-            $input,
-            $output,
-            new ChoiceQuestion(
-                ('Select AES method ' . $this->warningOutput('(default: ' . reset($aesMethods) . ')')),
-                $aesMethods,
-                0
-            )
+        $choiseQuestion = new ChoiceQuestion(
+            ('Select AES method ' . $this->warningOutput("(default: '{$default}')")),
+            $aesMethods,
+            0
         );
 
-        $config = $this->aes->create($aesMethod)->toObject()->get();
+        /** @var string $aesMethod */
+        $aesMethod = $helper->ask($input, $output, $choiseQuestion);
+
+        /** @var stdClass $config */
+        $config = $this->aes
+            ->create($aesMethod)
+            ->toObject()
+            ->get();
+
+        /** @var string $passphrase */
+        $passphrase = $config->passphrase;
+
+        /** @var string $key */
+        $key = $config->key;
+
+        /** @var string $iv */
+        $iv = $config->iv;
 
         $output->writeln($this->infoOutput("\t>>  AES METHOD: {$aesMethod}"));
 
-        $output->writeln($this->warningOutput("\t>>  AES PASSPHRASE: {$config->passphrase}"));
+        $output->writeln($this->warningOutput("\t>>  AES PASSPHRASE: {$passphrase}"));
 
-        $output->writeln($this->warningOutput("\t>>  AES KEY: {$config->key}"));
+        $output->writeln($this->warningOutput("\t>>  AES KEY: {$key}"));
 
-        $output->writeln($this->warningOutput("\t>>  AES IV: {$config->iv}"));
+        $output->writeln($this->warningOutput("\t>>  AES IV: {$iv}"));
 
         $output->writeln($this->successOutput("\t>>  Keys created successfully"));
 
-        return Command::SUCCESS;
+        return parent::SUCCESS;
     }
 }

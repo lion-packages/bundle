@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Tests\Commands\Lion\Migrations;
 
 use Lion\Bundle\Commands\Lion\Migrations\EmptyMigrationsCommand;
-use Lion\Command\Command;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class EmptyMigrationsCommandTest extends Test

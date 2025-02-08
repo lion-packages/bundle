@@ -11,22 +11,17 @@ use Lion\Command\Command;
 use Lion\Files\Store;
 use LogicException;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Run the defined seeds
- *
- * @property Store $store [Store class object]
- * @property Migrations $migrations [Manages the processes of creating or
- * executing migrations]
  *
  * @package Lion\Bundle\Commands\Lion\DB
  */
 class DBSeedCommand extends Command
 {
     /**
-     * [Store class object]
+     * [Manipulate system files]
      *
      * @var Store $store
      */
@@ -64,8 +59,7 @@ class DBSeedCommand extends Command
     {
         $this
             ->setName('db:seed')
-            ->setDescription('Run the available seeds')
-            ->addOption('run', '-r', InputOption::VALUE_OPTIONAL, 'Number of executions', 1);
+            ->setDescription('Run the available seeds');
     }
 
     /**
@@ -84,16 +78,16 @@ class DBSeedCommand extends Command
      * @return int
      *
      * @throws LogicException [When this abstract method is not implemented]
+     *
+     * @codeCoverageIgnore
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (isError($this->store->exist('database/Seed/'))) {
             $output->writeln($this->errorOutput("\t>> SEED: there are no defined seeds"));
 
-            return Command::FAILURE;
+            return parent::FAILURE;
         }
-
-        $end = (int) $input->getOption('run');
 
         /** @var array<int, SeedInterface> $files */
         $files = [];
@@ -105,26 +99,30 @@ class DBSeedCommand extends Command
                 /** @var SeedInterface $seedInterface */
                 $seedInterface = new $class();
 
-                $files[] = $seedInterface;
+                $files[$class] = $seedInterface;
             }
         }
 
+        /** @phpstan-ignore-next-line */
         foreach ($this->migrations->orderList($files) as $seedInterface) {
             $output->writeln($this->warningOutput("\t>>  SEED: " . $seedInterface::class));
 
-            for ($i = 0; $i < $end; $i++) {
+            if ($seedInterface instanceof SeedInterface) {
                 $response = $seedInterface->run();
 
+                /** @var string $message */
+                $message = $response->message;
+
                 if (isError($response)) {
-                    $output->writeln($this->errorOutput("\t>>  SEED: {$response->message}"));
+                    $output->writeln($this->errorOutput("\t>>  SEED: {$message}"));
                 } else {
-                    $output->writeln($this->successOutput("\t>>  SEED: {$response->message}"));
+                    $output->writeln($this->successOutput("\t>>  SEED: {$message}"));
                 }
             }
         }
 
         $output->writeln($this->infoOutput("\n\t>>  SEED: seeds executed"));
 
-        return Command::SUCCESS;
+        return parent::SUCCESS;
     }
 }

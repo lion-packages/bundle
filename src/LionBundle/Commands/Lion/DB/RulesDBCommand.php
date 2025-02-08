@@ -21,10 +21,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Generates the base rules for the properties of an entity
  *
- * @property FileWriter $fileWrite [FileWriter class object]
- * @property DatabaseEngine $databaseEngine [Manages basic database engine
- * processes]
- *
  * @package Lion\Bundle\Commands\Lion\DB
  */
 class RulesDBCommand extends MenuCommand
@@ -87,84 +83,107 @@ class RulesDBCommand extends MenuCommand
      *
      * @return int
      *
+     * @throws ExceptionInterface
      * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        /** @var string $entity */
         $entity = $input->getArgument('entity');
 
         $selectedConnection = $this->selectConnectionByEnviroment($input, $output);
 
         $connectionName = Connection::getConnections()[$selectedConnection]['dbname'];
 
+        /** @var string $databaseEngineType */
         $databaseEngineType = $this->databaseEngine->getDatabaseEngineType($selectedConnection);
 
         $driver = $this->databaseEngine->getDriver($databaseEngineType);
 
-        $entityPascal = $this->str->of($entity)->replace('_', ' ')->replace('-', ' ')->pascal()->get();
+        /** @var string $entityPascal */
+        $entityPascal = $this->str
+            ->of($entity)
+            ->replace('_', ' ')
+            ->replace('-', ' ')
+            ->pascal()
+            ->get();
 
-        $connectionPascal = $this->str->of($connectionName)->replace('_', ' ')->replace('-', ' ')->pascal()->get();
+        /** @var string $connectionPascal */
+        $connectionPascal = $this->str
+            ->of($connectionName)
+            ->replace('_', ' ')
+            ->replace('-', ' ')
+            ->pascal()
+            ->get();
 
+        /** @var array<int, stdClass>|stdClass $columns */
         $columns = $this->getTableColumns($databaseEngineType, $selectedConnection, $entity);
 
         if (isset($columns->status)) {
+            /** @phpstan-ignore-next-line */
             $output->writeln($this->errorOutput($columns->message));
 
-            return Command::FAILURE;
+            return parent::FAILURE;
         }
 
+        /** @var array<int, stdClass>|stdClass $foreigns */
         $foreigns = $this->getTableForeigns($databaseEngineType, $selectedConnection, $entity);
 
-        foreach ($columns as $column) {
-            $isForeign = false;
+        if (is_array($columns)) {
+            foreach ($columns as $column) {
+                $isForeign = false;
 
-            if (!isset($foreigns->status)) {
-                foreach ($foreigns as $foreign) {
-                    if ($column->Field === $foreign->COLUMN_NAME) {
-                        $isForeign = true;
+                if (is_array($foreigns)) {
+                    foreach ($foreigns as $foreign) {
+                        if ($column->Field === $foreign->COLUMN_NAME) {
+                            $isForeign = true;
+                        }
                     }
                 }
-            }
 
-            if (!$isForeign) {
-                if ($column->Null === 'YES') {
-                    $this->generateRule(
-                        $driver,
-                        $connectionPascal,
-                        $entityPascal,
-                        $column,
-                        'Optional',
-                        $output
-                    );
+                if (!$isForeign) {
+                    if ($column->Null === 'YES') {
+                        $this->generateRule(
+                            $driver,
+                            $connectionPascal,
+                            $entityPascal,
+                            $column,
+                            'Optional',
+                            $output
+                        );
 
-                    $this->generateRule(
-                        $driver,
-                        $connectionPascal,
-                        $entityPascal,
-                        $column,
-                        'Required',
-                        $output
-                    );
+                        $this->generateRule(
+                            $driver,
+                            $connectionPascal,
+                            $entityPascal,
+                            $column,
+                            'Required',
+                            $output
+                        );
+                    } else {
+                        $this->generateRule(
+                            $driver,
+                            $connectionPascal,
+                            $entityPascal,
+                            $column,
+                            '',
+                            $output
+                        );
+                    }
                 } else {
-                    $this->generateRule(
-                        $driver,
-                        $connectionPascal,
-                        $entityPascal,
-                        $column,
-                        '',
-                        $output
+                    /** @var string $field */
+                    $field = $column->Field;
+
+                    $output->writeln(
+                        $this->infoOutput(
+                            "\t>>  RULE: the rule for '{$field}' property has been omitted, it is a foreign"
+                        )
                     );
                 }
-            } else {
-                $output->writeln(
-                    $this->infoOutput(
-                        "\t>>  RULE: the rule for '{$column->Field}' property has been omitted, it is a foreign"
-                    )
-                );
             }
         }
 
-        return Command::SUCCESS;
+        return parent::SUCCESS;
     }
 
     /**
@@ -191,8 +210,18 @@ class RulesDBCommand extends MenuCommand
         string $type,
         OutputInterface $output
     ): void {
+        /** @var string $field */
+        $field = $column->Field;
+
+        /** @var string $comment */
+        $comment = $column->Comment;
+
+        /** @var string $default */
+        $default = $column->Default;
+
+        /** @var string $ruleName */
         $ruleName = $this->str
-            ->of($column->Field)
+            ->of($field)
             ->replace('-', '_')
             ->replace('_', ' ')
             ->trim()
@@ -201,6 +230,7 @@ class RulesDBCommand extends MenuCommand
             ->concat('Rule')
             ->get();
 
+        /** @phpstan-ignore-next-line */
         $this
             ->getApplication()
             ->find('new:rule')
@@ -214,63 +244,63 @@ class RulesDBCommand extends MenuCommand
         $this->fileWriter->readFileRows("app/Rules/{$connectionPascal}/{$driver}/{$entityPascal}/{$ruleName}.php", [
             12 => [
                 'replace' => true,
-                'content' => "'" . strtolower($column->Field) . "'",
+                'content' => "'" . strtolower($field) . "'",
                 'search' => "''"
             ],
             14 => [
                 'replace' => true,
-                'content' => "'" . strtolower($column->Field) . "'",
+                'content' => "'" . strtolower($field) . "'",
                 'search' => "''"
             ],
             15 => [
                 'replace' => true,
-                'content' => "'" . strtolower($column->Field) . "'",
+                'content' => "'" . strtolower($field) . "'",
                 'search' => "''"
             ],
             16 => [
                 'replace' => true,
-                'content' => "'" . strtolower($column->Field) . "'",
+                'content' => "'" . strtolower($field) . "'",
                 'search' => "''"
             ],
             25 => [
                 'replace' => true,
-                'content' => "'" . strtolower($column->Field) . "'",
+                'content' => "'" . strtolower($field) . "'",
                 'search' => "''"
             ],
             29 => [
                 'replace' => true,
-                'content' => "'" . strtolower($column->Field) . "'",
+                'content' => "'" . strtolower($field) . "'",
                 'search' => "''"
             ],
             32 => [
                 'replace' => true,
-                'content' => "'" . strtolower($column->Field) . "'",
+                'content' => "'" . strtolower($field) . "'",
                 'search' => "''"
             ],
             39 => [
                 'replace' => true,
-                'content' => "'" . strtolower($column->Field) . "'",
+                'content' => "'" . strtolower($field) . "'",
                 'search' => "''"
             ],
             36 => [
                 'replace' => true,
-                'content' => "'{$column->Comment}'",
+                'content' => "'{$comment}'",
                 'search' => "''"
             ],
             43 => [
                 'replace' => true,
                 'search' => '""',
-                'content' => "'{$column->Default}'",
+                'content' => "'{$default}'",
             ],
             50 => [
                 'replace' => true,
                 'content' => ($type === 'Required' ? 'false' : ($type === 'Optional' ? 'true' : 'false')),
-                'search' => 'false'
+                'search' => 'false',
             ],
             59 => [
                 'replace' => true,
                 'content' => ($type === 'Required' ? 'required' : ($type === 'Optional' ? 'optional' : 'required')),
-                'search' => 'required'
+                'search' => 'required',
             ],
             60 => [
                 'replace' => true,
@@ -279,14 +309,14 @@ class RulesDBCommand extends MenuCommand
                         'content' => (
                             $type === 'Required' ? 'required' : ($type === 'Optional' ? 'optional' : 'required')
                         ),
-                        'search' => 'required'
+                        'search' => 'required',
                     ],
                     [
-                        'content' => '"' . strtolower($column->Field) . '"',
-                        'search' => '""'
-                    ]
-                ]
-            ]
+                        'content' => '"' . strtolower($field) . '"',
+                        'search' => '""',
+                    ],
+                ],
+            ],
         ]);
     }
 }
