@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Lion\Bundle\Commands\Lion\New;
 
 use DI\Attribute\Inject;
+use Exception;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Files\Store;
 use Lion\Helpers\Arr;
 use Lion\Helpers\Str;
 use LogicException;
+use stdClass;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -18,12 +20,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Generates a capsule class and its defined properties
- *
- * @property ClassFactory $classFactory [Fabricates the data provided to
- * manipulate information (folder, class, namespace)]
- * @property Store $store [Manipulate system files]
- * @property Str $str [Modify and construct strings with different formats]
- * @property Arr $arr [Modify and build arrays with different indexes or values]
  *
  * @package Lion\Bundle\Commands\Lion\New
  */
@@ -124,16 +120,20 @@ class CapsuleCommand extends Command
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int [0 if everything went fine, or an exit code]
+     * @return int
      *
+     * @throws Exception
      * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        /** @var string $capsule */
         $capsule = $input->getArgument('capsule');
 
+        /** @var array<int, string> $properties */
         $properties = $input->getOption('properties');
 
+        /** @var string $entity */
         $entity = $input->getOption('entity');
 
         $this->classFactory->classFactory('database/Class/', $capsule);
@@ -148,7 +148,10 @@ class CapsuleCommand extends Command
 
         $listMethods = [];
 
-        foreach ($properties as $key => $propierty) {
+        /**
+         * Iterates the list of data to generate the Getter and Setter methods
+         */
+        foreach ($properties as $propierty) {
             $split = explode(':', $propierty);
 
             $data = $this->classFactory->getProperty(
@@ -158,12 +161,33 @@ class CapsuleCommand extends Command
                 ClassFactory::PRIVATE_PROPERTY
             );
 
-            $listProperties[] = $data->variable->type->snake;
+            /** @var stdClass $variable */
+            $variable = $data->variable;
+
+            /** @var stdClass $type */
+            $type = $variable->type;
+
+            /** @var string $snakeCase */
+            $snakeCase = $type->snake;
+
+            /** @var stdClass $getter */
+            $getter = $data->getter;
+
+            /** @var stdClass $setter */
+            $setter = $data->setter;
+
+            /** @var string $getterMethod */
+            $getterMethod = $getter->method;
+
+            /** @var string $setterMethod */
+            $setterMethod = $setter->method;
+
+            $listProperties[] = $snakeCase;
 
             $listMethods[] = [
-                'getter' => $data->getter->method,
-                'setter' => $data->setter->method,
-                'config' => $data
+                'getter' => $getterMethod,
+                'setter' => $setterMethod,
+                'config' => $data,
             ];
         }
 
@@ -184,14 +208,33 @@ class CapsuleCommand extends Command
             $this->str->ln();
         }
 
-        foreach ($listMethods as $key => $method) {
-            $this->str->concat(" * {$method['config']->variable->annotations->class->data_type_with_null}\n");
+        /**
+         * Iterate through the list of methods to add a class property
+         * annotation
+         */
+        foreach ($listMethods as $method) {
+            /** @var stdClass $config */
+            $config = $method['config'];
+
+            /** @var stdClass $variable */
+            $variable = $config->variable;
+
+            /** @var stdClass $annotations */
+            $annotations = $variable->annotations;
+
+            /** @var stdClass $classAnnotations */
+            $classAnnotations = $annotations->class;
+
+            /** @var string $dataType */
+            $dataType = $classAnnotations->data_type_with_null;
+
+            $this->str->concat(" * {$dataType}\n");
         }
 
         $this->str
             ->concat(" *\n * @package {$namespace}\n */\n")
-            ->concat("class")->spaces(1)
-            ->concat($class)->spaces(1)
+            ->concat("class")->spaces()
+            ->concat($class)->spaces()
             ->concat('implements CapsuleInterface')->ln()
             ->concat("{")->ln()
             ->lt()->concat('use CapsuleTrait;')->ln()->ln()
@@ -208,7 +251,9 @@ class CapsuleCommand extends Command
             )->ln();
 
         if (count($properties) > 0) {
-            $this->str->lt()->concat($this->arr->of($listProperties)->join("\n\t"))->ln();
+            $this->str
+                ->lt()->concat($this->arr->of($listProperties)->join("\n\t"))
+                ->ln();
         }
 
         if ($this->arr->of($properties)->length() > 0) {
@@ -218,11 +263,30 @@ class CapsuleCommand extends Command
                 ->lt()->concat('{')->ln()
                 ->lt()->lt()->concat('$this')->ln();
 
+            /**
+             * Iterate through the list of methods to add the dataset using HTTP
+             * requests
+             */
             foreach ($listMethods as $key => $method) {
+                /** @var stdClass $config */
+                $config = $method['config'];
+
+                /** @var stdClass $setter */
+                $setter = $config->setter;
+
+                /** @var string $setterMethod */
+                $setterMethod = $setter->name;
+
+                /** @var stdClass $format */
+                $format = $config->format;
+
+                /** @var string $snakeCase */
+                $snakeCase = $format->snake;
+
                 $this->str
                     ->lt()->lt()->lt()->concat('->')
-                    ->concat($method['config']->setter->name)
-                    ->concat("(request('{$method['config']->format->snake}'))")
+                    ->concat($setterMethod)
+                    ->concat("(request('{$snakeCase}'))")
                     ->concat($key === (count($listMethods) - 1) ? ';' : '')->ln();
             }
 
@@ -240,14 +304,16 @@ class CapsuleCommand extends Command
         if (count($properties) > 0) {
             $this->str->ln()->ln();
 
+            /**
+             * Iterate through the list of methods to add Getter and Setter
+             * methods
+             */
             foreach ($listMethods as $key => $method) {
-                if ($key === (count($listMethods) - 1)) {
-                    $this->str->concat($method['getter'])->ln()->ln();
+                $this->str->concat($method['getter'])->ln()->ln();
 
+                if ($key === (count($listMethods) - 1)) {
                     $this->str->concat($method['setter'])->ln();
                 } else {
-                    $this->str->concat($method['getter'])->ln()->ln();
-
                     $this->str->concat($method['setter'])->ln()->ln();
                 }
             }
@@ -255,9 +321,16 @@ class CapsuleCommand extends Command
             $this->str->ln();
         }
 
-        $contentFile = $this->str->concat("}")->ln()->get();
+        /** @var string $contentFile */
+        $contentFile = $this->str
+            ->concat("}")
+            ->ln()
+            ->get();
 
-        $this->classFactory->create($class, ClassFactory::PHP_EXTENSION, $folder)->add($contentFile)->close();
+        $this->classFactory
+            ->create($class, ClassFactory::PHP_EXTENSION, $folder)
+            ->add($contentFile)
+            ->close();
 
         $output->writeln($this->warningOutput("\t>>  CAPSULE: {$class}"));
 
@@ -265,6 +338,6 @@ class CapsuleCommand extends Command
             $this->successOutput("\t>>  CAPSULE: the '{$namespace}\\{$class}' capsule has been generated")
         );
 
-        return Command::SUCCESS;
+        return parent::SUCCESS;
     }
 }

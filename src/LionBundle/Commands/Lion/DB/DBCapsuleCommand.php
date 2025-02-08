@@ -8,8 +8,10 @@ use DI\Attribute\Inject;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Bundle\Helpers\DatabaseEngine;
-use Lion\Command\Command;
 use Lion\Database\Connection;
+use LogicException;
+use stdClass;
+use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,11 +19,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Generate capsule classes with the properties of an entity
- *
- * @property ClassFactory $classFactory [Fabricates the data provided to
- * manipulate information (folder, class, namespace)]
- * @property DatabaseEngine $databaseEngine [Manages basic database engine
- * processes]
  *
  * @package Lion\Bundle\Commands\Lion\DB\MySQL
  */
@@ -84,53 +81,72 @@ class DBCapsuleCommand extends MenuCommand
      * @param OutputInterface $output [OutputInterface is the interface
      * implemented by all Output classes]
      *
-     * @return int [0 if everything went fine, or an exit code]
+     * @return int
      *
+     * @throws ExceptionInterface
      * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        /** @var string $entity */
         $entity = $input->getArgument('entity');
 
+        /** @var string $entity */
         $entity = $this->str->of($entity)->test("/-/") ? "`{$entity}`" : $entity;
 
         $selectedConnection = $this->selectConnectionByEnviroment($input, $output);
 
         $connectionName = Connection::getConnections()[$selectedConnection]['dbname'];
 
+        /** @var string $databaseEngineType */
         $databaseEngineType = $this->databaseEngine->getDatabaseEngineType($selectedConnection);
 
         $driver = $this->databaseEngine->getDriver($databaseEngineType);
 
+        /** @var array<int, stdClass>|stdClass $columns */
         $columns = $this->getTableColumns($databaseEngineType, $selectedConnection, $entity);
 
         if (!empty($columns->status)) {
-            $output->writeln($this->errorOutput("\t>>  CAPSULE: {$columns->message}"));
+            /** @var string $message */
+            $message = $columns->message;
 
-            return Command::FAILURE;
+            $output->writeln($this->errorOutput("\t>>  CAPSULE: {$message}"));
+
+            return parent::FAILURE;
         }
 
-        $properties = [];
+        if (is_array($columns)) {
+            $properties = [];
 
-        foreach ($columns as $column) {
-            $properties[] = "{$column->Field}:{$this->classFactory->getDBType($column->Type)}";
+            foreach ($columns as $column) {
+                /** @var string $field */
+                $field = $column->Field;
+
+                /** @var string $type */
+                $type = $column->Type;
+
+                $properties[] = "{$field}:{$this->classFactory->getDBType($type)}";
+            }
+
+            $connPascal = $this->classFactory->getClassFormat($connectionName);
+
+            /** @var string $formatEntity */
+            $formatEntity = $this->str->of($entity)->replace('`', '')->get();
+
+            $className = $this->classFactory->getClassFormat($formatEntity);
+
+            $arrayInput = new ArrayInput([
+                'capsule' => "{$connPascal}/{$driver}/{$className}",
+                '--properties' => $properties,
+                '--entity' => $entity,
+            ]);
+
+            /** @phpstan-ignore-next-line */
+            $this->getApplication()
+                ->find('new:capsule')
+                ->run($arrayInput, $output);
         }
 
-        $connPascal = $this->classFactory->getClassFormat($connectionName);
-
-        $className = $this->classFactory->getClassFormat($this->str->of($entity)->replace('`', '')->get());
-
-        $this->getApplication()
-            ->find('new:capsule')
-            ->run(
-                new ArrayInput([
-                    'capsule' => "{$connPascal}/{$driver}/{$className}",
-                    '--properties' => $properties,
-                    '--entity' => $entity,
-                ]),
-                $output
-            );
-
-        return Command::SUCCESS;
+        return parent::SUCCESS;
     }
 }
