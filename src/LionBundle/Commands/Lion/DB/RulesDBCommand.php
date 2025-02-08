@@ -217,7 +217,7 @@ class RulesDBCommand extends MenuCommand
         $comment = $column->Comment;
 
         /** @var string $default */
-        $default = $column->default;
+        $default = $column->Default;
 
         /** @var string $ruleName */
         $ruleName = $this->str

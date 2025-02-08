@@ -50,6 +50,8 @@ class EmptyMigrationsCommand extends MenuCommand
      * @return int
      *
      * @throws LogicException [When this abstract method is not implemented]
+     *
+     * @codeCoverageIgnore
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -59,13 +61,13 @@ class EmptyMigrationsCommand extends MenuCommand
             /** @var array<int, stdClass>|stdClass $tables */
             $tables = $this->getTables($connectionName);
 
-            if (!is_array($tables) && isSuccess($tables)) {
+            if (isSuccess($tables)) {
                 $output->writeln($this->warningOutput("\t>> MIGRATION: no tables available"));
 
                 continue;
             }
 
-            if (!is_array($tables) && isError($tables)) {
+            if (isError($tables)) {
                 /** @phpstan-ignore-next-line */
                 $output->writeln($this->errorOutput("\t>> MIGRATION: {$tables->message}"));
 
@@ -114,6 +116,8 @@ class EmptyMigrationsCommand extends MenuCommand
      * @param string $table [Name the table]
      *
      * @return RunDatabaseProcessesInterface|null
+     *
+     * @codeCoverageIgnore
      */
     private function truncateTable(
         string $driver,

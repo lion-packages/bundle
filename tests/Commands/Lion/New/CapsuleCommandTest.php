@@ -4,16 +4,21 @@ declare(strict_types=1);
 
 namespace Tests\Commands\Lion\New;
 
+use DI\DependencyException;
+use DI\NotFoundException;
 use Lion\Bundle\Commands\Lion\New\CapsuleCommand;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Interface\CapsuleInterface;
-use Lion\Command\Command;
+use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
 use Lion\Helpers\Arr;
 use Lion\Helpers\Str;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
+use ReflectionException;
+use stdClass;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class CapsuleCommandTest extends Test
@@ -25,25 +30,29 @@ class CapsuleCommandTest extends Test
     private const string OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
     private const string FILE_NAME = self::CLASS_NAME . '.php';
     private const string OUTPUT_MESSAGE = 'capsule has been generated';
-    private const array PROPERTIES = ['idusers:int', 'users_name:string', 'users_last_name'];
+    private const array PROPERTIES = [
+        'idusers:int',
+        'users_name:string',
+        'users_last_name',
+    ];
 
     private CommandTester $commandTester;
     private CapsuleCommand $capsuleCommand;
     private ClassFactory $classFactory;
 
+    /**
+     * @throws ReflectionException
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
     protected function setUp(): void
     {
-        $this->classFactory = (new ClassFactory())
-            ->setStore(new Store());
+        /** @var CapsuleCommand $capsuleCommand */
+        $capsuleCommand = new Container()->resolve(CapsuleCommand::class);
 
-        $this->capsuleCommand = (new CapsuleCommand())
-            ->setClassFactory(
-                (new ClassFactory())
-                    ->setStore(new Store())
-            )
-            ->setStore(new Store())
-            ->setStr(new Str())
-            ->setArr(new Arr());
+        $this->capsuleCommand = $capsuleCommand;
+
+        $this->classFactory = new ClassFactory();
 
         $application = new Application();
 
@@ -51,9 +60,9 @@ class CapsuleCommandTest extends Test
 
         $this->commandTester = new CommandTester($application->find('new:capsule'));
 
-        $this->initReflection($this->capsuleCommand);
-
         $this->createDirectory(self::URL_PATH);
+
+        $this->initReflection($this->capsuleCommand);
     }
 
     protected function tearDown(): void
@@ -61,6 +70,9 @@ class CapsuleCommandTest extends Test
         $this->rmdirRecursively('./database/');
     }
 
+    /**
+     * @throws ReflectionException
+     */
     #[Testing]
     public function setClassFactory(): void
     {
@@ -68,6 +80,9 @@ class CapsuleCommandTest extends Test
         $this->assertInstanceOf(ClassFactory::class, $this->getPrivateProperty('classFactory'));
     }
 
+    /**
+     * @throws ReflectionException
+     */
     #[Testing]
     public function setStore(): void
     {
@@ -75,6 +90,9 @@ class CapsuleCommandTest extends Test
         $this->assertInstanceOf(Store::class, $this->getPrivateProperty('store'));
     }
 
+    /**
+     * @throws ReflectionException
+     */
     #[Testing]
     public function setStr(): void
     {
@@ -82,6 +100,9 @@ class CapsuleCommandTest extends Test
         $this->assertInstanceOf(Str::class, $this->getPrivateProperty('str'));
     }
 
+    /**
+     * @throws ReflectionException
+     */
     #[Testing]
     public function setArr(): void
     {
@@ -89,6 +110,9 @@ class CapsuleCommandTest extends Test
         $this->assertInstanceOf(Arr::class, $this->getPrivateProperty('arr'));
     }
 
+    /**
+     * @throws ReflectionException
+     */
     #[Testing]
     public function execute(): void
     {
@@ -102,27 +126,30 @@ class CapsuleCommandTest extends Test
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH . self::FILE_NAME);
 
-        /** @var CapsuleInterface $objClass */
+        /** @phpstan-ignore-next-line */
         $objClass = new (self::OBJECT_NAME)();
 
+        /** @phpstan-ignore-next-line */
         $this->initReflection($objClass);
 
-        $this->assertIsObject($objClass);
-
+        /** @phpstan-ignore-next-line */
         $this->assertInstances($objClass, [
             self::OBJECT_NAME,
             CapsuleInterface::class,
         ]);
 
+        /** @phpstan-ignore-next-line */
         $tableName = $objClass->getTableName();
 
         $this->assertIsString($tableName);
         $this->assertSame(self::CLASS_ENTITY, $tableName);
 
+        /** @phpstan-ignore-next-line */
         $capsule = $objClass->capsule();
 
         $this->assertIsObject($capsule);
 
+        /** @phpstan-ignore-next-line */
         $this->assertInstances($capsule, [
             self::OBJECT_NAME,
             CapsuleInterface::class,
@@ -138,16 +165,35 @@ class CapsuleCommandTest extends Test
                 ClassFactory::PRIVATE_PROPERTY
             );
 
-            $this->assertNull($this->getPrivateProperty($dataProperty->format->snake));
+            /** @var stdClass $format */
+            $format = $dataProperty->format;
 
-            $getter = $dataProperty->getter->name;
-            $setter = $dataProperty->setter->name;
+            /** @var string $snakeCase */
+            $snakeCase = $format->snake;
 
-            $this->assertInstanceOf(self::OBJECT_NAME, $objClass->$setter(null));
-            $this->assertNull($objClass->$getter());
+            $this->assertNull($this->getPrivateProperty($snakeCase));
+
+            /** @var stdClass $getter */
+            $getter = $dataProperty->getter;
+
+            /** @var stdClass $setter */
+            $setter = $dataProperty->setter;
+
+            /** @var string $getterName */
+            $getterName = $getter->name;
+
+            /** @var string $setterName */
+            $setterName = $setter->name;
+
+            /** @phpstan-ignore-next-line */
+            $this->assertInstanceOf(self::OBJECT_NAME, $objClass->$setterName(null));
+            $this->assertNull($objClass->$getterName());
         }
     }
 
+    /**
+     * @throws ReflectionException
+     */
     #[Testing]
     public function executeWithoutProperties(): void
     {
@@ -160,27 +206,32 @@ class CapsuleCommandTest extends Test
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH . self::FILE_NAME);
 
-        /** @var CapsuleInterface $objClass */
+        /** @phpstan-ignore-next-line */
         $objClass = new (self::OBJECT_NAME)();
 
+        /** @phpstan-ignore-next-line */
         $this->initReflection($objClass);
 
         $this->assertIsObject($objClass);
 
+        /** @phpstan-ignore-next-line */
         $this->assertInstances($objClass, [
             self::OBJECT_NAME,
             CapsuleInterface::class,
         ]);
 
+        /** @phpstan-ignore-next-line */
         $tableName = $objClass->getTableName();
 
         $this->assertIsString($tableName);
         $this->assertSame(self::CLASS_ENTITY, $tableName);
 
+        /** @phpstan-ignore-next-line */
         $capsule = $objClass->capsule();
 
         $this->assertIsObject($capsule);
 
+        /** @phpstan-ignore-next-line */
         $this->assertInstances($capsule, [
             self::OBJECT_NAME,
             CapsuleInterface::class,

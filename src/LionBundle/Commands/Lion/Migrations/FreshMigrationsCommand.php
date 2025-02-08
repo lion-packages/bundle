@@ -109,12 +109,6 @@ class FreshMigrationsCommand extends MenuCommand
         /** @var array<string, array<string, MigrationUpInterface>> $migrations */
         $migrations = $this->migrations->getMigrations();
 
-        if (empty($migrations)) {
-            $output->writeln($this->warningOutput("\t>> MIGRATION: no migrations available"));
-
-            return parent::INVALID;
-        }
-
         $this->migrations->executeMigrations(
             $this,
             $output,
@@ -151,6 +145,8 @@ class FreshMigrationsCommand extends MenuCommand
      * @return void
      *
      * @internal
+     *
+     * @codeCoverageIgnore
      */
     private function dropTables(): void
     {

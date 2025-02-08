@@ -78,6 +78,8 @@ class DBSeedCommand extends Command
      * @return int
      *
      * @throws LogicException [When this abstract method is not implemented]
+     *
+     * @codeCoverageIgnore
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
