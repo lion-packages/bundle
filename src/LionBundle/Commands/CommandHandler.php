@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands;
 
+use DI\DependencyException;
+use DI\NotFoundException;
 use Lion\Command\Command;
-use Lion\Command\Kernel;
 use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
 use Symfony\Component\Console\Application;
@@ -13,11 +14,9 @@ use Symfony\Component\Console\Application;
 /**
  * Initialize the command application to execute its functions
  *
- * @property Application $application [Application class object]
- * @property Container $container [Container class object]
- * @property Store $store [Store class object]
- *
  * @package Lion\Bundle\Commands
+ *
+ * @codeCoverageIgnore
  */
 class CommandHandler
 {
@@ -29,14 +28,14 @@ class CommandHandler
     private Application $application;
 
     /**
-     * [Container to generate dependency injection]
+     * [Dependency Injection Container Wrapper]
      *
      * @var Container $container
      */
     private Container $container;
 
     /**
-     * [Store class object]
+     * [Manipulate system files]
      *
      * @var Store $store
      */
@@ -49,19 +48,19 @@ class CommandHandler
      */
     public function __construct(string $name = '')
     {
-        $this->application = (new Kernel())->getApplication();
+        $this->application = new Application($name);
+
+        $this->application->setName($name);
 
         $this->container = new Container();
 
         $this->store = new Store();
-
-        $this->application->setName($name);
     }
 
     /**
      * Add commands in the application
      *
-     * @param array<Command> $commands [Command List]
+     * @param array<int, Command> $commands [Command List]
      */
     private function add(array $commands): void
     {
@@ -75,9 +74,12 @@ class CommandHandler
      *
      * @param string $pathCommands [Defined route]
      * @param string $namespace [Namespace for Command classes]
-     * @param string $pathSplit [Route separated]
+     * @param non-empty-string $pathSplit [Route separated]
      *
      * @return array<int, Command>
+     *
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     private function getCommands(string $pathCommands, string $namespace, string $pathSplit): array
     {
@@ -88,7 +90,10 @@ class CommandHandler
             if (isSuccess($this->store->validate([$file], ['php']))) {
                 $class = $this->store->getNamespaceFromFile($file, $namespace, $pathSplit);
 
-                $commands[] = $this->container->resolve($class);
+                /** @var Command $command */
+                $command = $this->container->resolve($class);
+
+                $commands[] = $command;
             }
         }
 
@@ -100,9 +105,12 @@ class CommandHandler
      *
      * @param string $pathCommands [Defined route]
      * @param string $namespace [Namespace for Command classes]
-     * @param string $pathSplit [Route separated]
+     * @param non-empty-string $pathSplit [Route separated]
      *
      * @return CommandHandler
+     *
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     public function registerCommands(string $pathCommands, string $namespace, string $pathSplit): CommandHandler
     {

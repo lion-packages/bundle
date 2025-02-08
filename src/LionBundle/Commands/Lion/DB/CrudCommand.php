@@ -9,10 +9,10 @@ use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Bundle\Helpers\DatabaseEngine;
 use Lion\Bundle\Helpers\FileWriter;
-use Lion\Command\Command;
 use Lion\Database\Connection;
 use Lion\Database\Driver;
 use LogicException;
+use stdClass;
 use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
@@ -21,11 +21,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Generate a CRUD (Controllers, Models, Tests and Capsule Classes) of an entity
- *
- * @property FileWriter $fileWriter [Object of class FileWriter]
- * @property ClassFactory $classFactory [Object of class ClassFactory]
- * @property DatabaseEngine $databaseEngine [Manages basic database engine
- * processes]
  *
  * @package Lion\Bundle\Commands\Lion\DB
  */
@@ -43,14 +38,15 @@ class CrudCommand extends MenuCommand
     ];
 
     /**
-     * [Object of class FileWriter]
+     * [Class that allows writing system files]
      *
      * @var FileWriter $fileWriter
      */
     private FileWriter $fileWriter;
 
     /**
-     * [Object of class ClassFactory]
+     * [Fabricates the data provided to manipulate information (folder, class,
+     * namespace)]
      *
      * @var ClassFactory $classFactory
      */
@@ -117,77 +113,98 @@ class CrudCommand extends MenuCommand
      *
      * @return int
      *
-     * @throws LogicException|ExceptionInterface [When this abstract method is
-     * not implemented]
+     * @throws ExceptionInterface
+     * @throws LogicException [When this abstract method is not implemented]
+     *
+     * @codeCoverageIgnore
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        /** @var string $entity */
         $entity = $input->getArgument('entity');
 
         $selectedConnection = $this->selectConnection($input, $output);
 
         $connectionName = Connection::getConnections()[$selectedConnection]['dbname'];
 
+        /** @var string $driver */
         $driver = $this->databaseEngine->getDatabaseEngineType($selectedConnection);
 
-        $connectionPascal = $this->str->of($connectionName)->replace('_', ' ')->replace('-', ' ')->pascal()->get();
+        /** @var string $connectionPascal */
+        $connectionPascal = $this->str
+            ->of($connectionName)
+            ->replace('_', ' ')
+            ->replace('-', ' ')
+            ->pascal()
+            ->get();
 
-        $entityPascal = $this->str->of($entity)->replace('_', ' ')->replace('-', ' ')->pascal()->get();
+        /** @var string $entityPascal */
+        $entityPascal = $this->str
+            ->of($entity)
+            ->replace('_', ' ')
+            ->replace('-', ' ')
+            ->pascal()
+            ->get();
 
+        /** @var array<int, stdClass>|stdClass $columns */
         $columns = $this->getTableColumns($driver, $selectedConnection, $entity);
 
-        if (isError($columns)) {
-            $output->writeln($this->errorOutput("\t>>  CRUD: {$columns->message}"));
+        if (is_object($columns) && isError($columns)) {
+            /** @var string $message */
+            $message = $columns->message;
 
-            return Command::FAILURE;
+            $output->writeln($this->errorOutput("\t>>  CRUD: {$message}"));
+
+            return parent::FAILURE;
         }
 
-        $this->addDBRules($entity, $output);
+        if (is_array($columns)) {
+            $this->addDBRules($entity);
 
-        $this->addControllerAndModel(
-            $this->databaseEngine->getDriver($driver),
-            $entityPascal,
-            $connectionPascal,
-            $entity,
-            $columns,
-            $output
-        );
+            $this->addControllerAndModel(
+                $this->databaseEngine->getDriver($driver),
+                $entityPascal,
+                $connectionPascal,
+                $entity,
+                $columns
+            );
 
-        $this->addCapsule(
-            $this->databaseEngine->getDriver($driver),
-            $entity,
-            $connectionPascal,
-            $entityPascal,
-            $output
-        );
+            $this->addCapsule(
+                $this->databaseEngine->getDriver($driver),
+                $entity,
+                $connectionPascal,
+                $entityPascal,
+                $output
+            );
 
-        $output->writeln($this->infoOutput("\n\t>>  CRUD: crud has been generated for the '{$entity}' entity"));
+            $output->writeln($this->infoOutput("\n\t>>  CRUD: crud has been generated for the '{$entity}' entity"));
+        }
 
-        return Command::SUCCESS;
+        return parent::SUCCESS;
     }
 
     /**
      * Create the rules of an entity
      *
      * @param string $entity [Entity name]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
      *
      * @return void
      *
      * @throws ExceptionInterface
+     *
+     * @codeCoverageIgnore
      */
-    private function addDBRules(string $entity, OutputInterface $output): void
+    private function addDBRules(string $entity): void
     {
+        $arrayInput = new ArrayInput([
+            'entity' => $entity,
+        ]);
+
+        /** @phpstan-ignore-next-line */
         $this
             ->getApplication()
             ->find('db:rules')
-            ->run(
-                new ArrayInput([
-                    'entity' => $entity,
-                ]),
-                $output
-            );
+            ->run($arrayInput, $this->output);
     }
 
     /**
@@ -197,52 +214,51 @@ class CrudCommand extends MenuCommand
      * @param string $entityPascal [Entity name in pascal-case format]
      * @param string $connectionPascal [Database name in pascal-case format]
      * @param string $entity [Entity name]
-     * @param array $columns [List of defined columns]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
+     * @param array<int, stdClass> $columns [List of defined columns]
      *
      * @return void
      *
      * @throws ExceptionInterface
+     *
+     * @codeCoverageIgnore
      */
     private function addControllerAndModel(
         string $driver,
         string $entityPascal,
         string $connectionPascal,
         string $entity,
-        array $columns,
-        OutputInterface $output
+        array $columns
     ): void {
+        $arrayInputController = new ArrayInput([
+            'controller' => "{$connectionPascal}/{$driver}/{$entityPascal}Controller",
+            '--model' => "{$connectionPascal}/{$driver}/{$entityPascal}Model",
+        ]);
+
+        $arrayInputModel = new ArrayInput([
+            'test' => "App/Http/Controllers/{$connectionPascal}/{$driver}/{$entityPascal}ControllerTest",
+        ]);
+
+        $arrayInputTest = new ArrayInput([
+            'test' => "App/Models/{$connectionPascal}/{$driver}/{$entityPascal}ModelTest",
+        ]);
+
+        /** @phpstan-ignore-next-line */
         $this
             ->getApplication()
             ->find('new:controller')
-            ->run(
-                new ArrayInput([
-                    'controller' => "{$connectionPascal}/{$driver}/{$entityPascal}Controller",
-                    '--model' => "{$connectionPascal}/{$driver}/{$entityPascal}Model",
-                ]),
-                $output
-            );
+            ->run($arrayInputController, $this->output);
 
+        /** @phpstan-ignore-next-line */
         $this
             ->getApplication()
             ->find('new:test')
-            ->run(
-                new ArrayInput([
-                    'test' => "App/Http/Controllers/{$connectionPascal}/{$driver}/{$entityPascal}ControllerTest",
-                ]),
-                $output
-            );
+            ->run($arrayInputModel, $this->output);
 
+        /** @phpstan-ignore-next-line */
         $this
             ->getApplication()
             ->find('new:test')
-            ->run(
-                new ArrayInput([
-                    'test' => "App/Models/{$connectionPascal}/{$driver}/{$entityPascal}ModelTest",
-                ]),
-                $output
-            );
+            ->run($arrayInputTest, $this->output);
 
         $namespacePascal = "Database\\Class\\{$connectionPascal}\\{$driver}\\{$entityPascal}";
 
@@ -535,6 +551,8 @@ class CrudCommand extends MenuCommand
      * @return void
      *
      * @throws ExceptionInterface
+     *
+     * @codeCoverageIgnore
      */
     private function addCapsule(
         string $driver,
@@ -543,25 +561,25 @@ class CrudCommand extends MenuCommand
         string $entityPascal,
         OutputInterface $output
     ): void {
+        $inputArrayCapsule = new ArrayInput([
+            'entity' => $entity,
+        ]);
+
+        $inputArrayTest = new ArrayInput([
+            'test' => "Database/Class/{$connectionPascal}/{$driver}/{$entityPascal}Test",
+        ]);
+
+        /** @phpstan-ignore-next-line */
         $this
             ->getApplication()
             ->find('db:capsule')
-            ->run(
-                new ArrayInput([
-                    'entity' => $entity,
-                ]),
-                $output
-            );
+            ->run($inputArrayCapsule, $output);
 
+        /** @phpstan-ignore-next-line */
         $this
             ->getApplication()
             ->find('new:test')
-            ->run(
-                new ArrayInput([
-                    'test' => "Database/Class/{$connectionPascal}/{$driver}/{$entityPascal}Test",
-                ]),
-                $output
-            );
+            ->run($inputArrayTest, $output);
     }
 
     /**
@@ -569,41 +587,72 @@ class CrudCommand extends MenuCommand
      * content to the generated model
      *
      * @param string $entityPascal [Entity name in pascal-case format]
-     * @param array $columns [List of defined columns]
+     * @param array<int, stdClass> $columns [List of defined columns]
      *
-     * @return array
+     * @return array{
+     *     create: array<int, string>,
+     *     update: array<int, string>,
+     *     delete: array<int, string>
+     * }
+     *
+     * @codeCoverageIgnore
      */
     private function generateCallGettersModel(string $entityPascal, array $columns): array
     {
-        $methods = ['create' => [], 'update' => [], 'delete' => []];
+        $methods = [
+            'create' => [],
+            'update' => [],
+            'delete' => [],
+        ];
 
         foreach (self::METHODS as $method) {
             foreach ($columns as $column) {
+                /** @var string $field */
+                $field = $column->Field;
+
+                /** @var string $type */
+                $type = $column->Type;
+
                 $getter = $this->classFactory->getProperty(
-                    $column->Field,
+                    $field,
                     $entityPascal,
-                    $this->classFactory->getDBType($column->Type)
+                    $this->classFactory->getDBType($type)
                 );
 
+                /** @var stdClass $getterInfo */
+                $getterInfo = $getter->getter;
+
+                /** @var string $getterName */
+                $getterName = $getterInfo->name;
+
                 if ('create' === $method  && 'PRI' != $column->Key) {
-                    $methods[$method][] = $getter->getter->name;
+                    $methods[$method][] = $getterName;
                 }
 
                 if ('update' === $method) {
-                    $methods[$method][] = $getter->getter->name;
+                    $methods[$method][] = $getterName;
                 }
 
                 if ('delete' === $method && 'PRI' === $column->Key) {
-                    $methods[$method][] = $getter->getter->name;
+                    $methods[$method][] = $getterName;
                 }
             }
         }
 
         foreach ($columns as $column) {
             if ('PRI' === $column->Key) {
+                /** @var array<int, string> $methodList */
+                $methodList = $this->arr
+                    ->of($methods['update'])
+                    ->where(fn ($value, $key) => $key != 0)
+                    ->get();
+
+                /** @var string $firstMethod */
+                $firstMethod = reset($methods['update']);
+
                 $methods['update'] = [
-                    ...$this->arr->of($methods['update'])->where(fn ($value, $key) => $key != 0)->get(),
-                    reset($methods['update'])
+                    ...$methodList,
+                    $firstMethod
                 ];
             }
         }
