@@ -9,7 +9,6 @@ use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Bundle\Helpers\DatabaseEngine;
 use Lion\Bundle\Helpers\FileWriter;
-use Lion\Command\Command;
 use Lion\Database\Connection;
 use Lion\Database\Driver;
 use LogicException;
@@ -39,14 +38,15 @@ class CrudCommand extends MenuCommand
     ];
 
     /**
-     * [Object of class FileWriter]
+     * [Class that allows writing system files]
      *
      * @var FileWriter $fileWriter
      */
     private FileWriter $fileWriter;
 
     /**
-     * [Object of class ClassFactory]
+     * [Fabricates the data provided to manipulate information (folder, class,
+     * namespace)]
      *
      * @var ClassFactory $classFactory
      */
@@ -115,6 +115,8 @@ class CrudCommand extends MenuCommand
      *
      * @throws ExceptionInterface
      * @throws LogicException [When this abstract method is not implemented]
+     *
+     * @codeCoverageIgnore
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -189,6 +191,8 @@ class CrudCommand extends MenuCommand
      * @return void
      *
      * @throws ExceptionInterface
+     *
+     * @codeCoverageIgnore
      */
     private function addDBRules(string $entity): void
     {
@@ -215,6 +219,8 @@ class CrudCommand extends MenuCommand
      * @return void
      *
      * @throws ExceptionInterface
+     *
+     * @codeCoverageIgnore
      */
     private function addControllerAndModel(
         string $driver,
@@ -545,6 +551,8 @@ class CrudCommand extends MenuCommand
      * @return void
      *
      * @throws ExceptionInterface
+     *
+     * @codeCoverageIgnore
      */
     private function addCapsule(
         string $driver,
@@ -586,6 +594,8 @@ class CrudCommand extends MenuCommand
      *     update: array<int, string>,
      *     delete: array<int, string>
      * }
+     *
+     * @codeCoverageIgnore
      */
     private function generateCallGettersModel(string $entityPascal, array $columns): array
     {

@@ -15,6 +15,8 @@ use Symfony\Component\Console\Application;
  * Initialize the command application to execute its functions
  *
  * @package Lion\Bundle\Commands
+ *
+ * @codeCoverageIgnore
  */
 class CommandHandler
 {
