@@ -90,7 +90,7 @@ class RunTestCommand extends Command
             $commandString .= " --filter {$method}";
         }
 
-        if (!empty($report) && 'none' != $report) {
+        if (!empty($report) && 'none' === $report) {
             $commandString .= ' --coverage-clover tests/build/logs/clover.xml --coverage-html tests/build/coverage';
         }
 
