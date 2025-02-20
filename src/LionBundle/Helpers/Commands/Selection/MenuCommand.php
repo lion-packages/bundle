@@ -343,15 +343,12 @@ class MenuCommand extends Command
      * @param string $selectedConnection [Database connection]
      * @param string $entity [Entity name]
      *
-     * @return stdClass|array<stdClass|array<int|string, mixed>|DatabaseCapsuleInterface>
+     * @return array<int, array<int|string, mixed>|DatabaseCapsuleInterface|stdClass>|stdClass
      *
      * @internal
      */
-    protected function getTableColumns(
-        string $driver,
-        string $selectedConnection,
-        string $entity
-    ): stdClass|array|DatabaseCapsuleInterface {
+    protected function getTableColumns(string $driver, string $selectedConnection, string $entity): array|stdClass
+    {
         if (Driver::MYSQL === $driver) {
             return MySQL::connection($selectedConnection)
                 ->show()
@@ -438,7 +435,7 @@ class MenuCommand extends Command
      * @param string $selectedConnection [Database connection]
      * @param string $entity [Entity name]
      *
-     * @return array<stdClass|array<int|string, mixed>|DatabaseCapsuleInterface>|stdClass
+     * @return array<int, array<int|string, mixed>|DatabaseCapsuleInterface|stdClass>|stdClass
      *
      * @internal
      */
@@ -481,7 +478,7 @@ class MenuCommand extends Command
      *
      * @param string $connectionName [Connection name]
      *
-     * @return array<stdClass|array<int|string, mixed>|DatabaseCapsuleInterface>|stdClass
+     * @return array<int, array<int|string, mixed>|DatabaseCapsuleInterface|stdClass>|stdClass
      */
     protected function getTables(string $connectionName): array|stdClass
     {

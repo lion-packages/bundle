@@ -96,7 +96,9 @@ class DBCapsuleCommand extends MenuCommand
 
         $selectedConnection = $this->selectConnectionByEnviroment($input, $output);
 
-        $connectionName = Connection::getConnections()[$selectedConnection]['dbname'];
+        $connections = Connection::getConnections();
+
+        $connectionName = $connections[$selectedConnection]['dbname'];
 
         /** @var string $databaseEngineType */
         $databaseEngineType = $this->databaseEngine->getDatabaseEngineType($selectedConnection);
@@ -131,7 +133,10 @@ class DBCapsuleCommand extends MenuCommand
             $connPascal = $this->classFactory->getClassFormat($connectionName);
 
             /** @var string $formatEntity */
-            $formatEntity = $this->str->of($entity)->replace('`', '')->get();
+            $formatEntity = $this->str
+                ->of($entity)
+                ->replace('`', '')
+                ->get();
 
             $className = $this->classFactory->getClassFormat($formatEntity);
 
