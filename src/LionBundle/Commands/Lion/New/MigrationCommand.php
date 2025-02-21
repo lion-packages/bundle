@@ -44,7 +44,7 @@ class MigrationCommand extends MenuCommand
      *
      * @const STORE_PROCEDURE
      */
-    private const string STORE_PROCEDURE = 'Store-Procedure';
+    private const string STORE_PROCEDURE = 'Stored-Procedure';
 
     /**
      * [List of available types]

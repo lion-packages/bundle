@@ -71,7 +71,7 @@ class DBCapsuleCommandTest extends Test
     private function createTables(): void
     {
         /** @var string $dbName */
-        $dbName = env('DB_NAME');
+        $dbName = env('DB_DEFAULT');
 
         Schema::connection($dbName)
             ->createTable(self::ENTITY, function () {

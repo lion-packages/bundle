@@ -72,12 +72,15 @@ class RulesDBCommandTest extends Test
 
         Schema::dropTable(self::ENTITY)
             ->execute();
+
+        Schema::dropTable('roles')
+            ->execute();
     }
 
     private function createTables(): void
     {
         /** @var string $dbName */
-        $dbName = env('DB_NAME');
+        $dbName = env('DB_DEFAULT');
 
         Schema::connection($dbName)
             ->createTable('roles', function (): void {

@@ -298,16 +298,15 @@ class MenuCommandTest extends Test
         $this->assertStringContainsString("(ts)", $commandTester->getDisplay());
     }
 
+    /**
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
     #[Testing]
     public function selectConnection(): void
     {
         $command = new class extends MenuCommand
         {
-            private const array TYPES = [
-                'js',
-                'ts',
-            ];
-
             protected function configure(): void
             {
                 $this->setName('test:menu:command');
@@ -323,15 +322,18 @@ class MenuCommandTest extends Test
             }
         };
 
+        /** @var MenuCommand $command */
+        $command = $this->container->resolve($command::class);
+
         $application = new Application();
 
-        $application->add($this->container->resolve($command::class));
+        $application->add($command);
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
         $this->assertSame(Command::SUCCESS, $commandTester->setInputs(["0"])->execute([]));
-        $this->assertStringContainsString("(lion_database)", $commandTester->getDisplay());
-        $this->assertSame($_ENV['SELECTED_CONNECTION'], 'lion_database');
+        $this->assertStringContainsString("(local)", $commandTester->getDisplay());
+        $this->assertSame($_ENV['SELECTED_CONNECTION'], 'local');
         $this->assertSame(Command::SUCCESS, $commandTester->setInputs(["1"])->execute([]));
         $this->assertStringContainsString("(lion_database_test)", $commandTester->getDisplay());
         $this->assertSame($_ENV['SELECTED_CONNECTION'], 'lion_database_test');
@@ -392,8 +394,8 @@ class MenuCommandTest extends Test
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
         $this->assertSame(Command::SUCCESS, $commandTester->setInputs([""])->execute([]));
-        $this->assertStringContainsString("(lion_database)", $commandTester->getDisplay());
-        $this->assertSame($_ENV['SELECTED_CONNECTION'], 'lion_database');
+        $this->assertStringContainsString("(local)", $commandTester->getDisplay());
+        $this->assertSame($_ENV['SELECTED_CONNECTION'], 'local');
 
         unset($_ENV['SELECTED_CONNECTION']);
 
@@ -404,7 +406,7 @@ class MenuCommandTest extends Test
 
         $connections = DB::getConnections();
 
-        $this->assertArrayHasKey('lion_database', $connections);
+        $this->assertArrayHasKey('local', $connections);
         $this->assertArrayHasKey('lion_database_test', $connections);
     }
 
@@ -440,8 +442,8 @@ class MenuCommandTest extends Test
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
         $this->assertSame(Command::SUCCESS, $commandTester->setInputs(["0"])->execute([]));
-        $this->assertStringContainsString("(lion_database)", $commandTester->getDisplay());
-        $this->assertSame($_ENV['SELECTED_CONNECTION'], 'lion_database');
+        $this->assertStringContainsString("(local)", $commandTester->getDisplay());
+        $this->assertSame($_ENV['SELECTED_CONNECTION'], 'local');
 
         unset($_ENV['SELECTED_CONNECTION']);
 
@@ -480,11 +482,11 @@ class MenuCommandTest extends Test
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
         $this->assertSame(Command::SUCCESS, $commandTester->setInputs(["0"])->execute([]));
-        $this->assertStringContainsString("(lion_database)", $commandTester->getDisplay());
-        $this->assertSame($_ENV['SELECTED_CONNECTION'], 'lion_database');
+        $this->assertStringContainsString("(local)", $commandTester->getDisplay());
+        $this->assertSame($_ENV['SELECTED_CONNECTION'], 'local');
         $this->assertSame(Command::SUCCESS, $commandTester->setInputs(["0"])->execute([]));
-        $this->assertStringContainsString("(lion_database)", $commandTester->getDisplay());
-        $this->assertSame($_ENV['SELECTED_CONNECTION'], 'lion_database');
+        $this->assertStringContainsString("(local)", $commandTester->getDisplay());
+        $this->assertSame($_ENV['SELECTED_CONNECTION'], 'local');
 
         unset($_ENV['SELECTED_CONNECTION']);
 
@@ -558,7 +560,8 @@ class MenuCommandTest extends Test
     {
         $foreigns = $this->getPrivateMethod('getTableForeigns', [
             'driver' => 'not-exists',
-            'selectedConnection' => 'test',
+            'connectionName' => 'test',
+            'databaseName' => 'test',
             'entity' => 'test',
         ]);
 
