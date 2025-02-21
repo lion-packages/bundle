@@ -97,7 +97,7 @@ class CrudCommandTest extends Test
     private function createTables(): void
     {
         /** @var string $dbName */
-        $dbName = env('DB_NAME');
+        $dbName = env('DB_DEFAULT');
 
         /** @var string $dbNameTestPostgresql */
         $dbNameTestPostgresql = env('DB_NAME_TEST_POSTGRESQL');
@@ -132,7 +132,7 @@ class CrudCommandTest extends Test
     private function dropTables(): void
     {
         /** @var string $dbName */
-        $dbName = env('DB_NAME');
+        $dbName = env('DB_DEFAULT');
 
         /** @var string $dbNameTestPostgresql */
         $dbNameTestPostgresql = env('DB_NAME_TEST_POSTGRESQL');

@@ -44,20 +44,20 @@ class MigrationFactory
              *
              * @const INDEX
              */
-            const ?int INDEX = null;
+            public const ?int INDEX = null;
 
             /**
              * {@inheritdoc}
              */
             public function up(): stdClass
             {
-                return Schema::connection(env('DB_NAME_EXAMPLE', 'lion_database'))
+                return Schema::connection(env('DB_DEFAULT', 'local'))
                     ->createTable('--NAME--', function (): void {
                         Schema::int('id')->notNull()->autoIncrement()->primaryKey();
                     })
                     ->execute();
             }
-        };
+        }
 
         PHP;
     }
@@ -149,7 +149,7 @@ class MigrationFactory
              */
             public function up(): stdClass
             {
-                return Schema::connection(env('DB_NAME_EXAMPLE', 'lion_database'))
+                return Schema::connection(env('DB_DEFAULT', 'local'))
                     ->createView('--NAME--', function (MySQL \$db): void {
                         \$db
                             ->table('table')
@@ -157,7 +157,7 @@ class MigrationFactory
                     })
                     ->execute();
             }
-        };
+        }
 
         PHP;
     }
@@ -203,7 +203,7 @@ class MigrationFactory
                     )
                     ->execute();
             }
-        };
+        }
 
         PHP;
     }
@@ -242,7 +242,7 @@ class MigrationFactory
              */
             public function up(): stdClass
             {
-                return Schema::connection(env('DB_NAME_EXAMPLE', 'lion_database'))
+                return Schema::connection(env('DB_DEFAULT', 'local'))
                     ->createStoreProcedure('--NAME--', function (): void {
                         Schema::in()->varchar('name', 25);
                     }, function (MySQL \$db): void {
@@ -252,7 +252,7 @@ class MigrationFactory
                     })
                     ->execute();
             }
-        };
+        }
 
         PHP;
     }
@@ -290,7 +290,7 @@ class MigrationFactory
              */
             public function up(): stdClass
             {
-                return PostgreSQL::connection(env('DB_NAME_EXAMPLE', 'lion_database'))
+                return PostgreSQL::connection(env('DB_DEFAULT', 'local'))
                     ->query(
                         <<<SQL
                         -- SQL
@@ -298,7 +298,7 @@ class MigrationFactory
                     )
                     ->execute();
             }
-        };
+        }
 
         PHP;
     }
