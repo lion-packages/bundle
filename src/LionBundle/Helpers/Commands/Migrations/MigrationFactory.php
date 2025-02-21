@@ -95,14 +95,14 @@ class MigrationFactory
              *
              * @const INDEX
              */
-            const ?int INDEX = null;
+            public const ?int INDEX = null;
 
             /**
              * {@inheritdoc}
              */
             public function up(): stdClass
             {
-                return PostgreSQL::connection(env('DB_NAME_EXAMPLE', 'lion_database'))
+                return PostgreSQL::connection(env('DB_DEFAULT', 'local'))
                     ->query(
                         <<<SQL
                         -- SQL
@@ -110,7 +110,7 @@ class MigrationFactory
                     )
                     ->execute();
             }
-        };
+        }
 
         PHP;
     }
@@ -195,7 +195,7 @@ class MigrationFactory
              */
             public function up(): stdClass
             {
-                return PostgreSQL::connection(env('DB_NAME_EXAMPLE', 'lion_database'))
+                return PostgreSQL::connection(env('DB_DEFAULT', 'local'))
                     ->query(
                         <<<SQL
                         -- SQL

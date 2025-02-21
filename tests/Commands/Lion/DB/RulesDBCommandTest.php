@@ -72,6 +72,9 @@ class RulesDBCommandTest extends Test
 
         Schema::dropTable(self::ENTITY)
             ->execute();
+
+        Schema::dropTable('roles')
+            ->execute();
     }
 
     private function createTables(): void

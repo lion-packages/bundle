@@ -93,7 +93,7 @@ class RulesDBCommand extends MenuCommand
 
         $selectedConnection = $this->selectConnectionByEnviroment($input, $output);
 
-        $connectionName = Connection::getConnections()[$selectedConnection]['dbname'];
+        $databaseName = Connection::getConnections()[$selectedConnection]['dbname'];
 
         /** @var string $databaseEngineType */
         $databaseEngineType = $this->databaseEngine->getDatabaseEngineType($selectedConnection);
@@ -110,7 +110,7 @@ class RulesDBCommand extends MenuCommand
 
         /** @var string $connectionPascal */
         $connectionPascal = $this->str
-            ->of($connectionName)
+            ->of($databaseName)
             ->replace('_', ' ')
             ->replace('-', ' ')
             ->pascal()
@@ -127,13 +127,13 @@ class RulesDBCommand extends MenuCommand
         }
 
         /** @var array<int, stdClass>|stdClass $foreigns */
-        $foreigns = $this->getTableForeigns($databaseEngineType, $selectedConnection, $entity);
+        $foreigns = $this->getTableForeigns($databaseEngineType, $selectedConnection, $databaseName, $entity);
 
-        if (is_array($columns)) {
+        if (is_array($columns) && !empty($columns)) {
             foreach ($columns as $column) {
                 $isForeign = false;
 
-                if (is_array($foreigns)) {
+                if (is_array($foreigns) && !empty($foreigns)) {
                     foreach ($foreigns as $foreign) {
                         if ($column->Field === $foreign->COLUMN_NAME) {
                             $isForeign = true;

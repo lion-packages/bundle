@@ -432,27 +432,32 @@ class MenuCommand extends Command
      * Get the foreign keys of a table
      *
      * @param string $driver [Database engine]
-     * @param string $selectedConnection [Database connection]
+     * @param string $connectionName [Database connection]
+     * @param string $databaseName [Database name]
      * @param string $entity [Entity name]
      *
      * @return array<int, array<int|string, mixed>|DatabaseCapsuleInterface|stdClass>|stdClass
      *
      * @internal
      */
-    protected function getTableForeigns(string $driver, string $selectedConnection, string $entity): array|stdClass
-    {
+    protected function getTableForeigns(
+        string $driver,
+        string $connectionName,
+        string $databaseName,
+        string $entity
+    ): array|stdClass {
         if (Driver::MYSQL === $driver) {
-            return MySQL::connection($selectedConnection)
+            return MySQL::connection($connectionName)
                 ->table('INFORMATION_SCHEMA.KEY_COLUMN_USAGE', false)
                 ->select('COLUMN_NAME')
-                ->where()->equalTo('TABLE_SCHEMA', $selectedConnection)
+                ->where()->equalTo('TABLE_SCHEMA', $databaseName)
                 ->and()->equalTo('TABLE_NAME', $entity)
                 ->and('REFERENCED_TABLE_NAME')->isNotNull()
                 ->getAll();
         }
 
         if (Driver::POSTGRESQL === $driver) {
-            return PostgreSQL::connection($selectedConnection)
+            return PostgreSQL::connection($connectionName)
                 ->query(
                     <<<SQL
                     SELECT

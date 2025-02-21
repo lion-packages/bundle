@@ -32,7 +32,7 @@ class DatabaseEngineTest extends Test
     }
 
     #[Testing]
-    #[TestWith(['connectionName' => 'lion_database', 'return' => 'mysql'])]
+    #[TestWith(['connectionName' => 'local', 'return' => 'mysql'])]
     #[TestWith(['connectionName' => 'lion_database_test', 'return' => 'mysql'])]
     #[TestWith(['connectionName' => 'lion_database_postgres', 'return' => 'postgresql'])]
     #[TestWith(['connectionName' => 'not-exist', 'return' => null])]
