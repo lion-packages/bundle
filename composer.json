@@ -58,7 +58,7 @@
         "lion/files": "^8.1",
         "lion/helpers": "^5.2",
         "lion/request": "^7.2",
-        "lion/route": "^12.2",
+        "lion/route": "^12.3",
         "lion/security": "^11.1",
         "monolog/monolog": "^3.3",
         "nesbot/carbon": "^3.8",
