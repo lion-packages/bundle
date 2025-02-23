@@ -111,22 +111,21 @@ class MiddlewareCommand extends Command
                 use Lion\Bundle\Exceptions\MiddlewareException;
                 use Lion\Request\Http;
                 use Lion\Request\Status;
+                use Lion\Route\Interface\MiddlewareInterface;
 
                 /**
                  * Description of Middleware '{$class}'
                  *
                  * @package {$namespace}
                  */
-                class {$class}
+                class {$class} implements MiddlewareInterface
                 {
                     /**
-                     * Middleware description
-                     *
-                     * @return void
+                     * {@inheritDoc}
                      *
                      * @throws MiddlewareException
                      */
-                    public function example(): void
+                    public function process(): void
                     {
                         throw new MiddlewareException('message', Status::ERROR, Http::UNAUTHORIZED);
                     }

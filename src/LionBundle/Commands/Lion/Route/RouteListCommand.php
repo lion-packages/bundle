@@ -62,7 +62,7 @@ class RouteListCommand extends Command
     /**
      * [List of defined Middleware]
      *
-     * @var array<int, Middleware> $configMiddleware
+     * @var array<string, class-string> $configMiddleware
      */
     private array $configMiddleware = [];
 
@@ -150,18 +150,13 @@ class RouteListCommand extends Command
 
                 if ($this->arr->of($method['filters'])->length() > 0) {
                     foreach ($method['filters'] as $filter) {
-                        foreach ($this->configMiddleware as $middleware) {
-                            if ($filter === $middleware->getMiddlewareName()) {
-                                /** @var string $methodClass */
-                                $methodClass = $middleware->getMethodClass();
-
-                                $rows[] = [
-                                    $this->infoOutput('MIDDLEWARE:'),
-                                    $this->infoOutput($filter),
-                                    $middleware->getClass(),
-                                    $this->warningOutput($methodClass)
-                                ];
-                            }
+                        if (isset($this->configMiddleware[$filter])) {
+                            $rows[] = [
+                                $this->infoOutput('MIDDLEWARE'),
+                                $this->infoOutput($filter),
+                                $this->configMiddleware[$filter],
+                                $this->warningOutput('process')
+                            ];
                         }
                     }
                 }
@@ -204,15 +199,7 @@ class RouteListCommand extends Command
 
         new Table($output)
             ->setHeaderTitle($this->successOutput('ROUTES'))
-            ->setFooterTitle(
-                $size > 1
-                    ? $this->successOutput(" showing [{$cont}] routes ")
-                    : (
-                        $size === 1
-                        ? $this->successOutput(' showing a single route ')
-                        : $this->successOutput(' no routes available ')
-                    )
-            )
+            ->setFooterTitle($this->successOutput(" Showing [{$cont}] routes "))
             ->setHeaders(['HTTP METHOD', 'ROUTE', 'CLASS', 'FUNCTION'])
             ->setRows($rows)
             ->render();

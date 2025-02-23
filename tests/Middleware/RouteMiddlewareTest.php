@@ -9,12 +9,13 @@ use Lion\Bundle\Middleware\RouteMiddleware;
 use Lion\Exceptions\Exception;
 use Lion\Request\Http;
 use Lion\Request\Status;
+use Lion\Route\Interface\MiddlewareInterface;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
 
 class RouteMiddlewareTest extends Test
 {
-    private RouteMiddleware $routeMiddleware;
+    private MiddlewareInterface $routeMiddleware;
 
     protected function setUp(): void
     {
@@ -29,11 +30,11 @@ class RouteMiddlewareTest extends Test
     {
         $this
             ->exception(MiddlewareException::class)
-            ->exceptionMessage('secure hash not found')
+            ->exceptionMessage('Secure hash not found')
             ->exceptionStatus(Status::ERROR)
             ->exceptionCode(Http::UNAUTHORIZED)
             ->expectLionException(function (): void {
-                $this->routeMiddleware->protectRouteList();
+                $this->routeMiddleware->process();
             });
     }
 
@@ -45,13 +46,13 @@ class RouteMiddlewareTest extends Test
     {
         $this
             ->exception(MiddlewareException::class)
-            ->exceptionMessage('you do not have access to this resource')
+            ->exceptionMessage('You do not have access to this resource')
             ->exceptionStatus(Status::ERROR)
             ->exceptionCode(Http::UNAUTHORIZED)
             ->expectLionException(function (): void {
                 $_SERVER['HTTP_LION_AUTH'] = 'ff1d1bcda9afa5873bdc8205c11e880a43351ea56dc059f6544116961f6f5c0e';
 
-                $this->routeMiddleware->protectRouteList();
+                $this->routeMiddleware->process();
             });
     }
 }
