@@ -75,7 +75,7 @@ class RouteListCommandTest extends Test
     public function execute(): void
     {
         $listMiddleware = [
-            new Middleware('protect-route-list', RouteMiddleware::class, 'protectRouteList')
+            'protect-route-list' => RouteMiddleware::class,
         ];
 
         Routes::setMiddleware($listMiddleware);

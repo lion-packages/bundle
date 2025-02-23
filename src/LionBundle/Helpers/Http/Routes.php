@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Helpers\Http;
 
-use Lion\Route\Middleware;
-
 /**
  * Initializes the defined web rules and filters
  *
@@ -16,14 +14,14 @@ class Routes
     /**
      * [List of defined web filters]
      *
-     * @var array<int, Middleware> $middleware
+     * @var array<string, class-string> $middleware
      */
     private static array $middleware;
 
     /**
      * Returns the list of defined web filters
      *
-     * @return array<int, Middleware>
+     * @return array<string, class-string>
      */
     public static function getMiddleware(): array
     {
@@ -33,7 +31,8 @@ class Routes
     /**
      * Change the list of defined web filters
      *
-     * @param array<int, Middleware> $middleware [List of defined web filters]
+     * @param array<string, class-string> $middleware [List of defined web
+     * filters]
      *
      * @return void
      */

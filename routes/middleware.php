@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Lion\Bundle\Helpers\Http\Routes;
 use Lion\Bundle\Middleware\RouteMiddleware;
-use Lion\Route\Middleware;
 
 /**
  * -----------------------------------------------------------------------------
@@ -15,5 +14,5 @@ use Lion\Route\Middleware;
  **/
 
 Routes::setMiddleware([
-    new Middleware('protect-route-list', RouteMiddleware::class, 'protectRouteList')
+    'protect-route-list' => RouteMiddleware::class,
 ]);
