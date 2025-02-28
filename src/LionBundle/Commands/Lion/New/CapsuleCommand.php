@@ -245,7 +245,7 @@ class CapsuleCommand extends Command
                      *
                      * @var string \$entity
                      */
-                    private string \$entity = '{$entity}';
+                    private static string \$entity = '{$entity}';
 
                 PHP
             )->ln();
