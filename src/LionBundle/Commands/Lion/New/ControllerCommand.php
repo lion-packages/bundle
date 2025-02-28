@@ -212,7 +212,19 @@ class ControllerCommand extends Command
                         ->replace('controller', '')
                         ->get();
 
+                    $methodType = $method === 'read'
+                        ? [
+                            'type' => 'array|stdClass',
+                            // phpcs:ignore Generic.Files.LineLength.TooLong
+                            'annotation' => 'array<int, array<int|string, mixed>|DatabaseCapsuleInterface|stdClass>|stdClass',
+                        ]
+                        : 'int|stdClass';
+
                     if ('none' != $model) {
+                        $methodParams = in_array($method, ['update', 'delete'], true)
+                            ? ($modelClass . ' $' . $camelModelClass . ', string $id')
+                            : ($modelClass . ' $' . $camelModelClass);
+
                         /** @var string $modelMethod */
                         $modelMethod = $this->str
                             ->of('return ')
@@ -230,14 +242,8 @@ class ControllerCommand extends Command
 
                         $customMethod = $factoryController->getCustomMethod(
                             $controllerMethod,
-                            $method === 'read' ? 'stdClass|array|DatabaseCapsuleInterface' : 'stdClass',
-                            (
-                                in_array($method, ['update', 'delete'], true) ? (
-                                    $modelClass . ' $' . $camelModelClass . ', string $id'
-                                ) : (
-                                    $modelClass . ' $' . $camelModelClass
-                                )
-                            ),
+                            $methodType,
+                            $methodParams,
                             $modelMethod,
                             'public',
                             $method === 'delete' ? 1 : 2
@@ -245,7 +251,7 @@ class ControllerCommand extends Command
                     } else {
                         $customMethod = $factoryController->getCustomMethod(
                             $controllerMethod,
-                            $method === 'read' ? 'stdClass|array|DatabaseCapsuleInterface' : 'stdClass',
+                            $methodType,
                             (in_array($method, ['update', 'delete'], true) ? 'string $id' : ''),
                             $method === 'read' ? "return [];" : "return success();",
                             'public',

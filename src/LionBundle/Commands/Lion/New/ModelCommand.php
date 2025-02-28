@@ -8,6 +8,7 @@ use DI\Attribute\Inject;
 use Exception;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
+use Lion\Database\Interface\DatabaseCapsuleInterface;
 use Lion\Files\Store;
 use Lion\Helpers\Str;
 use LogicException;
@@ -159,15 +160,22 @@ class ModelCommand extends Command
                 ->concat('DB')
                 ->get();
 
+            $methodType = $method === 'read'
+                ? [
+                    'type' => 'array|stdClass',
+                    'annotation' => 'array<int, array<int|string, mixed>|DatabaseCapsuleInterface|stdClass>|stdClass',
+                ]
+                : 'int|stdClass';
+
+            $methodBody = $method === 'read'
+                ? "return DB::table('')\n\t\t\t->select()\n\t\t\t->getAll();"
+                : "return DB::call('', [])\n\t\t\t->execute();";
+
             $customMethod = $this->classFactory->getCustomMethod(
                 $methodName,
-                $method === 'read' ? 'stdClass|array|DatabaseCapsuleInterface' : 'stdClass',
+                $methodType,
                 '',
-                (
-                    $method === 'read'
-                        ? "return DB::table('')\n\t\t\t->select()\n\t\t\t->getAll();"
-                        : "return DB::call('', [])\n\t\t\t->execute();"
-                ),
+                $methodBody,
                 'public',
                 $method === 'delete' ? 1 : 2
             );
