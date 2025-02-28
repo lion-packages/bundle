@@ -431,9 +431,45 @@ trait ClassFactoryProviderTrait
         ];
     }
 
+    /**
+     * @return array<int, array{
+     *     name: string,
+     *     type: array{
+     *          type: string,
+     *          annotation: string
+     *     }|string,
+     *     params: string,
+     *     content: string,
+     *     visibility: string,
+     *     lineBreak: int,
+     *     return: string
+     * }>
+     */
     public static function getCustomMethodProvider(): array
     {
         return [
+            [
+                'name' => 'example',
+                'type' => [
+                    'type' => 'null',
+                    'annotation' => 'null',
+                ],
+                'params' => '',
+                'content' => 'return null;',
+                'visibility' => 'public',
+                'lineBreak' => 2,
+                'return' => <<<PHP
+                \t/**
+                \t * Description of 'example'
+                \t *
+                \t * @return null
+                \t */
+                \tpublic function example(): null
+                \t{
+                \t\treturn null;
+                \t}\n\n
+                PHP
+            ],
             [
                 'name' => 'example',
                 'type' => 'null',
@@ -529,6 +565,30 @@ trait ClassFactoryProviderTrait
                 \t * @param array \$param1 [Parameter Description]
                 \t *
                 \t * @return array
+                \t */
+                \tprotected function example(array \$param1): array
+                \t{
+                \t\treturn [...\$param1];
+                \t}\n\n
+                PHP
+            ],
+            [
+                'name' => 'example',
+                'type' => [
+                    'type' => 'array',
+                    'annotation' => 'array<int, string>',
+                ],
+                'params' => 'array $param1',
+                'content' => 'return [...$param1];',
+                'visibility' => 'protected',
+                'lineBreak' => 2,
+                'return' => <<<PHP
+                \t/**
+                \t * Description of 'example'
+                \t *
+                \t * @param array \$param1 [Parameter Description]
+                \t *
+                \t * @return array<int, string>
                 \t */
                 \tprotected function example(array \$param1): array
                 \t{
