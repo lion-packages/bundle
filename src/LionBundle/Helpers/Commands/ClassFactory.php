@@ -393,39 +393,38 @@ class ClassFactory
      * Generate a custom method with its definitions
      *
      * @param string $name [Method name]
-     * @param string $type [Method type]
+     * @param array{
+     *     type: string,
+     *     annotation: string
+     * }|string $type [Method type]
      * @param string $params [Method parameters]
      * @param string $content [Method content]
      * @param string $visibility [Scope of the method]
-     * @param int|integer $lineBreak [Number of line breaks after the method]
+     * @param int $lineBreak [Number of line breaks after the method]
      *
      * @return string
      */
     public function getCustomMethod(
         string $name,
-        string $type = '',
+        array|string $type = '',
         string $params = '',
         string $content = 'return;',
         string $visibility = 'public',
         int $lineBreak = 2
     ): string {
-        $method = '';
+        if (is_string($type)) {
+            $methodType = $type === '' ? ': void' : ": {$type}";
 
-        $allCount = 16;
+            $splitMethodType = explode(':', $methodType);
 
-        $allCountWithType = 18;
+            $methodTypeAnnotation = trim(array_pop($splitMethodType));
+        }
 
-        $countContentFunction = strlen($visibility) + strlen($name) + strlen($params);
+        if (is_array($type)) {
+            $methodType = $type['type'] === '' ? ': void' : ": {$type['type']}";
 
-        $countContentFunction += '' === $type ? 0 : strlen($type);
-
-        $countContentFunction += '' === $type ? $allCount : $allCountWithType;
-
-        $methodType = $type === '' ? ': void' : ": {$type}";
-
-        $splitMethodType = explode(':', $methodType);
-
-        $methodTypeAnnotation = trim(array_pop($splitMethodType));
+            $methodTypeAnnotation = $type['annotation'];
+        }
 
         $paramsAnnotation = '';
 
@@ -449,7 +448,7 @@ class ClassFactory
             $paramsAnnotation .= "* @param {$params} [Parameter Description]";
         }
 
-        $method .= "\t/**\n\t * Description of '{$name}'\n";
+        $method = "\t/**\n\t * Description of '{$name}'\n";
 
         $method .= "\t *\n";
 
