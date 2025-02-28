@@ -9,7 +9,7 @@ use Lion\Database\Connection;
 use Lion\Database\Driver;
 use Lion\Database\Drivers\PostgreSQL;
 use Lion\Database\Drivers\Schema\MySQL as Schema;
-use Lion\Database\Interface\RunDatabaseProcessesInterface;
+use Lion\Database\Interface\ExecuteInterface;
 use LogicException;
 use stdClass;
 use Symfony\Component\Console\Input\InputInterface;
@@ -82,6 +82,7 @@ class EmptyMigrationsCommand extends MenuCommand
                     $truncate = $this->truncateTable($connection['type'], $connectionName, $tableName);
 
                     if (null != $truncate) {
+                        /** @var stdClass $response */
                         $response = $truncate->execute();
 
                         /** @var string $message */
@@ -115,7 +116,7 @@ class EmptyMigrationsCommand extends MenuCommand
      * @param string $connectionName [Connection name]
      * @param string $table [Name the table]
      *
-     * @return RunDatabaseProcessesInterface|null
+     * @return ExecuteInterface|null
      *
      * @codeCoverageIgnore
      */
@@ -123,7 +124,7 @@ class EmptyMigrationsCommand extends MenuCommand
         string $driver,
         string $connectionName,
         string $table
-    ): ?RunDatabaseProcessesInterface {
+    ): ?ExecuteInterface {
         if (Driver::MYSQL === $driver) {
             return Schema::connection($connectionName)
                 ->truncateTable($table);

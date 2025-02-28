@@ -22,8 +22,8 @@ trait CapsuleTrait
     /**
      * {@inheritdoc}
      */
-    public function getTableName(): string
+    public static function getTableName(): string
     {
-        return $this->entity;
+        return self::$entity;
     }
 }
