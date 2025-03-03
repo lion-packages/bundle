@@ -208,7 +208,7 @@ trait MigrationsFactoryProviderTrait
 
                 namespace Database\Migrations\LionDatabase\MySQL\StoreProcedures;
 
-                use Lion\Bundle\Interface\Migrations\StoreProcedureInterface;
+                use Lion\Bundle\Interface\Migrations\StoredProcedureInterface;
                 use Lion\Database\Drivers\MySQL;
                 use Lion\Database\Drivers\Schema\MySQL as Schema;
                 use stdClass;
@@ -218,7 +218,7 @@ trait MigrationsFactoryProviderTrait
                  *
                  * @package Database\Migrations\LionDatabase\MySQL\StoreProcedures
                  */
-                class Test implements StoreProcedureInterface
+                class Test implements StoredProcedureInterface
                 {
                     /**
                      * {@inheritdoc}
@@ -255,7 +255,7 @@ trait MigrationsFactoryProviderTrait
 
                 namespace Database\Migrations\LionDatabase\PostgreSQL\StoreProcedures;
 
-                use Lion\Bundle\Interface\Migrations\StoreProcedureInterface;
+                use Lion\Bundle\Interface\Migrations\StoredProcedureInterface;
                 use Lion\Database\Drivers\PostgreSQL;
                 use stdClass;
 
@@ -264,7 +264,7 @@ trait MigrationsFactoryProviderTrait
                  *
                  * @package Database\Migrations\LionDatabase\PostgreSQL\StoreProcedures
                  */
-                class Test implements StoreProcedureInterface
+                class Test implements StoredProcedureInterface
                 {
                     /**
                      * {@inheritdoc}

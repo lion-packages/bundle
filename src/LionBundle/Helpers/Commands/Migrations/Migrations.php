@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Lion\Bundle\Helpers\Commands\Migrations;
 
 use DI\Attribute\Inject;
-use Lion\Bundle\Interface\Migrations\StoreProcedureInterface;
+use Lion\Bundle\Interface\Migrations\StoredProcedureInterface;
 use Lion\Bundle\Interface\Migrations\TableInterface;
 use Lion\Bundle\Interface\Migrations\ViewInterface;
 use Lion\Bundle\Interface\MigrationUpInterface;
@@ -89,7 +89,7 @@ class Migrations
         $allMigrations = [
             TableInterface::class => [],
             ViewInterface::class => [],
-            StoreProcedureInterface::class => [],
+            StoredProcedureInterface::class => [],
         ];
 
         foreach ($this->store->getFiles('./database/Migrations/') as $migration) {
@@ -113,8 +113,8 @@ class Migrations
                     $allMigrations[ViewInterface::class][$namespace] = $tableMigration;
                 }
 
-                if ($tableMigration instanceof StoreProcedureInterface) {
-                    $allMigrations[StoreProcedureInterface::class][$namespace] = $tableMigration;
+                if ($tableMigration instanceof StoredProcedureInterface) {
+                    $allMigrations[StoredProcedureInterface::class][$namespace] = $tableMigration;
                 }
             }
         }
@@ -167,7 +167,7 @@ class Migrations
         $migrations = [
             TableInterface::class => [],
             ViewInterface::class => [],
-            StoreProcedureInterface::class => [],
+            StoredProcedureInterface::class => [],
         ];
 
         foreach ($list as $namespace) {
@@ -182,8 +182,8 @@ class Migrations
                 $migrations[ViewInterface::class][$namespace] = $classObject;
             }
 
-            if ($classObject instanceof StoreProcedureInterface) {
-                $migrations[StoreProcedureInterface::class][$namespace] = $classObject;
+            if ($classObject instanceof StoredProcedureInterface) {
+                $migrations[StoredProcedureInterface::class][$namespace] = $classObject;
             }
         }
 
@@ -204,6 +204,6 @@ class Migrations
 
         $run($migrations[ViewInterface::class]);
 
-        $run($migrations[StoreProcedureInterface::class]);
+        $run($migrations[StoredProcedureInterface::class]);
     }
 }

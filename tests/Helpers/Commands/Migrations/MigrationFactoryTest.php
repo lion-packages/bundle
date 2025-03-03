@@ -65,7 +65,7 @@ class MigrationFactoryTest extends Test
     #[DataProvider('getMySQLStoreProcedureBodyProvider')]
     public function getMySQLStoreProcedureBody(string $className, string $namespace, string $body): void
     {
-        $return = $this->migrationFactory->getMySQLStoreProcedureBody($className, $namespace);
+        $return = $this->migrationFactory->getMySQLStoredProcedureBody($className, $namespace);
 
         $this->assertIsString($return);
         $this->assertSame($body, $return);
@@ -75,7 +75,7 @@ class MigrationFactoryTest extends Test
     #[DataProvider('getPostgreSQLStoreProcedureBodyProvider')]
     public function getPostgreSQLStoreProcedureBody(string $className, string $namespace, string $body): void
     {
-        $return = $this->migrationFactory->getPostgreSQLStoreProcedureBody($className, $namespace);
+        $return = $this->migrationFactory->getPostgreSQLStoredProcedureBody($className, $namespace);
 
         $this->assertIsString($return);
         $this->assertSame($body, $return);

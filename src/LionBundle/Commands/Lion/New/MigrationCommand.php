@@ -44,7 +44,7 @@ class MigrationCommand extends MenuCommand
      *
      * @const STORE_PROCEDURE
      */
-    private const string STORE_PROCEDURE = 'Stored-Procedure';
+    private const string STORED_PROCEDURE = 'Stored-Procedure';
 
     /**
      * [List of available types]
@@ -54,7 +54,7 @@ class MigrationCommand extends MenuCommand
     private const array MIGRATIONS_OPTIONS = [
         self::TABLE,
         self::VIEW,
-        self::STORE_PROCEDURE,
+        self::STORED_PROCEDURE,
     ];
 
     /**
@@ -256,18 +256,18 @@ class MigrationCommand extends MenuCommand
             }
         }
 
-        if (self::STORE_PROCEDURE === $selectedType) {
-            $path = "database/Migrations/{$dbPascal}/{$driver}/StoreProcedures/";
+        if (self::STORED_PROCEDURE === $selectedType) {
+            $path = "database/Migrations/{$dbPascal}/{$driver}/StoredProcedures/";
 
             if ($this->databaseEngine->getDriver(Driver::MYSQL) === $driver) {
-                $body = $this->migrationFactory->getMySQLStoreProcedureBody(
+                $body = $this->migrationFactory->getMySQLStoredProcedureBody(
                     $className,
-                    "Database\\Migrations\\{$dbPascal}\\{$driver}\\StoreProcedures"
+                    "Database\\Migrations\\{$dbPascal}\\{$driver}\\StoredProcedures"
                 );
             } elseif ($this->databaseEngine->getDriver(Driver::POSTGRESQL) === $driver) {
-                $body = $this->migrationFactory->getPostgreSQLStoreProcedureBody(
+                $body = $this->migrationFactory->getPostgreSQLStoredProcedureBody(
                     $className,
-                    "Database\\Migrations\\{$dbPascal}\\{$driver}\\StoreProcedures"
+                    "Database\\Migrations\\{$dbPascal}\\{$driver}\\StoredProcedures"
                 );
             }
         }

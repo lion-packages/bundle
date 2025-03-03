@@ -7,7 +7,7 @@ namespace Lion\Bundle\Commands\Lion\Migrations;
 use DI\Attribute\Inject;
 use Lion\Bundle\Helpers\Commands\Migrations\Migrations;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
-use Lion\Bundle\Interface\Migrations\StoreProcedureInterface;
+use Lion\Bundle\Interface\Migrations\StoredProcedureInterface;
 use Lion\Bundle\Interface\Migrations\TableInterface;
 use Lion\Bundle\Interface\Migrations\ViewInterface;
 use Lion\Bundle\Interface\MigrationUpInterface;
@@ -120,7 +120,7 @@ class FreshMigrationsCommand extends MenuCommand
         $this->migrations->executeMigrations($this, $output, $migrations[ViewInterface::class]);
 
         /** @phpstan-ignore-next-line */
-        $this->migrations->executeMigrations($this, $output, $migrations[StoreProcedureInterface::class]);
+        $this->migrations->executeMigrations($this, $output, $migrations[StoredProcedureInterface::class]);
 
         $output->writeln($this->infoOutput("\n\t>> Migrations executed successfully"));
 

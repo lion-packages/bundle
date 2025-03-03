@@ -216,7 +216,7 @@ class MigrationFactory
      *
      * @return string
      */
-    public function getMySQLStoreProcedureBody(string $className, string $namespace): string
+    public function getMySQLStoredProcedureBody(string $className, string $namespace): string
     {
         return <<<PHP
         <?php
@@ -225,7 +225,7 @@ class MigrationFactory
 
         namespace {$namespace};
 
-        use Lion\Bundle\Interface\Migrations\StoreProcedureInterface;
+        use Lion\Bundle\Interface\Migrations\StoredProcedureInterface;
         use Lion\Database\Drivers\MySQL;
         use Lion\Database\Drivers\Schema\MySQL as Schema;
         use stdClass;
@@ -235,7 +235,7 @@ class MigrationFactory
          *
          * @package {$namespace}
          */
-        class {$className} implements StoreProcedureInterface
+        class {$className} implements StoredProcedureInterface
         {
             /**
              * {@inheritdoc}
@@ -265,7 +265,7 @@ class MigrationFactory
      *
      * @return string
      */
-    public function getPostgreSQLStoreProcedureBody(string $className, string $namespace): string
+    public function getPostgreSQLStoredProcedureBody(string $className, string $namespace): string
     {
         return <<<PHP
         <?php
@@ -274,7 +274,7 @@ class MigrationFactory
 
         namespace {$namespace};
 
-        use Lion\Bundle\Interface\Migrations\StoreProcedureInterface;
+        use Lion\Bundle\Interface\Migrations\StoredProcedureInterface;
         use Lion\Database\Drivers\PostgreSQL;
         use stdClass;
 
@@ -283,7 +283,7 @@ class MigrationFactory
          *
          * @package {$namespace}
          */
-        class {$className} implements StoreProcedureInterface
+        class {$className} implements StoredProcedureInterface
         {
             /**
              * {@inheritdoc}

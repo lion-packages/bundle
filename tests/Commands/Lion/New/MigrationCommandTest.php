@@ -10,7 +10,7 @@ use Lion\Bundle\Commands\Lion\New\MigrationCommand;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\Migrations\MigrationFactory;
 use Lion\Bundle\Helpers\DatabaseEngine;
-use Lion\Bundle\Interface\Migrations\StoreProcedureInterface;
+use Lion\Bundle\Interface\Migrations\StoredProcedureInterface;
 use Lion\Bundle\Interface\Migrations\TableInterface;
 use Lion\Bundle\Interface\Migrations\ViewInterface;
 use Lion\Bundle\Interface\MigrationUpInterface;
@@ -29,18 +29,18 @@ class MigrationCommandTest extends Test
     private const string NAMESPACE_MYSQL_TABLE = 'Database\\Migrations\\LionDatabase\\MySQL\\Tables\\';
     private const string NAMESPACE_MYSQL_VIEW = 'Database\\Migrations\\LionDatabase\\MySQL\\Views\\';
     private const string NAMESPACE_MYSQL_STORE_PROCEDURES =
-        'Database\\Migrations\\LionDatabase\\MySQL\\StoreProcedures\\';
+        'Database\\Migrations\\LionDatabase\\MySQL\\StoredProcedures\\';
     private const string NAMESPACE_POSTGRESQL_TABLE = 'Database\\Migrations\\LionDatabase\\PostgreSQL\\Tables\\';
     private const string NAMESPACE_POSTGRESQL_VIEW = 'Database\\Migrations\\LionDatabase\\PostgreSQL\\Views\\';
     private const string NAMESPACE_POSTGRESQL_STORE_PROCEDURES =
-        'Database\\Migrations\\LionDatabase\\PostgreSQL\\StoreProcedures\\';
+        'Database\\Migrations\\LionDatabase\\PostgreSQL\\StoredProcedures\\';
     private const string URL_PATH_MYSQL_TABLE = './database/Migrations/LionDatabase/MySQL/Tables/';
     private const string URL_PATH_MYSQL_VIEW = './database/Migrations/LionDatabase/MySQL/Views/';
-    private const string URL_PATH_MYSQL_STORE_PROCEDURES = './database/Migrations/LionDatabase/MySQL/StoreProcedures/';
+    private const string URL_PATH_MYSQL_STORE_PROCEDURES = './database/Migrations/LionDatabase/MySQL/StoredProcedures/';
     private const string URL_PATH_POSTGRESQL_TABLE = './database/Migrations/LionDatabase/PostgreSQL/Tables/';
     private const string URL_PATH_POSTGRESQL_VIEW = './database/Migrations/LionDatabase/PostgreSQL/Views/';
     private const string URL_PATH_POSTGRESQL_STORE_PROCEDURES =
-        './database/Migrations/LionDatabase/PostgreSQL/StoreProcedures/';
+        './database/Migrations/LionDatabase/PostgreSQL/StoredProcedures/';
     private const string FILE_NAME = self::CLASS_NAME . '.php';
     private const string OUTPUT_MESSAGE = 'migration has been generated';
 
@@ -193,7 +193,7 @@ class MigrationCommandTest extends Test
         /** @phpstan-ignore-next-line */
         $this->assertInstances($objClass, [
             MigrationUpInterface::class,
-            StoreProcedureInterface::class,
+            StoredProcedureInterface::class,
         ]);
     }
 
@@ -271,7 +271,7 @@ class MigrationCommandTest extends Test
         /** @phpstan-ignore-next-line */
         $this->assertInstances($objClass, [
             MigrationUpInterface::class,
-            StoreProcedureInterface::class,
+            StoredProcedureInterface::class,
         ]);
     }
 }
