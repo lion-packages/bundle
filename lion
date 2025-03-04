@@ -41,9 +41,9 @@ if (isSuccess((new Store())->exist(__DIR__ . '/.env'))) {
  * */
 
 Driver::run([
-    'default' => env('DB_NAME'),
+    'default' => env('DB_DEFAULT'),
     'connections' => [
-        env('DB_NAME') => [
+        env('DB_DEFAULT') => [
             'type' => env('DB_TYPE'),
             'host' => env('DB_HOST'),
             'port' => env('DB_PORT'),

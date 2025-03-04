@@ -11,7 +11,6 @@ use Lion\Bundle\Interface\Migrations\StoredProcedureInterface;
 use Lion\Bundle\Interface\Migrations\TableInterface;
 use Lion\Bundle\Interface\Migrations\ViewInterface;
 use Lion\Bundle\Interface\MigrationUpInterface;
-use Lion\Command\Command;
 use Lion\Database\Connection;
 use Lion\Database\Driver;
 use Lion\Database\Drivers\PostgreSQL;

@@ -41,25 +41,33 @@ if (isSuccess((new Store())->exist(__DIR__ . '/.env'))) {
  * */
 
 Driver::run([
-    'default' => $_ENV['DB_NAME'],
+    'default' => env('DB_DEFAULT'),
     'connections' => [
-        $_ENV['DB_NAME'] => [
-            'type' => $_ENV['DB_TYPE'],
-            'host' => $_ENV['DB_HOST'],
-            'port' => $_ENV['DB_PORT'],
-            'dbname' => $_ENV['DB_NAME'],
-            'user' => $_ENV['DB_USER'],
-            'password' => $_ENV['DB_PASSWORD']
+        env('DB_DEFAULT') => [
+            'type' => env('DB_TYPE'),
+            'host' => env('DB_HOST'),
+            'port' => env('DB_PORT'),
+            'dbname' => env('DB_NAME'),
+            'user' => env('DB_USER'),
+            'password' => env('DB_PASSWORD'),
         ],
-        $_ENV['DB_NAME_TEST'] => [
-            'type' => $_ENV['DB_TYPE_TEST'],
-            'host' => $_ENV['DB_HOST_TEST'],
-            'port' => $_ENV['DB_PORT_TEST'],
-            'dbname' => $_ENV['DB_NAME'],
-            'user' => $_ENV['DB_USER_TEST'],
-            'password' => $_ENV['DB_PASSWORD_TEST']
-        ]
-    ]
+        env('DB_NAME_TEST') => [
+            'type' => env('DB_TYPE_TEST'),
+            'host' => env('DB_HOST_TEST'),
+            'port' => env('DB_PORT_TEST'),
+            'dbname' => env('DB_NAME'),
+            'user' => env('DB_USER_TEST'),
+            'password' => env('DB_PASSWORD_TEST'),
+        ],
+        env('DB_NAME_TEST_POSTGRESQL') => [
+            'type' => env('DB_TYPE_TEST_POSTGRESQL'),
+            'host' => env('DB_HOST_TEST_POSTGRESQL'),
+            'port' => env('DB_PORT_TEST_POSTGRESQL'),
+            'dbname' => env('DB_NAME'),
+            'user' => env('DB_USER_TEST_POSTGRESQL'),
+            'password' => env('DB_PASSWORD_TEST_POSTGRESQL'),
+        ],
+    ],
 ]);
 
 /**

@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\Migrations;
 
+use DI\Attribute\Inject;
+use Lion\Bundle\Helpers\Commands\Migrations\Migrations;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Database\Connection;
-use Lion\Database\Driver;
-use Lion\Database\Drivers\PostgreSQL;
-use Lion\Database\Drivers\Schema\MySQL as Schema;
-use Lion\Database\Interface\ExecuteInterface;
 use LogicException;
 use stdClass;
 use Symfony\Component\Console\Input\InputInterface;
@@ -22,6 +20,21 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class EmptyMigrationsCommand extends MenuCommand
 {
+    /**
+     * [Manages the processes of creating or executing migrations]
+     *
+     * @var Migrations $migrations
+     */
+    private Migrations $migrations;
+
+    #[Inject]
+    public function setMigrations(Migrations $migrations): EmptyMigrationsCommand
+    {
+        $this->migrations = $migrations;
+
+        return $this;
+    }
+
     /**
      * Configures the current command
      *
@@ -62,7 +75,7 @@ class EmptyMigrationsCommand extends MenuCommand
             $tables = $this->getTables($connectionName);
 
             if (isSuccess($tables)) {
-                $output->writeln($this->warningOutput("\t>> MIGRATION: no tables available"));
+                $output->writeln($this->warningOutput("\t>> MIGRATION: No tables available"));
 
                 continue;
             }
@@ -79,7 +92,7 @@ class EmptyMigrationsCommand extends MenuCommand
                     /** @var string $tableName */
                     $tableName = $table->{"Tables_in_{$connection['dbname']}"};
 
-                    $truncate = $this->truncateTable($connection['type'], $connectionName, $tableName);
+                    $truncate = $this->migrations->truncateTable($connection['type'], $connectionName, $tableName);
 
                     if (null != $truncate) {
                         /** @var stdClass $response */
@@ -104,41 +117,8 @@ class EmptyMigrationsCommand extends MenuCommand
             }
         }
 
-        $output->writeln($this->infoOutput("\n\t>> all tables have been truncated"));
+        $output->writeln($this->infoOutput("\n\t>> All tables have been truncated"));
 
         return parent::SUCCESS;
-    }
-
-    /**
-     * Empty the available tables
-     *
-     * @param string $driver [Database engine]
-     * @param string $connectionName [Connection name]
-     * @param string $table [Name the table]
-     *
-     * @return ExecuteInterface|null
-     *
-     * @codeCoverageIgnore
-     */
-    private function truncateTable(
-        string $driver,
-        string $connectionName,
-        string $table
-    ): ?ExecuteInterface {
-        if (Driver::MYSQL === $driver) {
-            return Schema::connection($connectionName)
-                ->truncateTable($table);
-        }
-
-        if (Driver::POSTGRESQL === $driver) {
-            return PostgreSQL::connection($connectionName)
-                ->query(
-                    <<<SQL
-                    TRUNCATE TABLE {$table} CASCADE;
-                    SQL
-                );
-        }
-
-        return null;
     }
 }

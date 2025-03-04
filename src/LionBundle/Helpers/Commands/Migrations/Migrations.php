@@ -11,6 +11,10 @@ use Lion\Bundle\Interface\Migrations\ViewInterface;
 use Lion\Bundle\Interface\MigrationUpInterface;
 use Lion\Bundle\Interface\SeedInterface;
 use Lion\Command\Command;
+use Lion\Database\Driver;
+use Lion\Database\Drivers\PostgreSQL;
+use Lion\Database\Drivers\Schema\MySQL as Schema;
+use Lion\Database\Interface\ExecuteInterface;
 use Lion\Files\Store;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -205,5 +209,40 @@ class Migrations
         $run($migrations[ViewInterface::class]);
 
         $run($migrations[StoredProcedureInterface::class]);
+    }
+
+    /**
+     * Empty the available tables
+     *
+     * @param string $driver [Database engine]
+     * @param string $connectionName [Connection name]
+     * @param string $table [Name the table]
+     *
+     * @return ExecuteInterface|null
+     *
+     * @internal
+     *
+     * @codeCoverageIgnore
+     */
+    public function truncateTable(
+        string $driver,
+        string $connectionName,
+        string $table
+    ): ?ExecuteInterface {
+        if (Driver::MYSQL === $driver) {
+            return Schema::connection($connectionName)
+                ->truncateTable($table);
+        }
+
+        if (Driver::POSTGRESQL === $driver) {
+            return PostgreSQL::connection($connectionName)
+                ->query(
+                    <<<SQL
+                    TRUNCATE TABLE {$table} CASCADE;
+                    SQL
+                );
+        }
+
+        return null;
     }
 }

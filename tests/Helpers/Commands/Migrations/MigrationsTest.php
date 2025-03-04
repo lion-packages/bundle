@@ -12,11 +12,17 @@ use Lion\Bundle\Interface\Migrations\StoredProcedureInterface;
 use Lion\Bundle\Interface\Migrations\TableInterface;
 use Lion\Bundle\Interface\Migrations\ViewInterface;
 use Lion\Bundle\Interface\MigrationUpInterface;
+use Lion\Database\Driver;
+use Lion\Database\Drivers\MySQL;
+use Lion\Database\Drivers\PostgreSQL;
+use Lion\Database\Interface\ExecuteInterface;
 use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
+use Lion\Request\Status;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
 use ReflectionException;
+use stdClass;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -274,5 +280,156 @@ class MigrationsTest extends Test
             self::CLASS_NAMESPACE_VIEW . self::CLASS_NAME,
             self::CLASS_NAMESPACE_STORE_PROCEDURE . self::CLASS_NAME,
         ]);
+    }
+
+    #[Testing]
+    public function truncateTableIsNull(): void
+    {
+        $this->assertNull($this->migrations->truncateTable('test', 'test-connection', 'test_table'));
+    }
+
+    #[Testing]
+    public function truncateTableForMySQL(): void
+    {
+        /** @phpstan-ignore-next-line */
+        MySQL::connection(env('DB_DEFAULT'))
+            ->query(
+                <<<SQL
+                DROP TABLE IF EXISTS roles;
+                SQL
+            )
+            ->query(
+                <<<SQL
+                CREATE TABLE roles (
+                    id INT NOT NULL AUTO_INCREMENT,
+                    roles_name VARCHAR(30) NOT NULL,
+                    PRIMARY KEY (id)
+                ) ENGINE = INNODB DEFAULT CHARACTER SET = UTF8MB4 COLLATE = UTF8MB4_SPANISH_CI;
+                SQL
+            )
+            ->query(
+                <<<SQL
+                INSERT INTO roles (roles_name) VALUES ('ROLE_USER');
+                SQL
+            )
+            ->execute();
+
+        /** @phpstan-ignore-next-line */
+        $roles = MySQL::connection(env('DB_DEFAULT'))
+            ->table('roles')
+            ->select()
+            ->getAll();
+
+        $this->assertIsArray($roles);
+        $this->assertNotEmpty($roles);
+
+        $rol = reset($roles);
+
+        $this->assertIsObject($rol);
+        $this->assertInstanceOf(stdClass::class, $rol);
+
+        /**
+         * @var ExecuteInterface $execute
+         *
+         * @phpstan-ignore-next-line
+         */
+        $execute = $this->migrations->truncateTable(Driver::MYSQL, env('DB_DEFAULT'), 'roles');
+
+        $executeResponse = $execute->execute();
+
+        $this->assertIsObject($executeResponse);
+        $this->assertInstanceOf(stdClass::class, $executeResponse);
+        $this->assertObjectHasProperty('status', $executeResponse);
+        $this->assertSame(Status::SUCCESS, $executeResponse->status);
+
+        /** @phpstan-ignore-next-line */
+        $roles = MySQL::connection(env('DB_DEFAULT'))
+            ->table('roles')
+            ->select()
+            ->getAll();
+
+        $this->assertIsArray($roles);
+        $this->assertEmpty($roles);
+
+        /** @phpstan-ignore-next-line */
+        MySQL::connection(env('DB_DEFAULT'))
+            ->query(
+                <<<SQL
+                DROP TABLE IF EXISTS roles;
+                SQL
+            )
+            ->execute();
+    }
+
+    #[Testing]
+    public function truncateTableForPostgreSQL(): void
+    {
+        /** @phpstan-ignore-next-line */
+        PostgreSQL::connection(env('DB_NAME_TEST_POSTGRESQL'))
+            ->query(
+                <<<SQL
+                DROP TABLE IF EXISTS public.roles;
+                SQL
+            )
+            ->query(
+                <<<SQL
+                CREATE TABLE public.roles (
+                    id SERIAL PRIMARY KEY,
+                    roles_name VARCHAR(30) NOT NULL
+                );
+                SQL
+            )
+            ->query(
+                <<<SQL
+                INSERT INTO roles (roles_name) VALUES ('ROLE_USER');
+                SQL
+            )
+            ->execute();
+
+        /** @phpstan-ignore-next-line */
+        $roles = PostgreSQL::connection(env('DB_NAME_TEST_POSTGRESQL'))
+            ->table('roles', false)
+            ->select()
+            ->getAll();
+
+        $this->assertIsArray($roles);
+        $this->assertNotEmpty($roles);
+
+        $rol = reset($roles);
+
+        $this->assertIsObject($rol);
+        $this->assertInstanceOf(stdClass::class, $rol);
+
+        /**
+         * @var ExecuteInterface $execute
+         *
+         * @phpstan-ignore-next-line
+         */
+        $execute = $this->migrations->truncateTable(Driver::POSTGRESQL, env('DB_NAME_TEST_POSTGRESQL'), 'roles');
+
+        $executeResponse = $execute->execute();
+
+        $this->assertIsObject($executeResponse);
+        $this->assertInstanceOf(stdClass::class, $executeResponse);
+        $this->assertObjectHasProperty('status', $executeResponse);
+        $this->assertSame(Status::SUCCESS, $executeResponse->status);
+
+        /** @phpstan-ignore-next-line */
+        $roles = PostgreSQL::connection(env('DB_NAME_TEST_POSTGRESQL'))
+            ->table('roles', false)
+            ->select()
+            ->getAll();
+
+        $this->assertIsArray($roles);
+        $this->assertEmpty($roles);
+
+        /** @phpstan-ignore-next-line */
+        PostgreSQL::connection(env('DB_NAME_TEST_POSTGRESQL'))
+            ->query(
+                <<<SQL
+                DROP TABLE IF EXISTS roles;
+                SQL
+            )
+            ->execute();
     }
 }
