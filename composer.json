@@ -52,7 +52,7 @@
         "fakerphp/faker": "^1.23",
         "guzzlehttp/guzzle": "^7.9",
         "lion/command": "^5.1",
-        "lion/database": "^11.8",
+        "lion/database": "^11.9",
         "lion/dependency-injection": "^4.2",
         "lion/exceptions": "^2.0",
         "lion/files": "^8.1",
