@@ -138,7 +138,6 @@ class MigrationCommandTest extends Test
         /** @phpstan-ignore-next-line */
         $objClass = new (self::NAMESPACE_MYSQL_TABLE . self::CLASS_NAME)();
 
-        /** @phpstan-ignore-next-line */
         $this->assertInstances($objClass, [
             MigrationUpInterface::class,
             TableInterface::class,
@@ -164,7 +163,6 @@ class MigrationCommandTest extends Test
         /** @phpstan-ignore-next-line */
         $objClass = new (self::NAMESPACE_MYSQL_VIEW . self::CLASS_NAME)();
 
-        /** @phpstan-ignore-next-line */
         $this->assertInstances($objClass, [
             MigrationUpInterface::class,
             ViewInterface::class,
@@ -190,7 +188,6 @@ class MigrationCommandTest extends Test
         /** @phpstan-ignore-next-line */
         $objClass = new (self::NAMESPACE_MYSQL_STORE_PROCEDURES . self::CLASS_NAME)();
 
-        /** @phpstan-ignore-next-line */
         $this->assertInstances($objClass, [
             MigrationUpInterface::class,
             StoredProcedureInterface::class,
@@ -216,7 +213,6 @@ class MigrationCommandTest extends Test
         /** @phpstan-ignore-next-line */
         $objClass = new (self::NAMESPACE_POSTGRESQL_TABLE . self::CLASS_NAME)();
 
-        /** @phpstan-ignore-next-line */
         $this->assertInstances($objClass, [
             MigrationUpInterface::class,
             TableInterface::class,
@@ -242,7 +238,6 @@ class MigrationCommandTest extends Test
         /** @phpstan-ignore-next-line */
         $objClass = new (self::NAMESPACE_POSTGRESQL_VIEW . self::CLASS_NAME)();
 
-        /** @phpstan-ignore-next-line */
         $this->assertInstances($objClass, [
             MigrationUpInterface::class,
             ViewInterface::class,
@@ -268,7 +263,6 @@ class MigrationCommandTest extends Test
         /** @phpstan-ignore-next-line */
         $objClass = new (self::NAMESPACE_POSTGRESQL_STORE_PROCEDURES . self::CLASS_NAME)();
 
-        /** @phpstan-ignore-next-line */
         $this->assertInstances($objClass, [
             MigrationUpInterface::class,
             StoredProcedureInterface::class,
