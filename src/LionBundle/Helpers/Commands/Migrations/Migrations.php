@@ -6,6 +6,7 @@ namespace Lion\Bundle\Helpers\Commands\Migrations;
 
 use Closure;
 use DI\Attribute\Inject;
+use Exception;
 use Lion\Bundle\Interface\Migrations\StoredProcedureInterface;
 use Lion\Bundle\Interface\Migrations\TableInterface;
 use Lion\Bundle\Interface\Migrations\ViewInterface;
@@ -14,6 +15,7 @@ use Lion\Bundle\Interface\SeedInterface;
 use Lion\Command\Command;
 use Lion\Database\Connection;
 use Lion\Database\Driver;
+use Lion\Database\Drivers\MySQL;
 use Lion\Database\Drivers\PostgreSQL;
 use Lion\Database\Drivers\Schema\MySQL as Schema;
 use Lion\Database\Interface\ExecuteInterface;
@@ -263,6 +265,87 @@ class Migrations
         $callback();
 
         $addConnections($backupConnections, false);
+    }
+
+    /**
+     * Remove and rebuild all databases
+     *
+     * @param string $dbName [Database name]
+     * @param string $connectionName [Connection name]
+     * @param string $type [Driver Type]
+     * @param Closure|null $evaluate []
+     *
+     * @return void
+     *
+     * @throws Exception
+     */
+    public function resetDatabase(string $dbName, string $connectionName, string $type, ?Closure $evaluate = null): void
+    {
+        if (Driver::SQLITE === $type) {
+            $this->store->remove($dbName);
+
+            null != $evaluate && $evaluate();
+
+            file_put_contents($dbName, '');
+
+            return;
+        }
+
+        if (Driver::MYSQL === $type) {
+            MySQL::connection($connectionName)
+                ->query(
+                    <<<SQL
+                    DROP DATABASE IF EXISTS `{$dbName}`;
+                    SQL
+                )
+                ->execute();
+
+            null != $evaluate && $evaluate();
+
+            MySQL::connection($connectionName)
+                ->query(
+                    <<<SQL
+                    CREATE DATABASE `{$dbName}`;
+                    SQL
+                )
+                ->execute();
+
+            return;
+        }
+
+        if (Driver::POSTGRESQL === $type) {
+            PostgreSQL::connection($connectionName)
+                ->query(
+                    <<<SQL
+                    SELECT
+                        pg_terminate_backend(pg_stat_activity.pid)
+                    FROM pg_stat_activity
+                    WHERE datname = '{$dbName}'
+                    AND pid <> pg_backend_pid();
+                    SQL
+                )
+                ->execute();
+
+            usleep(500000);
+
+            PostgreSQL::connection($connectionName)
+                ->query(
+                    <<<SQL
+                    DROP DATABASE IF EXISTS "{$dbName}";
+                    SQL
+                )
+                ->execute();
+
+            null != $evaluate && $evaluate();
+
+            PostgreSQL::connection($connectionName)
+                ->query(
+                    <<<SQL
+                    CREATE DATABASE "{$dbName}";
+                    SQL
+                )
+                ->execute();
+        }
     }
 
     /**

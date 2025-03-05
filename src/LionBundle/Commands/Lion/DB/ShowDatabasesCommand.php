@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion\DB;
 
-use DI\Attribute\Inject;
 use Lion\Command\Command;
-use Lion\Helpers\Arr;
-use Lion\Database\Drivers\MySQL as DB;
+use Lion\Database\Connection;
 use LogicException;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
@@ -20,21 +18,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ShowDatabasesCommand extends Command
 {
-    /**
-     * [Modify and build arrays with different indexes or values]
-     *
-     * @var Arr $arr
-     */
-    private Arr $arr;
-
-    #[Inject]
-    public function setArr(Arr $arr): ShowDatabasesCommand
-    {
-        $this->arr = $arr;
-
-        return $this;
-    }
-
     /**
      * Configures the current command
      *
@@ -66,9 +49,9 @@ class ShowDatabasesCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $connections = DB::getConnections();
+        $connections = Connection::getConnections();
 
-        $size = $this->arr->of($connections)->length();
+        $size = count($connections);
 
         $listConnections = [];
 
@@ -76,10 +59,14 @@ class ShowDatabasesCommand extends Command
             $listConnections[] = [
                 'connectionName' => $this->infoOutput($connectionName),
                 'type' => "<fg=#FFB63E>{$connection['type']}</>",
-                'host' => $connection['host'],
-                'port' => $connection['port'],
-                'dbname' => $connection['dbname'],
-                'user' => $connection['user']
+                /** @phpstan-ignore-next-line */
+                'host' => $connection['host'] ?? '',
+                /** @phpstan-ignore-next-line */
+                'port' => $connection['port'] ?? '',
+                /** @phpstan-ignore-next-line */
+                'dbname' => $connection['dbname'] ?? '',
+                /** @phpstan-ignore-next-line */
+                'user' => $connection['user'] ?? '',
             ];
         }
 

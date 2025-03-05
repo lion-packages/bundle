@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lion\Bundle\Commands\Lion\Migrations;
 
 use DI\Attribute\Inject;
+use Exception;
 use Lion\Bundle\Helpers\Commands\Migrations\Migrations;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Bundle\Interface\Migrations\StoredProcedureInterface;
@@ -12,9 +13,6 @@ use Lion\Bundle\Interface\Migrations\TableInterface;
 use Lion\Bundle\Interface\Migrations\ViewInterface;
 use Lion\Bundle\Interface\MigrationUpInterface;
 use Lion\Database\Connection;
-use Lion\Database\Driver;
-use Lion\Database\Drivers\PostgreSQL;
-use Lion\Database\Drivers\Schema\MySQL as Schema;
 use LogicException;
 use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -92,18 +90,30 @@ class FreshMigrationsCommand extends MenuCommand
      *
      * @return int
      *
+     * @throws Exception
      * @throws ExceptionInterface
      * @throws LogicException [When this abstract method is not implemented]
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if (isError($this->store->exist('./database/Migrations/'))) {
+        if (isError($this->store->exist('database/Migrations/'))) {
             $output->writeln($this->errorOutput("\t>> MIGRATION: there are no defined migration routes"));
 
             return parent::FAILURE;
         }
 
-        $this->dropTables();
+        $connections = Connection::getConnections();
+
+        foreach ($connections as $connectionName => $connectionData) {
+            $this->migrations
+                ->processingWithStaticConnections(function () use ($connectionName, $connectionData): void {
+                    $this->migrations->resetDatabase(
+                        $connectionData['dbname'],
+                        $connectionName,
+                        $connectionData['type']
+                    );
+                });
+        }
 
         /** @var array<string, array<string, MigrationUpInterface>> $migrations */
         $migrations = $this->migrations->getMigrations();
@@ -136,63 +146,5 @@ class FreshMigrationsCommand extends MenuCommand
         }
 
         return parent::SUCCESS;
-    }
-
-    /**
-     * Clears all tables of all available connections
-     *
-     * @return void
-     *
-     * @internal
-     *
-     * @codeCoverageIgnore
-     */
-    private function dropTables(): void
-    {
-        $connections = Connection::getConnections();
-
-        foreach ($connections as $connectionName => $connection) {
-            $response = [];
-
-            if (Driver::MYSQL === $connection['type']) {
-                $response = Schema::connection($connectionName)
-                    ->dropTables()
-                    ->execute();
-            }
-
-            if (Driver::POSTGRESQL === $connection['type']) {
-                $tables = $this->getTables($connectionName);
-
-                if (!isset($tables->status)) {
-                    $tablesArr = $this->arr /** @phpstan-ignore-next-line */
-                        ->of($tables)
-                        ->tree('tablename')
-                        ->keys()
-                        ->join(', ');
-
-                    /** @var string $query */
-                    $query = $this->str
-                        ->of('DROP TABLE IF EXISTS ')
-                        ->concat($tablesArr)
-                        ->concat('CASCADE;')
-                        ->get();
-
-                    $response = PostgreSQL::connection($connectionName)
-                        ->query($query)
-                        ->execute();
-                }
-            }
-
-            if (isError($response)) {
-                $this->output->writeln(
-                    $this->warningOutput("\t>> DATABASE: {$connection['dbname']} [{$connection['type']}]")
-                );
-
-                $this->output->writeln(
-                    /** @phpstan-ignore-next-line */
-                    $this->errorOutput("\t>> DATABASE: {$response->message} [{$connection['type']}]")
-                );
-            }
-        }
     }
 }

@@ -66,6 +66,10 @@ $privateConnections = [
         'user' => env('DB_USER_TEST_POSTGRESQL'),
         'password' => env('DB_PASSWORD_TEST_POSTGRESQL'),
     ],
+    'lion_database_sqlite' => [
+        'type' => env('DB_TYPE_TEST_SQLITE'),
+        'dbname' => __DIR__ . '/' . env('DB_NAME_TEST_SQLITE'),
+    ],
 ];
 
 Driver::run([
