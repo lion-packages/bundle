@@ -12,6 +12,7 @@ use Lion\Bundle\Interface\Migrations\StoredProcedureInterface;
 use Lion\Bundle\Interface\Migrations\TableInterface;
 use Lion\Bundle\Interface\Migrations\ViewInterface;
 use Lion\Bundle\Interface\MigrationUpInterface;
+use Lion\Database\Connection;
 use Lion\Database\Driver;
 use Lion\Database\Drivers\MySQL;
 use Lion\Database\Drivers\PostgreSQL;
@@ -104,7 +105,6 @@ class MigrationsTest extends Test
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH_MYSQL_TABLE . self::FILE_NAME);
 
-        /** @phpstan-ignore-next-line */
         $tableMigration = new (self::CLASS_NAMESPACE_TABLE . self::CLASS_NAME)();
 
         $this->assertInstances($tableMigration, [
@@ -147,7 +147,6 @@ class MigrationsTest extends Test
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH_MYSQL_TABLE . self::FILE_NAME);
 
-        /** @phpstan-ignore-next-line */
         $tableMigration = new (self::CLASS_NAMESPACE_TABLE . self::CLASS_NAME)();
 
         $this->assertInstances($tableMigration, [
@@ -168,7 +167,6 @@ class MigrationsTest extends Test
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH_MYSQL_VIEW . self::FILE_NAME);
 
-        /** @phpstan-ignore-next-line */
         $viewMigration = new (self::CLASS_NAMESPACE_VIEW . self::CLASS_NAME)();
 
         $this->assertInstances($viewMigration, [
@@ -189,7 +187,6 @@ class MigrationsTest extends Test
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH_MYSQL_STORED_PROCEDURE . self::FILE_NAME);
 
-        /** @phpstan-ignore-next-line */
         $viewMigration = new (self::CLASS_NAMESPACE_STORE_PROCEDURE . self::CLASS_NAME)();
 
         $this->assertInstances($viewMigration, [
@@ -234,7 +231,7 @@ class MigrationsTest extends Test
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH_MYSQL_TABLE . self::FILE_NAME);
 
-        /** @phpstan-ignore-next-line */
+
         $objClass = new (self::CLASS_NAMESPACE_TABLE . self::CLASS_NAME)();
 
         $this->assertInstances($objClass, [
@@ -250,7 +247,6 @@ class MigrationsTest extends Test
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH_MYSQL_VIEW . self::FILE_NAME);
 
-        /** @phpstan-ignore-next-line */
         $objClass = new (self::CLASS_NAMESPACE_VIEW . self::CLASS_NAME)();
 
         $this->assertInstances($objClass, [
@@ -266,7 +262,6 @@ class MigrationsTest extends Test
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH_MYSQL_STORED_PROCEDURE . self::FILE_NAME);
 
-        /** @phpstan-ignore-next-line */
         $objClass = new (self::CLASS_NAMESPACE_STORE_PROCEDURE . self::CLASS_NAME)();
 
         $this->assertInstances($objClass, [
@@ -274,12 +269,45 @@ class MigrationsTest extends Test
             StoredProcedureInterface::class,
         ]);
 
-        /** @phpstan-ignore-next-line */
         $this->migrations->executeMigrationsGroup([
             self::CLASS_NAMESPACE_TABLE . self::CLASS_NAME,
             self::CLASS_NAMESPACE_VIEW . self::CLASS_NAME,
             self::CLASS_NAMESPACE_STORE_PROCEDURE . self::CLASS_NAME,
         ]);
+    }
+
+    #[Testing]
+    public function processingWithStaticConnections(): void
+    {
+        /** @var string $defaultConnection */
+        $defaultConnection = env('DB_DEFAULT');
+
+        $this->migrations->processingWithStaticConnections(function () use ($defaultConnection): void {
+            $connections = Connection::getConnections();
+
+            $numberOfConnections = count($connections);
+
+            $this->assertSame(NUMBER_OF_ACTIVE_CONNECTIONS, $numberOfConnections);
+
+            $connection = $connections[$defaultConnection];
+
+            $this->assertArrayNotHasKey('dbname', $connection);
+        });
+
+        $connections = Connection::getConnections();
+
+        $numberOfConnections = count($connections);
+
+        $this->assertSame(NUMBER_OF_ACTIVE_CONNECTIONS, $numberOfConnections);
+
+        $connection = $connections[$defaultConnection];
+
+        /** @var string $dbName */
+        $dbName = env('DB_NAME');
+
+        $this->assertArrayHasKey('dbname', $connection);
+        $this->assertIsString($connection['dbname']);
+        $this->assertSame($dbName, $connection['dbname']);
     }
 
     #[Testing]
@@ -291,7 +319,6 @@ class MigrationsTest extends Test
     #[Testing]
     public function truncateTableForMySQL(): void
     {
-        /** @phpstan-ignore-next-line */
         MySQL::connection(env('DB_DEFAULT'))
             ->query(
                 <<<SQL
@@ -314,7 +341,6 @@ class MigrationsTest extends Test
             )
             ->execute();
 
-        /** @phpstan-ignore-next-line */
         $roles = MySQL::connection(env('DB_DEFAULT'))
             ->table('roles')
             ->select()
@@ -328,11 +354,7 @@ class MigrationsTest extends Test
         $this->assertIsObject($rol);
         $this->assertInstanceOf(stdClass::class, $rol);
 
-        /**
-         * @var ExecuteInterface $execute
-         *
-         * @phpstan-ignore-next-line
-         */
+        /** @var ExecuteInterface $execute */
         $execute = $this->migrations->truncateTable(Driver::MYSQL, env('DB_DEFAULT'), 'roles');
 
         $executeResponse = $execute->execute();
@@ -342,7 +364,6 @@ class MigrationsTest extends Test
         $this->assertObjectHasProperty('status', $executeResponse);
         $this->assertSame(Status::SUCCESS, $executeResponse->status);
 
-        /** @phpstan-ignore-next-line */
         $roles = MySQL::connection(env('DB_DEFAULT'))
             ->table('roles')
             ->select()
@@ -351,7 +372,6 @@ class MigrationsTest extends Test
         $this->assertIsArray($roles);
         $this->assertEmpty($roles);
 
-        /** @phpstan-ignore-next-line */
         MySQL::connection(env('DB_DEFAULT'))
             ->query(
                 <<<SQL
@@ -364,7 +384,6 @@ class MigrationsTest extends Test
     #[Testing]
     public function truncateTableForPostgreSQL(): void
     {
-        /** @phpstan-ignore-next-line */
         PostgreSQL::connection(env('DB_NAME_TEST_POSTGRESQL'))
             ->query(
                 <<<SQL
@@ -386,7 +405,6 @@ class MigrationsTest extends Test
             )
             ->execute();
 
-        /** @phpstan-ignore-next-line */
         $roles = PostgreSQL::connection(env('DB_NAME_TEST_POSTGRESQL'))
             ->table('roles', false)
             ->select()
@@ -400,11 +418,7 @@ class MigrationsTest extends Test
         $this->assertIsObject($rol);
         $this->assertInstanceOf(stdClass::class, $rol);
 
-        /**
-         * @var ExecuteInterface $execute
-         *
-         * @phpstan-ignore-next-line
-         */
+        /** @var ExecuteInterface $execute */
         $execute = $this->migrations->truncateTable(Driver::POSTGRESQL, env('DB_NAME_TEST_POSTGRESQL'), 'roles');
 
         $executeResponse = $execute->execute();
@@ -414,7 +428,6 @@ class MigrationsTest extends Test
         $this->assertObjectHasProperty('status', $executeResponse);
         $this->assertSame(Status::SUCCESS, $executeResponse->status);
 
-        /** @phpstan-ignore-next-line */
         $roles = PostgreSQL::connection(env('DB_NAME_TEST_POSTGRESQL'))
             ->table('roles', false)
             ->select()
@@ -423,7 +436,6 @@ class MigrationsTest extends Test
         $this->assertIsArray($roles);
         $this->assertEmpty($roles);
 
-        /** @phpstan-ignore-next-line */
         PostgreSQL::connection(env('DB_NAME_TEST_POSTGRESQL'))
             ->query(
                 <<<SQL

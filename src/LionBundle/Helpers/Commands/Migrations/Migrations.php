@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Helpers\Commands\Migrations;
 
+use Closure;
 use DI\Attribute\Inject;
 use Lion\Bundle\Interface\Migrations\StoredProcedureInterface;
 use Lion\Bundle\Interface\Migrations\TableInterface;
@@ -11,6 +12,7 @@ use Lion\Bundle\Interface\Migrations\ViewInterface;
 use Lion\Bundle\Interface\MigrationUpInterface;
 use Lion\Bundle\Interface\SeedInterface;
 use Lion\Command\Command;
+use Lion\Database\Connection;
 use Lion\Database\Driver;
 use Lion\Database\Drivers\PostgreSQL;
 use Lion\Database\Drivers\Schema\MySQL as Schema;
@@ -137,8 +139,9 @@ class Migrations
      *
      * @return void
      *
-     * @codeCoverageIgnore
      * @internal
+     *
+     * @codeCoverageIgnore
      */
     public function executeMigrations(Command $command, OutputInterface $output, array $files): void
     {
@@ -209,6 +212,57 @@ class Migrations
         $run($migrations[ViewInterface::class]);
 
         $run($migrations[StoredProcedureInterface::class]);
+    }
+
+    /**
+     * Generates static connections to manipulate databases
+     *
+     * @param Closure $callback [Executes logic to reset databases to their
+     * original form]
+     *
+     * @return void
+     *
+     * @internal
+     */
+    public function processingWithStaticConnections(Closure $callback): void
+    {
+        $originalConnections = Connection::getConnections();
+
+        $backupConnections = $originalConnections;
+
+        /**
+         * @param array<string, array{
+         *     type: string,
+         *     host: string,
+         *     port: int,
+         *     dbname: string,
+         *     user: string,
+         *     password: string,
+         *     options?: array<int, int>
+         *  }> $connections
+         * @param bool $isReset
+         *
+         * @return void
+         */
+        $addConnections = function (array $connections, bool $isReset): void {
+            foreach ($connections as $connectionName => $connectionData) {
+                Connection::removeConnection($connectionName);
+
+                if ($isReset) {
+                    /** @phpstan-ignore-next-line */
+                    unset($connectionData['dbname']);
+                }
+
+                /** @phpstan-ignore-next-line */
+                Connection::addConnection($connectionName, $connectionData);
+            }
+        };
+
+        $addConnections($originalConnections, true);
+
+        $callback();
+
+        $addConnections($backupConnections, false);
     }
 
     /**
