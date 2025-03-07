@@ -41,9 +41,9 @@ if (isSuccess((new Store())->exist(__DIR__ . '/.env'))) {
  * */
 
 Driver::run([
-    'default' => env('DB_NAME'),
+    'default' => env('DB_DEFAULT'),
     'connections' => [
-        env('DB_NAME') => [
+        env('DB_DEFAULT') => [
             'type' => env('DB_TYPE'),
             'host' => env('DB_HOST'),
             'port' => env('DB_PORT'),
@@ -66,6 +66,10 @@ Driver::run([
             'dbname' => env('DB_NAME'),
             'user' => env('DB_USER_TEST_POSTGRESQL'),
             'password' => env('DB_PASSWORD_TEST_POSTGRESQL'),
+        ],
+        'lion_database_sqlite' => [
+            'type' => env('DB_TYPE_TEST_SQLITE'),
+            'dbname' => __DIR__ . '/' . env('DB_NAME_TEST_SQLITE'),
         ],
     ],
 ]);

@@ -12,6 +12,7 @@ use Lion\Bundle\Commands\Lion\New\MigrationCommand;
 use Lion\Bundle\Commands\Lion\New\SeedCommand;
 use Lion\Bundle\Helpers\Commands\Migrations\Migrations;
 use Lion\Command\Kernel;
+use Lion\Database\Drivers\Schema\MySQL;
 use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
@@ -111,6 +112,13 @@ class FreshMigrationsCommandTest extends Test
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTesterFresh->getDisplay());
 
         $this->rmdirRecursively('./database/');
+
+        /** @var string $connectionName */
+        $connectionName = env('DB_DEFAULT');
+
+        MySQL::connection($connectionName)
+            ->dropTable('test')
+            ->execute();
     }
 
     #[Testing]

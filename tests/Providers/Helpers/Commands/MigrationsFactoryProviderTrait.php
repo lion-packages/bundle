@@ -4,8 +4,278 @@ declare(strict_types=1);
 
 namespace Tests\Providers\Helpers\Commands;
 
+use Lion\Bundle\Helpers\Commands\Migrations\MigrationFactory;
+
 trait MigrationsFactoryProviderTrait
 {
+    public static function getBodyProvider(): array
+    {
+        return [
+            [
+                'className' => 'Test',
+                'selectedType' => MigrationFactory::TABLE,
+                'dbPascal' => 'LionDatabase',
+                'driver' => 'MySQL',
+                'path' => 'database/Migrations/LionDatabase/MySQL/Tables/',
+                'return' => <<<PHP
+                <?php
+
+                declare(strict_types=1);
+
+                namespace Database\Migrations\LionDatabase\MySQL\Tables;
+
+                use Lion\Bundle\Interface\Migrations\TableInterface;
+                use Lion\Database\Drivers\Schema\MySQL as Schema;
+                use stdClass;
+
+                /**
+                 * Description
+                 *
+                 * @package Database\Migrations\LionDatabase\MySQL\Tables
+                 */
+                class Test implements TableInterface
+                {
+                    /**
+                     * [Index number for seed execution priority]
+                     *
+                     * @const INDEX
+                     */
+                    public const ?int INDEX = null;
+
+                    /**
+                     * {@inheritdoc}
+                     */
+                    public function up(): stdClass
+                    {
+                        return Schema::connection(env('DB_DEFAULT', 'local'))
+                            ->createTable('--NAME--', function (): void {
+                                Schema::int('id')->notNull()->autoIncrement()->primaryKey();
+                            })
+                            ->execute();
+                    }
+                }
+
+                PHP,
+            ],
+            [
+                'className' => 'Test',
+                'selectedType' => MigrationFactory::TABLE,
+                'dbPascal' => 'LionDatabase',
+                'driver' => 'PostgreSQL',
+                'path' => 'database/Migrations/LionDatabase/PostgreSQL/Tables/',
+                'return' => <<<PHP
+                <?php
+
+                declare(strict_types=1);
+
+                namespace Database\Migrations\LionDatabase\PostgreSQL\Tables;
+
+                use Lion\Bundle\Interface\Migrations\TableInterface;
+                use Lion\Database\Drivers\PostgreSQL;
+                use stdClass;
+
+                /**
+                 * Description
+                 *
+                 * @package Database\Migrations\LionDatabase\PostgreSQL\Tables
+                 */
+                class Test implements TableInterface
+                {
+                    /**
+                     * [Index number for seed execution priority]
+                     *
+                     * @const INDEX
+                     */
+                    public const ?int INDEX = null;
+
+                    /**
+                     * {@inheritdoc}
+                     */
+                    public function up(): stdClass
+                    {
+                        return PostgreSQL::connection(env('DB_DEFAULT', 'local'))
+                            ->query(
+                                <<<SQL
+                                -- SQL
+                                SQL
+                            )
+                            ->execute();
+                    }
+                }
+
+                PHP,
+            ],
+            [
+                'className' => 'Test',
+                'selectedType' => MigrationFactory::VIEW,
+                'dbPascal' => 'LionDatabase',
+                'driver' => 'MySQL',
+                'path' => 'database/Migrations/LionDatabase/MySQL/Views/',
+                'return' => <<<PHP
+                <?php
+
+                declare(strict_types=1);
+
+                namespace Database\Migrations\LionDatabase\MySQL\Views;
+
+                use Lion\Bundle\Interface\Migrations\ViewInterface;
+                use Lion\Database\Drivers\MySQL;
+                use Lion\Database\Drivers\Schema\MySQL as Schema;
+                use stdClass;
+
+                /**
+                 * Description
+                 *
+                 * @package Database\Migrations\LionDatabase\MySQL\Views
+                 */
+                class Test implements ViewInterface
+                {
+                    /**
+                     * {@inheritdoc}
+                     */
+                    public function up(): stdClass
+                    {
+                        return Schema::connection(env('DB_DEFAULT', 'local'))
+                            ->createView('--NAME--', function (MySQL \$db): void {
+                                \$db
+                                    ->table('table')
+                                    ->select();
+                            })
+                            ->execute();
+                    }
+                }
+
+                PHP,
+            ],
+            [
+                'className' => 'Test',
+                'selectedType' => MigrationFactory::VIEW,
+                'dbPascal' => 'LionDatabase',
+                'driver' => 'PostgreSQL',
+                'path' => 'database/Migrations/LionDatabase/PostgreSQL/Views/',
+                'return' => <<<PHP
+                <?php
+
+                declare(strict_types=1);
+
+                namespace Database\Migrations\LionDatabase\PostgreSQL\Views;
+
+                use Lion\Bundle\Interface\Migrations\ViewInterface;
+                use Lion\Database\Drivers\PostgreSQL;
+                use stdClass;
+
+                /**
+                 * Description
+                 *
+                 * @package Database\Migrations\LionDatabase\PostgreSQL\Views
+                 */
+                class Test implements ViewInterface
+                {
+                    /**
+                     * {@inheritdoc}
+                     */
+                    public function up(): stdClass
+                    {
+                        return PostgreSQL::connection(env('DB_DEFAULT', 'local'))
+                            ->query(
+                                <<<SQL
+                                -- SQL
+                                SQL
+                            )
+                            ->execute();
+                    }
+                }
+
+                PHP,
+            ],
+            [
+                'className' => 'Test',
+                'selectedType' => MigrationFactory::STORED_PROCEDURE,
+                'dbPascal' => 'LionDatabase',
+                'driver' => 'MySQL',
+                'path' => 'database/Migrations/LionDatabase/MySQL/StoredProcedures/',
+                'return' => <<<PHP
+                <?php
+
+                declare(strict_types=1);
+
+                namespace Database\Migrations\LionDatabase\MySQL\StoredProcedures;
+
+                use Lion\Bundle\Interface\Migrations\StoredProcedureInterface;
+                use Lion\Database\Drivers\MySQL;
+                use Lion\Database\Drivers\Schema\MySQL as Schema;
+                use stdClass;
+
+                /**
+                 * Description
+                 *
+                 * @package Database\Migrations\LionDatabase\MySQL\StoredProcedures
+                 */
+                class Test implements StoredProcedureInterface
+                {
+                    /**
+                     * {@inheritdoc}
+                     */
+                    public function up(): stdClass
+                    {
+                        return Schema::connection(env('DB_DEFAULT', 'local'))
+                            ->createStoreProcedure('--NAME--', function (): void {
+                                Schema::in()->varchar('name', 25);
+                            }, function (MySQL \$db): void {
+                                \$db
+                                    ->table('')
+                                    ->insert(['name' => '']);
+                            })
+                            ->execute();
+                    }
+                }
+
+                PHP,
+            ],
+            [
+                'className' => 'Test',
+                'selectedType' => MigrationFactory::STORED_PROCEDURE,
+                'dbPascal' => 'LionDatabase',
+                'driver' => 'PostgreSQL',
+                'path' => 'database/Migrations/LionDatabase/PostgreSQL/StoredProcedures/',
+                'return' => <<<PHP
+                <?php
+
+                declare(strict_types=1);
+
+                namespace Database\Migrations\LionDatabase\PostgreSQL\StoredProcedures;
+
+                use Lion\Bundle\Interface\Migrations\StoredProcedureInterface;
+                use Lion\Database\Drivers\PostgreSQL;
+                use stdClass;
+
+                /**
+                 * Description
+                 *
+                 * @package Database\Migrations\LionDatabase\PostgreSQL\StoredProcedures
+                 */
+                class Test implements StoredProcedureInterface
+                {
+                    /**
+                     * {@inheritdoc}
+                     */
+                    public function up(): stdClass
+                    {
+                        return PostgreSQL::connection(env('DB_DEFAULT', 'local'))
+                            ->query(
+                                <<<SQL
+                                -- SQL
+                                SQL
+                            )
+                            ->execute();
+                    }
+                }
+
+                PHP,
+            ],
+        ];
+    }
+
     public static function getMySQLTableBodyProvider(): array
     {
         return [
@@ -208,7 +478,7 @@ trait MigrationsFactoryProviderTrait
 
                 namespace Database\Migrations\LionDatabase\MySQL\StoreProcedures;
 
-                use Lion\Bundle\Interface\Migrations\StoreProcedureInterface;
+                use Lion\Bundle\Interface\Migrations\StoredProcedureInterface;
                 use Lion\Database\Drivers\MySQL;
                 use Lion\Database\Drivers\Schema\MySQL as Schema;
                 use stdClass;
@@ -218,7 +488,7 @@ trait MigrationsFactoryProviderTrait
                  *
                  * @package Database\Migrations\LionDatabase\MySQL\StoreProcedures
                  */
-                class Test implements StoreProcedureInterface
+                class Test implements StoredProcedureInterface
                 {
                     /**
                      * {@inheritdoc}
@@ -237,7 +507,7 @@ trait MigrationsFactoryProviderTrait
                     }
                 }
 
-                PHP
+                PHP,
             ],
         ];
     }
@@ -255,7 +525,7 @@ trait MigrationsFactoryProviderTrait
 
                 namespace Database\Migrations\LionDatabase\PostgreSQL\StoreProcedures;
 
-                use Lion\Bundle\Interface\Migrations\StoreProcedureInterface;
+                use Lion\Bundle\Interface\Migrations\StoredProcedureInterface;
                 use Lion\Database\Drivers\PostgreSQL;
                 use stdClass;
 
@@ -264,7 +534,7 @@ trait MigrationsFactoryProviderTrait
                  *
                  * @package Database\Migrations\LionDatabase\PostgreSQL\StoreProcedures
                  */
-                class Test implements StoreProcedureInterface
+                class Test implements StoredProcedureInterface
                 {
                     /**
                      * {@inheritdoc}
@@ -281,7 +551,7 @@ trait MigrationsFactoryProviderTrait
                     }
                 }
 
-                PHP
+                PHP,
             ],
         ];
     }

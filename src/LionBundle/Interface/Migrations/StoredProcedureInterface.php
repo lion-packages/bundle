@@ -9,6 +9,6 @@ use Lion\Bundle\Interface\MigrationUpInterface;
 /**
  * Defines a stored procedure type migration
  */
-interface StoreProcedureInterface extends MigrationUpInterface
+interface StoredProcedureInterface extends MigrationUpInterface
 {
 }
