@@ -69,16 +69,23 @@ class Migrations
 
             $namespaceB = $classB::class;
 
-            if (!defined($namespaceA . "::INDEX")) {
+            $indexA = defined("{$namespaceA}::INDEX") ? constant("{$namespaceA}::INDEX") : null;
+
+            $indexB = defined("{$namespaceB}::INDEX") ? constant("{$namespaceB}::INDEX") : null;
+
+            if ($indexA === null && $indexB === null) {
+                return 0;
+            }
+
+            if ($indexA === null) {
+                return 1;
+            }
+
+            if ($indexB === null) {
                 return -1;
             }
 
-            if (!defined($namespaceB . "::INDEX")) {
-                return -1;
-            }
-
-            /** @phpstan-ignore-next-line */
-            return $classA::INDEX <=> $classB::INDEX;
+            return $indexA <=> $indexB;
         });
 
         return $list;
