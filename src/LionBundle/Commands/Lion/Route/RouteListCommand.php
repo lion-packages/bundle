@@ -12,7 +12,6 @@ use Lion\Command\Command;
 use Lion\Helpers\Arr;
 use Lion\Helpers\Str;
 use Lion\Route\Helpers\Rules;
-use Lion\Route\Middleware;
 use Lion\Route\Route;
 use LogicException;
 use Symfony\Component\Console\Input\InputInterface;

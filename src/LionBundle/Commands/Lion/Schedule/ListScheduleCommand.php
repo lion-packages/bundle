@@ -152,13 +152,13 @@ class ListScheduleCommand extends Command
 
         $output->writeln('');
 
-        (new Table($output))
+        new Table($output)
             ->setHeaderTitle('<info> SCHEDULED TASKS </info>')
             ->setHeaders(['CRON', 'COMMAND', 'OPTIONS', 'LOG'])
             ->setFooterTitle("<info> Showing [{$size}] available scheduled tasks </info>")
             ->setRows($rows)
             ->render();
 
-        return Command::SUCCESS;
+        return parent::SUCCESS;
     }
 }
