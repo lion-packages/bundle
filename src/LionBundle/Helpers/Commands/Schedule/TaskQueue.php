@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lion\Bundle\Helpers\Commands\Schedule;
 
 use DI\Attribute\Inject;
+use JsonException;
 use Lion\Bundle\Helpers\Redis;
 
 /**
@@ -44,6 +45,8 @@ class TaskQueue
      * @param Task $task [Tasks class to encapsulate tasks in queue]
      *
      * @return TaskQueue
+     *
+     * @throws JsonException
      */
     public function push(Task $task): TaskQueue
     {

@@ -29,7 +29,7 @@ class TaskQueueTest extends Test
     {
         $this->redis = new Redis();
 
-        $this->taskQueue = (new TaskQueue())
+        $this->taskQueue = new TaskQueue()
             ->setRedis($this->redis);
 
         $this->initReflection($this->taskQueue);
