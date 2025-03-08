@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lion\Bundle\Helpers\Commands\Schedule;
 
 use InvalidArgumentException;
+use JsonException;
 use Lion\Request\Http;
 
 /**
@@ -69,6 +70,8 @@ class Task
      * Returns the task data in a list
      *
      * @return string
+     *
+     * @throws JsonException
      */
     public function getTask(): string
     {

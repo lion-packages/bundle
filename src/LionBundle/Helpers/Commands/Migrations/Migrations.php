@@ -248,7 +248,7 @@ class Migrations
          *     user: string,
          *     password: string,
          *     options?: array<int, int>
-         *  }> $connections
+         * }> $connections
          * @param bool $isReset
          *
          * @return void
@@ -280,7 +280,8 @@ class Migrations
      * @param string $dbName [Database name]
      * @param string $connectionName [Connection name]
      * @param string $type [Driver Type]
-     * @param Closure|null $evaluate []
+     * @param Closure|null $evaluate [Performs the necessary operations during
+     * connections to the database server]
      *
      * @return void
      *
