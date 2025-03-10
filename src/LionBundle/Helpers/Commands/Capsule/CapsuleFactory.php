@@ -393,12 +393,7 @@ class CapsuleFactory
                 }
             };
 
-            $iterateMethods(function (
-                int $key,
-                stdClass $config,
-                string $setterMethod,
-                string $snake
-            ) use ($countCapsuleMethods): void {
+            $iterateMethods(function (int $key, stdClass $config, string $setterMethod, string $snake): void {
                 /** @var stdClass $variable */
                 $variable = $config->variable;
 

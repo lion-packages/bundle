@@ -12,7 +12,7 @@ namespace Lion\Bundle\Traits;
 trait CapsuleTrait
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function jsonSerialize(): array
     {
@@ -20,7 +20,7 @@ trait CapsuleTrait
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public static function getTableName(): string
     {
