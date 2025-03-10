@@ -237,7 +237,11 @@ class ClassFactory
         string $type = 'string',
         ?string $visibility = null
     ): stdClass {
-        $availableVisibility = [self::PUBLIC_PROPERTY, self::PRIVATE_PROPERTY, self::PROTECTED_PROPERTY];
+        $availableVisibility = [
+            self::PUBLIC_PROPERTY,
+            self::PRIVATE_PROPERTY,
+            self::PROTECTED_PROPERTY,
+        ];
 
         $finalVisibility = in_array($visibility, $availableVisibility, true) ? "{$visibility} " : '';
 
@@ -250,35 +254,54 @@ class ClassFactory
         return (object) [
             'format' => (object) [
                 'camel' => $camel,
-                'snake' => $snake
+                'snake' => $snake,
             ],
             'getter' => $this->getGetter($snake, $type),
             'setter' => $this->getSetter($snake, $type, $className),
             'variable' => (object) [
+                'data_type' => $type,
                 'annotations' => (object) [
                     'class' => (object) [
                         'data_type' => "@property {$type} $" . "{$snake} [Property for {$propertyName}]",
                         'data_type_with_null' => "@property {$type}|null $" . "{$snake} [Property for {$propertyName}]",
-                    ]
+                    ],
                 ],
                 'reference' => '$this->' . "{$camel};",
                 'name' => (object) [
                     'camel' => ($finalVisibility . '$' . $camel),
-                    'snake' => ($finalVisibility . '$' . $snake)
+                    'snake' => ($finalVisibility . '$' . $snake),
                 ],
                 'type' => (object) [
-                    'camel' => ($finalVisibility . "?{$type} $" . "{$camel} = null;"),
+                    'camel' => (
+                        <<<EOT
+                            /**
+                             * [Property for '{$propertyName}']
+                             *
+                             * @var {$type}|null \${$camel}
+                             */
+                            {$finalVisibility}?{$type} \${$camel} = null;
+
+
+                        EOT
+                    ),
                     'snake' => (
-                        "/**\n\t * [Property for {$propertyName}]\n\t *\n\t * @var {$type}|null $" .
-                        "{$snake}\n\t */\n" .
-                        "\t{$finalVisibility}?{$type} $" . "{$snake} = null;\n"
-                    )
+                        <<<EOT
+                            /**
+                             * [Property for '{$propertyName}']
+                             *
+                             * @var {$type}|null \${$snake}
+                             */
+                            {$finalVisibility}?{$type} \${$snake} = null;
+
+
+                        EOT
+                    ),
                 ],
                 'initialize' => (object) [
                     'camel' => ($finalVisibility . '$' . "{$camel} = null"),
-                    'snake' => ($finalVisibility . '$' . "{$snake} = null")
-                ]
-            ]
+                    'snake' => ($finalVisibility . '$' . "{$snake} = null"),
+                ],
+            ],
         ];
     }
 
@@ -371,7 +394,7 @@ class ClassFactory
             /**
              * Setter method for '{$name}'
              *
-             * @param {$type}|null \${$name}
+             * @param {$type}|null \${$name} [Description for '{$name}']
              *
              * @return {$capsule}
              */

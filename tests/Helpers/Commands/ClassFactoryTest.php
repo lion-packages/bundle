@@ -27,7 +27,7 @@ class ClassFactoryTest extends Test
      */
     protected function setUp(): void
     {
-        $this->classFactory = (new ClassFactory())
+        $this->classFactory = new ClassFactory()
             ->setStore(new Store());
 
         $this->initReflection($this->classFactory);
