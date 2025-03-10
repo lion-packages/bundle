@@ -92,7 +92,7 @@ trait ClassFactoryProviderTrait
                             /**
                              * Setter method for 'idusers'
                              *
-                             * @param int|null \$idusers
+                             * @param int|null \$idusers [Description for 'idusers']
                              *
                              * @return Users
                              */
@@ -117,11 +117,30 @@ trait ClassFactoryProviderTrait
                             'snake' => ("\$idusers")
                         ],
                         'type' => (object) [
-                            'camel' => ("?int \$idusers = null;"),
+                            'camel' => (
+                                <<<EOT
+                                    /**
+                                     * [Property for 'idusers']
+                                     *
+                                     * @var int|null \$idusers
+                                     */
+                                    ?int \$idusers = null;
+
+
+                                EOT
+                            ),
                             'snake' => (
-                                "/**\n\t * [Property for idusers]\n\t *\n\t * @var int|null \$idusers\n\t */\n" .
-                                "\t?int \$idusers = null;\n"
-                            )
+                                <<<EOT
+                                    /**
+                                     * [Property for 'idusers']
+                                     *
+                                     * @var int|null \$idusers
+                                     */
+                                    ?int \$idusers = null;
+
+
+                                EOT
+                            ),
                         ],
                         'initialize' => (object) [
                             'camel' => ("\$idusers = null"),
@@ -160,7 +179,7 @@ trait ClassFactoryProviderTrait
                             /**
                              * Setter method for 'idusers'
                              *
-                             * @param int|null \$idusers
+                             * @param int|null \$idusers [Description for 'idusers']
                              *
                              * @return Users
                              */
@@ -185,11 +204,30 @@ trait ClassFactoryProviderTrait
                             'snake' => ("public \$idusers")
                         ],
                         'type' => (object) [
-                            'camel' => ("public ?int \$idusers = null;"),
+                            'camel' => (
+                                <<<EOT
+                                    /**
+                                     * [Property for 'idusers']
+                                     *
+                                     * @var int|null \$idusers
+                                     */
+                                    public ?int \$idusers = null;
+
+
+                                EOT
+                            ),
                             'snake' => (
-                                "/**\n\t * [Property for idusers]\n\t *\n\t * @var int|null \$idusers\n\t */\n" .
-                                "\tpublic ?int \$idusers = null;\n"
-                            )
+                                <<<EOT
+                                    /**
+                                     * [Property for 'idusers']
+                                     *
+                                     * @var int|null \$idusers
+                                     */
+                                    public ?int \$idusers = null;
+
+
+                                EOT
+                            ),
                         ],
                         'initialize' => (object) [
                             'camel' => ("public \$idusers = null"),
@@ -228,7 +266,7 @@ trait ClassFactoryProviderTrait
                             /**
                              * Setter method for 'idusers'
                              *
-                             * @param int|null \$idusers
+                             * @param int|null \$idusers [Description for 'idusers']
                              *
                              * @return Users
                              */
@@ -253,11 +291,30 @@ trait ClassFactoryProviderTrait
                             'snake' => ("private \$idusers")
                         ],
                         'type' => (object) [
-                            'camel' => ("private ?int \$idusers = null;"),
+                            'camel' => (
+                                <<<EOT
+                                    /**
+                                     * [Property for 'idusers']
+                                     *
+                                     * @var int|null \$idusers
+                                     */
+                                    private ?int \$idusers = null;
+
+
+                                EOT
+                            ),
                             'snake' => (
-                                "/**\n\t * [Property for idusers]\n\t *\n\t * @var int|null \$idusers\n\t */\n" .
-                                "\tprivate ?int \$idusers = null;\n"
-                            )
+                                <<<EOT
+                                    /**
+                                     * [Property for 'idusers']
+                                     *
+                                     * @var int|null \$idusers
+                                     */
+                                    private ?int \$idusers = null;
+
+
+                                EOT
+                            ),
                         ],
                         'initialize' => (object) [
                             'camel' => ("private \$idusers = null"),
@@ -296,7 +353,7 @@ trait ClassFactoryProviderTrait
                             /**
                              * Setter method for 'idusers'
                              *
-                             * @param int|null \$idusers
+                             * @param int|null \$idusers [Description for 'idusers']
                              *
                              * @return Users
                              */
@@ -321,11 +378,30 @@ trait ClassFactoryProviderTrait
                             'snake' => ("protected \$idusers")
                         ],
                         'type' => (object) [
-                            'camel' => ("protected ?int \$idusers = null;"),
+                            'camel' => (
+                                <<<EOT
+                                    /**
+                                     * [Property for 'idusers']
+                                     *
+                                     * @var int|null \$idusers
+                                     */
+                                    protected ?int \$idusers = null;
+
+
+                                EOT
+                            ),
                             'snake' => (
-                                "/**\n\t * [Property for idusers]\n\t *\n\t * @var int|null \$idusers\n\t */\n" .
-                                "\tprotected ?int \$idusers = null;\n"
-                            )
+                                <<<EOT
+                                    /**
+                                     * [Property for 'idusers']
+                                     *
+                                     * @var int|null \$idusers
+                                     */
+                                    protected ?int \$idusers = null;
+
+
+                                EOT
+                            ),
                         ],
                         'initialize' => (object) [
                             'camel' => ("protected \$idusers = null"),
@@ -392,7 +468,7 @@ trait ClassFactoryProviderTrait
                         /**
                          * Setter method for 'idusers'
                          *
-                         * @param int|null \$idusers
+                         * @param int|null \$idusers [Description for 'idusers']
                          *
                          * @return Users
                          */
@@ -415,7 +491,7 @@ trait ClassFactoryProviderTrait
                         /**
                          * Setter method for 'idusers'
                          *
-                         * @param string|null \$idusers
+                         * @param string|null \$idusers [Description for 'idusers']
                          *
                          * @return Users
                          */

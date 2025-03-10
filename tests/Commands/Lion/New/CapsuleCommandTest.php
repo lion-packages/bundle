@@ -7,12 +7,11 @@ namespace Tests\Commands\Lion\New;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Lion\Bundle\Commands\Lion\New\CapsuleCommand;
+use Lion\Bundle\Helpers\Commands\Capsule\CapsuleFactory;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Interface\CapsuleInterface;
 use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
-use Lion\Helpers\Arr;
-use Lion\Helpers\Str;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
 use ReflectionException;
@@ -94,20 +93,10 @@ class CapsuleCommandTest extends Test
      * @throws ReflectionException
      */
     #[Testing]
-    public function setStr(): void
+    public function setCapsuleFactory(): void
     {
-        $this->assertInstanceOf(CapsuleCommand::class, $this->capsuleCommand->setStr(new Str()));
-        $this->assertInstanceOf(Str::class, $this->getPrivateProperty('str'));
-    }
-
-    /**
-     * @throws ReflectionException
-     */
-    #[Testing]
-    public function setArr(): void
-    {
-        $this->assertInstanceOf(CapsuleCommand::class, $this->capsuleCommand->setArr(new Arr()));
-        $this->assertInstanceOf(Arr::class, $this->getPrivateProperty('arr'));
+        $this->assertInstanceOf(CapsuleCommand::class, $this->capsuleCommand->setCapsuleFactory(new CapsuleFactory()));
+        $this->assertInstanceOf(CapsuleFactory::class, $this->getPrivateProperty('capsuleFactory'));
     }
 
     /**

@@ -6,13 +6,11 @@ namespace Lion\Bundle\Commands\Lion\New;
 
 use DI\Attribute\Inject;
 use Exception;
+use Lion\Bundle\Helpers\Commands\Capsule\CapsuleFactory;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Files\Store;
-use Lion\Helpers\Arr;
-use Lion\Helpers\Str;
 use LogicException;
-use stdClass;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -41,18 +39,11 @@ class CapsuleCommand extends Command
     private Store $store;
 
     /**
-     * [Modify and construct strings with different formats]
+     * [Manages the configuration and structure of a generated capsule class]
      *
-     * @var Str $str
+     * @var CapsuleFactory $capsuleFactory
      */
-    private Str $str;
-
-    /**
-     * [Modify and build arrays with different indexes or values]
-     *
-     * @var Arr $arr
-     */
-    private Arr $arr;
+    private CapsuleFactory $capsuleFactory;
 
     #[Inject]
     public function setClassFactory(ClassFactory $classFactory): CapsuleCommand
@@ -71,17 +62,9 @@ class CapsuleCommand extends Command
     }
 
     #[Inject]
-    public function setStr(Str $str): CapsuleCommand
+    public function setCapsuleFactory(CapsuleFactory $capsuleFactory): CapsuleCommand
     {
-        $this->str = $str;
-
-        return $this;
-    }
-
-    #[Inject]
-    public function setArr(Arr $arr): CapsuleCommand
-    {
-        $this->arr = $arr;
+        $this->capsuleFactory = $capsuleFactory;
 
         return $this;
     }
@@ -127,6 +110,15 @@ class CapsuleCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        /**
+         * ---------------------------------------------------------------------
+         * Initialize console parameters
+         * ---------------------------------------------------------------------
+         * The parameters are provided directly from the console, this in order
+         * to manipulate the body of the capsule class
+         * ---------------------------------------------------------------------
+         */
+
         /** @var string $capsule */
         $capsule = $input->getArgument('capsule');
 
@@ -136,6 +128,15 @@ class CapsuleCommand extends Command
         /** @var string $entity */
         $entity = $input->getOption('entity');
 
+        /**
+         * ---------------------------------------------------------------------
+         * Class Factory Parameters
+         * ---------------------------------------------------------------------
+         * Class factory parameters are used to obtain the precise data that
+         * defines the class, such as the name and namespace
+         * ---------------------------------------------------------------------
+         */
+
         $this->classFactory->classFactory('database/Class/', $capsule);
 
         $folder = $this->classFactory->getFolder();
@@ -144,188 +145,85 @@ class CapsuleCommand extends Command
 
         $class = $this->classFactory->getClass();
 
-        $listProperties = [];
+        /**
+         * ---------------------------------------------------------------------
+         * Initializing parameters in the body
+         * ---------------------------------------------------------------------
+         * Initializes the capsule class body parameters so that they are nested
+         * in the construction
+         * ---------------------------------------------------------------------
+         */
 
-        $listMethods = [];
+        $this->capsuleFactory->setClass($class);
+
+        $this->capsuleFactory->setNamespace($namespace);
+
+        $this->capsuleFactory->setEntity($entity);
+
+        $this->capsuleFactory->generateGettersAndSetters($class, $properties);
 
         /**
-         * Iterates the list of data to generate the Getter and Setter methods
+         * ---------------------------------------------------------------------
+         * Capsule class body
+         * ---------------------------------------------------------------------
+         * Builds the body of the capsule class, this with the defined
+         * parameters. The logic that a Capsule class performs is nested
+         * ---------------------------------------------------------------------
          */
-        foreach ($properties as $propierty) {
-            $split = explode(':', $propierty);
 
-            $data = $this->classFactory->getProperty(
-                $split[0],
-                $class,
-                (!empty($split[1]) ? $split[1] : 'string'),
-                ClassFactory::PRIVATE_PROPERTY
-            );
+        $this->capsuleFactory->addNamespace();
 
-            /** @var stdClass $variable */
-            $variable = $data->variable;
-
-            /** @var stdClass $type */
-            $type = $variable->type;
-
-            /** @var string $snakeCase */
-            $snakeCase = $type->snake;
-
-            /** @var stdClass $getter */
-            $getter = $data->getter;
-
-            /** @var stdClass $setter */
-            $setter = $data->setter;
-
-            /** @var string $getterMethod */
-            $getterMethod = $getter->method;
-
-            /** @var string $setterMethod */
-            $setterMethod = $setter->method;
-
-            $listProperties[] = $snakeCase;
-
-            $listMethods[] = [
-                'getter' => $getterMethod,
-                'setter' => $setterMethod,
-                'config' => $data,
-            ];
-        }
-
-        $this->store->folder($folder);
-
-        $this->str->of("<?php")->ln()->ln()
-            ->concat('declare(strict_types=1);')->ln()->ln()
-            ->concat("namespace")->spaces(1)
-            ->concat($namespace)
-            ->concat(";")->ln()->ln()
-            ->concat('use Lion\Bundle\Interface\CapsuleInterface;')->ln()
-            ->concat('use Lion\Bundle\Traits\CapsuleTrait;')->ln()->ln()
-            ->concat("/**\n * Capsule for the '{$class}' entity")->ln()
-            ->concat(' *')->ln()
-            ->concat(' * @property string $entity [Entity name]');
-
-        if (count($listMethods) > 0) {
-            $this->str->ln();
-        }
-
-        /**
-         * Iterate through the list of methods to add a class property
-         * annotation
-         */
-        foreach ($listMethods as $method) {
-            /** @var stdClass $config */
-            $config = $method['config'];
-
-            /** @var stdClass $variable */
-            $variable = $config->variable;
-
-            /** @var stdClass $annotations */
-            $annotations = $variable->annotations;
-
-            /** @var stdClass $classAnnotations */
-            $classAnnotations = $annotations->class;
-
-            /** @var string $dataType */
-            $dataType = $classAnnotations->data_type_with_null;
-
-            $this->str->concat(" * {$dataType}\n");
-        }
-
-        $this->str
-            ->concat(" *\n * @package {$namespace}\n */\n")
-            ->concat("class")->spaces()
-            ->concat($class)->spaces()
-            ->concat('implements CapsuleInterface')->ln()
-            ->concat("{")->ln()
-            ->lt()->concat('use CapsuleTrait;')->ln()->ln()
-            ->lt()->concat(
-                <<<PHP
-                /**
-                     * [Entity name]
-                     *
-                     * @var string \$entity
-                     */
-                    private static string \$entity = '{$entity}';
-
-                PHP
-            )->ln();
-
-        if (count($properties) > 0) {
-            $this->str
-                ->lt()->concat($this->arr->of($listProperties)->join("\n\t"))
+        if (count($this->capsuleFactory->getCapsuleMethods()) > 0) {
+            $this->capsuleFactory
+                ->getStr()
                 ->ln();
         }
 
-        if ($this->arr->of($properties)->length() > 0) {
-            $this->str
-                ->lt()->concat("/**\n\t * {@inheritdoc}\n\t * */")->ln()
-                ->lt()->concat("public function capsule(): {$class}")->ln()
-                ->lt()->concat('{')->ln()
-                ->lt()->lt()->concat('$this')->ln();
+        $this->capsuleFactory->addingPropertyAnnotations();
 
-            /**
-             * Iterate through the list of methods to add the dataset using HTTP
-             * requests
-             */
-            foreach ($listMethods as $key => $method) {
-                /** @var stdClass $config */
-                $config = $method['config'];
+        $this->capsuleFactory->addingClassAndImplementations();
 
-                /** @var stdClass $setter */
-                $setter = $config->setter;
+        $this->capsuleFactory->addProperties();
 
-                /** @var string $setterMethod */
-                $setterMethod = $setter->name;
-
-                /** @var stdClass $format */
-                $format = $config->format;
-
-                /** @var string $snakeCase */
-                $snakeCase = $format->snake;
-
-                $this->str
-                    ->lt()->lt()->lt()->concat('->')
-                    ->concat($setterMethod)
-                    ->concat("(request('{$snakeCase}'))")
-                    ->concat($key === (count($listMethods) - 1) ? ';' : '')->ln();
-            }
-
-            $this->str->ln()->lt()->lt()->concat('return $this;')->ln()
-                ->lt()->concat('}');
-        } else {
-            $this->str
-                ->lt()->concat("/**\n\t * {@inheritdoc}\n\t * */")->ln()
-                ->lt()->concat("public function capsule(): {$class}")->ln()
-                ->lt()->concat('{')->ln()
-                ->lt()->lt()->concat('return $this;')->ln()
-                ->lt()->concat('}');
-        }
+        $this->capsuleFactory->addAbstractMethods();
 
         if (count($properties) > 0) {
-            $this->str->ln()->ln();
+            $this->capsuleFactory
+                ->getStr()
+                ->ln()
+                ->ln();
 
-            /**
-             * Iterate through the list of methods to add Getter and Setter
-             * methods
-             */
-            foreach ($listMethods as $key => $method) {
-                $this->str->concat($method['getter'])->ln()->ln();
-
-                if ($key === (count($listMethods) - 1)) {
-                    $this->str->concat($method['setter'])->ln();
-                } else {
-                    $this->str->concat($method['setter'])->ln()->ln();
-                }
-            }
+            $this->capsuleFactory->addGettersAndSetters();
         } else {
-            $this->str->ln();
+            $this->capsuleFactory
+                ->getStr()
+                ->ln();
         }
 
+        /**
+         * ---------------------------------------------------------------------
+         * Class content
+         * ---------------------------------------------------------------------
+         * Gets the contents of the manufactured class
+         * ---------------------------------------------------------------------
+         */
+
         /** @var string $contentFile */
-        $contentFile = $this->str
+        $contentFile = $this->capsuleFactory
+            ->getStr()
             ->concat("}")
             ->ln()
             ->get();
+
+        /**
+         * ---------------------------------------------------------------------
+         * File manufacturing
+         * ---------------------------------------------------------------------
+         * Creating the file with the content of the manufactured class
+         * ---------------------------------------------------------------------
+         */
+
+        $this->store->folder($folder);
 
         $this->classFactory
             ->create($class, ClassFactory::PHP_EXTENSION, $folder)
