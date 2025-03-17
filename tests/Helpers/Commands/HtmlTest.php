@@ -15,6 +15,7 @@ class HtmlTest extends Test
     private const string REPLACE_TEXT = 'Lion-Bundle';
 
     private Html $html;
+    private Store $store;
 
     /**
      * @throws ReflectionException
@@ -22,6 +23,8 @@ class HtmlTest extends Test
     protected function setUp(): void
     {
         $this->html = new Html();
+
+        $this->store = new Store();
 
         $this->initReflection($this->html);
     }
@@ -32,9 +35,11 @@ class HtmlTest extends Test
     #[Testing]
     public function add(): void
     {
-        $template = (new Store)->get('./tests/Providers/Helpers/Commands/HtmlTemplate.html');
+        $template = $this->store->get('./tests/Providers/Helpers/Commands/HtmlTemplate.html');
 
-        $this->getPrivateMethod('add', [$template]);
+        $this->getPrivateMethod('add', [
+            'htmlTemplate' => $template,
+        ]);
 
         $this->assertSame($template, $this->getPrivateProperty('htmlTemplate'));
     }
@@ -45,15 +50,17 @@ class HtmlTest extends Test
     #[Testing]
     public function replace(): void
     {
-        $template = (new Store)->get('./tests/Providers/Helpers/Commands/HtmlTemplate.html');
+        $template = $this->store->get('./tests/Providers/Helpers/Commands/HtmlTemplate.html');
 
-        $this->getPrivateMethod('add', [$template]);
+        $this->getPrivateMethod('add', [
+            'htmlTemplate' => $template,
+        ]);
 
         $this->assertSame($template, $this->getPrivateProperty('htmlTemplate'));
 
-        $this->html->replace('REPLACE', self::REPLACE_TEXT);
+        $this->html->replace('--REPLACE--', self::REPLACE_TEXT);
 
-        $templateReplaced = (new Store)->get('./tests/Providers/Helpers/Commands/HtmlTemplateReplaced.html');
+        $templateReplaced = $this->store->get('./tests/Providers/Helpers/Commands/HtmlTemplateReplaced.html');
 
         $this->assertSame($templateReplaced, $this->getPrivateProperty('htmlTemplate'));
     }
@@ -64,15 +71,17 @@ class HtmlTest extends Test
     #[Testing]
     public function get(): void
     {
-        $template = (new Store)->get('./tests/Providers/Helpers/Commands/HtmlTemplate.html');
+        $template = $this->store->get('./tests/Providers/Helpers/Commands/HtmlTemplate.html');
 
-        $this->getPrivateMethod('add', [$template]);
+        $this->getPrivateMethod('add', [
+            'htmlTemplate' => $template,
+        ]);
 
         $this->assertSame($template, $this->getPrivateProperty('htmlTemplate'));
 
-        $this->html->replace('REPLACE', self::REPLACE_TEXT);
+        $this->html->replace('--REPLACE--', self::REPLACE_TEXT);
 
-        $templateReplaced = (new Store)->get('./tests/Providers/Helpers/Commands/HtmlTemplateReplaced.html');
+        $templateReplaced = $this->store->get('./tests/Providers/Helpers/Commands/HtmlTemplateReplaced.html');
 
         $this->assertSame($templateReplaced, $this->html->get());
     }
