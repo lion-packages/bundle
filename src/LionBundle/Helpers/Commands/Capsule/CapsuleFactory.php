@@ -259,39 +259,9 @@ class CapsuleFactory
                 use Lion\Bundle\Interface\CapsuleInterface;
                 use Lion\Bundle\Traits\CapsuleTrait;
 
-                /**
-                 * Capsule for the '{$this->entity}' entity
-                 *
-                 * @property string \$entity [Entity name]
+
                 EOT
             );
-    }
-
-    /**
-     * Add the property annotations
-     *
-     * @return void
-     */
-    public function addingPropertyAnnotations(): void
-    {
-        foreach ($this->capsuleData['methods'] as $method) {
-            /** @var stdClass $config */
-            $config = $method['config'];
-
-            /** @var stdClass $variable */
-            $variable = $config->variable;
-
-            /** @var stdClass $annotations */
-            $annotations = $variable->annotations;
-
-            /** @var stdClass $classAnnotations */
-            $classAnnotations = $annotations->class;
-
-            /** @var string $dataType */
-            $dataType = $classAnnotations->data_type_with_null;
-
-            $this->str->concat(" * {$dataType}\n");
-        }
     }
 
     /**
@@ -304,6 +274,8 @@ class CapsuleFactory
         $this->str
             ->concat(
                 <<<EOT
+                /**
+                 * Capsule for the '{$this->entity}' entity
                  *
                  * @package {$this->namespace}
                  */
