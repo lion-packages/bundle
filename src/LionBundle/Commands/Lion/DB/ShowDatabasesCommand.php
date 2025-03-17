@@ -59,13 +59,10 @@ class ShowDatabasesCommand extends Command
             $listConnections[] = [
                 'connectionName' => $this->infoOutput($connectionName),
                 'type' => "<fg=#FFB63E>{$connection['type']}</>",
-                /** @phpstan-ignore-next-line */
                 'host' => $connection['host'] ?? '',
-                /** @phpstan-ignore-next-line */
                 'port' => $connection['port'] ?? '',
                 /** @phpstan-ignore-next-line */
                 'dbname' => $connection['dbname'] ?? '',
-                /** @phpstan-ignore-next-line */
                 'user' => $connection['user'] ?? '',
             ];
         }

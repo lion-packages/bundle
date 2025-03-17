@@ -201,48 +201,6 @@ class CapsuleFactoryTest extends Test
         use Lion\Bundle\Interface\CapsuleInterface;
         use Lion\Bundle\Traits\CapsuleTrait;
 
-        /**
-         * Capsule for the 'test' entity
-         *
-         * @property string \$entity [Entity name]
-        EOT;
-
-        $this->assertSame($body, $str->get());
-    }
-
-    /**
-     * @throws ReflectionException
-     */
-    #[Testing]
-    public function addingPropertyAnnotations(): void
-    {
-        $method = [
-            'config' => (object) [
-                'variable' => (object) [
-                    'annotations' => (object) [
-                        'class' => (object) [
-                            'data_type' => '@property id $id [Property for id]',
-                            'data_type_with_null' => '@property int|null $id [Property for id]',
-                        ]
-                    ],
-                ],
-            ],
-        ];
-
-        $this->setPrivateProperty('capsuleData', [
-            'properties' => [],
-            'methods' => [
-                $method,
-            ],
-        ]);
-
-        $this->capsuleFactory->addingPropertyAnnotations();
-
-        /** @var Str $str */
-        $str = $this->getPrivateProperty('str');
-
-        $body = <<<EOT
-         * @property int|null \$id [Property for id]
 
         EOT;
 
@@ -267,6 +225,8 @@ class CapsuleFactoryTest extends Test
         $str = $this->getPrivateProperty('str');
 
         $body = <<<EOT
+        /**
+         * Capsule for the 'test' entity
          *
          * @package Database\\Class
          */

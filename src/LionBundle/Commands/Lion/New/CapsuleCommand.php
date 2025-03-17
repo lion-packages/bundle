@@ -173,14 +173,6 @@ class CapsuleCommand extends Command
 
         $this->capsuleFactory->addNamespace();
 
-        if (count($this->capsuleFactory->getCapsuleMethods()) > 0) {
-            $this->capsuleFactory
-                ->getStr()
-                ->ln();
-        }
-
-        $this->capsuleFactory->addingPropertyAnnotations();
-
         $this->capsuleFactory->addingClassAndImplementations();
 
         $this->capsuleFactory->addProperties();

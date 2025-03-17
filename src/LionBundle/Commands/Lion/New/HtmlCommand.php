@@ -119,7 +119,7 @@ class HtmlCommand extends Command
                 class {$class} extends Html implements HtmlInterface
                 {
                     /**
-                     * {@inheritdoc}
+                     * {@inheritDoc}
                      */
                     public function template(): {$class}
                     {
