@@ -8,7 +8,6 @@ use DI\Attribute\Inject;
 use Exception;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
-use Lion\Database\Interface\DatabaseCapsuleInterface;
 use Lion\Files\Store;
 use Lion\Helpers\Str;
 use LogicException;
@@ -114,8 +113,28 @@ class ModelCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        /**
+         * ---------------------------------------------------------------------
+         * Initialize console parameters
+         * ---------------------------------------------------------------------
+         * Parameters are provided directly from the console, in order to
+         * manipulate the body of the model class
+         * ---------------------------------------------------------------------
+         */
+
         /** @var string $model */
         $model = $input->getArgument('model');
+
+        /**
+         * ---------------------------------------------------------------------
+         * Class Factory Parameters
+         * ---------------------------------------------------------------------
+         * Class factory parameters are used to obtain the precise data that
+         * defines the class, such as the name and namespace
+         * ---------------------------------------------------------------------
+         */
+
+        $str = new Str();
 
         $this->classFactory->classFactory('app/Models/', $model);
 
@@ -125,12 +144,18 @@ class ModelCommand extends Command
 
         $namespace = $this->classFactory->getNamespace();
 
-        $this->store->folder($folder);
+        /**
+         * ---------------------------------------------------------------------
+         * Model class body
+         * ---------------------------------------------------------------------
+         * Builds the body of the capsule class, this with the defined
+         * parameters. The logic that a Capsule class performs is nested
+         * ---------------------------------------------------------------------
+         */
 
-        $this->classFactory
-            ->create($class, ClassFactory::PHP_EXTENSION, $folder)
-            ->add(
-                <<<PHP
+        $this->str
+            ->of(
+                <<<EOT
                 <?php
 
                 declare(strict_types=1);
@@ -147,13 +172,14 @@ class ModelCommand extends Command
                  * @package {$namespace}
                  */
                 class {$class}
-                {\n
-                PHP
+                {
+
+                EOT
             );
 
         foreach (self::METHODS as $method) {
             /** @var string $methodName */
-            $methodName = $this->str
+            $methodName = $str
                 ->of($method . $class)
                 ->replace('Model', '')
                 ->replace('model', '')
@@ -168,8 +194,16 @@ class ModelCommand extends Command
                 : 'int|stdClass';
 
             $methodBody = $method === 'read'
-                ? "return DB::table('')\n\t\t\t->select()\n\t\t\t->getAll();"
-                : "return DB::call('', [])\n\t\t\t->execute();";
+                ? <<<EOT
+                return DB::table('')
+                            ->select()
+                            ->getAll();
+                EOT
+                : <<<EOT
+                return DB::call('', [])
+                            ->execute();
+                EOT;
+
 
             $customMethod = $this->classFactory->getCustomMethod(
                 $methodName,
@@ -180,10 +214,40 @@ class ModelCommand extends Command
                 $method === 'delete' ? 1 : 2
             );
 
-            $this->classFactory->add($customMethod);
+            $this->str->concat($customMethod);
         }
 
-        $this->classFactory->add("}\n")->close();
+        /**
+         * ---------------------------------------------------------------------
+         * Class content
+         * ---------------------------------------------------------------------
+         * Gets the contents of the manufactured class
+         * ---------------------------------------------------------------------
+         */
+
+        /** @var string $content */
+        $content = $this->str
+            ->concat(
+                <<<EOT
+                }
+
+                EOT
+            )
+            ->get();
+
+        /**
+         * ---------------------------------------------------------------------
+         * File manufacturing
+         * ---------------------------------------------------------------------
+         * Creating the file with the content of the manufactured class
+         * ---------------------------------------------------------------------
+         */
+
+        $this->store->folder($folder);
+
+        $this->classFactory
+            ->create($class, ClassFactory::PHP_EXTENSION, $folder)
+            ->add($content);
 
         $output->writeln($this->warningOutput("\t>>  MODEL: {$class}"));
 

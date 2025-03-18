@@ -535,16 +535,18 @@ trait ClassFactoryProviderTrait
                 'visibility' => 'public',
                 'lineBreak' => 2,
                 'return' => <<<PHP
-                \t/**
-                \t * Description of 'example'
-                \t *
-                \t * @return null
-                \t */
-                \tpublic function example(): null
-                \t{
-                \t\treturn null;
-                \t}\n\n
-                PHP
+                    /**
+                     * Description of 'example'
+                     *
+                     * @return null
+                     */
+                    public function example(): null
+                    {
+                        return null;
+                    }
+
+
+                PHP,
             ],
             [
                 'name' => 'example',
@@ -554,16 +556,18 @@ trait ClassFactoryProviderTrait
                 'visibility' => 'public',
                 'lineBreak' => 2,
                 'return' => <<<PHP
-                \t/**
-                \t * Description of 'example'
-                \t *
-                \t * @return null
-                \t */
-                \tpublic function example(): null
-                \t{
-                \t\treturn null;
-                \t}\n\n
-                PHP
+                    /**
+                     * Description of 'example'
+                     *
+                     * @return null
+                     */
+                    public function example(): null
+                    {
+                        return null;
+                    }
+
+
+                PHP,
             ],
             [
                 'name' => 'example',
@@ -573,16 +577,16 @@ trait ClassFactoryProviderTrait
                 'visibility' => 'public',
                 'lineBreak' => 0,
                 'return' => <<<PHP
-                \t/**
-                \t * Description of 'example'
-                \t *
-                \t * @return null
-                \t */
-                \tpublic function example(): null
-                \t{
-                \t\treturn null;
-                \t}
-                PHP
+                    /**
+                     * Description of 'example'
+                     *
+                     * @return null
+                     */
+                    public function example(): null
+                    {
+                        return null;
+                    }
+                PHP,
             ],
             [
                 'name' => 'example',
@@ -592,19 +596,21 @@ trait ClassFactoryProviderTrait
                 'visibility' => 'public',
                 'lineBreak' => 2,
                 'return' => <<<PHP
-                \t/**
-                \t * Description of 'example'
-                \t *
-                \t * @param string \$param1 [Parameter Description]
-                \t * @param int \$param2 [Parameter Description]
-                \t *
-                \t * @return null
-                \t */
-                \tpublic function example(string \$param1, int \$param2): null
-                \t{
-                \t\treturn null;
-                \t}\n\n
-                PHP
+                    /**
+                     * Description of 'example'
+                     *
+                     * @param string \$param1 [Parameter Description]
+                     * @param int \$param2 [Parameter Description]
+                     *
+                     * @return null
+                     */
+                    public function example(string \$param1, int \$param2): null
+                    {
+                        return null;
+                    }
+
+
+                PHP,
             ],
             [
                 'name' => 'example',
@@ -614,18 +620,20 @@ trait ClassFactoryProviderTrait
                 'visibility' => 'public',
                 'lineBreak' => 2,
                 'return' => <<<PHP
-                \t/**
-                \t * Description of 'example'
-                \t *
-                \t * @param string \$param1 [Parameter Description]
-                \t *
-                \t * @return string
-                \t */
-                \tpublic function example(string \$param1): string
-                \t{
-                \t\treturn \$param1;
-                \t}\n\n
-                PHP
+                    /**
+                     * Description of 'example'
+                     *
+                     * @param string \$param1 [Parameter Description]
+                     *
+                     * @return string
+                     */
+                    public function example(string \$param1): string
+                    {
+                        return \$param1;
+                    }
+
+
+                PHP,
             ],
             [
                 'name' => 'example',
@@ -635,18 +643,20 @@ trait ClassFactoryProviderTrait
                 'visibility' => 'protected',
                 'lineBreak' => 2,
                 'return' => <<<PHP
-                \t/**
-                \t * Description of 'example'
-                \t *
-                \t * @param array \$param1 [Parameter Description]
-                \t *
-                \t * @return array
-                \t */
-                \tprotected function example(array \$param1): array
-                \t{
-                \t\treturn [...\$param1];
-                \t}\n\n
-                PHP
+                    /**
+                     * Description of 'example'
+                     *
+                     * @param array \$param1 [Parameter Description]
+                     *
+                     * @return array
+                     */
+                    protected function example(array \$param1): array
+                    {
+                        return [...\$param1];
+                    }
+
+
+                PHP,
             ],
             [
                 'name' => 'example',
@@ -659,18 +669,20 @@ trait ClassFactoryProviderTrait
                 'visibility' => 'protected',
                 'lineBreak' => 2,
                 'return' => <<<PHP
-                \t/**
-                \t * Description of 'example'
-                \t *
-                \t * @param array \$param1 [Parameter Description]
-                \t *
-                \t * @return array<int, string>
-                \t */
-                \tprotected function example(array \$param1): array
-                \t{
-                \t\treturn [...\$param1];
-                \t}\n\n
-                PHP
+                    /**
+                     * Description of 'example'
+                     *
+                     * @param array \$param1 [Parameter Description]
+                     *
+                     * @return array<int, string>
+                     */
+                    protected function example(array \$param1): array
+                    {
+                        return [...\$param1];
+                    }
+
+
+                PHP,
             ],
             [
                 'name' => 'exampleLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongMethod',
@@ -680,18 +692,20 @@ trait ClassFactoryProviderTrait
                 'visibility' => 'protected',
                 'lineBreak' => 2,
                 'return' => <<<PHP
-                \t/**
-                \t * Description of 'exampleLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongMethod'
-                \t *
-                \t * @param array \$param1 [Parameter Description]
-                \t *
-                \t * @return array
-                \t */
-                \tprotected function exampleLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongMethod(array \$param1): array
-                \t{
-                \t\treturn [...\$param1];
-                \t}\n\n
-                PHP
+                    /**
+                     * Description of 'exampleLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongMethod'
+                     *
+                     * @param array \$param1 [Parameter Description]
+                     *
+                     * @return array
+                     */
+                    protected function exampleLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongMethod(array \$param1): array
+                    {
+                        return [...\$param1];
+                    }
+
+
+                PHP,
             ],
         ];
     }
