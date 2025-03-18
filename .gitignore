@@ -7,6 +7,8 @@
 /storage/**/*.log
 /storage/postman/
 /tests/build/
+/tests/App/
+/tests/Database/
 /resources/
 /app/
 .rnd
