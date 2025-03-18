@@ -435,6 +435,10 @@ class ClassFactory
         string $visibility = 'public',
         int $lineBreak = 2
     ): string {
+        $methodTypeAnnotation = '';
+
+        $methodType = '';
+
         if (is_string($type)) {
             $methodType = $type === '' ? ': void' : ": {$type}";
 
@@ -460,28 +464,47 @@ class ClassFactory
                 $param = isset($split[1]) ? trim($split[0]) : trim($param);
 
                 $paramsAnnotation .= $key === ($paramsSize - 1)
-                    ? "\t * @param {$param} [Parameter Description]"
-                    : "* @param {$param} [Parameter Description]\n";
+                    ? <<<EOT
+                         * @param {$param} [Parameter Description]
+                    EOT
+                    : <<<EOT
+                    * @param {$param} [Parameter Description]
+
+                    EOT;
             }
         } elseif ($paramsSize === 1) {
             $split = explode('=', $params);
 
             $params = isset($split[1]) ? trim($split[0]) : trim($params);
 
-            $paramsAnnotation .= "* @param {$params} [Parameter Description]";
+            $paramsAnnotation .= <<<EOT
+            * @param {$params} [Parameter Description]
+            EOT;
         }
 
-        $method = "\t/**\n\t * Description of '{$name}'\n";
+        $method = <<<EOT
+            /**
+             * Description of '{$name}'
+             *
 
-        $method .= "\t *\n";
+        EOT;
 
-        $method .= $paramsAnnotation != '' ? "\t {$paramsAnnotation}\n\t *\n" : '';
+        if ($paramsAnnotation != '') {
+            $method .= <<<EOT
+                 {$paramsAnnotation}
+                 *
 
-        $method .= "\t * @return {$methodTypeAnnotation}\n\t */\n";
+            EOT;
+        }
 
-        $method .= "\t{$visibility} function {$name}({$params}){$methodType}";
-
-        $method .= "\n\t{\n\t\t{$content}\n\t}";
+        $method .= <<<EOT
+             * @return {$methodTypeAnnotation}
+             */
+            {$visibility} function {$name}({$params}){$methodType}
+            {
+                $content
+            }
+        EOT;
 
         $method .= str_repeat("\n", $lineBreak);
 

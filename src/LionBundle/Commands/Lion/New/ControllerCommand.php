@@ -117,9 +117,11 @@ class ControllerCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $str = new Str();
+
         return $this->classCommandFactory
             ->setFactories(['controller', 'model'])
-            ->execute(function (ClassCommandFactory $classFactory, Store $store) use ($input, $output): int {
+            ->execute(function (ClassCommandFactory $classFactory, Store $store) use ($input, $output, $str): int {
                 /** @var string $controller */
                 $controller = $input->getArgument('controller');
 
@@ -128,7 +130,7 @@ class ControllerCommand extends Command
 
                 if (null === $model) {
                     /** @var string $model */
-                    $model = $this->str
+                    $model = $str
                         ->of($model)
                         ->concat($controller)
                         ->replace('Controller', '')
@@ -170,25 +172,24 @@ class ControllerCommand extends Command
 
                 $store->folder($controllerPath);
 
-                $factoryController
-                    ->create($controllerClass, ClassFactory::PHP_EXTENSION, $controllerPath)
-                    ->add(
-                        <<<PHP
+                $this->str
+                    ->of(
+                        <<<EOT
                         <?php
 
                         declare(strict_types=1);
 
                         namespace {$controllerNamespace};
 
-                        PHP
+                        EOT
                     );
 
                 if ('none' != $model) {
-                    $factoryController->add("\nuse {$modelNamespace}\\{$modelClass};");
+                    $this->str->concat("\nuse {$modelNamespace}\\{$modelClass};");
                 }
 
-                $factoryController
-                    ->add(
+                $this->str
+                    ->concat(
                         <<<EOT
 
                         use Lion\Database\Interface\DatabaseCapsuleInterface;
@@ -206,7 +207,7 @@ class ControllerCommand extends Command
 
                 foreach (self::METHODS as $method) {
                     /** @var string $controllerMethod */
-                    $controllerMethod = $this->str
+                    $controllerMethod = $str
                         ->of($method . $controllerClass)
                         ->replace('Controller', '')
                         ->replace('controller', '')
@@ -226,14 +227,14 @@ class ControllerCommand extends Command
                             : ($modelClass . ' $' . $camelModelClass);
 
                         /** @var string $modelMethod */
-                        $modelMethod = $this->str
+                        $modelMethod = $str
                             ->of('return ')
                             ->concat('$')
                             ->concat($camelModelClass)
                             ->concat('->')
                             ->get();
 
-                        $modelMethod .= $this->str
+                        $modelMethod .= $str
                             ->of($method . $modelClass)
                             ->replace('Model', '')
                             ->replace('model', '')
@@ -259,10 +260,22 @@ class ControllerCommand extends Command
                         );
                     }
 
-                    $factoryController->add($customMethod);
+                    $this->str->concat($customMethod);
                 }
 
-                $factoryController->add("}\n")->close();
+                /** @var string $content */
+                $content = $this->str
+                    ->concat(
+                        <<<EOT
+                        }
+
+                        EOT
+                    )
+                    ->get();
+
+                $factoryController
+                    ->create($controllerClass, ClassFactory::PHP_EXTENSION, $controllerPath)
+                    ->add($content);
 
                 $output->writeln($this->warningOutput("\t>>  CONTROLLER: {$controllerClass}"));
 
