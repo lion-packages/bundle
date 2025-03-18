@@ -1,20 +1,30 @@
-/.phpunit.cache
+# Ignore IDE/Editors directories -----------------------------------------------
 /.fleet
 /.idea
 /.vscode
-/vendor/
-/storage/**/*.key
-/storage/**/*.log
-/storage/postman/
+# ------------------------------------------------------------------------------
+
+# Ignore configuration or test files -------------------------------------------
 /tests/build/
 /tests/App/
 /tests/Database/
-/resources/
-/app/
-.rnd
 .phpunit.result.cache
-.env
-/database/
-test.txt
-supervisord.pid
+# ------------------------------------------------------------------------------
+
+# Ignore dependency files ------------------------------------------------------
+/vendor/
 composer.lock
+# ------------------------------------------------------------------------------
+
+# Ignore project files ---------------------------------------------------------
+/app/
+/database/
+/resources/
+/storage/**/*.key
+/storage/**/*.log
+/storage/postman/
+.rnd
+.env
+supervisord.pid
+test.txt
+# ------------------------------------------------------------------------------
