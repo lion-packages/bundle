@@ -130,6 +130,12 @@ class CrudCommand extends MenuCommand
         /** @var string $driver */
         $driver = $this->databaseEngine->getDatabaseEngineType($selectedConnection);
 
+        if (Driver::SQLITE === $driver) {
+            $output->writeln($this->warningOutput('SQLite is not currently supported'));
+
+            return parent::SUCCESS;
+        }
+
         /** @var string $connectionPascal */
         $connectionPascal = $this->str
             ->of($connectionName)
