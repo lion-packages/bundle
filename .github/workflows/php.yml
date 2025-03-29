@@ -3,7 +3,7 @@ name: Lion-Bundle (CI Workflow)
 on:
   push:
     branches:
-      - main
+      - actions
   pull_request:
     branches:
       - main
@@ -11,21 +11,44 @@ on:
     - cron: "15 0 * * *"
 
 jobs:
+  install-dependencies:
+    runs-on: ubuntu-latest
+    name: Install PHP Dependencies
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          extensions: mbstring, gd, zip
+
+      - name: Install PHP dependencies
+        run: composer install
+
+      - name: Cache vendor directory
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: php-vendor-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: php-vendor-${{ runner.os }}-${{ github.run_id }}
+
+      - name: Cache composer.lock
+        uses: actions/cache@v4
+        with:
+          path: composer.lock
+          key: php-composer-lock-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: php-composer-lock-${{ runner.os }}-${{ github.run_id }}
+
   composer-validation:
     runs-on: ubuntu-latest
     name: Composer Validation
+    needs: install-dependencies
 
     steps:
       - name: Check out the repository
         uses: actions/checkout@v4
-
-      - name: Cache Composer dependencies
-        uses: actions/cache@v3
-        with:
-          path: vendor
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-composer
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
@@ -33,8 +56,19 @@ jobs:
           php-version: '8.4'
           extensions: mbstring, gd, zip
 
-      - name: Composer Install
-        run: composer install
+      - name: Restore composer.lock from cache
+        uses: actions/cache@v4
+        with:
+          path: composer.lock
+          key: php-composer-lock-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: php-composer-lock-${{ runner.os }}-${{ github.run_id }}
+
+      - name: Restore vendor directory from cache
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: php-vendor-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: php-vendor-${{ runner.os }}-${{ github.run_id }}
 
       - name: Composer Validate
         run: composer validate --strict
@@ -45,9 +79,9 @@ jobs:
       - name: Composer Dump-Autoload
         run: composer dump-autoload --optimize --strict-psr
 
-  code-analyze:
+  code-analysis-php-stan:
     runs-on: ubuntu-latest
-    name: PHP Code Analyze
+    name: PHPStan
     needs:
       - composer-validation
 
@@ -61,20 +95,68 @@ jobs:
           php-version: '8.4'
           extensions: mbstring, gd, zip
 
-      - name: Composer Install
-        run: composer install --dev
+      - name: Restore composer.lock from cache
+        uses: actions/cache@v4
+        with:
+          path: composer.lock
+          key: php-composer-lock-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: php-composer-lock-${{ runner.os }}-${{ github.run_id }}
 
-      - name: PHP CodeSnifer (Src)
-        run: php -d memory_limit=-1 vendor/bin/phpcs --standard=PSR12 src
+      - name: Restore vendor directory from cache
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: php-vendor-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: php-vendor-${{ runner.os }}-${{ github.run_id }}
 
       - name: PHPStan (Src)
         run: php -d memory_limit=-1 vendor/bin/phpstan analyse --level max src
 
-  tests:
+      # - name: PHPStan (Tests)
+        # run: php -d memory_limit=-1 vendor/bin/phpstan analyse --level max tests
+
+  code-analysis-php-codesniffer:
     runs-on: ubuntu-latest
-    name: PHP Tests
+    name: PHP Code Sniffer
     needs:
-      - code-analyze
+      - composer-validation
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, gd, zip
+
+      - name: Restore composer.lock from cache
+        uses: actions/cache@v4
+        with:
+          path: composer.lock
+          key: php-composer-lock-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: php-composer-lock-${{ runner.os }}-${{ github.run_id }}
+
+      - name: Restore vendor directory from cache
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: php-vendor-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: php-vendor-${{ runner.os }}-${{ github.run_id }}
+
+      - name: PHP CodeSniffer (Src)
+        run: php -d memory_limit=-1 vendor/bin/phpcs --standard=PSR12 src
+
+      # - name: PHP CodeSniffer (Tests)
+        # run: php -d memory_limit=-1 vendor/bin/phpcs --standard=PSR12 tests
+
+  tests-phpunit:
+    runs-on: ubuntu-latest
+    name: PHPUnit
+    needs:
+      - code-analysis-php-stan
+      - code-analysis-php-codesniffer
 
     services:
       redis:
@@ -109,12 +191,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install system dependencies
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install -y git curl wget unzip libpq-dev libpng-dev libzip-dev zlib1g-dev libonig-dev libevent-dev libssl-dev
-          sudo apt-get clean
-
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -137,6 +213,20 @@ jobs:
           nvm use 20
           npm install -g npm@11
 
+      - name: Restore composer.lock from cache
+        uses: actions/cache@v4
+        with:
+          path: composer.lock
+          key: php-composer-lock-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: php-composer-lock-${{ runner.os }}-${{ github.run_id }}
+
+      - name: Restore vendor directory from cache
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: php-vendor-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: php-vendor-${{ runner.os }}-${{ github.run_id }}
+
       - name: Copy .env.actions to .env
         run: |
           if [ -f .env.actions ]; then
@@ -145,9 +235,6 @@ jobs:
             echo ".env.actions not found! Please make sure the file exists."
             exit 1
           fi
-
-      - name: Install php dependencies
-        run: composer install
 
       - name: Start PHP built-in server
         run: |
