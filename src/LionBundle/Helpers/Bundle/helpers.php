@@ -69,9 +69,15 @@ if (!function_exists('fetch')) {
      */
     function fetch(Fetch $fetch): ResponseInterface
     {
-        $client = new Client(
-            null === $fetch->getFetchConfiguration() ? [] : $fetch->getFetchConfiguration()->getConfiguration()
-        );
+        $fetchConfiguration = [];
+
+        if (null != $fetch->getFetchConfiguration()) {
+            $fetchConfiguration = $fetch
+                ->getFetchConfiguration()
+                ->getConfiguration();
+        }
+
+        $client = new Client($fetchConfiguration);
 
         return $client->request($fetch->getHttpMethod(), $fetch->getUri(), $fetch->getOptions());
     }
@@ -247,19 +253,22 @@ if (!function_exists('logger')) {
 
         $logger = new Logger('log');
 
-        $logger->pushHandler(new StreamHandler($fileName, Level::Info));
+        $streamHandler = new StreamHandler($fileName, Level::Info);
+
+        $logger->pushHandler($streamHandler);
 
         if (!isset($_SERVER['REQUEST_URI'])) {
-            $logger->$logTypeValue(json_encode($message), $data);
+            /** @var non-empty-string $json */
+            $json = json_encode($message);
         } else {
-            $logger->$logTypeValue(
-                json_encode([
-                    'uri' => $_SERVER['REQUEST_URI'],
-                    'data' => json_decode($message)
-                ]),
-                $data
-            );
+            /** @var non-empty-string $json */
+            $json = json_encode([
+                'uri' => $_SERVER['REQUEST_URI'],
+                'data' => json_decode($message),
+            ]);
         }
+
+        $logger->$logTypeValue($json, $data);
     }
 }
 
