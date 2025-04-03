@@ -180,12 +180,49 @@ jobs:
       # - name: PHP CodeSniffer (Tests)
         # run: php -d memory_limit=-1 vendor/bin/phpcs --standard=PSR12 tests
 
+  code-analysis-phplint:
+    runs-on: ubuntu-latest
+    name: PHPLint
+    needs:
+      - composer-validation
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, gd, zip
+
+      - name: Restore composer.lock from cache
+        uses: actions/cache@v4
+        with:
+          path: composer.lock
+          key: php-composer-lock-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: php-composer-lock-${{ runner.os }}-${{ github.run_id }}
+
+      - name: Restore vendor directory from cache
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: php-vendor-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: php-vendor-${{ runner.os }}-${{ github.run_id }}
+
+      - name: PHPLint (Src)
+        run: php -d memory_limit=-1 vendor/bin/phplint src
+
+      - name: PHPLint (Tests)
+        run: php -d memory_limit=-1 vendor/bin/phplint tests
+
   tests-phpunit:
     runs-on: ubuntu-latest
     name: PHPUnit
     needs:
       - code-analysis-php-stan
       - code-analysis-php-codesniffer
+      - code-analysis-phplint
 
     services:
       redis:
