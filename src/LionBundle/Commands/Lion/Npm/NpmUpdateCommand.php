@@ -7,7 +7,6 @@ namespace Lion\Bundle\Commands\Lion\Npm;
 use DI\Attribute\Inject;
 use Exception;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
-use Lion\Command\Command;
 use Lion\Command\Kernel;
 use LogicException;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,9 +14,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Update Vite.JS project dependencies
- *
- * @property Kernel $Kernel [Adds functions to execute commands, allows you to
- * create an Application object to run applications with your custom commands]
  *
  * @package Lion\Bundle\Commands\Lion\Npm
  */
@@ -73,12 +69,12 @@ class NpmUpdateCommand extends MenuCommand
     {
         $project = $this->selectedProject($input, $output);
 
-        $this->kernel->execute("cd resources/{$project}/ && npm update", false);
+        $this->kernel->execute("cd resources/{$project}/ && npm update");
 
         $output->writeln($this->warningOutput("\n\t>>  RESOURCES: {$project}"));
 
         $output->writeln($this->successOutput("\t>>  RESOURCES: dependencies have been updated"));
 
-        return Command::SUCCESS;
+        return parent::SUCCESS;
     }
 }

@@ -219,7 +219,7 @@ class NpmInitCommand extends MenuCommand
 
         $command .= "-- --no-install --no-git --yes --skip-houston";
 
-        $this->kernel->execute($command, false);
+        $this->kernel->execute($command);
     }
 
     /**
@@ -237,7 +237,7 @@ class NpmInitCommand extends MenuCommand
 
         $command .= " -- --template {$template}" . ('js' === $type ? '' : '-ts');
 
-        $this->kernel->execute($command, false);
+        $this->kernel->execute($command);
     }
 
     /**
@@ -255,6 +255,6 @@ class NpmInitCommand extends MenuCommand
 
         $command .= " {$this->project} -- --template {$template}" . ('js' === $type ? '' : '-ts') . ' --skip';
 
-        $this->kernel->execute($command, false);
+        $this->kernel->execute($command);
     }
 }
