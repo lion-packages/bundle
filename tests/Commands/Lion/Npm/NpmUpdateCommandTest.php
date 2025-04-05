@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace Tests\Commands\Lion\Npm;
 
+use DI\DependencyException;
+use DI\NotFoundException;
 use Lion\Bundle\Commands\Lion\Npm\NpmInitCommand;
 use Lion\Bundle\Commands\Lion\Npm\NpmUpdateCommand;
-use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
+use ReflectionException;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class NpmUpdateCommandTest extends Test
@@ -21,25 +25,51 @@ class NpmUpdateCommandTest extends Test
 
     private CommandTester $commandTesterNpmIn;
     private CommandTester $commandTesterNpmU;
+    private NpmUpdateCommand $npmUpdateCommand;
 
+    /**
+     * @throws DependencyException
+     * @throws NotFoundException
+     * @throws ReflectionException
+     */
     protected function setUp(): void
     {
-        $application = (new Kernel())->getApplication();
-
         $container = new Container();
 
-        $application->add($container->resolve(NpmInitCommand::class));
+        $application = new Application();
 
-        $application->add($container->resolve(NpmUpdateCommand::class));
+        /** @var NpmInitCommand $npmInitCommand */
+        $npmInitCommand = $container->resolve(NpmInitCommand::class);
+
+        /** @var NpmUpdateCommand $npmUpdateCommand */
+        $npmUpdateCommand = $container->resolve(NpmUpdateCommand::class);
+
+        $this->npmUpdateCommand = $npmUpdateCommand;
+
+        $application->add($npmInitCommand);
+
+        $application->add($this->npmUpdateCommand);
 
         $this->commandTesterNpmIn = new CommandTester($application->find('npm:init'));
 
         $this->commandTesterNpmU = new CommandTester($application->find('npm:update'));
+
+        $this->initReflection($this->npmUpdateCommand);
     }
 
     protected function tearDown(): void
     {
         $this->rmdirRecursively('resources/');
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
+    public function setKernel(): void
+    {
+        $this->assertInstanceOf(NpmUpdateCommand::class, $this->npmUpdateCommand->setKernel(new Kernel()));
+        $this->assertInstanceOf(Kernel::class, $this->getPrivateProperty('kernel'));
     }
 
     #[Testing]

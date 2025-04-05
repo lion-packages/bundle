@@ -90,7 +90,7 @@ class NpmUninstallCommand extends MenuCommand
             ->trim()
             ->get();
 
-        $this->kernel->execute($command, false);
+        $this->kernel->execute($command);
 
         $output->writeln($this->warningOutput("\n\t>>  RESOURCES: {$project}"));
 
