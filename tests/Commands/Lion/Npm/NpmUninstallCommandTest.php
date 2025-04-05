@@ -9,13 +9,13 @@ use DI\NotFoundException;
 use Lion\Bundle\Commands\Lion\Npm\NpmInitCommand;
 use Lion\Bundle\Commands\Lion\Npm\NpmInstallCommand;
 use Lion\Bundle\Commands\Lion\Npm\NpmUninstallCommand;
-use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
 use ReflectionException;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class NpmUninstallCommandTest extends Test
