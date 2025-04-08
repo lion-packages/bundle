@@ -43,7 +43,7 @@
 Install the bundle using **Composer**:
 
 ```bash
-composer create-project lion/bundle
+composer require lion/bundle
 ```
 
 ## 📝 License
