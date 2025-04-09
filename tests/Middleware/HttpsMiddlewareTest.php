@@ -33,7 +33,7 @@ class HttpsMiddlewareTest extends Test
             ->exceptionStatus(Status::ERROR)
             ->exceptionCode(Http::FORBIDDEN)
             ->expectLionException(function (): void {
-                $this->httpsMiddleware->https();
+                $this->httpsMiddleware->process();
             });
     }
 
@@ -51,7 +51,7 @@ class HttpsMiddlewareTest extends Test
             ->expectLionException(function (): void {
                 $_SERVER['HTTPS'] = 'off';
 
-                $this->httpsMiddleware->https();
+                $this->httpsMiddleware->process();
             });
 
         $this->assertHeaderNotHasKey('HTTPS');

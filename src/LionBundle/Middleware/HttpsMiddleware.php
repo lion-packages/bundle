@@ -7,22 +7,21 @@ namespace Lion\Bundle\Middleware;
 use Lion\Bundle\Exceptions\MiddlewareException;
 use Lion\Request\Http;
 use Lion\Request\Status;
+use Lion\Route\Interface\MiddlewareInterface;
 
 /**
  * Verify that HTTP protocols are accepted
  *
  * @package Lion\Bundle\Middleware
  */
-class HttpsMiddleware
+class HttpsMiddleware implements MiddlewareInterface
 {
     /**
-     * Verify that the HTTP protocol is secure
-     *
-     * @return void
+     * {@inheritDoc}
      *
      * @throws MiddlewareException [If the HTTP protocol is not secure]
      */
-    public function https(): void
+    public function process(): void
     {
         if (!isset($_SERVER['HTTPS'])) {
             throw new MiddlewareException(
