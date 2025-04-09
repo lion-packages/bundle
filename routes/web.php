@@ -17,15 +17,14 @@ define('IS_INDEX', true);
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
-use Lion\Bundle\Helpers\Commands\Schedule\Task;
-use Lion\Route\Route;
 use Dotenv\Dotenv;
 use Lion\Bundle\Enums\LogTypeEnum;
 use Lion\Bundle\Helpers\Commands\Schedule\TaskQueue;
-use Lion\Bundle\Helpers\Http\Routes;
 use Lion\Database\Driver;
 use Lion\Files\Store;
+use Lion\Route\Route;
 use Tests\Providers\ExampleProvider;
+use Lion\Bundle\Support\Http\Routes;
 
 /**
  * -----------------------------------------------------------------------------
@@ -35,7 +34,7 @@ use Tests\Providers\ExampleProvider;
  * -----------------------------------------------------------------------------
  **/
 
-if (isSuccess((new Store())->exist(__DIR__ . '/../.env'))) {
+if (isSuccess(new Store()->exist(__DIR__ . '/../.env'))) {
     Dotenv::createMutable(__DIR__ . '/../')->load();
 }
 

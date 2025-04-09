@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lion\Bundle\Helpers\Http;
+namespace Lion\Bundle\Support\Http;
 
 /**
  * Initializes the defined web rules and filters
