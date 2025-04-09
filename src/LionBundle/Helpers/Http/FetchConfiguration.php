@@ -16,7 +16,7 @@ class FetchConfiguration
     /**
      * Class Constructor
      *
-     * @param array<string, string> $configuration [Configuration data]
+     * @param array<string, mixed> $configuration [Configuration data]
      */
     public function __construct(
         private readonly array $configuration = []
