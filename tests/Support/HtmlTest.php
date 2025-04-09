@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tests\Helpers\Commands;
+namespace Tests\Support;
 
-use Lion\Bundle\Helpers\Commands\Html;
+use Lion\Bundle\Support\Html;
 use Lion\Files\Store;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;

@@ -108,8 +108,8 @@ class HtmlCommand extends Command
 
                 namespace {$namespace};
 
-                use Lion\Bundle\Helpers\Commands\Html;
                 use Lion\Bundle\Interface\HtmlInterface;
+                use Lion\Bundle\Support\Html;
 
                 /**
                  * Define an HTML template
