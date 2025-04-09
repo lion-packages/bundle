@@ -6,7 +6,7 @@ namespace Tests\Helpers\Commands\Schedule;
 
 use Lion\Bundle\Helpers\Commands\Schedule\Task;
 use Lion\Bundle\Helpers\Commands\Schedule\TaskQueue;
-use Lion\Bundle\Helpers\Redis;
+use Lion\Bundle\Support\Redis;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
 use ReflectionException;

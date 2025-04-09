@@ -6,7 +6,7 @@ namespace Lion\Bundle\Helpers\Commands\Schedule;
 
 use DI\Attribute\Inject;
 use JsonException;
-use Lion\Bundle\Helpers\Redis;
+use Lion\Bundle\Support\Redis;
 
 /**
  * Manage server queued task processes
