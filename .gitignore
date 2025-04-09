@@ -8,6 +8,7 @@
 /tests/build/
 /tests/App/
 /tests/Database/
+/tests/lion_database.sqlite
 .phpunit.result.cache
 # ------------------------------------------------------------------------------
 
