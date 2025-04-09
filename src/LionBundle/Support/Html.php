@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lion\Bundle\Helpers\Commands;
+namespace Lion\Bundle\Support;
 
 /**
  * Allows you to process and transform an HTML template
