@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tests\Helpers;
+namespace Tests\Support;
 
-use Lion\Bundle\Helpers\Redis;
+use Lion\Bundle\Support\Redis;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
 use PHPUnit\Framework\Attributes\TestWith;

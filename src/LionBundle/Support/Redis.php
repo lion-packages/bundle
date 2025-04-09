@@ -2,16 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Lion\Bundle\Helpers;
+namespace Lion\Bundle\Support;
 
 use Predis\Client;
 
 /**
  * Process Manager with Redis Driver
- *
- * @property Client $client [Client class used for connecting and executing
- *  commands on Redis]
- * @property int $seconds [Time in seconds to expire the cache]
  *
  * @package Lion\Bundle\Helpers
  */
