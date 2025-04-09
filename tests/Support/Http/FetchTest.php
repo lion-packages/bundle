@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Support\Http;
 
-use Lion\Bundle\Helpers\Http\FetchConfiguration;
 use Lion\Bundle\Support\Http\Fetch;
+use Lion\Bundle\Support\Http\FetchConfiguration;
 use Lion\Bundle\Test\Test;
 use Lion\Request\Http;
 use PHPUnit\Framework\Attributes\Test as Testing;

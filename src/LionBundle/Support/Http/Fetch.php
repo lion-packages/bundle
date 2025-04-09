@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Support\Http;
 
-use Lion\Bundle\Helpers\Http\FetchConfiguration;
-
 /**
  * Defines parameters for consuming HTTP requests with GuzzleHttp
  *
