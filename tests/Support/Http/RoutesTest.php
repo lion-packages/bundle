@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tests\Helpers\Http;
+namespace Tests\Support\Http;
 
-use Lion\Bundle\Helpers\Http\Routes;
 use Lion\Bundle\Middleware\RouteMiddleware;
+use Lion\Bundle\Support\Http\Routes;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
 
