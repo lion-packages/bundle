@@ -2,17 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Lion\Bundle\Helpers\Http;
+namespace Lion\Bundle\Support\Http;
 
 /**
  * Defines parameters for consuming HTTP requests with GuzzleHttp
- *
- * @property string $httpMethod [HTTP protocol]
- * @property string $uri [URL to make the request]
- * @property array<string, mixed> $options [Options to send through the request,
- * such as headers or parameters]
- * @property FetchConfiguration|null $fetchConfiguration [Defines the
- * configuration data for making an HTTP request]
  *
  * @package Lion\Bundle\Helpers\Http
  */

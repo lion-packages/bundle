@@ -10,7 +10,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use Lion\Bundle\Enums\LogTypeEnum;
 use Lion\Bundle\Helpers\Env;
 use Lion\Bundle\Helpers\Fake;
-use Lion\Bundle\Helpers\Http\Fetch;
+use Lion\Bundle\Support\Http\Fetch;
 use Lion\Files\Store;
 use Lion\Request\Http;
 use Lion\Request\Request;

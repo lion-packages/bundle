@@ -8,7 +8,7 @@ use DI\DependencyException;
 use DI\NotFoundException;
 use GuzzleHttp\Exception\GuzzleException;
 use Lion\Bundle\Helpers\Commands\PostmanCollection;
-use Lion\Bundle\Helpers\Http\Fetch;
+use Lion\Bundle\Support\Http\Fetch;
 use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
 use Lion\Request\Http;

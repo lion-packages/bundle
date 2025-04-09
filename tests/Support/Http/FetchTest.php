@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tests\Helpers\Http;
+namespace Tests\Support\Http;
 
-use Lion\Bundle\Helpers\Http\Fetch;
-use Lion\Bundle\Helpers\Http\FetchConfiguration;
+use Lion\Bundle\Support\Http\Fetch;
+use Lion\Bundle\Support\Http\FetchConfiguration;
 use Lion\Bundle\Test\Test;
 use Lion\Request\Http;
 use PHPUnit\Framework\Attributes\Test as Testing;
@@ -33,7 +33,7 @@ class FetchTest extends Test
         $fetchConfiguration = new FetchConfiguration(self::CONFIGURATION);
 
         $this->initReflection(
-            (new Fetch(self::HTTP_METHOD, self::URI, self::OPTIONS))
+            new Fetch(self::HTTP_METHOD, self::URI, self::OPTIONS)
                 ->setFetchConfiguration($fetchConfiguration)
         );
 
@@ -48,7 +48,7 @@ class FetchTest extends Test
     {
         $fetchConfiguration = new FetchConfiguration(self::CONFIGURATION);
 
-        $fetch = (new Fetch(self::HTTP_METHOD, self::URI, self::OPTIONS))
+        $fetch = new Fetch(self::HTTP_METHOD, self::URI, self::OPTIONS)
             ->setFetchConfiguration($fetchConfiguration);
 
         $this->assertSame($fetchConfiguration, $fetch->getFetchConfiguration());

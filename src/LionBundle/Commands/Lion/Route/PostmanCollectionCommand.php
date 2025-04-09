@@ -9,7 +9,7 @@ use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\PostmanCollection;
-use Lion\Bundle\Helpers\Http\Fetch;
+use Lion\Bundle\Support\Http\Fetch;
 use Lion\Command\Command;
 use Lion\Files\Store;
 use Lion\Helpers\Str;

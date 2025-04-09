@@ -11,7 +11,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use JsonException;
 use Lion\Bundle\Enums\LogTypeEnum;
 use Lion\Bundle\Helpers\Env;
-use Lion\Bundle\Helpers\Http\Fetch;
+use Lion\Bundle\Support\Http\Fetch;
 use Lion\Request\Http;
 use Lion\Request\Status;
 use Lion\Security\AES;

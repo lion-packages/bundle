@@ -2,12 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Lion\Bundle\Helpers\Http;
+namespace Lion\Bundle\Support\Http;
 
 /**
  * Defines the configuration data for making an HTTP request
- *
- * @property array<string, string> $configuration [Configuration data]
  *
  * @package Lion\Bundle\Helpers\Http
  */
@@ -16,7 +14,7 @@ class FetchConfiguration
     /**
      * Class Constructor
      *
-     * @param array<string, string> $configuration [Configuration data]
+     * @param array<string, mixed> $configuration [Configuration data]
      */
     public function __construct(
         private readonly array $configuration = []
@@ -26,7 +24,7 @@ class FetchConfiguration
     /**
      * Returns configuration data
      *
-     * @return array<string, string>
+     * @return array<string, mixed>
      *
      * @internal
      */
