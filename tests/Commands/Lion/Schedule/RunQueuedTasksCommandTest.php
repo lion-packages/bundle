@@ -13,6 +13,8 @@ use Lion\Test\Test;
 use ReflectionException;
 use Symfony\Component\Console\Application;
 use PHPUnit\Framework\Attributes\Test as Testing;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
 
 class RunQueuedTasksCommandTest extends Test
 {
@@ -55,13 +57,19 @@ class RunQueuedTasksCommandTest extends Test
      * @throws ReflectionException
      */
     #[Testing]
-    public function setTaskQueue(): void
+    public function initialize(): void
     {
-        $this->assertInstanceOf(
-            RunQueuedTasksCommand::class,
-            $this->runQueuedTasksCommand->setTaskQueue(new TaskQueue())
-        );
+        $input = new ArrayInput([]);
 
-        $this->assertInstanceOf(TaskQueue::class, $this->getPrivateProperty('taskQueue'));
+        $output = new BufferedOutput();
+
+        $this->getPrivateMethod('initialize', [
+            'input' => $input,
+            'output' => $output
+        ]);
+
+        $taskQueue = $this->getPrivateProperty('taskQueue');
+
+        $this->assertInstanceOf(TaskQueue::class, $taskQueue);
     }
 }

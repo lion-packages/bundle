@@ -78,7 +78,7 @@ Route::init();
 
 Route::addMiddleware(Routes::getMiddleware());
 // -----------------------------------------------------------------------------
-Route::get('/', function (TaskQueue $taskQueue) {
+Route::get('/', function () {
     // $taskQueue->push(new Task(ExampleProvider::class, 'getArrExample', ['name' => 'root']));
 
     // $taskQueue->push(new Task(ExampleProvider::class, 'myMethod', ['name' => 'root']));
