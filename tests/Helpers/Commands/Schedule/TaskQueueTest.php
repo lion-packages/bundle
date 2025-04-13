@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Helpers\Commands\Schedule;
 
+use JsonException;
 use Lion\Bundle\Helpers\Commands\Schedule\Task;
 use Lion\Bundle\Helpers\Commands\Schedule\TaskQueue;
-use Lion\Bundle\Support\Redis;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
+use Predis\Client;
 use ReflectionException;
 use Tests\Providers\ExampleProvider;
 
@@ -20,43 +21,71 @@ class TaskQueueTest extends Test
     ];
 
     private TaskQueue $taskQueue;
-    private Redis $redis;
-
     /**
      * @throws ReflectionException
      */
     protected function setUp(): void
     {
-        $this->redis = new Redis();
+        /** @var string $redisScheme */
+        $redisScheme = env('REDIS_SCHEME');
 
-        $this->taskQueue = new TaskQueue()
-            ->setRedis($this->redis);
+        /** @var string $host */
+        $host = env('REDIS_HOST');
+
+        /** @var int $port */
+        $port = env('REDIS_PORT');
+
+        /** @var string $password */
+        $password = env('REDIS_PASSWORD');
+
+        $this->taskQueue = new TaskQueue([
+            'scheme' => $redisScheme,
+            'host' => $host,
+            'port' => $port,
+            'parameters' => [
+                'password' => $password,
+                'database' => TaskQueue::LION_DATABASE,
+            ],
+        ]);
 
         $this->initReflection($this->taskQueue);
     }
 
+    /**
+     * @throws ReflectionException
+     */
     protected function tearDown(): void
     {
-        $this->redis->empty();
+        /** @var Client $client */
+        $client = $this->getPrivateProperty('client');
+
+        $client->flushall();
     }
 
     /**
      * @throws ReflectionException
      */
     #[Testing]
-    public function setRedis(): void
+    public function construct(): void
     {
-        $this->assertInstanceOf(TaskQueue::class, $this->taskQueue->setRedis(new Redis()));
-        $this->assertInstanceOf(Redis::class, $this->getPrivateProperty('redis'));
+        $client = $this->getPrivateProperty('client');
+
+        $this->assertInstanceOf(Client::class, $client);
     }
 
+    /**
+     * @throws JsonException
+     * @throws ReflectionException
+     */
     #[Testing]
     public function push(): void
     {
-        $this->taskQueue
-            ->push(new Task(ExampleProvider::class, 'getArrExample', self::DATA));
+        $this->taskQueue->push(new Task(ExampleProvider::class, 'getArrExample', self::DATA));
 
-        $data = $this->redis->getClient()->rpop(TaskQueue::LION_TASKS);
+        /** @var Client $client */
+        $client = $this->getPrivateProperty('client');
+
+        $data = $client->rpop(TaskQueue::LION_TASKS);
 
         $this->assertIsString($data);
         $this->assertJson($data);
@@ -69,6 +98,7 @@ class TaskQueueTest extends Test
         $this->assertArrayHasKey('namespace', $json);
         $this->assertArrayHasKey('method', $json);
         $this->assertArrayHasKey('data', $json);
+        $this->assertIsArray($json['data']);
         $this->assertArrayHasKey('name', $json['data']);
         $this->assertIsString($json['id']);
         $this->assertIsString($json['namespace']);
@@ -80,6 +110,9 @@ class TaskQueueTest extends Test
         $this->assertSame(self::DATA, $json['data']);
     }
 
+    /**
+     * @throws JsonException
+     */
     #[Testing]
     public function get(): void
     {
@@ -98,7 +131,9 @@ class TaskQueueTest extends Test
         $this->assertArrayHasKey('namespace', $json);
         $this->assertArrayHasKey('method', $json);
         $this->assertArrayHasKey('data', $json);
+        $this->assertIsArray($json['data']);
         $this->assertArrayHasKey('name', $json['data']);
+        $this->assertIsString($json['id']);
         $this->assertIsString($json['id']);
         $this->assertIsString($json['namespace']);
         $this->assertIsString($json['method']);

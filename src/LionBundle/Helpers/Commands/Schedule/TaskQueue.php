@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Helpers\Commands\Schedule;
 
-use DI\Attribute\Inject;
 use JsonException;
-use Lion\Bundle\Support\Redis;
+use Predis\Client;
 
 /**
  * Manage server queued task processes
- *
- * @property Redis $redis [Process Manager with Redis Driver]
  *
  * @package Lion\Bundle\Helpers\Commands\Schedule
  */
@@ -22,21 +19,38 @@ class TaskQueue
      *
      * @const LION_TASKS
      */
-    public const string LION_TASKS  = 'lion-tasks';
+    public const string LION_TASKS = 'lion-tasks';
 
     /**
-     * [Process Manager with Redis Driver]
+     * [Defines the database to connect to and manipulate tasks]
      *
-     * @var Redis $redis
+     * @const LION_DATABASE
      */
-    private Redis $redis;
+    public const int LION_DATABASE = 0;
 
-    #[Inject]
-    public function setRedis(Redis $redis): TaskQueue
+    /**
+     * [Client class used for connecting and executing commands on Redis]
+     *
+     * @var Client $client
+     */
+    private Client $client;
+
+    /**
+     * Class constructor
+     *
+     * @param array{
+     *     scheme: string,
+     *     host: string,
+     *     port: int,
+     *     parameters: array{
+     *         password: string,
+     *         database: int
+     *     }
+     * } $parameters
+     */
+    public function __construct(array $parameters)
     {
-        $this->redis = $redis;
-
-        return $this;
+        $this->client = new Client($parameters);
     }
 
     /**
@@ -50,8 +64,7 @@ class TaskQueue
      */
     public function push(Task $task): TaskQueue
     {
-        $this->redis
-            ->getClient()
+        $this->client
             /** @phpstan-ignore-next-line */
             ->lpush(self::LION_TASKS, $task->getTask());
 
@@ -65,9 +78,7 @@ class TaskQueue
      */
     public function get(): ?string
     {
-        return $this->redis
-            ->getClient()
-            ->rpop(self::LION_TASKS);
+        return $this->client->rpop(self::LION_TASKS);
     }
 
     /**
