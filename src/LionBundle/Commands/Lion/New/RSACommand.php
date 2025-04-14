@@ -89,13 +89,13 @@ class RSACommand extends Command
         $path = $input->getOption('path');
 
         /** @var string $rsaPrivateKeyBits */
-        $rsaPrivateKeyBits = $_ENV['RSA_PRIVATE_KEY_BITS'];
+        $rsaPrivateKeyBits = env('RSA_PRIVATE_KEY_BITS');
 
         /** @var string $rsaPath */
-        $rsaPath = $_ENV['RSA_PATH'];
+        $rsaPath = env('RSA_PATH');
 
         /** @var string $rsaDefaultMd */
-        $rsaDefaultMd = $_ENV['RSA_DEFAULT_MD'];
+        $rsaDefaultMd = env('RSA_DEFAULT_MD');
 
         $this->rsa->config([
             'urlPath' => null === $path ? $this->rsa->getUrlPath() : storage_path($path),
