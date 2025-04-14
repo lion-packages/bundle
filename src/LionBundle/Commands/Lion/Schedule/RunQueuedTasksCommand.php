@@ -71,6 +71,8 @@ class RunQueuedTasksCommand extends MenuCommand
      */
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
+        parent::initialize($input, $output);
+
         /** @var string $redisScheme */
         $redisScheme = env('REDIS_SCHEME');
 
