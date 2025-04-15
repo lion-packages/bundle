@@ -261,7 +261,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.4
-          extensions: mbstring, gd, zip, pdo, pdo_mysql, pdo_pgsql, redis, xdebug
+          extensions: mbstring, gd, zip, pdo, xdebug, pdo_mysql, pdo_pgsql, redis
           coverage: xdebug
           ini-values: |
             xdebug.mode=coverage
@@ -269,15 +269,87 @@ jobs:
             xdebug.log_level=0
           tools: composer
 
-      - name: Setup NodeJS and NPM
+      - name: Install Apache and OpenSSL
         run: |
-          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-          export NVM_DIR="$HOME/.nvm"
-          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # Esto carga nvm
-          [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # Esto carga nvm bash_completion
-          nvm install 20
-          nvm use 20
-          npm install -g npm@11
+          sudo apt-get update
+          sudo apt-get install -y apache2 libapache2-mod-php8.4 openssl ca-certificates
+
+      - name: Enable Apache mods and configure SSL
+        run: |
+          sudo a2enmod rewrite ssl
+          echo "ServerName localhost" | sudo tee -a /etc/apache2/apache2.conf
+          sudo sed -i "s|SSLEngine on|SSLEngine on\nSSLVerifyClient none|g" /etc/apache2/sites-available/default-ssl.conf
+          sudo sed -i "s|DocumentRoot /var/www/html|DocumentRoot /home/runner/work/bundle/bundle/public|g" /etc/apache2/sites-available/000-default.conf
+          sudo sed -i "s|<Directory /var/www/html>|<Directory /home/runner/work/bundle/bundle/public>|g" /etc/apache2/apache2.conf
+          sudo sed -i "s|SSLProtocol all|SSLProtocol all -SSLv2 -SSLv3 -TLSv1 -TLSv1.1|g" /etc/apache2/mods-enabled/ssl.conf
+          sudo sed -i "s|SSLHonorCipherOrder on|SSLHonorCipherOrder on\nSSLCipherSuite HIGH:!aNULL:!MD5|g" /etc/apache2/mods-enabled/ssl.conf
+          sudo sed -i "s|www-data|$(whoami)|g" /etc/apache2/envvars
+
+      - name: Generate SSL certificates
+        run: |
+          sudo openssl req -x509 -nodes -days 365 -newkey rsa:4096 \
+            -keyout /etc/ssl/private/apache-selfsigned.key \
+            -out /etc/ssl/certs/apache-selfsigned.crt \
+            -subj "/C=US/ST=State/L=City/O=Lion-Packages/OU=Lion/CN=localhost/emailAddress=root@dev.com"
+          sudo cp /etc/ssl/certs/apache-selfsigned.crt /usr/local/share/ca-certificates/selfsigned.crt
+          sudo update-ca-certificates
+
+      - name: Update Apache virtual hosts
+        run: |
+          sudo bash -c 'cat <<EOF > /etc/apache2/sites-available/default-ssl.conf
+          <VirtualHost *:80>
+              ServerName localhost
+              DocumentRoot /home/runner/work/bundle/bundle/public
+              SSLEngine on
+              SSLCertificateFile /etc/ssl/certs/apache-selfsigned.crt
+              SSLCertificateKeyFile /etc/ssl/private/apache-selfsigned.key
+              ErrorLog \${APACHE_LOG_DIR}/error.log
+              CustomLog \${APACHE_LOG_DIR}/access.log combined
+              <Directory /home/runner/work/bundle/bundle/public>
+                  Options Indexes FollowSymLinks
+                  AllowOverride All
+                  Require all granted
+              </Directory>
+          </VirtualHost>
+          <VirtualHost *:443>
+              ServerName localhost
+              DocumentRoot /home/runner/work/bundle/bundle/public
+              SSLEngine on
+              SSLCertificateFile /etc/ssl/certs/apache-selfsigned.crt
+              SSLCertificateKeyFile /etc/ssl/private/apache-selfsigned.key
+              ErrorLog \${APACHE_LOG_DIR}/error.log
+              CustomLog \${APACHE_LOG_DIR}/access.log combined
+              <Directory /home/runner/work/bundle/bundle/public>
+                  Options Indexes FollowSymLinks
+                  AllowOverride All
+                  Require all granted
+              </Directory>
+          </VirtualHost>
+          EOF'
+
+      - name: Apache conf
+        run: sudo cat /etc/apache2/sites-available/default-ssl.conf
+
+      - name: Enable SSL site
+        run: |
+          sudo a2ensite default-ssl
+          sudo apache2ctl configtest
+          sudo apache2ctl restart
+          sudo apache2ctl status
+
+      - name: Set permissions for the bundle directory
+        run: |
+          sudo chown -R $USER:$USER /home/runner/work/bundle/bundle/public
+          sudo chmod -R 755 /home/runner/work/bundle/bundle/public
+
+      - name: Copy .env.actions to .env
+        run: |
+          if [ -f .env.actions ]; then
+            cp .env.actions .env
+          else
+            echo ".env.actions not found! Please make sure the file exists."
+            exit 1
+          fi
 
       - name: Restore composer.lock from cache
         uses: actions/cache@v4
@@ -293,27 +365,12 @@ jobs:
           key: php-vendor-${{ runner.os }}-${{ github.run_id }}
           restore-keys: php-vendor-${{ runner.os }}-${{ github.run_id }}
 
-      - name: Copy .env.actions to .env
-        run: |
-          if [ -f .env.actions ]; then
-            cp .env.actions .env
-          else
-            echo ".env.actions not found! Please make sure the file exists."
-            exit 1
-          fi
-
-      - name: Start PHP built-in server
-        run: |
-          nohup php -S 0.0.0.0:8000 -t public &
-
-      - name: Generate RSA Key's
-        run: php lion new:rsa
-
       - name: Run tests
         run: php vendor/bin/phpunit --coverage-clover tests/build/logs/clover.xml --coverage-html tests/build/coverage
 
-      - name: Upload coverage reports to Codecov
+      - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
           files: tests/build/logs/clover.xml
           token: ${{ secrets.CODECOV_TOKEN_LION_BUNDLE }}
+
