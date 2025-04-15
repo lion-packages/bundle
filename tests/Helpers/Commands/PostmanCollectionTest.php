@@ -22,7 +22,7 @@ class PostmanCollectionTest extends Test
 {
     use PostmanCollectionProviderTrait;
 
-    private const string HOST = 'http://127.0.0.1:8000';
+    private const string HOST = 'https://localhost';
     private const array POSTMAN_CONFIG = [
         'params' => [
             'host' => [

@@ -16,8 +16,8 @@ trait EnvProviderTrait
             ],
             [
                 'envKey' => 'SERVER_URL',
-                'envValue' => 'http://127.0.0.1:8000',
-                'return' => 'http://127.0.0.1:8000'
+                'envValue' => 'https://localhost',
+                'return' => 'https://localhost'
             ],
             [
                 'envKey' => 'APP_NAME_TEST',
@@ -26,8 +26,8 @@ trait EnvProviderTrait
             ],
             [
                 'envKey' => 'SERVER_URL_TEST',
-                'envValue' => 'http://127.0.0.1:8000',
-                'return' => 'http://127.0.0.1:8000'
+                'envValue' => 'https://localhost',
+                'return' => 'https://localhost'
             ],
             [
                 'envKey' => 'MAIL_DEBUG_SUPP_TEST',
@@ -91,11 +91,11 @@ trait EnvProviderTrait
     {
         return [
             [
-                'value' => 'http://127.0.0.1:8000',
+                'value' => 'https://localhost',
                 'return' => 'SERVER_URL',
             ],
             [
-                'value' => 'http://127.0.0.1:5173',
+                'value' => 'http://localhost:5173',
                 'return' => 'SERVER_URL_AUD'
             ],
             [
@@ -115,8 +115,8 @@ trait EnvProviderTrait
             ],
             [
                 'envKey' => 'SERVER_URL',
-                'envValue' => 'http://127.0.0.1:8000',
-                'return' => 'http://127.0.0.1:8000'
+                'envValue' => 'https://localhost',
+                'return' => 'https://localhost'
             ],
             [
                 'envKey' => 'APP_NAME_TEST',
@@ -125,8 +125,8 @@ trait EnvProviderTrait
             ],
             [
                 'envKey' => 'SERVER_URL_TEST',
-                'envValue' => 'http://127.0.0.1:8000',
-                'return' => 'http://127.0.0.1:8000'
+                'envValue' => 'https://localhost',
+                'return' => 'https://localhost'
             ],
             [
                 'envKey' => 'MAIL_DEBUG_SUPP_TEST',
