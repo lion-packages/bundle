@@ -21,13 +21,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Generate JSON object structure for POSTMAN collections
  *
- * @property ClassFactory $classFactory [Fabricates the data provided to
- * manipulate information (folder, class, namespace)]
- * @property PostmanCollection $postmanCollection [Generate structures to create
- * Postman collections]
- * @property Store $store [Manipulate system files]
- * @property Str $str [Modify and construct strings with different formats]
- *
  * @package Lion\Bundle\Commands\Lion\Route
  */
 class PostmanCollectionCommand extends Command

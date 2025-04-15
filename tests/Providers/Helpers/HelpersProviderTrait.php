@@ -46,8 +46,8 @@ trait HelpersProviderTrait
             ],
             [
                 'envKey' => 'SERVER_URL',
-                'envValue' => 'http://127.0.0.1:8000',
-                'return' => 'http://127.0.0.1:8000'
+                'envValue' => 'https://localhost',
+                'return' => 'https://localhost'
             ],
             [
                 'envKey' => 'APP_NAME_TEST',
@@ -56,8 +56,8 @@ trait HelpersProviderTrait
             ],
             [
                 'envKey' => 'SERVER_URL_TEST',
-                'envValue' => 'http://127.0.0.1:8000',
-                'return' => 'http://127.0.0.1:8000'
+                'envValue' => 'https://localhost',
+                'return' => 'https://localhost'
             ],
             [
                 'envKey' => 'MAIL_DEBUG_SUPP_TEST',
