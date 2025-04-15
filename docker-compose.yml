@@ -5,17 +5,18 @@ services:
             context: .
             dockerfile: Dockerfile
         ports:
-            - "8000:8000"
-            - "8001:8001"
-            - "8002:8002"
-            - "9000:9000"
-            - "5173:5173"
-            - "4321:4321"
+            - 80:80
+            - 443:443
+            - 8000:8000
+            - 8001:8001
+            - 8002:8002
+            - 9000:9000
+            - 5173:5173
+            - 4321:4321
         volumes:
             - ./:/var/www/html
         depends_on:
             - mysql
-            - phpmyadmin
             - redis
         networks:
             - lion
@@ -25,7 +26,7 @@ services:
         container_name: bundle-redis
         restart: always
         ports:
-            - "6379:6379"
+            - 6379:6379
         volumes:
             - redis_data:/var/lib/redis
         environment:
@@ -39,7 +40,7 @@ services:
         image: mysql
         container_name: bundle-mysql
         ports:
-            - "3306:3306"
+            - 3306:3306
         environment:
             MYSQL_DATABASE: lion_database
             MYSQL_PASSWORD: lion
@@ -68,7 +69,7 @@ services:
         image: postgres
         container_name: bundle-postgres
         ports:
-            - "5432:5432"
+            - 5432:5432
         environment:
             POSTGRES_DB: lion_database
             POSTGRES_USER: root
@@ -82,7 +83,7 @@ services:
         image: dpage/pgadmin4
         container_name: bundle-pgadmin4
         ports:
-            - "5050:80"
+            - 5050:80
         environment:
             PGADMIN_DEFAULT_EMAIL: root@dev.com
             PGADMIN_DEFAULT_PASSWORD: lion
