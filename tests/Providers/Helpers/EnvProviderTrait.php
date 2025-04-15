@@ -95,7 +95,7 @@ trait EnvProviderTrait
                 'return' => 'SERVER_URL',
             ],
             [
-                'value' => 'http://127.0.0.1:5173',
+                'value' => 'http://localhost:5173',
                 'return' => 'SERVER_URL_AUD'
             ],
             [
