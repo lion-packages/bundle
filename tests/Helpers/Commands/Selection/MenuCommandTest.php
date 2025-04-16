@@ -152,6 +152,10 @@ class MenuCommandTest extends Test
         $commandTester->execute([]);
     }
 
+    /**
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
     #[Testing]
     public function selectedProjectWithSingleProject(): void
     {
@@ -174,9 +178,12 @@ class MenuCommandTest extends Test
             }
         };
 
+        /** @var MenuCommand $menuCommand */
+        $menuCommand = $this->container->resolve($command::class);
+
         $application = new Application();
 
-        $application->add($this->container->resolve($command::class));
+        $application->add($menuCommand);
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -184,6 +191,10 @@ class MenuCommandTest extends Test
         $this->assertStringContainsString(('(' . self::PROJECT_NAME . ')'), $commandTester->getDisplay());
     }
 
+    /**
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
     #[Testing]
     public function selectedProjectWithMultipleProjects(): void
     {
@@ -208,16 +219,84 @@ class MenuCommandTest extends Test
             }
         };
 
+        /** @var MenuCommand $menuCommand */
+        $menuCommand = $this->container->resolve($command::class);
+
         $application = new Application();
 
-        $application->add($this->container->resolve($command::class));
+        $application->add($menuCommand);
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
         $this->assertSame(Command::SUCCESS, $commandTester->setInputs(['0'])->execute([]));
-        $this->assertStringContainsString(('(' . self::PROJECT_NAME_SECOND . ')'), $commandTester->getDisplay());
+
+        $display = $commandTester->getDisplay();
+
+        $this->assertStringContainsString(self::PROJECT_NAME, $display);
+        $this->assertStringContainsString(self::PROJECT_NAME_SECOND, $display);
+        $this->assertStringContainsString(('(' . self::PROJECT_NAME_SECOND . ')'), $display);
     }
 
+    /**
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    #[Testing]
+    public function selectedProjectWithMultipleProjectsAndFiles(): void
+    {
+        $this->createDirectory(self::RESOURCES_PATH . self::PROJECT_PATH);
+
+        $this->createDirectory(self::RESOURCES_PATH . self::PROJECT_PATH_SECOND);
+
+        $this->createImage(
+            path: self::RESOURCES_PATH
+        );
+
+        $this->createImage(
+            path: self::RESOURCES_PATH,
+            fileName: 'a-image.png'
+        );
+
+        $command = new class extends MenuCommand
+        {
+            protected function configure(): void
+            {
+                $this->setName('test:menu:command');
+            }
+
+            protected function execute(InputInterface $input, OutputInterface $output): int
+            {
+                $project = $this->selectedProject($input, $output);
+
+                $output->write("({$project})");
+
+                return Command::SUCCESS;
+            }
+        };
+
+        /** @var MenuCommand $menuCommand */
+        $menuCommand = $this->container->resolve($command::class);
+
+        $application = new Application();
+
+        $application->add($menuCommand);
+
+        $commandTester = new CommandTester($application->find('test:menu:command'));
+
+        $this->assertSame(Command::SUCCESS, $commandTester->setInputs(['0'])->execute([]));
+
+        $display = $commandTester->getDisplay();
+        $this->assertStringContainsString(self::PROJECT_NAME, $display);
+        $this->assertStringContainsString(self::PROJECT_NAME_SECOND, $display);
+        $this->assertStringContainsString(('(' . self::PROJECT_NAME_SECOND . ')'), $display);
+        $this->assertStringNotContainsString('image.png', $display);
+        $this->assertStringNotContainsString('a-image.png', $display);
+    }
+
+    /**
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
     #[Testing]
     #[DataProvider('selectedTemplateProvider')]
     public function selectedTemplate(string $output, array $inputs): void
@@ -251,9 +330,12 @@ class MenuCommandTest extends Test
             }
         };
 
+        /** @var MenuCommand $menuCommand */
+        $menuCommand = $this->container->resolve($command::class);
+
         $application = new Application();
 
-        $application->add($this->container->resolve($command::class));
+        $application->add($menuCommand);
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -261,6 +343,10 @@ class MenuCommandTest extends Test
         $this->assertStringContainsString($output, $commandTester->getDisplay());
     }
 
+    /**
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
     #[Testing]
     public function selectedTypes(): void
     {
@@ -286,9 +372,12 @@ class MenuCommandTest extends Test
             }
         };
 
+        /** @var MenuCommand $menuCommand */
+        $menuCommand = $this->container->resolve($command::class);
+
         $application = new Application();
 
-        $application->add($this->container->resolve($command::class));
+        $application->add($menuCommand);
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -322,12 +411,12 @@ class MenuCommandTest extends Test
             }
         };
 
-        /** @var MenuCommand $command */
-        $command = $this->container->resolve($command::class);
+        /** @var MenuCommand $menuCommand */
+        $menuCommand = $this->container->resolve($command::class);
 
         $application = new Application();
 
-        $application->add($command);
+        $application->add($menuCommand);
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -367,9 +456,6 @@ class MenuCommandTest extends Test
             }
         };
 
-        /** @var MenuCommand $command */
-        $command = $this->container->resolve($command::class);
-
         $connections = DB::getConnections();
 
         $this->assertArrayHasKey('lion_database_test', $connections);
@@ -387,14 +473,17 @@ class MenuCommandTest extends Test
         $this->assertArrayNotHasKey('lion_database_test', $connections);
         $this->assertArrayNotHasKey('lion_database_postgres', $connections);
 
+        /** @var MenuCommand $menuCommand */
+        $menuCommand = $this->container->resolve($command::class);
+
         $application = new Application();
 
-        $application->add($command);
+        $application->add($menuCommand);
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
-        $this->assertSame(Command::SUCCESS, $commandTester->setInputs([""])->execute([]));
-        $this->assertStringContainsString("(local)", $commandTester->getDisplay());
+        $this->assertSame(Command::SUCCESS, $commandTester->setInputs([''])->execute([]));
+        $this->assertStringContainsString('(local)', $commandTester->getDisplay());
         $this->assertSame($_ENV['SELECTED_CONNECTION'], 'local');
 
         unset($_ENV['SELECTED_CONNECTION']);
@@ -410,16 +499,15 @@ class MenuCommandTest extends Test
         $this->assertArrayHasKey('lion_database_test', $connections);
     }
 
+    /**
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
     #[Testing]
     public function selectConnectionByEnviromentEmpty(): void
     {
         $command = new class extends MenuCommand
         {
-            private const array TYPES = [
-                'js',
-                'ts',
-            ];
-
             protected function configure(): void
             {
                 $this->setName('test:menu:command');
@@ -435,14 +523,17 @@ class MenuCommandTest extends Test
             }
         };
 
+        /** @var MenuCommand $menuCommand */
+        $menuCommand = $this->container->resolve($command::class);
+
         $application = new Application();
 
-        $application->add($this->container->resolve($command::class));
+        $application->add($menuCommand);
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
-        $this->assertSame(Command::SUCCESS, $commandTester->setInputs(["0"])->execute([]));
-        $this->assertStringContainsString("(local)", $commandTester->getDisplay());
+        $this->assertSame(Command::SUCCESS, $commandTester->setInputs(['0'])->execute([]));
+        $this->assertStringContainsString('(local)', $commandTester->getDisplay());
         $this->assertSame($_ENV['SELECTED_CONNECTION'], 'local');
 
         unset($_ENV['SELECTED_CONNECTION']);
@@ -450,16 +541,15 @@ class MenuCommandTest extends Test
         $this->assertArrayNotHasKey('SELECTED_CONNECTION', $_ENV);
     }
 
+    /**
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
     #[Testing]
     public function selectConnectionByEnviromentNotEmpty(): void
     {
         $command = new class extends MenuCommand
         {
-            private const array TYPES = [
-                'js',
-                'ts',
-            ];
-
             protected function configure(): void
             {
                 $this->setName('test:menu:command');
@@ -475,9 +565,12 @@ class MenuCommandTest extends Test
             }
         };
 
+        /** @var MenuCommand $menuCommand */
+        $menuCommand = $this->container->resolve($command::class);
+
         $application = new Application();
 
-        $application->add($this->container->resolve($command::class));
+        $application->add($menuCommand);
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -493,6 +586,10 @@ class MenuCommandTest extends Test
         $this->assertArrayNotHasKey('SELECTED_CONNECTION', $_ENV);
     }
 
+    /**
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
     #[Testing]
     public function selectMigrationType(): void
     {
@@ -522,18 +619,21 @@ class MenuCommandTest extends Test
             }
         };
 
+        /** @var MenuCommand $menuCommand */
+        $menuCommand = $this->container->resolve($command::class);
+
         $application = new Application();
 
-        $application->add($this->container->resolve($command::class));
+        $application->add($menuCommand);
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
-        $this->assertSame(Command::SUCCESS, $commandTester->setInputs(["0"])->execute([]));
-        $this->assertStringContainsString("(Table)", $commandTester->getDisplay());
-        $this->assertSame(Command::SUCCESS, $commandTester->setInputs(["1"])->execute([]));
-        $this->assertStringContainsString("(View)", $commandTester->getDisplay());
-        $this->assertSame(Command::SUCCESS, $commandTester->setInputs(["2"])->execute([]));
-        $this->assertStringContainsString("(Store-Procedure)", $commandTester->getDisplay());
+        $this->assertSame(Command::SUCCESS, $commandTester->setInputs(['0'])->execute([]));
+        $this->assertStringContainsString('(Table)', $commandTester->getDisplay());
+        $this->assertSame(Command::SUCCESS, $commandTester->setInputs(['1'])->execute([]));
+        $this->assertStringContainsString('(View)', $commandTester->getDisplay());
+        $this->assertSame(Command::SUCCESS, $commandTester->setInputs(['2'])->execute([]));
+        $this->assertStringContainsString('(Store-Procedure)', $commandTester->getDisplay());
     }
 
     /**

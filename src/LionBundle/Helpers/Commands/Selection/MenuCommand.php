@@ -128,18 +128,20 @@ class MenuCommand extends Command
     {
         $projects = [];
 
-        $resources = $this->store->view('resources/');
+        $folders = $this->store->view('resources/');
 
-        if (is_array($resources)) {
-            foreach ($resources as $folder) {
-                $split = $this->str
-                    ->of($folder)
-                    ->split('resources/');
+        if (is_array($folders)) {
+            foreach ($folders as $folder) {
+                if (is_dir($folder)) {
+                    $split = $this->str
+                        ->of($folder)
+                        ->split('resources/');
 
-                $project = end($split);
+                    $project = end($split);
 
-                if ($project != '.' && $project != '..') {
-                    $projects[] = $project;
+                    if ($project != '.' && $project != '..') {
+                        $projects[] = $project;
+                    }
                 }
             }
         }
