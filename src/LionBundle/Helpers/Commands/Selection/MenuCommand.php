@@ -130,7 +130,7 @@ class MenuCommand extends Command
 
         $folders = $this->store->view('resources/');
 
-        if (is_iterable($folders)) {
+        if (is_array($folders)) {
             foreach ($folders as $folder) {
                 if (is_dir($folder)) {
                     $split = $this->str
