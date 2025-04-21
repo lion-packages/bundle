@@ -1,0 +1,11 @@
+preset: psr12
+
+risky: true
+
+finder:
+  path:
+    - src
+    - tests
+
+  not-path:
+    - vendor

@@ -122,14 +122,12 @@ trait PostmanCollectionProviderTrait
             ],
             [
                 'rules' => [
-                    new class
-                    {
+                    new class () {
                         public string $field = 'name';
 
                         public string $value = 'root';
                     },
-                    new class
-                    {
+                    new class () {
                         public string $field = 'last_name';
 
                         public string $value = 'lion';
@@ -139,20 +137,17 @@ trait PostmanCollectionProviderTrait
             ],
             [
                 'rules' => [
-                    new class
-                    {
+                    new class () {
                         public string $field = 'name';
 
                         public string $value = 'root';
                     },
-                    new class
-                    {
+                    new class () {
                         public string $field = '';
 
                         public string $value = '';
                     },
-                    new class
-                    {
+                    new class () {
                         public string $field = 'rol';
 
                         public string $value = '';
@@ -170,8 +165,7 @@ trait PostmanCollectionProviderTrait
                 'name' => 'example',
                 'route' => 'example',
                 'params' => [
-                    new class
-                    {
+                    new class () {
                         public string $field = 'name';
 
                         public string $value = 'root';
@@ -204,8 +198,7 @@ trait PostmanCollectionProviderTrait
                 'name' => 'users',
                 'route' => 'users',
                 'params' => [
-                    new class
-                    {
+                    new class () {
                         public string $field = 'name';
 
                         public string $value = 'lion';
@@ -244,8 +237,7 @@ trait PostmanCollectionProviderTrait
                 'name' => 'example',
                 'route' => 'example',
                 'params' => [
-                    new class
-                    {
+                    new class () {
                         public string $field = 'name';
 
                         public string $value = 'root';
@@ -275,8 +267,7 @@ trait PostmanCollectionProviderTrait
                 'name' => 'users',
                 'route' => 'users',
                 'params' => [
-                    new class
-                    {
+                    new class () {
                         public string $field = 'name';
 
                         public string $value = 'root';
@@ -312,8 +303,7 @@ trait PostmanCollectionProviderTrait
                 'name' => 'example',
                 'route' => 'example',
                 'params' => [
-                    new class
-                    {
+                    new class () {
                         public string $field = 'name';
 
                         public string $value = 'root';
@@ -346,8 +336,7 @@ trait PostmanCollectionProviderTrait
                 'name' => 'users',
                 'route' => 'users',
                 'params' => [
-                    new class
-                    {
+                    new class () {
                         public string $field = 'name';
 
                         public string $value = 'root';
@@ -386,8 +375,7 @@ trait PostmanCollectionProviderTrait
                 'name' => 'example',
                 'route' => 'example',
                 'params' => [
-                    new class
-                    {
+                    new class () {
                         public string $field = 'name';
 
                         public string $value = 'root';
@@ -420,8 +408,7 @@ trait PostmanCollectionProviderTrait
                 'name' => 'users',
                 'route' => 'users',
                 'params' => [
-                    new class
-                    {
+                    new class () {
                         public string $field = 'name';
 
                         public string $value = 'root';
@@ -460,8 +447,7 @@ trait PostmanCollectionProviderTrait
                 'name' => 'example',
                 'route' => 'example',
                 'params' => [
-                    new class
-                    {
+                    new class () {
                         public string $field = 'name';
 
                         public string $value = 'root';
@@ -494,8 +480,7 @@ trait PostmanCollectionProviderTrait
                 'name' => 'users',
                 'route' => 'users',
                 'params' => [
-                    new class
-                    {
+                    new class () {
                         public string $field = 'name';
 
                         public string $value = 'root';
@@ -535,8 +520,7 @@ trait PostmanCollectionProviderTrait
                 'route' => 'example',
                 'method' => Route::POST,
                 'params' => [
-                    new class
-                    {
+                    new class () {
                         public string $field = 'name';
 
                         public string $value = 'root';
@@ -570,8 +554,7 @@ trait PostmanCollectionProviderTrait
                 'route' => 'example',
                 'method' => Route::GET,
                 'params' => [
-                    new class
-                    {
+                    new class () {
                         public string $field = 'name';
 
                         public string $value = 'root';
@@ -602,8 +585,7 @@ trait PostmanCollectionProviderTrait
                 'route' => 'example',
                 'method' => Route::PUT,
                 'params' => [
-                    new class
-                    {
+                    new class () {
                         public string $field = 'name';
 
                         public string $value = 'root';
@@ -637,8 +619,7 @@ trait PostmanCollectionProviderTrait
                 'route' => 'example',
                 'method' => Route::DELETE,
                 'params' => [
-                    new class
-                    {
+                    new class () {
                         public string $field = 'name';
 
                         public string $value = 'root';
@@ -672,8 +653,7 @@ trait PostmanCollectionProviderTrait
                 'route' => 'example',
                 'method' => Route::PATCH,
                 'params' => [
-                    new class
-                    {
+                    new class () {
                         public string $field = 'name';
 
                         public string $value = 'root';
@@ -707,8 +687,7 @@ trait PostmanCollectionProviderTrait
                 'route' => 'example',
                 'method' => 'ERROR-TEST',
                 'params' => [
-                    new class
-                    {
+                    new class () {
                         public string $field = 'name';
 
                         public string $value = 'root';

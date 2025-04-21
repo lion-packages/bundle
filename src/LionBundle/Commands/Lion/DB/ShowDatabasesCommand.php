@@ -77,14 +77,7 @@ class ShowDatabasesCommand extends Command
                 'DATABASE NAME',
                 'DATABASE USER',
             ])
-            ->setFooterTitle(
-                $size > 1
-                    ? "<info> Showing [{$size}] connections </info>"
-                    : ($size === 1
-                        ? '<info> showing a single connection </info>'
-                        : '<info> No connections available </info>'
-                    )
-            )
+            ->setFooterTitle("<info> Showing [{$size}] connections </info>")
             ->setRows($listConnections)
             ->render();
 

@@ -11,7 +11,7 @@ use Lion\Test\Test;
 
 class MiddlewareExceptionTest extends Test
 {
-    const MESSAGE = 'ERR';
+    public const MESSAGE = 'ERR';
 
     public function testMiddlewareException(): void
     {
