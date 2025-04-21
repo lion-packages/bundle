@@ -123,8 +123,7 @@ class MenuCommandTest extends Test
 
         $this->createDirectory(self::RESOURCES_PATH);
 
-        $command = new class extends MenuCommand
-        {
+        $command = new class () extends MenuCommand {
             protected function configure(): void
             {
                 $this->setName('test:menu:command');
@@ -161,8 +160,7 @@ class MenuCommandTest extends Test
     {
         $this->createDirectory(self::RESOURCES_PATH . self::PROJECT_PATH);
 
-        $command = new class extends MenuCommand
-        {
+        $command = new class () extends MenuCommand {
             protected function configure(): void
             {
                 $this->setName('test:menu:command');
@@ -202,8 +200,7 @@ class MenuCommandTest extends Test
 
         $this->createDirectory(self::RESOURCES_PATH . self::PROJECT_PATH_SECOND);
 
-        $command = new class extends MenuCommand
-        {
+        $command = new class () extends MenuCommand {
             protected function configure(): void
             {
                 $this->setName('test:menu:command');
@@ -257,8 +254,7 @@ class MenuCommandTest extends Test
             fileName: 'a-image.png'
         );
 
-        $command = new class extends MenuCommand
-        {
+        $command = new class () extends MenuCommand {
             protected function configure(): void
             {
                 $this->setName('test:menu:command');
@@ -301,8 +297,7 @@ class MenuCommandTest extends Test
     #[DataProvider('selectedTemplateProvider')]
     public function selectedTemplate(string $output, array $inputs): void
     {
-        $command = new class extends MenuCommand
-        {
+        $command = new class () extends MenuCommand {
             private const array VITE_TEMPLATES = [
                 'Vanilla',
                 'Vue',
@@ -350,8 +345,7 @@ class MenuCommandTest extends Test
     #[Testing]
     public function selectedTypes(): void
     {
-        $command = new class extends MenuCommand
-        {
+        $command = new class () extends MenuCommand {
             private const array TYPES = [
                 'js',
                 'ts',
@@ -394,8 +388,7 @@ class MenuCommandTest extends Test
     #[Testing]
     public function selectConnection(): void
     {
-        $command = new class extends MenuCommand
-        {
+        $command = new class () extends MenuCommand {
             protected function configure(): void
             {
                 $this->setName('test:menu:command');
@@ -439,8 +432,7 @@ class MenuCommandTest extends Test
     #[Testing]
     public function selectConnectionDefault(): void
     {
-        $command = new class extends MenuCommand
-        {
+        $command = new class () extends MenuCommand {
             protected function configure(): void
             {
                 $this->setName('test:menu:command');
@@ -506,8 +498,7 @@ class MenuCommandTest extends Test
     #[Testing]
     public function selectConnectionByEnviromentEmpty(): void
     {
-        $command = new class extends MenuCommand
-        {
+        $command = new class () extends MenuCommand {
             protected function configure(): void
             {
                 $this->setName('test:menu:command');
@@ -548,8 +539,7 @@ class MenuCommandTest extends Test
     #[Testing]
     public function selectConnectionByEnviromentNotEmpty(): void
     {
-        $command = new class extends MenuCommand
-        {
+        $command = new class () extends MenuCommand {
             protected function configure(): void
             {
                 $this->setName('test:menu:command');
@@ -593,8 +583,7 @@ class MenuCommandTest extends Test
     #[Testing]
     public function selectMigrationType(): void
     {
-        $command = new class extends MenuCommand
-        {
+        $command = new class () extends MenuCommand {
             private const string TABLE = 'Table';
             private const string VIEW = 'View';
             private const string STORE_PROCEDURE = 'Store-Procedure';

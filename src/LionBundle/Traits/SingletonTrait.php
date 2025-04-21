@@ -33,7 +33,7 @@ trait SingletonTrait
      */
     final public static function getInstance(): self
     {
-        if (self::$singleton === null){
+        if (self::$singleton === null) {
             self::$singleton = new self();
         }
 

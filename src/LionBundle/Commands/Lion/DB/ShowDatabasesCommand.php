@@ -80,7 +80,8 @@ class ShowDatabasesCommand extends Command
             ->setFooterTitle(
                 $size > 1
                     ? "<info> Showing [{$size}] connections </info>"
-                    : ($size === 1
+                    : (
+                        $size === 1
                         ? '<info> showing a single connection </info>'
                         : '<info> No connections available </info>'
                     )
