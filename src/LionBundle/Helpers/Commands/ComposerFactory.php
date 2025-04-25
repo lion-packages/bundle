@@ -7,6 +7,7 @@ namespace Lion\Bundle\Helpers\Commands;
 use DI\Attribute\Inject;
 use Lion\Helpers\Arr;
 use stdClass;
+use Symfony\Component\Console\Helper\TableSeparator;
 
 /**
  * Gets the list of installed libraries and dev-libraries
@@ -16,7 +17,7 @@ use stdClass;
 class ComposerFactory
 {
     /**
-     * [Arr class object]
+     * [Modify and build arrays with different indexes or values]
      *
      * @var Arr $arr
      */
@@ -25,7 +26,7 @@ class ComposerFactory
     /**
      * [List of installed libraries and dev-libraries]
      *
-     * @var array<int, array<int, string>> $libraries
+     * @var array<int, array<int, string>|TableSeparator> $libraries
      */
     private array $libraries = [];
 
@@ -132,8 +133,10 @@ class ComposerFactory
                     "\033[0;33m{$version}\033[0m",
                     "\033[0;33m{$license}\033[0m",
                     "\033[0;31m{$type}\033[0m",
-                    $description,
+                    wordwrap($description, 80, "\n", true),
                 ];
+
+                $this->libraries[] = new TableSeparator();
             }
         }
 
@@ -190,8 +193,10 @@ class ComposerFactory
                     "\033[0;33m{$version}\033[0m",
                     "\033[0;33m{$license}\033[0m",
                     "\033[0;31m{$type}\033[0m",
-                    $description,
+                    wordwrap($description, 80, "\n", true),
                 ];
+
+                $this->libraries[] = new TableSeparator();
             }
         }
 

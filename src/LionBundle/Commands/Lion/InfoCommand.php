@@ -114,9 +114,9 @@ class InfoCommand extends Command
             ->length();
 
         new Table($output)
-            ->setHeaderTitle($this->successOutput(' LIBRARIES '))
+            ->setHeaderTitle('<fg=green> LIBRARIES </>')
             ->setHeaders(['LIBRARY', 'VERSION', 'LICENSE', 'DEV', 'DESCRIPTION'])
-            ->setFooterTitle($this->successOutput(" Showing [{$size}] libraries "))
+            ->setFooterTitle("<fg=green> Showing [{$size}] libraries </>")
             ->setRows($libraries)
             ->render();
 
