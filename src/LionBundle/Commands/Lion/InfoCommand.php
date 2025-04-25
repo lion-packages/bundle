@@ -7,7 +7,6 @@ namespace Lion\Bundle\Commands\Lion;
 use DI\Attribute\Inject;
 use Lion\Bundle\Helpers\Commands\ComposerFactory;
 use Lion\Command\Command;
-use Lion\Helpers\Arr;
 use LogicException;
 use stdClass;
 use Symfony\Component\Console\Helper\Table;
@@ -22,42 +21,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 class InfoCommand extends Command
 {
     /**
-     * [List of ignored extensions]
-     *
-     * @const EXTENSIONS
-     */
-    private const array EXTENSIONS = [
-        'php',
-        'ext-ctype',
-        'ext-filter',
-        'ext-hash',
-        'ext-mbstring',
-        'ext-openssl',
-        'ext-session',
-        'ext-tokenizer',
-    ];
-
-    /**
-     * [Modify and build arrays with different indexes or values]
-     *
-     * @var Arr $arr
-     */
-    private Arr $arr;
-
-    /**
      * [Gets the list of installed libraries and dev-libraries]
      *
      * @var ComposerFactory $composerFactory
      */
     private ComposerFactory $composerFactory;
-
-    #[Inject]
-    public function setArr(Arr $arr): InfoCommand
-    {
-        $this->arr = $arr;
-
-        return $this;
-    }
 
     #[Inject]
     public function setComposerFactory(ComposerFactory $composerFactory): InfoCommand
@@ -87,10 +55,10 @@ class InfoCommand extends Command
      * execute() method, you set the code to execute by passing
      * a Closure to the setCode() method
      *
-     * @param InputInterface $input [InputInterface is the interface implemented
-     * by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
+     * @param InputInterface $input InputInterface is the interface implemented
+     * by all input classes
+     * @param OutputInterface $output OutputInterface is the interface
+     * implemented by all Output classes
      *
      * @return int
      *
@@ -104,9 +72,7 @@ class InfoCommand extends Command
         /** @var stdClass $composerJson */
         $composerJson = json_decode($file);
 
-        $this->composerFactory
-            ->libraries($composerJson, self::EXTENSIONS)
-            ->librariesDev($composerJson, self::EXTENSIONS);
+        $this->composerFactory->libraries($composerJson);
 
         $libraries = $this->composerFactory->getLibraries();
 

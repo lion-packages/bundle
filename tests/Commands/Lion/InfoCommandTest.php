@@ -9,7 +9,6 @@ use DI\NotFoundException;
 use Lion\Bundle\Commands\Lion\InfoCommand;
 use Lion\Bundle\Helpers\Commands\ComposerFactory;
 use Lion\Dependency\Injection\Container;
-use Lion\Helpers\Arr;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
 use ReflectionException;
@@ -41,16 +40,6 @@ class InfoCommandTest extends Test
         $this->commandTester = new CommandTester($application->find('info'));
 
         $this->initReflection($this->infoCommand);
-    }
-
-    /**
-     * @throws ReflectionException
-     */
-    #[Testing]
-    public function setArr(): void
-    {
-        $this->assertInstanceOf(InfoCommand::class, $this->infoCommand->setArr(new Arr()));
-        $this->assertInstanceOf(Arr::class, $this->getPrivateProperty('arr'));
     }
 
     /**
