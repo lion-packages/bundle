@@ -16,7 +16,11 @@
     "autoload": {
         "psr-4": {
             "Lion\\Bundle\\": "src/LionBundle/"
-        }
+        },
+        "files": [
+            "src/LionBundle/Helpers/Bundle/constants.php",
+            "src/LionBundle/Helpers/Bundle/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
@@ -28,8 +32,6 @@
             "Database\\Migrations\\": "database/Migrations/"
         },
         "files": [
-            "src/LionBundle/Helpers/Bundle/constants.php",
-            "src/LionBundle/Helpers/Bundle/helpers.php",
             "routes/middleware.php"
         ]
     },
