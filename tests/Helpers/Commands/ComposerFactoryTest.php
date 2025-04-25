@@ -18,16 +18,6 @@ use stdClass;
 class ComposerFactoryTest extends Test
 {
     private const string COMPOSER_JSON = './composer.json';
-    private const array EXTENSIONS = [
-        'php',
-        'ext-ctype',
-        'ext-filter',
-        'ext-hash',
-        'ext-mbstring',
-        'ext-openssl',
-        'ext-session',
-        'ext-tokenizer',
-    ];
 
     private ComposerFactory $composerFactory;
 
@@ -160,21 +150,7 @@ class ComposerFactoryTest extends Test
     #[Testing]
     public function libraries(): void
     {
-        $this->composerFactory->libraries($this->getComposerJson(), self::EXTENSIONS);
-
-        $libraries = $this->getPrivateProperty('libraries');
-
-        $this->assertIsArray($libraries);
-        $this->assertNotEmpty($libraries);
-    }
-
-    /**
-     * @throws ReflectionException
-     */
-    #[Testing]
-    public function librariesDev(): void
-    {
-        $this->composerFactory->librariesDev($this->getComposerJson(), self::EXTENSIONS);
+        $this->composerFactory->libraries($this->getComposerJson());
 
         $libraries = $this->getPrivateProperty('libraries');
 
@@ -186,10 +162,20 @@ class ComposerFactoryTest extends Test
     public function getLibraries(): void
     {
         $libraries = $this->composerFactory
-            ->libraries($this->getComposerJson(), self::EXTENSIONS)
-            ->librariesDev($this->getComposerJson(), self::EXTENSIONS)
+            ->libraries($this->getComposerJson())
             ->getLibraries();
 
         $this->assertNotEmpty($libraries);
+    }
+
+    #[Testing]
+    public function getCountTest(): void
+    {
+        $count = $this->composerFactory
+            ->libraries($this->getComposerJson())
+            ->getCount();
+
+        $this->assertNotEmpty($count);
+        $this->assertTrue($count > 1);
     }
 }

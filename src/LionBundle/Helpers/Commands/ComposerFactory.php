@@ -7,27 +7,35 @@ namespace Lion\Bundle\Helpers\Commands;
 use DI\Attribute\Inject;
 use Lion\Helpers\Arr;
 use stdClass;
+use Symfony\Component\Console\Helper\TableSeparator;
 
 /**
- * Gets the list of installed libraries and dev-libraries
+ * Gets the list of installed libraries and dev-libraries.
  *
  * @package Lion\Bundle\Helpers\Commands
  */
 class ComposerFactory
 {
     /**
-     * [Arr class object]
+     * Modify and build arrays with different indexes or values.
      *
      * @var Arr $arr
      */
     private Arr $arr;
 
     /**
-     * [List of installed libraries and dev-libraries]
+     * List of installed libraries and dev-libraries.
      *
-     * @var array<int, array<int, string>> $libraries
+     * @var array<int, array<int, string>|TableSeparator> $libraries
      */
     private array $libraries = [];
+
+    /**
+     * Counter to validate the number of installed packages.
+     *
+     * @var int $count
+     */
+    private int $count = 0;
 
     #[Inject]
     public function setArr(Arr $arr): ComposerFactory
@@ -38,9 +46,9 @@ class ComposerFactory
     }
 
     /**
-     * Gets the data of the installed library
+     * Gets the data of the installed library.
      *
-     * @param string $library [Name of the library]
+     * @param string $library Name of the library.
      *
      * @return stdClass
      */
@@ -59,9 +67,9 @@ class ComposerFactory
     }
 
     /**
-     * Valid if the library has the required properties
+     * Valid if the library has the required properties.
      *
-     * @param stdClass $json [Installed library data]
+     * @param stdClass $json Installed library data.
      *
      * @return bool
      */
@@ -83,128 +91,95 @@ class ComposerFactory
     }
 
     /**
-     * List of installed libraries
+     * List of installed libraries.
      *
-     * @param stdClass $composerJson [Composer json content]
-     * @param array<int, string> $extensions [Extensions that should be ignored]
-     *
-     * @return ComposerFactory
-     *
-     * @codeCoverageIgnore
-     */
-    public function libraries(stdClass $composerJson, array $extensions): ComposerFactory
-    {
-        /** @var array<string, string> $dependencies */
-        $dependencies = (array) $composerJson->require;
-
-        foreach ($dependencies as $library => $content) {
-            if (!in_array($library, $extensions, true)) {
-                $json = $this->getLibrariesWithCommand($library);
-
-                if (!$this->validateLibrary($json)) {
-                    continue;
-                }
-
-                /** @var string $description */
-                $description = $json->description;
-
-                /**
-                 * @var string $version
-                 *
-                 * @phpstan-ignore-next-line
-                 */
-                $version = $json->versions[0];
-
-                /**
-                 * @var stdClass $licenses
-                 *
-                 * @phpstan-ignore-next-line
-                 */
-                $licenses = $json->licenses[0];
-
-                /** @var string $license */
-                $license = $licenses->osi;
-
-                $type = 'false';
-
-                $this->libraries[] = [
-                    $library,
-                    "\033[0;33m{$version}\033[0m",
-                    "\033[0;33m{$license}\033[0m",
-                    "\033[0;31m{$type}\033[0m",
-                    $description,
-                ];
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * List of installed libraries-dev
-     *
-     * @param stdClass $composerJson [Composer json content]
-     * @param array<int, string> $extensions [Extensions that should be ignored]
+     * @param stdClass $composerJson Composer json content.
      *
      * @return ComposerFactory
      *
      * @codeCoverageIgnore
      */
-    public function librariesDev(stdClass $composerJson, array $extensions): ComposerFactory
+    public function libraries(stdClass $composerJson): ComposerFactory
     {
-        /** @var array<string, string> $dependencies */
-        $dependencies = (array) $composerJson->{'require-dev'};
+        /**
+         * @param bool $isDev Determines which libraries to obtain are required
+         *                    or necessary for developers.
+         *
+         * @return void
+         */
+        $getLibraries = function (bool $isDev) use ($composerJson): void {
+            /** @var array<string, string> $dependencies */
+            $dependencies = $isDev ? (array) $composerJson->{'require-dev'} : (array) $composerJson->require;
 
-        foreach ($dependencies as $library => $content) {
-            if (!in_array($library, $extensions, true)) {
-                $json = $this->getLibrariesWithCommand($library);
+            foreach ($dependencies as $library => $content) {
+                if (preg_match('/\//', $library)) {
+                    $json = $this->getLibrariesWithCommand($library);
 
-                if (!$this->validateLibrary($json)) {
-                    continue;
+                    if (!$this->validateLibrary($json)) {
+                        continue;
+                    }
+
+                    /** @var string $description */
+                    $description = $json->description;
+
+                    /**
+                     * @var string $version
+                     *
+                     * @phpstan-ignore-next-line
+                     */
+                    $version = $json->versions[0];
+
+                    /**
+                     * @var stdClass $licenses
+                     *
+                     * @phpstan-ignore-next-line
+                     */
+                    $licenses = $json->licenses[0];
+
+                    /** @var string $license */
+                    $license = $licenses->osi;
+
+                    $type = $isDev ? 'true' : 'false';
+
+                    $this->libraries[] = [
+                        $library,
+                        "\033[0;33m{$version}\033[0m",
+                        "\033[0;33m{$license}\033[0m",
+                        "\033[0;31m{$type}\033[0m",
+                        wordwrap($description, 80, "\n", true),
+                    ];
+
+                    $this->libraries[] = new TableSeparator();
+
+                    $this->count++;
                 }
-
-                /** @var string $description */
-                $description = $json->description;
-
-                /**
-                 * @var string $version
-                 *
-                 * @phpstan-ignore-next-line
-                 */
-                $version = $json->versions[0];
-
-                /**
-                 * @var stdClass $licenses
-                 *
-                 * @phpstan-ignore-next-line
-                 */
-                $licenses = $json->licenses[0];
-
-                /** @var string $license */
-                $license = $licenses->osi;
-
-                $type = 'true';
-
-                $this->libraries[] = [
-                    $library,
-                    "\033[0;33m{$version}\033[0m",
-                    "\033[0;33m{$license}\033[0m",
-                    "\033[0;31m{$type}\033[0m",
-                    $description,
-                ];
             }
-        }
+        };
+
+        $getLibraries(false);
+
+        $getLibraries(true);
 
         return $this;
     }
 
     /**
-     * Gets the libraries obtained
+     * Gets the libraries obtained.
      *
-     * @return array<int, array<int, string>>
+     * @return array<int, array<int, string>|TableSeparator>
      */
     public function getLibraries(): array
     {
         return $this->libraries;
+    }
+
+    /**
+     * Returns the number of installed packages.
+     *
+     * @return int
+     */
+    public function getCount(): int
+    {
+        return $this->count;
     }
 }
