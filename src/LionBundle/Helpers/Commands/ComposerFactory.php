@@ -17,18 +17,25 @@ use Symfony\Component\Console\Helper\TableSeparator;
 class ComposerFactory
 {
     /**
-     * [Modify and build arrays with different indexes or values]
+     * Modify and build arrays with different indexes or values
      *
      * @var Arr $arr
      */
     private Arr $arr;
 
     /**
-     * [List of installed libraries and dev-libraries]
+     * List of installed libraries and dev-libraries
      *
      * @var array<int, array<int, string>|TableSeparator> $libraries
      */
     private array $libraries = [];
+
+    /**
+     * Counter to validate the number of installed packages
+     *
+     * @var int $count
+     */
+    private int $count = 0;
 
     #[Inject]
     public function setArr(Arr $arr): ComposerFactory
@@ -137,6 +144,8 @@ class ComposerFactory
                 ];
 
                 $this->libraries[] = new TableSeparator();
+
+                $this->count++;
             }
         }
 
@@ -197,6 +206,8 @@ class ComposerFactory
                 ];
 
                 $this->libraries[] = new TableSeparator();
+
+                $this->count++;
             }
         }
 
@@ -206,10 +217,20 @@ class ComposerFactory
     /**
      * Gets the libraries obtained
      *
-     * @return array<int, array<int, string>>
+     * @return array<int, array<int, string>|TableSeparator>
      */
     public function getLibraries(): array
     {
         return $this->libraries;
+    }
+
+    /**
+     * Returns the number of installed packages
+     *
+     * @return int
+     */
+    public function getCount(): int
+    {
+        return $this->count;
     }
 }

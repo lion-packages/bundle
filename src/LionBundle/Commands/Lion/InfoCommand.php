@@ -104,14 +104,13 @@ class InfoCommand extends Command
         /** @var stdClass $composerJson */
         $composerJson = json_decode($file);
 
-        $libraries = $this->composerFactory
+        $this->composerFactory
             ->libraries($composerJson, self::EXTENSIONS)
-            ->librariesDev($composerJson, self::EXTENSIONS)
-            ->getLibraries();
+            ->librariesDev($composerJson, self::EXTENSIONS);
 
-        $size = $this->arr
-            ->of($libraries)
-            ->length();
+        $libraries = $this->composerFactory->getLibraries();
+
+        $size = $this->composerFactory->getCount();
 
         new Table($output)
             ->setHeaderTitle('<fg=green> LIBRARIES </>')

@@ -192,4 +192,16 @@ class ComposerFactoryTest extends Test
 
         $this->assertNotEmpty($libraries);
     }
+
+    #[Testing]
+    public function getCountTest(): void
+    {
+        $count = $this->composerFactory
+            ->libraries($this->getComposerJson(), self::EXTENSIONS)
+            ->librariesDev($this->getComposerJson(), self::EXTENSIONS)
+            ->getCount();
+
+        $this->assertNotEmpty($count);
+        $this->assertTrue($count > 1);
+    }
 }
