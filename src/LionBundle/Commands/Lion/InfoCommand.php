@@ -34,7 +34,7 @@ class InfoCommand extends Command
         'ext-mbstring',
         'ext-openssl',
         'ext-session',
-        'ext-tokenizer'
+        'ext-tokenizer',
     ];
 
     /**

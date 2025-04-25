@@ -98,7 +98,7 @@ class ComposerFactory
         $dependencies = (array) $composerJson->require;
 
         foreach ($dependencies as $library => $content) {
-            if (!in_array($library, $extensions, true)) {
+            if (preg_match('/\//', $library)) {
                 $json = $this->getLibrariesWithCommand($library);
 
                 if (!$this->validateLibrary($json)) {
@@ -156,7 +156,7 @@ class ComposerFactory
         $dependencies = (array) $composerJson->{'require-dev'};
 
         foreach ($dependencies as $library => $content) {
-            if (!in_array($library, $extensions, true)) {
+            if (preg_match('/\//', $library)) {
                 $json = $this->getLibrariesWithCommand($library);
 
                 if (!$this->validateLibrary($json)) {
