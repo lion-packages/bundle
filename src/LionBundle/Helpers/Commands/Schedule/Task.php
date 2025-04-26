@@ -4,33 +4,31 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Helpers\Commands\Schedule;
 
-use InvalidArgumentException;
 use JsonException;
-use Lion\Request\Http;
 
 /**
- * Tasks class to encapsulate tasks in queue
+ * Tasks class to encapsulate tasks in queue.
  *
  * @package Lion\Bundle\Helpers\Commands\Schedule
  */
 class Task
 {
     /**
-     * [Property for namespace]
+     * Property for namespace.
      *
-     * @var string|null $namespace
+     * @var string $namespace
      */
-    private ?string $namespace = null;
+    private string $namespace;
 
     /**
-     * [Property for method]
+     * Property for method.
      *
-     * @var string|null $method
+     * @var string $method
      */
-    private ?string $method = null;
+    private string $method;
 
     /**
-     * [Property for data]
+     * Property for data.
      *
      * @var array<int|string, mixed> $data
      */
@@ -39,26 +37,12 @@ class Task
     /**
      * Class Constructor
      *
-     * @param string|null $namespace [Property for namespace]
-     * @param string|null $method [Property for method]
-     * @param array<int|string, mixed> $data [Property for data]
-     *
-     * @throws InvalidArgumentException
+     * @param string $namespace Property for namespace.
+     * @param string $method Property for method.
+     * @param array<int|string, mixed> $data Property for data.
      */
-    public function __construct(?string $namespace = null, ?string $method = null, array $data = [])
+    public function __construct(string $namespace, string $method, array $data)
     {
-        if (null === $namespace) {
-            throw new InvalidArgumentException('Namespace is null', Http::INTERNAL_SERVER_ERROR);
-        }
-
-        if (null === $method) {
-            throw new InvalidArgumentException('The method is null', Http::INTERNAL_SERVER_ERROR);
-        }
-
-        if (empty($data)) {
-            throw new InvalidArgumentException('The data is empty', Http::INTERNAL_SERVER_ERROR);
-        }
-
         $this->namespace = $namespace;
 
         $this->method = $method;
@@ -67,7 +51,7 @@ class Task
     }
 
     /**
-     * Returns the task data in a list
+     * Returns the task data in a list.
      *
      * @return string
      *
