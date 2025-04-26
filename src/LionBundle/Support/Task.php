@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lion\Bundle\Helpers\Commands\Schedule;
+namespace Lion\Bundle\Support;
 
 use JsonException;
 
