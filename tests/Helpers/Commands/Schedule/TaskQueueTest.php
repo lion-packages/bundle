@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tests\Helpers\Commands\Schedule;
 
 use JsonException;
-use Lion\Bundle\Helpers\Commands\Schedule\Task;
 use Lion\Bundle\Helpers\Commands\Schedule\TaskQueue;
+use Lion\Bundle\Support\Task;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
 use Predis\Client;

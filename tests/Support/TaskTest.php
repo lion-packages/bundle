@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tests\Helpers\Commands\Schedule;
+namespace Tests\Support;
 
 use JsonException;
-use Lion\Bundle\Helpers\Commands\Schedule\Task;
+use Lion\Bundle\Support\Task;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
 use ReflectionException;
@@ -18,7 +18,9 @@ class TaskTest extends Test
     #[Testing]
     public function construct(): void
     {
-        $task = new Task(self::class, 'construct', ['foo' => 'bar']);
+        $task = new Task(self::class, 'construct', [
+            'foo' => 'bar',
+        ]);
 
         $this->initReflection($task);
 

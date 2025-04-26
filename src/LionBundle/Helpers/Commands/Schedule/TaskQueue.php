@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lion\Bundle\Helpers\Commands\Schedule;
 
 use JsonException;
+use Lion\Bundle\Support\Task;
 use Predis\Client;
 
 /**
