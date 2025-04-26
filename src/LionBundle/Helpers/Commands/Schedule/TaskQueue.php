@@ -55,19 +55,26 @@ class TaskQueue
     }
 
     /**
-     * Add a task to the queue
+     * Add one or more tasks to the queue
      *
-     * @param Task $task [Tasks class to encapsulate tasks in queue]
+     * @param Task $task [First task to add]
+     * @param Task ...$tasks [Additional tasks to add]
      *
      * @return TaskQueue
      *
      * @throws JsonException
      */
-    public function push(Task $task): TaskQueue
+    public function push(Task $task, Task ...$tasks): TaskQueue
     {
         $this->client
             /** @phpstan-ignore-next-line */
             ->lpush(self::LION_TASKS, $task->getTask());
+
+        foreach ($tasks as $additionalTask) {
+            $this->client
+                /** @phpstan-ignore-next-line */
+                ->lpush(self::LION_TASKS, $additionalTask->getTask());
+        }
 
         return $this;
     }
