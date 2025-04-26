@@ -112,6 +112,51 @@ class TaskQueueTest extends Test
 
     /**
      * @throws JsonException
+     * @throws ReflectionException
+     */
+    #[Testing]
+    public function pushMultiple(): void
+    {
+        $this->taskQueue->push(
+            new Task(ExampleProvider::class, 'getArrExample', self::DATA),
+            new Task(ExampleProvider::class, 'getArrExample', self::DATA)
+        );
+
+        /** @var Client $client */
+        $client = $this->getPrivateProperty('client');
+
+        $list = $client->lrange(TaskQueue::LION_TASKS, 0, -1);
+
+        $this->assertNotEmpty($list);
+        $this->assertCount(2, $list);
+
+        $data = $client->rpop(TaskQueue::LION_TASKS);
+
+        $this->assertIsString($data);
+        $this->assertJson($data);
+
+        $json = json_decode($data, true);
+
+        $this->assertIsArray($json);
+        $this->assertNotEmpty($json);
+        $this->assertArrayHasKey('id', $json);
+        $this->assertArrayHasKey('namespace', $json);
+        $this->assertArrayHasKey('method', $json);
+        $this->assertArrayHasKey('data', $json);
+        $this->assertIsArray($json['data']);
+        $this->assertArrayHasKey('name', $json['data']);
+        $this->assertIsString($json['id']);
+        $this->assertIsString($json['namespace']);
+        $this->assertIsString($json['method']);
+        $this->assertIsArray($json['data']);
+        $this->assertIsString($json['data']['name']);
+        $this->assertSame(ExampleProvider::class, $json['namespace']);
+        $this->assertSame('getArrExample', $json['method']);
+        $this->assertSame(self::DATA, $json['data']);
+    }
+
+    /**
+     * @throws JsonException
      */
     #[Testing]
     public function get(): void
