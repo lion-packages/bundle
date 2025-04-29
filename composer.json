@@ -37,6 +37,8 @@
     },
     "require": {
         "php": ">=8.4",
+        "ext-pdo": "*",
+        "ext-gd": "*",
         "ext-ctype": "*",
         "ext-filter": "*",
         "ext-hash": "*",
@@ -45,7 +47,7 @@
         "ext-session": "*",
         "ext-tokenizer": "*",
         "cboden/ratchet": "^0.4.4",
-        "fakerphp/faker": "^1.23",
+        "fakerphp/faker": "^1.24",
         "guzzlehttp/guzzle": "^7.9",
         "lion/command": "^5.1",
         "lion/database": "^11.11",
@@ -71,13 +73,9 @@
         "squizlabs/php_codesniffer": "^3.11"
     },
     "suggest": {
-        "ext-gd": "Required to use spreadsheet/files.",
-        "ext-pdo": "Required to use all database features.",
         "ext-redis": "Required to use the Redis cache.",
-        "fakerphp/faker": "Required to use the factory builder.",
-        "guzzlehttp/guzzle": "Required to use the HTTP client.",
-        "phpunit/phpunit": "Required to use assertions and run tests.",
-        "predis/predis": "Required to use the predis connector."
+        "fakerphp/faker": "Used for the fake() helper.",
+        "guzzlehttp/guzzle": "Used for the fetch() helper."
     },
     "config": {
         "sort-packages": true,
