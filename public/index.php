@@ -6,7 +6,7 @@ header('Content-Type: application/json');
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
-(new Lion\Exceptions\Serialize())->exceptionHandler();
+new Lion\Exceptions\Serialize()->exceptionHandler();
 
 include_once(__DIR__ . '/../routes/middleware.php');
 include_once(__DIR__ . '/../routes/web.php');
