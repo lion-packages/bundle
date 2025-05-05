@@ -60,7 +60,7 @@
         "lion/security": "^11.1",
         "monolog/monolog": "^3.3",
         "nesbot/carbon": "^3.8",
-        "predis/predis": "^2.3",
+        "predis/predis": "^2.3 || ^3.0",
         "symfony/console": "^7.2",
         "symfony/process": "^7.2",
         "vlucas/phpdotenv": "^5.6"
