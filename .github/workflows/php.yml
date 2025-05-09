@@ -8,7 +8,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: "15 5 * * *"
+    - cron: "15 5 * * 1-5"
 
 jobs:
   install-dependencies:
