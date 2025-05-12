@@ -7,7 +7,5 @@ updates:
       time: "05:15"
       days:
         - monday
-        - tuesday
         - wednesday
-        - thursday
         - friday
