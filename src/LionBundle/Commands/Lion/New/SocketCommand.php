@@ -138,7 +138,7 @@ class SocketCommand extends Command
                     }
 
                     /**
-                     * {@inheritdoc}
+                     * {@inheritDoc}
                      */
                     public function onOpen(ConnectionInterface \$conn): void
                     {
@@ -148,7 +148,7 @@ class SocketCommand extends Command
                     }
 
                     /**
-                     * {@inheritdoc}
+                     * {@inheritDoc}
                      */
                     public function onMessage(ConnectionInterface \$from, \$msg): void
                     {
@@ -160,7 +160,7 @@ class SocketCommand extends Command
                     }
 
                     /**
-                     * {@inheritdoc}
+                     * {@inheritDoc}
                      */
                     public function onClose(ConnectionInterface \$conn): void
                     {
@@ -168,7 +168,7 @@ class SocketCommand extends Command
                     }
 
                     /**
-                     * {@inheritdoc}
+                     * {@inheritDoc}
                      */
                     public function onError(ConnectionInterface \$conn, Exception \$e): void
                     {

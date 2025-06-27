@@ -66,10 +66,10 @@ class MigrationFactory
     /**
      * Gets the data to generate the body of the selected migration type
      *
-     * @param string $className [Class name]
-     * @param string $selectedType [Type of migration]
-     * @param string $dbPascal [Database in PascalCase format]
-     * @param string $driver [Database Engine Type]
+     * @param string $className Class name
+     * @param string $selectedType Type of migration
+     * @param string $dbPascal Database in PascalCase format
+     * @param string $driver Database Engine Type
      *
      * @return stdClass
      */
@@ -155,27 +155,28 @@ class MigrationFactory
         use stdClass;
 
         /**
-         * Description
-         *
-         * @package {$namespace}
+         * Table schema for the entity '{$className}'
          */
         class {$className} implements TableInterface
         {
             /**
-             * [Index number for seed execution priority]
+             * Index number for seed execution priority
              *
              * @const INDEX
              */
             public const ?int INDEX = null;
 
             /**
-             * {@inheritdoc}
+             * {@inheritDoc}
              */
             public function up(): stdClass
             {
-                return Schema::connection(env('DB_DEFAULT', 'local'))
+                return Schema::connection(getDefaultConnection())
                     ->createTable('--NAME--', function (): void {
-                        Schema::int('id')->notNull()->autoIncrement()->primaryKey();
+                        Schema::int('id')
+                            ->notNull()
+                            ->autoIncrement()
+                            ->primaryKey();
                     })
                     ->execute();
             }
@@ -187,8 +188,8 @@ class MigrationFactory
     /**
      * Returns the body of the migration of type table
      *
-     * @param string $className [Class name]
-     * @param string $namespace [Class namespace]
+     * @param string $className Class name
+     * @param string $namespace Class namespace
      *
      * @return string
      */
@@ -206,25 +207,23 @@ class MigrationFactory
         use stdClass;
 
         /**
-         * Description
-         *
-         * @package {$namespace}
+         * Table schema for the entity '{$className}'
          */
         class {$className} implements TableInterface
         {
             /**
-             * [Index number for seed execution priority]
+             * Index number for seed execution priority
              *
              * @const INDEX
              */
             public const ?int INDEX = null;
 
             /**
-             * {@inheritdoc}
+             * {@inheritDoc}
              */
             public function up(): stdClass
             {
-                return PostgreSQL::connection(env('DB_DEFAULT', 'local'))
+                return PostgreSQL::connection(getDefaultConnection())
                     ->query(
                         <<<SQL
                         -- SQL
@@ -240,8 +239,8 @@ class MigrationFactory
     /**
      * Returns the body of the migration of type view
      *
-     * @param string $className [Class name]
-     * @param string $namespace [Class namespace]
+     * @param string $className Class name
+     * @param string $namespace Class namespace
      *
      * @return string
      */
@@ -260,18 +259,16 @@ class MigrationFactory
         use stdClass;
 
         /**
-         * Description
-         *
-         * @package {$namespace}
+         * View schema to run queries
          */
         class {$className} implements ViewInterface
         {
             /**
-             * {@inheritdoc}
+             * {@inheritDoc}
              */
             public function up(): stdClass
             {
-                return Schema::connection(env('DB_DEFAULT', 'local'))
+                return Schema::connection(getDefaultConnection())
                     ->createView('--NAME--', function (MySQL \$db): void {
                         \$db
                             ->table('table')
@@ -287,8 +284,8 @@ class MigrationFactory
     /**
      * Returns the body of the migration of type view
      *
-     * @param string $className [Class name]
-     * @param string $namespace [Class namespace]
+     * @param string $className Class name
+     * @param string $namespace Class namespace
      *
      * @return string
      */
@@ -306,18 +303,16 @@ class MigrationFactory
         use stdClass;
 
         /**
-         * Description
-         *
-         * @package {$namespace}
+         * View schema to run queries
          */
         class {$className} implements ViewInterface
         {
             /**
-             * {@inheritdoc}
+             * {@inheritDoc}
              */
             public function up(): stdClass
             {
-                return PostgreSQL::connection(env('DB_DEFAULT', 'local'))
+                return PostgreSQL::connection(getDefaultConnection())
                     ->query(
                         <<<SQL
                         -- SQL
@@ -333,8 +328,8 @@ class MigrationFactory
     /**
      * Returns the body of the migration of type store-procedure
      *
-     * @param string $className [Class name]
-     * @param string $namespace [Class namespace]
+     * @param string $className Class name
+     * @param string $namespace Class namespace
      *
      * @return string
      */
@@ -353,24 +348,24 @@ class MigrationFactory
         use stdClass;
 
         /**
-         * Description
-         *
-         * @package {$namespace}
+         * Generates a schema to execute processes in a database
          */
         class {$className} implements StoredProcedureInterface
         {
             /**
-             * {@inheritdoc}
+             * {@inheritDoc}
              */
             public function up(): stdClass
             {
-                return Schema::connection(env('DB_DEFAULT', 'local'))
+                return Schema::connection(getDefaultConnection())
                     ->createStoreProcedure('--NAME--', function (): void {
                         Schema::in()->varchar('name', 25);
                     }, function (MySQL \$db): void {
                         \$db
                             ->table('')
-                            ->insert(['name' => '']);
+                            ->insert([
+                                'name' => '',
+                            ]);
                     })
                     ->execute();
             }
@@ -382,8 +377,8 @@ class MigrationFactory
     /**
      * Returns the body of the migration of type store-procedure
      *
-     * @param string $className [Class name]
-     * @param string $namespace [Class namespace]
+     * @param string $className Class name
+     * @param string $namespace Class namespace
      *
      * @return string
      */
@@ -401,18 +396,16 @@ class MigrationFactory
         use stdClass;
 
         /**
-         * Description
-         *
-         * @package {$namespace}
+         * Generates a schema to execute processes in a database
          */
         class {$className} implements StoredProcedureInterface
         {
             /**
-             * {@inheritdoc}
+             * {@inheritDoc}
              */
             public function up(): stdClass
             {
-                return PostgreSQL::connection(env('DB_DEFAULT', 'local'))
+                return PostgreSQL::connection(getDefaultConnection())
                     ->query(
                         <<<SQL
                         -- SQL

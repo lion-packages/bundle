@@ -118,7 +118,7 @@ class FactoryCommand extends Command
                 class {$class} implements FactoryInterface
                 {
                     /**
-                     * {@inheritdoc}
+                     * {@inheritDoc}
                      */
                     public static function columns(): array
                     {
@@ -128,7 +128,7 @@ class FactoryCommand extends Command
                     }
 
                     /**
-                     * {@inheritdoc}
+                     * {@inheritDoc}
                      */
                     public static function definition(): array
                     {

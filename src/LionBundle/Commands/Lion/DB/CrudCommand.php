@@ -27,7 +27,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CrudCommand extends MenuCommand
 {
     /**
-     * [Defined CRUD methods]
+     * Defined CRUD methods
      *
      * @const METHODS
      */
@@ -38,22 +38,22 @@ class CrudCommand extends MenuCommand
     ];
 
     /**
-     * [Class that allows writing system files]
+     * Class that allows writing system files
      *
      * @var FileWriter $fileWriter
      */
     private FileWriter $fileWriter;
 
     /**
-     * [Fabricates the data provided to manipulate information (folder, class,
-     * namespace)]
+     * Fabricates the data provided to manipulate information (folder, class,
+     * namespace)
      *
      * @var ClassFactory $classFactory
      */
     private ClassFactory $classFactory;
 
     /**
-     * [Manages basic database engine processes]
+     * Manages basic database engine processes
      *
      * @var DatabaseEngine $databaseEngine
      */
@@ -192,7 +192,7 @@ class CrudCommand extends MenuCommand
     /**
      * Create the rules of an entity
      *
-     * @param string $entity [Entity name]
+     * @param string $entity Entity name
      *
      * @return void
      *
@@ -216,11 +216,11 @@ class CrudCommand extends MenuCommand
     /**
      * Create the controller and model of an entity
      *
-     * @param string $driver [Database engine]
-     * @param string $entityPascal [Entity name in pascal-case format]
-     * @param string $connectionPascal [Database name in pascal-case format]
-     * @param string $entity [Entity name]
-     * @param array<int, stdClass> $columns [List of defined columns]
+     * @param string $driver Database engine
+     * @param string $entityPascal Entity name in pascal-case format
+     * @param string $connectionPascal Database name in pascal-case format
+     * @param string $entity Entity name
+     * @param array<int, stdClass> $columns List of defined columns
      *
      * @return void
      *
@@ -240,25 +240,25 @@ class CrudCommand extends MenuCommand
             '--model' => "{$connectionPascal}/{$driver}/{$entityPascal}Model",
         ]);
 
-        $arrayInputModel = new ArrayInput([
-            'test' => "App/Http/Controllers/{$connectionPascal}/{$driver}/{$entityPascal}ControllerTest",
-        ]);
-
-        $arrayInputTest = new ArrayInput([
-            'test' => "App/Models/{$connectionPascal}/{$driver}/{$entityPascal}ModelTest",
-        ]);
-
         /** @phpstan-ignore-next-line */
         $this
             ->getApplication()
             ->find('new:controller')
             ->run($arrayInputController, $this->output);
 
+        $arrayInputModel = new ArrayInput([
+            'test' => "App/Http/Controllers/{$connectionPascal}/{$driver}/{$entityPascal}ControllerTest",
+        ]);
+
         /** @phpstan-ignore-next-line */
         $this
             ->getApplication()
             ->find('new:test')
             ->run($arrayInputModel, $this->output);
+
+        $arrayInputTest = new ArrayInput([
+            'test' => "App/Models/{$connectionPascal}/{$driver}/{$entityPascal}ModelTest",
+        ]);
 
         /** @phpstan-ignore-next-line */
         $this
@@ -280,57 +280,57 @@ class CrudCommand extends MenuCommand
                 'content' => ";\nuse {$namespacePascal};",
                 'search' => ';',
             ],
-            20 => [
+            18 => [
                 'replace' => true,
                 'content' => <<<EOT
                 *
-                     * @param {$entityPascal} \${$variableName} [Parameter Description]
+                     * @param {$entityPascal} \${$variableName} Capsule for the '{$entity}' entity
                 EOT,
                 'search' => '*'
             ],
-            25 => [
+            23 => [
                 'replace' => true,
                 'content' => ("{$entityPascal}({$entityPascal} " . '$' . lcfirst($entityPascal) . ', '),
                 'search' => "{$entityPascal}("
             ],
-            27 => [
+            25 => [
                 'replace' => true,
                 'content' => '($' . lcfirst($entityPascal) . '->capsule())',
                 'search' => '()'
             ],
-            44 => [
+            42 => [
                 'replace' => true,
                 'content' => <<<EOT
                 *
-                     * @param {$entityPascal} \${$variableName} [Parameter Description]
+                     * @param {$entityPascal} \${$variableName} Capsule for the 'users' entity
                 EOT,
 
                 'search' => '*'
             ],
-            50 => [
+            48 => [
                 'replace' => true,
                 'content' => ("{$entityPascal}({$entityPascal} " . '$' . lcfirst($entityPascal) . ', '),
                 'search' => "{$entityPascal}("
             ],
-            52 => [
+            50 => [
                 'replace' => true,
                 'content' => '($' . lcfirst($entityPascal) . '->capsule())',
                 'search' => '()'
             ],
-            57 => [
+            55 => [
                 'replace' => true,
                 'content' => <<<EOT
                 *
-                     * @param {$entityPascal} \${$variableName} [Parameter Description]
+                     * @param {$entityPascal} \${$variableName} Capsule for the 'users' entity
                 EOT,
                 'search' => '*'
             ],
-            63 => [
+            61 => [
                 'replace' => true,
                 'content' => ("{$entityPascal}({$entityPascal} " . '$' . lcfirst($entityPascal) . ', '),
                 'search' => "{$entityPascal}("
             ],
-            65 => [
+            63 => [
                 'replace' => true,
                 'content' => '($' . lcfirst($entityPascal) . ')',
                 'search' => '()'
@@ -353,20 +353,29 @@ class CrudCommand extends MenuCommand
                     $sizeMethods = count($methods) - 1;
 
                     foreach ($methods as $key => $name) {
-                        if ($sizeMethods === $key) {
+                        if (0 === $key) {
                             $listGettersCallModel[$keyGetterCallModel] .= <<<EOT
                                         \${$variableName}->{$name}(),
+
+                            EOT;
+
+                            continue;
+                        }
+
+                        if ($sizeMethods === $key) {
+                            $listGettersCallModel[$keyGetterCallModel] .= <<<EOT
+                                            \${$variableName}->{$name}(),
                             EOT;
                         } else {
                             $listGettersCallModel[$keyGetterCallModel] .= <<<EOT
-                                    \${$variableName}->{$name}(),
+                                            \${$variableName}->{$name}(),
 
                             EOT;
                         }
                     }
                 } else {
                     $listGettersCallModel[$keyGetterCallModel] .= <<<EOT
-                            \${$variableName}->{$methods[0]}(),
+                                \${$variableName}->{$methods[0]}(),
                     EOT;
                 }
             }
@@ -376,23 +385,23 @@ class CrudCommand extends MenuCommand
                     'replace' => false,
                     'content' => "\nuse {$namespacePascal};\n",
                 ],
-                20 => [
+                18 => [
                     'replace' => true,
                     'content' => <<<EOT
                     *
-                         * @param {$entityPascal} \${$variableName} [Parameter Description]
+                         * @param {$entityPascal} \${$variableName} Capsule for the 'users' entity
                          *
                     EOT,
                     'search' => '*',
                 ],
-                23 => [
+                21 => [
                     'replace' => true,
                     'content' => <<<EOT
                     ({$entityPascal} \${$variableName})
                     EOT,
                     'search' => '()',
                 ],
-                25 => [
+                24 => [
                     'replace' => true,
                     'multiple' => [
                         [
@@ -403,7 +412,7 @@ class CrudCommand extends MenuCommand
                             'content' => <<<EOT
                             [
                                 {$listGettersCallModel['create']}
-                                    ]
+                                        ]
                             EOT,
                             'search' => '[]',
                         ],
@@ -418,7 +427,7 @@ class CrudCommand extends MenuCommand
                     'replace' => true,
                     'content' => <<<EOT
                     *
-                         * @param {$entityPascal} \${$variableName} [Parameter Description]
+                         * @param {$entityPascal} \${$variableName} Capsule for the 'users' entity
                          *
                     EOT,
                     'search' => '*',
@@ -430,7 +439,7 @@ class CrudCommand extends MenuCommand
                     EOT,
                     'search' => '()',
                 ],
-                48 => [
+                49 => [
                     'replace' => true,
                     'multiple' => [
                         [
@@ -447,23 +456,23 @@ class CrudCommand extends MenuCommand
                         ],
                     ],
                 ],
-                54 => [
+                55 => [
                     'replace' => true,
                     'content' => <<<EOT
                     *
-                         * @param {$entityPascal} \${$variableName} [Parameter Description]
+                         * @param {$entityPascal} \${$variableName} Capsule for the 'users' entity
                          *
                     EOT,
                     'search' => '*',
                 ],
-                57 => [
+                58 => [
                     'replace' => true,
                     'content' => <<<EOT
                     ({$entityPascal} \${$variableName})
                     EOT,
                     'search' => '()',
                 ],
-                59 => [
+                61 => [
                     'replace' => true,
                     'multiple' => [
                         [
@@ -474,7 +483,7 @@ class CrudCommand extends MenuCommand
                             'content' => <<<EOT
                             [
                                 {$listGettersCallModel['delete']}
-                                    ]
+                                        ]
                             EOT,
                             'search' => '[]',
                         ],
@@ -499,7 +508,7 @@ class CrudCommand extends MenuCommand
                     'search' => '*',
                     'content' => <<<EOT
                     *
-                         * @param {$entityPascal} \${$variableName} [Parameter Description]
+                         * @param {$entityPascal} \${$variableName} [Capsule for the 'users' entity]
                          *
                     EOT,
                 ],
@@ -535,7 +544,7 @@ class CrudCommand extends MenuCommand
                     'replace' => true,
                     'content' => <<<EOT
                     *
-                         * @param {$entityPascal} \${$variableName} [Parameter Description]
+                         * @param {$entityPascal} \${$variableName} [Capsule for the 'users' entity]
                          *
                     EOT,
                     'search' => '*',
@@ -564,7 +573,7 @@ class CrudCommand extends MenuCommand
                     'replace' => true,
                     'content' => <<<EOT
                     *
-                         * @param {$entityPascal} \${$variableName} [Parameter Description]
+                         * @param {$entityPascal} \${$variableName} [Capsule for the 'users' entity]
                          *
                     EOT,
                     'search' => '*',

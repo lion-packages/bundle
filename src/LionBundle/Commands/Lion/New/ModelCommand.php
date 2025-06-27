@@ -23,7 +23,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ModelCommand extends Command
 {
     /**
-     * [List of methods generated in the class]
+     * List of methods generated in the class
      *
      * @const METHODS
      */
@@ -35,15 +35,15 @@ class ModelCommand extends Command
     ];
 
     /**
-     * [Fabricates the data provided to manipulate information (folder, class,
-     * namespace)]
+     * Fabricates the data provided to manipulate information (folder, class,
+     * namespace)
      *
      * @var ClassFactory $classFactory
      */
     private ClassFactory $classFactory;
 
     /**
-     * [Manipulate system files]
+     * Manipulate system files
      *
      * @var Store $store
      */
@@ -96,20 +96,19 @@ class ModelCommand extends Command
     /**
      * Executes the current command
      *
-     * This method is not abstract because you can use this class
-     * as a concrete class. In this case, instead of defining the
-     * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method
+     * This method is not abstract because you can use this class as a concrete
+     * class. In this case, instead of defining the execute() method, you set the
+     * code to execute by passing a Closure to the setCode() method
      *
-     * @param InputInterface $input [InputInterface is the interface implemented
-     * by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
+     * @param InputInterface $input InputInterface is the interface implemented by all
+     * input classes
+     * @param OutputInterface $output OutputInterface is the interface implemented
+     * by all Output classes
      *
      * @return int
      *
      * @throws Exception
-     * @throws LogicException [When this abstract method is not implemented]
+     * @throws LogicException When this abstract method is not implemented
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -168,8 +167,6 @@ class ModelCommand extends Command
 
                 /**
                  * Description of Model '{$class}'
-                 *
-                 * @package {$namespace}
                  */
                 class {$class}
                 {
@@ -194,15 +191,17 @@ class ModelCommand extends Command
                 : 'int|stdClass';
 
             $methodBody = $method === 'read'
-                ? <<<EOT
-                return DB::table('')
+                ? <<<PHP
+                return DB::connection(getDefaultConnection())
+                            ->table('')
                             ->select()
                             ->getAll();
-                EOT
-                : <<<EOT
-                return DB::call('', [])
+                PHP
+                : <<<PHP
+                return DB::connection(getDefaultConnection())
+                            ->call('', [])
                             ->execute();
-                EOT;
+                PHP;
 
 
             $customMethod = $this->classFactory->getCustomMethod(
@@ -249,9 +248,9 @@ class ModelCommand extends Command
             ->create($class, ClassFactory::PHP_EXTENSION, $folder)
             ->add($content);
 
-        $output->writeln($this->warningOutput("\t>>  MODEL: {$class}"));
+        $output->writeln($this->warningOutput("\t>>  MODEL: {$namespace}\\{$class}"));
 
-        $output->writeln($this->successOutput("\t>>  MODEL: the '{$namespace}\\{$class}' model has been generated"));
+        $output->writeln($this->successOutput("\t>>  MODEL: The model has been generated"));
 
         return parent::SUCCESS;
     }

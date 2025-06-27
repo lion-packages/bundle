@@ -465,10 +465,10 @@ class ClassFactory
 
                 $paramsAnnotation .= $key === ($paramsSize - 1)
                     ? <<<EOT
-                         * @param {$param} [Parameter Description]
+                         * @param {$param} Parameter Description
                     EOT
                     : <<<EOT
-                    * @param {$param} [Parameter Description]
+                    * @param {$param} Parameter Description
 
                     EOT;
             }
@@ -478,7 +478,7 @@ class ClassFactory
             $params = isset($split[1]) ? trim($split[0]) : trim($params);
 
             $paramsAnnotation .= <<<EOT
-            * @param {$params} [Parameter Description]
+            * @param {$params} Parameter Description
             EOT;
         }
 
