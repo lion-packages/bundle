@@ -276,15 +276,13 @@ class CapsuleFactory
                 <<<EOT
                 /**
                  * Capsule for the '{$this->entity}' entity
-                 *
-                 * @package {$this->namespace}
                  */
                 class {$this->class} implements CapsuleInterface
                 {
                     use CapsuleTrait;
 
                     /**
-                     * [Entity name]
+                     * Entity name
                      *
                      * @var string \$entity
                      */
@@ -375,7 +373,7 @@ class CapsuleFactory
                 $this->str
                     ->concat(
                         <<<EOT
-                                /** @var $dataType \${$snake} */
+                                /** @var $dataType|null \${$snake} */
                                 \${$snake} = request('{$snake}');
 
 

@@ -24,22 +24,22 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CapsuleCommand extends Command
 {
     /**
-     * [Fabricates the data provided to manipulate information (folder, class,
-     * namespace)]
+     * Fabricates the data provided to manipulate information (folder, class,
+     * namespace)
      *
      * @var ClassFactory $classFactory
      */
     private ClassFactory $classFactory;
 
     /**
-     * [Manipulate system files]
+     * Manipulate system files
      *
      * @var Store $store
      */
     private Store $store;
 
     /**
-     * [Manages the configuration and structure of a generated capsule class]
+     * Manages the configuration and structure of a generated capsule class
      *
      * @var CapsuleFactory $capsuleFactory
      */
@@ -93,30 +93,29 @@ class CapsuleCommand extends Command
     /**
      * Executes the current command
      *
-     * This method is not abstract because you can use this class
-     * as a concrete class. In this case, instead of defining the
-     * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method
+     * This method is not abstract because you can use this class as a concrete
+     * class. In this case, instead of defining the execute() method, you set the
+     * code to execute by passing a Closure to the setCode() method
      *
-     * @param InputInterface $input [InputInterface is the interface implemented
-     * by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
+     * @param InputInterface $input InputInterface is the interface implemented by
+     * all input classes
+     * @param OutputInterface $output OutputInterface is the interface implemented
+     * by all Output classes
      *
      * @return int
      *
      * @throws Exception
-     * @throws LogicException [When this abstract method is not implemented]
+     * @throws LogicException When this abstract method is not implemented
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         /**
-         * ---------------------------------------------------------------------
+         * -----------------------------------------------------------------------------
          * Initialize console parameters
-         * ---------------------------------------------------------------------
-         * The parameters are provided directly from the console, this in order
-         * to manipulate the body of the capsule class
-         * ---------------------------------------------------------------------
+         * -----------------------------------------------------------------------------
+         * The parameters are provided directly from the console, this in order to
+         * manipulate the body of the capsule class
+         * -----------------------------------------------------------------------------
          */
 
         /** @var string $capsule */
@@ -129,12 +128,12 @@ class CapsuleCommand extends Command
         $entity = $input->getOption('entity');
 
         /**
-         * ---------------------------------------------------------------------
+         * -----------------------------------------------------------------------------
          * Class Factory Parameters
-         * ---------------------------------------------------------------------
-         * Class factory parameters are used to obtain the precise data that
-         * defines the class, such as the name and namespace
-         * ---------------------------------------------------------------------
+         * -----------------------------------------------------------------------------
+         * Class factory parameters are used to obtain the precise data that defines the
+         * class, such as the name and namespace
+         * -----------------------------------------------------------------------------
          */
 
         $this->classFactory->classFactory('database/Class/', $capsule);
@@ -146,12 +145,12 @@ class CapsuleCommand extends Command
         $class = $this->classFactory->getClass();
 
         /**
-         * ---------------------------------------------------------------------
+         * -----------------------------------------------------------------------------
          * Initializing parameters in the body
-         * ---------------------------------------------------------------------
-         * Initializes the capsule class body parameters so that they are nested
-         * in the construction
-         * ---------------------------------------------------------------------
+         * -----------------------------------------------------------------------------
+         * Initializes the capsule class body parameters so that they are nested in the
+         * construction
+         * -----------------------------------------------------------------------------
          */
 
         $this->capsuleFactory->setClass($class);
@@ -163,12 +162,12 @@ class CapsuleCommand extends Command
         $this->capsuleFactory->generateGettersAndSetters($class, $properties);
 
         /**
-         * ---------------------------------------------------------------------
+         * -----------------------------------------------------------------------------
          * Capsule class body
-         * ---------------------------------------------------------------------
-         * Builds the body of the capsule class, this with the defined
-         * parameters. The logic that a Capsule class performs is nested
-         * ---------------------------------------------------------------------
+         * -----------------------------------------------------------------------------
+         * Builds the body of the capsule class, this with the defined parameters. The
+         * logic that a Capsule class performs is nested
+         * -----------------------------------------------------------------------------
          */
 
         $this->capsuleFactory->addNamespace();
@@ -192,40 +191,32 @@ class CapsuleCommand extends Command
                 ->ln();
         }
 
-        /**
-         * ---------------------------------------------------------------------
-         * Class content
-         * ---------------------------------------------------------------------
-         * Gets the contents of the manufactured class
-         * ---------------------------------------------------------------------
-         */
-
-        /** @var string $contentFile */
-        $contentFile = $this->capsuleFactory
+        /** @var string $body */
+        $body = $this->capsuleFactory
             ->getStr()
             ->concat("}")
             ->ln()
             ->get();
 
         /**
-         * ---------------------------------------------------------------------
+         * -----------------------------------------------------------------------------
          * File manufacturing
-         * ---------------------------------------------------------------------
+         * -----------------------------------------------------------------------------
          * Creating the file with the content of the manufactured class
-         * ---------------------------------------------------------------------
+         * -----------------------------------------------------------------------------
          */
 
         $this->store->folder($folder);
 
         $this->classFactory
             ->create($class, ClassFactory::PHP_EXTENSION, $folder)
-            ->add($contentFile)
+            ->add($body)
             ->close();
 
-        $output->writeln($this->warningOutput("\t>>  CAPSULE: {$class}"));
+        $output->writeln($this->warningOutput("\t>>  CAPSULE: {$namespace}\\{$class}"));
 
         $output->writeln(
-            $this->successOutput("\t>>  CAPSULE: the '{$namespace}\\{$class}' capsule has been generated")
+            $this->successOutput("\t>>  CAPSULE: The capsule class has been generated successfully.")
         );
 
         return parent::SUCCESS;

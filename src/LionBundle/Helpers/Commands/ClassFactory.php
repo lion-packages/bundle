@@ -262,8 +262,8 @@ class ClassFactory
                 'data_type' => $type,
                 'annotations' => (object) [
                     'class' => (object) [
-                        'data_type' => "@property {$type} $" . "{$snake} [Property for {$propertyName}]",
-                        'data_type_with_null' => "@property {$type}|null $" . "{$snake} [Property for {$propertyName}]",
+                        'data_type' => "@property {$type} $" . "{$snake} Property for {$propertyName}",
+                        'data_type_with_null' => "@property {$type}|null $" . "{$snake} Property for {$propertyName}",
                     ],
                 ],
                 'reference' => '$this->' . "{$camel};",
@@ -275,7 +275,7 @@ class ClassFactory
                     'camel' => (
                         <<<EOT
                             /**
-                             * [Property for '{$propertyName}']
+                             * Property for '{$propertyName}'
                              *
                              * @var {$type}|null \${$camel}
                              */
@@ -287,7 +287,7 @@ class ClassFactory
                     'snake' => (
                         <<<EOT
                             /**
-                             * [Property for '{$propertyName}']
+                             * Property for '{$propertyName}'
                              *
                              * @var {$type}|null \${$snake}
                              */
@@ -394,7 +394,7 @@ class ClassFactory
             /**
              * Setter method for '{$name}'
              *
-             * @param {$type}|null \${$name} [Description for '{$name}']
+             * @param {$type}|null \${$name} Property for '{$name}'
              *
              * @return {$capsule}
              */
