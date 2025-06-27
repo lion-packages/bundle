@@ -21,6 +21,21 @@ use Monolog\Level;
 use Monolog\Logger;
 use Psr\Http\Message\ResponseInterface;
 
+if (!function_exists('getDefaultConnection')) {
+    /**
+     * Returns the default connection
+     *
+     * @return string
+     */
+    function getDefaultConnection(): string
+    {
+        /** @var string $connection */
+        $connection = env('DB_DEFAULT');
+
+        return $connection;
+    }
+}
+
 if (!function_exists('request')) {
     /**
      * Object with properties captured in an HTTP request and you can add
