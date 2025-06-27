@@ -10,7 +10,7 @@ on:
 
 jobs:
   install-dependencies:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     name: Install PHP Dependencies
     steps:
       - name: Checkout repository
@@ -40,7 +40,7 @@ jobs:
           restore-keys: php-composer-lock-${{ runner.os }}-${{ github.run_id }}
 
   composer-validation:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     name: Composer Validation
     needs: install-dependencies
 
@@ -78,7 +78,7 @@ jobs:
         run: composer dump-autoload --optimize --strict-psr
 
   dependency-review:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     name: Dependency Review
     needs: install-dependencies
 
@@ -107,7 +107,7 @@ jobs:
           license-check: true
 
   code-analysis-php-stan:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     name: PHPStan
     needs:
       - composer-validation
@@ -137,13 +137,13 @@ jobs:
           restore-keys: php-vendor-${{ runner.os }}-${{ github.run_id }}
 
       - name: PHPStan (Src)
-        run: php -d memory_limit=-1 vendor/bin/phpstan analyse --level max src
+        run: php -d memory_limit=-1 vendor/bin/phpstan analyse --level 10 src
 
       # - name: PHPStan (Tests)
         # run: php -d memory_limit=-1 vendor/bin/phpstan analyse --level max tests
 
   code-analysis-php-codesniffer:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     name: PHPCodeSniffer
     needs:
       - composer-validation
@@ -179,7 +179,7 @@ jobs:
         # run: php -d memory_limit=-1 vendor/bin/phpcs --standard=PSR12 tests
 
   code-analysis-phplint:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     name: PHPLint
     needs:
       - composer-validation
@@ -215,41 +215,41 @@ jobs:
         run: php -d memory_limit=-1 vendor/bin/phplint tests
 
   tests-phpunit:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     name: PHPUnit
     needs:
       - code-analysis-php-stan
       - code-analysis-php-codesniffer
       - code-analysis-phplint
 
-    services:
-      redis:
-        image: redis
-        ports:
-          - 6379:6379
+    # services:
+      # redis:
+        # image: redis
+        # ports:
+          # - 6379:6379
 
-      mysql:
-        image: mysql
-        options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
-        ports:
-          - 3306:3306
-        env:
-          MYSQL_DATABASE: lion_database
-          MYSQL_ROOT_PASSWORD: lion
-          MYSQL_PASSWORD: lion
+      # mysql:
+        # image: mysql
+        # options: >-
+          # --health-cmd="mysqladmin ping"
+          # --health-interval=10s
+          # --health-timeout=5s
+          # --health-retries=3
+        # ports:
+          # - 3306:3306
+        # env:
+          # MYSQL_DATABASE: lion_database
+          # MYSQL_ROOT_PASSWORD: lion
+          # MYSQL_PASSWORD: lion
 
-      postgres:
-        image: postgres
-        ports:
-          - 5432:5432
-        env:
-          POSTGRES_DB: lion_database
-          POSTGRES_USER: root
-          POSTGRES_PASSWORD: lion
+      # postgres:
+        # image: postgres
+        # ports:
+          # - 5432:5432
+        # env:
+          # POSTGRES_DB: lion_database
+          # POSTGRES_USER: root
+          # POSTGRES_PASSWORD: lion
 
     steps:
       - name: Checkout repository
@@ -270,7 +270,7 @@ jobs:
       - name: Install Apache and OpenSSL
         run: |
           sudo apt-get update
-          sudo apt-get install -y apache2 libapache2-mod-php8.4 openssl ca-certificates
+          sudo apt-get install -y apache2 openssl ca-certificates
 
       - name: Setup NodeJS and NPM
         run: |
