@@ -29,27 +29,28 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * Description
-                 *
-                 * @package Database\Migrations\LionDatabase\MySQL\Tables
+                 * Table schema for the entity 'Test'
                  */
                 class Test implements TableInterface
                 {
                     /**
-                     * [Index number for seed execution priority]
+                     * Index number for seed execution priority
                      *
                      * @const INDEX
                      */
                     public const ?int INDEX = null;
 
                     /**
-                     * {@inheritdoc}
+                     * {@inheritDoc}
                      */
                     public function up(): stdClass
                     {
-                        return Schema::connection(env('DB_DEFAULT', 'local'))
+                        return Schema::connection(getDefaultConnection())
                             ->createTable('--NAME--', function (): void {
-                                Schema::int('id')->notNull()->autoIncrement()->primaryKey();
+                                Schema::int('id')
+                                    ->notNull()
+                                    ->autoIncrement()
+                                    ->primaryKey();
                             })
                             ->execute();
                     }
@@ -75,25 +76,23 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * Description
-                 *
-                 * @package Database\Migrations\LionDatabase\PostgreSQL\Tables
+                 * Table schema for the entity 'Test'
                  */
                 class Test implements TableInterface
                 {
                     /**
-                     * [Index number for seed execution priority]
+                     * Index number for seed execution priority
                      *
                      * @const INDEX
                      */
                     public const ?int INDEX = null;
 
                     /**
-                     * {@inheritdoc}
+                     * {@inheritDoc}
                      */
                     public function up(): stdClass
                     {
-                        return PostgreSQL::connection(env('DB_DEFAULT', 'local'))
+                        return PostgreSQL::connection(getDefaultConnection())
                             ->query(
                                 <<<SQL
                                 -- SQL
@@ -124,18 +123,16 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * Description
-                 *
-                 * @package Database\Migrations\LionDatabase\MySQL\Views
+                 * View schema to run queries
                  */
                 class Test implements ViewInterface
                 {
                     /**
-                     * {@inheritdoc}
+                     * {@inheritDoc}
                      */
                     public function up(): stdClass
                     {
-                        return Schema::connection(env('DB_DEFAULT', 'local'))
+                        return Schema::connection(getDefaultConnection())
                             ->createView('--NAME--', function (MySQL \$db): void {
                                 \$db
                                     ->table('table')
@@ -165,18 +162,16 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * Description
-                 *
-                 * @package Database\Migrations\LionDatabase\PostgreSQL\Views
+                 * View schema to run queries
                  */
                 class Test implements ViewInterface
                 {
                     /**
-                     * {@inheritdoc}
+                     * {@inheritDoc}
                      */
                     public function up(): stdClass
                     {
-                        return PostgreSQL::connection(env('DB_DEFAULT', 'local'))
+                        return PostgreSQL::connection(getDefaultConnection())
                             ->query(
                                 <<<SQL
                                 -- SQL
@@ -207,24 +202,24 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * Description
-                 *
-                 * @package Database\Migrations\LionDatabase\MySQL\StoredProcedures
+                 * Generates a schema to execute processes in a database
                  */
                 class Test implements StoredProcedureInterface
                 {
                     /**
-                     * {@inheritdoc}
+                     * {@inheritDoc}
                      */
                     public function up(): stdClass
                     {
-                        return Schema::connection(env('DB_DEFAULT', 'local'))
+                        return Schema::connection(getDefaultConnection())
                             ->createStoreProcedure('--NAME--', function (): void {
                                 Schema::in()->varchar('name', 25);
                             }, function (MySQL \$db): void {
                                 \$db
                                     ->table('')
-                                    ->insert(['name' => '']);
+                                    ->insert([
+                                        'name' => '',
+                                    ]);
                             })
                             ->execute();
                     }
@@ -250,18 +245,16 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * Description
-                 *
-                 * @package Database\Migrations\LionDatabase\PostgreSQL\StoredProcedures
+                 * Generates a schema to execute processes in a database
                  */
                 class Test implements StoredProcedureInterface
                 {
                     /**
-                     * {@inheritdoc}
+                     * {@inheritDoc}
                      */
                     public function up(): stdClass
                     {
-                        return PostgreSQL::connection(env('DB_DEFAULT', 'local'))
+                        return PostgreSQL::connection(getDefaultConnection())
                             ->query(
                                 <<<SQL
                                 -- SQL
@@ -294,27 +287,28 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * Description
-                 *
-                 * @package Database\Migrations\LionDatabase\MySQL\Tables
+                 * Table schema for the entity 'Test'
                  */
                 class Test implements TableInterface
                 {
                     /**
-                     * [Index number for seed execution priority]
+                     * Index number for seed execution priority
                      *
                      * @const INDEX
                      */
                     public const ?int INDEX = null;
 
                     /**
-                     * {@inheritdoc}
+                     * {@inheritDoc}
                      */
                     public function up(): stdClass
                     {
-                        return Schema::connection(env('DB_DEFAULT', 'local'))
+                        return Schema::connection(getDefaultConnection())
                             ->createTable('--NAME--', function (): void {
-                                Schema::int('id')->notNull()->autoIncrement()->primaryKey();
+                                Schema::int('id')
+                                    ->notNull()
+                                    ->autoIncrement()
+                                    ->primaryKey();
                             })
                             ->execute();
                     }
@@ -343,25 +337,23 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * Description
-                 *
-                 * @package Database\Migrations\LionDatabase\PostgreSQL\Tables
+                 * Table schema for the entity 'Test'
                  */
                 class Test implements TableInterface
                 {
                     /**
-                     * [Index number for seed execution priority]
+                     * Index number for seed execution priority
                      *
                      * @const INDEX
                      */
                     public const ?int INDEX = null;
 
                     /**
-                     * {@inheritdoc}
+                     * {@inheritDoc}
                      */
                     public function up(): stdClass
                     {
-                        return PostgreSQL::connection(env('DB_DEFAULT', 'local'))
+                        return PostgreSQL::connection(getDefaultConnection())
                             ->query(
                                 <<<SQL
                                 -- SQL
@@ -395,18 +387,16 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * Description
-                 *
-                 * @package Database\Migrations\LionDatabase\MySQL\Views
+                 * View schema to run queries
                  */
                 class Test implements ViewInterface
                 {
                     /**
-                     * {@inheritdoc}
+                     * {@inheritDoc}
                      */
                     public function up(): stdClass
                     {
-                        return Schema::connection(env('DB_DEFAULT', 'local'))
+                        return Schema::connection(getDefaultConnection())
                             ->createView('--NAME--', function (MySQL \$db): void {
                                 \$db
                                     ->table('table')
@@ -439,18 +429,16 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * Description
-                 *
-                 * @package Database\Migrations\LionDatabase\PostgreSQL\Views
+                 * View schema to run queries
                  */
                 class Test implements ViewInterface
                 {
                     /**
-                     * {@inheritdoc}
+                     * {@inheritDoc}
                      */
                     public function up(): stdClass
                     {
-                        return PostgreSQL::connection(env('DB_DEFAULT', 'local'))
+                        return PostgreSQL::connection(getDefaultConnection())
                             ->query(
                                 <<<SQL
                                 -- SQL
@@ -484,24 +472,24 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * Description
-                 *
-                 * @package Database\Migrations\LionDatabase\MySQL\StoreProcedures
+                 * Generates a schema to execute processes in a database
                  */
                 class Test implements StoredProcedureInterface
                 {
                     /**
-                     * {@inheritdoc}
+                     * {@inheritDoc}
                      */
                     public function up(): stdClass
                     {
-                        return Schema::connection(env('DB_DEFAULT', 'local'))
+                        return Schema::connection(getDefaultConnection())
                             ->createStoreProcedure('--NAME--', function (): void {
                                 Schema::in()->varchar('name', 25);
                             }, function (MySQL \$db): void {
                                 \$db
                                     ->table('')
-                                    ->insert(['name' => '']);
+                                    ->insert([
+                                        'name' => '',
+                                    ]);
                             })
                             ->execute();
                     }
@@ -530,18 +518,16 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * Description
-                 *
-                 * @package Database\Migrations\LionDatabase\PostgreSQL\StoreProcedures
+                 * Generates a schema to execute processes in a database
                  */
                 class Test implements StoredProcedureInterface
                 {
                     /**
-                     * {@inheritdoc}
+                     * {@inheritDoc}
                      */
                     public function up(): stdClass
                     {
-                        return PostgreSQL::connection(env('DB_DEFAULT', 'local'))
+                        return PostgreSQL::connection(getDefaultConnection())
                             ->query(
                                 <<<SQL
                                 -- SQL

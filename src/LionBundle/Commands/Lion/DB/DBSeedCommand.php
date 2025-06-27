@@ -10,6 +10,7 @@ use Lion\Bundle\Interface\SeedInterface;
 use Lion\Command\Command;
 use Lion\Files\Store;
 use LogicException;
+use stdClass;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -109,6 +110,10 @@ class DBSeedCommand extends Command
 
             if ($seedInterface instanceof SeedInterface) {
                 $response = $seedInterface->run();
+
+                if (is_int($response)) {
+                    continue;
+                }
 
                 /** @var string $message */
                 $message = $response->message;

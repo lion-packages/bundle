@@ -23,7 +23,7 @@ class DBSeedCommandTest extends Test
     private const string URL_PATH = './database/Seed/';
     private const string CLASS_NAME = 'TestSeed';
     private const string FILE_NAME = self::CLASS_NAME . '.php';
-    private const string OUTPUT_MESSAGE = 'run seed';
+    private const string OUTPUT_MESSAGE = 'OK';
     private const string OUTPUT_MESSAGE_NOT_EXISTS_ERROR = 'there are no defined seeds';
     private const string OUTPUT_MESSAGE_NEW_SEED = 'seed has been generated';
 

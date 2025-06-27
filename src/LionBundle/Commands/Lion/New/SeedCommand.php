@@ -128,7 +128,7 @@ class SeedCommand extends Command
                      */
                     public function run(): int|stdClass
                     {
-                        return success();
+                        return success('OK');
                     }
                 }
 

@@ -599,8 +599,8 @@ trait ClassFactoryProviderTrait
                     /**
                      * Description of 'example'
                      *
-                     * @param string \$param1 [Parameter Description]
-                     * @param int \$param2 [Parameter Description]
+                     * @param string \$param1 Parameter Description
+                     * @param int \$param2 Parameter Description
                      *
                      * @return null
                      */
@@ -623,7 +623,7 @@ trait ClassFactoryProviderTrait
                     /**
                      * Description of 'example'
                      *
-                     * @param string \$param1 [Parameter Description]
+                     * @param string \$param1 Parameter Description
                      *
                      * @return string
                      */
@@ -646,7 +646,7 @@ trait ClassFactoryProviderTrait
                     /**
                      * Description of 'example'
                      *
-                     * @param array \$param1 [Parameter Description]
+                     * @param array \$param1 Parameter Description
                      *
                      * @return array
                      */
@@ -672,7 +672,7 @@ trait ClassFactoryProviderTrait
                     /**
                      * Description of 'example'
                      *
-                     * @param array \$param1 [Parameter Description]
+                     * @param array \$param1 Parameter Description
                      *
                      * @return array<int, string>
                      */
@@ -695,7 +695,7 @@ trait ClassFactoryProviderTrait
                     /**
                      * Description of 'exampleLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongMethod'
                      *
-                     * @param array \$param1 [Parameter Description]
+                     * @param array \$param1 Parameter Description
                      *
                      * @return array
                      */

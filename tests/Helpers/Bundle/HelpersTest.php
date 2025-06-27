@@ -19,6 +19,7 @@ use Lion\Security\JWT;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test as Testing;
+use stdClass;
 use Tests\Providers\Helpers\HelpersProviderTrait;
 
 class HelpersTest extends Test
@@ -42,13 +43,24 @@ class HelpersTest extends Test
         unset($_SERVER['REQUEST_URI']);
     }
 
-    public function testRequest(): void
+    #[Testing]
+    public function getDefaultConnection(): void
+    {
+        /** @var string $connection */
+        $connection = env('DB_DEFAULT');
+
+        $this->assertSame($connection, getDefaultConnection());
+    }
+
+    #[Testing]
+    public function request(): void
     {
         $_POST['users_name'] = self::USERS_NAME;
 
         $data = request();
 
         $this->assertIsObject($data);
+        $this->assertInstanceOf(stdClass::class, $data);
         $this->assertObjectHasProperty('users_name', $data);
         $this->assertSame(self::USERS_NAME, $data->users_name);
 

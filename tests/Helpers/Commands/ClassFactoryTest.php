@@ -233,15 +233,15 @@ class ClassFactoryTest extends Test
     }
 
     /**
-     * @param string $name [Method name]
+     * @param string $name Method name
      * @param array{
      *      type: string,
      *      annotation: string
-     *  }|string $type [Method type]
-     * @param string $params [Method parameters]
-     * @param string $content [Method content]
-     * @param string $visibility [Scope of the method]
-     * @param int $lineBreak [Number of line breaks after the method]
+     *  }|string $type Method type
+     * @param string $params Method parameters
+     * @param string $content Method content
+     * @param string $visibility Scope of the method
+     * @param int $lineBreak Number of line breaks after the method
      */
     #[Testing]
     #[DataProvider('getCustomMethodProvider')]
