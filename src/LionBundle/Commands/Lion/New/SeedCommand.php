@@ -22,15 +22,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 class SeedCommand extends Command
 {
     /**
-     * [Fabricates the data provided to manipulate information (folder, class,
-     * namespace)]
+     * Fabricates the data provided to manipulate information (folder, class,
+     * namespace)
      *
      * @var ClassFactory $classFactory
      */
     private ClassFactory $classFactory;
 
     /**
-     * [Manipulate system files]
+     * Manipulate system files
      *
      * @var Store $store
      */
@@ -109,33 +109,26 @@ class SeedCommand extends Command
                 namespace {$namespace};
 
                 use Lion\Bundle\Interface\SeedInterface;
-                use Lion\Database\Drivers\MySQL as DB;
                 use stdClass;
 
                 /**
                  * Description of '{$class}' Seed
-                 *
-                 * @package {$namespace}
                  */
                 class {$class} implements SeedInterface
                 {
                     /**
-                     * [Index number for seed execution priority]
+                     * Index number for seed execution priority
                      *
                      * @const INDEX
                      */
-                    const ?int INDEX = null;
+                    public const ?int INDEX = null;
 
                     /**
-                     * {@inheritdoc}
+                     * {@inheritDoc}
                      */
-                    public function run(): stdClass
+                    public function run(): int|stdClass
                     {
-                        return (object) [
-                            'code' => 200,
-                            'status' => 'success',
-                            'message' => 'run seed',
-                        ];
+                        return success('OK');
                     }
                 }
 

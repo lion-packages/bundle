@@ -29,7 +29,7 @@ trait SingletonTrait
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     final public static function getInstance(): self
     {

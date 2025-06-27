@@ -27,7 +27,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ControllerCommand extends Command
 {
     /**
-     * [List of methods generated in the class]
+     * List of methods generated in the class
      *
      * @const METHODS
      */
@@ -39,28 +39,28 @@ class ControllerCommand extends Command
     ];
 
     /**
-     * [Controller path]
+     * Controller path
      *
      * @const PATH_CONTROLLER
      */
     public const string PATH_CONTROLLER = 'app/Http/Controllers/';
 
     /**
-     * [Model path]
+     * Model path
      *
      * @const PATH_MODEL
      */
     public const string PATH_MODEL = 'app/Models/';
 
     /**
-     * [Modify and construct strings with different formats]
+     * Modify and construct strings with different formats
      *
      * @var Str $str
      */
     private Str $str;
 
     /**
-     * [Allows adding several ClassFactory type objects for multiple management]
+     * Allows adding several ClassFactory type objects for multiple management
      *
      * @var ClassCommandFactory $classCommandFactory
      */
@@ -197,8 +197,6 @@ class ControllerCommand extends Command
 
                         /**
                          * Description of Controller '{$controllerClass}'
-                         *
-                         * @package {$controllerNamespace}
                          */
                         class {$controllerClass}
                         {\n

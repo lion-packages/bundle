@@ -16,7 +16,7 @@ interface SeedInterface
     /**
      * Seed the application's database
      *
-     * @return stdClass
+     * @return int|stdClass
      **/
-    public function run(): stdClass;
+    public function run(): int|stdClass;
 }

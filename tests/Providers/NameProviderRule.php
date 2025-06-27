@@ -42,7 +42,7 @@ class NameProviderRule extends Rules implements RulesInterface
     public bool $disabled = false;
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function passes(): void
     {

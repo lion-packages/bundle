@@ -24,22 +24,22 @@ use Symfony\Component\Console\Output\OutputInterface;
 class MigrationCommand extends MenuCommand
 {
     /**
-     * [Fabricates the data provided to manipulate information (folder, class,
-     * namespace)]
+     * Fabricates the data provided to manipulate information (folder, class,
+     * namespace)
      *
      * @var ClassFactory $classFactory
      */
     private ClassFactory $classFactory;
 
     /**
-     * [Factory of the content of the generated migrations]
+     * Factory of the content of the generated migrations
      *
      * @var MigrationFactory $migrationFactory
      */
     private MigrationFactory $migrationFactory;
 
     /**
-     * [Manages basic database engine processes]
+     * Manages basic database engine processes
      *
      * @var DatabaseEngine $databaseEngine
      */

@@ -154,7 +154,7 @@ class RulesCommand extends Command
                     public bool \$disabled = false;
 
                     /**
-                     * {@inheritdoc}
+                     * {@inheritDoc}
                      */
                     public function passes(): void
                     {
