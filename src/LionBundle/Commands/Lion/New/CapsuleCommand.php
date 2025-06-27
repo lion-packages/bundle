@@ -159,7 +159,7 @@ class CapsuleCommand extends Command
 
         $this->capsuleFactory->setEntity($entity);
 
-        $this->capsuleFactory->generateGettersAndSetters($class, $properties);
+        $this->capsuleFactory->generateMethods($class, $properties);
 
         /**
          * -----------------------------------------------------------------------------
@@ -184,7 +184,7 @@ class CapsuleCommand extends Command
                 ->ln()
                 ->ln();
 
-            $this->capsuleFactory->addGettersAndSetters();
+            $this->capsuleFactory->addMethods();
         } else {
             $this->capsuleFactory
                 ->getStr()

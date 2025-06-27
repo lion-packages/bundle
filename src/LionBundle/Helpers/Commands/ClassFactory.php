@@ -258,6 +258,7 @@ class ClassFactory
             ],
             'getter' => $this->getGetter($snake, $type),
             'setter' => $this->getSetter($snake, $type, $className),
+            'abstract' => $this->getAbstractCapsuleMethod($snake),
             'variable' => (object) [
                 'data_type' => $type,
                 'annotations' => (object) [
@@ -408,6 +409,41 @@ class ClassFactory
 
         return (object) [
             'name' => "set{$newName}",
+            'method' => $setter
+        ];
+    }
+
+    /**
+     * Generates the abstract methods of the capsule classes
+     *
+     * @param string $column Column name
+     *
+     * @return stdClass
+     */
+    public function getAbstractCapsuleMethod(string $column): stdClass
+    {
+        $newName = str_replace(' ', '_', $column);
+
+        $newName = str_replace('-', '_', $newName);
+
+        $newName = str_replace('_', ' ', $newName);
+
+        $newName = trim(str_replace(' ', '', ucwords($newName)));
+
+        $setter = <<<PHP
+            /**
+             * Gets the name of the column '{$column}'
+             *
+             * @return string
+             */
+            public static function get{$newName}Column(): string
+            {
+                return '{$column}';
+            }
+        PHP;
+
+        return (object) [
+            'name' => "get{$newName}Column",
             'method' => $setter
         ];
     }

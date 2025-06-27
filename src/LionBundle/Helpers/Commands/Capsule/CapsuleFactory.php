@@ -46,6 +46,7 @@ class CapsuleFactory
      *     methods: array<int, array{
      *          getter: string,
      *          setter: string,
+     *          abstract: string,
      *          config: stdClass
      *     }>
      * } $capsuleData
@@ -192,12 +193,12 @@ class CapsuleFactory
     /**
      * Iterates the list of data to generate the Getter and Setter methods
      *
-     * @param string $class [Class name]
-     * @param array<int, string> $properties [List of class properties]
+     * @param string $class Class name
+     * @param array<int, string> $properties List of class properties
      *
      * @return void
      */
-    public function generateGettersAndSetters(string $class, array $properties): void
+    public function generateMethods(string $class, array $properties): void
     {
         foreach ($properties as $property) {
             $split = explode(':', $property);
@@ -224,17 +225,24 @@ class CapsuleFactory
             /** @var stdClass $setter */
             $setter = $data->setter;
 
+            /** @var stdClass $abstract */
+            $abstract = $data->abstract;
+
             /** @var string $getterMethod */
             $getterMethod = $getter->method;
 
             /** @var string $setterMethod */
             $setterMethod = $setter->method;
 
+            /** @var string $abstractMethod */
+            $abstractMethod = $abstract->method;
+
             $this->capsuleData['properties'][] = $snakeCase;
 
             $this->capsuleData['methods'][] = [
                 'getter' => $getterMethod,
                 'setter' => $setterMethod,
+                'abstract' => $abstractMethod,
                 'config' => $data,
             ];
         }
@@ -435,12 +443,14 @@ class CapsuleFactory
      *
      * @return void
      */
-    public function addGettersAndSetters(): void
+    public function addMethods(): void
     {
         $countCapsuleMethods = count($this->getCapsuleMethods()) - 1;
 
         foreach ($this->capsuleData['methods'] as $key => $method) {
-            $this->str->concat($method['getter'])->ln()->ln();
+            $this->str
+                ->concat($method['abstract'])->ln()->ln()
+                ->concat($method['getter'])->ln()->ln();
 
             if ($key === $countCapsuleMethods) {
                 $this->str->concat($method['setter'])->ln();
