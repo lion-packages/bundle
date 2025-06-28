@@ -22,14 +22,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 class InterfaceCommand extends Command
 {
     /**
-     * [ClassFactory class object]
+     * Fabricates the data provided to manipulate information (folder, class,
+     * amespace)
      *
      * @var ClassFactory $classFactory
      */
     private ClassFactory $classFactory;
 
     /**
-     * [Store class object]
+     * Manipulate system files
      *
      * @var Store $store
      */
@@ -100,7 +101,7 @@ class InterfaceCommand extends Command
         $this->classFactory
             ->create($class, ClassFactory::PHP_EXTENSION, $folder)
             ->add(
-                <<<EOT
+                <<<PHP
                 <?php
 
                 declare(strict_types=1);
@@ -109,24 +110,18 @@ class InterfaceCommand extends Command
 
                 /**
                  * Description of the '{$class}' interface
-                 *
-                 * @package {$namespace}
                  */
                 interface {$class}
                 {
                 }
 
-                EOT
+                PHP
             )
             ->close();
 
-        $output->writeln($this->warningOutput("\t>>  INTERFACE: {$class}"));
+        $output->writeln($this->warningOutput("\t>>  INTERFACE: {$namespace}\\{$class}"));
 
-        $output->writeln(
-            $this->successOutput(
-                "\t>>  INTERFACE: the '{$namespace}\\{$class}' interface has been generated"
-            )
-        );
+        $output->writeln($this->successOutput("\t>>  INTERFACE: The interface has been generated successfully."));
 
         return parent::SUCCESS;
     }

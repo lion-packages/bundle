@@ -11,6 +11,7 @@ use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Command\Command;
 use Lion\Files\Store;
 use LogicException;
+use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -106,6 +107,7 @@ class CapsuleCommand extends Command
      *
      * @throws Exception
      * @throws LogicException When this abstract method is not implemented
+     * @throws ExceptionInterface
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -153,6 +155,11 @@ class CapsuleCommand extends Command
          * -----------------------------------------------------------------------------
          */
 
+        /** @phpstan-ignore-next-line */
+        $this->capsuleFactory->setApplication($this->getApplication());
+
+        $this->capsuleFactory->setOutput($output);
+
         $this->capsuleFactory->setClass($class);
 
         $this->capsuleFactory->setNamespace($namespace);
@@ -160,6 +167,8 @@ class CapsuleCommand extends Command
         $this->capsuleFactory->setEntity($entity);
 
         $this->capsuleFactory->generateMethods($class, $properties);
+
+        $this->capsuleFactory->generateInterfaces();
 
         /**
          * -----------------------------------------------------------------------------

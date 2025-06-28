@@ -7,9 +7,14 @@ namespace Lion\Bundle\Helpers\Commands\Capsule;
 use Closure;
 use DI\Attribute\Inject;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
+use Lion\Bundle\Helpers\FileWriter;
 use Lion\Helpers\Arr;
 use Lion\Helpers\Str;
 use stdClass;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Exception\ExceptionInterface;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Manages the configuration and structure of a generated capsule class
@@ -19,22 +24,22 @@ use stdClass;
 class CapsuleFactory
 {
     /**
-     * [Fabricates the data provided to manipulate information (folder, class,
-     * namespace)]
+     * Fabricates the data provided to manipulate information (folder, class,
+     * namespace)
      *
      * @var ClassFactory $classFactory
      */
     private ClassFactory $classFactory;
 
     /**
-     * [Modify and construct strings with different formats]
+     * Modify and construct strings with different formats
      *
      * @var Str $str
      */
     private Str $str;
 
     /**
-     * [Modify and build arrays with different indexes or values]
+     * Modify and build arrays with different indexes or values
      *
      * @var Arr $arr
      */
@@ -44,6 +49,7 @@ class CapsuleFactory
      * @var array{
      *     properties: array<int, string>,
      *     methods: array<int, array{
+     *          property: string,
      *          getter: string,
      *          setter: string,
      *          abstract: string,
@@ -57,30 +63,66 @@ class CapsuleFactory
     ];
 
     /**
-     * [Class name]
+     * OutputInterface is the interface implemented by all Output classes
+     *
+     * @var OutputInterface $output
+     */
+    private OutputInterface $output;
+
+    /**
+     * An Application is the container for a collection of commands
+     *
+     * @var Application $application
+     */
+    private Application $application;
+
+    /**
+     * Class that allows writing system files
+     *
+     * @var FileWriter $fileWriter
+     */
+    private FileWriter $fileWriter;
+
+    /**
+     * Class name
      *
      * @var string $class
      */
     private string $class;
 
     /**
-     * [Class namespace]
+     * Class namespace
      *
      * @var string $namespace
      */
     private string $namespace;
 
     /**
-     * [Entity name]
+     * Entity name
      *
      * @var string $entity
      */
     private string $entity;
 
+    /**
+     * List of interfaces
+     *
+     * @var array<int, string> $interfaces
+     */
+    private array $interfaces = [];
+
     #[Inject]
     public function setClassFactory(ClassFactory $classFactory): CapsuleFactory
     {
         $this->classFactory = $classFactory;
+
+        return $this;
+    }
+
+    #[Inject]
+    public function setFileWriter(FileWriter $fileWriter): CapsuleFactory
+    {
+        $this->fileWriter = $fileWriter;
 
         return $this;
     }
@@ -102,9 +144,36 @@ class CapsuleFactory
     }
 
     /**
+     * @param OutputInterface $output
+     *
+     * @return $this
+     */
+    public function setOutput(OutputInterface $output): CapsuleFactory
+    {
+        $this->output = $output;
+
+        return $this;
+    }
+
+    /**
+     * Add the app to settings
+     *
+     * @param Application $application An Application is the container for a
+     * collection of commands
+     *
+     * @return CapsuleFactory
+     */
+    public function setApplication(Application $application): CapsuleFactory
+    {
+        $this->application = $application;
+
+        return $this;
+    }
+
+    /**
      * Add the name of the class
      *
-     * @param string $class [Class name]
+     * @param string $class Class name
      *
      * @return CapsuleFactory
      */
@@ -118,7 +187,7 @@ class CapsuleFactory
     /**
      * Add the class namespace
      *
-     * @param string $namespace [Class namespace]
+     * @param string $namespace Class namespace
      *
      * @return CapsuleFactory
      */
@@ -132,7 +201,7 @@ class CapsuleFactory
     /**
      * Add the name of the entity
      *
-     * @param string $entity [Entity name]
+     * @param string $entity Entity name
      *
      * @return $this
      */
@@ -191,6 +260,33 @@ class CapsuleFactory
     }
 
     /**
+     * Defines the properties of the class with its data type
+     *
+     * @param string $propertyDef Defined property
+     *
+     * @return array{
+     *      property: string,
+     *      type: string,
+     *      interface: string
+     * }
+     */
+    private function parsePropertyDefinition(string $propertyDef): array
+    {
+        /**
+         * @var string $property
+         * @var string|null $type
+         * @var string $interface
+         */
+        [$property, $type, $interface] = array_pad(explode(':', $propertyDef, 3), 3, null);
+
+        return [
+            'property' => $property,
+            'type' => $type ?? 'string',
+            'interface' => $interface,
+        ];
+    }
+
+    /**
      * Iterates the list of data to generate the Getter and Setter methods
      *
      * @param string $class Class name
@@ -200,51 +296,44 @@ class CapsuleFactory
      */
     public function generateMethods(string $class, array $properties): void
     {
-        foreach ($properties as $property) {
-            $split = explode(':', $property);
+        foreach ($properties as $propertyDef) {
+            $parsed = $this->parsePropertyDefinition($propertyDef);
 
             $data = $this->classFactory->getProperty(
-                $split[0],
+                $parsed['property'],
                 $class,
-                $split[1] ?? 'string',
+                $parsed['type'],
                 ClassFactory::PRIVATE_PROPERTY
             );
 
-            /** @var stdClass $variable */
-            $variable = $data->variable;
+            /** @var stdClass $config */
+            $config = $data;
 
-            /** @var stdClass $type */
-            $type = $variable->type;
+            // Guárdalo en la configuración para reutilizarlo en generateInterfaces
 
-            /** @var string $snakeCase */
-            $snakeCase = $type->snake;
+            $config->customInterface = $parsed['interface'];
 
-            /** @var stdClass $getter */
-            $getter = $data->getter;
-
-            /** @var stdClass $setter */
-            $setter = $data->setter;
-
-            /** @var stdClass $abstract */
-            $abstract = $data->abstract;
-
-            /** @var string $getterMethod */
-            $getterMethod = $getter->method;
-
-            /** @var string $setterMethod */
-            $setterMethod = $setter->method;
-
-            /** @var string $abstractMethod */
-            $abstractMethod = $abstract->method;
-
-            $this->capsuleData['properties'][] = $snakeCase;
+            $this->capsuleData['properties'][] = $config->variable->type->snake;
 
             $this->capsuleData['methods'][] = [
-                'getter' => $getterMethod,
-                'setter' => $setterMethod,
-                'abstract' => $abstractMethod,
-                'config' => $data,
+                'property' => $parsed['property'],
+                'getter' => $data->getter->method,
+                'setter' => $data->setter->method,
+                'abstract' => $data->abstract->method,
+                'config' => $config,
             ];
+
+            // 🔁 Agrega la interfaz (personalizada o generada) al listado global si no existe
+            if (!empty($config->customInterface)) {
+                $fqcn = $config->customInterface;
+            } else {
+                $pascal = $config->format->pascal;
+                $fqcn = "App\\Interfaces\\{$this->namespace}\\{$this->class}\\{$pascal}Interface";
+            }
+
+            if (!in_array($fqcn, $this->interfaces, true)) {
+                $this->interfaces[] = $fqcn;
+            }
         }
     }
 
@@ -257,18 +346,15 @@ class CapsuleFactory
     {
         $this->str
             ->of(
-                <<<EOT
-                <?php
+                <<<PHP
+                    <?php
 
-                declare(strict_types=1);
+                    declare(strict_types=1);
 
-                namespace {$this->namespace};
-
-                use Lion\Bundle\Interface\CapsuleInterface;
-                use Lion\Bundle\Traits\CapsuleTrait;
+                    namespace {$this->namespace};
 
 
-                EOT
+                    PHP
             );
     }
 
@@ -279,26 +365,198 @@ class CapsuleFactory
      */
     public function addingClassAndImplementations(): void
     {
-        $this->str
-            ->concat(
-                <<<EOT
-                /**
-                 * Capsule for the '{$this->entity}' entity
-                 */
-                class {$this->class} implements CapsuleInterface
+        $interfaceImports = [];
+        $interfaceNames = [];
+
+        foreach ($this->capsuleData['methods'] as $method) {
+            $config = $method['config'];
+            $customInterface = $config->customInterface ?? null;
+
+            if ($customInterface) {
+                $interfaceImports[] = $customInterface;
+                $interfaceNames[] = '\\' . ltrim($customInterface, '\\'); // asegura formato para implements
+            } else {
+                // Si no hay una interfaz personalizada, generamos la por defecto
+                $format = $config->format;
+                $pascal = $format->pascal;
+                $defaultInterface = "App\\Interfaces\\{$this->namespace}\\{$this->class}\\{$pascal}Interface";
+                $interfaceImports[] = $defaultInterface;
+                $interfaceNames[] = "\\{$defaultInterface}";
+            }
+        }
+
+        // Elimina duplicados
+        $interfaceImports = array_unique($interfaceImports);
+        $interfaceNames = array_unique($interfaceNames);
+
+        // Genera el bloque use
+        $useStatements = implode("\n", array_map(function (string $fqcn): string {
+            return "use {$fqcn};";
+        }, $interfaceImports));
+
+        $implements = implode(",\n    ", array_map(function ($fqcn) {
+            return basename(str_replace('\\', '/', $fqcn));
+        }, $interfaceNames));
+
+        $this->str->concat(
+            <<<PHP
+        {$useStatements}
+        use Lion\Bundle\Interface\CapsuleInterface;
+        use Lion\Bundle\Traits\CapsuleTrait;
+
+
+        PHP
+        );
+
+        // Agrega clase con interfaces
+        $this->str->concat(
+            <<<PHP
+        /**
+         * Capsule for the '{$this->entity}' entity
+         */
+        class {$this->class} implements
+            CapsuleInterface,
+            {$implements}
+        {
+            use CapsuleTrait;
+
+            /**
+             * Entity name
+             *
+             * @var string \$entity
+             *
+             * @phpstan-ignore-next-line
+             */
+            private static string \$entity = '{$this->entity}';
+
+
+        PHP
+        );
+    }
+
+    /**
+     * Add the interfaces for each property
+     *
+     * @return void
+     *
+     * @throws ExceptionInterface
+     */
+    public function generateInterfaces(): void
+    {
+        $command = $this->application->find('new:interface');
+
+        $generatedInterfaces = [];
+
+        foreach ($this->capsuleData['methods'] as $method) {
+            /** @var stdClass $config */
+            $config = $method['config'];
+
+            if (!empty($config->customInterface)) {
+                // Solo registrar para usar más adelante (use, implements...)
+                $interfaceNamespace = $config->customInterface;
+
+                // Opcional: verificar si realmente existe el archivo
+                $relativePath = str_replace('App\\Interfaces\\', '', $interfaceNamespace);
+                $interfacePath = 'app/Interfaces/' . str_replace('\\', '/', $relativePath) . '.php';
+
+                if (!file_exists($interfacePath)) {
+                    $this->output->writeln("<comment>⚠️ Interfaz personalizada '{$interfaceNamespace}' no existe en '{$interfacePath}'</comment>");
+                }
+
+                // Nunca la generes aquí
+                continue;
+            }
+
+            // Desde aquí se generan SOLO las interfaces locales a esta cápsula
+
+            $property = $config->property;
+            $format = $config->format;
+            $getter = $config->getter;
+            $setter = $config->setter;
+            $abstract = $config->abstract;
+
+            $pascal = $format->pascal;
+            $interface = "{$pascal}Interface";
+            $interfaceNamespace = "{$this->namespace}\\{$this->class}\\{$interface}";
+            $interfacePath = "app/Interfaces/{$this->namespace}/{$this->class}/{$interface}.php";
+            $interfacePath = str_replace('\\', '/', $interfacePath);
+
+            // Evita duplicados
+            if (in_array($interfaceNamespace, $generatedInterfaces)) {
+                continue;
+            }
+
+            $generatedInterfaces[] = $interfaceNamespace;
+
+            // Generar interfaz normalmente
+            $command->run(new ArrayInput([
+                'interface' => str_replace('\\', '/', $interfaceNamespace),
+            ]), $this->output);
+
+            // Inserta contenido personalizado
+            $this->fileWriter->readFileRows($interfacePath, [
+                6 => [
+                    'replace' => false,
+                    'content' => <<<PHP
+
+                use {$this->namespace}\\{$this->class};
+
+
+                PHP
+                ],
+                8 => [
+                    'replace' => true,
+                    'search' => "Description of the '{$interface}' interface",
+                    'content' => "Interface of the '{$property}' property",
+                ],
+                11 => [
+                    'replace' => false,
+                    'content' => <<<PHP
                 {
-                    use CapsuleTrait;
+                    /**
+                     * Gets the name of the column '{$property}'
+                     *
+                     * @return string
+                     */
+                    public static function {$abstract->name}(): string;
 
                     /**
-                     * Entity name
+                     * Getter method for '{$property}'
                      *
-                     * @var string \$entity
+                     * @return {$getter->type}|null
                      */
-                    private static string \$entity = '{$this->entity}';
+                    public function {$getter->name}(): ?{$getter->type};
 
+                    /**
+                     * Setter method for '{$property}'
+                     *
+                     * @param {$getter->type}|null \${$property} Property for '{$property}'
+                     *
+                     * @return static
+                     */
+                    public function {$setter->name}(?{$getter->type} \${$property}): static;
 
-                EOT
-            );
+                PHP,
+                ],
+            ]);
+
+            $this->fileWriter->readFileRows($interfacePath, [
+                11 => [
+                    'remove' => true,
+                ],
+            ]);
+
+            $this->fileWriter->readFileRows($interfacePath, [
+                11 => [
+                    'replace' => true,
+                    'search' => 'interface',
+                    'content' => <<<PHP
+                     */
+                    interface
+                    PHP,
+                ],
+            ]);
+        }
     }
 
     /**
@@ -458,5 +716,7 @@ class CapsuleFactory
                 $this->str->concat($method['setter'])->ln()->ln();
             }
         }
+
+        $this->interfaces = [];
     }
 }
