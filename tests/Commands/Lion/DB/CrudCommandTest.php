@@ -11,6 +11,7 @@ use Lion\Bundle\Commands\Lion\DB\DBCapsuleCommand;
 use Lion\Bundle\Commands\Lion\DB\RulesDBCommand;
 use Lion\Bundle\Commands\Lion\New\CapsuleCommand;
 use Lion\Bundle\Commands\Lion\New\ControllerCommand;
+use Lion\Bundle\Commands\Lion\New\InterfaceCommand;
 use Lion\Bundle\Commands\Lion\New\ModelCommand;
 use Lion\Bundle\Commands\Lion\New\RulesCommand;
 use Lion\Bundle\Commands\Lion\New\TestCommand;
@@ -45,6 +46,9 @@ class CrudCommandTest extends Test
 
         $container = new Container();
 
+        /** @var InterfaceCommand $interfaceCommand */
+        $interfaceCommand = $container->resolve(InterfaceCommand::class);
+
         /** @var TestCommand $testsCommand */
         $testsCommand = $container->resolve(TestCommand::class);
 
@@ -74,6 +78,7 @@ class CrudCommandTest extends Test
         $kernel = new Kernel();
 
         $kernel->commandsOnObjects([
+            $interfaceCommand,
             $testsCommand,
             $modelCommand,
             $controllerCommand,

@@ -22,15 +22,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CommandsCommand extends Command
 {
     /**
-     * [Fabricates the data provided to manipulate information (folder, class,
-     * namespace)]
+     * Fabricates the data provided to manipulate information (folder, class,
+     * namespace)
      *
      * @var ClassFactory $classFactory
      */
     private ClassFactory $classFactory;
 
     /**
-     * [Manipulate system files]
+     * Manipulate system files
      *
      * @var Store $store
      */
@@ -68,20 +68,19 @@ class CommandsCommand extends Command
     /**
      * Executes the current command
      *
-     * This method is not abstract because you can use this class
-     * as a concrete class. In this case, instead of defining the
-     * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method
+     * This method is not abstract because you can use this class as a concrete
+     * class. In this case, instead of defining the execute() method, you set the
+     * code to execute by passing a Closure to the setCode() method
      *
-     * @param InputInterface $input [InputInterface is the interface implemented
-     * by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
+     * @param InputInterface $input InputInterface is the interface implemented by
+     * all input classes
+     * @param OutputInterface $output OutputInterface is the interface implemented
+     * by all Output classes
      *
-     * @return int [0 if everything went fine, or an exit code]
+     * @return int
      *
      * @throws Exception
-     * @throws LogicException [When this abstract method is not implemented]
+     * @throws LogicException When this abstract method is not implemented
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -115,8 +114,6 @@ class CommandsCommand extends Command
 
                 /**
                  * {$class} description
-                 *
-                 * @package {$namespace}
                  */
                 class {$class} extends Command
                 {
@@ -133,17 +130,16 @@ class CommandsCommand extends Command
                     }
 
                     /**
-                     * Initializes the command after the input has been bound and before the
-                     * input is validated
+                     * Initializes the command after the input has been bound and before the input
+                     * is validated
                      *
-                     * This is mainly useful when a lot of commands extends one main command
-                     * where some things need to be initialized based on the input arguments and
-                     * options
+                     * This is mainly useful when a lot of commands extends one main command where
+                     * some things need to be initialized based on the input arguments and options
                      *
-                     * @param InputInterface \$input [InputInterface is the interface implemented
-                     * by all input classes]
-                     * @param OutputInterface \$output [OutputInterface is the interface
-                     * implemented by all Output classes]
+                     * @param InputInterface \$input InputInterface is the interface implemented by
+                     * all input classes
+                     * @param OutputInterface \$output OutputInterface is the interface implemented
+                     * by all Output classes
                      *
                      * @return void
                      */
@@ -156,13 +152,13 @@ class CommandsCommand extends Command
                      *
                      * This method is executed before the InputDefinition is validated
                      *
-                     * This means that this is the only place where the command can
-                     * interactively ask for values of missing required arguments
+                     * This means that this is the only place where the command can interactively
+                     * ask for values of missing required arguments
                      *
-                     * @param InputInterface \$input [InputInterface is the interface implemented
-                     * by all input classes]
-                     * @param OutputInterface \$output [OutputInterface is the interface
-                     * implemented by all Output classes]
+                     * @param InputInterface \$input InputInterface is the interface implemented by
+                     * all input classes
+                     * @param OutputInterface \$output OutputInterface is the interface implemented
+                     * by all Output classes
                      *
                      * @return void
                      */
@@ -173,25 +169,24 @@ class CommandsCommand extends Command
                     /**
                      * Executes the current command
                      *
-                     * This method is not abstract because you can use this class
-                     * as a concrete class. In this case, instead of defining the
-                     * execute() method, you set the code to execute by passing
-                     * a Closure to the setCode() method
+                     * This method is not abstract because you can use this class as a concrete
+                     * class. In this case, instead of defining the execute() method, you set the
+                     * code to execute by passing a Closure to the setCode() method
                      *
-                     * @param InputInterface \$input [InputInterface is the interface implemented
-                     * by all input classes]
-                     * @param OutputInterface \$output [OutputInterface is the interface
-                     * implemented by all Output classes]
+                     * @param InputInterface \$input InputInterface is the interface implemented by
+                     * all input classes
+                     * @param OutputInterface \$output OutputInterface is the interface implemented
+                     * by all Output classes
                      *
-                     * @return int [0 if everything went fine, or an exit code]
+                     * @return int
                      *
-                     * @throws LogicException [When this abstract method is not implemented]
+                     * @throws LogicException When this abstract method is not implemented
                      */
                     protected function execute(InputInterface \$input, OutputInterface \$output): int
                     {
-                        \$output->writeln('ExampleCommand');
+                        \$output->writeln('OK');
 
-                        return Command::SUCCESS;
+                        return parent::SUCCESS;
                     }
                 }
 
@@ -199,10 +194,10 @@ class CommandsCommand extends Command
             )
             ->close();
 
-        $output->writeln($this->warningOutput("\t>>  COMMAND: {$class}"));
+        $output->writeln($this->warningOutput("\t>>  COMMAND: {$namespace}\\{$class}"));
 
         $output->writeln(
-            $this->successOutput("\t>>  COMMAND: the '{$namespace}\\{$class}' command has been generated")
+            $this->successOutput("\t>>  COMMAND: The command was generated successfully.")
         );
 
         return parent::SUCCESS;

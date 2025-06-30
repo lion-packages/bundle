@@ -221,13 +221,14 @@ class ClassFactory
     }
 
     /**
-     * Generates the content (property name in [camel, snake] formats) of a
+     * Generates the content (property name in [camel, pascal, snake] formats) of a
      * property for getter, setter and class property methods
      *
-     * @param string $propertyName [Property name]
-     * @param string $className [Class name]
-     * @param string $type [Datatype]
-     * @param string|null $visibility [Property Scope]
+     * @param string $propertyName Property name
+     * @param string $className Class name
+     * @param string $type Datatype
+     * @param string|null $visibility Property Scope
+     * @param string|null $customInterface
      *
      * @return stdClass
      */
@@ -235,7 +236,8 @@ class ClassFactory
         string $propertyName,
         string $className,
         string $type = 'string',
-        ?string $visibility = null
+        ?string $visibility = null,
+        ?string $customInterface = null
     ): stdClass {
         $availableVisibility = [
             self::PUBLIC_PROPERTY,
@@ -251,19 +253,25 @@ class ClassFactory
 
         $camel = lcfirst(str_replace(' ', '', ucwords($camel)));
 
+        $pascal = ucwords($camel);
+
         return (object) [
+            'customInterface' => $customInterface,
+            'property' => $propertyName,
             'format' => (object) [
                 'camel' => $camel,
+                'pascal' => $pascal,
                 'snake' => $snake,
             ],
             'getter' => $this->getGetter($snake, $type),
             'setter' => $this->getSetter($snake, $type, $className),
+            'abstract' => $this->getAbstractCapsuleMethod($snake),
             'variable' => (object) [
                 'data_type' => $type,
                 'annotations' => (object) [
                     'class' => (object) [
-                        'data_type' => "@property {$type} $" . "{$snake} [Property for {$propertyName}]",
-                        'data_type_with_null' => "@property {$type}|null $" . "{$snake} [Property for {$propertyName}]",
+                        'data_type' => "@property {$type} $" . "{$snake} Property for {$propertyName}",
+                        'data_type_with_null' => "@property {$type}|null $" . "{$snake} Property for {$propertyName}",
                     ],
                 ],
                 'reference' => '$this->' . "{$camel};",
@@ -275,7 +283,7 @@ class ClassFactory
                     'camel' => (
                         <<<EOT
                             /**
-                             * [Property for '{$propertyName}']
+                             * Property for '{$propertyName}'
                              *
                              * @var {$type}|null \${$camel}
                              */
@@ -287,7 +295,7 @@ class ClassFactory
                     'snake' => (
                         <<<EOT
                             /**
-                             * [Property for '{$propertyName}']
+                             * Property for '{$propertyName}'
                              *
                              * @var {$type}|null \${$snake}
                              */
@@ -355,9 +363,7 @@ class ClassFactory
 
         $getter = <<<EOT
             /**
-             * Getter method for '{$name}'
-             *
-             * @return {$type}|null
+             * {@inheritDoc}
              */
             public function get{$newName}(): ?{$type}
             {
@@ -367,6 +373,7 @@ class ClassFactory
 
         return (object) [
             'name' => "get{$newName}",
+            'type' => $type,
             'method' => $getter
         ];
     }
@@ -390,24 +397,55 @@ class ClassFactory
 
         $newName = trim(str_replace(' ', '', ucwords($newName)));
 
-        $setter = <<<EOT
+        $setter = <<<PHP
             /**
-             * Setter method for '{$name}'
-             *
-             * @param {$type}|null \${$name} [Description for '{$name}']
-             *
-             * @return {$capsule}
+             * {@inheritDoc}
              */
-            public function set{$newName}(?{$type} \${$name} = null): {$capsule}
+            public function set{$newName}(?{$type} \${$name} = null): static
             {
                 \$this->{$name} = \${$name};
 
                 return \$this;
             }
-        EOT;
+        PHP;
 
         return (object) [
             'name' => "set{$newName}",
+            'type' => $capsule,
+            'method' => $setter
+        ];
+    }
+
+    /**
+     * Generates the abstract methods of the capsule classes
+     *
+     * @param string $column Column name
+     *
+     * @return stdClass
+     */
+    public function getAbstractCapsuleMethod(string $column): stdClass
+    {
+        $newName = str_replace(' ', '_', $column);
+
+        $newName = str_replace('-', '_', $newName);
+
+        $newName = str_replace('_', ' ', $newName);
+
+        $newName = trim(str_replace(' ', '', ucwords($newName)));
+
+        $setter = <<<PHP
+            /**
+             * {@inheritDoc}
+             */
+            public static function get{$newName}Column(): string
+            {
+                return '{$column}';
+            }
+        PHP;
+
+        return (object) [
+            'name' => "get{$newName}Column",
+            'type' => 'string',
             'method' => $setter
         ];
     }
