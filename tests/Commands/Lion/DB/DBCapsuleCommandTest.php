@@ -8,6 +8,7 @@ use DI\DependencyException;
 use DI\NotFoundException;
 use Lion\Bundle\Commands\Lion\DB\DBCapsuleCommand;
 use Lion\Bundle\Commands\Lion\New\CapsuleCommand;
+use Lion\Bundle\Commands\Lion\New\InterfaceCommand;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\DatabaseEngine;
 use Lion\Database\Drivers\Schema\MySQL as Schema;
@@ -25,7 +26,7 @@ class DBCapsuleCommandTest extends Test
     private const string ENTITY = 'test';
     private const string CLASS_NAME = 'Test';
     private const string OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
-    private const string OUTPUT_MESSAGE = 'capsule has been generated';
+    private const string OUTPUT_MESSAGE = 'The capsule class has been generated successfully';
     private const string OUTPUT_MESSAGE_ERROR =
         "SQLSTATE[42S02]: Base table or view not found: 1146 Table 'lion_database.test' doesn't exist";
 
@@ -41,6 +42,9 @@ class DBCapsuleCommandTest extends Test
     {
         $container = new Container();
 
+        /** @var InterfaceCommand $interfaceCommand */
+        $interfaceCommand = $container->resolve(InterfaceCommand::class);
+
         /** @var CapsuleCommand $capsuleCommand */
         $capsuleCommand = $container->resolve(CapsuleCommand::class);
 
@@ -50,6 +54,8 @@ class DBCapsuleCommandTest extends Test
         $this->dbCapsuleCommand = $dbCapsuleCommand;
 
         $application = new Application();
+
+        $application->add($interfaceCommand);
 
         $application->add($capsuleCommand);
 
@@ -62,18 +68,18 @@ class DBCapsuleCommandTest extends Test
 
     protected function tearDown(): void
     {
-        Schema::dropTable(self::ENTITY)
+        Schema::connection(getDefaultConnection())
+            ->dropTable(self::ENTITY)
             ->execute();
+
+        $this->rmdirRecursively('./app/');
 
         $this->rmdirRecursively('./database/');
     }
 
     private function createTables(): void
     {
-        /** @var string $dbName */
-        $dbName = env('DB_DEFAULT');
-
-        Schema::connection($dbName)
+        Schema::connection(getDefaultConnection())
             ->createTable(self::ENTITY, function () {
                 Schema::int('id', 11)->notNull()->autoIncrement()->primaryKey();
                 Schema::varchar('name', 25)->notNull();

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Providers\Helpers;
 
 use Lion\Bundle\Helpers\Commands\ClassFactory;
+use PHPUnit\Event\Runtime\PHP;
 
 trait ClassFactoryProviderTrait
 {
@@ -62,7 +63,7 @@ trait ClassFactoryProviderTrait
     public static function getPropertyProvider(): array
     {
         return [
-            [
+            'case-0' => [
                 'propertyName' => 'idusers',
                 'className' => 'Users',
                 'type' => 'int',
@@ -76,9 +77,7 @@ trait ClassFactoryProviderTrait
                         'name' => 'getIdusers',
                         'method' => <<<PHP
                             /**
-                             * Getter method for 'idusers'
-                             *
-                             * @return int|null
+                             * {@inheritDoc}
                              */
                             public function getIdusers(): ?int
                             {
@@ -90,13 +89,9 @@ trait ClassFactoryProviderTrait
                         'name' => 'setIdusers',
                         'method' => <<<PHP
                             /**
-                             * Setter method for 'idusers'
-                             *
-                             * @param int|null \$idusers [Description for 'idusers']
-                             *
-                             * @return Users
+                             * {@inheritDoc}
                              */
-                            public function setIdusers(?int \$idusers = null): Users
+                            public function setIdusers(?int \$idusers = null): static
                             {
                                 \$this->idusers = \$idusers;
 
@@ -104,11 +99,23 @@ trait ClassFactoryProviderTrait
                             }
                         PHP
                     ],
+                    'abstract' => (object) [
+                        'name' => '',
+                        'method' => <<<PHP
+                            /**
+                             * {@inheritDoc}
+                             */
+                            public function getIdusersColumn(): string
+                            {
+                                return 'idusers';
+                            }
+                        PHP,
+                    ],
                     'variable' => (object) [
                         'annotations' => (object) [
                             'class' => (object) [
-                                'data_type' => "@property int \$idusers [Property for idusers]",
-                                'data_type_with_null' => "@property int|null \$idusers [Property for idusers]",
+                                'data_type' => "@property int \$idusers Property for idusers",
+                                'data_type_with_null' => "@property int|null \$idusers Property for idusers",
                             ],
                         ],
                         'reference' => "\$this->idusers;",
@@ -120,7 +127,7 @@ trait ClassFactoryProviderTrait
                             'camel' => (
                                 <<<EOT
                                     /**
-                                     * [Property for 'idusers']
+                                     * Property for 'idusers'
                                      *
                                      * @var int|null \$idusers
                                      */
@@ -132,7 +139,7 @@ trait ClassFactoryProviderTrait
                             'snake' => (
                                 <<<EOT
                                     /**
-                                     * [Property for 'idusers']
+                                     * Property for 'idusers'
                                      *
                                      * @var int|null \$idusers
                                      */
@@ -149,7 +156,7 @@ trait ClassFactoryProviderTrait
                     ]
                 ]
             ],
-            [
+            'case-1' => [
                 'propertyName' => 'idusers',
                 'className' => 'Users',
                 'type' => 'int',
@@ -163,9 +170,7 @@ trait ClassFactoryProviderTrait
                         'name' => 'getIdusers',
                         'method' => <<<PHP
                             /**
-                             * Getter method for 'idusers'
-                             *
-                             * @return int|null
+                             * {@inheritDoc}
                              */
                             public function getIdusers(): ?int
                             {
@@ -177,13 +182,9 @@ trait ClassFactoryProviderTrait
                         'name' => 'setIdusers',
                         'method' => <<<PHP
                             /**
-                             * Setter method for 'idusers'
-                             *
-                             * @param int|null \$idusers [Description for 'idusers']
-                             *
-                             * @return Users
+                             * {@inheritDoc}
                              */
-                            public function setIdusers(?int \$idusers = null): Users
+                            public function setIdusers(?int \$idusers = null): static
                             {
                                 \$this->idusers = \$idusers;
 
@@ -191,11 +192,23 @@ trait ClassFactoryProviderTrait
                             }
                         PHP
                     ],
+                    'abstract' => (object) [
+                        'name' => '',
+                        'method' => <<<PHP
+                            /**
+                             * {@inheritDoc}
+                             */
+                            public function getIdusersColumn(): string
+                            {
+                                return 'idusers';
+                            }
+                        PHP,
+                    ],
                     'variable' => (object) [
                         'annotations' => (object) [
                             'class' => (object) [
-                                'data_type' => "@property int \$idusers [Property for idusers]",
-                                'data_type_with_null' => "@property int|null \$idusers [Property for idusers]",
+                                'data_type' => "@property int \$idusers Property for idusers",
+                                'data_type_with_null' => "@property int|null \$idusers Property for idusers",
                             ],
                         ],
                         'reference' => "\$this->idusers;",
@@ -207,7 +220,7 @@ trait ClassFactoryProviderTrait
                             'camel' => (
                                 <<<EOT
                                     /**
-                                     * [Property for 'idusers']
+                                     * Property for 'idusers'
                                      *
                                      * @var int|null \$idusers
                                      */
@@ -219,7 +232,7 @@ trait ClassFactoryProviderTrait
                             'snake' => (
                                 <<<EOT
                                     /**
-                                     * [Property for 'idusers']
+                                     * Property for 'idusers'
                                      *
                                      * @var int|null \$idusers
                                      */
@@ -236,7 +249,7 @@ trait ClassFactoryProviderTrait
                     ]
                 ]
             ],
-            [
+            'case-2' => [
                 'propertyName' => 'idusers',
                 'className' => 'Users',
                 'type' => 'int',
@@ -250,9 +263,7 @@ trait ClassFactoryProviderTrait
                         'name' => 'getIdusers',
                         'method' => <<<PHP
                             /**
-                             * Getter method for 'idusers'
-                             *
-                             * @return int|null
+                             * {@inheritDoc}
                              */
                             public function getIdusers(): ?int
                             {
@@ -264,13 +275,9 @@ trait ClassFactoryProviderTrait
                         'name' => 'setIdusers',
                         'method' => <<<PHP
                             /**
-                             * Setter method for 'idusers'
-                             *
-                             * @param int|null \$idusers [Description for 'idusers']
-                             *
-                             * @return Users
+                             * {@inheritDoc}
                              */
-                            public function setIdusers(?int \$idusers = null): Users
+                            public function setIdusers(?int \$idusers = null): static
                             {
                                 \$this->idusers = \$idusers;
 
@@ -278,11 +285,23 @@ trait ClassFactoryProviderTrait
                             }
                         PHP
                     ],
+                    'abstract' => (object) [
+                        'name' => '',
+                        'method' => <<<PHP
+                            /**
+                             * {@inheritDoc}
+                             */
+                            public function getIdusersColumn(): string
+                            {
+                                return 'idusers';
+                            }
+                        PHP,
+                    ],
                     'variable' => (object) [
                         'annotations' => (object) [
                             'class' => (object) [
-                                'data_type' => "@property int \$idusers [Property for idusers]",
-                                'data_type_with_null' => "@property int|null \$idusers [Property for idusers]",
+                                'data_type' => "@property int \$idusers Property for idusers",
+                                'data_type_with_null' => "@property int|null \$idusers Property for idusers",
                             ],
                         ],
                         'reference' => "\$this->idusers;",
@@ -294,7 +313,7 @@ trait ClassFactoryProviderTrait
                             'camel' => (
                                 <<<EOT
                                     /**
-                                     * [Property for 'idusers']
+                                     * Property for 'idusers'
                                      *
                                      * @var int|null \$idusers
                                      */
@@ -306,7 +325,7 @@ trait ClassFactoryProviderTrait
                             'snake' => (
                                 <<<EOT
                                     /**
-                                     * [Property for 'idusers']
+                                     * Property for 'idusers'
                                      *
                                      * @var int|null \$idusers
                                      */
@@ -323,7 +342,7 @@ trait ClassFactoryProviderTrait
                     ]
                 ]
             ],
-            [
+            'case-3' => [
                 'propertyName' => 'idusers',
                 'className' => 'Users',
                 'type' => 'int',
@@ -337,9 +356,7 @@ trait ClassFactoryProviderTrait
                         'name' => 'getIdusers',
                         'method' => <<<PHP
                             /**
-                             * Getter method for 'idusers'
-                             *
-                             * @return int|null
+                             * {@inheritDoc}
                              */
                             public function getIdusers(): ?int
                             {
@@ -351,13 +368,9 @@ trait ClassFactoryProviderTrait
                         'name' => 'setIdusers',
                         'method' => <<<PHP
                             /**
-                             * Setter method for 'idusers'
-                             *
-                             * @param int|null \$idusers [Description for 'idusers']
-                             *
-                             * @return Users
+                             * {@inheritDoc}
                              */
-                            public function setIdusers(?int \$idusers = null): Users
+                            public function setIdusers(?int \$idusers = null): static
                             {
                                 \$this->idusers = \$idusers;
 
@@ -365,11 +378,23 @@ trait ClassFactoryProviderTrait
                             }
                         PHP
                     ],
+                    'abstract' => (object) [
+                        'name' => '',
+                        'method' => <<<PHP
+                            /**
+                             * {@inheritDoc}
+                             */
+                            public function getIdusersColumn(): string
+                            {
+                                return 'idusers';
+                            }
+                        PHP,
+                    ],
                     'variable' => (object) [
                         'annotations' => (object) [
                             'class' => (object) [
-                                'data_type' => "@property int \$idusers [Property for idusers]",
-                                'data_type_with_null' => "@property int|null \$idusers [Property for idusers]",
+                                'data_type' => "@property int \$idusers Property for idusers",
+                                'data_type_with_null' => "@property int|null \$idusers Property for idusers",
                             ],
                         ],
                         'reference' => "\$this->idusers;",
@@ -381,7 +406,7 @@ trait ClassFactoryProviderTrait
                             'camel' => (
                                 <<<EOT
                                     /**
-                                     * [Property for 'idusers']
+                                     * Property for 'idusers'
                                      *
                                      * @var int|null \$idusers
                                      */
@@ -393,7 +418,7 @@ trait ClassFactoryProviderTrait
                             'snake' => (
                                 <<<EOT
                                     /**
-                                     * [Property for 'idusers']
+                                     * Property for 'idusers'
                                      *
                                      * @var int|null \$idusers
                                      */
@@ -421,17 +446,15 @@ trait ClassFactoryProviderTrait
                 'type' => 'int',
                 'return' => (object) [
                     'name' => 'getIdusers',
-                    'method' => <<<EOT
+                    'method' => <<<PHP
                         /**
-                         * Getter method for 'idusers'
-                         *
-                         * @return int|null
+                         * {@inheritDoc}
                          */
                         public function getIdusers(): ?int
                         {
                             return \$this->idusers;
                         }
-                    EOT
+                    PHP
                 ]
             ],
             [
@@ -439,17 +462,15 @@ trait ClassFactoryProviderTrait
                 'type' => 'string',
                 'return' => (object) [
                     'name' => 'getIdusers',
-                    'method' => <<<EOT
+                    'method' => <<<PHP
                         /**
-                         * Getter method for 'idusers'
-                         *
-                         * @return string|null
+                         * {@inheritDoc}
                          */
                         public function getIdusers(): ?string
                         {
                             return \$this->idusers;
                         }
-                    EOT
+                    PHP
                 ]
             ]
         ];
@@ -464,22 +485,18 @@ trait ClassFactoryProviderTrait
                 'capsule' => 'Users',
                 'return' => (object) [
                     'name' => 'setIdusers',
-                    'method' => <<<EOT
+                    'method' => <<<PHP
                         /**
-                         * Setter method for 'idusers'
-                         *
-                         * @param int|null \$idusers [Description for 'idusers']
-                         *
-                         * @return Users
+                         * {@inheritDoc}
                          */
-                        public function setIdusers(?int \$idusers = null): Users
+                        public function setIdusers(?int \$idusers = null): static
                         {
                             \$this->idusers = \$idusers;
 
                             return \$this;
                         }
-                    EOT
-                ]
+                    PHP,
+                ],
             ],
             [
                 'name' => 'idusers',
@@ -487,23 +504,55 @@ trait ClassFactoryProviderTrait
                 'capsule' => 'Users',
                 'return' => (object) [
                     'name' => 'setIdusers',
-                    'method' => <<<EOT
+                    'method' => <<<PHP
                         /**
-                         * Setter method for 'idusers'
-                         *
-                         * @param string|null \$idusers [Description for 'idusers']
-                         *
-                         * @return Users
+                         * {@inheritDoc}
                          */
-                        public function setIdusers(?string \$idusers = null): Users
+                        public function setIdusers(?string \$idusers = null): static
                         {
                             \$this->idusers = \$idusers;
 
                             return \$this;
                         }
-                    EOT
-                ]
-            ]
+                    PHP,
+                ],
+            ],
+        ];
+    }
+
+    public static function getAbstractCapsuleMethodProvider(): array
+    {
+        return [
+            'case-0' => [
+                'column' => 'idusers',
+                'return' => (object) [
+                    'name' => 'getIdusersColumn',
+                    'method' => <<<PHP
+                        /**
+                         * {@inheritDoc}
+                         */
+                        public static function getIdusersColumn(): string
+                        {
+                            return 'idusers';
+                        }
+                    PHP,
+                ],
+            ],
+            'case-1' => [
+                'column' => 'users_name',
+                'return' => (object) [
+                    'name' => 'getUsersNameColumn',
+                    'method' => <<<PHP
+                        /**
+                         * {@inheritDoc}
+                         */
+                        public static function getUsersNameColumn(): string
+                        {
+                            return 'users_name';
+                        }
+                    PHP,
+                ],
+            ],
         ];
     }
 

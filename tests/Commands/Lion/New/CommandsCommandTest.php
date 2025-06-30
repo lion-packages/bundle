@@ -7,7 +7,6 @@ namespace Tests\Commands\Lion\New;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Lion\Bundle\Commands\Lion\New\CommandsCommand;
-use Lion\Bundle\Commands\Lion\New\HtmlCommand;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
@@ -25,7 +24,7 @@ class CommandsCommandTest extends Test
     private const string CLASS_NAME = 'TestCommand';
     private const string OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
     private const string FILE_NAME = self::CLASS_NAME . '.php';
-    private const string OUTPUT_MESSAGE = 'command has been generated';
+    private const string OUTPUT_MESSAGE = 'The command was generated successfully';
 
     private CommandTester $commandTester;
     private CommandsCommand $commandsCommand;

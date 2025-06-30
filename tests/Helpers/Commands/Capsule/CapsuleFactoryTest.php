@@ -6,6 +6,7 @@ namespace Tests\Helpers\Commands\Capsule;
 
 use Lion\Bundle\Helpers\Commands\Capsule\CapsuleFactory;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
+use Lion\Bundle\Helpers\FileWriter;
 use Lion\Bundle\Test\Test;
 use Lion\Helpers\Arr;
 use Lion\Helpers\Str;
@@ -13,6 +14,7 @@ use PHPUnit\Framework\Attributes\Test as Testing;
 use PHPUnit\Framework\Attributes\TestWith;
 use ReflectionException;
 use stdClass;
+use Symfony\Component\Console\Application;
 
 class CapsuleFactoryTest extends Test
 {
@@ -26,9 +28,17 @@ class CapsuleFactoryTest extends Test
         $this->capsuleFactory = new CapsuleFactory()
             ->setClassFactory(new ClassFactory())
             ->setStr(new Str())
-            ->setArr(new Arr());
+            ->setArr(new Arr())
+            ->setFileWriter(new FileWriter());
 
         $this->initReflection($this->capsuleFactory);
+    }
+
+    protected function tearDown(): void
+    {
+        $this->rmdirRecursively('./app/');
+
+        $this->rmdirRecursively('./database/');
     }
 
     /**
@@ -39,6 +49,16 @@ class CapsuleFactoryTest extends Test
     {
         $this->assertInstanceOf(CapsuleFactory::class, $this->capsuleFactory->setClassFactory(new ClassFactory()));
         $this->assertInstanceOf(ClassFactory::class, $this->getPrivateProperty('classFactory'));
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
+    public function setFileWriter(): void
+    {
+        $this->assertInstanceOf(CapsuleFactory::class, $this->capsuleFactory->setFileWriter(new FileWriter()));
+        $this->assertInstanceOf(FileWriter::class, $this->getPrivateProperty('fileWriter'));
     }
 
     /**
@@ -59,6 +79,16 @@ class CapsuleFactoryTest extends Test
     {
         $this->assertInstanceOf(CapsuleFactory::class, $this->capsuleFactory->setArr(new Arr()));
         $this->assertInstanceOf(Arr::class, $this->getPrivateProperty('arr'));
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
+    public function setApplication(): void
+    {
+        $this->assertInstanceOf(CapsuleFactory::class, $this->capsuleFactory->setApplication(new Application()));
+        $this->assertInstanceOf(Application::class, $this->getPrivateProperty('application'));
     }
 
     /**
@@ -89,6 +119,25 @@ class CapsuleFactoryTest extends Test
     {
         $this->assertInstanceOf(CapsuleFactory::class, $this->capsuleFactory->setEntity('entity'));
         $this->assertSame('entity', $this->getPrivateProperty('entity'));
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
+    #[TestWith(['word' => 'Testing'])]
+    #[TestWith(['word' => 'App'])]
+    public function getBody(string $word): void
+    {
+        $this->assertInstanceOf(CapsuleFactory::class, $this->capsuleFactory->setStr(new Str()));
+
+        $str = $this->getPrivateProperty('str');
+
+        $this->assertInstanceOf(Str::class, $str);
+
+        $str->of($word);
+
+        $this->assertSame($word, $this->capsuleFactory->getBody());
     }
 
     /**
@@ -152,9 +201,14 @@ class CapsuleFactoryTest extends Test
     #[TestWith(['class' => 'Test', 'properties' => ['id:int'], 'count' => 1])]
     #[TestWith(['class' => 'Test', 'properties' => ['id:int', 'name:string'], 'count' => 2])]
     #[TestWith(['class' => 'Test', 'properties' => ['id:int', 'name:string', 'email'], 'count' => 3])]
-    public function generateGettersAndSetters(string $class, array $properties, int $count): void
+    #[TestWith(['class' => 'Test', 'properties' => ['id:int', 'idroles:int', 'name:string', 'email'], 'count' => 4])]
+    public function generateMethods(string $class, array $properties, int $count): void
     {
-        $this->capsuleFactory->generateGettersAndSetters($class, $properties);
+        $this->capsuleFactory->setClass($class);
+
+        $this->capsuleFactory->setNamespace('Database\\Class\\');
+
+        $this->capsuleFactory->generateMethods($properties);
 
         /**
          * @var array{
@@ -180,18 +234,20 @@ class CapsuleFactoryTest extends Test
      * @throws ReflectionException
      */
     #[Testing]
-    public function addNamespace(): void
+    public function addingClassAndImplementations(): void
     {
-        $this->setPrivateProperty('entity', 'test');
+        $this->capsuleFactory->setClass('Test');
 
-        $this->setPrivateProperty('namespace', 'Database\\Class');
+        $this->capsuleFactory->setNamespace('Database\\Class');
 
-        $this->capsuleFactory->addNamespace();
+        $this->capsuleFactory->setEntity('test');
+
+        $this->capsuleFactory->addingClassAndImplementations();
 
         /** @var Str $str */
         $str = $this->getPrivateProperty('str');
 
-        $body = <<<EOT
+        $body = <<<PHP
         <?php
 
         declare(strict_types=1);
@@ -201,48 +257,24 @@ class CapsuleFactoryTest extends Test
         use Lion\Bundle\Interface\CapsuleInterface;
         use Lion\Bundle\Traits\CapsuleTrait;
 
-
-        EOT;
-
-        $this->assertSame($body, $str->get());
-    }
-
-    /**
-     * @throws ReflectionException
-     */
-    #[Testing]
-    public function addingClassAndImplementations(): void
-    {
-        $this->setPrivateProperty('class', 'Test');
-
-        $this->setPrivateProperty('namespace', 'Database\\Class');
-
-        $this->setPrivateProperty('entity', 'test');
-
-        $this->capsuleFactory->addingClassAndImplementations();
-
-        /** @var Str $str */
-        $str = $this->getPrivateProperty('str');
-
-        $body = <<<EOT
         /**
          * Capsule for the 'test' entity
-         *
-         * @package Database\\Class
          */
         class Test implements CapsuleInterface
         {
             use CapsuleTrait;
 
             /**
-             * [Entity name]
+             * Entity name
              *
              * @var string \$entity
+             *
+             * @phpstan-ignore-next-line
              */
             private static string \$entity = 'test';
 
 
-        EOT;
+        PHP;
 
         $this->assertSame($body, $str->get());
     }
@@ -255,14 +287,14 @@ class CapsuleFactoryTest extends Test
     {
         $this->setPrivateProperty('capsuleData', [
             'properties' => [
-                <<<EOT
+                <<<PHP
                 /**
-                 * [Property for id]
+                 * Property for id
                  *
                  * @var int|null \$id
                  */
                  private ?int \$id = null;
-                EOT
+                PHP
             ],
             'methods' => [],
         ]);
@@ -272,16 +304,16 @@ class CapsuleFactoryTest extends Test
         /** @var Str $str */
         $str = $this->getPrivateProperty('str');
 
-        $body = <<<EOT
+        $body = <<<PHP
             /**
-         * [Property for id]
+         * Property for id
          *
          * @var int|null \$id
          */
          private ?int \$id = null;
 
 
-        EOT;
+        PHP;
 
         $this->assertSame($body, $str->get());
     }
@@ -308,7 +340,7 @@ class CapsuleFactoryTest extends Test
         /** @var Str $str */
         $str = $this->getPrivateProperty('str');
 
-        $body = <<<EOT
+        $body = <<<PHP
             /**
              * {@inheritDoc}
              */
@@ -316,7 +348,7 @@ class CapsuleFactoryTest extends Test
             {
                 return \$this;
             }
-        EOT;
+        PHP;
 
         $this->assertSame($body, $str->get());
     }
@@ -335,14 +367,14 @@ class CapsuleFactoryTest extends Test
 
         $this->setPrivateProperty('capsuleData', [
             'properties' => [
-                <<<EOT
+                <<<PHP
                 /**
                  * [Property for id]
                  *
                  * @var int|null \$id
                  */
                  private ?int \$id = null;
-                EOT,
+                PHP,
             ],
             'methods' => [
                 [
@@ -352,28 +384,28 @@ class CapsuleFactoryTest extends Test
                         ],
                         'setter' => (object) [
                             'name' => 'setId',
-                            'method' => <<<EOT
+                            'method' => <<<PHP
                                 /**
                                  * Setter method for 'id'
                                  *
-                                 * @param int|null \$id
+                                 * @param int|null \$id Property for 'id'
                                  *
                                  * @return Test
                                  */
-                                public function setId(?int \$id = null): Test
+                                public function setId(?int \$id = null): static
                                 {
                                     \$this->id = \$id;
 
                                     return \$this;
                                 }
-                            EOT,
+                            PHP,
                         ],
                         'variable' => (object) [
                             'data_type' => 'int',
                             'annotations' => (object) [
                                 'class' => (object) [
-                                    'data_type' => '@property id $id [Property for id]',
-                                    'data_type_with_null' => '@property int|null $id [Property for id]',
+                                    'data_type' => '@property id $id Property for id',
+                                    'data_type_with_null' => '@property int|null $id Property for id',
                                 ],
                             ],
                         ],
@@ -387,19 +419,19 @@ class CapsuleFactoryTest extends Test
         /** @var Str $str */
         $str = $this->getPrivateProperty('str');
 
-        $body = <<<EOT
+        $body = <<<PHP
             /**
              * {@inheritDoc}
              */
             public function capsule(): Test
             {
-                /** @var int \$id */
+                /** @var int|null \$id */
                 \$id = request('id');
 
                 return \$this
                     ->setId(\$id);
             }
-        EOT;
+        PHP;
 
         $this->assertSame($body, $str->get());
     }
@@ -408,26 +440,36 @@ class CapsuleFactoryTest extends Test
      * @throws ReflectionException
      */
     #[Testing]
-    public function addGettersAndSetters(): void
+    public function addMethods(): void
     {
         $this->capsuleFactory
             ->getStr()
             ->of('');
 
-        $this->capsuleFactory->generateGettersAndSetters('Test', [
+        $this->capsuleFactory->setClass('Test');
+
+        $this->capsuleFactory->setNamespace('Database\\Class');
+
+        $this->capsuleFactory->generateMethods([
             'id:int',
         ]);
 
-        $this->capsuleFactory->addGettersAndSetters();
+        $this->capsuleFactory->addMethods();
 
         /** @var Str $str */
         $str = $this->getPrivateProperty('str');
 
-        $body = <<<EOT
+        $body = <<<PHP
             /**
-             * Getter method for 'id'
-             *
-             * @return int|null
+             * {@inheritDoc}
+             */
+            public static function getIdColumn(): string
+            {
+                return 'id';
+            }
+
+            /**
+             * {@inheritDoc}
              */
             public function getId(): ?int
             {
@@ -435,20 +477,16 @@ class CapsuleFactoryTest extends Test
             }
 
             /**
-             * Setter method for 'id'
-             *
-             * @param int|null \$id [Description for 'id']
-             *
-             * @return Test
+             * {@inheritDoc}
              */
-            public function setId(?int \$id = null): Test
+            public function setId(?int \$id = null): static
             {
                 \$this->id = \$id;
 
                 return \$this;
             }
 
-        EOT;
+        PHP;
 
         $this->assertSame($body, $str->get());
     }
