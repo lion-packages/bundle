@@ -30,7 +30,7 @@ define('IS_INDEX', false);
  * -----------------------------------------------------------------------------
  **/
 
-if (isSuccess((new Store())->exist(__DIR__ . '/.env'))) {
+if (isSuccess(new Store()->exist(__DIR__ . '/.env'))) {
     Dotenv::createImmutable(__DIR__)->load();
 }
 

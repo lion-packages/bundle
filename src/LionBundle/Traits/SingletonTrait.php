@@ -14,7 +14,7 @@ namespace Lion\Bundle\Traits;
 trait SingletonTrait
 {
     /**
-     * [Holds the unique instance of the class]
+     * Holds the unique instance of the class
      *
      * @var self|null $singleton
      */
@@ -41,8 +41,8 @@ trait SingletonTrait
     }
 
     /**
-     * Protected method that can be overridden by the class using the trait.
-     * Called in the constructor
+     * Protected method that can be overridden by the class using the trait. Called
+     * in the constructor
      *
      * @return void
      */

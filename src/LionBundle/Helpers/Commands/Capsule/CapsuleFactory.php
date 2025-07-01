@@ -740,6 +740,11 @@ class CapsuleFactory
         $this->interfaces = [];
     }
 
+    /**
+     * Empty properties to avoid caching
+     *
+     * @return void
+     */
     public function clean(): void
     {
         $this->interfaces = [];

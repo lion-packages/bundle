@@ -25,15 +25,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 class DBCapsuleCommand extends MenuCommand
 {
     /**
-     * [Fabricates the data provided to manipulate information (folder, class,
-     * namespace)]
+     * Fabricates the data provided to manipulate information (folder, class,
+     * namespace)
      *
      * @var ClassFactory $classFactory
      */
     private ClassFactory $classFactory;
 
     /**
-     * [Manages basic database engine processes]
+     * Manages basic database engine processes
      *
      * @var DatabaseEngine $databaseEngine
      */
@@ -71,20 +71,19 @@ class DBCapsuleCommand extends MenuCommand
     /**
      * Executes the current command
      *
-     * This method is not abstract because you can use this class
-     * as a concrete class. In this case, instead of defining the
-     * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method
+     * This method is not abstract because you can use this class as a concrete
+     * class. In this case, instead of defining the execute() method, you set the
+     * code to execute by passing a Closure to the setCode() method
      *
-     * @param InputInterface $input [InputInterface is the interface implemented
-     * by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
+     * @param InputInterface $input InputInterface is the interface implemented by
+     * all input classes
+     * @param OutputInterface $output OutputInterface is the interface implemented
+     * by all Output classes
      *
      * @return int
      *
      * @throws ExceptionInterface
-     * @throws LogicException [When this abstract method is not implemented]
+     * @throws LogicException When this abstract method is not implemented
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -98,7 +97,7 @@ class DBCapsuleCommand extends MenuCommand
 
         $connections = Connection::getConnections();
 
-        $connectionName = $connections[$selectedConnection]['dbname'];
+        $databaseName = $connections[$selectedConnection]['dbname'];
 
         /** @var string $databaseEngineType */
         $databaseEngineType = $this->databaseEngine->getDatabaseEngineType($selectedConnection);
@@ -108,7 +107,10 @@ class DBCapsuleCommand extends MenuCommand
         /** @var array<int, stdClass>|stdClass $columns */
         $columns = $this->getTableColumns($databaseEngineType, $selectedConnection, $entity);
 
-        if (!empty($columns->status)) {
+        /** @var array<int, stdClass>|stdClass $foreigns */
+        $foreigns = $this->getTableForeigns($databaseEngineType, $selectedConnection, $databaseName, $entity);
+
+        if ($columns instanceof stdClass) {
             /** @var string $message */
             $message = $columns->message;
 
@@ -117,40 +119,87 @@ class DBCapsuleCommand extends MenuCommand
             return parent::FAILURE;
         }
 
-        if (is_array($columns)) {
-            $properties = [];
+        if ($foreigns instanceof stdClass) {
+            /** @var string $message */
+            $message = $foreigns->message;
 
-            foreach ($columns as $column) {
-                /** @var string $field */
-                $field = $column->Field;
+            $output->writeln($this->errorOutput("\t>>  CAPSULE: {$message}"));
 
-                /** @var string $type */
-                $type = $column->Type;
+            return parent::FAILURE;
+        }
 
-                $properties[] = "{$field}:{$this->classFactory->getDBType($type)}";
+        $properties = [];
+
+        foreach ($columns as $column) {
+            $interface = '';
+
+            /** @var string $field */
+            $field = $column->Field;
+
+            /** @var string $type */
+            $type = $column->Type;
+
+            foreach ($foreigns as $foreign) {
+                /** @var string $columnName */
+                $columnName = $foreign->COLUMN_NAME;
+
+                if ($columnName != $field) {
+                    continue;
+                }
+
+                /** @var string $referencedTableName */
+                $referencedTableName = $foreign->REFERENCED_TABLE_NAME;
+
+                $interfaceName = $this->str
+                    ->of($field)
+                    ->replace('-', ' ')
+                    ->replace('_', ' ')
+                    ->pascal()
+                    ->concat('Interface')
+                    ->get();
+
+                $entityPascalCase = $this->str
+                    ->of($referencedTableName)
+                    ->replace('-', ' ')
+                    ->replace('_', ' ')
+                    ->pascal()
+                    ->get();
+
+                $databaseNamePascalCase = $this->str
+                    ->of($databaseName)
+                    ->replace('-', ' ')
+                    ->replace('_', ' ')
+                    ->pascal()
+                    ->get();
+
+                $interface = ":App\\Interfaces\\Database\\Class\\";
+
+                $interface .= "{$databaseNamePascalCase}\\{$driver}\\{$entityPascalCase}\\{$interfaceName}";
             }
 
-            $connPascal = $this->classFactory->getClassFormat($connectionName);
-
-            /** @var string $formatEntity */
-            $formatEntity = $this->str
-                ->of($entity)
-                ->replace('`', '')
-                ->get();
-
-            $className = $this->classFactory->getClassFormat($formatEntity);
-
-            $arrayInput = new ArrayInput([
-                'capsule' => "{$connPascal}/{$driver}/{$className}",
-                '--properties' => $properties,
-                '--entity' => $entity,
-            ]);
-
-            /** @phpstan-ignore-next-line */
-            $this->getApplication()
-                ->find('new:capsule')
-                ->run($arrayInput, $output);
+            $properties[] = "{$field}:{$this->classFactory->getDBType($type)}{$interface}";
         }
+
+        $connPascal = $this->classFactory->getClassFormat($databaseName);
+
+        /** @var string $formatEntity */
+        $formatEntity = $this->str
+            ->of($entity)
+            ->replace('`', '')
+            ->get();
+
+        $className = $this->classFactory->getClassFormat($formatEntity);
+
+        $arrayInput = new ArrayInput([
+            'capsule' => "{$connPascal}/{$driver}/{$className}",
+            '--properties' => $properties,
+            '--entity' => $entity,
+        ]);
+
+        /** @phpstan-ignore-next-line */
+        $this->getApplication()
+            ->find('new:capsule')
+            ->run($arrayInput, $output);
 
         return parent::SUCCESS;
     }
