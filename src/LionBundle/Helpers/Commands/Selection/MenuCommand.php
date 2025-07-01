@@ -341,9 +341,9 @@ class MenuCommand extends Command
     /**
      * Gets the columns of the entity
      *
-     * @param string $driver [Database engine]
-     * @param string $selectedConnection [Database connection]
-     * @param string $entity [Entity name]
+     * @param string $driver Database engine
+     * @param string $selectedConnection Database connection
+     * @param string $entity Entity name
      *
      * @return array<int, array<int|string, mixed>|DatabaseCapsuleInterface|stdClass>|stdClass
      *
@@ -433,10 +433,10 @@ class MenuCommand extends Command
     /**
      * Get the foreign keys of a table
      *
-     * @param string $driver [Database engine]
-     * @param string $connectionName [Database connection]
-     * @param string $databaseName [Database name]
-     * @param string $entity [Entity name]
+     * @param string $driver Database engine
+     * @param string $connectionName Database connection
+     * @param string $databaseName Database name
+     * @param string $entity Entity name
      *
      * @return array<int, array<int|string, mixed>|DatabaseCapsuleInterface|stdClass>|stdClass
      *
@@ -450,8 +450,13 @@ class MenuCommand extends Command
     ): array|stdClass {
         if (Driver::MYSQL === $driver) {
             return MySQL::connection($connectionName)
-                ->table('INFORMATION_SCHEMA.KEY_COLUMN_USAGE', false)
-                ->select('COLUMN_NAME')
+                ->table('INFORMATION_SCHEMA.KEY_COLUMN_USAGE')
+                ->select(
+                    'CONSTRAINT_SCHEMA',
+                    'COLUMN_NAME',
+                    'REFERENCED_TABLE_SCHEMA',
+                    'REFERENCED_TABLE_NAME',
+                )
                 ->where()->equalTo('TABLE_SCHEMA', $databaseName)
                 ->and()->equalTo('TABLE_NAME', $entity)
                 ->and('REFERENCED_TABLE_NAME')->isNotNull()
