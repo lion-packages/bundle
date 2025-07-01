@@ -84,6 +84,27 @@ class RouteListCommandTest extends Test
 
         $display = $this->commandTester->getDisplay();
 
+        $this->assertStringContainsString('DELETE', $display);
+        $this->assertStringContainsString('/api/test/{id:i}', $display);
+    }
+
+    #[Testing]
+    public function executeWithMiddlewareOption(): void
+    {
+        $listMiddleware = [
+            'protect-route-list' => RouteMiddleware::class,
+        ];
+
+        Routes::setMiddleware($listMiddleware);
+
+        $this->assertSame($listMiddleware, Routes::getMiddleware());
+
+        $this->assertSame(Command::SUCCESS, $this->commandTester->execute([
+            '--middleware' => null,
+        ]));
+
+        $display = $this->commandTester->getDisplay();
+
         $this->assertStringContainsString(RouteMiddleware::class, $display);
     }
 }
