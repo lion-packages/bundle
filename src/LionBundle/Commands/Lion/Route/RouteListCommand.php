@@ -16,6 +16,7 @@ use LogicException;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Lion\Bundle\Support\Http\Routes;
 
@@ -27,39 +28,37 @@ use Lion\Bundle\Support\Http\Routes;
 class RouteListCommand extends Command
 {
     /**
-     * [Modify and build arrays with different indexes or values]
+     * Modify and build arrays with different indexes or values
      *
      * @var Arr $arr
      */
     private Arr $arr;
 
     /**
-     * [Modify and construct strings with different formats]
+     * Modify and construct strings with different formats
      *
      * @var Str $str
      */
     private Str $str;
 
     /**
-     * [List of defined web routes]
+     * List of defined web routes
      *
-     * @var array{
-     *     array<string, array{
-     *          filters: array<int, string>,
-     *          handler: array{
-     *              controller: bool|array{
-     *                  name: string,
-     *                  function: string
-     *              },
-     *              callback: bool
-     *          }
-     *     }>
-     * } $routes
+     * @var array<int, array<string, array{
+     *      filters: array<int, string>,
+     *      handler: array{
+     *          controller: bool|array{
+     *              name: string,
+     *              function: string
+     *          },
+     *          callback: bool
+     *      }
+     * }>> $routes
      */
     private array $routes;
 
     /**
-     * [List of defined Middleware]
+     * List of defined Middleware
      *
      * @var array<string, class-string> $configMiddleware
      */
@@ -90,34 +89,32 @@ class RouteListCommand extends Command
     {
         $this
             ->setName('route:list')
-            ->setDescription('Command to view a list of available web routes');
+            ->setDescription('Command to view a list of available web routes')
+            ->addOption('middleware', 'm', InputOption::VALUE_OPTIONAL, 'View the middleware for each route', 'None');
     }
 
     /**
      * Executes the current command
      *
-     * This method is not abstract because you can use this class
-     * as a concrete class. In this case, instead of defining the
-     * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method
+     * This method is not abstract because you can use this class as a concrete
+     * class. In this case, instead of defining the execute() method, you set the
+     * code to execute by passing a Closure to the setCode() method
      *
-     * @param InputInterface $input [InputInterface is the interface implemented
-     * by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
+     * @param InputInterface $input InputInterface is the interface implemented by
+     * all input classes
+     * @param OutputInterface $output OutputInterface is the interface implemented
+     * by all Output classes
      *
      * @return int
      *
-     * @throws LogicException [When this abstract method is not implemented]
+     * @throws LogicException When this abstract method is not implemented
      * @throws GuzzleException
-     *
-     * @codeCoverageIgnore
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->fetchRoutes();
+        $middleware = $input->getOption('middleware');
 
-        $size = $this->arr->of($this->routes)->length();
+        $this->fetchRoutes();
 
         $cont = 0;
 
@@ -147,7 +144,7 @@ class RouteListCommand extends Command
                     ];
                 }
 
-                if ($this->arr->of($method['filters'])->length() > 0) {
+                if (null === $middleware && $this->arr->of($method['filters'])->length() > 0) {
                     foreach ($method['filters'] as $filter) {
                         if (isset($this->configMiddleware[$filter])) {
                             $rows[] = [
@@ -156,36 +153,6 @@ class RouteListCommand extends Command
                                 $this->configMiddleware[$filter],
                                 $this->warningOutput('process')
                             ];
-                        }
-                    }
-                }
-
-                /** @phpstan-ignore-next-line */
-                if (isset($this->rules[$keyMethods])) {
-                    /** @phpstan-ignore-next-line */
-                    if (isset($this->rules[$keyMethods][$routeUrl])) {
-                        /** @phpstan-ignore-next-line */
-                        foreach ($this->rules[$keyMethods][$routeUrl] as $keyUriRule => $classRule) {
-                            /** @var Rules $objectClassRule */
-                            $objectClassRule = new $classRule();
-
-                            if (isset($objectClassRule->disabled, $objectClassRule->field)) {
-                                $requiredParam = $objectClassRule->disabled === false ? 'REQUIRED' : 'OPTIONAL';
-
-                                /** @var string $field */
-                                $field = $objectClassRule->field;
-
-                                $rows[] = [
-                                    $this->successOutput('PARAM:'),
-                                    (
-                                        empty($objectClassRule->field)
-                                            ? $this->successOutput('(NAMELESS)')
-                                            : $this->successOutput("{$field} ({$requiredParam})")
-                                    ),
-                                    $objectClassRule::class,
-                                    $this->warningOutput('passes')
-                                ];
-                            }
                         }
                     }
                 }
@@ -230,24 +197,21 @@ class RouteListCommand extends Command
             ->getContents();
 
         /**
-         * @var array{
-         *     array<string, array{
-         *          filters: array<int, string>,
-         *          handler: array{
-         *              controller: bool|array{
-         *                  name: string,
-         *                  function: string
-         *              },
-         *              callback: bool
-         *          }
-         *     }>
-         * } $routes
+         * @var array<int, array<string, array{
+         *      filters: array<int, string>,
+         *      handler: array{
+         *          controller: bool|array{
+         *              name: string,
+         *              function: string
+         *          },
+         *          callback: bool
+         *      }
+         * }>> $routes
          */
         $routes = json_decode($fetchRoutes, true);
 
         array_pop($routes);
 
-        /** @phpstan-ignore-next-line */
         $this->routes = $routes;
 
         $this->configMiddleware = Routes::getMiddleware();
