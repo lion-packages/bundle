@@ -13,6 +13,8 @@ use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\DatabaseEngine;
 use Lion\Database\Drivers\Schema\MySQL as Schema;
 use Lion\Dependency\Injection\Container;
+use Lion\Helpers\Arr;
+use Lion\Helpers\Str;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
 use ReflectionException;
@@ -68,23 +70,9 @@ class DBCapsuleCommandTest extends Test
 
     protected function tearDown(): void
     {
-        Schema::connection(getDefaultConnection())
-            ->dropTable(self::ENTITY)
-            ->execute();
-
         $this->rmdirRecursively('./app/');
 
         $this->rmdirRecursively('./database/');
-    }
-
-    private function createTables(): void
-    {
-        Schema::connection(getDefaultConnection())
-            ->createTable(self::ENTITY, function () {
-                Schema::int('id', 11)->notNull()->autoIncrement()->primaryKey();
-                Schema::varchar('name', 25)->notNull();
-            })
-            ->execute();
     }
 
     /**
@@ -114,7 +102,17 @@ class DBCapsuleCommandTest extends Test
     #[Testing]
     public function execute(): void
     {
-        $this->createTables();
+        Schema::connection(getDefaultConnection())
+            ->createTable(self::ENTITY, function (): void {
+                Schema::int('id')
+                    ->notNull()
+                    ->autoIncrement()
+                    ->primaryKey();
+
+                Schema::varchar('name', 25)
+                    ->notNull();
+            })
+            ->execute();
 
         $execute = $this->commandTester
             ->setInputs([
@@ -133,6 +131,98 @@ class DBCapsuleCommandTest extends Test
         unset($_ENV['SELECTED_CONNECTION']);
 
         $this->assertArrayNotHasKey('SELECTED_CONNECTION', $_ENV);
+
+        Schema::connection(getDefaultConnection())
+            ->dropTable(self::ENTITY)
+            ->execute();
+    }
+
+    #[Testing]
+    public function executeWithForeignKeys(): void
+    {
+        Schema::connection(getDefaultConnection())
+            ->createTable('roles', function (): void {
+                Schema::int('idroles')
+                    ->notNull()
+                    ->autoIncrement()
+                    ->primaryKey();
+
+                Schema::varchar('roles_name', 25)
+                    ->notNull();
+            })
+            ->execute();
+
+        Schema::connection(getDefaultConnection())
+            ->createTable('users', function (): void {
+                Schema::int('idusers')
+                    ->notNull()
+                    ->autoIncrement()
+                    ->primaryKey();
+
+                Schema::int('idroles')
+                    ->notNull()
+                    ->foreign('roles', 'idroles');
+
+                Schema::varchar('users_name', 25)
+                    ->notNull();
+            })
+            ->execute();
+
+        $execute = $this->commandTester
+            ->setInputs([
+                '0',
+            ])
+            ->execute([
+                'entity' => 'roles',
+            ]);
+
+        $this->assertSame(Command::SUCCESS, $execute);
+
+        $display = $this->commandTester->getDisplay();
+
+        $this->assertStringContainsString(<<<EOT
+        INTERFACE: App\Interfaces\Database\Class\LionDatabase\MySQL\Roles\IdrolesInterface
+        EOT, $display);
+
+        $this->assertStringContainsString(<<<EOT
+        INTERFACE: App\Interfaces\Database\Class\LionDatabase\MySQL\Roles\RolesNameInterface
+        EOT, $display);
+
+        $this->assertStringContainsString(<<<EOT
+        CAPSULE: Database\Class\LionDatabase\MySQL\Roles
+        EOT, $display);
+
+        $execute = $this->commandTester
+            ->setInputs([
+                '0',
+            ])
+            ->execute([
+                'entity' => 'users',
+            ]);
+
+        $this->assertSame(Command::SUCCESS, $execute);
+
+        $display = $this->commandTester->getDisplay();
+
+        $this->assertStringContainsString(<<<EOT
+        >>  INTERFACE: App\Interfaces\Database\Class\LionDatabase\MySQL\Users\IdusersInterface
+        EOT, $display);
+
+        $this->assertStringContainsString(<<<EOT
+        >>  INTERFACE: App\Interfaces\Database\Class\LionDatabase\MySQL\Users\UsersNameInterface
+        EOT, $display);
+
+        $this->assertStringContainsString(<<<EOT
+        >>  CAPSULE: Database\Class\LionDatabase\MySQL\Users
+        EOT, $display);
+
+        Schema::connection(getDefaultConnection())
+            ->dropTable('users')
+            ->execute();
+
+        Schema::connection(getDefaultConnection())
+            ->dropTable('roles')
+            ->execute();
     }
 
     #[Testing]
@@ -148,5 +238,78 @@ class DBCapsuleCommandTest extends Test
 
         $this->assertSame(Command::FAILURE, $execute);
         $this->assertStringContainsString(self::OUTPUT_MESSAGE_ERROR, $this->commandTester->getDisplay());
+    }
+
+    #[Testing]
+    public function executeWithForeignsReturningErrorObject(): void
+    {
+        Schema::connection(getDefaultConnection())
+            ->createTable('roles', function (): void {
+                Schema::int('idroles')
+                    ->notNull()
+                    ->autoIncrement()
+                    ->primaryKey();
+
+                Schema::varchar('roles_name', 25)
+                    ->notNull();
+            })
+            ->execute();
+
+        Schema::connection(getDefaultConnection())
+            ->createTable('users', function (): void {
+                Schema::int('idusers')
+                    ->notNull()
+                    ->autoIncrement()
+                    ->primaryKey();
+
+                Schema::int('idroles')
+                    ->notNull()
+                    ->foreign('roles', 'idroles');
+
+                Schema::varchar('users_name', 25)
+                    ->notNull();
+            })
+            ->execute();
+
+        $mockCommand = $this->getMockBuilder(DBCapsuleCommand::class)
+            ->onlyMethods(['getTableForeigns'])
+            ->getMock();
+
+        $mockCommand
+            ->setStr(new Str())
+            ->setArr(new Arr());
+
+        $mockCommand
+            ->setDatabaseEngine(new DatabaseEngine());
+
+        $mockCommand->method('getTableForeigns')->willReturn((object) [
+            'message' => 'ERROR MESSAGE',
+        ]);
+
+        $application = new Application();
+
+        $application->add($mockCommand);
+
+        $tester = new CommandTester($application->find('db:capsule'));
+
+        $exitCode = $tester
+            ->setInputs([
+                '0',
+            ])
+            ->execute([
+                'entity' => 'users',
+            ]);
+
+        $this->assertEquals(Command::FAILURE, $exitCode);
+
+        $this->assertStringContainsString('>>  CAPSULE: ERROR MESSAGE', $tester->getDisplay());
+
+        Schema::connection(getDefaultConnection())
+            ->dropTable('users')
+            ->execute();
+
+        Schema::connection(getDefaultConnection())
+            ->dropTable('roles')
+            ->execute();
     }
 }
