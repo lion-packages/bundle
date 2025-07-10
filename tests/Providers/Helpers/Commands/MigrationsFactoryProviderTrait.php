@@ -11,7 +11,7 @@ trait MigrationsFactoryProviderTrait
     public static function getBodyProvider(): array
     {
         return [
-            [
+            'case-0' => [
                 'className' => 'Test',
                 'selectedType' => MigrationFactory::TABLE,
                 'dbPascal' => 'LionDatabase',
@@ -34,6 +34,13 @@ trait MigrationsFactoryProviderTrait
                 class Test implements TableInterface
                 {
                     /**
+                     * Name of the migration
+                     *
+                     * @const NAME
+                     */
+                    public const string NAME = '--NAME--';
+
+                    /**
                      * Index number for seed execution priority
                      *
                      * @const INDEX
@@ -46,7 +53,7 @@ trait MigrationsFactoryProviderTrait
                     public function up(): stdClass
                     {
                         return Schema::connection(getDefaultConnection())
-                            ->createTable('--NAME--', function (): void {
+                            ->createTable(self::NAME, function (): void {
                                 Schema::int('id')
                                     ->notNull()
                                     ->autoIncrement()
@@ -58,7 +65,7 @@ trait MigrationsFactoryProviderTrait
 
                 PHP,
             ],
-            [
+            'case-1' => [
                 'className' => 'Test',
                 'selectedType' => MigrationFactory::TABLE,
                 'dbPascal' => 'LionDatabase',
@@ -80,6 +87,13 @@ trait MigrationsFactoryProviderTrait
                  */
                 class Test implements TableInterface
                 {
+                    /**
+                     * Name of the migration
+                     *
+                     * @const NAME
+                     */
+                    public const string NAME = '--NAME--';
+
                     /**
                      * Index number for seed execution priority
                      *
@@ -104,7 +118,7 @@ trait MigrationsFactoryProviderTrait
 
                 PHP,
             ],
-            [
+            'case-2' => [
                 'className' => 'Test',
                 'selectedType' => MigrationFactory::VIEW,
                 'dbPascal' => 'LionDatabase',
@@ -128,12 +142,19 @@ trait MigrationsFactoryProviderTrait
                 class Test implements ViewInterface
                 {
                     /**
+                     * Name of the migration
+                     *
+                     * @const NAME
+                     */
+                    public const string NAME = '--NAME--';
+
+                    /**
                      * {@inheritDoc}
                      */
                     public function up(): stdClass
                     {
                         return Schema::connection(getDefaultConnection())
-                            ->createView('--NAME--', function (MySQL \$db): void {
+                            ->createView(self::NAME, function (MySQL \$db): void {
                                 \$db
                                     ->table('table')
                                     ->select();
@@ -144,7 +165,7 @@ trait MigrationsFactoryProviderTrait
 
                 PHP,
             ],
-            [
+            'case-3' => [
                 'className' => 'Test',
                 'selectedType' => MigrationFactory::VIEW,
                 'dbPascal' => 'LionDatabase',
@@ -167,6 +188,13 @@ trait MigrationsFactoryProviderTrait
                 class Test implements ViewInterface
                 {
                     /**
+                     * Name of the migration
+                     *
+                     * @const NAME
+                     */
+                    public const string NAME = '--NAME--';
+
+                    /**
                      * {@inheritDoc}
                      */
                     public function up(): stdClass
@@ -183,7 +211,7 @@ trait MigrationsFactoryProviderTrait
 
                 PHP,
             ],
-            [
+            'case-4' => [
                 'className' => 'Test',
                 'selectedType' => MigrationFactory::STORED_PROCEDURE,
                 'dbPascal' => 'LionDatabase',
@@ -207,12 +235,19 @@ trait MigrationsFactoryProviderTrait
                 class Test implements StoredProcedureInterface
                 {
                     /**
+                     * Name of the migration
+                     *
+                     * @const NAME
+                     */
+                    public const string NAME = '--NAME--';
+
+                    /**
                      * {@inheritDoc}
                      */
                     public function up(): stdClass
                     {
                         return Schema::connection(getDefaultConnection())
-                            ->createStoreProcedure('--NAME--', function (): void {
+                            ->createStoreProcedure(self::NAME, function (): void {
                                 Schema::in()->varchar('name', 25);
                             }, function (MySQL \$db): void {
                                 \$db
@@ -227,7 +262,7 @@ trait MigrationsFactoryProviderTrait
 
                 PHP,
             ],
-            [
+            'case-5' => [
                 'className' => 'Test',
                 'selectedType' => MigrationFactory::STORED_PROCEDURE,
                 'dbPascal' => 'LionDatabase',
@@ -249,6 +284,13 @@ trait MigrationsFactoryProviderTrait
                  */
                 class Test implements StoredProcedureInterface
                 {
+                    /**
+                     * Name of the migration
+                     *
+                     * @const NAME
+                     */
+                    public const string NAME = '--NAME--';
+
                     /**
                      * {@inheritDoc}
                      */
@@ -272,7 +314,7 @@ trait MigrationsFactoryProviderTrait
     public static function getMySQLTableBodyProvider(): array
     {
         return [
-            [
+            'case-0' => [
                 'className' => 'Test',
                 'namespace' => 'Database\\Migrations\\LionDatabase\\MySQL\\Tables',
                 'body' => <<<PHP
@@ -292,6 +334,13 @@ trait MigrationsFactoryProviderTrait
                 class Test implements TableInterface
                 {
                     /**
+                     * Name of the migration
+                     *
+                     * @const NAME
+                     */
+                    public const string NAME = '--NAME--';
+
+                    /**
                      * Index number for seed execution priority
                      *
                      * @const INDEX
@@ -304,7 +353,7 @@ trait MigrationsFactoryProviderTrait
                     public function up(): stdClass
                     {
                         return Schema::connection(getDefaultConnection())
-                            ->createTable('--NAME--', function (): void {
+                            ->createTable(self::NAME, function (): void {
                                 Schema::int('id')
                                     ->notNull()
                                     ->autoIncrement()
@@ -322,7 +371,7 @@ trait MigrationsFactoryProviderTrait
     public static function getPostgreSQLTableBodyProvider(): array
     {
         return [
-            [
+            'case-0' => [
                 'className' => 'Test',
                 'namespace' => 'Database\\Migrations\\LionDatabase\\PostgreSQL\\Tables',
                 'body' => <<<PHP
@@ -341,6 +390,13 @@ trait MigrationsFactoryProviderTrait
                  */
                 class Test implements TableInterface
                 {
+                    /**
+                     * Name of the migration
+                     *
+                     * @const NAME
+                     */
+                    public const string NAME = '--NAME--';
+
                     /**
                      * Index number for seed execution priority
                      *
@@ -371,7 +427,7 @@ trait MigrationsFactoryProviderTrait
     public static function getMySQLViewBodyProvider(): array
     {
         return [
-            [
+            'case-0' => [
                 'className' => 'Test',
                 'namespace' => 'Database\\Migrations\\LionDatabase\\MySQL\\Views',
                 'body' => <<<PHP
@@ -392,12 +448,19 @@ trait MigrationsFactoryProviderTrait
                 class Test implements ViewInterface
                 {
                     /**
+                     * Name of the migration
+                     *
+                     * @const NAME
+                     */
+                    public const string NAME = '--NAME--';
+
+                    /**
                      * {@inheritDoc}
                      */
                     public function up(): stdClass
                     {
                         return Schema::connection(getDefaultConnection())
-                            ->createView('--NAME--', function (MySQL \$db): void {
+                            ->createView(self::NAME, function (MySQL \$db): void {
                                 \$db
                                     ->table('table')
                                     ->select();
@@ -414,7 +477,7 @@ trait MigrationsFactoryProviderTrait
     public static function getPostgreSQLViewBodyProvider(): array
     {
         return [
-            [
+            'case-0' => [
                 'className' => 'Test',
                 'namespace' => 'Database\\Migrations\\LionDatabase\\PostgreSQL\\Views',
                 'body' => <<<PHP
@@ -433,6 +496,13 @@ trait MigrationsFactoryProviderTrait
                  */
                 class Test implements ViewInterface
                 {
+                    /**
+                     * Name of the migration
+                     *
+                     * @const NAME
+                     */
+                    public const string NAME = '--NAME--';
+
                     /**
                      * {@inheritDoc}
                      */
@@ -456,7 +526,7 @@ trait MigrationsFactoryProviderTrait
     public static function getMySQLStoreProcedureBodyProvider(): array
     {
         return [
-            [
+            'case-0' => [
                 'className' => 'Test',
                 'namespace' => 'Database\\Migrations\\LionDatabase\\MySQL\\StoreProcedures',
                 'body' => <<<PHP
@@ -477,12 +547,19 @@ trait MigrationsFactoryProviderTrait
                 class Test implements StoredProcedureInterface
                 {
                     /**
+                     * Name of the migration
+                     *
+                     * @const NAME
+                     */
+                    public const string NAME = '--NAME--';
+
+                    /**
                      * {@inheritDoc}
                      */
                     public function up(): stdClass
                     {
                         return Schema::connection(getDefaultConnection())
-                            ->createStoreProcedure('--NAME--', function (): void {
+                            ->createStoreProcedure(self::NAME, function (): void {
                                 Schema::in()->varchar('name', 25);
                             }, function (MySQL \$db): void {
                                 \$db
@@ -503,7 +580,7 @@ trait MigrationsFactoryProviderTrait
     public static function getPostgreSQLStoreProcedureBodyProvider(): array
     {
         return [
-            [
+            'case-0' => [
                 'className' => 'Test',
                 'namespace' => 'Database\\Migrations\\LionDatabase\\PostgreSQL\\StoreProcedures',
                 'body' => <<<PHP
@@ -522,6 +599,13 @@ trait MigrationsFactoryProviderTrait
                  */
                 class Test implements StoredProcedureInterface
                 {
+                    /**
+                     * Name of the migration
+                     *
+                     * @const NAME
+                     */
+                    public const string NAME = '--NAME--';
+
                     /**
                      * {@inheritDoc}
                      */
