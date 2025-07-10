@@ -541,7 +541,7 @@ class CapsuleFactory
             ]), $this->output);
 
             $this->fileWriter->readFileRows($interfacePath, [
-                6 => [
+                8 => [
                     'replace' => true,
                     'search' => "Description of the '{$interface}' interface",
                     'content' => "Interface of the '{$property}' property",
@@ -574,6 +574,23 @@ class CapsuleFactory
                     public function {$setterName}(?{$getterType} \${$property}): static;
 
                 PHP,
+                ],
+            ]);
+
+            $this->fileWriter->readFileRows($interfacePath, [
+                9 => [
+                    'remove' => true,
+                ],
+            ]);
+
+            $this->fileWriter->readFileRows($interfacePath, [
+                9 => [
+                    'replace' => false,
+                    'content' => <<<PHP
+                     */
+                    interface {$interface}
+
+                    PHP,
                 ],
             ]);
         }
