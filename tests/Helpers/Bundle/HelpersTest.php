@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace Tests\Helpers\Bundle;
 
 use Carbon\Carbon;
+use Carbon\Month;
+use Carbon\WeekDay;
+use DateTime;
+use DateTimeInterface;
 use DateTimeZone;
 use Faker\Generator;
 use GuzzleHttp\Exception\GuzzleException;
@@ -19,6 +23,7 @@ use Lion\Security\JWT;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test as Testing;
+use PHPUnit\Framework\Attributes\TestWith;
 use stdClass;
 use Tests\Providers\Helpers\HelpersProviderTrait;
 
@@ -90,10 +95,56 @@ class HelpersTest extends Test
         $this->assertNull($data);
     }
 
-    public function testNow(): void
+    #[Testing]
+    #[TestWith(['tz' => null])]
+    #[TestWith(['tz' => 'UTC'])]
+    #[TestWith(['tz' => 'America/Bogota'])]
+    #[TestWith(['tz' => new DateTimeZone('America/Bogota')])]
+    public function now(DateTimeZone|string|int|null $tz): void
     {
-        $this->assertInstanceOf(Carbon::class, now());
-        $this->assertInstanceOf(Carbon::class, now(new DateTimeZone('America/Bogota')));
+        $this->assertInstanceOf(Carbon::class, now($tz));
+    }
+
+    #[Testing]
+    #[TestWith(['time' => null, 'timezone' => null])]
+    #[TestWith(['time' => '2025-07-10', 'timezone' => null])]
+    #[TestWith(['time' => 'now', 'timezone' => null])]
+    #[TestWith(['time' => '2025-07-10 15:30:00', 'timezone' => null])]
+    #[TestWith(['time' => 'next Monday', 'timezone' => null])]
+    #[TestWith(['time' => '2025-07-10T15:30:00+02:00', 'timezone' => null])]
+    #[TestWith(['time' => '10 July 2025', 'timezone' => null])]
+    #[TestWith(['time' => 1720587600, 'timezone' => null])]
+    #[TestWith(['time' => 1720587600.0, 'timezone' => null])]
+    #[TestWith(['time' => new DateTime('2025-07-10 12:00:00'), 'timezone' => null])]
+    #[TestWith(['time' => WeekDay::Saturday, 'timezone' => null])]
+    #[TestWith(['time' => Month::March, 'timezone' => null])]
+    #[TestWith(['time' => '2025-07-10', 'timezone' => 'America/Bogota'])]
+    #[TestWith(['time' => 'now', 'timezone' => 'America/Bogota'])]
+    #[TestWith(['time' => '2025-07-10 15:30:00', 'timezone' => 'America/Bogota'])]
+    #[TestWith(['time' => 'next Monday', 'timezone' => 'America/Bogota'])]
+    #[TestWith(['time' => '2025-07-10T15:30:00+02:00', 'timezone' => 'America/Bogota'])]
+    #[TestWith(['time' => '10 July 2025', 'timezone' => 'America/Bogota'])]
+    #[TestWith(['time' => 1720587600, 'timezone' => 'America/Bogota'])]
+    #[TestWith(['time' => 1720587600.0, 'timezone' => 'America/Bogota'])]
+    #[TestWith(['time' => new DateTime('2025-07-10 12:00:00'), 'timezone' => 'America/Bogota'])]
+    #[TestWith(['time' => WeekDay::Saturday, 'timezone' => 'America/Bogota'])]
+    #[TestWith(['time' => Month::March, 'timezone' => 'America/Bogota'])]
+    #[TestWith(['time' => '2025-07-10', 'timezone' => new DateTimeZone('America/Bogota')])]
+    #[TestWith(['time' => 'now', 'timezone' => new DateTimeZone('America/Bogota')])]
+    #[TestWith(['time' => '2025-07-10 15:30:00', 'timezone' => new DateTimeZone('America/Bogota')])]
+    #[TestWith(['time' => 'next Monday', 'timezone' => new DateTimeZone('America/Bogota')])]
+    #[TestWith(['time' => '2025-07-10T15:30:00+02:00', 'timezone' => new DateTimeZone('America/Bogota')])]
+    #[TestWith(['time' => '10 July 2025', 'timezone' => new DateTimeZone('America/Bogota')])]
+    #[TestWith(['time' => 1720587600, 'timezone' => new DateTimeZone('America/Bogota')])]
+    #[TestWith(['time' => 1720587600.0, 'timezone' => new DateTimeZone('America/Bogota')])]
+    #[TestWith(['time' => new DateTime('2025-07-10 12:00:00'), 'timezone' => new DateTimeZone('America/Bogota')])]
+    #[TestWith(['time' => WeekDay::Saturday, 'timezone' => new DateTimeZone('America/Bogota')])]
+    #[TestWith(['time' => Month::March, 'timezone' => new DateTimeZone('America/Bogota')])]
+    public function parse(
+        DateTimeInterface|WeekDay|Month|string|int|float|null $time,
+        DateTimeZone|string|int|null $timezone
+    ): void {
+        $this->assertInstanceOf(Carbon::class, parse($time, $timezone));
     }
 
     /**
