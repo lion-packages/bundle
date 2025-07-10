@@ -117,7 +117,6 @@ class ControllerCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-
         return $this->classCommandFactory
             ->setFactories(['controller', 'model'])
             ->execute(function (ClassCommandFactory $classFactory, Store $store) use ($input, $output): int {
