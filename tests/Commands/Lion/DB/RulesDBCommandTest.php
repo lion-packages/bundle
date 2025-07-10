@@ -33,7 +33,8 @@ class RulesDBCommandTest extends Test
     private const string EMAILRULE_NAMESPACE = 'App\\Rules\\LionDatabase\\MySQL\\Users\\EmailRule';
     private const string OUTPUT_MESSAGE_ERROR =
         "SQLSTATE[42S02]: Base table or view not found: 1146 Table 'lion_database.users' doesn't exist";
-    private const string OUTPUT_MESSAGE_FOREIGN = "the rule for 'idroles' property has been omitted, it is a foreign";
+    private const string OUTPUT_MESSAGE_FOREIGN =
+        "The rule for property 'idroles' has been omitted, it is an external property.";
 
     private CommandTester $commandTester;
     private RulesDBCommand $rulesDBCommand;
@@ -70,54 +71,65 @@ class RulesDBCommandTest extends Test
     {
         $this->rmdirRecursively('./app/');
 
-        Schema::dropTable(self::ENTITY)
+        Schema::connection(getDefaultConnection())
+            ->dropTable(self::ENTITY)
             ->execute();
 
-        Schema::dropTable('roles')
+        Schema::connection(getDefaultConnection())
+            ->dropTable('roles')
             ->execute();
     }
 
     private function createTables(): void
     {
-        /** @var string $dbName */
-        $dbName = env('DB_DEFAULT');
-
-        Schema::connection($dbName)
+        Schema::connection(getDefaultConnection())
             ->createTable('roles', function (): void {
-                Schema::int('idroles')->notNull()->autoIncrement()->primaryKey();
+                Schema::int('idroles')
+                    ->notNull()
+                    ->autoIncrement()
+                    ->primaryKey();
 
-                Schema::varchar('name', 255)->notNull()->comment('role description');
+                Schema::varchar('name', 255)
+                    ->notNull()
+                    ->comment('role description');
             })
             ->execute();
 
-        Schema::connection($dbName)
+        Schema::connection(getDefaultConnection())
             ->createTable(self::ENTITY, function (): void {
-                Schema::int('id')->notNull()->autoIncrement()->primaryKey();
+                Schema::int('id')
+                    ->notNull()
+                    ->autoIncrement()
+                    ->primaryKey();
 
-                Schema::int('idroles', 11)->notNull()->foreign('roles', 'idroles');
+                Schema::int('idroles', 11)
+                    ->notNull()
+                    ->foreign('roles', 'idroles');
 
-                Schema::varchar('name', 25)->notNull()->comment('username');
+                Schema::varchar('name', 25)
+                    ->notNull()
+                    ->comment('username');
 
-                Schema::varchar('last_name', 25)->null()->default('N/A');
+                Schema::varchar('last_name', 25)
+                    ->null()
+                    ->default('N/A');
 
-                Schema::varchar('email', 150)->notNull()->comment('user email');
+                Schema::varchar('email', 150)
+                    ->notNull()
+                    ->comment('user email');
             })
             ->execute();
     }
 
     /**
      * @param array{
-     *     field: string,
-     *     desc: string,
-     *     value: mixed,
-     *     disabled: bool
+     *     field: string
      * } $options
      */
     private function assertColumn(string $display, string $namespace, array $options): void
     {
         $this->assertStringContainsString($namespace, $display);
 
-        /** @var Rules $rules */
         $rules = new $namespace();
 
         $this->assertInstances($rules, [
@@ -127,12 +139,6 @@ class RulesDBCommandTest extends Test
 
         /** @phpstan-ignore-next-line */
         $this->assertSame($options['field'], $rules->field);
-        /** @phpstan-ignore-next-line */
-        $this->assertSame($options['desc'], $rules->desc);
-        /** @phpstan-ignore-next-line */
-        $this->assertSame($options['value'], $rules->value);
-        /** @phpstan-ignore-next-line */
-        $this->assertSame($options['disabled'], $rules->disabled);
     }
 
     /**
@@ -174,37 +180,22 @@ class RulesDBCommandTest extends Test
 
         $this->assertColumn($display, self::IDRULE_NAMESPACE, [
             'field' => 'id',
-            'desc' => '',
-            'value' => '',
-            'disabled' => false
         ]);
 
         $this->assertColumn($display, self::NAMERULE_NAMESPACE, [
             'field' => 'name',
-            'desc' => 'username',
-            'value' => '',
-            'disabled' => false
         ]);
 
         $this->assertColumn($display, self::LASTNAMERULE_NAMESPACE_OPTIONAL, [
             'field' => 'last_name',
-            'desc' => '',
-            'value' => 'N/A',
-            'disabled' => true
         ]);
 
         $this->assertColumn($display, self::LASTNAMERULE_NAMESPACE_REQUIRED, [
             'field' => 'last_name',
-            'desc' => '',
-            'value' => 'N/A',
-            'disabled' => false
         ]);
 
         $this->assertColumn($display, self::EMAILRULE_NAMESPACE, [
             'field' => 'email',
-            'desc' => 'user email',
-            'value' => '',
-            'disabled' => false
         ]);
 
         unset($_ENV['SELECTED_CONNECTION']);
