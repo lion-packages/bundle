@@ -122,7 +122,7 @@ class RulesCommand extends Command
                 class {$class} extends Rules implements RulesInterface
                 {
                     /**
-                     * field for '{$field}'
+                     * Field for the '{$field}' property
                      *
                      * @var string \$field
                      */
@@ -136,7 +136,7 @@ class RulesCommand extends Command
                         \$this->validate(function (Validator \$validator): void {
                             \$validator
                                 ->rule('required', \$this->field)
-                                ->message("The '{\$this->field}' property is required");
+                                ->message("The '{\$this->field}' property is required.");
                         });
                     }
                 }

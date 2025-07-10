@@ -8,7 +8,6 @@ use DI\Attribute\Inject;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Bundle\Helpers\DatabaseEngine;
 use Lion\Bundle\Helpers\FileWriter;
-use Lion\Command\Command;
 use Lion\Database\Connection;
 use LogicException;
 use stdClass;
@@ -26,14 +25,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 class RulesDBCommand extends MenuCommand
 {
     /**
-     * [FileWriter class object]
+     * Class that allows writing system files
      *
      * @var FileWriter $fileWrite
      */
     private FileWriter $fileWriter;
 
     /**
-     * [Manages basic database engine processes]
+     * Manages basic database engine processes
      *
      * @var DatabaseEngine $databaseEngine
      */
@@ -71,20 +70,19 @@ class RulesDBCommand extends MenuCommand
     /**
      * Executes the current command
      *
-     * This method is not abstract because you can use this class
-     * as a concrete class. In this case, instead of defining the
-     * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method
+     * This method is not abstract because you can use this class as a concrete
+     * class. In this case, instead of defining the execute() method, you set the
+     * code to execute by passing a Closure to the setCode() method
      *
-     * @param InputInterface $input [InputInterface is the interface implemented
-     * by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
+     * @param InputInterface $input InputInterface is the interface implemented by
+     * all input classes
+     * @param OutputInterface $output OutputInterface is the interface implemented
+     * by all Output classes
      *
      * @return int
      *
      * @throws ExceptionInterface
-     * @throws LogicException [When this abstract method is not implemented]
+     * @throws LogicException When this abstract method is not implemented
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -176,7 +174,7 @@ class RulesDBCommand extends MenuCommand
 
                     $output->writeln(
                         $this->infoOutput(
-                            "\t>>  RULE: the rule for '{$field}' property has been omitted, it is a foreign"
+                            "\t>>  RULE: The rule for property '{$field}' has been omitted, it is an external property."
                         )
                     );
                 }
@@ -189,18 +187,19 @@ class RulesDBCommand extends MenuCommand
     /**
      * Generate rules for an entity
      *
-     * @param string $driver [Database Engine Type]
-     * @param string $connectionPascal [Connection name in PascalCase format]
-     * @param string $entityPascal [Entity name in PascalCase format]
-     * @param stdClass $column [Property object]
-     * @param string $type [Defines whether the rule type is optional or
-     * required]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
+     * @param string $driver Database Engine Type
+     * @param string $connectionPascal Connection name in PascalCase format
+     * @param string $entityPascal Entity name in PascalCase format
+     * @param stdClass $column Property object
+     * @param string $type Defines whether the rule type is optional or
+     * required
+     * @param OutputInterface $output OutputInterface is the interface implemented
+     * by all Output classes
      *
      * @return void
      *
-     * @throws ExceptionInterface
+     * @throws ExceptionInterface When input binding fails. Bypass this by calling
+     * ignoreValidationErrors()
      */
     private function generateRule(
         string $driver,
@@ -212,12 +211,6 @@ class RulesDBCommand extends MenuCommand
     ): void {
         /** @var string $field */
         $field = $column->Field;
-
-        /** @var string $comment */
-        $comment = $column->Comment;
-
-        /** @var string $default */
-        $default = $column->Default;
 
         /** @var string $ruleName */
         $ruleName = $this->str
@@ -237,72 +230,13 @@ class RulesDBCommand extends MenuCommand
             ->run(
                 new ArrayInput([
                     'rule' => "{$connectionPascal}/{$driver}/{$entityPascal}/{$ruleName}",
+                    '--field' => $field,
                 ]),
                 $output
             );
 
         $this->fileWriter->readFileRows("app/Rules/{$connectionPascal}/{$driver}/{$entityPascal}/{$ruleName}.php", [
-            12 => [
-                'replace' => true,
-                'content' => "'" . strtolower($field) . "'",
-                'search' => "''"
-            ],
-            14 => [
-                'replace' => true,
-                'content' => "'" . strtolower($field) . "'",
-                'search' => "''"
-            ],
-            15 => [
-                'replace' => true,
-                'content' => "'" . strtolower($field) . "'",
-                'search' => "''"
-            ],
-            16 => [
-                'replace' => true,
-                'content' => "'" . strtolower($field) . "'",
-                'search' => "''"
-            ],
-            25 => [
-                'replace' => true,
-                'content' => "'" . strtolower($field) . "'",
-                'search' => "''"
-            ],
-            29 => [
-                'replace' => true,
-                'content' => "'" . strtolower($field) . "'",
-                'search' => "''"
-            ],
-            32 => [
-                'replace' => true,
-                'content' => "'" . strtolower($field) . "'",
-                'search' => "''"
-            ],
-            39 => [
-                'replace' => true,
-                'content' => "'" . strtolower($field) . "'",
-                'search' => "''"
-            ],
-            36 => [
-                'replace' => true,
-                'content' => "'{$comment}'",
-                'search' => "''"
-            ],
-            43 => [
-                'replace' => true,
-                'search' => '""',
-                'content' => "'{$default}'",
-            ],
-            50 => [
-                'replace' => true,
-                'content' => ($type === 'Required' ? 'false' : ($type === 'Optional' ? 'true' : 'false')),
-                'search' => 'false',
-            ],
-            59 => [
-                'replace' => true,
-                'content' => ($type === 'Required' ? 'required' : ($type === 'Optional' ? 'optional' : 'required')),
-                'search' => 'required',
-            ],
-            60 => [
+            30 => [
                 'replace' => true,
                 'multiple' => [
                     [
@@ -311,9 +245,16 @@ class RulesDBCommand extends MenuCommand
                         ),
                         'search' => 'required',
                     ],
+                ],
+            ],
+            31 => [
+                'replace' => true,
+                'multiple' => [
                     [
-                        'content' => '"' . strtolower($field) . '"',
-                        'search' => '""',
+                        'content' => (
+                            $type === 'Required' ? 'required' : ($type === 'Optional' ? 'optional' : 'required')
+                        ),
+                        'search' => 'required',
                     ],
                 ],
             ],

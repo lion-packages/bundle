@@ -15,7 +15,7 @@ use Lion\Helpers\Str;
 class FileWriter
 {
     /**
-     * [Object of class Str]
+     * Modify and construct strings with different formats
      *
      * @var Str $str
      */
@@ -33,8 +33,8 @@ class FileWriter
      * @param array{
      *     search: string,
      *     content: string
-     * } $row [Row to modify]
-     * @param string $originalLine [Original row content]
+     * } $row Row to modify
+     * @param string $originalLine Original row content
      *
      * @return string
      */
@@ -52,7 +52,7 @@ class FileWriter
     /**
      * Reads all rows from a file and modifies them as defined
      *
-     * @param string $path [Defined route]
+     * @param string $path Defined route
      * @param array<int, array{
      *     replace?: bool,
      *     remove?: bool,
@@ -62,7 +62,7 @@ class FileWriter
      *         content?: string,
      *         search?: string
      *     }>
-     * }> $rows [list of rows to modify]
+     * }> $rows list of rows to modify
      *
      * @return void
      */
