@@ -23,7 +23,7 @@ class TestCommandTest extends Test
     private const string URL_PATH = './tests/';
     private const string CLASS_NAME = 'TestTest';
     private const string FILE_NAME = self::CLASS_NAME . '.php';
-    private const string OUTPUT_MESSAGE = 'test has been generated';
+    private const string OUTPUT_MESSAGE = 'The test has been generated successfully.';
 
     private CommandTester $commandTester;
     private TestCommand $testCommand;

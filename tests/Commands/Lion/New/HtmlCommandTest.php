@@ -26,7 +26,7 @@ class HtmlCommandTest extends Test
     private const string CLASS_NAME = 'TestHtml';
     private const string OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
     private const string FILE_NAME = self::CLASS_NAME . '.php';
-    private const string OUTPUT_MESSAGE = 'html has been generated';
+    private const string OUTPUT_MESSAGE = 'The html class has been generated successfully.';
 
     private CommandTester $commandTester;
     private HtmlCommand $htmlCommand;

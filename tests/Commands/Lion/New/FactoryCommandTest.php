@@ -24,7 +24,7 @@ class FactoryCommandTest extends Test
     private const string CLASS_NAME = 'TestFactory';
     private const string OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
     private const string FILE_NAME = self::CLASS_NAME . '.php';
-    private const string OUTPUT_MESSAGE = 'factory has been generated';
+    private const string OUTPUT_MESSAGE = 'The factory has been generated successfully.';
     private const array METHOD = [
         'columns',
         'definition',

@@ -24,7 +24,7 @@ class ControllerCommandTest extends Test
     private const string CLASS_NAME = 'TestController';
     private const string OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
     private const string FILE_NAME = self::CLASS_NAME . '.php';
-    private const string OUTPUT_MESSAGE = 'controller has been generated';
+    private const string OUTPUT_MESSAGE = 'The controller class has been generated successfully.';
     private const array CONTROLLER_METHODS = [
         'createTest',
         'readTest',
@@ -36,7 +36,7 @@ class ControllerCommandTest extends Test
     private const string CLASS_NAME_MODEL = 'TestModel';
     private const string OBJECT_NAME_MODEL = self::NAMESPACE_CLASS_MODEL . self::CLASS_NAME_MODEL;
     private const string FILE_NAME_MODEL = self::CLASS_NAME_MODEL . '.php';
-    private const string OUTPUT_MESSAGE_MODEL = 'model has been generated';
+    private const string OUTPUT_MESSAGE_MODEL = 'The model was generated successfully.';
     private const array MODEL_METHODS = [
         'createTestDB',
         'readTestDB',

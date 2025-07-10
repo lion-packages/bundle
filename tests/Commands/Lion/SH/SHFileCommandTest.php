@@ -22,7 +22,7 @@ class SHFileCommandTest extends Test
     private const string URL_PATH = './storage/sh/';
     private const string FILE_NAME = 'test-app';
     private const string FILE = self::URL_PATH . self::FILE_NAME . '.sh';
-    private const string OUTPUT_MESSAGE = 'File generated successfully';
+    private const string OUTPUT_MESSAGE = 'The script was generated successfully.';
 
     private CommandTester $commandTester;
     private SHFileCommand $shFileCommand;

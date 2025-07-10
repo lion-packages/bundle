@@ -277,15 +277,15 @@ class Migrations
     /**
      * Remove and rebuild all databases
      *
-     * @param string $dbName [Database name]
-     * @param string $connectionName [Connection name]
-     * @param string $type [Driver Type]
-     * @param Closure|null $evaluate [Performs the necessary operations during
-     * connections to the database server]
+     * @param string $dbName Database name
+     * @param string $connectionName Connection name
+     * @param string $type Driver Type
+     * @param Closure|null $evaluate Performs the necessary operations during
+     * connections to the database server
      *
      * @return void
      *
-     * @throws Exception
+     * @throws Exception If an error occurs while deleting the file
      */
     public function resetDatabase(string $dbName, string $connectionName, string $type, ?Closure $evaluate = null): void
     {

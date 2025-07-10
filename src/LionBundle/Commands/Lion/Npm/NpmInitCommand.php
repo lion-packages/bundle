@@ -20,7 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class NpmInitCommand extends MenuCommand
 {
     /**
-     * [List of available project templates]
+     * List of available project templates
      *
      * @const PROJECTS_TEMPLATE
      */
@@ -29,7 +29,7 @@ class NpmInitCommand extends MenuCommand
         'Astro',
     ];
     /**
-     * [List of templates available to create electron-vite projects]
+     * List of templates available to create electron-vite projects
      *
      * @const VITE_ELECTRON_TEMPLATES
      */
@@ -42,7 +42,7 @@ class NpmInitCommand extends MenuCommand
     ];
 
     /**
-     * [List of templates available to create vite projects]
+     * List of templates available to create vite projects
      *
      * @const VITE_TEMPLATES
      */
@@ -59,7 +59,7 @@ class NpmInitCommand extends MenuCommand
     ];
 
     /**
-     * [List of languages available to create a project]
+     * List of languages available to create a project
      *
      * @const TYPES
      */
@@ -69,15 +69,15 @@ class NpmInitCommand extends MenuCommand
     ];
 
     /**
-     * [Adds functions to execute commands, allows you to create an Application
-     * object to run applications with your custom commands]
+     * Adds functions to execute commands, allows you to create an Application
+     * object to run applications with your custom commands
      *
      * @property Kernel $kernel
      */
     private Kernel $kernel;
 
     /**
-     * [Project name]
+     * Project name
      *
      * @var string $project
      */
@@ -105,17 +105,16 @@ class NpmInitCommand extends MenuCommand
     }
 
     /**
-     * Initializes the command after the input has been bound and before the
-     * input is validated
+     * Initializes the command after the input has been bound and before the input
+     * is validated
      *
-     * This is mainly useful when a lot of commands extends one main command
-     * where some things need to be initialized based on the input arguments and
-     * options
+     * This is mainly useful when a lot of commands extends one main command where
+     * some things need to be initialized based on the input arguments and options
      *
-     * @param InputInterface $input [InputInterface is the interface implemented
-     * by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
+     * @param InputInterface $input InputInterface is the interface implemented by
+     * all input classes
+     * @param OutputInterface $output OutputInterface is the interface implemented
+     * by all Output classes
      *
      * @return void
      */
@@ -127,19 +126,18 @@ class NpmInitCommand extends MenuCommand
     /**
      * Executes the current command
      *
-     * This method is not abstract because you can use this class
-     * as a concrete class. In this case, instead of defining the
-     * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method
+     * This method is not abstract because you can use this class as a concrete
+     * class. In this case, instead of defining the execute() method, you set the
+     * code to execute by passing a Closure to the setCode() method
      *
-     * @param InputInterface $input [InputInterface is the interface implemented
-     * by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
+     * @param InputInterface $input InputInterface is the interface implemented by
+     * all input classes
+     * @param OutputInterface $output OutputInterface is the interface implemented
+     * by all Output classes
      *
      * @return int
      *
-     * @throws LogicException [When this abstract method is not implemented]
+     * @throws LogicException When this abstract method is not implemented
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -225,7 +223,7 @@ class NpmInitCommand extends MenuCommand
     /**
      * Create a vite project and install its dependencies
      *
-     * @param string $template [Project template]
+     * @param string $template Project template
      *
      * @return void
      */
@@ -243,7 +241,7 @@ class NpmInitCommand extends MenuCommand
     /**
      * Create an electron-vite project and install its dependencies
      *
-     * @param string $template [Project template]
+     * @param string $template Project template
      *
      * @return void
      */

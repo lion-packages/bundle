@@ -41,7 +41,7 @@ class MigrationsTest extends Test
     private const string URL_PATH_MYSQL_VIEW = './database/Migrations/LionDatabase/MySQL/Views/';
     private const string URL_PATH_MYSQL_STORED_PROCEDURE = './database/Migrations/LionDatabase/MySQL/StoredProcedures/';
     private const string FILE_NAME = self::CLASS_NAME . '.php';
-    private const string OUTPUT_MESSAGE = 'migration has been generated';
+    private const string OUTPUT_MESSAGE = 'The migration was generated successfully.';
 
     private CommandTester $commandTester;
     private Migrations $migrations;

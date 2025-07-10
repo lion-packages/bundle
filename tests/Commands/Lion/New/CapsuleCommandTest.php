@@ -30,7 +30,7 @@ class CapsuleCommandTest extends Test
     private const string CLASS_ENTITY = 'test';
     private const string OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
     private const string FILE_NAME = self::CLASS_NAME . '.php';
-    private const string OUTPUT_MESSAGE = 'The capsule class has been generated successfully';
+    private const string OUTPUT_MESSAGE = 'The capsule class has been generated successfully.';
     private const array PROPERTIES = [
         'idusers:int',
         'users_name:string',

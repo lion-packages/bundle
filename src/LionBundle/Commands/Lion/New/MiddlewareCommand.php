@@ -79,7 +79,7 @@ class MiddlewareCommand extends Command
      *
      * @return int
      *
-     * @throws Exception
+     * @throws Exception If the file could not be opened
      * @throws LogicException When this abstract method is not implemented
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -117,12 +117,17 @@ class MiddlewareCommand extends Command
                  */
                 class {$class} implements MiddlewareInterface
                 {
+                    /**
+                     * Filter name
+                     *
+                     * @const NAME
+                     */
                     public const string NAME = '';
 
                     /**
                      * {@inheritDoc}
                      *
-                     * @throws MiddlewareException
+                     * @throws MiddlewareException If something goes wrong with the filter
                      */
                     public function process(): void
                     {
@@ -134,10 +139,10 @@ class MiddlewareCommand extends Command
             )
             ->close();
 
-        $output->writeln($this->warningOutput("\t>>  MIDDLEWARE: {$class}"));
+        $output->writeln($this->warningOutput("\t>>  MIDDLEWARE: {$namespace}\\{$class}"));
 
         $output->writeln(
-            $this->successOutput("\t>>  MIDDLEWARE: the '{$namespace}\\{$class}' middleware has been generated")
+            $this->successOutput("\t>>  MIDDLEWARE: The middleware has been generated successfully.")
         );
 
         return parent::SUCCESS;

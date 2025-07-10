@@ -22,15 +22,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 class EnumCommand extends Command
 {
     /**
-     * [Fabricates the data provided to manipulate information (folder, class,
-     * namespace)]
+     * Fabricates the data provided to manipulate information (folder, class,
+     * namespace)
      *
      * @var ClassFactory $classFactory
      */
     private ClassFactory $classFactory;
 
     /**
-     * [Manipulate system files]
+     * Manipulate system files
      *
      * @var Store $store
      */
@@ -68,20 +68,19 @@ class EnumCommand extends Command
     /**
      * Executes the current command
      *
-     * This method is not abstract because you can use this class
-     * as a concrete class. In this case, instead of defining the
-     * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method
+     * This method is not abstract because you can use this class as a concrete
+     * class. In this case, instead of defining the execute() method, you set the
+     * code to execute by passing a Closure to the setCode() method
      *
-     * @param InputInterface $input [InputInterface is the interface implemented
-     * by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
+     * @param InputInterface $input InputInterface is the interface implemented by
+     * all input classes
+     * @param OutputInterface $output OutputInterface is the interface implemented
+     * by all Output classes
      *
      * @return int
      *
-     * @throws Exception
-     * @throws LogicException [When this abstract method is not implemented]
+     * @throws Exception If the file could not be opened
+     * @throws LogicException When this abstract method is not implemented
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -101,7 +100,7 @@ class EnumCommand extends Command
         $this->classFactory
             ->create($class, ClassFactory::PHP_EXTENSION, $folder)
             ->add(
-                <<<EOT
+                <<<PHP
                 <?php
 
                 declare(strict_types=1);
@@ -110,13 +109,11 @@ class EnumCommand extends Command
 
                 /**
                  * Description of Enum '{$class}'
-                 *
-                 * @package {$namespace}
                  */
                 enum {$class}: string
                 {
                     /**
-                     * [Description of the case EXAMPLE]
+                     * Description of the case EXAMPLE
                      */
                     case EXAMPLE = 'example';
 
@@ -131,13 +128,13 @@ class EnumCommand extends Command
                     }
                 }
 
-                EOT
+                PHP
             )
             ->close();
 
-        $output->writeln($this->warningOutput("\t>>  ENUM: {$class}"));
+        $output->writeln($this->warningOutput("\t>>  ENUM: {$namespace}\\{$class}"));
 
-        $output->writeln($this->successOutput("\t>>  ENUM: the '{$namespace}\\{$class}' enum has been generated"));
+        $output->writeln($this->successOutput("\t>>  ENUM: The enumeration has been generated successfully."));
 
         return parent::SUCCESS;
     }

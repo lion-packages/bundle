@@ -68,20 +68,19 @@ class ClassCommand extends Command
     /**
      * Executes the current command
      *
-     * This method is not abstract because you can use this class
-     * as a concrete class. In this case, instead of defining the
-     * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method
+     * This method is not abstract because you can use this class as a concrete
+     * class. In this case, instead of defining the execute() method, you set the
+     * code to execute by passing a Closure to the setCode() method
      *
-     * @param InputInterface $input [InputInterface is the interface implemented
-     * by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
+     * @param InputInterface $input InputInterface is the interface implemented by
+     * all input classes
+     * @param OutputInterface $output OutputInterface is the interface implemented
+     * by all Output classes
      *
      * @return int
      *
-     * @throws Exception
-     * @throws LogicException [When this abstract method is not implemented]
+     * @throws Exception If the file could not be opened
+     * @throws LogicException When this abstract method is not implemented
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -110,8 +109,6 @@ class ClassCommand extends Command
 
                 /**
                  * Class Description
-                 *
-                 * @package {$namespace}
                  */
                 class {$class}
                 {
@@ -121,9 +118,9 @@ class ClassCommand extends Command
             )
             ->close();
 
-        $output->writeln($this->warningOutput("\t>>  CLASS: {$class}"));
+        $output->writeln($this->warningOutput("\t>>  CLASS: {$namespace}\\{$class}"));
 
-        $output->writeln($this->successOutput("\t>>  CLASS: the '{$namespace}\\{$class}' class has been generated"));
+        $output->writeln($this->successOutput("\t>>  CLASS: The class has been generated successfully."));
 
         return parent::SUCCESS;
     }

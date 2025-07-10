@@ -22,7 +22,7 @@ class SocketCommandTest extends Test
     private const string URL_PATH = './app/Sockets/';
     private const string CLASS_NAME = 'TestSocket';
     private const string FILE_NAME = self::CLASS_NAME . '.php';
-    private const string OUTPUT_MESSAGE = 'socket has been generated';
+    private const string OUTPUT_MESSAGE = 'The socket has been generated successfully.';
 
     private CommandTester $commandTester;
     private SocketCommand $socketCommand;

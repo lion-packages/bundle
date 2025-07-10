@@ -79,7 +79,7 @@ class CommandsCommand extends Command
      *
      * @return int
      *
-     * @throws Exception
+     * @throws Exception If the file could not be opened
      * @throws LogicException When this abstract method is not implemented
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -196,9 +196,7 @@ class CommandsCommand extends Command
 
         $output->writeln($this->warningOutput("\t>>  COMMAND: {$namespace}\\{$class}"));
 
-        $output->writeln(
-            $this->successOutput("\t>>  COMMAND: The command was generated successfully.")
-        );
+        $output->writeln($this->successOutput("\t>>  COMMAND: The command was generated successfully."));
 
         return parent::SUCCESS;
     }

@@ -24,7 +24,7 @@ class ServiceCommandTest extends Test
     private const string CLASS_NAME = 'TestService';
     private const string OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
     private const string FILE_NAME = self::CLASS_NAME . '.php';
-    private const string OUTPUT_MESSAGE = 'service has been generated';
+    private const string OUTPUT_MESSAGE = 'The service was generated successfully.';
 
     private CommandTester $commandTester;
     private ServiceCommand $serviceCommand;

@@ -22,11 +22,11 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class FreshMigrationsCommandTest extends Test
 {
-    private const string OUTPUT_SEED_CREATE_MESSAGE = 'seed has been generated';
-    private const string OUTPUT_MESSAGE = 'Migrations executed successfully';
-    private const string OUTPUT_MESSAGE_ERROR_PATH = 'there are no defined migration routes';
-    private const string OUTPUT_SEED_MESSAGE = 'seeds executed';
-    private const string OUTPUT_MIGRATION_CREATE_MESSAGE = 'migration has been generated';
+    private const string OUTPUT_SEED_CREATE_MESSAGE = 'The seed was generated correctly.';
+    private const string OUTPUT_MESSAGE = 'Migrations executed successfully.';
+    private const string OUTPUT_MESSAGE_ERROR_PATH = 'There are no defined migrations.';
+    private const string OUTPUT_SEED_MESSAGE = 'Seeds executed.';
+    private const string OUTPUT_MIGRATION_CREATE_MESSAGE = 'The migration was generated successfully.';
     private const string SEED_NAMESPACE = 'Database\\Seed\\';
     private const string SEED_CLASS = 'ExampleSeed';
     private const string SEED_PATH = './database/Seed/';

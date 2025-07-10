@@ -7,7 +7,6 @@ namespace Tests\Commands\Lion\New;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Lion\Bundle\Commands\Lion\New\ClassCommand;
-use Lion\Bundle\Commands\Lion\New\CommandsCommand;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
@@ -25,7 +24,7 @@ class ClassCommandTest extends Test
     private const string CLASS_NAME = 'TestClass';
     private const string OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
     private const string FILE_NAME = self::CLASS_NAME . '.php';
-    private const string OUTPUT_MESSAGE = 'class has been generated';
+    private const string OUTPUT_MESSAGE = 'The class has been generated successfully.';
 
     private CommandTester $commandTester;
     private ClassCommand $classCommand;

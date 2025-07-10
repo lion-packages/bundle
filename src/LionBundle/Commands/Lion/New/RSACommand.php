@@ -22,15 +22,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 class RSACommand extends Command
 {
     /**
-     * [Allows you to generate the required configuration for public and private
-     * keys, has methods that allow you to encrypt and decrypt data with RSA]
+     * Allows you to generate the required configuration for public and private
+     * keys, has methods that allow you to encrypt and decrypt data with RSA
      *
      * @var RSA $rsa
      */
     private RSA $rsa;
 
     /**
-     * [Manipulate system files]
+     * Manipulate system files
      *
      * @var Store $store
      */
@@ -68,20 +68,19 @@ class RSACommand extends Command
     /**
      * Executes the current command
      *
-     * This method is not abstract because you can use this class
-     * as a concrete class. In this case, instead of defining the
-     * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method
+     * This method is not abstract because you can use this class as a concrete
+     * class. In this case, instead of defining the execute() method, you set the
+     * code to execute by passing a Closure to the setCode() method
      *
-     * @param InputInterface $input [InputInterface is the interface implemented
-     * by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
+     * @param InputInterface $input InputInterface is the interface implemented by
+     * all input classes
+     * @param OutputInterface $output OutputInterface is the interface implemented
+     * by all Output classes
      *
      * @return int
      *
-     * @throws Exception
-     * @throws LogicException [When this abstract method is not implemented]
+     * @throws Exception If the file could not be opened
+     * @throws LogicException When this abstract method is not implemented
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -110,11 +109,11 @@ class RSACommand extends Command
 
         $this->rsa->create();
 
-        $output->writeln($this->warningOutput("\t>>  RSA KEYS: public and private"));
+        $output->writeln($this->warningOutput("\t>>  RSA: public and private"));
 
-        $output->writeln($this->successOutput("\t>>  RSA KEYS: Exported in {$urlPath}public.key"));
+        $output->writeln($this->successOutput("\t>>  RSA: Exported in {$urlPath}public.key"));
 
-        $output->writeln($this->successOutput("\t>>  RSA KEYS: Exported in {$urlPath}private.key"));
+        $output->writeln($this->successOutput("\t>>  RSA: Exported in {$urlPath}private.key"));
 
         return parent::SUCCESS;
     }

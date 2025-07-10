@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lion\Bundle\Commands\Lion\New;
 
 use DI\Attribute\Inject;
+use Exception;
 use Lion\Command\Command;
 use Lion\Security\AES;
 use LogicException;
@@ -22,18 +23,18 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 class AESCommand extends Command
 {
     /**
-     * [List of available AES methods]
+     * List of available AES methods
      *
-     * @const array AES_METHODS
+     * @const AES_METHODS
      */
     private const array AES_METHODS = [
         AES::AES_256_CBC,
     ];
 
     /**
-     * [It allows you to generate the configuration required for AES encryption
-     * and decryption, it has methods that allow you to encrypt and decrypt data
-     * with AES]
+     * It allows you to generate the configuration required for AES encryption and
+     * decryption, it has methods that allow you to encrypt and decrypt data with
+     * AES
      *
      * @var AES $aes
      */
@@ -62,19 +63,19 @@ class AESCommand extends Command
     /**
      * Executes the current command
      *
-     * This method is not abstract because you can use this class
-     * as a concrete class. In this case, instead of defining the
-     * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method
+     * This method is not abstract because you can use this class as a concrete
+     * class. In this case, instead of defining the execute() method, you set the
+     * code to execute by passing a Closure to the setCode() method
      *
-     * @param InputInterface $input [InputInterface is the interface implemented
-     * by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
+     * @param InputInterface $input InputInterface is the interface implemented by
+     * all input classes
+     * @param OutputInterface $output OutputInterface is the interface implemented
+     * by all Output classes
      *
      * @return int
      *
-     * @throws LogicException [When this abstract method is not implemented]
+     * @throws Exception If the algorithm is not supported
+     * @throws LogicException When this abstract method is not implemented
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
