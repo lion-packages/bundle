@@ -17,28 +17,28 @@ use stdClass;
 class MigrationFactory
 {
     /**
-     * [Constant for a table]
+     * Constant for a table
      *
      * @const TABLE
      */
     public const string TABLE = 'Table';
 
     /**
-     * [Constant for a view]
+     * Constant for a view
      *
      * @const VIEW
      */
     public const string VIEW = 'View';
 
     /**
-     * [Constant for a store-procedure]
+     * Constant for a store-procedure
      *
      * @const STORE_PROCEDURE
      */
     public const string STORED_PROCEDURE = 'Stored-Procedure';
 
     /**
-     * [List of available types]
+     * List of available types
      *
      * @const OPTIONS
      */
@@ -49,7 +49,7 @@ class MigrationFactory
     ];
 
     /**
-     * [Manages basic database engine processes]
+     * Manages basic database engine processes
      *
      * @var DatabaseEngine $databaseEngine
      */
@@ -79,51 +79,39 @@ class MigrationFactory
 
         $path = '';
 
-        if (self::TABLE === $selectedType) {
-            $path = "database/Migrations/{$dbPascal}/{$driver}/Tables/";
+        $typeFolders = [
+            self::TABLE => 'Tables',
+            self::VIEW => 'Views',
+            self::STORED_PROCEDURE => 'StoredProcedures',
+        ];
+
+        $mysqlMethods = [
+            self::TABLE => 'getMySQLTableBody',
+            self::VIEW => 'getMySQLViewBody',
+            self::STORED_PROCEDURE => 'getMySQLStoredProcedureBody',
+        ];
+
+        $pgsqlMethods = [
+            self::TABLE => 'getPostgreSQLTableBody',
+            self::VIEW => 'getPostgreSQLViewBody',
+            self::STORED_PROCEDURE => 'getPostgreSQLStoredProcedureBody',
+        ];
+
+        if (isset($typeFolders[$selectedType])) {
+            $folder = $typeFolders[$selectedType];
+
+            $path = "database/Migrations/{$dbPascal}/{$driver}/{$folder}/";
+
+            $namespace = "Database\\Migrations\\{$dbPascal}\\{$driver}\\{$folder}";
 
             if ($this->databaseEngine->getDriver(Driver::MYSQL) === $driver) {
-                $body = $this->getMySQLTableBody(
-                    $className,
-                    "Database\\Migrations\\{$dbPascal}\\{$driver}\\Tables"
-                );
+                $method = $mysqlMethods[$selectedType];
+
+                $body = $this->$method($className, $namespace);
             } elseif ($this->databaseEngine->getDriver(Driver::POSTGRESQL) === $driver) {
-                $body = $this->getPostgreSQLTableBody(
-                    $className,
-                    "Database\\Migrations\\{$dbPascal}\\{$driver}\\Tables"
-                );
-            }
-        }
+                $method = $pgsqlMethods[$selectedType];
 
-        if (self::VIEW === $selectedType) {
-            $path = "database/Migrations/{$dbPascal}/{$driver}/Views/";
-
-            if ($this->databaseEngine->getDriver(Driver::MYSQL) === $driver) {
-                $body = $this->getMySQLViewBody(
-                    $className,
-                    "Database\\Migrations\\{$dbPascal}\\{$driver}\\Views"
-                );
-            } elseif ($this->databaseEngine->getDriver(Driver::POSTGRESQL) === $driver) {
-                $body = $this->getPostgreSQLViewBody(
-                    $className,
-                    "Database\\Migrations\\{$dbPascal}\\{$driver}\\Views"
-                );
-            }
-        }
-
-        if (self::STORED_PROCEDURE === $selectedType) {
-            $path = "database/Migrations/{$dbPascal}/{$driver}/StoredProcedures/";
-
-            if ($this->databaseEngine->getDriver(Driver::MYSQL) === $driver) {
-                $body = $this->getMySQLStoredProcedureBody(
-                    $className,
-                    "Database\\Migrations\\{$dbPascal}\\{$driver}\\StoredProcedures"
-                );
-            } elseif ($this->databaseEngine->getDriver(Driver::POSTGRESQL) === $driver) {
-                $body = $this->getPostgreSQLStoredProcedureBody(
-                    $className,
-                    "Database\\Migrations\\{$dbPascal}\\{$driver}\\StoredProcedures"
-                );
+                $body = $this->$method($className, $namespace);
             }
         }
 
@@ -132,6 +120,7 @@ class MigrationFactory
             'path' => $path,
         ];
     }
+
 
     /**
      * Returns the body of the migration of type table
@@ -160,6 +149,13 @@ class MigrationFactory
         class {$className} implements TableInterface
         {
             /**
+             * Name of the migration
+             *
+             * @const NAME
+             */
+            public const string NAME = '--NAME--';
+
+            /**
              * Index number for seed execution priority
              *
              * @const INDEX
@@ -172,7 +168,7 @@ class MigrationFactory
             public function up(): stdClass
             {
                 return Schema::connection(getDefaultConnection())
-                    ->createTable('--NAME--', function (): void {
+                    ->createTable(self::NAME, function (): void {
                         Schema::int('id')
                             ->notNull()
                             ->autoIncrement()
@@ -211,6 +207,13 @@ class MigrationFactory
          */
         class {$className} implements TableInterface
         {
+            /**
+             * Name of the migration
+             *
+             * @const NAME
+             */
+            public const string NAME = '--NAME--';
+
             /**
              * Index number for seed execution priority
              *
@@ -264,12 +267,19 @@ class MigrationFactory
         class {$className} implements ViewInterface
         {
             /**
+             * Name of the migration
+             *
+             * @const NAME
+             */
+            public const string NAME = '--NAME--';
+
+            /**
              * {@inheritDoc}
              */
             public function up(): stdClass
             {
                 return Schema::connection(getDefaultConnection())
-                    ->createView('--NAME--', function (MySQL \$db): void {
+                    ->createView(self::NAME, function (MySQL \$db): void {
                         \$db
                             ->table('table')
                             ->select();
@@ -307,6 +317,13 @@ class MigrationFactory
          */
         class {$className} implements ViewInterface
         {
+            /**
+             * Name of the migration
+             *
+             * @const NAME
+             */
+            public const string NAME = '--NAME--';
+
             /**
              * {@inheritDoc}
              */
@@ -353,12 +370,19 @@ class MigrationFactory
         class {$className} implements StoredProcedureInterface
         {
             /**
+             * Name of the migration
+             *
+             * @const NAME
+             */
+            public const string NAME = '--NAME--';
+
+            /**
              * {@inheritDoc}
              */
             public function up(): stdClass
             {
                 return Schema::connection(getDefaultConnection())
-                    ->createStoreProcedure('--NAME--', function (): void {
+                    ->createStoreProcedure(self::NAME, function (): void {
                         Schema::in()->varchar('name', 25);
                     }, function (MySQL \$db): void {
                         \$db
@@ -400,6 +424,13 @@ class MigrationFactory
          */
         class {$className} implements StoredProcedureInterface
         {
+            /**
+             * Name of the migration
+             *
+             * @const NAME
+             */
+            public const string NAME = '--NAME--';
+
             /**
              * {@inheritDoc}
              */
