@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use Carbon\Carbon;
+use Carbon\Month;
+use Carbon\WeekDay;
 use Faker\Factory;
 use Faker\Generator;
 use GuzzleHttp\Client;
@@ -61,13 +63,30 @@ if (!function_exists('now')) {
     /**
      * Get a Carbon instance for the current date and time
      *
-     * @param null|DateTimeZone|string $tz
+     * @param DateTimeZone|string|int|null $tz
      *
      * @return Carbon
      */
-    function now(null|DateTimeZone|string $tz = null): Carbon
+    function now(DateTimeZone|string|int|null $tz = null): Carbon
     {
         return Carbon::now($tz);
+    }
+}
+
+if (!function_exists('parse')) {
+    /**
+     * Create a carbon instance from a string
+     *
+     * @param DateTimeInterface|WeekDay|Month|string|int|float|null $time
+     * @param DateTimeZone|string|int|null $timezone
+     *
+     * @return Carbon
+     */
+    function parse(
+        DateTimeInterface|WeekDay|Month|string|int|float|null $time,
+        DateTimeZone|string|int|null $timezone = null
+    ): Carbon {
+        return Carbon::parse($time, $timezone);
     }
 }
 
@@ -75,8 +94,8 @@ if (!function_exists('fetch')) {
     /**
      * Function to make HTTP requests with GuzzleHttp
      *
-     * @param Fetch $fetch [Defines parameters for consuming HTTP requests with
-     * GuzzleHttp]
+     * @param Fetch $fetch Defines parameters for consuming HTTP requests with
+     * GuzzleHttp
      *
      * @return ResponseInterface
      *
