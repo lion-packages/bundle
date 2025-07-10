@@ -22,7 +22,7 @@ class InterfaceCommandTest extends Test
     private const string URL_PATH = './app/Interfaces/';
     private const string CLASS_NAME = 'TestInterface';
     private const string FILE_NAME = self::CLASS_NAME . '.php';
-    private const string OUTPUT_MESSAGE = 'interface has been generated';
+    private const string OUTPUT_MESSAGE = 'The interface has been generated successfully.';
 
     private CommandTester $commandTester;
     private InterfaceCommand $interfaceCommand;

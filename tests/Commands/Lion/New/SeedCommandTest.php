@@ -24,8 +24,10 @@ class SeedCommandTest extends Test
     private const string CLASS_NAME = 'TestSeed';
     private const string OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
     private const string FILE_NAME = self::CLASS_NAME . '.php';
-    private const string OUTPUT_MESSAGE = 'seed has been generated';
-    private const array METHOD = ['run'];
+    private const string OUTPUT_MESSAGE = 'The seed was generated correctly.';
+    private const array METHOD = [
+        'run',
+    ];
 
     private CommandTester $commandTester;
     private SeedCommand $seedCommand;

@@ -42,7 +42,7 @@ class MigrationCommandTest extends Test
     private const string URL_PATH_POSTGRESQL_STORE_PROCEDURES =
         './database/Migrations/LionDatabase/PostgreSQL/StoredProcedures/';
     private const string FILE_NAME = self::CLASS_NAME . '.php';
-    private const string OUTPUT_MESSAGE = 'migration has been generated';
+    private const string OUTPUT_MESSAGE = 'The migration was generated successfully.';
 
     private CommandTester $commandTester;
     private MigrationCommand $migrationCommand;

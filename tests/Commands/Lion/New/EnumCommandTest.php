@@ -22,7 +22,7 @@ class EnumCommandTest extends Test
     private const string URL_PATH = './app/Enums/';
     private const string CLASS_NAME = 'TestEnum';
     private const string FILE_NAME = self::CLASS_NAME . '.php';
-    private const string OUTPUT_MESSAGE = 'enum has been generated';
+    private const string OUTPUT_MESSAGE = 'The enumeration has been generated successfully.';
 
     private CommandTester $commandTester;
     private EnumCommand $enumCommand;

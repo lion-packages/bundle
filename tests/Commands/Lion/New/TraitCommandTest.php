@@ -22,7 +22,7 @@ class TraitCommandTest extends Test
     private const string URL_PATH = './app/Traits/';
     private const string CLASS_NAME = 'TestTrait';
     private const string FILE_NAME = self::CLASS_NAME . '.php';
-    private const string OUTPUT_MESSAGE = 'trait has been generated';
+    private const string OUTPUT_MESSAGE = 'The trait has been generated successfully.';
 
     private CommandTester $commandTester;
     private TraitCommand $traitCommand;

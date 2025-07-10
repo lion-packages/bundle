@@ -24,7 +24,7 @@ class RulesCommandTest extends Test
     private const string CLASS_NAME = 'TestRule';
     private const string OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
     private const string FILE_NAME = self::CLASS_NAME . '.php';
-    private const string OUTPUT_MESSAGE = 'rule has been generated';
+    private const string OUTPUT_MESSAGE = 'The rule was generated successfully.';
     private const string METHOD = 'passes';
 
     private CommandTester $commandTester;

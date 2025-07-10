@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Tests\Helpers\Commands\Seeds;
 
+use DI\DependencyException;
+use DI\NotFoundException;
 use Lion\Bundle\Commands\Lion\New\SeedCommand;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\Migrations\Migrations;
 use Lion\Bundle\Helpers\Commands\Seeds\Seeds;
 use Lion\Bundle\Interface\SeedInterface;
 use Lion\Command\Command;
+use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
@@ -23,29 +26,31 @@ class SeedsTest extends Test
     private const string FILE_NAME = self::SEED_NAME . '.php';
     private const string URL_PATH_SEED = 'database/Seed/';
     private const string NAMESPACE_SEED = 'Database\\Seed\\';
-    private const string MESSAGE_OUTPUT = 'seed has been generated';
+    private const string MESSAGE_OUTPUT = 'The seed was generated correctly.';
 
     private CommandTester $commandTester;
     private Seeds $seeds;
 
     /**
      * @throws ReflectionException
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     protected function setUp(): void
     {
-        $this->seeds = (new Seeds())
-            ->setMigrations(new Migrations());
+        $container = new Container();
+
+        /** @var SeedCommand $seedCommand */
+        $seedCommand = $container->resolve(SeedCommand::class);
+
+        /** @var Seeds $seeds */
+        $seeds = $container->resolve(Seeds::class);
+
+        $this->seeds = $seeds;
 
         $application = new Application();
 
-        $application->add(
-            (new SeedCommand())
-                ->setClassFactory(
-                    (new ClassFactory())
-                        ->setStore(new Store())
-                )
-                ->setStore(new Store())
-        );
+        $application->add($seedCommand);
 
         $this->commandTester = new CommandTester($application->find('new:seed'));
 
