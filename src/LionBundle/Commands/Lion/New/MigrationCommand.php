@@ -85,20 +85,19 @@ class MigrationCommand extends MenuCommand
     /**
      * Executes the current command
      *
-     * This method is not abstract because you can use this class
-     * as a concrete class. In this case, instead of defining the
-     * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method
+     * This method is not abstract because you can use this class as a concrete
+     * class. In this case, instead of defining the execute() method, you set the
+     * code to execute by passing a Closure to the setCode() method
      *
-     * @param InputInterface $input [InputInterface is the interface implemented
-     * by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
+     * @param InputInterface $input InputInterface is the interface implemented by
+     * all input classes
+     * @param OutputInterface $output OutputInterface is the interface implemented
+     * by all Output classes
      *
-     * @return int [0 if everything went fine, or an exit code]
+     * @return int
      *
-     * @throws Exception
-     * @throws LogicException [When this abstract method is not implemented]
+     * @throws Exception If the file could not be opened
+     * @throws LogicException When this abstract method is not implemented
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -106,7 +105,9 @@ class MigrationCommand extends MenuCommand
         $migration = $input->getArgument('migration');
 
         if (STR->of($migration)->test("/.*\//")) {
-            $output->writeln($this->errorOutput("\t>>  migration cannot be inside subfolders"));
+            $output->writeln($this->warningOutput("\t>>  MIGRATION: {$migration}"));
+
+            $output->writeln($this->errorOutput("\t>>  MIGRATION: Migration cannot be inside subfolders"));
 
             return parent::INVALID;
         }
@@ -162,14 +163,13 @@ class MigrationCommand extends MenuCommand
             ->add($add)
             ->close();
 
-        $output->writeln($this->warningOutput("\t>>  MIGRATION: {$this->classFactory->getClass()}"));
-
         $output->writeln(
-            $this->successOutput(
-                "\t>>  MIGRATION: the '{$this->classFactory->getNamespace()}\\{$this->classFactory->getClass()}' " .
-                'migration has been generated'
+            $this->warningOutput(
+                "\t>>  MIGRATION: {$this->classFactory->getNamespace()}\\{$this->classFactory->getClass()}"
             )
         );
+
+        $output->writeln($this->successOutput("\t>>  MIGRATION: The migration was generated successfully."));
 
         return parent::SUCCESS;
     }

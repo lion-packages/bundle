@@ -99,29 +99,30 @@ class ControllerCommand extends Command
     /**
      * Executes the current command
      *
-     * This method is not abstract because you can use this class
-     * as a concrete class. In this case, instead of defining the
-     * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method
+     * This method is not abstract because you can use this class as a concrete
+     * class. In this case, instead of defining the execute() method, you set the
+     * code to execute by passing a Closure to the setCode() method
      *
-     * @param InputInterface $input [InputInterface is the interface implemented
-     * by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
+     * @param InputInterface $input InputInterface is the interface implemented by
+     * all input classes
+     * @param OutputInterface $output OutputInterface is the interface implemented
+     * by all Output classes
      *
      * @return int
      *
-     * @throws Exception
-     * @throws ExceptionInterface
-     * @throws LogicException [When this abstract method is not implemented]
+     * @throws Exception If the file could not be opened
+     * @throws ExceptionInterface When input binding fails. Bypass this by calling
+     * ignoreValidationErrors()
+     * @throws LogicException When this abstract method is not implemented
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $str = new Str();
 
         return $this->classCommandFactory
             ->setFactories(['controller', 'model'])
-            ->execute(function (ClassCommandFactory $classFactory, Store $store) use ($input, $output, $str): int {
+            ->execute(function (ClassCommandFactory $classFactory, Store $store) use ($input, $output): int {
+                $str = new Str();
+
                 /** @var string $controller */
                 $controller = $input->getArgument('controller');
 
@@ -174,14 +175,14 @@ class ControllerCommand extends Command
 
                 $this->str
                     ->of(
-                        <<<EOT
+                        <<<PHP
                         <?php
 
                         declare(strict_types=1);
 
                         namespace {$controllerNamespace};
 
-                        EOT
+                        PHP
                     );
 
                 if ('none' != $model) {
@@ -190,7 +191,7 @@ class ControllerCommand extends Command
 
                 $this->str
                     ->concat(
-                        <<<EOT
+                        <<<PHP
 
                         use Lion\Database\Interface\DatabaseCapsuleInterface;
                         use stdClass;
@@ -200,7 +201,7 @@ class ControllerCommand extends Command
                          */
                         class {$controllerClass}
                         {\n
-                        EOT
+                        PHP
                     );
 
                 foreach (self::METHODS as $method) {
@@ -264,10 +265,10 @@ class ControllerCommand extends Command
                 /** @var string $content */
                 $content = $this->str
                     ->concat(
-                        <<<EOT
+                        <<<PHP
                         }
 
-                        EOT
+                        PHP
                     )
                     ->get();
 
@@ -275,13 +276,10 @@ class ControllerCommand extends Command
                     ->create($controllerClass, ClassFactory::PHP_EXTENSION, $controllerPath)
                     ->add($content);
 
-                $output->writeln($this->warningOutput("\t>>  CONTROLLER: {$controllerClass}"));
+                $output->writeln($this->warningOutput("\t>>  CONTROLLER: {$controllerNamespace}\\{$controllerClass}"));
 
                 $output->writeln(
-                    $this->successOutput(
-                        "\t>>  CONTROLLER: the '{$controllerNamespace}\\{$controllerClass}' " .
-                        'controller has been generated'
-                    )
+                    $this->successOutput("\t>>  CONTROLLER: The controller class has been generated successfully.")
                 );
 
                 if ('none' != $model) {

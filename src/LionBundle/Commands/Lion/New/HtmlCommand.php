@@ -22,15 +22,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 class HtmlCommand extends Command
 {
     /**
-     * [Fabricates the data provided to manipulate information (folder, class,
-     * namespace)]
+     * Fabricates the data provided to manipulate information (folder, class,
+     * namespace)
      *
      * @var ClassFactory $classFactory
      */
     private ClassFactory $classFactory;
 
     /**
-     * [Manipulate system files]
+     * Manipulate system files
      *
      * @var Store $store
      */
@@ -68,20 +68,19 @@ class HtmlCommand extends Command
     /**
      * Executes the current command
      *
-     * This method is not abstract because you can use this class
-     * as a concrete class. In this case, instead of defining the
-     * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method
+     * This method is not abstract because you can use this class as a concrete
+     * class. In this case, instead of defining the execute() method, you set the
+     * code to execute by passing a Closure to the setCode() method
      *
-     * @param InputInterface $input [InputInterface is the interface implemented
-     * by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
+     * @param InputInterface $input InputInterface is the interface implemented by
+     * all input classes
+     * @param OutputInterface $output OutputInterface is the interface implemented
+     * by all Output classes
      *
      * @return int
      *
-     * @throws Exception
-     * @throws LogicException [When this abstract method is not implemented]
+     * @throws Exception If the file could not be opened
+     * @throws LogicException When this abstract method is not implemented
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -113,8 +112,6 @@ class HtmlCommand extends Command
 
                 /**
                  * Define an HTML template
-                 *
-                 * @package {$namespace}
                  */
                 class {$class} extends Html implements HtmlInterface
                 {
@@ -147,9 +144,9 @@ class HtmlCommand extends Command
             )
             ->close();
 
-        $output->writeln($this->warningOutput("\t>>  HTML: {$class}"));
+        $output->writeln($this->warningOutput("\t>>  HTML: {$namespace}\\{$class}"));
 
-        $output->writeln($this->successOutput("\t>>  HTML: the '{$namespace}\\{$class}' html has been generated"));
+        $output->writeln($this->successOutput("\t>>  HTML: The html class has been generated successfully."));
 
         return parent::SUCCESS;
     }

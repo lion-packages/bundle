@@ -224,9 +224,7 @@ class CapsuleCommand extends Command
 
         $output->writeln($this->warningOutput("\t>>  CAPSULE: {$namespace}\\{$class}"));
 
-        $output->writeln(
-            $this->successOutput("\t>>  CAPSULE: The capsule class has been generated successfully.")
-        );
+        $output->writeln($this->successOutput("\t>>  CAPSULE: The capsule class has been generated successfully."));
 
         return parent::SUCCESS;
     }

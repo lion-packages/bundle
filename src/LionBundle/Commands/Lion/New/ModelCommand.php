@@ -50,7 +50,7 @@ class ModelCommand extends Command
     private Store $store;
 
     /**
-     * [Modify and construct strings with different formats]
+     * Modify and construct strings with different formats
      *
      * @var Str $str
      */
@@ -100,37 +100,37 @@ class ModelCommand extends Command
      * class. In this case, instead of defining the execute() method, you set the
      * code to execute by passing a Closure to the setCode() method
      *
-     * @param InputInterface $input InputInterface is the interface implemented by all
-     * input classes
+     * @param InputInterface $input InputInterface is the interface implemented by
+     * all input classes
      * @param OutputInterface $output OutputInterface is the interface implemented
      * by all Output classes
      *
      * @return int
      *
-     * @throws Exception
+     * @throws Exception If the file could not be opened
      * @throws LogicException When this abstract method is not implemented
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         /**
-         * ---------------------------------------------------------------------
+         * -----------------------------------------------------------------------------
          * Initialize console parameters
-         * ---------------------------------------------------------------------
-         * Parameters are provided directly from the console, in order to
-         * manipulate the body of the model class
-         * ---------------------------------------------------------------------
+         * -----------------------------------------------------------------------------
+         * Parameters are provided directly from the console, in order to manipulate the
+         * body of the model class
+         * -----------------------------------------------------------------------------
          */
 
         /** @var string $model */
         $model = $input->getArgument('model');
 
         /**
-         * ---------------------------------------------------------------------
+         * -----------------------------------------------------------------------------
          * Class Factory Parameters
-         * ---------------------------------------------------------------------
-         * Class factory parameters are used to obtain the precise data that
-         * defines the class, such as the name and namespace
-         * ---------------------------------------------------------------------
+         * -----------------------------------------------------------------------------
+         * Class factory parameters are used to obtain the precise data that defines the
+         * class, such as the name and namespace
+         * -----------------------------------------------------------------------------
          */
 
         $str = new Str();
@@ -144,17 +144,17 @@ class ModelCommand extends Command
         $namespace = $this->classFactory->getNamespace();
 
         /**
-         * ---------------------------------------------------------------------
+         * -----------------------------------------------------------------------------
          * Model class body
-         * ---------------------------------------------------------------------
-         * Builds the body of the capsule class, this with the defined
-         * parameters. The logic that a Capsule class performs is nested
-         * ---------------------------------------------------------------------
+         * -----------------------------------------------------------------------------
+         * Builds the body of the capsule class, this with the defined parameters. The
+         * logic that a Capsule class performs is nested
+         * -----------------------------------------------------------------------------
          */
 
         $this->str
             ->of(
-                <<<EOT
+                <<<PHP
                 <?php
 
                 declare(strict_types=1);
@@ -171,7 +171,7 @@ class ModelCommand extends Command
                 class {$class}
                 {
 
-                EOT
+                PHP
             );
 
         foreach (self::METHODS as $method) {
@@ -217,29 +217,29 @@ class ModelCommand extends Command
         }
 
         /**
-         * ---------------------------------------------------------------------
+         * -----------------------------------------------------------------------------
          * Class content
-         * ---------------------------------------------------------------------
+         * -----------------------------------------------------------------------------
          * Gets the contents of the manufactured class
-         * ---------------------------------------------------------------------
+         * -----------------------------------------------------------------------------
          */
 
         /** @var string $content */
         $content = $this->str
             ->concat(
-                <<<EOT
+                <<<PHP
                 }
 
-                EOT
+                PHP
             )
             ->get();
 
         /**
-         * ---------------------------------------------------------------------
+         * -----------------------------------------------------------------------------
          * File manufacturing
-         * ---------------------------------------------------------------------
+         * -----------------------------------------------------------------------------
          * Creating the file with the content of the manufactured class
-         * ---------------------------------------------------------------------
+         * -----------------------------------------------------------------------------
          */
 
         $this->store->folder($folder);
@@ -250,7 +250,7 @@ class ModelCommand extends Command
 
         $output->writeln($this->warningOutput("\t>>  MODEL: {$namespace}\\{$class}"));
 
-        $output->writeln($this->successOutput("\t>>  MODEL: The model has been generated"));
+        $output->writeln($this->successOutput("\t>>  MODEL: The model was generated successfully."));
 
         return parent::SUCCESS;
     }

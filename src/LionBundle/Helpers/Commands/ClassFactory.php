@@ -126,14 +126,14 @@ class ClassFactory
     /**
      * Create a new file with its properties and permissions defined
      *
-     * @param string $fileName [File name]
-     * @param string $extension [File extension]
-     * @param string $path [File path]
-     * @param string $filePermissions [File permissions]
+     * @param string $fileName File name
+     * @param string $extension File extension
+     * @param string $path File path
+     * @param string $filePermissions File permissions
      *
      * @return ClassFactory
      *
-     * @throws Exception [If the file could not be opened]
+     * @throws Exception If the file could not be opened
      */
     public function create(
         string $fileName,

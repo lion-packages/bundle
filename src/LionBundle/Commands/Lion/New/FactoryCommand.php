@@ -22,15 +22,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 class FactoryCommand extends Command
 {
     /**
-     * [Fabricates the data provided to manipulate information (folder, class,
-     * namespace)]
+     * Fabricates the data provided to manipulate information (folder, class,
+     * namespace)
      *
      * @var ClassFactory $classFactory
      */
     private ClassFactory $classFactory;
 
     /**
-     * [Manipulate system files]
+     * Manipulate system files
      *
      * @var Store $store
      */
@@ -68,20 +68,19 @@ class FactoryCommand extends Command
     /**
      * Executes the current command
      *
-     * This method is not abstract because you can use this class
-     * as a concrete class. In this case, instead of defining the
-     * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method
+     * This method is not abstract because you can use this class as a concrete
+     * class. In this case, instead of defining the execute() method, you set the
+     * code to execute by passing a Closure to the setCode() method
      *
-     * @param InputInterface $input [InputInterface is the interface implemented
-     * by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
+     * @param InputInterface $input InputInterface is the interface implemented by
+     * all input classes
+     * @param OutputInterface $output OutputInterface is the interface implemented
+     * by all Output classes
      *
      * @return int
      *
-     * @throws Exception
-     * @throws LogicException [When this abstract method is not implemented]
+     * @throws Exception If the file could not be opened
+     * @throws LogicException When this abstract method is not implemented
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -101,7 +100,7 @@ class FactoryCommand extends Command
         $this->classFactory
             ->create($class, 'php', $folder)
             ->add(
-                <<<EOT
+                <<<PHP
                 <?php
 
                 declare(strict_types=1);
@@ -111,9 +110,7 @@ class FactoryCommand extends Command
                 use Lion\Bundle\Interface\FactoryInterface;
 
                 /**
-                 * Description of the factory '{$class}'
-                 *
-                 * @package {$namespace}
+                 * Data factory for the entity ''
                  */
                 class {$class} implements FactoryInterface
                 {
@@ -123,7 +120,7 @@ class FactoryCommand extends Command
                     public static function columns(): array
                     {
                         return [
-                            // ...
+                            'name',
                         ];
                     }
 
@@ -133,20 +130,20 @@ class FactoryCommand extends Command
                     public static function definition(): array
                     {
                         return [
-                            fake()->name(),
+                            [
+                                fake()->name(),
+                            ],
                         ];
                     }
                 }
 
-                EOT
+                PHP
             )
             ->close();
 
-        $output->writeln($this->warningOutput("\t>>  FACTORY: {$class}"));
+        $output->writeln($this->warningOutput("\t>>  FACTORY: {$namespace}\\{$class}"));
 
-        $output->writeln(
-            $this->successOutput("\t>>  FACTORY: the '{$namespace}\\{$class}' factory has been generated")
-        );
+        $output->writeln($this->successOutput("\t>>  FACTORY: The factory has been generated successfully."));
 
         return parent::SUCCESS;
     }
