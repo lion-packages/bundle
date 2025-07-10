@@ -12,6 +12,7 @@ use Lion\Files\Store;
 use LogicException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -62,7 +63,8 @@ class RulesCommand extends Command
         $this
             ->setName('new:rule')
             ->setDescription('Command required for rule creation')
-            ->addArgument('rule', InputArgument::OPTIONAL, 'Rule name', 'ExampleRule');
+            ->addArgument('rule', InputArgument::OPTIONAL, 'Rule name', 'ExampleRule')
+            ->addOption('field', 'f', InputOption::VALUE_OPTIONAL, 'Field', 'example');
     }
 
     /**
@@ -86,6 +88,9 @@ class RulesCommand extends Command
     {
         /** @var string $rule */
         $rule = $input->getArgument('rule');
+
+        /** @var string $field */
+        $field = $input->getOption('field');
 
         $this->classFactory->classFactory('app/Rules/', $rule);
 
@@ -112,45 +117,16 @@ class RulesCommand extends Command
                 use Valitron\Validator;
 
                 /**
-                 * Rule defined for the '' property
-                 *
-                 * @property string \$field [field for '']
-                 * @property string \$desc [description for '']
-                 * @property string \$value [value for '']
-                 * @property bool \$disabled [Defines whether the column is optional for postman
-                 * collections]
-                 *
-                 * @package {$namespace}
+                 * Rule defined for the '{$field}' property
                  */
                 class {$class} extends Rules implements RulesInterface
                 {
                     /**
-                     * [field for '']
+                     * field for '{$field}'
                      *
                      * @var string \$field
                      */
-                    public string \$field = '';
-
-                    /**
-                     * [description for '']
-                     *
-                     * @var string \$desc
-                     */
-                    public string \$desc = '';
-
-                    /**
-                     * [value for '']
-                     *
-                     * @var string \$value;
-                     */
-                    public string \$value = "";
-
-                    /**
-                     * [Defines whether the column is optional for postman collections]
-                     *
-                     * @var bool \$disabled;
-                     */
-                    public bool \$disabled = false;
+                    public string \$field = '{$field}';
 
                     /**
                      * {@inheritDoc}
@@ -160,7 +136,7 @@ class RulesCommand extends Command
                         \$this->validate(function (Validator \$validator): void {
                             \$validator
                                 ->rule('required', \$this->field)
-                                ->message('the "" property is required');
+                                ->message("The '{\$this->field}' property is required");
                         });
                     }
                 }
