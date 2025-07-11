@@ -176,9 +176,13 @@ class Migrations
      * @param array<int, class-string> $list [List of classes]
      *
      * @return void
+     *
+     * @throws Exception If an error occurs while deleting the file
      */
     public function executeMigrationsGroup(array $list): void
     {
+        $this->resetDatabases();
+
         /** @var array<string, array<int, MigrationUpInterface>> $migrations */
         $migrations = [
             TableInterface::class => [],
@@ -389,5 +393,32 @@ class Migrations
         }
 
         return null;
+    }
+
+    /**
+     * Delete databases from defined connections
+     *
+     * @return void
+     *
+     * @throws Exception If an error occurs while deleting the file
+     *
+     * @codeCoverageIgnore
+     */
+    public function resetDatabases(): void
+    {
+        $connections = Connection::getConnections();
+
+        foreach ($connections as $connectionName => $connectionData) {
+            $this
+                ->processingWithStaticConnections(
+                    function () use ($connectionName, $connectionData): void {
+                        $this->resetDatabase(
+                            $connectionData['dbname'],
+                            $connectionName,
+                            $connectionData['type']
+                        );
+                    }
+                );
+        }
     }
 }
