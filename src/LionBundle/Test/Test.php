@@ -6,6 +6,7 @@ namespace Lion\Bundle\Test;
 
 use DI\DependencyException;
 use DI\NotFoundException;
+use Exception;
 use Lion\Bundle\Helpers\Commands\Migrations\Migrations;
 use Lion\Bundle\Helpers\Commands\Seeds\Seeds;
 use Lion\Bundle\Interface\CapsuleInterface;
@@ -15,34 +16,28 @@ use Lion\Test\Test as Testing;
 /**
  * Extend testing functions
  *
- * @property Container|null $container [Dependency Injection Container Wrapper]
- * @property Migrations|null $migrations [Manages the processes of creating or
- * executing migrations]
- * @property Seeds|null $seeds [Manages the processes of creating or executing
- * seeds]
- *
- * @package Lion\Bundle
+ * @package Lion\Bundle\Test
  *
  * @codeCoverageIgnore
  */
 class Test extends Testing
 {
     /**
-     * [Dependency Injection Container Wrapper]
+     * Dependency Injection Container Wrapper
      *
      * @var Container|null $container
      */
     private ?Container $container = null;
 
     /**
-     * [Manages the processes of creating or executing migrations]
+     * Manages the processes of creating or executing migrations
      *
      * @var Migrations|null $migrations
      */
     private ?Migrations $migrations = null;
 
     /**
-     * [Manages the processes of creating or executing seeds]
+     * Manages the processes of creating or executing seeds
      *
      * @var Seeds|null $seeds
      */
@@ -51,12 +46,13 @@ class Test extends Testing
     /**
      * Run a group of migrations
      *
-     * @param array<int, class-string> $migrations [List of classes]
+     * @param array<int, class-string> $migrations List of classes
      *
      * @return void
      *
-     * @throws DependencyException
-     * @throws NotFoundException
+     * @throws Exception If an error occurs while deleting the file
+     * @throws DependencyException Error while resolving the entry
+     * @throws NotFoundException No entry found for the given name
      */
     protected function executeMigrationsGroup(array $migrations): void
     {
@@ -77,12 +73,12 @@ class Test extends Testing
     /**
      * Run a group of seeds
      *
-     * @param array<int, class-string> $seeds [List of classes]
+     * @param array<int, class-string> $seeds List of classes
      *
      * @return void
      *
-     * @throws DependencyException
-     * @throws NotFoundException
+     * @throws DependencyException Error while resolving the entry
+     * @throws NotFoundException No entry found for the given name
      */
     protected function executeSeedsGroup(array $seeds): void
     {
@@ -104,9 +100,9 @@ class Test extends Testing
      * Checks two aspects of an object that implements the CapsuleInterface
      * interface
      *
-     * @param CapsuleInterface $capsuleInterface [Implement abstract methods for
-     * capsule classes]
-     * @param string $entity [Entity name]
+     * @param CapsuleInterface $capsuleInterface Implement abstract methods for
+     * capsule classes
+     * @param string $entity Entity name
      *
      * @return void
      */
