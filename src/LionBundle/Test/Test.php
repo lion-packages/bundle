@@ -169,7 +169,7 @@ abstract class Test extends Testing
 
             $actualColumn = $capsuleClass::$staticGetter();
 
-            $this->assertSame($column, $actualColumn,);
+            $this->assertSame($column, $actualColumn);
 
             /**
              * -----------------------------------------------------------------------------
