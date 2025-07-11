@@ -12,15 +12,15 @@ use Lion\Bundle\Helpers\Commands\Seeds\Seeds;
 use Lion\Bundle\Interface\CapsuleInterface;
 use Lion\Dependency\Injection\Container;
 use Lion\Test\Test as Testing;
+use ReflectionClass;
+use ReflectionException;
 
 /**
  * Extend testing functions
  *
  * @package Lion\Bundle\Test
- *
- * @codeCoverageIgnore
  */
-class Test extends Testing
+abstract class Test extends Testing
 {
     /**
      * Dependency Injection Container Wrapper
@@ -53,6 +53,8 @@ class Test extends Testing
      * @throws Exception If an error occurs while deleting the file
      * @throws DependencyException Error while resolving the entry
      * @throws NotFoundException No entry found for the given name
+     *
+     * @codeCoverageIgnore
      */
     protected function executeMigrationsGroup(array $migrations): void
     {
@@ -79,6 +81,8 @@ class Test extends Testing
      *
      * @throws DependencyException Error while resolving the entry
      * @throws NotFoundException No entry found for the given name
+     *
+     * @codeCoverageIgnore
      */
     protected function executeSeedsGroup(array $seeds): void
     {
@@ -97,19 +101,58 @@ class Test extends Testing
     }
 
     /**
-     * Checks two aspects of an object that implements the CapsuleInterface
-     * interface
+     * Run tests for capsule classes by testing getter, setter, and column methods
      *
-     * @param CapsuleInterface $capsuleInterface Implement abstract methods for
-     * capsule classes
-     * @param string $entity Entity name
+     * @param string $capsuleClass Capsule class namespace
+     * @param string $entity Name of the entity
+     * @param array<class-string, mixed> $interfaces Capsule class namespace
      *
-     * @return void
+     * @throws ReflectionException
      */
-    public function assertCapsule(CapsuleInterface $capsuleInterface, string $entity): void
+    public function assertCapsule(string $capsuleClass, string $entity, array $interfaces = []): void
     {
-        $this->assertInstanceOf(CapsuleInterface::class, $capsuleInterface->capsule());
-        $this->assertIsArray($capsuleInterface->jsonSerialize());
-        $this->assertSame($entity, $capsuleInterface->getTableName());
+        /** @phpstan-ignore-next-line */
+        $reflection = new ReflectionClass($capsuleClass);
+
+        $instance = $reflection->newInstance();
+
+        $this->assertInstanceOf(CapsuleInterface::class, $reflection->getMethod('capsule')->invoke($instance));
+        $this->assertIsArray($reflection->getMethod('jsonSerialize')->invoke($instance));
+        $this->assertSame($entity, $reflection->getMethod('getTableName')->invoke($instance));
+
+        foreach ($interfaces as $interfaceName => $value) {
+            $interface = new ReflectionClass($interfaceName);
+
+            foreach ($interface->getMethods() as $method) {
+                $methodName = $method->getName();
+
+                if (
+                    $method->isStatic()
+                    && str_starts_with($methodName, 'get')
+                    && str_ends_with($methodName, 'Column')
+                ) {
+                    $result = $capsuleClass::$methodName();
+
+                    /** @phpstan-ignore-next-line */
+                    $expected = strtolower(preg_replace('/^get|Column$/', '', $methodName));
+
+                    $this->assertSame($expected, $result);
+                }
+
+                if (str_starts_with($methodName, 'get') && !$method->isStatic()) {
+                    $property = lcfirst(substr($methodName, 3));
+
+                    $setter = 'set' . ucfirst($property);
+
+                    if ($reflection->hasMethod($setter)) {
+                        $reflection->getMethod($setter)->invoke($instance, $value);
+
+                        $result = $reflection->getMethod($methodName)->invoke($instance);
+
+                        $this->assertSame($value, $result);
+                    }
+                }
+            }
+        }
     }
 }
