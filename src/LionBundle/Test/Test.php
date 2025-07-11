@@ -105,51 +105,99 @@ abstract class Test extends Testing
      *
      * @param string $capsuleClass Capsule class namespace
      * @param string $entity Name of the entity
-     * @param array<class-string, mixed> $interfaces Capsule class namespace
+     * @param array<class-string, array{
+     *     column: string,
+     *     set: mixed,
+     *     get: mixed
+     * }> $interfaces Capsule class namespace
      *
      * @throws ReflectionException
      */
-    public function assertCapsule(string $capsuleClass, string $entity, array $interfaces = []): void
+    public function assertCapsule(string $capsuleClass, string $entity, array $interfaces): void
     {
         /** @phpstan-ignore-next-line */
         $reflection = new ReflectionClass($capsuleClass);
 
         $instance = $reflection->newInstance();
 
-        $this->assertInstanceOf(CapsuleInterface::class, $reflection->getMethod('capsule')->invoke($instance));
-        $this->assertIsArray($reflection->getMethod('jsonSerialize')->invoke($instance));
-        $this->assertSame($entity, $reflection->getMethod('getTableName')->invoke($instance));
+        /**
+         * -----------------------------------------------------------------------------
+         * Validate the capsule class
+         * -----------------------------------------------------------------------------
+         * The capsule class is validated to determine that it meets the defined data
+         * -----------------------------------------------------------------------------
+         */
 
-        foreach ($interfaces as $interfaceName => $value) {
+        $this->assertInstanceOf(
+            CapsuleInterface::class,
+            $reflection
+                ->getMethod('capsule')
+                ->invoke($instance)
+        );
+
+        $this->assertIsArray(
+            $reflection
+                ->getMethod('jsonSerialize')
+                ->invoke($instance)
+        );
+
+        $this->assertSame(
+            $entity,
+            $reflection
+                ->getMethod('getTableName')
+                ->invoke($instance)
+        );
+
+        foreach ($interfaces as $interfaceName => $config) {
             $interface = new ReflectionClass($interfaceName);
+
+            /**
+             * -----------------------------------------------------------------------------
+             * Validate column values
+             * -----------------------------------------------------------------------------
+             * Column methods are used to validate that the expected value is obtained
+             * -----------------------------------------------------------------------------
+             */
+
+            $column = $config['column'];
+
+            $pascal = str_replace(' ', '', ucwords(str_replace('_', ' ', $column)));
+
+            $staticGetter = "get{$pascal}Column";
+
+            $this->assertTrue($reflection->hasMethod($staticGetter));
+
+            $actualColumn = $capsuleClass::$staticGetter();
+
+            $this->assertSame($column, $actualColumn);
+
+            /**
+             * -----------------------------------------------------------------------------
+             * Test Getter and Setter methods
+             * -----------------------------------------------------------------------------
+             * Unit tests are performed to determine that the Getter and Setter methods
+             * perform their function
+             * -----------------------------------------------------------------------------
+             */
 
             foreach ($interface->getMethods() as $method) {
                 $methodName = $method->getName();
 
-                if (
-                    $method->isStatic()
-                    && str_starts_with($methodName, 'get')
-                    && str_ends_with($methodName, 'Column')
-                ) {
-                    $result = $capsuleClass::$methodName();
-
-                    /** @phpstan-ignore-next-line */
-                    $expected = strtolower(preg_replace('/^get|Column$/', '', $methodName));
-
-                    $this->assertSame($expected, $result);
-                }
-
                 if (str_starts_with($methodName, 'get') && !$method->isStatic()) {
-                    $property = lcfirst(substr($methodName, 3));
+                    $property = substr($methodName, 3);
 
-                    $setter = 'set' . ucfirst($property);
+                    $setter = 'set' . $property;
 
                     if ($reflection->hasMethod($setter)) {
-                        $reflection->getMethod($setter)->invoke($instance, $value);
+                        $reflection
+                            ->getMethod($setter)
+                            ->invoke($instance, $config['set']);
 
-                        $result = $reflection->getMethod($methodName)->invoke($instance);
+                        $result = $reflection
+                            ->getMethod($methodName)
+                            ->invoke($instance);
 
-                        $this->assertSame($value, $result);
+                        $this->assertSame($config['get'], $result);
                     }
                 }
             }
