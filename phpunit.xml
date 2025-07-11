@@ -45,7 +45,7 @@
 
     <testsuites>
         <testsuite name="All-Test">
-            <directory>tests/</directory>
+            <directory>tests</directory>
         </testsuite>
     </testsuites>
 </phpunit>
