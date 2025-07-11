@@ -633,6 +633,5 @@ class MigrationsTest extends Test
     #[Testing]
     public function resetDatabases(): void
     {
-
     }
 }
