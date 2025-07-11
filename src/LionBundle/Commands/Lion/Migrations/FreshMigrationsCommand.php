@@ -101,18 +101,7 @@ class FreshMigrationsCommand extends MenuCommand
             return parent::FAILURE;
         }
 
-        $connections = Connection::getConnections();
-
-        foreach ($connections as $connectionName => $connectionData) {
-            $this->migrations
-                ->processingWithStaticConnections(function () use ($connectionName, $connectionData): void {
-                    $this->migrations->resetDatabase(
-                        $connectionData['dbname'],
-                        $connectionName,
-                        $connectionData['type']
-                    );
-                });
-        }
+        $this->migrations->resetDatabases();
 
         /** @var array<string, array<string, MigrationUpInterface>> $migrations */
         $migrations = $this->migrations->getMigrations();
