@@ -13,9 +13,11 @@ use DateTimeZone;
 use Exception;
 use Faker\Generator;
 use GuzzleHttp\Exception\GuzzleException;
+use InvalidArgumentException;
 use JsonException;
 use Lion\Bundle\Enums\LogTypeEnum;
 use Lion\Bundle\Support\Http\Fetch;
+use Lion\Bundle\Support\Http\FetchConfiguration;
 use Lion\Request\Http;
 use Lion\Request\Status;
 use Lion\Security\AES;
@@ -62,6 +64,19 @@ class HelpersTest extends Test
         $connection = env($connectionName);
 
         $this->assertSame($connection, getConnection($connectionName));
+    }
+
+    #[Testing]
+    #[TestWith(['connectionName' => 'INVALID_CONNECTION_NAME_1'], 'case-0')]
+    #[TestWith(['connectionName' => 'INVALID_CONNECTION_NAME_2'], 'case-1')]
+    #[TestWith(['connectionName' => 'INVALID_CONNECTION_NAME_3'], 'case-2')]
+    public function getConnectionITDoesNotExist(string $connectionName): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionCode(Http::INTERNAL_SERVER_ERROR);
+        $this->expectExceptionMessage("The environment variable '{$connectionName}' is not defined.");
+
+        getConnection($connectionName);
     }
 
     #[Testing]
@@ -166,7 +181,7 @@ class HelpersTest extends Test
     }
 
     /**
-     * @throws GuzzleException
+     * @throws GuzzleException If the request fails.
      */
     #[Testing]
     public function fetch(): void
@@ -175,6 +190,33 @@ class HelpersTest extends Test
         $uri = env('SERVER_URL');
 
         $fetchResponse = fetch(new Fetch(Http::GET, $uri))
+            ->getBody()
+            ->getContents();
+
+        $response = json_decode($fetchResponse, true);
+
+        $this->assertSame(self::RESPONSE, $response);
+    }
+
+    /**
+     * @throws GuzzleException If the request fails.
+     */
+    #[Testing]
+    public function fetchWithFetchConfiguration(): void
+    {
+        /** @var string $uri */
+        $uri = env('SERVER_URL');
+
+        $fetchResponse = fetch(
+            new Fetch(Http::GET, $uri)
+                ->setFetchConfiguration(
+                    new FetchConfiguration([
+                        'headers' => [
+                            'Accept' => 'application/json',
+                        ],
+                    ])
+                )
+        )
             ->getBody()
             ->getContents();
 
@@ -365,6 +407,7 @@ class HelpersTest extends Test
     /**
      * @throws Exception
      */
+    #[Testing]
     public function jwt(): void
     {
         /**

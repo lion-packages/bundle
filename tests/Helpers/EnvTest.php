@@ -64,4 +64,19 @@ class EnvTest extends Test
         $this->assertArrayNotHasKey('key', $_ENV);
         $this->assertArrayNotHasKey('key2', $_ENV);
     }
+
+    /**
+     * @throws ReflectionException
+     */
+    #[Testing]
+    #[RunInSeparateProcess]
+    public function getOptionEnvDoesNotExist(): void
+    {
+        unset($_ENV);
+
+        $this->assertNull($this->getPrivateMethod('getOption', [
+            'key' => 'key',
+            'default' => 'value',
+        ]));
+    }
 }

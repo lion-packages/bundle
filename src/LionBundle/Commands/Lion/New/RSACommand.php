@@ -16,8 +16,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Generate public and private keys with RSA
- *
- * @package Lion\Bundle\Commands\Lion\New
  */
 class RSACommand extends Command
 {
@@ -61,7 +59,7 @@ class RSACommand extends Command
     {
         $this
             ->setName('new:rsa')
-            ->setDescription('Command required to create public and private keys for RSA encryptions')
+            ->setDescription('Command required to create public and private keys for RSA encryptions.')
             ->addOption('path', 'p', InputOption::VALUE_REQUIRED, 'Save to a specific path?');
     }
 
@@ -84,7 +82,7 @@ class RSACommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        /** @var string|null $path */
+        /** @var non-empty-string|null $path */
         $path = $input->getOption('path');
 
         /** @var string $rsaPrivateKeyBits */

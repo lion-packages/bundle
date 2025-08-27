@@ -26,10 +26,9 @@ if (!function_exists('getConnection')) {
     /**
      * Returns the database connection name based on an environment variable.
      *
-     * Example:
      * <code>
      *     $default = getConnection(); // uses DB_DEFAULT
-     *     $mysql   = getConnection('DB_MYSQL');
+     *     $mysql = getConnection('DB_MYSQL');
      * </code>
      *
      * @param string $key The environment variable key (default: "DB_DEFAULT").
@@ -42,7 +41,10 @@ if (!function_exists('getConnection')) {
         $connection = env($key);
 
         if (null === $connection) {
-            throw new InvalidArgumentException("The environment variable '{$key}' is not defined.");
+            throw new InvalidArgumentException(
+                "The environment variable '{$key}' is not defined.",
+                Http::INTERNAL_SERVER_ERROR
+            );
         }
 
         return $connection;
@@ -52,6 +54,10 @@ if (!function_exists('getConnection')) {
 if (!function_exists('getDefaultConnection')) {
     /**
      * Returns the default database connection name.
+     *
+     * <code>
+     *     $default = getDefaultConnection(); // uses DB_DEFAULT
+     * </code>
      *
      * @return string The default connection name.
      */
@@ -67,6 +73,11 @@ if (!function_exists('getDefaultConnection')) {
 if (!function_exists('request')) {
     /**
      * Retrieves the HTTP request object or a specific property from it.
+     *
+     * <code>
+     *     $data = request(); // Get all the data
+     *     $name = request('name');
+     * </code>
      *
      * @param string $key The property name to retrieve (optional).
      *
@@ -87,6 +98,10 @@ if (!function_exists('request')) {
 if (!function_exists('now')) {
     /**
      * Returns a Carbon instance for the current date and time.
+     *
+     * <code>
+     *     $date = now()->format('Y-m-d H:i:s');
+     * </code>
      *
      * @param DateTimeZone|string|int|null $tz The timezone to apply, if any.
      *
@@ -302,6 +317,8 @@ if (!function_exists('vd')) {
      * @param mixed $response The value to dump.
      *
      * @return void
+     *
+     * @codeCoverageIgnore
      */
     function vd(mixed $response): void
     {
@@ -311,6 +328,7 @@ if (!function_exists('vd')) {
                 JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR
             ) . PHP_EOL;
         } catch (\JsonException $e) {
+            var_dump("ENTRA");
             var_dump($response); // fallback if encoding fails
         }
     }
