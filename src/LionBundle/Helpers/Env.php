@@ -5,48 +5,63 @@ declare(strict_types=1);
 namespace Lion\Bundle\Helpers;
 
 /**
- * Environment variable manager
- *
- * @package Lion\Bundle\Helpers
+ * Environment variable manager.
  */
 class Env
 {
     /**
-     * Gets the value defined for an environment variable
+     * Gets the value of an environment variable.
      *
-     * @param string $key [Property name]
-     * @param mixed $default [Default value]
+     * @param string $key The name of the environment variable.
+     * @param string|int|float|bool|null $default The default value if the
+     * environment variable is not set.
      *
-     * @return mixed
+     * @return string|int|float|bool|null The value of the environment variable, or
+     * the default value if not found.
      */
-    public static function get(string $key, mixed $default = null): mixed
+    public static function get(string $key, string|int|float|bool|null $default = null): string|int|float|bool|null
     {
         return self::getOption($key, $default);
     }
 
+
     /**
-     * Gets the name of the property defined by its value
+     * Gets the environment variable name associated with a given value.
      *
-     * @param string $value [Property value]
+     * @param string $value The value to search for within the environment
+     * variables.
      *
-     * @return string|int|false
+     * @return string|int|false The variable name if found, or false if not found.
      */
     public static function getKey(string $value): string|int|false
     {
-        return array_search($value, $_ENV);
+        return array_search($value, $_ENV, true);
     }
 
     /**
-     * Gets and transforms the possible value of environment variables
+     * Retrieves and transforms the value of an environment variable.
      *
-     * @param string $key [Property name]
-     * @param mixed $default [Default value]
+     * Possible transformations:
+     * - "true" or "(true)" → true
+     * - "false" or "(false)" → false
+     * - "empty" or "(empty)" → ""
+     * - "null" or "(null)" → null
      *
-     * @return mixed
+     * @param string $key The name of the environment variable.
+     * @param string|int|float|bool|null $default The default value if the
+     * environment variable is not set.
+     *
+     * @return string|int|float|bool|null The transformed environment variable
+     * value, or the default value if not found.
      */
-    private static function getOption(string $key, mixed $default): mixed
+    private static function getOption(string $key, string|int|float|bool|null $default): string|int|float|bool|null
     {
-        $transform = function (mixed $value): mixed {
+        /** @phpstan-ignore-next-line */
+        if (!isset($_ENV)) {
+            return null;
+        }
+
+        $transform = static function (string|int|float|bool|null $value): string|int|float|bool|null {
             return match ($value) {
                 'true', '(true)' => true,
                 'false', '(false)' => false,
@@ -56,16 +71,19 @@ class Env
             };
         };
 
-        if (empty($_ENV[$key])) {
+        if (!array_key_exists($key, $_ENV)) {
             return $transform($default);
         }
 
-        $value = $transform($_ENV[$key]);
+        /** @var string $value */
+        $value = $_ENV[$key];
 
-        if (is_string($value) && preg_match('/\A([\'"])(.*)\1\z/', $value, $matches)) {
+        $valueTransform = $transform($value);
+
+        if (is_string($valueTransform) && preg_match('/\A([\'"])(.*)\1\z/', $valueTransform, $matches)) {
             return $matches[2];
         }
 
-        return $value;
+        return $valueTransform;
     }
 }

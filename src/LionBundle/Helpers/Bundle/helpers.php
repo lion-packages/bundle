@@ -19,15 +19,41 @@ use Lion\Request\Request;
 use Lion\Request\Status;
 use Lion\Security\JWT;
 use Monolog\Handler\StreamHandler;
-use Monolog\Level;
 use Monolog\Logger;
 use Psr\Http\Message\ResponseInterface;
 
+if (!function_exists('getConnection')) {
+    /**
+     * Returns the database connection name based on an environment variable.
+     *
+     * Example:
+     * <code>
+     *     $default = getConnection(); // uses DB_DEFAULT
+     *     $mysql   = getConnection('DB_MYSQL');
+     * </code>
+     *
+     * @param string $key The environment variable key (default: "DB_DEFAULT").
+     *
+     * @return string The connection name.
+     */
+    function getConnection(string $key = 'DB_DEFAULT'): string
+    {
+        /** @var string|null $connection */
+        $connection = env($key);
+
+        if (null === $connection) {
+            throw new InvalidArgumentException("The environment variable '{$key}' is not defined.");
+        }
+
+        return $connection;
+    }
+}
+
 if (!function_exists('getDefaultConnection')) {
     /**
-     * Returns the default connection
+     * Returns the default database connection name.
      *
-     * @return string
+     * @return string The default connection name.
      */
     function getDefaultConnection(): string
     {
@@ -40,18 +66,17 @@ if (!function_exists('getDefaultConnection')) {
 
 if (!function_exists('request')) {
     /**
-     * Object with properties captured in an HTTP request and you can add
-     * properties to the object
+     * Retrieves the HTTP request object or a specific property from it.
      *
-     * @param string $key [Property name]
+     * @param string $key The property name to retrieve (optional).
      *
-     * @return mixed
+     * @return mixed The full request object or the property value if provided.
      */
     function request(string $key = ''): mixed
     {
         $data = new Request()->capture();
 
-        if (!empty($key)) {
+        if ($key !== '') {
             return $data->$key ?? null;
         }
 
@@ -61,11 +86,11 @@ if (!function_exists('request')) {
 
 if (!function_exists('now')) {
     /**
-     * Get a Carbon instance for the current date and time
+     * Returns a Carbon instance for the current date and time.
      *
-     * @param DateTimeZone|string|int|null $tz
+     * @param DateTimeZone|string|int|null $tz The timezone to apply, if any.
      *
-     * @return Carbon
+     * @return Carbon The current date and time as a Carbon instance.
      */
     function now(DateTimeZone|string|int|null $tz = null): Carbon
     {
@@ -75,12 +100,13 @@ if (!function_exists('now')) {
 
 if (!function_exists('parse')) {
     /**
-     * Create a carbon instance from a string
+     * Creates a Carbon instance from a given value.
      *
-     * @param DateTimeInterface|WeekDay|Month|string|int|float|null $time
-     * @param DateTimeZone|string|int|null $timezone
+     * @param DateTimeInterface|WeekDay|Month|string|int|float|null $time The
+     * date/time value to parse.
+     * @param DateTimeZone|string|int|null $timezone The timezone to apply, if any.
      *
-     * @return Carbon
+     * @return Carbon The resulting Carbon instance.
      */
     function parse(
         DateTimeInterface|WeekDay|Month|string|int|float|null $time,
@@ -92,20 +118,20 @@ if (!function_exists('parse')) {
 
 if (!function_exists('fetch')) {
     /**
-     * Function to make HTTP requests with GuzzleHttp
+     * Sends an HTTP request using GuzzleHttp.
      *
      * @param Fetch $fetch Defines parameters for consuming HTTP requests with
-     * GuzzleHttp
+     * GuzzleHttp.
      *
-     * @return ResponseInterface
+     * @return ResponseInterface The HTTP response object.
      *
-     * @throws GuzzleException
+     * @throws GuzzleException If the request fails.
      */
     function fetch(Fetch $fetch): ResponseInterface
     {
         $fetchConfiguration = [];
 
-        if (null != $fetch->getFetchConfiguration()) {
+        if (null !== $fetch->getFetchConfiguration()) {
             $fetchConfiguration = $fetch
                 ->getFetchConfiguration()
                 ->getConfiguration();
@@ -113,17 +139,21 @@ if (!function_exists('fetch')) {
 
         $client = new Client($fetchConfiguration);
 
-        return $client->request($fetch->getHttpMethod(), $fetch->getUri(), $fetch->getOptions());
+        return $client->request(
+            $fetch->getHttpMethod(),
+            $fetch->getUri(),
+            $fetch->getOptions()
+        );
     }
 }
 
 if (!function_exists('storage_path')) {
     /**
-     * Function to get the path of the storage directory
+     * Gets the absolute path to the storage directory.
      *
-     * @param string $path [Directory path]
+     * @param non-empty-string $path Relative directory path within storage.
      *
-     * @return string
+     * @return non-empty-string The resolved storage path.
      */
     function storage_path(string $path): string
     {
@@ -134,11 +164,11 @@ if (!function_exists('storage_path')) {
 
 if (!function_exists('public_path')) {
     /**
-     * Function to get the path of the public directory
+     * Gets the absolute path to the public directory.
      *
-     * @param string $path [Directory path]
+     * @param non-empty-string $path Relative directory path within public.
      *
-     * @return string
+     * @return non-empty-string The resolved public path.
      */
     function public_path(string $path): string
     {
@@ -149,15 +179,15 @@ if (!function_exists('public_path')) {
 
 if (!function_exists('finish')) {
     /**
-     * Function to display a response and end the execution of processes
+     * Displays a response and terminates further execution.
      *
-     * @param mixed|null $response [Message or content of the response]
+     * @param string|int|float|bool|array<object>|object|null $response Message or content of the response.
      *
      * @return void
      *
      * @codeCoverageIgnore
      */
-    function finish(mixed $response = null): void
+    function finish(string|int|float|bool|array|object|null $response = null): void
     {
         RESPONSE->finish(null === $response ? success() : $response);
     }
@@ -165,20 +195,21 @@ if (!function_exists('finish')) {
 
 if (!function_exists('response')) {
     /**
-     * Allows you to generate a custom response object
+     * Generates a custom response object.
      *
-     * @param string $status [The type of status on the object]
-     * @param string|null $message [Message inside the object]
-     * @param int $code [HTTP status code inside the object]
-     * @param mixed|null $data [Extra data inside the object]
+     * @param string $status The type of status for the response.
+     * @param string|null $message The message to include in the response.
+     * @param int $code The HTTP status code of the response.
+     * @param string|int|float|bool|array<object>|object|null $data Extra data to
+     * include in the response.
      *
-     * @return stdClass
+     * @return stdClass The generated response object.
      */
     function response(
         string $status = 'custom',
         ?string $message = null,
         int $code = Http::OK,
-        mixed $data = null
+        string|int|float|bool|array|object|null $data = null
     ): stdClass {
         return RESPONSE->custom($status, $message, $code, $data);
     }
@@ -186,91 +217,117 @@ if (!function_exists('response')) {
 
 if (!function_exists('success')) {
     /**
-     * Allows you to generate an object of type success
+     * Generates a success response object.
      *
-     * @param string|null $message [Message inside the object]
-     * @param int $code [HTTP status code inside the object]
-     * @param mixed|null $data [Extra data inside the object]
+     * @param string|null $message The message to include in the response.
+     * @param int $code The HTTP status code of the response.
+     * @param string|int|float|bool|array<object>|object|null $data Extra data to
+     * include in the response.
      *
-     * @return stdClass
+     * @return stdClass The generated success response object.
      */
-    function success(?string $message = null, int $code = Http::OK, mixed $data = null): stdClass
-    {
+    function success(
+        ?string $message = null,
+        int $code = Http::OK,
+        string|int|float|bool|array|object|null $data = null
+    ): stdClass {
         return RESPONSE->success($message, $code, $data);
     }
 }
 
 if (!function_exists('error')) {
     /**
-     * Allows you to generate an object of type error
+     * Generates an error response object.
      *
-     * @param string|null $message [Message inside the object]
-     * @param int $code [HTTP status code inside the object]
-     * @param mixed|null $data [Extra data inside the object]
+     * @param string|null $message The message to include in the response.
+     * @param int $code The HTTP status code of the response.
+     * @param string|int|float|bool|array<object>|object|null $data Extra data to
+     * include in the response.
      *
-     * @return stdClass
+     * @return stdClass The generated error response object.
      */
-    function error(?string $message = null, int $code = Http::INTERNAL_SERVER_ERROR, mixed $data = null): stdClass
-    {
+    function error(
+        ?string $message = null,
+        int $code = Http::INTERNAL_SERVER_ERROR,
+        string|int|float|bool|array|object|null $data = null
+    ): stdClass {
         return RESPONSE->error($message, $code, $data);
     }
 }
 
 if (!function_exists('warning')) {
     /**
-     * Allows you to generate an object of type warning
+     * Generates a warning response object.
      *
-     * @param string|null $message [Message inside the object]
-     * @param int $code [HTTP status code inside the object]
-     * @param mixed|null $data [Extra data inside the object]
+     * @param string|null $message The message to include in the response.
+     * @param int $code The HTTP status code of the response.
+     * @param string|int|float|bool|array<object>|object|null $data Extra data to
+     * include in the response.
      *
-     * @return stdClass
+     * @return stdClass The generated warning response object.
      */
-    function warning(?string $message = null, int $code = Http::OK, mixed $data = null): stdClass
-    {
+    function warning(
+        ?string $message = null,
+        int $code = Http::OK,
+        string|int|float|bool|array|object|null $data = null
+    ): stdClass {
         return RESPONSE->warning($message, $code, $data);
     }
 }
 
 if (!function_exists('info')) {
     /**
-     * Allows you to generate an object of type info
+     * Generates an info response object.
      *
-     * @param string|null $message [Message inside the object]
-     * @param int $code [HTTP status code inside the object]
-     * @param mixed|null $data [Extra data inside the object]
+     * @param string|null $message The message to include in the response.
+     * @param int $code The HTTP status code of the response.
+     * @param string|int|float|bool|array<object>|object|null $data Extra data to
+     * include in the response.
      *
-     * @return stdClass
+     * @return stdClass The generated info response object.
      */
-    function info(?string $message = null, int $code = Http::OK, mixed $data = null): stdClass
-    {
+    function info(
+        ?string $message = null,
+        int $code = Http::OK,
+        string|int|float|bool|array|object|null $data = null
+    ): stdClass {
         return RESPONSE->info($message, $code, $data);
     }
 }
 
 if (!function_exists('vd')) {
     /**
-     * Function to perform a var_dump
+     * Dumps the given value as a pretty-printed JSON string.
      *
-     * @param mixed $response [Message or content to view]
+     * @param mixed $response The value to dump.
      *
      * @return void
      */
     function vd(mixed $response): void
     {
-        var_dump($response);
+        try {
+            echo json_encode(
+                $response,
+                JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR
+            ) . PHP_EOL;
+        } catch (\JsonException $e) {
+            var_dump($response); // fallback if encoding fails
+        }
     }
 }
 
 if (!function_exists('logger')) {
     /**
-     * Function to add a line to the log file
+     * Writes a log entry to the application log file.
      *
-     * @param string $message [Message or content to add to the log record]
-     * @param LogTypeEnum $logType [Log type]
-     * @param array<string, mixed> $data [data to add to the log record]
+     * @param string $message The message or content to add to the log record.
+     * @param LogTypeEnum $logType The type of log entry (e.g. INFO, ERROR, WARNING).
+     * @param array<string, mixed> $data Additional contextual data to include in
+     * the log record.
      *
      * @return void
+     *
+     * @throws JsonException If encoding to JSON fails.
      */
     function logger(
         string $message,
@@ -287,19 +344,20 @@ if (!function_exists('logger')) {
 
         $logger = new Logger('log');
 
-        $streamHandler = new StreamHandler($fileName, Level::Info);
+        // Better: use $logType->value instead of hardcoding Level::Info
+        $streamHandler = new StreamHandler($fileName, $logType->value);
 
         $logger->pushHandler($streamHandler);
 
         if (!isset($_SERVER['REQUEST_URI'])) {
             /** @var non-empty-string $json */
-            $json = json_encode($message);
+            $json = json_encode($message, JSON_THROW_ON_ERROR);
         } else {
             /** @var non-empty-string $json */
             $json = json_encode([
                 'uri' => $_SERVER['REQUEST_URI'],
                 'data' => json_decode($message),
-            ]);
+            ], JSON_THROW_ON_ERROR);
         }
 
         $logger->$logTypeValue($json, $data);
@@ -308,83 +366,68 @@ if (!function_exists('logger')) {
 
 if (!function_exists('json')) {
     /**
-     * Function to convert data to json
+     * Converts the given value to a JSON string.
      *
-     * @param mixed $values [Values to convert to JSON]
+     * @param mixed $values The value to convert to JSON.
      *
-     * @return string
+     * @return string The encoded JSON string.
      *
-     * @throws JsonException [If JSON format encoding fails]
+     * @throws JsonException If encoding to JSON fails.
      */
     function json(mixed $values): string
     {
-        $json = json_encode($values);
-
-        if (!$json) {
-            throw new JsonException(json_last_error_msg(), 500);
-        }
-
-        return $json;
+        return json_encode(
+            $values,
+            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR
+        );
     }
 }
 
 if (!function_exists('isError')) {
     /**
-     * Function to check if a response object comes with errors
+     * Checks if the response indicates an error status.
      *
-     * @param mixed $response [Response object]
+     * <code>
+     *     return isError(error('ERR'));
+     * </code>
      *
-     * @return bool
+     * @param stdClass $response The response object to check.
+     *
+     * @return bool True if the response has an error status, otherwise false.
      */
-    function isError(mixed $response): bool
+    function isError(stdClass $response): bool
     {
-        if (is_array($response)) {
-            $response = (object) $response;
-        }
-
-        if (!$response instanceof stdClass) {
-            return false;
-        }
-
-        if (empty($response->status)) {
-            return false;
-        }
-
-        return in_array($response->status, RESPONSE->getErrors());
+        return !empty($response->status) && in_array($response->status, RESPONSE->getErrors(), true);
     }
 }
 
 if (!function_exists('isSuccess')) {
     /**
-     * Function to check if a response object is successful
+     * Checks if the response indicates a successful status.
      *
-     * @param mixed $response [Response object]
+     * <code>
+     *     return isSuccess(success('OK'));
+     * </code>
      *
-     * @return bool
+     * @param stdClass $response The response object to check.
+     *
+     * @return bool True if the response has a success status, otherwise false.
      */
-    function isSuccess(mixed $response): bool
+    function isSuccess(stdClass $response): bool
     {
-        if (is_array($response)) {
-            $response = (object) $response;
-        }
-
-        if (!$response instanceof stdClass) {
-            return false;
-        }
-
-        if (empty($response->status)) {
-            return false;
-        }
-
-        return Status::SUCCESS === $response->status;
+        return !empty($response->status) && $response->status === Status::SUCCESS;
     }
 }
 
 if (!function_exists('jwt')) {
     /**
-     * Gets the HTTP_AUTHORIZATION header token
+     * Gets the JWT token from the HTTP_AUTHORIZATION header.
      *
-     * @return string|bool
+     * <code>
+     *     $token = jwt();
+     * </code>
+     *
+     * @return string|bool The JWT token if available, or false if not found.
      */
     function jwt(): string|bool
     {
@@ -394,11 +437,15 @@ if (!function_exists('jwt')) {
 
 if (!function_exists('fake')) {
     /**
-     * Function that generates a Generator object to obtain fake data
+     * Generates a Generator instance to obtain fake data.
      *
-     * @param string $locale [Regional configuration]
+     * <code>
+     *     $name = fake()->name();
+     * </code>
      *
-     * @return Generator
+     * @param string $locale The regional configuration to use.
+     *
+     * @return Generator The Faker generator instance.
      */
     function fake(string $locale = Factory::DEFAULT_LOCALE): Generator
     {
@@ -408,14 +455,20 @@ if (!function_exists('fake')) {
 
 if (!function_exists('env')) {
     /**
-     * Gets the value defined for an environment variable
+     * Gets the value of an environment variable.
      *
-     * @param string $key [Property name]
-     * @param mixed $default [Default value]
+     * <code>
+     *     $var = env('DEFAULT_DATABASE');
+     * </code>
      *
-     * @return mixed
+     * @param string $key The name of the environment variable.
+     * @param string|int|float|bool|null $default The default value to return if the
+     * variable is not set.
+     *
+     * @return string|int|float|bool|null The value of the environment variable or
+     * the default value.
      */
-    function env(string $key, mixed $default = null): mixed
+    function env(string $key, string|int|float|bool|null $default = null): string|int|float|bool|null
     {
         return Env::get($key, $default);
     }

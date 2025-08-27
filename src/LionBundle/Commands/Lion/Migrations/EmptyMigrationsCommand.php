@@ -74,13 +74,13 @@ class EmptyMigrationsCommand extends MenuCommand
             /** @var array<int, stdClass>|stdClass $tables */
             $tables = $this->getTables($connectionName);
 
-            if (isSuccess($tables)) {
+            if ($tables instanceof stdClass && isSuccess($tables)) {
                 $output->writeln($this->warningOutput("\t>> MIGRATION: No tables available"));
 
                 continue;
             }
 
-            if (isError($tables)) {
+            if ($tables instanceof stdClass && isError($tables)) {
                 /** @phpstan-ignore-next-line */
                 $output->writeln($this->errorOutput("\t>> MIGRATION: {$tables->message}"));
 
