@@ -183,6 +183,11 @@ trait EnvProviderTrait
                 'envValue' => 'default2',
                 'return' => 'value',
             ],
+            [
+                'envKey' => 'REDIS_PORT',
+                'envValue' => '6379',
+                'return' => '6379',
+            ],
         ];
     }
 }

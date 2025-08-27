@@ -14,9 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Generate a secure hash
  *
- * @property Validation $validation [Validation class object]
- *
- * @package Lion\Bundle\Commands\Lion
+ * @codeCoverageIgnore
  */
 class HashCommand extends Command
 {
