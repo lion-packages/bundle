@@ -382,7 +382,7 @@ class MigrationFactory
             public function up(): stdClass
             {
                 return Schema::connection(getDefaultConnection())
-                    ->createStoreProcedure(self::NAME, function (): void {
+                    ->createStoredProcedure(self::NAME, function (): void {
                         Schema::in()->varchar('name', 25);
                     }, function (MySQL \$db): void {
                         \$db
