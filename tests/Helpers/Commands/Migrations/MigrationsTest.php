@@ -232,14 +232,23 @@ class MigrationsTest extends Test
     public function executeMigrationsGroup(): void
     {
         $commandExecute = $this->commandTester
-            ->setInputs(['0', '0'])
-            ->execute(['migration' => self::MIGRATION_NAME]);
+            ->setInputs([
+                '0',
+                '0',
+            ])
+            ->execute([
+                'migration' => self::MIGRATION_NAME,
+            ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH_MYSQL_TABLE . self::FILE_NAME);
 
-        /** @phpstan-ignore-next-line */
+        /**
+         * @var object $objClass
+         *
+         * @phpstan-ignore-next-line
+         */
         $objClass = new (self::CLASS_NAMESPACE_TABLE . self::CLASS_NAME)();
 
         $this->assertInstances($objClass, [
@@ -248,14 +257,23 @@ class MigrationsTest extends Test
         ]);
 
         $commandExecute = $this->commandTester
-            ->setInputs(['0', '1'])
-            ->execute(['migration' => self::MIGRATION_NAME]);
+            ->setInputs([
+                '0',
+                '1',
+            ])
+            ->execute([
+                'migration' => self::MIGRATION_NAME,
+            ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH_MYSQL_VIEW . self::FILE_NAME);
 
-        /** @phpstan-ignore-next-line */
+        /**
+         * @var object $objClass
+         *
+         * @phpstan-ignore-next-line
+         */
         $objClass = new (self::CLASS_NAMESPACE_VIEW . self::CLASS_NAME)();
 
         $this->assertInstances($objClass, [
@@ -264,14 +282,23 @@ class MigrationsTest extends Test
         ]);
 
         $commandExecute = $this->commandTester
-            ->setInputs(['0', '2'])
-            ->execute(['migration' => self::MIGRATION_NAME]);
+            ->setInputs([
+                '0',
+                '2',
+            ])
+            ->execute([
+                'migration' => self::MIGRATION_NAME,
+            ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH_MYSQL_STORED_PROCEDURE . self::FILE_NAME);
 
-        /** @phpstan-ignore-next-line */
+        /**
+         * @var object $objClass
+         *
+         * @phpstan-ignore-next-line
+         */
         $objClass = new (self::CLASS_NAMESPACE_STORE_PROCEDURE . self::CLASS_NAME)();
 
         $this->assertInstances($objClass, [
