@@ -7,14 +7,12 @@ namespace Lion\Bundle\Interface;
 use stdClass;
 
 /**
- * Implement abstract methods for seeds
- *
- * @package Lion\Bundle\Interface
+ * Implement abstract methods for seeds.
  */
 interface SeedInterface
 {
     /**
-     * Seed the application's database
+     * Seed the application's database.
      *
      * @return int|stdClass
      **/

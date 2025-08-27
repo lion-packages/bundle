@@ -8,16 +8,25 @@ use JsonSerializable;
 use Lion\Database\Interface\DatabaseCapsuleInterface;
 
 /**
- * Implement abstract methods for capsule classes
+ * Defines the contract for capsule classes that represent entities or data
+ * containers in the application.
  *
- * @package Lion\Bundle\Interface
+ * Extends:
+ * - JsonSerializable: requires implementing jsonSerialize() to define how the
+ * object should be converted to JSON.
+ * - DatabaseCapsuleInterface: requires implementing methods related to persistence
+ * or database interactions.
  */
 interface CapsuleInterface extends JsonSerializable, DatabaseCapsuleInterface
 {
     /**
-     * Returns an object of the class
+     * Returns an instance of the implementing class.
      *
-     * @return CapsuleInterface
+     * Typically, this method is used to hydrate the object by invoking its setter
+     * methods and assigning values to its properties. The method then returns the
+     * same object instance for further use.
+     *
+     * @return self The hydrated instance of the capsule class.
      */
-    public function capsule(): CapsuleInterface;
+    public function capsule(): self;
 }

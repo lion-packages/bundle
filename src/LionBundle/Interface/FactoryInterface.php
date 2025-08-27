@@ -19,7 +19,7 @@ interface FactoryInterface
     /**
      * Define the model's default state
      *
-     * @return array<int|string, array<int|string, mixed>|bool|float|int|null|string>
+     * @return array<int|string, array<int|string, bool|float|int|null|string>|bool|float|int|null|string>
      */
     public static function definition(): array;
 }

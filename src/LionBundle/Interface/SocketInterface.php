@@ -7,9 +7,7 @@ namespace Lion\Bundle\Interface;
 use Ratchet\MessageComponentInterface;
 
 /**
- * Implement abstract methods for sockets
- *
- * @package Lion\Bundle\Interface
+ * Implement abstract methods for sockets.
  */
 interface SocketInterface extends MessageComponentInterface
 {

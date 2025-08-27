@@ -7,7 +7,7 @@ namespace Lion\Bundle\Interface\Migrations;
 use Lion\Bundle\Interface\MigrationUpInterface;
 
 /**
- * Defines a table type migration
+ * Defines a table type migration.
  */
 interface TableInterface extends MigrationUpInterface
 {
