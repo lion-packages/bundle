@@ -18,8 +18,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Generate a migration for database structure control
- *
- * @package Lion\Bundle\Commands\Lion\New
  */
 class MigrationCommand extends MenuCommand
 {
