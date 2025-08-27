@@ -20,9 +20,6 @@ class EmptyMigrationsCommandTest extends Test
     private CommandTester $commandTester;
     private EmptyMigrationsCommand $emptyMigrationsCommand;
 
-    /**
-     * @throws ReflectionException
-     */
     protected function setUp(): void
     {
         $this->emptyMigrationsCommand = new EmptyMigrationsCommand()

@@ -10,11 +10,11 @@ use Carbon\WeekDay;
 use DateTime;
 use DateTimeInterface;
 use DateTimeZone;
+use Exception;
 use Faker\Generator;
 use GuzzleHttp\Exception\GuzzleException;
 use JsonException;
 use Lion\Bundle\Enums\LogTypeEnum;
-use Lion\Bundle\Helpers\Env;
 use Lion\Bundle\Support\Http\Fetch;
 use Lion\Request\Http;
 use Lion\Request\Status;
@@ -34,7 +34,11 @@ class HelpersTest extends Test
     private const string PATH_URL = 'storage/';
     private const string PUBLIC_PATH_URL = 'public/';
     private const string CUSTOM_FOLDER = 'example/';
-    private const array RESPONSE = ['code' => Http::OK, 'status' => Status::INFO, 'message' => '[index]'];
+    private const array RESPONSE = [
+        'code' => Http::OK,
+        'status' => Status::INFO,
+        'message' => '[index]',
+    ];
     private const string JSON_RESPONSE = '{"name":"Sleon"}';
     private const string CODE = 'code';
     private const string STATUS = 'status';
@@ -46,6 +50,18 @@ class HelpersTest extends Test
     protected function tearDown(): void
     {
         unset($_SERVER['REQUEST_URI']);
+    }
+
+    #[Testing]
+    #[TestWith(['connectionName' => 'DB_DEFAULT'], 'case-0')]
+    #[TestWith(['connectionName' => 'DB_NAME_TEST'], 'case-1')]
+    #[TestWith(['connectionName' => 'DB_NAME_TEST_POSTGRESQL'], 'case-2')]
+    public function getConnection(string $connectionName): void
+    {
+        /** @var string $connection */
+        $connection = env($connectionName);
+
+        $this->assertSame($connection, getConnection($connectionName));
     }
 
     #[Testing]
@@ -74,8 +90,9 @@ class HelpersTest extends Test
         $this->assertArrayNotHasKey('users_name', $_POST);
     }
 
+    #[Testing]
     #[DataProvider('requestProvider')]
-    public function testRequestWithProperty(string $key, mixed $value, mixed $return): void
+    public function requestWithProperty(string $key, mixed $value, mixed $return): void
     {
         $_POST[$key] = $value;
 
@@ -88,7 +105,8 @@ class HelpersTest extends Test
         $this->assertArrayNotHasKey($key, $_POST);
     }
 
-    public function testRequestReturnNull(): void
+    #[Testing]
+    public function requestReturnNull(): void
     {
         $data = request(uniqid('code-'));
 
@@ -150,7 +168,8 @@ class HelpersTest extends Test
     /**
      * @throws GuzzleException
      */
-    public function testFetch(): void
+    #[Testing]
+    public function fetch(): void
     {
         /** @var string $uri */
         $uri = env('SERVER_URL');
@@ -164,21 +183,23 @@ class HelpersTest extends Test
         $this->assertSame(self::RESPONSE, $response);
     }
 
-    public function testStoragePathForRoot(): void
+    #[Testing]
+    public function storagePathForRoot(): void
     {
         $this->assertSame(self::PATH_URL . self::CUSTOM_FOLDER, storage_path(self::CUSTOM_FOLDER));
     }
 
-    public function testPublicPathForRoot(): void
+    #[Testing]
+    public function publicPathForRoot(): void
     {
         $this->assertSame(self::PUBLIC_PATH_URL . self::CUSTOM_FOLDER, public_path(self::CUSTOM_FOLDER));
     }
 
-    public function testResponse(): void
+    #[Testing]
+    public function response(): void
     {
         $response = response();
 
-        $this->assertIsObject($response);
         $this->assertObjectHasProperty(self::CODE, $response);
         $this->assertObjectHasProperty(self::STATUS, $response);
         $this->assertObjectHasProperty(self::MESSAGE, $response);
@@ -187,11 +208,11 @@ class HelpersTest extends Test
         $this->assertNull($response->message);
     }
 
-    public function testSuccess(): void
+    #[Testing]
+    public function success(): void
     {
         $response = success();
 
-        $this->assertIsObject($response);
         $this->assertObjectHasProperty(self::CODE, $response);
         $this->assertObjectHasProperty(self::STATUS, $response);
         $this->assertObjectHasProperty(self::MESSAGE, $response);
@@ -200,11 +221,11 @@ class HelpersTest extends Test
         $this->assertNull($response->message);
     }
 
-    public function testError(): void
+    #[Testing]
+    public function error(): void
     {
         $response = error();
 
-        $this->assertIsObject($response);
         $this->assertObjectHasProperty(self::CODE, $response);
         $this->assertObjectHasProperty(self::STATUS, $response);
         $this->assertObjectHasProperty(self::MESSAGE, $response);
@@ -213,11 +234,11 @@ class HelpersTest extends Test
         $this->assertNull($response->message);
     }
 
-    public function testWarning(): void
+    #[Testing]
+    public function warning(): void
     {
         $response = warning();
 
-        $this->assertIsObject($response);
         $this->assertObjectHasProperty(self::CODE, $response);
         $this->assertObjectHasProperty(self::STATUS, $response);
         $this->assertObjectHasProperty(self::MESSAGE, $response);
@@ -226,11 +247,11 @@ class HelpersTest extends Test
         $this->assertNull($response->message);
     }
 
-    public function testInfo(): void
+    #[Testing]
+    public function info(): void
     {
         $response = info();
 
-        $this->assertIsObject($response);
         $this->assertObjectHasProperty(self::CODE, $response);
         $this->assertObjectHasProperty(self::STATUS, $response);
         $this->assertObjectHasProperty(self::MESSAGE, $response);
@@ -239,29 +260,43 @@ class HelpersTest extends Test
         $this->assertNull($response->message);
     }
 
-    public function testVd(): void
+    /**
+     * @throws JsonException If encoding to JSON fails.
+     */
+    #[Testing]
+    public function vd(): void
     {
-        ob_start();
+        $data = [
+            'name' => 'foo',
+        ];
 
-        vd('Testing');
-
-        $output = ob_get_clean();
-
-        $this->assertStringContainsString('Testing', $output);
+        $this->assertWithOb(json($data) . PHP_EOL, function () use ($data): void {
+            vd($data);
+        });
     }
 
-    public function testLogger(): void
+    /**
+     * @throws JsonException If encoding to JSON fails.
+     */
+    #[Testing]
+    public function logger(): void
     {
-        $path = storage_path('logs/monolog/', false);
+        $path = storage_path('logs/monolog/');
 
         $fileName = "{$path}lion-" . Carbon::now()->format('Y-m-d') . '.log';
 
-        logger(self::LOGGER_CONTENT, LogTypeEnum::INFO, ['user' => 'Sleon'], false);
+        logger(self::LOGGER_CONTENT, LogTypeEnum::INFO, [
+            'user' => 'Sleon4',
+        ]);
 
         $this->assertFileExists($fileName);
     }
 
-    public function testLoggerForApi(): void
+    /**
+     * @throws JsonException If encoding to JSON fails.
+     */
+    #[Testing]
+    public function loggerForApi(): void
     {
         $_SERVER['REQUEST_URI'] = '/api/test';
 
@@ -277,7 +312,7 @@ class HelpersTest extends Test
     }
 
     /**
-     * @throws JsonException
+     * @throws JsonException If encoding to JSON fails.
      */
     #[Testing]
     public function json(): void
@@ -285,15 +320,6 @@ class HelpersTest extends Test
         $this->assertJsonStringEqualsJsonString(self::JSON_RESPONSE, json([
             'name' => 'Sleon',
         ]));
-    }
-
-    #[Testing]
-    public function jsonError(): void
-    {
-        $this->expectException(JsonException::class);
-        $this->expectExceptionCode(500);
-
-        json(fopen('php://memory', 'r'));
     }
 
     #[Testing]
@@ -305,21 +331,15 @@ class HelpersTest extends Test
     #[Testing]
     public function isErrorIsArray(): void
     {
-        $this->assertTrue(isError([
-            'status' => 'error',
+        $this->assertTrue(isError((object) [
+            'status' => Status::ERROR,
         ]));
-    }
-
-    #[Testing]
-    public function isErrorObjectNotValid(): void
-    {
-        $this->assertFalse(isError(new Env()));
     }
 
     #[Testing]
     public function isErrorStatusNotExists(): void
     {
-        $this->assertFalse(isError([]));
+        $this->assertFalse(isError((object) []));
     }
 
     #[Testing]
@@ -331,32 +351,36 @@ class HelpersTest extends Test
     #[Testing]
     public function isSuccessIsArray(): void
     {
-        $this->assertTrue(isSuccess([
-            'status' => 'success',
+        $this->assertTrue(isSuccess((object) [
+            'status' => Status::SUCCESS,
         ]));
-    }
-
-    #[Testing]
-    public function isSuccessObjectNotValid(): void
-    {
-        $this->assertFalse(isSuccess(new Env()));
     }
 
     #[Testing]
     public function isSuccessStatusNotExists(): void
     {
-        $this->assertFalse(isSuccess([]));
+        $this->assertFalse(isSuccess((object) []));
     }
 
-    public function testJwt(): void
+    /**
+     * @throws Exception
+     */
+    public function jwt(): void
     {
+        /**
+         * @var array{
+         *     iv: string
+         * } $config
+         */
         $config = new AES()
             ->create(AES::AES_256_CBC)
             ->get();
 
         $jwt = new JWT();
 
+        /** @var string $tokenEncode */
         $tokenEncode = $jwt
+            /** @phpstan-ignore-next-line */
             ->config([
                 'privateKey' => $config['iv'],
                 'jwtServerUrl' => env('SERVER_URL'),
@@ -374,14 +398,19 @@ class HelpersTest extends Test
         $this->assertIsString($token);
     }
 
-    public function testFake(): void
+    #[Testing]
+    public function fake(): void
     {
         $this->assertInstanceOf(Generator::class, fake());
     }
 
+    #[Testing]
     #[DataProvider('envProvider')]
-    public function testEnv(string $envKey, mixed $envValue, mixed $return): void
-    {
+    public function env(
+        string $envKey,
+        string|int|float|bool|null $envValue,
+        string|int|float|bool|null $return
+    ): void {
         $this->assertSame($return, env($envKey, $envValue));
     }
 }

@@ -104,6 +104,11 @@ trait HelpersProviderTrait
                 'envValue' => null,
                 'return' => null,
             ],
+            [
+                'envKey' => 'REDIS_PORT',
+                'envValue' => '6379',
+                'return' => '6379',
+            ],
         ];
     }
 }
