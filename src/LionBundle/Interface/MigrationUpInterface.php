@@ -8,15 +8,13 @@ use stdClass;
 
 /**
  * Implement abstract methods for migrations
- *
- * @package Lion\Bundle\Interface
  */
 interface MigrationUpInterface
 {
     /**
      * Run the process and create a table in the database
      *
-     * @return stdClass
+     * @return int|stdClass
      * */
-    public function up(): stdClass;
+    public function up(): int|stdClass;
 }
