@@ -15,26 +15,50 @@ use Lion\Request\Request;
 use Lion\Request\Response;
 
 /**
- * [Object with properties captured in an HTTP request]
+ * Defines the 'code' property of response objects.
+ */
+
+const CODE = 'code';
+
+/**
+ * Defines the 'status' property of response objects.
+ */
+
+const STATUS = 'status';
+
+/**
+ * Defines the 'message' property of response objects.
+ */
+
+const MESSSAGE = 'message';
+
+/**
+ * Defines the 'data' property of response objects.
+ */
+
+const DATA = 'data';
+
+/**
+ * Get all values sent via an HTTP request.
  */
 define('REQUEST', new Request()->capture());
 
 /**
- * [Object of Response class to generate response objects]
+ * Allows you to manage custom or already defined response objects.
  *
  * @var Response
  */
 const RESPONSE = new Response();
 
 /**
- * Object of class Str
+ * Modify and construct strings with different formats.
  *
  * @var Str
  */
 const STR = new Str();
 
 /**
- * Object of class Arr
+ * Modify and build arrays with different indexes or values.
  *
  * @var Arr
  */
