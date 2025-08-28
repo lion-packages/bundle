@@ -13,6 +13,7 @@ use Lion\Bundle\Interface\Migrations\ViewInterface;
 use Lion\Bundle\Interface\MigrationUpInterface;
 use Lion\Bundle\Interface\SeedInterface;
 use Lion\Command\Command;
+use Lion\Command\Kernel;
 use Lion\Database\Connection;
 use Lion\Database\Driver;
 use Lion\Database\Drivers\MySQL;
@@ -20,24 +21,26 @@ use Lion\Database\Drivers\PostgreSQL;
 use Lion\Database\Drivers\Schema\MySQL as Schema;
 use Lion\Database\Interface\ExecuteInterface;
 use Lion\Files\Store;
+use Lion\Helpers\Str;
+use Lion\Request\Http;
+use RuntimeException;
+use stdClass;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Manages the processes of creating or executing migrations
- *
- * @package Lion\Bundle\Helpers\Commands\Migrations
+ * Manages the processes of creating or executing migrations.
  */
 class Migrations
 {
     /**
-     * [Manipulate system files]
+     * Manipulate system files.
      *
      * @var Store $store
      */
     private Store $store;
 
     /**
-     * [Stores already loaded migrations]
+     * Stores already loaded migrations.
      *
      * @var array<string, MigrationUpInterface>
      */
@@ -52,9 +55,9 @@ class Migrations
     }
 
     /**
-     * Sorts the list of elements by the value defined in the INDEX constant
+     * Sorts the list of elements by the value defined in the INDEX constant.
      *
-     * @param array<string, MigrationUpInterface|SeedInterface> $list [Class List]
+     * @param array<string, MigrationUpInterface|SeedInterface> $list Class List.
      *
      * @return array<string, MigrationUpInterface|SeedInterface>
      *
@@ -92,7 +95,7 @@ class Migrations
     }
 
     /**
-     * Gets defined migrations categorized by type
+     * Gets defined migrations categorized by type.
      *
      * @return array<string, array<string, MigrationUpInterface>>
      *
@@ -138,13 +141,13 @@ class Migrations
     }
 
     /**
-     * Run the migrations
+     * Run the migrations.
      *
-     * @param Command $command [Extends the functions of the Command class to
-     * format messages with different colors]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
-     * @param array<int, MigrationUpInterface> $files [List of migration files]
+     * @param Command $command Extends the functions of the Command class to format
+     * messages with different colors
+     * @param OutputInterface $output OutputInterface is the interface implemented
+     * by all Output classes.
+     * @param array<int, MigrationUpInterface> $files List of migration files.
      *
      * @return void
      *
@@ -156,6 +159,10 @@ class Migrations
     {
         foreach ($files as $namespace => $classObject) {
             $response = $classObject->up();
+
+            if (!$response instanceof stdClass) {
+                continue;
+            }
 
             /** @phpstan-ignore-next-line */
             $message = "\t>> MIGRATION: {$response->message}";
@@ -171,13 +178,13 @@ class Migrations
     }
 
     /**
-     * Run the migrations
+     * Run the migrations.
      *
-     * @param array<int, class-string> $list [List of classes]
+     * @param array<int, class-string> $list List of classes.
      *
      * @return void
      *
-     * @throws Exception If an error occurs while deleting the file
+     * @throws Exception If an error occurs while deleting the file.
      */
     public function executeMigrationsGroup(array $list): void
     {
@@ -228,10 +235,10 @@ class Migrations
     }
 
     /**
-     * Generates static connections to manipulate databases
+     * Generates static connections to manipulate databases.
      *
-     * @param Closure $callback [Executes logic to reset databases to their
-     * original form]
+     * @param Closure $callback Executes logic to reset databases to their original
+     * form.
      *
      * @return void
      *
@@ -296,7 +303,7 @@ class Migrations
         if (Driver::SQLITE === $type) {
             $this->store->remove($dbName);
 
-            null != $evaluate && $evaluate();
+            null !== $evaluate && $evaluate();
 
             file_put_contents($dbName, '');
 
@@ -312,7 +319,7 @@ class Migrations
                 )
                 ->execute();
 
-            null != $evaluate && $evaluate();
+            null !== $evaluate && $evaluate();
 
             MySQL::connection($connectionName)
                 ->query(
@@ -348,7 +355,7 @@ class Migrations
                 )
                 ->execute();
 
-            null != $evaluate && $evaluate();
+            null !== $evaluate && $evaluate();
 
             PostgreSQL::connection($connectionName)
                 ->query(
@@ -409,16 +416,52 @@ class Migrations
         $connections = Connection::getConnections();
 
         foreach ($connections as $connectionName => $connectionData) {
-            $this
-                ->processingWithStaticConnections(
-                    function () use ($connectionName, $connectionData): void {
-                        $this->resetDatabase(
-                            $connectionData['dbname'],
-                            $connectionName,
-                            $connectionData['type']
-                        );
-                    }
-                );
+            $this->processingWithStaticConnections(function () use ($connectionName, $connectionData): void {
+                $this->resetDatabase($connectionData['dbname'], $connectionName, $connectionData['type']);
+            });
+        }
+    }
+
+    /**
+     * Clones the contents of a template database connection into a temporary
+     * database using mysqldump. This includes tables, data, triggers, stored
+     * procedures, and events.
+     *
+     * @param string $dbName Name of the database to operate on (usually the target DB).
+     * @param string $connectionName Name of the template connection to clone from.
+     * @param string $tempConnectionName Name of the temporary database or
+     * connection to clone into.
+     *
+     * @return void
+     *
+     * @codeCoverageIgnore
+     */
+    public function cloneDatabase(string $dbName, string $connectionName, string $tempConnectionName): void
+    {
+        $connections = Connection::getConnections();
+
+        $dumpCommand = sprintf(
+            'mysqldump --skip-ssl -h%s -u%s -p%s --routines --triggers --events --single-transaction %s | mysql --skip-ssl -h%s -u%s -p%s %s', // phpcs:ignore
+            /** @phpstan-ignore-next-line */
+            escapeshellarg($connections[$connectionName]['host']),
+            /** @phpstan-ignore-next-line */
+            escapeshellarg($connections[$connectionName]['user']),
+            /** @phpstan-ignore-next-line */
+            escapeshellarg($connections[$connectionName]['password']),
+            escapeshellarg($dbName),
+            /** @phpstan-ignore-next-line */
+            escapeshellarg($connections[$connectionName]['host']),
+            /** @phpstan-ignore-next-line */
+            escapeshellarg($connections[$connectionName]['user']),
+            /** @phpstan-ignore-next-line */
+            escapeshellarg($connections[$connectionName]['password']),
+            escapeshellarg($connections[$tempConnectionName]['dbname'])
+        );
+
+        exec($dumpCommand, $output, $returnVar);
+
+        if ($returnVar !== 0) {
+            throw new RuntimeException("Error cloning database {$dbName} to {$connections[$tempConnectionName]['dbname']}."); // phpcs:ignore
         }
     }
 }
