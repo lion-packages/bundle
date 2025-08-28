@@ -66,6 +66,7 @@
         "vlucas/phpdotenv": "^5.6"
     },
     "require-dev": {
+        "brianium/paratest": "^7.11",
         "lion/test": "^3.1",
         "overtrue/phplint": "^9.5",
         "phpstan/phpstan": "^2.1",
