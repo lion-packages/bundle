@@ -591,4 +591,16 @@ class ClassFactory
 
         return 'string';
     }
+
+    /**
+     * Determines whether a file exists or can be skipped
+     *
+     * @param string $fileExtension File extension
+     *
+     * @return bool
+     */
+    public function omit(string $fileExtension): bool
+    {
+        return isSuccess($this->store->exist($this->getFolder() . $this->getClass() . ".{$fileExtension}"));
+    }
 }
