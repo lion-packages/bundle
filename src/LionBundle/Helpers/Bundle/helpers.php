@@ -13,6 +13,7 @@ use Lion\Bundle\Enums\LogTypeEnum;
 use Lion\Bundle\Helpers\Env;
 use Lion\Bundle\Helpers\Fake;
 use Lion\Bundle\Support\Http\Fetch;
+use Lion\Database\Connection;
 use Lion\Files\Store;
 use Lion\Request\Http;
 use Lion\Request\Request;
@@ -56,17 +57,14 @@ if (!function_exists('getDefaultConnection')) {
      * Returns the default database connection name.
      *
      * <code>
-     *     $default = getDefaultConnection(); // uses DB_DEFAULT
+     *     $default = getDefaultConnection(); // uses Connection::getDefaultConnectionName()
      * </code>
      *
      * @return string The default connection name.
      */
     function getDefaultConnection(): string
     {
-        /** @var string $connection */
-        $connection = env('DB_DEFAULT');
-
-        return $connection;
+        return Connection::getDefaultConnectionName();
     }
 }
 
