@@ -8,6 +8,7 @@ USER root
 RUN useradd -m lion && echo 'lion:lion' | chpasswd && usermod -aG sudo lion && usermod -s /bin/bash lion
 # Dependencies ---------------------------------------------------------------------------------------------------------
 RUN apt-get update -y \
+    && apt-get upgrade -y \
     && apt-get install -y sudo nano zsh git default-mysql-client curl wget unzip cron sendmail golang-go \
     && apt-get install -y libpq-dev libpng-dev libzip-dev zlib1g-dev libonig-dev libevent-dev libssl-dev \
     && sudo apt-get install -y ca-certificates \

@@ -243,6 +243,8 @@ abstract class Test extends Testing
      *
      * @throws DependencyException Error while resolving the entry.
      * @throws NotFoundException No entry found for the given name.
+     *
+     * @codeCoverageIgnore
      */
     final protected function runInSeparateDatabase(Closure $callable): void
     {
