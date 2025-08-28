@@ -13,7 +13,6 @@ use Lion\Bundle\Interface\Migrations\ViewInterface;
 use Lion\Bundle\Interface\MigrationUpInterface;
 use Lion\Bundle\Interface\SeedInterface;
 use Lion\Command\Command;
-use Lion\Command\Kernel;
 use Lion\Database\Connection;
 use Lion\Database\Driver;
 use Lion\Database\Drivers\MySQL;
@@ -21,7 +20,6 @@ use Lion\Database\Drivers\PostgreSQL;
 use Lion\Database\Drivers\Schema\MySQL as Schema;
 use Lion\Database\Interface\ExecuteInterface;
 use Lion\Files\Store;
-use Lion\Helpers\Str;
 use Lion\Request\Http;
 use RuntimeException;
 use stdClass;
@@ -461,7 +459,10 @@ class Migrations
         exec($dumpCommand, $output, $returnVar);
 
         if ($returnVar !== 0) {
-            throw new RuntimeException("Error cloning database {$dbName} to {$connections[$tempConnectionName]['dbname']}."); // phpcs:ignore
+            throw new RuntimeException(
+                "Error cloning database {$dbName} to {$connections[$tempConnectionName]['dbname']}.",
+                Http::INTERNAL_SERVER_ERROR
+            );
         }
     }
 }

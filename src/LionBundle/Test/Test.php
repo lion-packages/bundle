@@ -307,6 +307,7 @@ abstract class Test extends Testing
 
             Connection::setDefaultConnectionName($tempConnectionName);
 
+            /** @phpstan-ignore-next-line */
             $this->migrations->cloneDatabase($dbName, $connectionName, $tempConnectionName);
 
             $callable($tempConnectionName);
