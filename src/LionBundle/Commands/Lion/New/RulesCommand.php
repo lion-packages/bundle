@@ -16,22 +16,20 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Generate a rule
- *
- * @package Lion\Bundle\Commands\Lion\New
+ * Generate a rule.
  */
 class RulesCommand extends Command
 {
     /**
      * Fabricates the data provided to manipulate information (folder, class,
-     * namespace)
+     * namespace).
      *
      * @var ClassFactory $classFactory
      */
     private ClassFactory $classFactory;
 
     /**
-     * Manipulate system files
+     * Manipulate system files.
      *
      * @var Store $store
      */
@@ -54,7 +52,7 @@ class RulesCommand extends Command
     }
 
     /**
-     * Configures the current command
+     * Configures the current command.
      *
      * @return void
      */
@@ -68,21 +66,21 @@ class RulesCommand extends Command
     }
 
     /**
-     * Executes the current command
+     * Executes the current command.
      *
      * This method is not abstract because you can use this class as a concrete
      * class. In this case, instead of defining the execute() method, you set the
-     * code to execute by passing a Closure to the setCode() method
+     * code to execute by passing a Closure to the setCode() method.
      *
      * @param InputInterface $input InputInterface is the interface implemented by
-     * all input classes
+     * all input classes.
      * @param OutputInterface $output OutputInterface is the interface implemented
-     * by all Output classes
+     * by all Output classes.
      *
      * @return int
      *
-     * @throws Exception If the file could not be opened
-     * @throws LogicException When this abstract method is not implemented
+     * @throws Exception If the file could not be opened.
+     * @throws LogicException When this abstract method is not implemented.
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -102,6 +100,14 @@ class RulesCommand extends Command
 
         $this->store->folder($folder);
 
+        if ($this->classFactory->omit(ClassFactory::PHP_EXTENSION)) {
+            $output->writeln($this->warningOutput("\t>>  RULE: {$namespace}\\{$class}"));
+
+            $output->writeln($this->infoOutput("\t>>  RULE: This class already exists, the file has been skipped."));
+
+            return parent::SUCCESS;
+        }
+
         $this->classFactory
             ->create($class, ClassFactory::PHP_EXTENSION, $folder)
             ->add(
@@ -117,12 +123,12 @@ class RulesCommand extends Command
                 use Valitron\Validator;
 
                 /**
-                 * Rule defined for the '{$field}' property
+                 * Rule defined for the '{$field}' property.
                  */
                 class {$class} extends Rules implements RulesInterface
                 {
                     /**
-                     * Field for the '{$field}' property
+                     * Field for the '{$field}' property.
                      *
                      * @var string \$field
                      */
