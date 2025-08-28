@@ -23,35 +23,6 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Http\Message\ResponseInterface;
 
-if (!function_exists('getConnection')) {
-    /**
-     * Returns the database connection name based on an environment variable.
-     *
-     * <code>
-     *     $default = getConnection(); // uses DB_DEFAULT
-     *     $mysql = getConnection('DB_MYSQL');
-     * </code>
-     *
-     * @param string $key The environment variable key (default: "DB_DEFAULT").
-     *
-     * @return string The connection name.
-     */
-    function getConnection(string $key = 'DB_DEFAULT'): string
-    {
-        /** @var string|null $connection */
-        $connection = env($key);
-
-        if (null === $connection) {
-            throw new InvalidArgumentException(
-                "The environment variable '{$key}' is not defined.",
-                Http::INTERNAL_SERVER_ERROR
-            );
-        }
-
-        return $connection;
-    }
-}
-
 if (!function_exists('getDefaultConnection')) {
     /**
      * Returns the default database connection name.
