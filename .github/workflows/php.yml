@@ -373,6 +373,9 @@ jobs:
           key: php-vendor-${{ runner.os }}-${{ github.run_id }}
           restore-keys: php-vendor-${{ runner.os }}-${{ github.run_id }}
 
+      - name: Run database tests in parallel
+        run: php vendor/bin/paratest --colors=always --group=database --processes=$(nproc)
+
       - name: Run tests
         run: php vendor/bin/phpunit --coverage-clover tests/build/logs/clover.xml --coverage-html tests/build/coverage
 
