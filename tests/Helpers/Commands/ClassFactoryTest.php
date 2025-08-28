@@ -10,6 +10,7 @@ use Lion\Files\Store;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test as Testing;
+use PHPUnit\Framework\Attributes\TestWith;
 use ReflectionException;
 use stdClass;
 use Tests\Providers\Helpers\ClassFactoryProviderTrait;
@@ -24,9 +25,6 @@ class ClassFactoryTest extends Test
     private ClassFactory $classFactory;
     private Store $store;
 
-    /**
-     * @throws ReflectionException
-     */
     protected function setUp(): void
     {
         $this->store = new Store();
@@ -320,5 +318,27 @@ class ClassFactoryTest extends Test
     public function getDBType(string $type, string $return): void
     {
         $this->assertSame($return, $this->classFactory->getDBType($type));
+    }
+
+    #[Testing]
+    #[TestWith(['extension' => ClassFactory::PHP_EXTENSION], 'case-0')]
+    #[TestWith(['extension' => ClassFactory::SH_EXTENSION], 'case-1')]
+    #[TestWith(['extension' => ClassFactory::JSON_EXTENSION], 'case-2')]
+    #[TestWith(['extension' => ClassFactory::LOG_EXTENSION], 'case-3')]
+    public function omit(string $extension): void
+    {
+        $this->store->folder('app/');
+
+        $response = $this->store->create('app/Example' . ".{$extension}", "");
+
+        $this->assertTrue(isSuccess($response));
+
+        $this->classFactory->classFactory('app/', self::FILE_NAME);
+
+        $this->assertTrue($this->classFactory->omit($extension));
+
+        $this->rmdirRecursively('app/');
+
+        $this->assertDirectoryDoesNotExist('app/');
     }
 }

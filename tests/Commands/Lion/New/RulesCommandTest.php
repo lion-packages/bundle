@@ -25,6 +25,7 @@ class RulesCommandTest extends Test
     private const string OBJECT_NAME = self::NAMESPACE_CLASS . self::CLASS_NAME;
     private const string FILE_NAME = self::CLASS_NAME . '.php';
     private const string OUTPUT_MESSAGE = 'The rule was generated successfully.';
+    private const string OUTPUT_OMIT_MESSAGE = 'This class already exists, the file has been skipped.';
     private const string METHOD = 'passes';
 
     private CommandTester $commandTester;
@@ -32,9 +33,8 @@ class RulesCommandTest extends Test
     private RulesCommand $rulesCommand;
 
     /**
-     * @throws DependencyException
-     * @throws NotFoundException
-     * @throws ReflectionException
+     * @throws DependencyException Error while resolving the entry
+     * @throws NotFoundException No entry found for the given name
      */
     protected function setUp(): void
     {
@@ -62,7 +62,8 @@ class RulesCommandTest extends Test
     }
 
     /**
-     * @throws ReflectionException
+     * @throws ReflectionException If the property does not exist in the reflected
+     * class.
      */
     #[Testing]
     public function setClassFactory(): void
@@ -72,7 +73,8 @@ class RulesCommandTest extends Test
     }
 
     /**
-     * @throws ReflectionException
+     * @throws ReflectionException If the property does not exist in the reflected
+     * class.
      */
     #[Testing]
     public function setStore(): void
@@ -82,8 +84,8 @@ class RulesCommandTest extends Test
     }
 
     /**
-     * @throws DependencyException
-     * @throws NotFoundException
+     * @throws DependencyException Error while resolving the entry
+     * @throws NotFoundException No entry found for the given name
      */
     #[Testing]
     public function execute(): void
@@ -100,5 +102,32 @@ class RulesCommandTest extends Test
         /** @phpstan-ignore-next-line */
         $this->assertInstanceOf(self::OBJECT_NAME, $objClass);
         $this->assertContains(self::METHOD, get_class_methods($objClass));
+    }
+
+    /**
+     * @throws DependencyException Error while resolving the entry
+     * @throws NotFoundException No entry found for the given name
+     */
+    #[Testing]
+    public function executeOmit(): void
+    {
+        $this->assertSame(Command::SUCCESS, $this->commandTester->execute([
+            'rule' => self::CLASS_NAME,
+        ]));
+
+        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
+        $this->assertFileExists(self::URL_PATH . self::FILE_NAME);
+
+        $objClass = $this->container->resolve(self::OBJECT_NAME);
+
+        /** @phpstan-ignore-next-line */
+        $this->assertInstanceOf(self::OBJECT_NAME, $objClass);
+        $this->assertContains(self::METHOD, get_class_methods($objClass));
+
+        $this->assertSame(Command::SUCCESS, $this->commandTester->execute([
+            'rule' => self::CLASS_NAME,
+        ]));
+
+        $this->assertStringContainsString(self::OUTPUT_OMIT_MESSAGE, $this->commandTester->getDisplay());
     }
 }
