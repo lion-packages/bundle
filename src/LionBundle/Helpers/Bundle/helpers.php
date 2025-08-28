@@ -13,6 +13,7 @@ use Lion\Bundle\Enums\LogTypeEnum;
 use Lion\Bundle\Helpers\Env;
 use Lion\Bundle\Helpers\Fake;
 use Lion\Bundle\Support\Http\Fetch;
+use Lion\Database\Connection;
 use Lion\Files\Store;
 use Lion\Request\Http;
 use Lion\Request\Request;
@@ -22,51 +23,19 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Http\Message\ResponseInterface;
 
-if (!function_exists('getConnection')) {
-    /**
-     * Returns the database connection name based on an environment variable.
-     *
-     * <code>
-     *     $default = getConnection(); // uses DB_DEFAULT
-     *     $mysql = getConnection('DB_MYSQL');
-     * </code>
-     *
-     * @param string $key The environment variable key (default: "DB_DEFAULT").
-     *
-     * @return string The connection name.
-     */
-    function getConnection(string $key = 'DB_DEFAULT'): string
-    {
-        /** @var string|null $connection */
-        $connection = env($key);
-
-        if (null === $connection) {
-            throw new InvalidArgumentException(
-                "The environment variable '{$key}' is not defined.",
-                Http::INTERNAL_SERVER_ERROR
-            );
-        }
-
-        return $connection;
-    }
-}
-
 if (!function_exists('getDefaultConnection')) {
     /**
      * Returns the default database connection name.
      *
      * <code>
-     *     $default = getDefaultConnection(); // uses DB_DEFAULT
+     *     $default = getDefaultConnection(); // uses Connection::getDefaultConnectionName()
      * </code>
      *
      * @return string The default connection name.
      */
     function getDefaultConnection(): string
     {
-        /** @var string $connection */
-        $connection = env('DB_DEFAULT');
-
-        return $connection;
+        return Connection::getDefaultConnectionName();
     }
 }
 

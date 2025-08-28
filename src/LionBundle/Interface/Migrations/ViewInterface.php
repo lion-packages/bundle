@@ -7,7 +7,7 @@ namespace Lion\Bundle\Interface\Migrations;
 use Lion\Bundle\Interface\MigrationUpInterface;
 
 /**
- * Defines a view type migration
+ * Defines a view type migration.
  */
 interface ViewInterface extends MigrationUpInterface
 {

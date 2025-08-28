@@ -7,16 +7,14 @@ namespace Lion\Bundle\Interface;
 use stdClass;
 
 /**
- * Implement abstract methods for migrations
- *
- * @package Lion\Bundle\Interface
+ * Implement abstract methods for migrations.
  */
 interface MigrationUpInterface
 {
     /**
-     * Run the process and create a table in the database
+     * Run the process and create a table in the database.
      *
-     * @return stdClass
+     * @return int|stdClass
      * */
-    public function up(): stdClass;
+    public function up(): int|stdClass;
 }

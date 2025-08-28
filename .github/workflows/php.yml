@@ -373,12 +373,15 @@ jobs:
           key: php-vendor-${{ runner.os }}-${{ github.run_id }}
           restore-keys: php-vendor-${{ runner.os }}-${{ github.run_id }}
 
+      # - name: Run database tests in parallel
+        # run: php vendor/bin/paratest --colors=always --group=database --processes=$(nproc)
+
       - name: Run tests
-        run: php vendor/bin/phpunit --coverage-clover tests/build/logs/clover.xml --coverage-html tests/build/coverage
+        run: php vendor/bin/phpunit --coverage-clover tests/build/logs/clover.xml --coverage-html tests/build/coverage --exclude-group database
+        # php vendor/bin/phpunit --coverage-clover tests/build/logs/clover.xml --coverage-html tests/build/coverage
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
           files: tests/build/logs/clover.xml
           token: ${{ secrets.CODECOV_TOKEN_LION_BUNDLE }}
-

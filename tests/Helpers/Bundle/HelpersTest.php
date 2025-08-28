@@ -13,7 +13,6 @@ use DateTimeZone;
 use Exception;
 use Faker\Generator;
 use GuzzleHttp\Exception\GuzzleException;
-use InvalidArgumentException;
 use JsonException;
 use Lion\Bundle\Enums\LogTypeEnum;
 use Lion\Bundle\Support\Http\Fetch;
@@ -52,31 +51,6 @@ class HelpersTest extends Test
     protected function tearDown(): void
     {
         unset($_SERVER['REQUEST_URI']);
-    }
-
-    #[Testing]
-    #[TestWith(['connectionName' => 'DB_DEFAULT'], 'case-0')]
-    #[TestWith(['connectionName' => 'DB_NAME_TEST'], 'case-1')]
-    #[TestWith(['connectionName' => 'DB_NAME_TEST_POSTGRESQL'], 'case-2')]
-    public function getConnection(string $connectionName): void
-    {
-        /** @var string $connection */
-        $connection = env($connectionName);
-
-        $this->assertSame($connection, getConnection($connectionName));
-    }
-
-    #[Testing]
-    #[TestWith(['connectionName' => 'INVALID_CONNECTION_NAME_1'], 'case-0')]
-    #[TestWith(['connectionName' => 'INVALID_CONNECTION_NAME_2'], 'case-1')]
-    #[TestWith(['connectionName' => 'INVALID_CONNECTION_NAME_3'], 'case-2')]
-    public function getConnectionITDoesNotExist(string $connectionName): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionCode(Http::INTERNAL_SERVER_ERROR);
-        $this->expectExceptionMessage("The environment variable '{$connectionName}' is not defined.");
-
-        getConnection($connectionName);
     }
 
     #[Testing]

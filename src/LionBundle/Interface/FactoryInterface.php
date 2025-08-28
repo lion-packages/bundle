@@ -6,8 +6,6 @@ namespace Lion\Bundle\Interface;
 
 /**
  * Implement abstract methods for factories
- *
- * @package Lion\Bundle\Interface
  */
 interface FactoryInterface
 {
@@ -21,7 +19,7 @@ interface FactoryInterface
     /**
      * Define the model's default state
      *
-     * @return array<int, array<int|string, mixed>>
+     * @return array<int|string, array<int|string, bool|float|int|null|string>|bool|float|int|null|string>
      */
     public static function definition(): array;
 }
