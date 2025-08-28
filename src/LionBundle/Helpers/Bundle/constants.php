@@ -30,7 +30,7 @@ const STATUS = 'status';
  * Defines the 'message' property of response objects.
  */
 
-const MESSSAGE = 'message';
+const MESSAGE = 'message';
 
 /**
  * Defines the 'data' property of response objects.
