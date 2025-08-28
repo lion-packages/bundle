@@ -3,8 +3,7 @@ updates:
   - package-ecosystem: "composer"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
+      day: "monday"
       time: "05:15"
-      days:
-        - monday
-        - wednesday
+      timezone: "America/Bogota"
