@@ -54,6 +54,16 @@ class HelpersTest extends Test
     }
 
     #[Testing]
+    #[TestWith(['number' => 1], 'case-0')]
+    #[TestWith(['number' => 2], 'case-1')]
+    #[TestWith(['number' => 3], 'case-2')]
+    #[TestWith(['number' => 4], 'case-3')]
+    public function testCase(int $number): void
+    {
+        $this->assertSame("case-{$number}", testCase($number));
+    }
+
+    #[Testing]
     public function getDefaultConnection(): void
     {
         /** @var string $connection */
