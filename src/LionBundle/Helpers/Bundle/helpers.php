@@ -23,6 +23,24 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Http\Message\ResponseInterface;
 
+if (!function_exists('testCase')) {
+    /**
+     * Generates a test case name using the given number.
+     *
+     * <code>
+     *     $name = testCase(5); // returns "case-5"
+     * </code>
+     *
+     * @param int $number The test case number.
+     *
+     * @return string The generated test case name in the format "case-{number}".
+     */
+    function testCase(int $number): string
+    {
+        return "case-{$number}";
+    }
+}
+
 if (!function_exists('getDefaultConnection')) {
     /**
      * Returns the default database connection name.
