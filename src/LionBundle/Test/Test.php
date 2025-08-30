@@ -45,6 +45,13 @@ abstract class Test extends Testing
     private static ?Seeds $seeds = null;
 
     /**
+     * Defines whether the running process is in a temporary database.
+     *
+     * @var bool $runAnIsolatedDatabase
+     */
+    private static bool $runningATemporaryDatabase = false;
+
+    /**
      * Run a group of migrations.
      *
      * @param array<int, class-string> $migrations List of classes.
@@ -76,7 +83,7 @@ abstract class Test extends Testing
             self::$migrations = $migrationsInstance;
         }
 
-        self::$migrations->executeMigrationsGroup($migrations);
+        self::$migrations->executeMigrationsGroup($migrations, self::$runningATemporaryDatabase);
     }
 
     /**
@@ -254,6 +261,8 @@ abstract class Test extends Testing
          * -----------------------------------------------------------------------------
          */
 
+        self::$runningATemporaryDatabase = true;
+
         if (null === self::$container) {
             self::$container = new Container();
         }
@@ -322,5 +331,7 @@ abstract class Test extends Testing
 
             Connection::setDefaultConnectionName($connectionName);
         });
+
+        self::$runningATemporaryDatabase = false;
     }
 }

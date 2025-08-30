@@ -179,14 +179,18 @@ class Migrations
      * Run the migrations.
      *
      * @param array<int, class-string> $list List of classes.
+     * @param bool $runningATemporaryDatabase Defines whether the running process is
+     * in a temporary database.
      *
      * @return void
      *
      * @throws Exception If an error occurs while deleting the file.
      */
-    public function executeMigrationsGroup(array $list): void
+    public function executeMigrationsGroup(array $list, bool $runningATemporaryDatabase = false): void
     {
-        $this->resetDatabases();
+        if (!$runningATemporaryDatabase) {
+            $this->resetDatabases();
+        }
 
         /** @var array<string, array<int, MigrationUpInterface>> $migrations */
         $migrations = [
