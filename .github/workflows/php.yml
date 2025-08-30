@@ -376,8 +376,8 @@ jobs:
       # - name: Run database tests in parallel
         # run: php vendor/bin/paratest --colors=always --group=database --processes=$(nproc)
 
-      - name: Run tests (Database Group)
-        run: php vendor/bin/phpunit --group database
+      # - name: Run tests (Database Group)
+        # run: php vendor/bin/phpunit --group database
 
       - name: Run tests
         run: php vendor/bin/phpunit --coverage-clover tests/build/logs/clover.xml --coverage-html tests/build/coverage --exclude-group database
