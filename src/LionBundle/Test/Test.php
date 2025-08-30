@@ -28,21 +28,21 @@ abstract class Test extends Testing
      *
      * @var Container|null $container
      */
-    private ?Container $container = null;
+    private static ?Container $container = null;
 
     /**
      * Manages the processes of creating or executing migrations.
      *
      * @var Migrations|null $migrations
      */
-    private ?Migrations $migrations = null;
+    private static ?Migrations $migrations = null;
 
     /**
      * Manages the processes of creating or executing seeds.
      *
      * @var Seeds|null $seeds
      */
-    private ?Seeds $seeds = null;
+    private static ?Seeds $seeds = null;
 
     /**
      * Run a group of migrations.
@@ -57,7 +57,7 @@ abstract class Test extends Testing
      *
      * @codeCoverageIgnore
      */
-    final protected function executeMigrationsGroup(array $migrations): void
+    final protected static function executeMigrationsGroup(array $migrations): void
     {
         /**
          * -----------------------------------------------------------------------------
@@ -65,18 +65,18 @@ abstract class Test extends Testing
          * -----------------------------------------------------------------------------
          */
 
-        if (null === $this->container) {
-            $this->container = new Container();
+        if (null === self::$container) {
+            self::$container = new Container();
         }
 
-        if (null === $this->migrations) {
+        if (null === self::$migrations) {
             /** @var Migrations $migrationsInstance */
-            $migrationsInstance = $this->container->resolve(Migrations::class);
+            $migrationsInstance = self::$container->resolve(Migrations::class);
 
-            $this->migrations = $migrationsInstance;
+            self::$migrations = $migrationsInstance;
         }
 
-        $this->migrations->executeMigrationsGroup($migrations);
+        self::$migrations->executeMigrationsGroup($migrations);
     }
 
     /**
@@ -91,7 +91,7 @@ abstract class Test extends Testing
      *
      * @codeCoverageIgnore
      */
-    final protected function executeSeedsGroup(array $seeds): void
+    final protected static function executeSeedsGroup(array $seeds): void
     {
         /**
          * -----------------------------------------------------------------------------
@@ -99,18 +99,18 @@ abstract class Test extends Testing
          * -----------------------------------------------------------------------------
          */
 
-        if (null === $this->container) {
-            $this->container = new Container();
+        if (null === self::$container) {
+            self::$container = new Container();
         }
 
-        if (null === $this->seeds) {
+        if (null === self::$seeds) {
             /** @var Seeds $seedsInstance */
-            $seedsInstance = $this->container->resolve(Seeds::class);
+            $seedsInstance = self::$container->resolve(Seeds::class);
 
-            $this->seeds = $seedsInstance;
+            self::$seeds = $seedsInstance;
         }
 
-        $this->seeds->executeSeedsGroup($seeds);
+        self::$seeds->executeSeedsGroup($seeds);
     }
 
     /**
@@ -254,15 +254,15 @@ abstract class Test extends Testing
          * -----------------------------------------------------------------------------
          */
 
-        if (null === $this->container) {
-            $this->container = new Container();
+        if (null === self::$container) {
+            self::$container = new Container();
         }
 
-        if (null === $this->migrations) {
+        if (null === self::$migrations) {
             /** @var Migrations $migrationsInstance */
-            $migrationsInstance = $this->container->resolve(Migrations::class);
+            $migrationsInstance = self::$container->resolve(Migrations::class);
 
-            $this->migrations = $migrationsInstance;
+            self::$migrations = $migrationsInstance;
         }
 
         /**
@@ -291,7 +291,7 @@ abstract class Test extends Testing
          * -----------------------------------------------------------------------------
          */
 
-        $this->migrations->processingWithStaticConnections(function () use (
+        self::$migrations->processingWithStaticConnections(function () use (
             $connectionName,
             $callable,
             $connection,
@@ -310,7 +310,7 @@ abstract class Test extends Testing
             Connection::setDefaultConnectionName($tempConnectionName);
 
             /** @phpstan-ignore-next-line */
-            $this->migrations->cloneDatabase($dbName, $connectionName, $tempConnectionName);
+            self::$migrations->cloneDatabase($dbName, $connectionName, $tempConnectionName);
 
             $callable($tempConnectionName);
 
