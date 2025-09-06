@@ -14,14 +14,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Empties all entities of the defined databases
- *
- * @package Lion\Bundle\Commands\Lion\Migrations
+ * Empties all entities of the defined databases.
  */
 class EmptyMigrationsCommand extends MenuCommand
 {
     /**
-     * [Manages the processes of creating or executing migrations]
+     * Manages the processes of creating or executing migrations.
      *
      * @var Migrations $migrations
      */
@@ -36,7 +34,7 @@ class EmptyMigrationsCommand extends MenuCommand
     }
 
     /**
-     * Configures the current command
+     * Configures the current command.
      *
      * @return void
      */
@@ -44,25 +42,24 @@ class EmptyMigrationsCommand extends MenuCommand
     {
         $this
             ->setName('migrate:empty')
-            ->setDescription('Empties all tables built with the migrations');
+            ->setDescription('Empties all tables built with the migrations.');
     }
 
     /**
-     * Executes the current command
+     * Executes the current command.
      *
-     * This method is not abstract because you can use this class
-     * as a concrete class. In this case, instead of defining the
-     * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method
+     * This method is not abstract because you can use this class as a concrete
+     * class. In this case, instead of defining the execute() method, you set the
+     * code to execute by passing a Closure to the setCode() method.
      *
-     * @param InputInterface $input [InputInterface is the interface implemented
-     * by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
+     * @param InputInterface $input InputInterface is the interface implemented by
+     * all input classes.
+     * @param OutputInterface $output [OutputInterface is the interface implemented
+     * by all Output classes.
      *
      * @return int
      *
-     * @throws LogicException [When this abstract method is not implemented]
+     * @throws LogicException When this abstract method is not implemented.
      *
      * @codeCoverageIgnore
      */
