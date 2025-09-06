@@ -41,7 +41,7 @@ class Task
      * @param string $method Property for method.
      * @param array<int|string, mixed> $data Property for data.
      */
-    public function __construct(string $namespace, string $method, array $data)
+    public function __construct(string $namespace, string $method, array $data = [])
     {
         $this->namespace = $namespace;
 

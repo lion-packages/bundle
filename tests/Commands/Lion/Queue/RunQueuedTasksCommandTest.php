@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Tests\Commands\Lion\Schedule;
+namespace Tests\Commands\Lion\Queue;
 
 use DI\DependencyException;
 use DI\NotFoundException;
-use Lion\Bundle\Commands\Lion\Schedule\RunQueuedTasksCommand;
-use Lion\Bundle\Helpers\Commands\Schedule\TaskQueue;
+use Lion\Bundle\Commands\Lion\Queue\RunQueuedTasksCommand;
+use Lion\Bundle\Helpers\Commands\Queue\TaskQueue;
 use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
 use ReflectionException;
