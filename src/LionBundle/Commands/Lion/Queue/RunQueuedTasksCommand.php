@@ -2,33 +2,32 @@
 
 declare(strict_types=1);
 
-namespace Lion\Bundle\Commands\Lion\Schedule;
+namespace Lion\Bundle\Commands\Lion\Queue;
 
 use DI\Attribute\Inject;
 use Lion\Bundle\Enums\LogTypeEnum;
-use Lion\Bundle\Helpers\Commands\Schedule\TaskQueue;
+use Lion\Bundle\Helpers\Commands\Queue\TaskQueue;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Dependency\Injection\Container;
 use LogicException;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Allows queued tasks to run in the background
- *
- * @package Lion\Bundle\Commands\Lion\Schedule
+ * Allows queued tasks to run in the background.
  */
 class RunQueuedTasksCommand extends MenuCommand
 {
     /**
-     * [Container to generate dependency injection]
+     * Dependency Injection Container Wrapper.
      *
      * @var Container $container
      */
     private Container $container;
 
     /**
-     * [Manage server queued task processes]
+     * Manage server queued task processes.
      *
      * @var TaskQueue $taskQueue
      */
@@ -43,15 +42,22 @@ class RunQueuedTasksCommand extends MenuCommand
     }
 
     /**
-     * Configures the current command
+     * Configures the current command.
      *
      * @return void
      */
     protected function configure(): void
     {
         $this
-            ->setName('schedule:run')
-            ->setDescription('Run queued tasks');
+            ->setName('queue:run')
+            ->setDescription('Run queued tasks')
+            ->addOption(
+                'pause',
+                'p',
+                InputOption::VALUE_OPTIONAL,
+                'Defines the time to wait before retrieving tasks if all have been executed.',
+                60
+            );
     }
 
     /**
@@ -117,6 +123,9 @@ class RunQueuedTasksCommand extends MenuCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        /** @var int|string $pause */
+        $pause = $input->getOption('pause');
+
         /** @phpstan-ignore-next-line */
         while (true) {
             $json = $this->taskQueue->get();
@@ -124,7 +133,7 @@ class RunQueuedTasksCommand extends MenuCommand
             if (null === $json) {
                 $output->writeln($this->infoOutput("\t>> SCHEDULE: no queued tasks available"));
 
-                $this->taskQueue->pause(60);
+                $this->taskQueue->pause((int) $pause);
 
                 continue;
             }
@@ -143,17 +152,23 @@ class RunQueuedTasksCommand extends MenuCommand
                 )
             );
 
+            $return = $this->container->callMethod(
+                $this->container->resolve($queue['namespace']),
+                $queue['method'],
+                [
+                    'queue' => $queue,
+                    ...$queue['data'],
+                ],
+            );
+
+            if (is_object($return)) {
+                $return = (array) $return;
+            }
+
             $json = [
                 'class' => "{$queue['namespace']}::{$queue['method']}",
                 'params' => $queue['data'],
-                'return' => $this->container->callMethod(
-                    $this->container->resolve($queue['namespace']),
-                    $queue['method'],
-                    [
-                        'queue' => $queue,
-                        ...$queue['data'],
-                    ],
-                ),
+                'return' => $return,
             ];
 
             logger("TASK: {$queue['id']}", LogTypeEnum::INFO, $json);

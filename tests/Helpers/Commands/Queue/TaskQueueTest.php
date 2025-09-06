@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tests\Helpers\Commands\Schedule;
+namespace Tests\Helpers\Commands\Queue;
 
 use JsonException;
-use Lion\Bundle\Helpers\Commands\Schedule\TaskQueue;
+use Lion\Bundle\Helpers\Commands\Queue\TaskQueue;
 use Lion\Bundle\Support\Task;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;

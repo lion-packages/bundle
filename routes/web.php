@@ -19,7 +19,7 @@ require_once(__DIR__ . '/../vendor/autoload.php');
 
 use Dotenv\Dotenv;
 use Lion\Bundle\Enums\LogTypeEnum;
-use Lion\Bundle\Helpers\Commands\Schedule\TaskQueue;
+use Lion\Bundle\Helpers\Commands\Queue\TaskQueue;
 use Lion\Database\Driver;
 use Lion\Files\Store;
 use Lion\Route\Route;
@@ -78,16 +78,33 @@ Route::init();
 
 Route::addMiddleware(Routes::getMiddleware());
 // -----------------------------------------------------------------------------
-Route::get('/', function () {
-    // $taskQueue->push(new Task(ExampleProvider::class, 'getArrExample', ['name' => 'root']));
+Route::get('/', function (): stdClass {
+    /** @phpstan-ignore-next-line */
+    $taskQueue = new TaskQueue([
+        'scheme' => env('REDIS_SCHEME'),
+        'host' => env('REDIS_HOST'),
+        'port' => env('REDIS_PORT'),
+        'parameters' => [
+            'password' => env('REDIS_PASSWORD'),
+            'database' => TaskQueue::LION_DATABASE,
+        ],
+    ]);
 
-    // $taskQueue->push(new Task(ExampleProvider::class, 'myMethod', ['name' => 'root']));
+    $taskQueue
+        ->push(
+            new \Lion\Bundle\Support\Task(ExampleProvider::class, 'getArrExample', [
+                'name' => 'root',
+            ]),
+            new \Lion\Bundle\Support\Task(ExampleProvider::class, 'getResult')
+        );
 
     return info('[index]');
 });
 
 Route::get('logger', function () {
-    logger('test-logger', LogTypeEnum::INFO, ['user' => 'Sleon'], true);
+    logger('test-logger', LogTypeEnum::INFO, [
+        'user' => 'Sleon',
+    ]);
 
     return success();
 });

@@ -2,42 +2,40 @@
 
 declare(strict_types=1);
 
-namespace Lion\Bundle\Helpers\Commands\Schedule;
+namespace Lion\Bundle\Helpers\Commands\Queue;
 
 use JsonException;
 use Lion\Bundle\Support\Task;
 use Predis\Client;
 
 /**
- * Manage server queued task processes
- *
- * @package Lion\Bundle\Helpers\Commands\Schedule
+ * Manage server queued task processes.
  */
 class TaskQueue
 {
     /**
-     * [Defines the property that contains the queued task data]
+     * Defines the property that contains the queued task data.
      *
      * @const LION_TASKS
      */
     public const string LION_TASKS = 'lion-tasks';
 
     /**
-     * [Defines the database to connect to and manipulate tasks]
+     * Defines the database to connect to and manipulate tasks.
      *
      * @const LION_DATABASE
      */
     public const int LION_DATABASE = 0;
 
     /**
-     * [Client class used for connecting and executing commands on Redis]
+     * Client class used for connecting and executing commands on Redis.
      *
      * @var Client $client
      */
     private Client $client;
 
     /**
-     * Class constructor
+     * Class constructor.
      *
      * @param array{
      *     scheme: string,
@@ -57,8 +55,8 @@ class TaskQueue
     /**
      * Add one or more tasks to the queue
      *
-     * @param Task $task [First task to add]
-     * @param Task ...$tasks [Additional tasks to add]
+     * @param Task $task First task to add.
+     * @param Task ...$tasks Additional tasks to add.
      *
      * @return TaskQueue
      *
@@ -80,7 +78,7 @@ class TaskQueue
     }
 
     /**
-     * Gets a function that is executed
+     * Gets a function that is executed.
      *
      * @return string|null
      */
@@ -90,9 +88,9 @@ class TaskQueue
     }
 
     /**
-     * Pause the process for a certain time in seconds
+     * Pause the process for a certain time in seconds.
      *
-     * @param int $time [Amount of time in seconds]
+     * @param int $time Amount of time in seconds.
      *
      * @return void
      */
