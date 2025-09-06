@@ -502,8 +502,11 @@ class MenuCommand extends Command
 
         if (Driver::MYSQL === $connections[$connectionName]['type']) {
             return MySQL::connection($connectionName)
-                ->show()
-                ->tables()
+                ->query(
+                    <<<SQL
+                    SHOW FULL TABLES IN {$connections[$connectionName]['dbname']} WHERE Table_type = 'BASE TABLE';
+                    SQL
+                )
                 ->getAll();
         }
 
