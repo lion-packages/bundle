@@ -13,6 +13,8 @@ use DateTimeZone;
 use Exception;
 use Faker\Generator;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7\Request;
 use JsonException;
 use Lion\Bundle\Enums\LogTypeEnum;
 use Lion\Bundle\Support\Http\Fetch;
@@ -51,6 +53,33 @@ class HelpersTest extends Test
     protected function tearDown(): void
     {
         unset($_SERVER['REQUEST_URI']);
+    }
+
+    #[Testing]
+    public function getExceptionFromGuzzleHttpReturnsNullWhenNoExceptionIsThrown(): void
+    {
+        $callable = function () {
+            return true;
+        };
+
+        $exception = getExceptionFromGuzzleHttp($callable);
+
+        $this->assertNull($exception, 'Expected null when no exception is thrown.');
+    }
+
+    #[Testing]
+    public function getExceptionFromGuzzleHttpReturnsRequestExceptionWhenThrown(): void
+    {
+        $callable = function (): void {
+            throw new RequestException('Test exception', new Request('GET', 'https://example.com'));
+        };
+
+        $exception = getExceptionFromGuzzleHttp($callable);
+
+        /** @phpstan-ignore-next-line */
+        $this->assertIsObject($exception);
+        $this->assertInstanceOf(RequestException::class, $exception);
+        $this->assertSame('Test exception', $exception->getMessage());
     }
 
     #[Testing]
