@@ -29,7 +29,7 @@ class HttpsMiddlewareTest extends Test
     {
         $this
             ->exception(MiddlewareException::class)
-            ->exceptionMessage('the HTTPS protocol header is not set, the connection must be secure (HTTPS)')
+            ->exceptionMessage('The HTTPS protocol header is not set, the connection must be secure (HTTPS).')
             ->exceptionStatus(Status::ERROR)
             ->exceptionCode(Http::FORBIDDEN)
             ->expectLionException(function (): void {
@@ -45,7 +45,7 @@ class HttpsMiddlewareTest extends Test
     {
         $this
             ->exception(MiddlewareException::class)
-            ->exceptionMessage('the connection is not marked as secure (HTTPS is not active)')
+            ->exceptionMessage('The connection is not marked as secure (HTTPS is not active).')
             ->exceptionStatus(Status::ERROR)
             ->exceptionCode(Http::FORBIDDEN)
             ->expectLionException(function (): void {

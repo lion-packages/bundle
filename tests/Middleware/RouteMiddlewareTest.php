@@ -30,7 +30,7 @@ class RouteMiddlewareTest extends Test
     {
         $this
             ->exception(MiddlewareException::class)
-            ->exceptionMessage('Secure hash not found')
+            ->exceptionMessage('Secure hash not found.')
             ->exceptionStatus(Status::ERROR)
             ->exceptionCode(Http::UNAUTHORIZED)
             ->expectLionException(function (): void {
@@ -46,7 +46,7 @@ class RouteMiddlewareTest extends Test
     {
         $this
             ->exception(MiddlewareException::class)
-            ->exceptionMessage('You do not have access to this resource')
+            ->exceptionMessage('You do not have access to this resource.')
             ->exceptionStatus(Status::ERROR)
             ->exceptionCode(Http::UNAUTHORIZED)
             ->expectLionException(function (): void {
