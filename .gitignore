@@ -29,4 +29,5 @@ composer.lock
 .env
 supervisord.pid
 test.txt
+lion_database.sqlite
 # ------------------------------------------------------------------------------

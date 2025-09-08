@@ -15,22 +15,20 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Generate a Command class to execute commands
- *
- * @package Lion\Bundle\Commands\Lion\New
+ * Generate a Command class to execute commands.
  */
 class CommandsCommand extends Command
 {
     /**
      * Fabricates the data provided to manipulate information (folder, class,
-     * namespace)
+     * namespace).
      *
      * @var ClassFactory $classFactory
      */
     private ClassFactory $classFactory;
 
     /**
-     * Manipulate system files
+     * Manipulate system files.
      *
      * @var Store $store
      */
@@ -53,7 +51,7 @@ class CommandsCommand extends Command
     }
 
     /**
-     * Configures the current command
+     * Configures the current command.
      *
      * @return void
      */
@@ -70,17 +68,17 @@ class CommandsCommand extends Command
      *
      * This method is not abstract because you can use this class as a concrete
      * class. In this case, instead of defining the execute() method, you set the
-     * code to execute by passing a Closure to the setCode() method
+     * code to execute by passing a Closure to the setCode() method.
      *
      * @param InputInterface $input InputInterface is the interface implemented by
-     * all input classes
+     * all input classes.
      * @param OutputInterface $output OutputInterface is the interface implemented
-     * by all Output classes
+     * by all Output classes.
      *
      * @return int
      *
-     * @throws Exception If the file could not be opened
-     * @throws LogicException When this abstract method is not implemented
+     * @throws Exception If the file could not be opened.
+     * @throws LogicException When this abstract method is not implemented.
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -107,18 +105,19 @@ class CommandsCommand extends Command
 
                 namespace {$namespace};
 
+                use Exception;
                 use Lion\Command\Command;
                 use Symfony\Component\Console\Exception\LogicException;
                 use Symfony\Component\Console\Input\InputInterface;
                 use Symfony\Component\Console\Output\OutputInterface;
 
                 /**
-                 * {$class} description
+                 * {$class} description.
                  */
                 class {$class} extends Command
                 {
                     /**
-                     * Configures the current command
+                     * Configures the current command.
                      *
                      * @return void
                      */
@@ -131,15 +130,15 @@ class CommandsCommand extends Command
 
                     /**
                      * Initializes the command after the input has been bound and before the input
-                     * is validated
+                     * is validated.
                      *
                      * This is mainly useful when a lot of commands extends one main command where
-                     * some things need to be initialized based on the input arguments and options
+                     * some things need to be initialized based on the input arguments and options.
                      *
                      * @param InputInterface \$input InputInterface is the interface implemented by
-                     * all input classes
+                     * all input classes.
                      * @param OutputInterface \$output OutputInterface is the interface implemented
-                     * by all Output classes
+                     * by all Output classes.
                      *
                      * @return void
                      */
@@ -148,17 +147,17 @@ class CommandsCommand extends Command
                     }
 
                     /**
-                     * Interacts with the user
+                     * Interacts with the user.
                      *
-                     * This method is executed before the InputDefinition is validated
+                     * This method is executed before the InputDefinition is validated.
                      *
                      * This means that this is the only place where the command can interactively
-                     * ask for values of missing required arguments
+                     * ask for values of missing required arguments.
                      *
                      * @param InputInterface \$input InputInterface is the interface implemented by
-                     * all input classes
+                     * all input classes.
                      * @param OutputInterface \$output OutputInterface is the interface implemented
-                     * by all Output classes
+                     * by all Output classes.
                      *
                      * @return void
                      */
@@ -167,20 +166,21 @@ class CommandsCommand extends Command
                     }
 
                     /**
-                     * Executes the current command
+                     * Executes the current command.
                      *
                      * This method is not abstract because you can use this class as a concrete
                      * class. In this case, instead of defining the execute() method, you set the
-                     * code to execute by passing a Closure to the setCode() method
+                     * code to execute by passing a Closure to the setCode() method.
                      *
                      * @param InputInterface \$input InputInterface is the interface implemented by
-                     * all input classes
+                     * all input classes.
                      * @param OutputInterface \$output OutputInterface is the interface implemented
-                     * by all Output classes
+                     * by all Output classes.
                      *
                      * @return int
                      *
-                     * @throws LogicException When this abstract method is not implemented
+                     * @throws Exception If the file could not be opened.
+                     * @throws LogicException When this abstract method is not implemented.
                      */
                     protected function execute(InputInterface \$input, OutputInterface \$output): int
                     {
