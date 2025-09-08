@@ -113,12 +113,12 @@ class MiddlewareCommand extends Command
                 use Lion\Route\Interface\MiddlewareInterface;
 
                 /**
-                 * Description of Middleware '{$class}'
+                 * Description of Middleware '{$class}'.
                  */
                 class {$class} implements MiddlewareInterface
                 {
                     /**
-                     * Filter name
+                     * Filter name.
                      *
                      * @const NAME
                      */
@@ -127,7 +127,7 @@ class MiddlewareCommand extends Command
                     /**
                      * {@inheritDoc}
                      *
-                     * @throws MiddlewareException If something goes wrong with the filter
+                     * @throws MiddlewareException If something goes wrong with the filter.
                      */
                     public function process(): void
                     {
