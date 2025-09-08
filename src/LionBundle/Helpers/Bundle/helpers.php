@@ -9,6 +9,7 @@ use Faker\Factory;
 use Faker\Generator;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
 use Lion\Bundle\Enums\LogTypeEnum;
 use Lion\Bundle\Helpers\Env;
 use Lion\Bundle\Helpers\Fake;
@@ -22,6 +23,29 @@ use Lion\Security\JWT;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Http\Message\ResponseInterface;
+
+if (!function_exists('getExceptionFromGuzzleHttp')) {
+    /**
+     * Executes a callable that performs an HTTP request and captures any Guzzle
+     * RequestException thrown during execution.
+     *
+     * @param Closure $callable The function to be executed, typically making an
+     * HTTP request.
+     *
+     * @return RequestException|null Returns the caught RequestException if one is
+     * thrown, or null if the callable executes successfully.
+     */
+    function getExceptionFromGuzzleHttp(Closure $callable): ?RequestException
+    {
+        try {
+            $callable();
+
+            return null;
+        } catch (RequestException $e) {
+            return $e;
+        }
+    }
+}
 
 if (!function_exists('testCase')) {
     /**
