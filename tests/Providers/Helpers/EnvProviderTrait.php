@@ -16,8 +16,8 @@ trait EnvProviderTrait
             ],
             [
                 'envKey' => 'SERVER_URL',
-                'envValue' => 'https://localhost',
-                'return' => 'https://localhost'
+                'envValue' => 'http://localhost:8000',
+                'return' => 'http://localhost:8000'
             ],
             [
                 'envKey' => 'APP_NAME_TEST',
@@ -26,8 +26,8 @@ trait EnvProviderTrait
             ],
             [
                 'envKey' => 'SERVER_URL_TEST',
-                'envValue' => 'https://localhost',
-                'return' => 'https://localhost'
+                'envValue' => 'http://localhost:8000',
+                'return' => 'http://localhost:8000'
             ],
             [
                 'envKey' => 'MAIL_DEBUG_SUPP_TEST',
@@ -91,7 +91,7 @@ trait EnvProviderTrait
     {
         return [
             [
-                'value' => 'https://localhost',
+                'value' => 'http://localhost:8000',
                 'return' => 'SERVER_URL',
             ],
             [
@@ -115,8 +115,8 @@ trait EnvProviderTrait
             ],
             [
                 'envKey' => 'SERVER_URL',
-                'envValue' => 'https://localhost',
-                'return' => 'https://localhost'
+                'envValue' => 'http://localhost:8000',
+                'return' => 'http://localhost:8000'
             ],
             [
                 'envKey' => 'APP_NAME_TEST',
@@ -125,8 +125,8 @@ trait EnvProviderTrait
             ],
             [
                 'envKey' => 'SERVER_URL_TEST',
-                'envValue' => 'https://localhost',
-                'return' => 'https://localhost'
+                'envValue' => 'http://localhost:8000',
+                'return' => 'http://localhost:8000'
             ],
             [
                 'envKey' => 'MAIL_DEBUG_SUPP_TEST',

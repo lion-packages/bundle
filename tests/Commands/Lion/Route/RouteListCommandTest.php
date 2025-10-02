@@ -27,7 +27,6 @@ class RouteListCommandTest extends Test
     /**
      * @throws DependencyException
      * @throws NotFoundException
-     * @throws ReflectionException
      */
     protected function setUp(): void
     {
