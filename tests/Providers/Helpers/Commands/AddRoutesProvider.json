@@ -239,7 +239,7 @@
             }
         ],
         "host": {
-            "url": "https:\/\/localhost",
+            "url": "http:\/\/localhost:8000",
             "params": {
                 "host": [
                     "{{base_url}}"
