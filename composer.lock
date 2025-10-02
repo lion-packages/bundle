@@ -1165,16 +1165,16 @@
         },
         {
             "name": "lion/security",
-            "version": "v11.11.0",
+            "version": "v11.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/security.git",
-                "reference": "417b9773bef29a1d771c5ba86cf51b9cb85c6978"
+                "reference": "93169f3d135cf1301aef7bc4c4652dfece974d3b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/security/zipball/417b9773bef29a1d771c5ba86cf51b9cb85c6978",
-                "reference": "417b9773bef29a1d771c5ba86cf51b9cb85c6978",
+                "url": "https://api.github.com/repos/lion-packages/security/zipball/93169f3d135cf1301aef7bc4c4652dfece974d3b",
+                "reference": "93169f3d135cf1301aef7bc4c4652dfece974d3b",
                 "shasum": ""
             },
             "require": {
@@ -1185,12 +1185,12 @@
             },
             "require-dev": {
                 "guzzlehttp/guzzle": "^7.8",
-                "infection/infection": "^0.29.14",
+                "infection/infection": "^0.29.14 || ^0.31.0",
                 "lion/test": "^3.2",
                 "overtrue/phplint": "^9.5",
                 "phpstan/phpstan": "^2.1",
                 "phpunit/phpunit": "^12.0",
-                "squizlabs/php_codesniffer": "^3.11"
+                "squizlabs/php_codesniffer": "^3.11 || ^4.0"
             },
             "type": "library",
             "autoload": {
@@ -1203,11 +1203,17 @@
                 "MIT"
             ],
             "description": "Library created with the function of implementing AES, RSA and JWT Security functions for PHP.",
+            "homepage": "https://dev.lion-packages.com",
+            "keywords": [
+                "lion",
+                "lion-security",
+                "security"
+            ],
             "support": {
                 "issues": "https://github.com/lion-packages/security/issues",
-                "source": "https://github.com/lion-packages/security/tree/v11.11.0"
+                "source": "https://github.com/lion-packages/security"
             },
-            "time": "2025-06-28T18:43:55+00:00"
+            "time": "2025-10-01T23:07:21+00:00"
         },
         {
             "name": "monolog/monolog",
