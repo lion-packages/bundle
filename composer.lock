@@ -805,16 +805,16 @@
         },
         {
             "name": "lion/database",
-            "version": "v11.21.0",
+            "version": "v11.23.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/database.git",
-                "reference": "e62ece78ad370bbfd053eef334e135009b6ad297"
+                "reference": "1fd1daca77a015ab2417f8015bd74c87722d5d78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/database/zipball/e62ece78ad370bbfd053eef334e135009b6ad297",
-                "reference": "e62ece78ad370bbfd053eef334e135009b6ad297",
+                "url": "https://api.github.com/repos/lion-packages/database/zipball/1fd1daca77a015ab2417f8015bd74c87722d5d78",
+                "reference": "1fd1daca77a015ab2417f8015bd74c87722d5d78",
                 "shasum": ""
             },
             "require": {
@@ -827,7 +827,7 @@
                 "overtrue/phplint": "^9.5",
                 "phpstan/phpstan": "^2.1",
                 "phpunit/phpunit": "^12.0",
-                "squizlabs/php_codesniffer": "^3.11",
+                "squizlabs/php_codesniffer": "^3.11 || ^4.0",
                 "vlucas/phpdotenv": "^5.6"
             },
             "type": "library",
@@ -851,7 +851,7 @@
                 "issues": "https://github.com/lion-packages/database/issues",
                 "source": "https://github.com/lion-packages/database"
             },
-            "time": "2025-08-28T14:20:11+00:00"
+            "time": "2025-10-03T14:48:22+00:00"
         },
         {
             "name": "lion/dependency-injection",
