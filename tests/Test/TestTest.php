@@ -8,9 +8,8 @@ use DI\DependencyException;
 use DI\NotFoundException;
 use Lion\Bundle\Commands\Lion\New\CapsuleCommand;
 use Lion\Bundle\Commands\Lion\New\InterfaceCommand;
-use Lion\Bundle\Helpers\Commands\Migrations\Migrations;
+use Lion\Bundle\Helpers\Env;
 use Lion\Bundle\Test\Test;
-use Lion\Database\Connection;
 use Lion\Database\Drivers\MySQL;
 use Lion\Database\Drivers\Schema\MySQL as Schema;
 use Lion\Dependency\Injection\Container;
@@ -18,6 +17,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\Attributes\Test as Testing;
+use PHPUnit\Framework\Attributes\TestWith;
 use ReflectionException;
 use stdClass;
 use Symfony\Component\Console\Application;
@@ -101,11 +101,33 @@ class TestTest extends Test
         $this->assertCapsule("Database\\Class\\{$capsule}", $entity, $interfaces);
     }
 
+    #[Testing]
+    #[RunInSeparateProcess]
+    #[TestWith(['envName' => 'SERVER_URL', 'value' => 'http://sandbox.local1'], 'case-0')]
+    #[TestWith(['envName' => 'SERVER_URL_AUD', 'value' => 'http://sandbox.local2'], 'case-1')]
+    public function runInSeparateEnvironmentRestoresOriginal(string $envName, string $value): void
+    {
+        $original = env($envName);
+
+        $this->assertFalse(Env::isSandboxActive());
+
+        $this->runInSeparateEnvironment(function () use ($envName, $value): void {
+            $this->assertTrue(Env::isSandboxActive());
+
+            Env::set($envName, $value);
+
+            $this->assertSame($value, env($envName));
+        });
+
+        $this->assertFalse(Env::isSandboxActive());
+        $this->assertSame($original, env($envName));
+    }
+
     /**
      * @throws DependencyException Error while resolving the entry.
      * @throws NotFoundException No entry found for the given name.
      */
-    #[Group('database')]
+    #[Group('parallel')]
     #[Testing]
     #[RunInSeparateProcess]
     public function runInSeparateDatabaseTest(): void
@@ -182,7 +204,7 @@ class TestTest extends Test
      * @throws DependencyException Error while resolving the entry.
      * @throws NotFoundException No entry found for the given name.
      */
-    #[Group('database')]
+    #[Group('parallel')]
     #[Testing]
     #[RunInSeparateProcess]
     public function runInSeparateDatabase2Test(): void
