@@ -4243,16 +4243,16 @@
         },
         {
             "name": "lion/test",
-            "version": "v3.10.0",
+            "version": "v3.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/test.git",
-                "reference": "86e3e7f4e1d5c52b96ebab225caca7a32f1e19e1"
+                "reference": "bfa3e03274c78b9b4cc0a370579a8ddb6cd8e301"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/test/zipball/86e3e7f4e1d5c52b96ebab225caca7a32f1e19e1",
-                "reference": "86e3e7f4e1d5c52b96ebab225caca7a32f1e19e1",
+                "url": "https://api.github.com/repos/lion-packages/test/zipball/bfa3e03274c78b9b4cc0a370579a8ddb6cd8e301",
+                "reference": "bfa3e03274c78b9b4cc0a370579a8ddb6cd8e301",
                 "shasum": ""
             },
             "require": {
@@ -4260,12 +4260,12 @@
                 "php": ">=8.4"
             },
             "require-dev": {
-                "infection/infection": "^0.29.14",
+                "infection/infection": "^0.29.14 || ^0.31.0",
                 "lion/exceptions": "^2.0",
                 "overtrue/phplint": "^9.5",
                 "phpstan/phpstan": "^2.0",
                 "phpunit/phpunit": "^12.0",
-                "squizlabs/php_codesniffer": "^3.11"
+                "squizlabs/php_codesniffer": "^3.11 || ^4.0"
             },
             "type": "library",
             "autoload": {
@@ -4278,11 +4278,17 @@
                 "MIT"
             ],
             "description": "Library to implement testing with helpers that allow easy testing with PHPUnit",
+            "homepage": "https://dev.lion-packages.com",
+            "keywords": [
+                "lion",
+                "lion-test",
+                "test"
+            ],
             "support": {
                 "issues": "https://github.com/lion-packages/test/issues",
-                "source": "https://github.com/lion-packages/test/tree/v3.10.0"
+                "source": "https://github.com/lion-packages/test"
             },
-            "time": "2025-08-26T17:10:12+00:00"
+            "time": "2025-10-01T21:25:12+00:00"
         },
         {
             "name": "myclabs/deep-copy",
