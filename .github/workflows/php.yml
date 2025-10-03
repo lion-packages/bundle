@@ -8,6 +8,19 @@ on:
     branches:
       - main
       - 18.x
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'composer.json'
+      - 'composer.lock'
+      - 'phpunit.xml'
+      - 'phpstan.neon'
+      - '.styleci.yml'
+      - '.gitignore'
+      - '.env.actions'
+      - '.github/workflows/**'
+      - 'lion'
+      - 'npm'
 
 jobs:
   install-dependencies:
