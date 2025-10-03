@@ -11,39 +11,37 @@ use Lion\Route\Helpers\Rules;
 use Lion\Route\Route;
 
 /**
- * Generate structures to create Postman collections
- *
- * @package Lion\Bundle\Helpers\Commands
+ * Generate structures to create Postman collections.
  */
 class PostmanCollection
 {
     /**
-     * [Headers available for requests]
+     * Headers available for requests.
      *
      * @const HEADERS
      */
     public const array HEADERS = [
         'key' => 'Content-Type',
         'value' => 'application/json',
-        'type' => 'text'
+        'type' => 'text',
     ];
 
     /**
-     * [Arr class object]
+     * Modify and build arrays with different indexes or values.
      *
      * @var Arr $arr
      */
     private Arr $arr;
 
     /**
-     * [Str class object]
+     * Modify and construct strings with different formats.
      *
      * @var Str $str
      */
     private Str $str;
 
     /**
-     * [List of configuration data for postman collection]
+     * List of configuration data for postman collection.
      *
      * @var array{
      *     params?: array{
@@ -242,6 +240,7 @@ class PostmanCollection
             $objectRuleClass = new $rule();
 
             if (!empty($objectRuleClass->field) && isset($objectRuleClass->value)) {
+                /** @phpstan-ignore-next-line */
                 $newParams[$objectRuleClass->field] = $objectRuleClass->value;
             }
         }
@@ -909,8 +908,6 @@ class PostmanCollection
      *         item?: array<int, mixed>
      *     }>
      * }>
-     *
-     * @phpstan-ignore-next-line
      */
     public function createCollection(array $items, ?array &$result = null): array
     {
