@@ -19,43 +19,41 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Generate JSON object structure for POSTMAN collections
- *
- * @package Lion\Bundle\Commands\Lion\Route
+ * Generate JSON object structure for POSTMAN collections.
  */
 class PostmanCollectionCommand extends Command
 {
     /**
-     * [Fabricates the data provided to manipulate information (folder, class,
-     * namespace)]
+     * Fabricates the data provided to manipulate information (folder, class,
+     * namespace).
      *
      * @var ClassFactory $classFactory
      */
     private ClassFactory $classFactory;
 
     /**
-     * [Generate structures to create Postman collections]
+     * Generate structures to create Postman collections.
      *
      * @var PostmanCollection $postmanCollection
      */
     private PostmanCollection $postmanCollection;
 
     /**
-     * [Manipulate system files]
+     * Manipulate system files.
      *
      * @var Store $store
      */
     private Store $store;
 
     /**
-     * [Modify and construct strings with different formats]
+     * Modify and construct strings with different formats.
      *
      * @var Str $str
      */
     private Str $str;
 
     /**
-     * [List of defined web routes]
+     * List of defined web routes.
      *
      * @var array{
      *     array<string, array{
@@ -73,21 +71,21 @@ class PostmanCollectionCommand extends Command
     private array $routes;
 
     /**
-     * [JSON file name]
+     * JSON file name.
      *
      * @var string $jsonName
      */
     private string $jsonName;
 
     /**
-     * [Server URL]
+     * Server URL.
      *
      * @var string $serverUrl
      */
     private string $serverUrl;
 
     /**
-     * [Application Name]
+     * Application Name.
      *
      * @var string $appName
      */
@@ -126,7 +124,7 @@ class PostmanCollectionCommand extends Command
     }
 
     /**
-     * Configures the current command
+     * Configures the current command.
      *
      * @return void
      */
@@ -134,21 +132,20 @@ class PostmanCollectionCommand extends Command
     {
         $this
             ->setName('route:postman')
-            ->setDescription('Command required to create postman collections in JSON format');
+            ->setDescription('Command required to create postman collections in JSON format.');
     }
 
     /**
-     * Initializes the command after the input has been bound and before the
-     * input is validated
+     * Initializes the command after the input has been bound and before the input
+     * is validated.
      *
-     * This is mainly useful when a lot of commands extends one main command
-     * where some things need to be initialized based on the input arguments and
-     * options
+     * This is mainly useful when a lot of commands extends one main command where
+     * some things need to be initialized based on the input arguments and options.
      *
-     * @param InputInterface $input [InputInterface is the interface implemented
-     * by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
+     * @param InputInterface $input InputInterface is the interface implemented by
+     * all input classes.
+     * @param OutputInterface $output OutputInterface is the interface implemented
+     * by all Output classes.
      *
      * @return void
      */
@@ -166,22 +163,21 @@ class PostmanCollectionCommand extends Command
     }
 
     /**
-     * Executes the current command
+     * Executes the current command.
      *
-     * This method is not abstract because you can use this class
-     * as a concrete class. In this case, instead of defining the
-     * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method
+     * This method is not abstract because you can use this class as a concrete
+     * class. In this case, instead of defining the execute() method, you set the
+     * code to execute by passing a Closure to the setCode() method.
      *
-     * @param InputInterface $input [InputInterface is the interface implemented
-     * by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
+     * @param InputInterface $input InputInterface is the interface implemented by
+     * all input classes
+     * @param OutputInterface $output OutputInterface is the interface implemented
+     * by all Output classes
      *
      * @return int
      *
      * @throws Exception
-     * @throws LogicException [When this abstract method is not implemented]
+     * @throws LogicException When this abstract method is not implemented.
      * @throws GuzzleException
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -227,7 +223,7 @@ class PostmanCollectionCommand extends Command
 
         $output->writeln($this->successOutput("\t>>  COLLECTION: Exported in {$path}{$this->jsonName}.json"));
 
-        return Command::SUCCESS;
+        return parent::SUCCESS;
     }
 
     /**
@@ -281,6 +277,7 @@ class PostmanCollectionCommand extends Command
 
         $this->routes = $routes;
 
+        /** @phpstan-ignore-next-line */
         array_pop($this->routes);
     }
 }
