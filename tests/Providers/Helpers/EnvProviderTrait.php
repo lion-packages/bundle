@@ -87,24 +87,6 @@ trait EnvProviderTrait
         ];
     }
 
-    public static function getKeyProvider(): array
-    {
-        return [
-            [
-                'value' => 'http://localhost:8000',
-                'return' => 'SERVER_URL',
-            ],
-            [
-                'value' => 'http://localhost:5173',
-                'return' => 'SERVER_URL_AUD'
-            ],
-            [
-                'value' => uniqid(),
-                'return' => false
-            ]
-        ];
-    }
-
     public static function getOptionProvider(): array
     {
         return [

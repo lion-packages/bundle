@@ -321,7 +321,7 @@ jobs:
           echo "Server running at http://localhost:8000"
 
       - name: Run tests
-        run: php vendor/bin/phpunit --exclude-group database --coverage-clover tests/build/logs/clover.xml
+        run: php vendor/bin/phpunit --exclude-group parallel --coverage-clover tests/build/logs/clover.xml
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5

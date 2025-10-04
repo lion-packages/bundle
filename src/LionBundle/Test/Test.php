@@ -10,6 +10,7 @@ use DI\NotFoundException;
 use Exception;
 use Lion\Bundle\Helpers\Commands\Migrations\Migrations;
 use Lion\Bundle\Helpers\Commands\Seeds\Seeds;
+use Lion\Bundle\Helpers\Env;
 use Lion\Bundle\Interface\CapsuleInterface;
 use Lion\Database\Connection;
 use Lion\Database\Drivers\Schema\MySQL;
@@ -17,6 +18,7 @@ use Lion\Dependency\Injection\Container;
 use Lion\Test\Test as Testing;
 use ReflectionClass;
 use ReflectionException;
+use RuntimeException;
 
 /**
  * Extend testing functions.
@@ -225,6 +227,36 @@ abstract class Test extends Testing
     }
 
     /**
+     * Runs the given closure inside an isolated environment sandbox.
+     *
+     * Each call creates a unique sandbox context, so tests can run in parallel
+     * without interfering with each other. The sandbox is destroyed after the
+     * closure completes, restoring the original environment.
+     *
+     * @param Closure $callable The code to run in the isolated environment.
+     *
+     * @return void
+     *
+     * @throws RuntimeException If sandbox activation or cleanup fails.
+     */
+    final protected function runInSeparateEnvironment(Closure $callable): void
+    {
+        // Generate a unique context ID (per test call)
+        $contextId = uniqid('sandbox_', true);
+
+        // Enable a fresh sandbox context (empty or seeded from $_ENV)
+        Env::enableSandbox($contextId);
+
+        try {
+            // Run the test code inside the sandbox
+            $callable();
+        } finally {
+            // Always clean up after execution
+            Env::disableSandbox($contextId);
+        }
+    }
+
+    /**
      * Executes a callback using a temporary database connection.
      *
      * This method clones the default database connection and runs the provided callback
@@ -237,8 +269,9 @@ abstract class Test extends Testing
      * For safe execution in PHPUnit, it is recommended to use the attribute:
      *
      * <code>
+     *     #[Testing
      *     #[RunInSeparateProcess]
-     *     public function testApp(): void
+     *     public function App(): void
      * </code>
      *
      * This ensures that changes to static connection state or global settings do not
