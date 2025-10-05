@@ -443,20 +443,20 @@ class Migrations
         $connections = Connection::getConnections();
 
         $dumpCommand = sprintf(
-            'mysqldump --skip-ssl -h%s -u%s -p%s --routines --triggers --events --single-transaction %s | mysql --skip-ssl -h%s -u%s -p%s %s', // phpcs:ignore
+            'MYSQL_PWD=%s mysqldump --ssl-mode=DISABLED -h%s -u%s --routines --triggers --events --single-transaction %s | MYSQL_PWD=%s mysql --ssl-mode=DISABLED -h%s -u%s %s', // phpcs:ignore
+            /** @phpstan-ignore-next-line */
+            $connections[$connectionName]['password'],
             /** @phpstan-ignore-next-line */
             escapeshellarg($connections[$connectionName]['host']),
             /** @phpstan-ignore-next-line */
             escapeshellarg($connections[$connectionName]['user']),
-            /** @phpstan-ignore-next-line */
-            escapeshellarg($connections[$connectionName]['password']),
             escapeshellarg($dbName),
             /** @phpstan-ignore-next-line */
+            $connections[$connectionName]['password'],
+            /** @phpstan-ignore-next-line */
             escapeshellarg($connections[$connectionName]['host']),
             /** @phpstan-ignore-next-line */
             escapeshellarg($connections[$connectionName]['user']),
-            /** @phpstan-ignore-next-line */
-            escapeshellarg($connections[$connectionName]['password']),
             escapeshellarg($connections[$tempConnectionName]['dbname'])
         );
 

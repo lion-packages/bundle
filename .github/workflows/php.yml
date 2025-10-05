@@ -153,7 +153,7 @@ jobs:
       - name: PHPStan (Src)
         run: php -d memory_limit=-1 vendor/bin/phpstan analyse --level max src
 
-      # - name: PHPStan (Tests)
+        # - name: PHPStan (Tests)
         # run: php -d memory_limit=-1 vendor/bin/phpstan analyse --level max tests
 
   code-analysis-php-codesniffer:
@@ -189,7 +189,7 @@ jobs:
       - name: PHP CodeSniffer (Src)
         run: php -d memory_limit=-1 vendor/bin/phpcs --standard=PSR12 src
 
-      # - name: PHP CodeSniffer (Tests)
+        # - name: PHP CodeSniffer (Tests)
         # run: php -d memory_limit=-1 vendor/bin/phpcs --standard=PSR12 tests
 
   code-analysis-phplint:
@@ -321,11 +321,10 @@ jobs:
           echo "Server running at http://localhost:8000"
 
       - name: Run tests
-        run: php vendor/bin/phpunit --exclude-group parallel --coverage-clover tests/build/logs/clover.xml
+        run: php vendor/bin/phpunit --coverage-clover tests/build/logs/clover.xml
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
           files: tests/build/logs/clover.xml
           token: ${{ secrets.CODECOV_TOKEN_LION_BUNDLE }}
-
