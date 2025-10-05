@@ -233,6 +233,12 @@ abstract class Test extends Testing
      * without interfering with each other. The sandbox is destroyed after the
      * closure completes, restoring the original environment.
      *
+     * <code>
+     *     #[Testing]
+     *     #[RunInSeparateProcess]
+     *     public function app(): void
+     * </code>
+     *
      * @param Closure $callable The code to run in the isolated environment.
      *
      * @return void
@@ -269,9 +275,9 @@ abstract class Test extends Testing
      * For safe execution in PHPUnit, it is recommended to use the attribute:
      *
      * <code>
-     *     #[Testing
+     *     #[Testing]
      *     #[RunInSeparateProcess]
-     *     public function App(): void
+     *     public function app(): void
      * </code>
      *
      * This ensures that changes to static connection state or global settings do not
