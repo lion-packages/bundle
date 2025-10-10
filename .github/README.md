@@ -1,12 +1,6 @@
-# 🦁 Lion-Bundle
-
 <p align="center">
   <a href="https://dev.lion-packages.com/docs/library/content" target="_blank">
-    <img 
-        src="https://github.com/lion-packages/framework/assets/56183278/60871c9f-1c93-4481-8c1e-d70282b33254"
-        width="450" 
-        alt="Lion-Packages Logo"
-    >
+    <img width="1920" height="1080" alt="presentation-lion-packages (1)" src="https://github.com/user-attachments/assets/a0bf5f90-ec16-4d42-8b74-83e5d7500af9" />
   </a>
 </p>
 
