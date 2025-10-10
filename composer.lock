@@ -805,16 +805,16 @@
         },
         {
             "name": "lion/database",
-            "version": "v11.23.1",
+            "version": "v11.23.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/database.git",
-                "reference": "1fd1daca77a015ab2417f8015bd74c87722d5d78"
+                "reference": "7ecef69d85b212b4747680956220536868eba026"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/database/zipball/1fd1daca77a015ab2417f8015bd74c87722d5d78",
-                "reference": "1fd1daca77a015ab2417f8015bd74c87722d5d78",
+                "url": "https://api.github.com/repos/lion-packages/database/zipball/7ecef69d85b212b4747680956220536868eba026",
+                "reference": "7ecef69d85b212b4747680956220536868eba026",
                 "shasum": ""
             },
             "require": {
@@ -851,7 +851,7 @@
                 "issues": "https://github.com/lion-packages/database/issues",
                 "source": "https://github.com/lion-packages/database"
             },
-            "time": "2025-10-03T14:48:22+00:00"
+            "time": "2025-10-10T20:22:59+00:00"
         },
         {
             "name": "lion/dependency-injection",
