@@ -329,7 +329,7 @@ abstract class Test extends Testing
 
         $dbName = $connection['dbname'];
 
-        $tempConnectionName = $connection['dbname'] . uniqid(uniqid('_'));
+        $tempConnectionName = $connection['dbname'] . '_' . dechex(mt_rand(0, 0xfffff));
 
         /**
          * -----------------------------------------------------------------------------
