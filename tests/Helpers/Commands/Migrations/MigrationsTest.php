@@ -2,675 +2,465 @@
 
 declare(strict_types=1);
 
-namespace Tests\Helpers\Commands\Migrations;
+namespace Lion\Bundle\Helpers\Commands\Migrations;
 
-use DI\DependencyException;
-use DI\NotFoundException;
+use Closure;
+use DI\Attribute\Inject;
 use Exception;
-use Lion\Bundle\Commands\Lion\New\MigrationCommand;
-use Lion\Bundle\Helpers\Commands\Migrations\Migrations;
 use Lion\Bundle\Interface\Migrations\StoredProcedureInterface;
 use Lion\Bundle\Interface\Migrations\TableInterface;
 use Lion\Bundle\Interface\Migrations\ViewInterface;
 use Lion\Bundle\Interface\MigrationUpInterface;
+use Lion\Bundle\Interface\SeedInterface;
+use Lion\Command\Command;
 use Lion\Database\Connection;
 use Lion\Database\Driver;
 use Lion\Database\Drivers\MySQL;
 use Lion\Database\Drivers\PostgreSQL;
+use Lion\Database\Drivers\Schema\MySQL as Schema;
 use Lion\Database\Interface\ExecuteInterface;
-use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
-use Lion\Request\Status;
-use Lion\Test\Test;
-use PHPUnit\Framework\Attributes\Test as Testing;
-use ReflectionException;
+use Lion\Request\Http;
+use RuntimeException;
 use stdClass;
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Tester\CommandTester;
+use Symfony\Component\Console\Output\OutputInterface;
 
-class MigrationsTest extends Test
+/**
+ * Manages the processes of creating or executing migrations.
+ */
+class Migrations
 {
-    private const string MIGRATION_NAME = 'test-migration';
-    private const string CLASS_NAME = 'TestMigration';
-    private const string CLASS_NAMESPACE_TABLE = 'Database\\Migrations\\LionDatabase\\MySQL\\Tables\\';
-    private const string CLASS_NAMESPACE_VIEW = 'Database\\Migrations\\LionDatabase\\MySQL\\Views\\';
-    private const string CLASS_NAMESPACE_STORE_PROCEDURE =
-        'Database\\Migrations\\LionDatabase\\MySQL\\StoredProcedures\\';
-    private const string URL_PATH_MYSQL_TABLE = './database/Migrations/LionDatabase/MySQL/Tables/';
-    private const string URL_PATH_MYSQL_VIEW = './database/Migrations/LionDatabase/MySQL/Views/';
-    private const string URL_PATH_MYSQL_STORED_PROCEDURE = './database/Migrations/LionDatabase/MySQL/StoredProcedures/';
-    private const string FILE_NAME = self::CLASS_NAME . '.php';
-    private const string OUTPUT_MESSAGE = 'The migration was generated successfully.';
-
-    private CommandTester $commandTester;
-    private Migrations $migrations;
+    /**
+     * Manipulate system files.
+     *
+     * @var Store $store
+     */
     private Store $store;
 
     /**
-     * @throws NotFoundException
-     * @throws ReflectionException
-     * @throws DependencyException
+     * Stores already loaded migrations.
+     *
+     * @var array<string, MigrationUpInterface>
      */
-    protected function setUp(): void
+    private array $loadedMigrations = [];
+
+    #[Inject]
+    public function setStore(Store $store): Migrations
     {
-        $this->store = new Store();
+        $this->store = $store;
 
-        $container = new Container();
-
-        /** @var Migrations $migrations */
-        $migrations = $container->resolve(Migrations::class);
-
-        $this->migrations = $migrations;
-
-        /** @var MigrationCommand $migrationCommand */
-        $migrationCommand = $container->resolve(MigrationCommand::class);
-
-        $application = new Application();
-
-        $application->add($migrationCommand);
-
-        $this->commandTester = new CommandTester($application->find('new:migration'));
-
-        $this->initReflection($this->migrations);
-    }
-
-    protected function tearDown(): void
-    {
-        $this->rmdirRecursively('database/');
+        return $this;
     }
 
     /**
-     * @throws ReflectionException
+     * Sorts the list of elements by the value defined in the INDEX constant.
+     *
+     * @param array<string, MigrationUpInterface|SeedInterface> $list Class List.
+     *
+     * @return array<string, MigrationUpInterface|SeedInterface>
+     *
+     * @internal
+     *
+     * @codeCoverageIgnore
      */
-    #[Testing]
-    public function setStore(): void
+    public function orderList(array $list): array
     {
-        $this->assertInstanceOf(Migrations::class, $this->migrations->setStore($this->store));
-        $this->assertInstanceOf(Store::class, $this->getPrivateProperty('store'));
+        uasort($list, function ($classA, $classB) {
+            $namespaceA = $classA::class;
+
+            $namespaceB = $classB::class;
+
+            $indexA = defined("{$namespaceA}::INDEX") ? constant("{$namespaceA}::INDEX") : null;
+
+            $indexB = defined("{$namespaceB}::INDEX") ? constant("{$namespaceB}::INDEX") : null;
+
+            if ($indexA === null && $indexB === null) {
+                return 0;
+            }
+
+            if ($indexA === null) {
+                return 1;
+            }
+
+            if ($indexB === null) {
+                return -1;
+            }
+
+            return $indexA <=> $indexB;
+        });
+
+        return $list;
     }
 
-    #[Testing]
-    public function orderList(): void
+    /**
+     * Gets defined migrations categorized by type.
+     *
+     * @return array<string, array<string, MigrationUpInterface>>
+     *
+     * @internal
+     */
+    public function getMigrations(): array
     {
-        $commandExecute = $this->commandTester
-            ->setInputs([
-                '0',
-                '0',
-            ])
-            ->execute([
-                'migration' => self::MIGRATION_NAME,
-            ]);
-
-        $this->assertSame(Command::SUCCESS, $commandExecute);
-        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
-        $this->assertFileExists(self::URL_PATH_MYSQL_TABLE . self::FILE_NAME);
-
-        /** @phpstan-ignore-next-line */
-        $tableMigration = new (self::CLASS_NAMESPACE_TABLE . self::CLASS_NAME)();
-
-        $this->assertInstances($tableMigration, [
-            MigrationUpInterface::class,
-            TableInterface::class,
-        ]);
-
-        $tableNamespace = $this->store->getNamespaceFromFile(
-            (self::URL_PATH_MYSQL_TABLE . self::FILE_NAME),
-            'Database\\Migrations\\',
-            'Migrations/'
-        );
-
-        /** @var array<string, MigrationUpInterface> $migrations */
-        $migrations = [
-            $tableNamespace => $tableMigration,
+        /** @var array<string, array<string, MigrationUpInterface>> $allMigrations */
+        $allMigrations = [
+            TableInterface::class => [],
+            ViewInterface::class => [],
+            StoredProcedureInterface::class => [],
         ];
 
-        $list = $this->migrations->orderList($migrations);
+        foreach ($this->store->getFiles('./database/Migrations/') as $migration) {
+            if (isSuccess($this->store->validate([$migration], ['php']))) {
+                $namespace = $this->store->getNamespaceFromFile($migration, 'Database\\Migrations\\', 'Migrations/');
 
-        $this->assertNotEmpty($list);
-        $this->assertArrayHasKey($tableNamespace, $list);
-        $this->assertSame($migrations, $list);
-        $this->assertInstanceOf(TableInterface::class, $list[$tableNamespace]);
-    }
+                if (!isset($this->loadedMigrations[$migration])) {
+                    /** @var MigrationUpInterface $migrationInstance */
+                    $migrationInstance = new $namespace();
 
-    #[Testing]
-    public function getMigrations(): void
-    {
-        $commandExecute = $this->commandTester
-            ->setInputs([
-                '0',
-                '0',
-            ])
-            ->execute([
-                'migration' => self::MIGRATION_NAME,
-            ]);
+                    $this->loadedMigrations[$migration] = $migrationInstance;
+                }
 
-        $this->assertSame(Command::SUCCESS, $commandExecute);
-        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
-        $this->assertFileExists(self::URL_PATH_MYSQL_TABLE . self::FILE_NAME);
+                $tableMigration = $this->loadedMigrations[$migration];
 
-        /** @phpstan-ignore-next-line */
-        $tableMigration = new (self::CLASS_NAMESPACE_TABLE . self::CLASS_NAME)();
+                if ($tableMigration instanceof TableInterface) {
+                    $allMigrations[TableInterface::class][$namespace] = $tableMigration;
+                }
 
-        $this->assertInstances($tableMigration, [
-            MigrationUpInterface::class,
-            TableInterface::class,
-        ]);
+                if ($tableMigration instanceof ViewInterface) {
+                    $allMigrations[ViewInterface::class][$namespace] = $tableMigration;
+                }
 
-        $commandExecute = $this->commandTester
-            ->setInputs([
-                '0',
-                '1',
-            ])
-            ->execute([
-                'migration' => self::MIGRATION_NAME,
-            ]);
+                if ($tableMigration instanceof StoredProcedureInterface) {
+                    $allMigrations[StoredProcedureInterface::class][$namespace] = $tableMigration;
+                }
+            }
+        }
 
-        $this->assertSame(Command::SUCCESS, $commandExecute);
-        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
-        $this->assertFileExists(self::URL_PATH_MYSQL_VIEW . self::FILE_NAME);
-
-        /** @phpstan-ignore-next-line */
-        $viewMigration = new (self::CLASS_NAMESPACE_VIEW . self::CLASS_NAME)();
-
-        $this->assertInstances($viewMigration, [
-            MigrationUpInterface::class,
-            ViewInterface::class,
-        ]);
-
-        $commandExecute = $this->commandTester
-            ->setInputs([
-                '0',
-                '2',
-            ])
-            ->execute([
-                'migration' => self::MIGRATION_NAME,
-            ]);
-
-        $this->assertSame(Command::SUCCESS, $commandExecute);
-        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
-        $this->assertFileExists(self::URL_PATH_MYSQL_STORED_PROCEDURE . self::FILE_NAME);
-
-        /** @phpstan-ignore-next-line */
-        $viewMigration = new (self::CLASS_NAMESPACE_STORE_PROCEDURE . self::CLASS_NAME)();
-
-        $this->assertInstances($viewMigration, [
-            MigrationUpInterface::class,
-            StoredProcedureInterface::class,
-        ]);
-
-        $list = $this->migrations->getMigrations();
-
-        $this->assertNotEmpty($list);
-        $this->assertArrayHasKey(TableInterface::class, $list);
-        $this->assertArrayHasKey(ViewInterface::class, $list);
-        $this->assertArrayHasKey(StoredProcedureInterface::class, $list);
-        $this->assertNotEmpty($list[TableInterface::class]);
-        $this->assertNotEmpty($list[ViewInterface::class]);
-        $this->assertNotEmpty($list[StoredProcedureInterface::class]);
-
-        $this->assertInstanceOf(
-            TableInterface::class,
-            $list[TableInterface::class][self::CLASS_NAMESPACE_TABLE . self::CLASS_NAME]
-        );
-
-        $this->assertInstanceOf(
-            ViewInterface::class,
-            $list[ViewInterface::class][self::CLASS_NAMESPACE_VIEW . self::CLASS_NAME]
-        );
-
-        $this->assertInstanceOf(
-            StoredProcedureInterface::class,
-            $list[StoredProcedureInterface::class][self::CLASS_NAMESPACE_STORE_PROCEDURE . self::CLASS_NAME]
-        );
+        return $allMigrations;
     }
 
     /**
-     * @throws Exception
+     * Run the migrations.
+     *
+     * @param Command $command Extends the functions of the Command class to format
+     * messages with different colors
+     * @param OutputInterface $output OutputInterface is the interface implemented
+     * by all Output classes.
+     * @param array<int, MigrationUpInterface> $files List of migration files.
+     *
+     * @return void
+     *
+     * @internal
+     *
+     * @codeCoverageIgnore
      */
-    #[Testing]
-    public function executeMigrationsGroup(): void
+    public function executeMigrations(Command $command, OutputInterface $output, array $files): void
     {
-        $commandExecute = $this->commandTester
-            ->setInputs([
-                '0',
-                '0',
-            ])
-            ->execute([
-                'migration' => self::MIGRATION_NAME,
-            ]);
+        foreach ($files as $namespace => $classObject) {
+            $response = $classObject->up();
 
-        $this->assertSame(Command::SUCCESS, $commandExecute);
-        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
-        $this->assertFileExists(self::URL_PATH_MYSQL_TABLE . self::FILE_NAME);
+            if (!$response instanceof stdClass) {
+                continue;
+            }
 
-        /**
-         * @var object $objClass
-         *
-         * @phpstan-ignore-next-line
-         */
-        $objClass = new (self::CLASS_NAMESPACE_TABLE . self::CLASS_NAME)();
+            /** @phpstan-ignore-next-line */
+            $message = "\t>> MIGRATION: {$response->message}";
 
-        $this->assertInstances($objClass, [
-            MigrationUpInterface::class,
-            TableInterface::class,
-        ]);
+            $output->writeln($command->warningOutput("\t>> MIGRATION: {$namespace}"));
 
-        $commandExecute = $this->commandTester
-            ->setInputs([
-                '0',
-                '1',
-            ])
-            ->execute([
-                'migration' => self::MIGRATION_NAME,
-            ]);
-
-        $this->assertSame(Command::SUCCESS, $commandExecute);
-        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
-        $this->assertFileExists(self::URL_PATH_MYSQL_VIEW . self::FILE_NAME);
-
-        /**
-         * @var object $objClass
-         *
-         * @phpstan-ignore-next-line
-         */
-        $objClass = new (self::CLASS_NAMESPACE_VIEW . self::CLASS_NAME)();
-
-        $this->assertInstances($objClass, [
-            MigrationUpInterface::class,
-            ViewInterface::class,
-        ]);
-
-        $commandExecute = $this->commandTester
-            ->setInputs([
-                '0',
-                '2',
-            ])
-            ->execute([
-                'migration' => self::MIGRATION_NAME,
-            ]);
-
-        $this->assertSame(Command::SUCCESS, $commandExecute);
-        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
-        $this->assertFileExists(self::URL_PATH_MYSQL_STORED_PROCEDURE . self::FILE_NAME);
-
-        /**
-         * @var object $objClass
-         *
-         * @phpstan-ignore-next-line
-         */
-        $objClass = new (self::CLASS_NAMESPACE_STORE_PROCEDURE . self::CLASS_NAME)();
-
-        $this->assertInstances($objClass, [
-            MigrationUpInterface::class,
-            StoredProcedureInterface::class,
-        ]);
-
-        /** @phpstan-ignore-next-line */
-        $this->migrations->executeMigrationsGroup([
-            self::CLASS_NAMESPACE_TABLE . self::CLASS_NAME,
-            self::CLASS_NAMESPACE_VIEW . self::CLASS_NAME,
-            self::CLASS_NAMESPACE_STORE_PROCEDURE . self::CLASS_NAME,
-        ]);
+            if (isError($response)) {
+                $output->writeln($command->errorOutput($message));
+            } else {
+                $output->writeln($command->successOutput($message));
+            }
+        }
     }
 
-    #[Testing]
-    public function processingWithStaticConnections(): void
+    /**
+     * Run the migrations.
+     *
+     * @param array<int, class-string> $list List of classes.
+     * @param bool $runningATemporaryDatabase Defines whether the running process is
+     * in a temporary database.
+     *
+     * @return void
+     *
+     * @throws Exception If an error occurs while deleting the file.
+     */
+    public function executeMigrationsGroup(array $list, bool $runningATemporaryDatabase = false): void
     {
-        /** @var string $defaultConnection */
-        $defaultConnection = env('DB_DEFAULT');
+        if (!$runningATemporaryDatabase) {
+            $this->resetDatabases();
+        }
 
-        $this->migrations->processingWithStaticConnections($defaultConnection, function () use ($defaultConnection): void {
-            $connections = Connection::getConnections();
+        /** @var array<string, array<int, MigrationUpInterface>> $migrations */
+        $migrations = [
+            TableInterface::class => [],
+            ViewInterface::class => [],
+            StoredProcedureInterface::class => [],
+        ];
 
-            $numberOfConnections = count($connections);
+        foreach ($list as $namespace) {
+            /** @var MigrationUpInterface $classObject */
+            $classObject = new $namespace();
 
-            $this->assertSame(NUMBER_OF_ACTIVE_CONNECTIONS, $numberOfConnections);
-            $this->assertArrayNotHasKey('dbname', $connections[$defaultConnection]);
-        });
+            if ($classObject instanceof TableInterface) {
+                $migrations[TableInterface::class][$namespace] = $classObject;
+            }
 
+            if ($classObject instanceof ViewInterface) {
+                $migrations[ViewInterface::class][$namespace] = $classObject;
+            }
+
+            if ($classObject instanceof StoredProcedureInterface) {
+                $migrations[StoredProcedureInterface::class][$namespace] = $classObject;
+            }
+        }
+
+        /**
+         * @param array<string, MigrationUpInterface> $list
+         *
+         * @return void
+         */
+        $run = function (array $list): void {
+            foreach ($list as $migration) {
+                /** @phpstan-ignore-next-line */
+                $migration->up();
+            }
+        };
+
+        /** @phpstan-ignore-next-line */
+        $run($this->orderList($migrations[TableInterface::class]));
+
+        $run($migrations[ViewInterface::class]);
+
+        $run($migrations[StoredProcedureInterface::class]);
+    }
+
+    /**
+     * Generates static connections to manipulate databases.
+     *
+     * @param string $connectionName Name of the connection being run.
+     * @param Closure $callback Executes logic to reset databases to their original
+     * form.
+     *
+     * @return void
+     *
+     * @internal
+     */
+    public function processingWithStaticConnections(string $connectionName, Closure $callback): void
+    {
         $connections = Connection::getConnections();
 
-        $numberOfConnections = count($connections);
+        if (!isset($connections[$connectionName])) {
+            throw new RuntimeException(
+                "The connection '{$connectionName}' does not exist.",
+                Http::INTERNAL_SERVER_ERROR
+            );
+        }
 
-        $this->assertSame(NUMBER_OF_ACTIVE_CONNECTIONS, $numberOfConnections);
+        $originalConnection = $connections[$connectionName];
 
-        /** @var string $dbName */
-        $dbName = env('DB_NAME');
+        Connection::removeConnection($connectionName);
 
-        $this->assertSame($dbName, $connections[$defaultConnection]['dbname']);
+        $tempConnection = $originalConnection;
+
+        unset($tempConnection['dbname']);
+
+        /** @phpstan-ignore-next-line */
+        Connection::addConnection($connectionName, $tempConnection);
+
+        try {
+            $callback();
+        } finally {
+            Connection::removeConnection($connectionName);
+
+            Connection::addConnection($connectionName, $originalConnection);
+        }
     }
 
     /**
-     * @throws Exception
+     * Remove and rebuild all databases
+     *
+     * @param string $dbName Database name
+     * @param string $connectionName Connection name
+     * @param string $type Driver Type
+     * @param Closure|null $evaluate Performs the necessary operations during
+     * connections to the database server
+     *
+     * @return void
+     *
+     * @throws Exception If an error occurs while deleting the file
      */
-    #[Testing]
-    public function resetDatabaseForSQLite(): void
+    public function resetDatabase(string $dbName, string $connectionName, string $type, ?Closure $evaluate = null): void
     {
-        /** @var string $dbName */
-        $dbName = env('DB_NAME_TEST_SQLITE');
+        if (Driver::SQLITE === $type) {
+            $this->store->remove($dbName);
 
-        $this->migrations->processingWithStaticConnections('lion_database_sqlite', function () use ($dbName): void {
-            $this->migrations
-                ->resetDatabase($dbName, 'lion_database_sqlite', Driver::SQLITE, function () use ($dbName): void {
-                    $this->assertFileDoesNotExist($dbName);
-                });
-        });
+            null !== $evaluate && $evaluate();
 
-        $this->assertFileExists($dbName);
+            file_put_contents($dbName, '');
 
-        new Store()->remove($dbName);
+            return;
+        }
 
-        $this->assertFileDoesNotExist($dbName);
+        if (Driver::MYSQL === $type) {
+            MySQL::connection($connectionName)
+                ->query(
+                    <<<SQL
+                    DROP DATABASE IF EXISTS `{$dbName}`;
+                    SQL
+                )
+                ->execute();
 
-        Connection::clearConnectionList();
+            null !== $evaluate && $evaluate();
+
+            MySQL::connection($connectionName)
+                ->query(
+                    <<<SQL
+                    CREATE DATABASE `{$dbName}`;
+                    SQL
+                )
+                ->execute();
+
+            return;
+        }
+
+        if (Driver::POSTGRESQL === $type) {
+            PostgreSQL::connection($connectionName)
+                ->query(
+                    <<<SQL
+                    SELECT
+                        pg_terminate_backend(pg_stat_activity.pid)
+                    FROM pg_stat_activity
+                    WHERE datname = '{$dbName}'
+                    AND pid <> pg_backend_pid();
+                    SQL
+                )
+                ->execute();
+
+            usleep(500000);
+
+            PostgreSQL::connection($connectionName)
+                ->query(
+                    <<<SQL
+                    DROP DATABASE IF EXISTS "{$dbName}";
+                    SQL
+                )
+                ->execute();
+
+            null !== $evaluate && $evaluate();
+
+            PostgreSQL::connection($connectionName)
+                ->query(
+                    <<<SQL
+                    CREATE DATABASE "{$dbName}";
+                    SQL
+                )
+                ->execute();
+        }
     }
 
     /**
-     * @throws Exception
+     * Empty the available tables
+     *
+     * @param string $driver [Database engine]
+     * @param string $connectionName [Connection name]
+     * @param string $table [Name the table]
+     *
+     * @return ExecuteInterface|null
+     *
+     * @internal
+     *
+     * @codeCoverageIgnore
      */
-    #[Testing]
-    public function resetDatabaseForMySQL(): void
-    {
-        /** @var string $connectionName */
-        $connectionName = env('DB_DEFAULT');
+    public function truncateTable(
+        string $driver,
+        string $connectionName,
+        string $table
+    ): ?ExecuteInterface {
+        if (Driver::MYSQL === $driver) {
+            return Schema::connection($connectionName)
+                ->truncateTable($table);
+        }
 
-        /** @var string $dbName */
-        $dbName = env('DB_NAME');
-
-        $existDatabase = MySQL::connection($connectionName)
-            ->query(
-                <<<SQL
-                SELECT COUNT(*) AS cont FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?;
-                SQL
-            )
-            ->addRows([
-                $dbName,
-            ])
-            ->get();
-
-        $this->assertIsObject($existDatabase);
-        $this->assertInstanceOf(stdClass::class, $existDatabase);
-        $this->assertObjectHasProperty('cont', $existDatabase);
-        $this->assertIsInt($existDatabase->cont);
-        $this->assertSame(1, $existDatabase->cont);
-
-        $this->migrations->processingWithStaticConnections(
-            connectionName: $connectionName,
-            callback: function () use ($connectionName, $dbName): void {
-                $this->migrations->resetDatabase(
-                    $dbName,
-                    $connectionName,
-                    Driver::MYSQL,
-                    function () use ($connectionName, $dbName): void {
-                        $existDatabase = MySQL::connection($connectionName)
-                            ->query(
-                                <<<SQL
-                                SELECT COUNT(*) AS cont FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?;
-                                SQL
-                            )
-                            ->addRows([
-                                $dbName,
-                            ])
-                            ->get();
-
-                        $this->assertIsObject($existDatabase);
-                        $this->assertInstanceOf(stdClass::class, $existDatabase);
-                        $this->assertObjectHasProperty('cont', $existDatabase);
-                        $this->assertIsInt($existDatabase->cont);
-                        $this->assertSame(0, $existDatabase->cont);
-                    }
+        if (Driver::POSTGRESQL === $driver) {
+            return PostgreSQL::connection($connectionName)
+                ->query(
+                    <<<SQL
+                    TRUNCATE TABLE {$table} CASCADE;
+                    SQL
                 );
-            }
-        );
+        }
 
-        $existDatabase = MySQL::connection($connectionName)
-            ->query(
-                <<<SQL
-                SELECT COUNT(*) AS cont FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?;
-                SQL
-            )
-            ->addRows([
-                $dbName,
-            ])
-            ->get();
-
-        $this->assertIsObject($existDatabase);
-        $this->assertInstanceOf(stdClass::class, $existDatabase);
-        $this->assertObjectHasProperty('cont', $existDatabase);
-        $this->assertIsInt($existDatabase->cont);
-        $this->assertSame(1, $existDatabase->cont);
-
-        Connection::clearConnectionList();
+        return null;
     }
 
     /**
-     * @throws Exception
+     * Delete databases from defined connections
+     *
+     * @return void
+     *
+     * @throws Exception If an error occurs while deleting the file
+     *
+     * @codeCoverageIgnore
      */
-    #[Testing]
-    public function resetDatabaseForPostgreSQL(): void
+    public function resetDatabases(): void
     {
-        /** @var string $connectionName */
-        $connectionName = env('DB_NAME_TEST_POSTGRESQL');
+        $connections = Connection::getConnections();
 
-        /** @var string $dbName */
-        $dbName = env('DB_NAME');
+        foreach ($connections as $connectionName => $connectionData) {
+            $this->processingWithStaticConnections(
+                connectionName: $connectionName,
+                callback: function () use ($connectionName, $connectionData): void {
+                    $this->resetDatabase($connectionData['dbname'], $connectionName, $connectionData['type']);
+                }
+            );
+        }
+    }
 
-        $existDatabase = PostgreSQL::connection($connectionName)
-            ->query(
-                <<<SQL
-                SELECT COUNT(*) as cont FROM pg_database WHERE datname = ?;
-                SQL
-            )
-            ->addRows([
-                $dbName,
-            ])
-            ->get();
+    /**
+     * Clones the contents of a template database connection into a temporary
+     * database using mysqldump. This includes tables, data, triggers, stored
+     * procedures, and events.
+     *
+     * @param string $dbName Name of the database to operate on (usually the target DB).
+     * @param string $connectionName Name of the template connection to clone from.
+     * @param string $tempConnectionName Name of the temporary database or
+     * connection to clone into.
+     *
+     * @return void
+     *
+     * @codeCoverageIgnore
+     */
+    public function cloneDatabase(string $dbName, string $connectionName, string $tempConnectionName): void
+    {
+        $connections = Connection::getConnections();
 
-        $this->assertIsObject($existDatabase);
-        $this->assertInstanceOf(stdClass::class, $existDatabase);
-        $this->assertObjectHasProperty('cont', $existDatabase);
-        $this->assertIsInt($existDatabase->cont);
-        $this->assertSame(1, $existDatabase->cont);
-
-        $this->migrations->processingWithStaticConnections(
-            connectionName: $connectionName,
-            callback: function () use ($connectionName, $dbName): void {
-                $this->migrations->resetDatabase(
-                    $dbName,
-                    $connectionName,
-                    Driver::POSTGRESQL,
-                    function () use ($connectionName, $dbName): void {
-                        $existDatabase = PostgreSQL::connection($connectionName)
-                            ->query(
-                                <<<SQL
-                                SELECT COUNT(*) as cont FROM pg_database WHERE datname = ?;
-                                SQL
-                            )
-                            ->addRows([
-                                $dbName,
-                            ])
-                            ->get();
-
-                        $this->assertIsObject($existDatabase);
-                        $this->assertInstanceOf(stdClass::class, $existDatabase);
-                        $this->assertObjectHasProperty('cont', $existDatabase);
-                        $this->assertIsInt($existDatabase->cont);
-                        $this->assertSame(0, $existDatabase->cont);
-                    }
-                );
-            }
+        $dumpCommand = sprintf(
+            'MYSQL_PWD=%s mysqldump --ssl-mode=DISABLED -h%s -u%s --routines --triggers --events --single-transaction %s | MYSQL_PWD=%s mysql --ssl-mode=DISABLED -h%s -u%s %s', // phpcs:ignore
+            /** @phpstan-ignore-next-line */
+            $connections[$connectionName]['password'],
+            /** @phpstan-ignore-next-line */
+            escapeshellarg($connections[$connectionName]['host']),
+            /** @phpstan-ignore-next-line */
+            escapeshellarg($connections[$connectionName]['user']),
+            escapeshellarg($dbName),
+            /** @phpstan-ignore-next-line */
+            $connections[$connectionName]['password'],
+            /** @phpstan-ignore-next-line */
+            escapeshellarg($connections[$connectionName]['host']),
+            /** @phpstan-ignore-next-line */
+            escapeshellarg($connections[$connectionName]['user']),
+            escapeshellarg($connections[$tempConnectionName]['dbname'])
         );
 
-        $this->migrations->processingWithStaticConnections(
-            connectionName: $connectionName,
-            callback: function () use ($connectionName, $dbName): void {
-                $existDatabase = PostgreSQL::connection($connectionName)
-                    ->query(
-                        <<<SQL
-                        SELECT COUNT(*) as cont FROM pg_database WHERE datname = ?;
-                        SQL
-                    )
-                    ->addRows([
-                        $dbName,
-                    ])
-                    ->get();
+        exec($dumpCommand, $output, $returnVar);
 
-                $this->assertIsObject($existDatabase);
-                $this->assertInstanceOf(stdClass::class, $existDatabase);
-                $this->assertObjectHasProperty('cont', $existDatabase);
-                $this->assertIsInt($existDatabase->cont);
-                $this->assertSame(1, $existDatabase->cont);
-            }
-        );
-
-        Connection::clearConnectionList();
-    }
-
-    #[Testing]
-    public function truncateTableIsNull(): void
-    {
-        $this->assertNull($this->migrations->truncateTable('test', 'test-connection', 'test_table'));
-    }
-
-    #[Testing]
-    public function truncateTableForMySQL(): void
-    {
-        /** @var string $connectionName */
-        $connectionName = env('DB_DEFAULT');
-
-        MySQL::connection($connectionName)
-            ->query(
-                <<<SQL
-                DROP TABLE IF EXISTS roles;
-                SQL
-            )
-            ->query(
-                <<<SQL
-                CREATE TABLE roles (
-                    id INT NOT NULL AUTO_INCREMENT,
-                    roles_name VARCHAR(30) NOT NULL,
-                    PRIMARY KEY (id)
-                ) ENGINE = INNODB DEFAULT CHARACTER SET = UTF8MB4 COLLATE = UTF8MB4_SPANISH_CI;
-                SQL
-            )
-            ->query(
-                <<<SQL
-                INSERT INTO roles (roles_name) VALUES ('ROLE_USER');
-                SQL
-            )
-            ->execute();
-
-        $roles = MySQL::connection($connectionName)
-            ->table('roles')
-            ->select()
-            ->getAll();
-
-        $this->assertIsArray($roles);
-        $this->assertNotEmpty($roles);
-
-        $rol = reset($roles);
-
-        $this->assertIsObject($rol);
-        $this->assertInstanceOf(stdClass::class, $rol);
-        $this->assertObjectHasProperty('id', $rol);
-        $this->assertObjectHasProperty('roles_name', $rol);
-
-        /** @var ExecuteInterface $execute */
-        $execute = $this->migrations->truncateTable(Driver::MYSQL, $connectionName, 'roles');
-
-        $executeResponse = $execute->execute();
-
-        $this->assertIsObject($executeResponse);
-        $this->assertInstanceOf(stdClass::class, $executeResponse);
-        $this->assertObjectHasProperty('status', $executeResponse);
-        $this->assertSame(Status::SUCCESS, $executeResponse->status);
-
-        $roles = MySQL::connection($connectionName)
-            ->table('roles')
-            ->select()
-            ->getAll();
-
-        $this->assertIsArray($roles);
-        $this->assertEmpty($roles);
-
-        MySQL::connection($connectionName)
-            ->query(
-                <<<SQL
-                DROP TABLE IF EXISTS roles;
-                SQL
-            )
-            ->execute();
-    }
-
-    #[Testing]
-    public function truncateTableForPostgreSQL(): void
-    {
-        /** @phpstan-ignore-next-line */
-        PostgreSQL::connection(env('DB_NAME_TEST_POSTGRESQL'))
-            ->query(
-                <<<SQL
-                DROP TABLE IF EXISTS public.roles;
-                SQL
-            )
-            ->query(
-                <<<SQL
-                CREATE TABLE public.roles (
-                    id SERIAL PRIMARY KEY,
-                    roles_name VARCHAR(30) NOT NULL
-                );
-                SQL
-            )
-            ->query(
-                <<<SQL
-                INSERT INTO roles (roles_name) VALUES ('ROLE_USER');
-                SQL
-            )
-            ->execute();
-
-        /** @phpstan-ignore-next-line */
-        $roles = PostgreSQL::connection(env('DB_NAME_TEST_POSTGRESQL'))
-            ->table('roles', false)
-            ->select()
-            ->getAll();
-
-        $this->assertIsArray($roles);
-        $this->assertNotEmpty($roles);
-
-        $rol = reset($roles);
-
-        $this->assertIsObject($rol);
-        $this->assertInstanceOf(stdClass::class, $rol);
-
-        /**
-         * @var ExecuteInterface $execute
-         * @phpstan-ignore-next-line
-         */
-        $execute = $this->migrations->truncateTable(Driver::POSTGRESQL, env('DB_NAME_TEST_POSTGRESQL'), 'roles');
-
-        $executeResponse = $execute->execute();
-
-        $this->assertIsObject($executeResponse);
-        $this->assertInstanceOf(stdClass::class, $executeResponse);
-        $this->assertObjectHasProperty('status', $executeResponse);
-        $this->assertSame(Status::SUCCESS, $executeResponse->status);
-
-        /** @phpstan-ignore-next-line */
-        $roles = PostgreSQL::connection(env('DB_NAME_TEST_POSTGRESQL'))
-            ->table('roles', false)
-            ->select()
-            ->getAll();
-
-        $this->assertIsArray($roles);
-        $this->assertEmpty($roles);
-
-        /** @phpstan-ignore-next-line */
-        PostgreSQL::connection(env('DB_NAME_TEST_POSTGRESQL'))
-            ->query(
-                <<<SQL
-                DROP TABLE IF EXISTS roles;
-                SQL
-            )
-            ->execute();
+        if ($returnVar !== 0) {
+            throw new RuntimeException(
+                "Error cloning database {$dbName} to {$connections[$tempConnectionName]['dbname']}.",
+                Http::INTERNAL_SERVER_ERROR
+            );
+        }
     }
 }
