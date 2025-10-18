@@ -128,6 +128,7 @@ class MigrationFactory
 
                 $body = $this->$method($className, $namespace);
             } elseif ($this->databaseEngine->getDriver(Driver::POSTGRESQL) === $driver) {
+                /** @phpstan-ignore-next-line */
                 $method = $pgsqlMethods[$selectedType];
 
                 $body = $this->$method($className, $namespace);
@@ -201,19 +202,19 @@ class MigrationFactory
         use stdClass;
 
         /**
-         * Table schema for the entity '{$className}'
+         * Table schema for the entity '{$className}'.
          */
         class {$className} implements TableInterface
         {
             /**
-             * Name of the migration
+             * Name of the migration.
              *
              * @const NAME
              */
             public const string NAME = '--NAME--';
 
             /**
-             * Index number for seed execution priority
+             * Index number for seed execution priority.
              *
              * @const INDEX
              */
@@ -239,10 +240,10 @@ class MigrationFactory
     }
 
     /**
-     * Returns the body of the migration of type table
+     * Returns the body of the migration of type table.
      *
-     * @param string $className Class name
-     * @param string $namespace Class namespace
+     * @param string $className Class name.
+     * @param string $namespace Class namespace.
      *
      * @return string
      */
@@ -260,19 +261,19 @@ class MigrationFactory
         use stdClass;
 
         /**
-         * Table schema for the entity '{$className}'
+         * Table schema for the entity '{$className}'.
          */
         class {$className} implements TableInterface
         {
             /**
-             * Name of the migration
+             * Name of the migration.
              *
              * @const NAME
              */
             public const string NAME = '--NAME--';
 
             /**
-             * Index number for seed execution priority
+             * Index number for seed execution priority.
              *
              * @const INDEX
              */
@@ -297,10 +298,10 @@ class MigrationFactory
     }
 
     /**
-     * Returns the body of the migration of type view
+     * Returns the body of the migration of type view.
      *
-     * @param string $className Class name
-     * @param string $namespace Class namespace
+     * @param string $className Class name.
+     * @param string $namespace Class namespace.
      *
      * @return string
      */
@@ -319,12 +320,12 @@ class MigrationFactory
         use stdClass;
 
         /**
-         * View schema to run queries
+         * View schema to run queries.
          */
         class {$className} implements ViewInterface
         {
             /**
-             * Name of the migration
+             * Name of the migration.
              *
              * @const NAME
              */
@@ -349,10 +350,10 @@ class MigrationFactory
     }
 
     /**
-     * Returns the body of the migration of type view
+     * Returns the body of the migration of type view.
      *
-     * @param string $className Class name
-     * @param string $namespace Class namespace
+     * @param string $className Class name.
+     * @param string $namespace Class namespace.
      *
      * @return string
      */
@@ -370,12 +371,12 @@ class MigrationFactory
         use stdClass;
 
         /**
-         * View schema to run queries
+         * View schema to run queries.
          */
         class {$className} implements ViewInterface
         {
             /**
-             * Name of the migration
+             * Name of the migration.
              *
              * @const NAME
              */
@@ -400,10 +401,10 @@ class MigrationFactory
     }
 
     /**
-     * Returns the body of the migration of type store-procedure
+     * Returns the body of the migration of type stored-procedure.
      *
-     * @param string $className Class name
-     * @param string $namespace Class namespace
+     * @param string $className Class name.
+     * @param string $namespace Class namespace.
      *
      * @return string
      */
@@ -422,12 +423,12 @@ class MigrationFactory
         use stdClass;
 
         /**
-         * Generates a schema to execute processes in a database
+         * Generates a schema to execute processes in a database.
          */
         class {$className} implements StoredProcedureInterface
         {
             /**
-             * Name of the migration
+             * Name of the migration.
              *
              * @const NAME
              */
@@ -456,10 +457,10 @@ class MigrationFactory
     }
 
     /**
-     * Returns the body of the migration of type store-procedure
+     * Returns the body of the migration of type stored-procedure.
      *
-     * @param string $className Class name
-     * @param string $namespace Class namespace
+     * @param string $className Class name.
+     * @param string $namespace Class namespace.
      *
      * @return string
      */
@@ -477,12 +478,12 @@ class MigrationFactory
         use stdClass;
 
         /**
-         * Generates a schema to execute processes in a database
+         * Generates a schema to execute processes in a database.
          */
         class {$className} implements StoredProcedureInterface
         {
             /**
-             * Name of the migration
+             * Name of the migration.
              *
              * @const NAME
              */
