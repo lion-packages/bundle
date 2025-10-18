@@ -320,7 +320,7 @@ class MigrationsTest extends Test
         /** @var string $defaultConnection */
         $defaultConnection = env('DB_DEFAULT');
 
-        $this->migrations->processingWithStaticConnections(function () use ($defaultConnection): void {
+        $this->migrations->processingWithStaticConnections($defaultConnection, function () use ($defaultConnection): void {
             $connections = Connection::getConnections();
 
             $numberOfConnections = count($connections);
@@ -350,7 +350,7 @@ class MigrationsTest extends Test
         /** @var string $dbName */
         $dbName = env('DB_NAME_TEST_SQLITE');
 
-        $this->migrations->processingWithStaticConnections(function () use ($dbName): void {
+        $this->migrations->processingWithStaticConnections('lion_database_sqlite', function () use ($dbName): void {
             $this->migrations
                 ->resetDatabase($dbName, 'lion_database_sqlite', Driver::SQLITE, function () use ($dbName): void {
                     $this->assertFileDoesNotExist($dbName);
@@ -372,13 +372,13 @@ class MigrationsTest extends Test
     #[Testing]
     public function resetDatabaseForMySQL(): void
     {
-        /** @var string $dbDefault */
-        $dbDefault = env('DB_DEFAULT');
+        /** @var string $connectionName */
+        $connectionName = env('DB_DEFAULT');
 
         /** @var string $dbName */
         $dbName = env('DB_NAME');
 
-        $existDatabase = MySQL::connection($dbDefault)
+        $existDatabase = MySQL::connection($connectionName)
             ->query(
                 <<<SQL
                 SELECT COUNT(*) AS cont FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?;
@@ -395,29 +395,36 @@ class MigrationsTest extends Test
         $this->assertIsInt($existDatabase->cont);
         $this->assertSame(1, $existDatabase->cont);
 
-        $this->migrations->processingWithStaticConnections(function () use ($dbDefault, $dbName): void {
-            $this->migrations
-                ->resetDatabase($dbName, $dbDefault, Driver::MYSQL, function () use ($dbDefault, $dbName): void {
-                    $existDatabase = MySQL::connection($dbDefault)
-                        ->query(
-                            <<<SQL
-                            SELECT COUNT(*) AS cont FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?;
-                            SQL
-                        )
-                        ->addRows([
-                            $dbName,
-                        ])
-                        ->get();
+        $this->migrations->processingWithStaticConnections(
+            connectionName: $connectionName,
+            callback: function () use ($connectionName, $dbName): void {
+                $this->migrations->resetDatabase(
+                    $dbName,
+                    $connectionName,
+                    Driver::MYSQL,
+                    function () use ($connectionName, $dbName): void {
+                        $existDatabase = MySQL::connection($connectionName)
+                            ->query(
+                                <<<SQL
+                                SELECT COUNT(*) AS cont FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?;
+                                SQL
+                            )
+                            ->addRows([
+                                $dbName,
+                            ])
+                            ->get();
 
-                    $this->assertIsObject($existDatabase);
-                    $this->assertInstanceOf(stdClass::class, $existDatabase);
-                    $this->assertObjectHasProperty('cont', $existDatabase);
-                    $this->assertIsInt($existDatabase->cont);
-                    $this->assertSame(0, $existDatabase->cont);
-                });
-        });
+                        $this->assertIsObject($existDatabase);
+                        $this->assertInstanceOf(stdClass::class, $existDatabase);
+                        $this->assertObjectHasProperty('cont', $existDatabase);
+                        $this->assertIsInt($existDatabase->cont);
+                        $this->assertSame(0, $existDatabase->cont);
+                    }
+                );
+            }
+        );
 
-        $existDatabase = MySQL::connection($dbDefault)
+        $existDatabase = MySQL::connection($connectionName)
             ->query(
                 <<<SQL
                 SELECT COUNT(*) AS cont FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?;
@@ -443,13 +450,13 @@ class MigrationsTest extends Test
     #[Testing]
     public function resetDatabaseForPostgreSQL(): void
     {
-        /** @var string $dbDefault */
-        $dbDefault = env('DB_NAME_TEST_POSTGRESQL');
+        /** @var string $connectionName */
+        $connectionName = env('DB_NAME_TEST_POSTGRESQL');
 
         /** @var string $dbName */
         $dbName = env('DB_NAME');
 
-        $existDatabase = PostgreSQL::connection($dbDefault)
+        $existDatabase = PostgreSQL::connection($connectionName)
             ->query(
                 <<<SQL
                 SELECT COUNT(*) as cont FROM pg_database WHERE datname = ?;
@@ -466,46 +473,56 @@ class MigrationsTest extends Test
         $this->assertIsInt($existDatabase->cont);
         $this->assertSame(1, $existDatabase->cont);
 
-        $this->migrations->processingWithStaticConnections(function () use ($dbDefault, $dbName): void {
-            $this->migrations
-                ->resetDatabase($dbName, $dbDefault, Driver::POSTGRESQL, function () use ($dbDefault, $dbName): void {
-                    $existDatabase = PostgreSQL::connection($dbDefault)
-                        ->query(
-                            <<<SQL
-                            SELECT COUNT(*) as cont FROM pg_database WHERE datname = ?;
-                            SQL
-                        )
-                        ->addRows([
-                            $dbName,
-                        ])
-                        ->get();
-
-                    $this->assertIsObject($existDatabase);
-                    $this->assertInstanceOf(stdClass::class, $existDatabase);
-                    $this->assertObjectHasProperty('cont', $existDatabase);
-                    $this->assertIsInt($existDatabase->cont);
-                    $this->assertSame(0, $existDatabase->cont);
-                });
-        });
-
-        $this->migrations->processingWithStaticConnections(function () use ($dbDefault, $dbName): void {
-            $existDatabase = PostgreSQL::connection($dbDefault)
-                ->query(
-                    <<<SQL
-                    SELECT COUNT(*) as cont FROM pg_database WHERE datname = ?;
-                    SQL
-                )
-                ->addRows([
+        $this->migrations->processingWithStaticConnections(
+            connectionName: $connectionName,
+            callback: function () use ($connectionName, $dbName): void {
+                $this->migrations->resetDatabase(
                     $dbName,
-                ])
-                ->get();
+                    $connectionName,
+                    Driver::POSTGRESQL,
+                    function () use ($connectionName, $dbName): void {
+                        $existDatabase = PostgreSQL::connection($connectionName)
+                            ->query(
+                                <<<SQL
+                                SELECT COUNT(*) as cont FROM pg_database WHERE datname = ?;
+                                SQL
+                            )
+                            ->addRows([
+                                $dbName,
+                            ])
+                            ->get();
 
-            $this->assertIsObject($existDatabase);
-            $this->assertInstanceOf(stdClass::class, $existDatabase);
-            $this->assertObjectHasProperty('cont', $existDatabase);
-            $this->assertIsInt($existDatabase->cont);
-            $this->assertSame(1, $existDatabase->cont);
-        });
+                        $this->assertIsObject($existDatabase);
+                        $this->assertInstanceOf(stdClass::class, $existDatabase);
+                        $this->assertObjectHasProperty('cont', $existDatabase);
+                        $this->assertIsInt($existDatabase->cont);
+                        $this->assertSame(0, $existDatabase->cont);
+                    }
+                );
+            }
+        );
+
+        $this->migrations->processingWithStaticConnections(
+            connectionName: $connectionName,
+            callback: function () use ($connectionName, $dbName): void {
+                $existDatabase = PostgreSQL::connection($connectionName)
+                    ->query(
+                        <<<SQL
+                        SELECT COUNT(*) as cont FROM pg_database WHERE datname = ?;
+                        SQL
+                    )
+                    ->addRows([
+                        $dbName,
+                    ])
+                    ->get();
+
+                $this->assertIsObject($existDatabase);
+                $this->assertInstanceOf(stdClass::class, $existDatabase);
+                $this->assertObjectHasProperty('cont', $existDatabase);
+                $this->assertIsInt($existDatabase->cont);
+                $this->assertSame(1, $existDatabase->cont);
+            }
+        );
 
         Connection::clearConnectionList();
     }
