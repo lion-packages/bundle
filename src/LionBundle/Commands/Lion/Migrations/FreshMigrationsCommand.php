@@ -8,11 +8,11 @@ use DI\Attribute\Inject;
 use Exception;
 use Lion\Bundle\Helpers\Commands\Migrations\Migrations;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
+use Lion\Bundle\Interface\Migrations\SchemaInterface;
 use Lion\Bundle\Interface\Migrations\StoredProcedureInterface;
 use Lion\Bundle\Interface\Migrations\TableInterface;
 use Lion\Bundle\Interface\Migrations\ViewInterface;
 use Lion\Bundle\Interface\MigrationUpInterface;
-use Lion\Database\Connection;
 use LogicException;
 use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -21,14 +21,12 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Drop all tables and re-run all migrations
- *
- * @package Lion\Bundle\Commands\Lion\Migrations
+ * Drop all tables and re-run all migrations.
  */
 class FreshMigrationsCommand extends MenuCommand
 {
     /**
-     * Manages the processes of creating or executing migrations
+     * Manages the processes of creating or executing migrations.
      *
      * @var Migrations $migrations
      */
@@ -43,7 +41,7 @@ class FreshMigrationsCommand extends MenuCommand
     }
 
     /**
-     * Configures the current command
+     * Configures the current command.
      *
      * @return void
      */
@@ -57,15 +55,15 @@ class FreshMigrationsCommand extends MenuCommand
 
     /**
      * Initializes the command after the input has been bound and before the input
-     * is validated
+     * is validated.
      *
      * This is mainly useful when a lot of commands extends one main command where
-     * some things need to be initialized based on the input arguments and options
+     * some things need to be initialized based on the input arguments and options.
      *
      * @param InputInterface $input InputInterface is the interface implemented by
-     * all input classes
+     * all input classes.
      * @param OutputInterface $output OutputInterface is the interface implemented
-     * by all Output classes
+     * by all Output classes.
      *
      * @return void
      */
@@ -75,23 +73,23 @@ class FreshMigrationsCommand extends MenuCommand
     }
 
     /**
-     * Executes the current command
+     * Executes the current command.
      *
      * This method is not abstract because you can use this class as a concrete
      * class. In this case, instead of defining the execute() method, you set the
-     * code to execute by passing a Closure to the setCode() method
+     * code to execute by passing a Closure to the setCode() method.
      *
      * @param InputInterface $input InputInterface is the interface implemented by
-     * all input classes
+     * all input classes.
      * @param OutputInterface $output OutputInterface is the interface implemented
-     * by all Output classes
+     * by all Output classes.
      *
      * @return int
      *
-     * @throws Exception If an error occurs while deleting the file
+     * @throws Exception If an error occurs while deleting the file.
      * @throws ExceptionInterface When input binding fails. Bypass this by calling
-     * ignoreValidationErrors()
-     * @throws LogicException When this abstract method is not implemented
+     * ignoreValidationErrors().
+     * @throws LogicException When this abstract method is not implemented.
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -105,6 +103,9 @@ class FreshMigrationsCommand extends MenuCommand
 
         /** @var array<string, array<string, MigrationUpInterface>> $migrations */
         $migrations = $this->migrations->getMigrations();
+
+        /** @phpstan-ignore-next-line */
+        $this->migrations->executeMigrations($this, $output, $migrations[SchemaInterface::class]);
 
         $this->migrations->executeMigrations(
             $this,

@@ -30,14 +30,14 @@ class MigrationCommand extends MenuCommand
     private ClassFactory $classFactory;
 
     /**
-     * Factory of the content of the generated migrations
+     * Factory of the content of the generated migrations.
      *
      * @var MigrationFactory $migrationFactory
      */
     private MigrationFactory $migrationFactory;
 
     /**
-     * Manages basic database engine processes
+     * Manages basic database engine processes.
      *
      * @var DatabaseEngine $databaseEngine
      */
@@ -81,21 +81,21 @@ class MigrationCommand extends MenuCommand
     }
 
     /**
-     * Executes the current command
+     * Executes the current command.
      *
      * This method is not abstract because you can use this class as a concrete
      * class. In this case, instead of defining the execute() method, you set the
-     * code to execute by passing a Closure to the setCode() method
+     * code to execute by passing a Closure to the setCode() method.
      *
      * @param InputInterface $input InputInterface is the interface implemented by
-     * all input classes
+     * all input classes.
      * @param OutputInterface $output OutputInterface is the interface implemented
-     * by all Output classes
+     * by all Output classes.
      *
      * @return int
      *
-     * @throws Exception If the file could not be opened
-     * @throws LogicException When this abstract method is not implemented
+     * @throws Exception If the file could not be opened.
+     * @throws LogicException When this abstract method is not implemented.
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {

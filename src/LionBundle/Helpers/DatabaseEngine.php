@@ -8,16 +8,14 @@ use Lion\Database\Connection;
 use Lion\Database\Driver;
 
 /**
- * Manages basic database engine processes
- *
- * @package Lion\Bundle\Helpers
+ * Manages basic database engine processes.
  */
 class DatabaseEngine
 {
     /**
-     * Gets the database engine with Pascalcase Format [Default: MySQL]
+     * Gets the database engine with Pascalcase Format [Default: MySQL].
      *
-     * @param string $driver [Database engine]
+     * @param string $driver Database engine.
      *
      * @return string
      */
@@ -26,15 +24,16 @@ class DatabaseEngine
         $drivers = [
             Driver::MYSQL => 'MySQL',
             Driver::POSTGRESQL => 'PostgreSQL',
+            Driver::SQLITE => 'SQLite',
         ];
 
         return $drivers[$driver] ?? 'MySQL';
     }
 
     /**
-     * Gets the database engine type of the defined connection
+     * Gets the database engine type of the defined connection.
      *
-     * @param string $connectionName [Connection name]
+     * @param string $connectionName Connection name.
      *
      * @return string|null
      */
