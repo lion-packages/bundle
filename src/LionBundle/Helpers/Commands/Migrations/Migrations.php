@@ -7,6 +7,7 @@ namespace Lion\Bundle\Helpers\Commands\Migrations;
 use Closure;
 use DI\Attribute\Inject;
 use Exception;
+use Lion\Bundle\Interface\Migrations\SchemaInterface;
 use Lion\Bundle\Interface\Migrations\StoredProcedureInterface;
 use Lion\Bundle\Interface\Migrations\TableInterface;
 use Lion\Bundle\Interface\Migrations\ViewInterface;
@@ -103,6 +104,7 @@ class Migrations
     {
         /** @var array<string, array<string, MigrationUpInterface>> $allMigrations */
         $allMigrations = [
+            SchemaInterface::class => [],
             TableInterface::class => [],
             ViewInterface::class => [],
             StoredProcedureInterface::class => [],
@@ -120,6 +122,10 @@ class Migrations
                 }
 
                 $tableMigration = $this->loadedMigrations[$migration];
+
+                if ($tableMigration instanceof SchemaInterface) {
+                    $allMigrations[SchemaInterface::class][$namespace] = $tableMigration;
+                }
 
                 if ($tableMigration instanceof TableInterface) {
                     $allMigrations[TableInterface::class][$namespace] = $tableMigration;

@@ -8,7 +8,9 @@ use DI\DependencyException;
 use DI\NotFoundException;
 use Exception;
 use Lion\Bundle\Commands\Lion\New\MigrationCommand;
+use Lion\Bundle\Helpers\Commands\Migrations\MigrationFactory;
 use Lion\Bundle\Helpers\Commands\Migrations\Migrations;
+use Lion\Bundle\Interface\Migrations\SchemaInterface;
 use Lion\Bundle\Interface\Migrations\StoredProcedureInterface;
 use Lion\Bundle\Interface\Migrations\TableInterface;
 use Lion\Bundle\Interface\Migrations\ViewInterface;
@@ -36,10 +38,12 @@ class MigrationsTest extends Test
 {
     private const string MIGRATION_NAME = 'test-migration';
     private const string CLASS_NAME = 'TestMigration';
+    private const string CLASS_NAMESPACE_SCHEMA = 'Database\\Migrations\\LionDatabase\\MySQL\\Schemas\\';
     private const string CLASS_NAMESPACE_TABLE = 'Database\\Migrations\\LionDatabase\\MySQL\\Tables\\';
     private const string CLASS_NAMESPACE_VIEW = 'Database\\Migrations\\LionDatabase\\MySQL\\Views\\';
     private const string CLASS_NAMESPACE_STORE_PROCEDURE =
         'Database\\Migrations\\LionDatabase\\MySQL\\StoredProcedures\\';
+    private const string URL_PATH_MYSQL_SCHEMA = './database/Migrations/LionDatabase/MySQL/Schemas/';
     private const string URL_PATH_MYSQL_TABLE = './database/Migrations/LionDatabase/MySQL/Tables/';
     private const string URL_PATH_MYSQL_VIEW = './database/Migrations/LionDatabase/MySQL/Views/';
     private const string URL_PATH_MYSQL_STORED_PROCEDURE = './database/Migrations/LionDatabase/MySQL/StoredProcedures/';
@@ -51,9 +55,8 @@ class MigrationsTest extends Test
     private Store $store;
 
     /**
-     * @throws NotFoundException
-     * @throws ReflectionException
-     * @throws DependencyException
+     * @throws NotFoundException Error while resolving the entry.
+     * @throws DependencyException No entry found for the given name.
      */
     protected function setUp(): void
     {
@@ -84,7 +87,8 @@ class MigrationsTest extends Test
     }
 
     /**
-     * @throws ReflectionException
+     * @throws ReflectionException If the property does not exist in the reflected
+     * class.
      */
     #[Testing]
     public function setStore(): void
@@ -98,8 +102,8 @@ class MigrationsTest extends Test
     {
         $commandExecute = $this->commandTester
             ->setInputs([
-                '0',
-                '0',
+                'local',
+                MigrationFactory::TABLE,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
@@ -141,8 +145,29 @@ class MigrationsTest extends Test
     {
         $commandExecute = $this->commandTester
             ->setInputs([
-                '0',
-                '0',
+                'local',
+                MigrationFactory::SCHEMA,
+            ])
+            ->execute([
+                'migration' => self::MIGRATION_NAME,
+            ]);
+
+        $this->assertSame(Command::SUCCESS, $commandExecute);
+        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
+        $this->assertFileExists(self::URL_PATH_MYSQL_SCHEMA . self::FILE_NAME);
+
+        /** @phpstan-ignore-next-line */
+        $tableMigration = new (self::CLASS_NAMESPACE_SCHEMA . self::CLASS_NAME)();
+
+        $this->assertInstances($tableMigration, [
+            MigrationUpInterface::class,
+            SchemaInterface::class,
+        ]);
+
+        $commandExecute = $this->commandTester
+            ->setInputs([
+                'local',
+                MigrationFactory::TABLE,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
@@ -162,8 +187,8 @@ class MigrationsTest extends Test
 
         $commandExecute = $this->commandTester
             ->setInputs([
-                '0',
-                '1',
+                'local',
+                MigrationFactory::VIEW,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
@@ -183,8 +208,8 @@ class MigrationsTest extends Test
 
         $commandExecute = $this->commandTester
             ->setInputs([
-                '0',
-                '2',
+                'local',
+                MigrationFactory::STORED_PROCEDURE,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
@@ -213,6 +238,11 @@ class MigrationsTest extends Test
         $this->assertNotEmpty($list[StoredProcedureInterface::class]);
 
         $this->assertInstanceOf(
+            SchemaInterface::class,
+            $list[SchemaInterface::class][self::CLASS_NAMESPACE_SCHEMA . self::CLASS_NAME]
+        );
+
+        $this->assertInstanceOf(
             TableInterface::class,
             $list[TableInterface::class][self::CLASS_NAMESPACE_TABLE . self::CLASS_NAME]
         );
@@ -236,8 +266,8 @@ class MigrationsTest extends Test
     {
         $commandExecute = $this->commandTester
             ->setInputs([
-                '0',
-                '0',
+                'local',
+                MigrationFactory::TABLE,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
@@ -261,8 +291,8 @@ class MigrationsTest extends Test
 
         $commandExecute = $this->commandTester
             ->setInputs([
-                '0',
-                '1',
+                'local',
+                MigrationFactory::VIEW,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
@@ -286,8 +316,8 @@ class MigrationsTest extends Test
 
         $commandExecute = $this->commandTester
             ->setInputs([
-                '0',
-                '2',
+                'local',
+                MigrationFactory::STORED_PROCEDURE,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,

@@ -323,11 +323,13 @@ class MenuCommand extends Command
      */
     protected function selectMigrationType(InputInterface $input, OutputInterface $output, array $options): string
     {
+        $defaultOption = $options[0];
+
         /** @var QuestionHelper $helper */
         $helper = $this->getHelper('question');
 
         $choiceQuestion = new ChoiceQuestion(
-            "Select the type of migration {$this->warningOutput('(default: Table)')}",
+            "Select the type of migration {$this->warningOutput("(default: {$defaultOption})")}",
             $options,
             0
         );

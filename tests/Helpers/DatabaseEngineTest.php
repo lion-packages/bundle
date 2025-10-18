@@ -22,12 +22,12 @@ class DatabaseEngineTest extends Test
     #[Testing]
     #[TestWith(['driver' => Driver::MYSQL, 'return' => 'MySQL'])]
     #[TestWith(['driver' => Driver::POSTGRESQL, 'return' => 'PostgreSQL'])]
+    #[TestWith(['driver' => Driver::SQLITE, 'return' => 'SQLite'])]
     #[TestWith(['driver' => 'redis', 'return' => 'MySQL'])]
     public function getDriver(string $driver, string $return): void
     {
         $returnDriver = $this->databaseEngine->getDriver($driver);
 
-        $this->assertIsString($returnDriver);
         $this->assertSame($return, $returnDriver);
     }
 

@@ -29,19 +29,19 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * Table schema for the entity 'Test'
+                 * Table schema for the entity 'Test'.
                  */
                 class Test implements TableInterface
                 {
                     /**
-                     * Name of the migration
+                     * Name of the migration.
                      *
                      * @const NAME
                      */
                     public const string NAME = '--NAME--';
 
                     /**
-                     * Index number for seed execution priority
+                     * Index number for seed execution priority.
                      *
                      * @const INDEX
                      */
@@ -54,7 +54,7 @@ trait MigrationsFactoryProviderTrait
                     {
                         return Schema::connection(getDefaultConnection())
                             ->createTable(self::NAME, function (): void {
-                                Schema::int('id')
+                                Schema::int('id--NAME--')
                                     ->notNull()
                                     ->autoIncrement()
                                     ->primaryKey();
@@ -83,19 +83,19 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * Table schema for the entity 'Test'
+                 * Table schema for the entity 'Test'.
                  */
                 class Test implements TableInterface
                 {
                     /**
-                     * Name of the migration
+                     * Name of the migration.
                      *
                      * @const NAME
                      */
                     public const string NAME = '--NAME--';
 
                     /**
-                     * Index number for seed execution priority
+                     * Index number for seed execution priority.
                      *
                      * @const INDEX
                      */
@@ -137,12 +137,12 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * View schema to run queries
+                 * View schema to run queries.
                  */
                 class Test implements ViewInterface
                 {
                     /**
-                     * Name of the migration
+                     * Name of the migration.
                      *
                      * @const NAME
                      */
@@ -183,12 +183,12 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * View schema to run queries
+                 * View schema to run queries.
                  */
                 class Test implements ViewInterface
                 {
                     /**
-                     * Name of the migration
+                     * Name of the migration.
                      *
                      * @const NAME
                      */
@@ -230,12 +230,12 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * Generates a schema to execute processes in a database
+                 * Generates a schema to execute processes in a database.
                  */
                 class Test implements StoredProcedureInterface
                 {
                     /**
-                     * Name of the migration
+                     * Name of the migration.
                      *
                      * @const NAME
                      */
@@ -280,12 +280,12 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * Generates a schema to execute processes in a database
+                 * Generates a schema to execute processes in a database.
                  */
                 class Test implements StoredProcedureInterface
                 {
                     /**
-                     * Name of the migration
+                     * Name of the migration.
                      *
                      * @const NAME
                      */
@@ -302,6 +302,93 @@ trait MigrationsFactoryProviderTrait
                                 -- SQL
                                 SQL
                             )
+                            ->execute();
+                    }
+                }
+
+                PHP,
+            ],
+            'case-6' => [
+                'className' => 'Test',
+                'selectedType' => MigrationFactory::SCHEMA,
+                'dbPascal' => 'LionDatabase',
+                'driver' => 'MySQL',
+                'path' => 'database/Migrations/LionDatabase/MySQL/Schemas/',
+                'return' => <<<PHP
+                <?php
+
+                declare(strict_types=1);
+
+                namespace Database\Migrations\LionDatabase\MySQL\Schemas;
+
+                use Lion\Bundle\Interface\Migrations\SchemaInterface;
+                use Lion\Database\Drivers\Schema\MySQL as Schema;
+                use stdClass;
+
+                /**
+                 * Database schema.
+                 */
+                class Test implements SchemaInterface
+                {
+                    /**
+                     * Name of the migration.
+                     *
+                     * @const NAME
+                     */
+                    public const string NAME = '--NAME--';
+
+                    /**
+                     * {@inheritDoc}
+                     */
+                    public function up(): stdClass
+                    {
+                        return Schema::connection(getDefaultConnection())
+                            ->createDatabase(self::NAME)
+                            ->execute();
+                    }
+                }
+
+                PHP,
+            ],
+        ];
+    }
+
+    public static function getMySQLSchemaBodyProvider(): array
+    {
+        return [
+            'case-0' => [
+                'className' => 'LionDatabase',
+                'namespace' => 'Database\\Migrations\\LionDatabase\\MySQL\\Schemas',
+                'body' => <<<PHP
+                <?php
+
+                declare(strict_types=1);
+
+                namespace Database\Migrations\LionDatabase\MySQL\Schemas;
+
+                use Lion\Bundle\Interface\Migrations\SchemaInterface;
+                use Lion\Database\Drivers\Schema\MySQL as Schema;
+                use stdClass;
+
+                /**
+                 * Database schema.
+                 */
+                class LionDatabase implements SchemaInterface
+                {
+                    /**
+                     * Name of the migration.
+                     *
+                     * @const NAME
+                     */
+                    public const string NAME = '--NAME--';
+
+                    /**
+                     * {@inheritDoc}
+                     */
+                    public function up(): stdClass
+                    {
+                        return Schema::connection(getDefaultConnection())
+                            ->createDatabase(self::NAME)
                             ->execute();
                     }
                 }
@@ -329,19 +416,19 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * Table schema for the entity 'Test'
+                 * Table schema for the entity 'Test'.
                  */
                 class Test implements TableInterface
                 {
                     /**
-                     * Name of the migration
+                     * Name of the migration.
                      *
                      * @const NAME
                      */
                     public const string NAME = '--NAME--';
 
                     /**
-                     * Index number for seed execution priority
+                     * Index number for seed execution priority.
                      *
                      * @const INDEX
                      */
@@ -354,7 +441,7 @@ trait MigrationsFactoryProviderTrait
                     {
                         return Schema::connection(getDefaultConnection())
                             ->createTable(self::NAME, function (): void {
-                                Schema::int('id')
+                                Schema::int('id--NAME--')
                                     ->notNull()
                                     ->autoIncrement()
                                     ->primaryKey();
@@ -386,19 +473,19 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * Table schema for the entity 'Test'
+                 * Table schema for the entity 'Test'.
                  */
                 class Test implements TableInterface
                 {
                     /**
-                     * Name of the migration
+                     * Name of the migration.
                      *
                      * @const NAME
                      */
                     public const string NAME = '--NAME--';
 
                     /**
-                     * Index number for seed execution priority
+                     * Index number for seed execution priority.
                      *
                      * @const INDEX
                      */
@@ -443,12 +530,12 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * View schema to run queries
+                 * View schema to run queries.
                  */
                 class Test implements ViewInterface
                 {
                     /**
-                     * Name of the migration
+                     * Name of the migration.
                      *
                      * @const NAME
                      */
@@ -492,12 +579,12 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * View schema to run queries
+                 * View schema to run queries.
                  */
                 class Test implements ViewInterface
                 {
                     /**
-                     * Name of the migration
+                     * Name of the migration.
                      *
                      * @const NAME
                      */
@@ -542,12 +629,12 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * Generates a schema to execute processes in a database
+                 * Generates a schema to execute processes in a database.
                  */
                 class Test implements StoredProcedureInterface
                 {
                     /**
-                     * Name of the migration
+                     * Name of the migration.
                      *
                      * @const NAME
                      */
@@ -595,12 +682,12 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * Generates a schema to execute processes in a database
+                 * Generates a schema to execute processes in a database.
                  */
                 class Test implements StoredProcedureInterface
                 {
                     /**
-                     * Name of the migration
+                     * Name of the migration.
                      *
                      * @const NAME
                      */

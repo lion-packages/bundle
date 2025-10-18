@@ -5,33 +5,40 @@ declare(strict_types=1);
 namespace Lion\Bundle\Helpers\Commands\Migrations;
 
 use DI\Attribute\Inject;
+use Exception;
 use Lion\Bundle\Helpers\DatabaseEngine;
 use Lion\Database\Driver;
+use Lion\Request\Http;
 use stdClass;
 
 /**
- * Factory of the content of the generated migrations
- *
- * @package Lion\Bundle\Helpers\Commands\Migrations
+ * Factory of the content of the generated migrations.
  */
 class MigrationFactory
 {
     /**
-     * Constant for a table
+     * Constant for a Schema.
+     *
+     * @const TABLE
+     */
+    public const string SCHEMA = 'Schema';
+
+    /**
+     * Constant for a table.
      *
      * @const TABLE
      */
     public const string TABLE = 'Table';
 
     /**
-     * Constant for a view
+     * Constant for a view.
      *
      * @const VIEW
      */
     public const string VIEW = 'View';
 
     /**
-     * Constant for a store-procedure
+     * Constant for a store-procedure.
      *
      * @const STORE_PROCEDURE
      */
@@ -43,6 +50,7 @@ class MigrationFactory
      * @const OPTIONS
      */
     public const array MIGRATIONS_OPTIONS = [
+        self::SCHEMA,
         self::TABLE,
         self::VIEW,
         self::STORED_PROCEDURE,
@@ -72,20 +80,31 @@ class MigrationFactory
      * @param string $driver Database Engine Type
      *
      * @return stdClass
+     *
+     * @throws Exception If the driver is not supported.
      */
     public function getBody(string $className, string $selectedType, string $dbPascal, string $driver): stdClass
     {
+        if (self::SCHEMA === $selectedType && 'PostgreSQL' === $driver || 'SQLite' === $driver) {
+            throw new Exception(
+                'Currently, the driver does not support this type of migration.',
+                Http::INTERNAL_SERVER_ERROR
+            );
+        }
+
         $body = '';
 
         $path = '';
 
         $typeFolders = [
+            self::SCHEMA => 'Schemas',
             self::TABLE => 'Tables',
             self::VIEW => 'Views',
             self::STORED_PROCEDURE => 'StoredProcedures',
         ];
 
         $mysqlMethods = [
+            self::SCHEMA => 'getMySQLSchemaBody',
             self::TABLE => 'getMySQLTableBody',
             self::VIEW => 'getMySQLViewBody',
             self::STORED_PROCEDURE => 'getMySQLStoredProcedureBody',
@@ -109,6 +128,7 @@ class MigrationFactory
 
                 $body = $this->$method($className, $namespace);
             } elseif ($this->databaseEngine->getDriver(Driver::POSTGRESQL) === $driver) {
+                /** @phpstan-ignore-next-line */
                 $method = $pgsqlMethods[$selectedType];
 
                 $body = $this->$method($className, $namespace);
@@ -121,12 +141,50 @@ class MigrationFactory
         ];
     }
 
+    public function getMySQLSchemaBody(string $className, string $namespace): string
+    {
+        return <<<PHP
+        <?php
+
+        declare(strict_types=1);
+
+        namespace {$namespace};
+
+        use Lion\Bundle\Interface\Migrations\SchemaInterface;
+        use Lion\Database\Drivers\Schema\MySQL as Schema;
+        use stdClass;
+
+        /**
+         * Database schema.
+         */
+        class {$className} implements SchemaInterface
+        {
+            /**
+             * Name of the migration.
+             *
+             * @const NAME
+             */
+            public const string NAME = '--NAME--';
+
+            /**
+             * {@inheritDoc}
+             */
+            public function up(): stdClass
+            {
+                return Schema::connection(getDefaultConnection())
+                    ->createDatabase(self::NAME)
+                    ->execute();
+            }
+        }
+
+        PHP;
+    }
 
     /**
-     * Returns the body of the migration of type table
+     * Returns the body of the migration of type table.
      *
-     * @param string $className [Class name]
-     * @param string $namespace [Class namespace]
+     * @param string $className Class name.
+     * @param string $namespace Class namespace.
      *
      * @return string
      */
@@ -144,19 +202,19 @@ class MigrationFactory
         use stdClass;
 
         /**
-         * Table schema for the entity '{$className}'
+         * Table schema for the entity '{$className}'.
          */
         class {$className} implements TableInterface
         {
             /**
-             * Name of the migration
+             * Name of the migration.
              *
              * @const NAME
              */
             public const string NAME = '--NAME--';
 
             /**
-             * Index number for seed execution priority
+             * Index number for seed execution priority.
              *
              * @const INDEX
              */
@@ -169,7 +227,7 @@ class MigrationFactory
             {
                 return Schema::connection(getDefaultConnection())
                     ->createTable(self::NAME, function (): void {
-                        Schema::int('id')
+                        Schema::int('id--NAME--')
                             ->notNull()
                             ->autoIncrement()
                             ->primaryKey();
@@ -182,10 +240,10 @@ class MigrationFactory
     }
 
     /**
-     * Returns the body of the migration of type table
+     * Returns the body of the migration of type table.
      *
-     * @param string $className Class name
-     * @param string $namespace Class namespace
+     * @param string $className Class name.
+     * @param string $namespace Class namespace.
      *
      * @return string
      */
@@ -203,19 +261,19 @@ class MigrationFactory
         use stdClass;
 
         /**
-         * Table schema for the entity '{$className}'
+         * Table schema for the entity '{$className}'.
          */
         class {$className} implements TableInterface
         {
             /**
-             * Name of the migration
+             * Name of the migration.
              *
              * @const NAME
              */
             public const string NAME = '--NAME--';
 
             /**
-             * Index number for seed execution priority
+             * Index number for seed execution priority.
              *
              * @const INDEX
              */
@@ -240,10 +298,10 @@ class MigrationFactory
     }
 
     /**
-     * Returns the body of the migration of type view
+     * Returns the body of the migration of type view.
      *
-     * @param string $className Class name
-     * @param string $namespace Class namespace
+     * @param string $className Class name.
+     * @param string $namespace Class namespace.
      *
      * @return string
      */
@@ -262,12 +320,12 @@ class MigrationFactory
         use stdClass;
 
         /**
-         * View schema to run queries
+         * View schema to run queries.
          */
         class {$className} implements ViewInterface
         {
             /**
-             * Name of the migration
+             * Name of the migration.
              *
              * @const NAME
              */
@@ -292,10 +350,10 @@ class MigrationFactory
     }
 
     /**
-     * Returns the body of the migration of type view
+     * Returns the body of the migration of type view.
      *
-     * @param string $className Class name
-     * @param string $namespace Class namespace
+     * @param string $className Class name.
+     * @param string $namespace Class namespace.
      *
      * @return string
      */
@@ -313,12 +371,12 @@ class MigrationFactory
         use stdClass;
 
         /**
-         * View schema to run queries
+         * View schema to run queries.
          */
         class {$className} implements ViewInterface
         {
             /**
-             * Name of the migration
+             * Name of the migration.
              *
              * @const NAME
              */
@@ -343,10 +401,10 @@ class MigrationFactory
     }
 
     /**
-     * Returns the body of the migration of type store-procedure
+     * Returns the body of the migration of type stored-procedure.
      *
-     * @param string $className Class name
-     * @param string $namespace Class namespace
+     * @param string $className Class name.
+     * @param string $namespace Class namespace.
      *
      * @return string
      */
@@ -365,12 +423,12 @@ class MigrationFactory
         use stdClass;
 
         /**
-         * Generates a schema to execute processes in a database
+         * Generates a schema to execute processes in a database.
          */
         class {$className} implements StoredProcedureInterface
         {
             /**
-             * Name of the migration
+             * Name of the migration.
              *
              * @const NAME
              */
@@ -399,10 +457,10 @@ class MigrationFactory
     }
 
     /**
-     * Returns the body of the migration of type store-procedure
+     * Returns the body of the migration of type stored-procedure.
      *
-     * @param string $className Class name
-     * @param string $namespace Class namespace
+     * @param string $className Class name.
+     * @param string $namespace Class namespace.
      *
      * @return string
      */
@@ -420,12 +478,12 @@ class MigrationFactory
         use stdClass;
 
         /**
-         * Generates a schema to execute processes in a database
+         * Generates a schema to execute processes in a database.
          */
         class {$className} implements StoredProcedureInterface
         {
             /**
-             * Name of the migration
+             * Name of the migration.
              *
              * @const NAME
              */

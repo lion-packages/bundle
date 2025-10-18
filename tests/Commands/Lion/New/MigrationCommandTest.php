@@ -6,16 +6,20 @@ namespace Tests\Commands\Lion\New;
 
 use DI\DependencyException;
 use DI\NotFoundException;
+use Exception;
 use Lion\Bundle\Commands\Lion\New\MigrationCommand;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\Migrations\MigrationFactory;
 use Lion\Bundle\Helpers\DatabaseEngine;
+use Lion\Bundle\Interface\Migrations\SchemaInterface;
 use Lion\Bundle\Interface\Migrations\StoredProcedureInterface;
 use Lion\Bundle\Interface\Migrations\TableInterface;
 use Lion\Bundle\Interface\Migrations\ViewInterface;
 use Lion\Bundle\Interface\MigrationUpInterface;
 use Lion\Dependency\Injection\Container;
+use Lion\Request\Http;
 use Lion\Test\Test;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\Attributes\Test as Testing;
 use ReflectionException;
 use Symfony\Component\Console\Application;
@@ -26,6 +30,7 @@ class MigrationCommandTest extends Test
 {
     private const string MIGRATION_NAME = 'test-migration';
     private const string CLASS_NAME = 'TestMigration';
+    private const string NAMESPACE_MYSQL_SCHEMA = 'Database\\Migrations\\LionDatabase\\MySQL\\Schemas\\';
     private const string NAMESPACE_MYSQL_TABLE = 'Database\\Migrations\\LionDatabase\\MySQL\\Tables\\';
     private const string NAMESPACE_MYSQL_VIEW = 'Database\\Migrations\\LionDatabase\\MySQL\\Views\\';
     private const string NAMESPACE_MYSQL_STORE_PROCEDURES =
@@ -34,6 +39,7 @@ class MigrationCommandTest extends Test
     private const string NAMESPACE_POSTGRESQL_VIEW = 'Database\\Migrations\\LionDatabase\\PostgreSQL\\Views\\';
     private const string NAMESPACE_POSTGRESQL_STORE_PROCEDURES =
         'Database\\Migrations\\LionDatabase\\PostgreSQL\\StoredProcedures\\';
+    private const string URL_PATH_MYSQL_SCHEMA = './database/Migrations/LionDatabase/MySQL/Schemas/';
     private const string URL_PATH_MYSQL_TABLE = './database/Migrations/LionDatabase/MySQL/Tables/';
     private const string URL_PATH_MYSQL_VIEW = './database/Migrations/LionDatabase/MySQL/Views/';
     private const string URL_PATH_MYSQL_STORE_PROCEDURES = './database/Migrations/LionDatabase/MySQL/StoredProcedures/';
@@ -48,9 +54,8 @@ class MigrationCommandTest extends Test
     private MigrationCommand $migrationCommand;
 
     /**
-     * @throws ReflectionException
-     * @throws DependencyException
-     * @throws NotFoundException
+     * @throws DependencyException Error while resolving the entry.
+     * @throws NotFoundException No entry found for the given name.
      */
     protected function setUp(): void
     {
@@ -74,7 +79,8 @@ class MigrationCommandTest extends Test
     }
 
     /**
-     * @throws ReflectionException
+     * @throws ReflectionException If the property does not exist in the reflected
+     * class.
      */
     #[Testing]
     public function setClassFactory(): void
@@ -84,7 +90,8 @@ class MigrationCommandTest extends Test
     }
 
     /**
-     * @throws ReflectionException
+     * @throws ReflectionException If the property does not exist in the reflected
+     *  class.
      */
     #[Testing]
     public function setMigrationFactory(): void
@@ -98,7 +105,8 @@ class MigrationCommandTest extends Test
     }
 
     /**
-     * @throws ReflectionException
+     * @throws ReflectionException If the property does not exist in the reflected
+     *  class.
      */
     #[Testing]
     public function setDatabaseEngine(): void
@@ -120,12 +128,75 @@ class MigrationCommandTest extends Test
     }
 
     #[Testing]
+    #[RunInSeparateProcess]
+    public function executeForMySQLSchema(): void
+    {
+        $commandExecute = $this->commandTester
+            ->setInputs([
+                'local',
+                MigrationFactory::SCHEMA,
+            ])
+            ->execute([
+                'migration' => self::MIGRATION_NAME,
+            ]);
+
+        $this->assertSame(Command::SUCCESS, $commandExecute);
+        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
+        $this->assertFileExists(self::URL_PATH_MYSQL_SCHEMA . self::FILE_NAME);
+
+        /** @phpstan-ignore-next-line */
+        $objClass = new (self::NAMESPACE_MYSQL_SCHEMA . self::CLASS_NAME)();
+
+        $this->assertInstances($objClass, [
+            MigrationUpInterface::class,
+            SchemaInterface::class,
+        ]);
+    }
+
+    #[Testing]
+    #[RunInSeparateProcess]
+    public function executeForPostgreSQLSchema(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionCode(Http::INTERNAL_SERVER_ERROR);
+        $this->expectExceptionMessage('Currently, the driver does not support this type of migration.');
+
+        $this->commandTester
+            ->setInputs([
+                'lion_database_postgres',
+                MigrationFactory::SCHEMA,
+            ])
+            ->execute([
+                'migration' => self::MIGRATION_NAME,
+            ]);
+    }
+
+    #[Testing]
+    #[RunInSeparateProcess]
+    public function executeForSQLiteSchema(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionCode(Http::INTERNAL_SERVER_ERROR);
+        $this->expectExceptionMessage('Currently, the driver does not support this type of migration.');
+
+        $this->commandTester
+            ->setInputs([
+                'lion_database_sqlite',
+                MigrationFactory::SCHEMA,
+            ])
+            ->execute([
+                'migration' => self::MIGRATION_NAME,
+            ]);
+    }
+
+    #[Testing]
+    #[RunInSeparateProcess]
     public function executeForMySQLTable(): void
     {
         $commandExecute = $this->commandTester
             ->setInputs([
-                '0',
-                '0',
+                'local',
+                MigrationFactory::TABLE,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
@@ -145,12 +216,13 @@ class MigrationCommandTest extends Test
     }
 
     #[Testing]
+    #[RunInSeparateProcess]
     public function executeForMySQLView(): void
     {
         $commandExecute = $this->commandTester
             ->setInputs([
-                '0',
-                '1',
+                'local',
+                MigrationFactory::VIEW,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
@@ -170,12 +242,13 @@ class MigrationCommandTest extends Test
     }
 
     #[Testing]
+    #[RunInSeparateProcess]
     public function executeForMySQLStoreProcedure(): void
     {
         $commandExecute = $this->commandTester
             ->setInputs([
-                '0',
-                '2',
+                'local',
+                MigrationFactory::STORED_PROCEDURE,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
@@ -195,12 +268,13 @@ class MigrationCommandTest extends Test
     }
 
     #[Testing]
+    #[RunInSeparateProcess]
     public function executeForPostgreSQLTable(): void
     {
         $commandExecute = $this->commandTester
             ->setInputs([
-                '2',
-                '0',
+                'lion_database_postgres',
+                MigrationFactory::TABLE,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
@@ -220,12 +294,13 @@ class MigrationCommandTest extends Test
     }
 
     #[Testing]
+    #[RunInSeparateProcess]
     public function executeForPostgreSQLView(): void
     {
         $commandExecute = $this->commandTester
             ->setInputs([
-                '2',
-                '1',
+                'lion_database_postgres',
+                MigrationFactory::VIEW,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
@@ -245,12 +320,13 @@ class MigrationCommandTest extends Test
     }
 
     #[Testing]
+    #[RunInSeparateProcess]
     public function executeForPostgreSQLStoreProcedure(): void
     {
         $commandExecute = $this->commandTester
             ->setInputs([
-                '2',
-                '2',
+                'lion_database_postgres',
+                MigrationFactory::STORED_PROCEDURE,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
