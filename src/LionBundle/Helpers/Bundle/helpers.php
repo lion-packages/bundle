@@ -226,8 +226,8 @@ if (!function_exists('response')) {
      * @param string $status The type of status for the response.
      * @param string|null $message The message to include in the response.
      * @param int $code The HTTP status code of the response.
-     * @param string|int|float|bool|array<object>|object|null $data Extra data to
-     * include in the response.
+     * @param string|int|float|bool|array<int|string, mixed>|object|null $data Extra
+     * data to include in the response.
      *
      * @return stdClass The generated response object.
      */
@@ -247,8 +247,8 @@ if (!function_exists('success')) {
      *
      * @param string|null $message The message to include in the response.
      * @param int $code The HTTP status code of the response.
-     * @param string|int|float|bool|array<object>|object|null $data Extra data to
-     * include in the response.
+     * @param string|int|float|bool|array<int|string, mixed>|object|null $data Extra
+     *  data to include in the response.
      *
      * @return stdClass The generated success response object.
      */
@@ -267,8 +267,8 @@ if (!function_exists('error')) {
      *
      * @param string|null $message The message to include in the response.
      * @param int $code The HTTP status code of the response.
-     * @param string|int|float|bool|array<object>|object|null $data Extra data to
-     * include in the response.
+     * @param string|int|float|bool|array<int|string, mixed>|object|null $data Extra
+     *  data to include in the response.
      *
      * @return stdClass The generated error response object.
      */
@@ -287,8 +287,8 @@ if (!function_exists('warning')) {
      *
      * @param string|null $message The message to include in the response.
      * @param int $code The HTTP status code of the response.
-     * @param string|int|float|bool|array<object>|object|null $data Extra data to
-     * include in the response.
+     * @param string|int|float|bool|array<int|string, mixed>|object|null $data Extra
+     *  data to include in the response.
      *
      * @return stdClass The generated warning response object.
      */
@@ -307,8 +307,8 @@ if (!function_exists('info')) {
      *
      * @param string|null $message The message to include in the response.
      * @param int $code The HTTP status code of the response.
-     * @param string|int|float|bool|array<object>|object|null $data Extra data to
-     * include in the response.
+     * @param string|int|float|bool|array<int|string, mixed>|object|null $data Extra
+     *  data to include in the response.
      *
      * @return stdClass The generated info response object.
      */
