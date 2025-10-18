@@ -28,7 +28,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Manages the processes of creating or executing migrations.
  */
-class Migrations
+class MigrationsTest
 {
     /**
      * Manipulate system files.
