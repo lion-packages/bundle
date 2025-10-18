@@ -16,7 +16,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test as Testing;
 use PHPUnit\Framework\Attributes\TestWith;
 use ReflectionException;
-use stdClass;
 use Tests\Providers\Helpers\Commands\MigrationsFactoryProviderTrait;
 
 class MigrationFactoryTest extends Test

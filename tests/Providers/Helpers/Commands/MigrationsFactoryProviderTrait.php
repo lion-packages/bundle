@@ -29,19 +29,19 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * Table schema for the entity 'Test'
+                 * Table schema for the entity 'Test'.
                  */
                 class Test implements TableInterface
                 {
                     /**
-                     * Name of the migration
+                     * Name of the migration.
                      *
                      * @const NAME
                      */
                     public const string NAME = '--NAME--';
 
                     /**
-                     * Index number for seed execution priority
+                     * Index number for seed execution priority.
                      *
                      * @const INDEX
                      */
@@ -83,19 +83,19 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * Table schema for the entity 'Test'
+                 * Table schema for the entity 'Test'.
                  */
                 class Test implements TableInterface
                 {
                     /**
-                     * Name of the migration
+                     * Name of the migration.
                      *
                      * @const NAME
                      */
                     public const string NAME = '--NAME--';
 
                     /**
-                     * Index number for seed execution priority
+                     * Index number for seed execution priority.
                      *
                      * @const INDEX
                      */
@@ -137,12 +137,12 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * View schema to run queries
+                 * View schema to run queries.
                  */
                 class Test implements ViewInterface
                 {
                     /**
-                     * Name of the migration
+                     * Name of the migration.
                      *
                      * @const NAME
                      */
@@ -183,12 +183,12 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * View schema to run queries
+                 * View schema to run queries.
                  */
                 class Test implements ViewInterface
                 {
                     /**
-                     * Name of the migration
+                     * Name of the migration.
                      *
                      * @const NAME
                      */
@@ -230,12 +230,12 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * Generates a schema to execute processes in a database
+                 * Generates a schema to execute processes in a database.
                  */
                 class Test implements StoredProcedureInterface
                 {
                     /**
-                     * Name of the migration
+                     * Name of the migration.
                      *
                      * @const NAME
                      */
@@ -280,12 +280,12 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * Generates a schema to execute processes in a database
+                 * Generates a schema to execute processes in a database.
                  */
                 class Test implements StoredProcedureInterface
                 {
                     /**
-                     * Name of the migration
+                     * Name of the migration.
                      *
                      * @const NAME
                      */
@@ -416,19 +416,19 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * Table schema for the entity 'Test'
+                 * Table schema for the entity 'Test'.
                  */
                 class Test implements TableInterface
                 {
                     /**
-                     * Name of the migration
+                     * Name of the migration.
                      *
                      * @const NAME
                      */
                     public const string NAME = '--NAME--';
 
                     /**
-                     * Index number for seed execution priority
+                     * Index number for seed execution priority.
                      *
                      * @const INDEX
                      */
@@ -473,19 +473,19 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * Table schema for the entity 'Test'
+                 * Table schema for the entity 'Test'.
                  */
                 class Test implements TableInterface
                 {
                     /**
-                     * Name of the migration
+                     * Name of the migration.
                      *
                      * @const NAME
                      */
                     public const string NAME = '--NAME--';
 
                     /**
-                     * Index number for seed execution priority
+                     * Index number for seed execution priority.
                      *
                      * @const INDEX
                      */
@@ -530,12 +530,12 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * View schema to run queries
+                 * View schema to run queries.
                  */
                 class Test implements ViewInterface
                 {
                     /**
-                     * Name of the migration
+                     * Name of the migration.
                      *
                      * @const NAME
                      */
@@ -579,12 +579,12 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * View schema to run queries
+                 * View schema to run queries.
                  */
                 class Test implements ViewInterface
                 {
                     /**
-                     * Name of the migration
+                     * Name of the migration.
                      *
                      * @const NAME
                      */
@@ -629,12 +629,12 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * Generates a schema to execute processes in a database
+                 * Generates a schema to execute processes in a database.
                  */
                 class Test implements StoredProcedureInterface
                 {
                     /**
-                     * Name of the migration
+                     * Name of the migration.
                      *
                      * @const NAME
                      */
@@ -682,12 +682,12 @@ trait MigrationsFactoryProviderTrait
                 use stdClass;
 
                 /**
-                 * Generates a schema to execute processes in a database
+                 * Generates a schema to execute processes in a database.
                  */
                 class Test implements StoredProcedureInterface
                 {
                     /**
-                     * Name of the migration
+                     * Name of the migration.
                      *
                      * @const NAME
                      */
