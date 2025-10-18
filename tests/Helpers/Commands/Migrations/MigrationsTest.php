@@ -20,10 +20,13 @@ use Lion\Database\Drivers\PostgreSQL;
 use Lion\Database\Interface\ExecuteInterface;
 use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
+use Lion\Request\Http;
 use Lion\Request\Status;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
+use PHPUnit\Framework\Attributes\TestWith;
 use ReflectionException;
+use RuntimeException;
 use stdClass;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
@@ -315,19 +318,34 @@ class MigrationsTest extends Test
     }
 
     #[Testing]
+    #[TestWith(['connectionName' => 'not-exists-1'], 'case-0')]
+    #[TestWith(['connectionName' => 'not-exists-2'], 'case-1')]
+    #[TestWith(['connectionName' => 'not-exists-3'], 'case-2')]
+    #[TestWith(['connectionName' => 'not-exists-4'], 'case-3')]
+    public function processingWithStaticConnectionsConnectionDoesNotExists(string $connectionName): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionCode(Http::INTERNAL_SERVER_ERROR);
+        $this->expectExceptionMessage("The connection '{$connectionName}' does not exist.");
+
+        $this->migrations->processingWithStaticConnections($connectionName, fn (): bool => true);
+    }
+
+    #[Testing]
     public function processingWithStaticConnections(): void
     {
         /** @var string $defaultConnection */
         $defaultConnection = env('DB_DEFAULT');
 
-        $this->migrations->processingWithStaticConnections($defaultConnection, function () use ($defaultConnection): void {
-            $connections = Connection::getConnections();
+        $this->migrations
+            ->processingWithStaticConnections($defaultConnection, function () use ($defaultConnection): void {
+                $connections = Connection::getConnections();
 
-            $numberOfConnections = count($connections);
+                $numberOfConnections = count($connections);
 
-            $this->assertSame(NUMBER_OF_ACTIVE_CONNECTIONS, $numberOfConnections);
-            $this->assertArrayNotHasKey('dbname', $connections[$defaultConnection]);
-        });
+                $this->assertSame(NUMBER_OF_ACTIVE_CONNECTIONS, $numberOfConnections);
+                $this->assertArrayNotHasKey('dbname', $connections[$defaultConnection]);
+            });
 
         $connections = Connection::getConnections();
 
