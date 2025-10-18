@@ -13,12 +13,14 @@ use Lion\Bundle\Helpers\Commands\Seeds\Seeds;
 use Lion\Bundle\Helpers\Env;
 use Lion\Bundle\Interface\CapsuleInterface;
 use Lion\Database\Connection;
+use Lion\Database\Driver;
 use Lion\Database\Drivers\Schema\MySQL;
 use Lion\Dependency\Injection\Container;
 use Lion\Test\Test as Testing;
 use ReflectionClass;
 use ReflectionException;
 use RuntimeException;
+use Throwable;
 
 /**
  * Extend testing functions.
@@ -294,12 +296,6 @@ abstract class Test extends Testing
      */
     final protected function runInSeparateDatabase(Closure $callable): void
     {
-        /**
-         * -----------------------------------------------------------------------------
-         * Initializes objects.
-         * -----------------------------------------------------------------------------
-         */
-
         self::$runningATemporaryDatabase = true;
 
         if (null === self::$container) {
@@ -313,64 +309,63 @@ abstract class Test extends Testing
             self::$migrations = $migrationsInstance;
         }
 
-        /**
-         * -----------------------------------------------------------------------------
-         * Get connection values.
-         * -----------------------------------------------------------------------------
-         * Connection values are obtained to create alternate database connections.
-         * -----------------------------------------------------------------------------
-         */
-
-        $connectionName = getDefaultConnection();
-
         $connections = Connection::getConnections();
 
-        $connection = $connections[$connectionName];
+        $defaultConnectionName = Connection::getDefaultConnectionName();
 
-        $dbName = $connection['dbname'];
+        $mysqlConnections = array_filter($connections, fn (array $conn) => $conn['type'] === Driver::MYSQL);
 
-        $tempConnectionName = $connection['dbname'] . '_' . dechex(mt_rand(0, 0xfffff));
+        $tempConnections = [];
 
-        /**
-         * -----------------------------------------------------------------------------
-         * Create database.
-         * -----------------------------------------------------------------------------
-         * Create the alternate database to run processes.
-         * -----------------------------------------------------------------------------
-         */
+        foreach ($mysqlConnections as $connectionName => $connection) {
+            $dbName = $connection['dbname'];
 
-        self::$migrations->processingWithStaticConnections(function () use (
-            $connectionName,
-            $callable,
-            $connection,
-            $dbName,
-            $tempConnectionName
-        ): void {
-            MySQL::connection($connectionName)
-                ->createDatabase($tempConnectionName)
-                ->execute();
+            $tempDbName = "{$dbName}_" . dechex(mt_rand(0, 0xfffff));
 
-            Connection::addConnection($tempConnectionName, [
-                ...$connection,
-                'dbname' => $tempConnectionName,
-            ]);
+            $tempConnections[$connectionName] = $tempDbName;
 
-            Connection::setDefaultConnectionName($tempConnectionName);
+            self::$migrations->processingWithStaticConnections($connectionName, function () use (
+                $connectionName,
+                $connection,
+                $dbName,
+                $tempDbName
+            ): void {
+                MySQL::connection($connectionName)
+                    ->createDatabase($tempDbName)
+                    ->execute();
 
-            /** @phpstan-ignore-next-line */
-            self::$migrations->cloneDatabase($dbName, $connectionName, $tempConnectionName);
+                Connection::addConnection($tempDbName, [
+                    ...$connection,
+                    'dbname' => $tempDbName,
+                ]);
 
-            $callable($tempConnectionName);
+                /** @phpstan-ignore-next-line */
+                self::$migrations->cloneDatabase($dbName, $connectionName, $tempDbName);
+            });
+        }
 
-            MySQL::connection($connectionName)
-                ->dropDatabase($tempConnectionName)
-                ->execute();
+        if (isset($tempConnections[$defaultConnectionName])) {
+            Connection::setDefaultConnectionName($tempConnections[$defaultConnectionName]);
+        }
 
-            Connection::removeConnection($tempConnectionName);
+        try {
+            $callable($tempConnections);
+        } finally {
+            foreach ($tempConnections as $connectionName => $tempDbName) {
+                try {
+                    MySQL::connection($connectionName)
+                        ->dropDatabase($tempDbName)
+                        ->execute();
+                } catch (Throwable $e) {
+                    // Avoid stopping the flow if any databases have already been deleted.
+                }
 
-            Connection::setDefaultConnectionName($connectionName);
-        });
+                Connection::removeConnection($tempDbName);
+            }
 
-        self::$runningATemporaryDatabase = false;
+            Connection::setDefaultConnectionName($defaultConnectionName);
+
+            self::$runningATemporaryDatabase = false;
+        }
     }
 }

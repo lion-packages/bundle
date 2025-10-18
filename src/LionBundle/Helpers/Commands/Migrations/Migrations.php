@@ -239,6 +239,7 @@ class Migrations
     /**
      * Generates static connections to manipulate databases.
      *
+     * @param string $connectionName Name of the connection being run.
      * @param Closure $callback Executes logic to reset databases to their original
      * form.
      *
@@ -246,45 +247,35 @@ class Migrations
      *
      * @internal
      */
-    public function processingWithStaticConnections(Closure $callback): void
+    public function processingWithStaticConnections(string $connectionName, Closure $callback): void
     {
-        $originalConnections = Connection::getConnections();
+        $connections = Connection::getConnections();
 
-        $backupConnections = $originalConnections;
+        if (!isset($connections[$connectionName])) {
+            throw new RuntimeException(
+                "The connection '{$connectionName}' does not exist.",
+                Http::INTERNAL_SERVER_ERROR
+            );
+        }
 
-        /**
-         * @param array<string, array{
-         *     type: string,
-         *     host: string,
-         *     port: int,
-         *     dbname: string,
-         *     user: string,
-         *     password: string,
-         *     options?: array<int, int>
-         * }> $connections
-         * @param bool $isReset
-         *
-         * @return void
-         */
-        $addConnections = function (array $connections, bool $isReset): void {
-            foreach ($connections as $connectionName => $connectionData) {
-                Connection::removeConnection($connectionName);
+        $originalConnection = $connections[$connectionName];
 
-                if ($isReset) {
-                    /** @phpstan-ignore-next-line */
-                    unset($connectionData['dbname']);
-                }
+        Connection::removeConnection($connectionName);
 
-                /** @phpstan-ignore-next-line */
-                Connection::addConnection($connectionName, $connectionData);
-            }
-        };
+        $tempConnection = $originalConnection;
 
-        $addConnections($originalConnections, true);
+        unset($tempConnection['dbname']);
 
-        $callback();
+        /** @phpstan-ignore-next-line */
+        Connection::addConnection($connectionName, $tempConnection);
 
-        $addConnections($backupConnections, false);
+        try {
+            $callback();
+        } finally {
+            Connection::removeConnection($connectionName);
+
+            Connection::addConnection($connectionName, $originalConnection);
+        }
     }
 
     /**
@@ -418,9 +409,12 @@ class Migrations
         $connections = Connection::getConnections();
 
         foreach ($connections as $connectionName => $connectionData) {
-            $this->processingWithStaticConnections(function () use ($connectionName, $connectionData): void {
-                $this->resetDatabase($connectionData['dbname'], $connectionName, $connectionData['type']);
-            });
+            $this->processingWithStaticConnections(
+                connectionName: $connectionName,
+                callback: function () use ($connectionName, $connectionData): void {
+                    $this->resetDatabase($connectionData['dbname'], $connectionName, $connectionData['type']);
+                }
+            );
         }
     }
 

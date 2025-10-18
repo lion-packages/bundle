@@ -17,6 +17,7 @@ use Lion\Helpers\Str;
 use Lion\Request\Http;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\Attributes\Test as Testing;
 use ReflectionException;
 use Symfony\Component\Console\Application;
@@ -42,9 +43,8 @@ class MenuCommandTest extends Test
     private MenuCommand $menuCommand;
 
     /**
-     * @throws ReflectionException
-     * @throws DependencyException
-     * @throws NotFoundException
+     * @throws DependencyException Error while resolving the entry.
+     * @throws NotFoundException No entry found for the given name.
      */
     protected function setUp(): void
     {
@@ -386,6 +386,7 @@ class MenuCommandTest extends Test
      * @throws NotFoundException
      */
     #[Testing]
+    #[RunInSeparateProcess]
     public function selectConnection(): void
     {
         $command = new class () extends MenuCommand {
@@ -430,6 +431,7 @@ class MenuCommandTest extends Test
      * @throws NotFoundException
      */
     #[Testing]
+    #[RunInSeparateProcess]
     public function selectConnectionDefault(): void
     {
         $command = new class () extends MenuCommand {
@@ -496,6 +498,7 @@ class MenuCommandTest extends Test
      * @throws NotFoundException
      */
     #[Testing]
+    #[RunInSeparateProcess]
     public function selectConnectionByEnviromentEmpty(): void
     {
         $command = new class () extends MenuCommand {
@@ -537,6 +540,7 @@ class MenuCommandTest extends Test
      * @throws NotFoundException
      */
     #[Testing]
+    #[RunInSeparateProcess]
     public function selectConnectionByEnviromentNotEmpty(): void
     {
         $command = new class () extends MenuCommand {
