@@ -588,10 +588,12 @@ class MenuCommandTest extends Test
     public function selectMigrationType(): void
     {
         $command = new class () extends MenuCommand {
+            private const string SCHEMA = 'Schema';
             private const string TABLE = 'Table';
             private const string VIEW = 'View';
             private const string STORE_PROCEDURE = 'Store-Procedure';
             private const array OPTIONS = [
+                self::SCHEMA,
                 self::TABLE,
                 self::VIEW,
                 self::STORE_PROCEDURE,
@@ -622,10 +624,12 @@ class MenuCommandTest extends Test
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
         $this->assertSame(Command::SUCCESS, $commandTester->setInputs(['0'])->execute([]));
-        $this->assertStringContainsString('(Table)', $commandTester->getDisplay());
+        $this->assertStringContainsString('(Schema)', $commandTester->getDisplay());
         $this->assertSame(Command::SUCCESS, $commandTester->setInputs(['1'])->execute([]));
-        $this->assertStringContainsString('(View)', $commandTester->getDisplay());
+        $this->assertStringContainsString('(Table)', $commandTester->getDisplay());
         $this->assertSame(Command::SUCCESS, $commandTester->setInputs(['2'])->execute([]));
+        $this->assertStringContainsString('(View)', $commandTester->getDisplay());
+        $this->assertSame(Command::SUCCESS, $commandTester->setInputs(['3'])->execute([]));
         $this->assertStringContainsString('(Store-Procedure)', $commandTester->getDisplay());
     }
 

@@ -54,7 +54,7 @@ trait MigrationsFactoryProviderTrait
                     {
                         return Schema::connection(getDefaultConnection())
                             ->createTable(self::NAME, function (): void {
-                                Schema::int('id')
+                                Schema::int('id--NAME--')
                                     ->notNull()
                                     ->autoIncrement()
                                     ->primaryKey();
@@ -308,6 +308,93 @@ trait MigrationsFactoryProviderTrait
 
                 PHP,
             ],
+            'case-6' => [
+                'className' => 'Test',
+                'selectedType' => MigrationFactory::SCHEMA,
+                'dbPascal' => 'LionDatabase',
+                'driver' => 'MySQL',
+                'path' => 'database/Migrations/LionDatabase/MySQL/Schemas/',
+                'return' => <<<PHP
+                <?php
+
+                declare(strict_types=1);
+
+                namespace Database\Migrations\LionDatabase\MySQL\Schemas;
+
+                use Lion\Bundle\Interface\Migrations\SchemaInterface;
+                use Lion\Database\Drivers\Schema\MySQL as Schema;
+                use stdClass;
+
+                /**
+                 * Database schema.
+                 */
+                class Test implements SchemaInterface
+                {
+                    /**
+                     * Name of the migration.
+                     *
+                     * @const NAME
+                     */
+                    public const string NAME = '--NAME--';
+
+                    /**
+                     * {@inheritDoc}
+                     */
+                    public function up(): stdClass
+                    {
+                        return Schema::connection(getDefaultConnection())
+                            ->createDatabase(self::NAME)
+                            ->execute();
+                    }
+                }
+
+                PHP,
+            ],
+        ];
+    }
+
+    public static function getMySQLSchemaBodyProvider(): array
+    {
+        return [
+            'case-0' => [
+                'className' => 'LionDatabase',
+                'namespace' => 'Database\\Migrations\\LionDatabase\\MySQL\\Schemas',
+                'body' => <<<PHP
+                <?php
+
+                declare(strict_types=1);
+
+                namespace Database\Migrations\LionDatabase\MySQL\Schemas;
+
+                use Lion\Bundle\Interface\Migrations\SchemaInterface;
+                use Lion\Database\Drivers\Schema\MySQL as Schema;
+                use stdClass;
+
+                /**
+                 * Database schema.
+                 */
+                class LionDatabase implements SchemaInterface
+                {
+                    /**
+                     * Name of the migration.
+                     *
+                     * @const NAME
+                     */
+                    public const string NAME = '--NAME--';
+
+                    /**
+                     * {@inheritDoc}
+                     */
+                    public function up(): stdClass
+                    {
+                        return Schema::connection(getDefaultConnection())
+                            ->createDatabase(self::NAME)
+                            ->execute();
+                    }
+                }
+
+                PHP,
+            ],
         ];
     }
 
@@ -354,7 +441,7 @@ trait MigrationsFactoryProviderTrait
                     {
                         return Schema::connection(getDefaultConnection())
                             ->createTable(self::NAME, function (): void {
-                                Schema::int('id')
+                                Schema::int('id--NAME--')
                                     ->notNull()
                                     ->autoIncrement()
                                     ->primaryKey();
