@@ -313,7 +313,7 @@ abstract class Test extends Testing
 
         $defaultConnectionName = Connection::getDefaultConnectionName();
 
-        $mysqlConnections = array_filter($connections, fn(array $conn) => $conn['type'] === Driver::MYSQL);
+        $mysqlConnections = array_filter($connections, fn (array $conn) => $conn['type'] === Driver::MYSQL);
 
         $tempConnections = [];
 
