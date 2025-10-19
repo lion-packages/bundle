@@ -402,11 +402,11 @@ class Migrations
     }
 
     /**
-     * Delete databases from defined connections
+     * Delete databases from defined connections.
      *
      * @return void
      *
-     * @throws Exception If an error occurs while deleting the file
+     * @throws Exception If an error occurs while deleting the file.
      *
      * @codeCoverageIgnore
      */
@@ -420,52 +420,6 @@ class Migrations
                 callback: function () use ($connectionName, $connectionData): void {
                     $this->resetDatabase($connectionData['dbname'], $connectionName, $connectionData['type']);
                 }
-            );
-        }
-    }
-
-    /**
-     * Clones the contents of a template database connection into a temporary
-     * database using mysqldump. This includes tables, data, triggers, stored
-     * procedures, and events.
-     *
-     * @param string $dbName Name of the database to operate on (usually the target DB).
-     * @param string $connectionName Name of the template connection to clone from.
-     * @param string $tempConnectionName Name of the temporary database or
-     * connection to clone into.
-     *
-     * @return void
-     *
-     * @codeCoverageIgnore
-     */
-    public function cloneDatabase(string $dbName, string $connectionName, string $tempConnectionName): void
-    {
-        $connections = Connection::getConnections();
-
-        $dumpCommand = sprintf(
-            'MYSQL_PWD=%s mysqldump --ssl-mode=DISABLED -h%s -u%s --routines --triggers --events --single-transaction %s | MYSQL_PWD=%s mysql --ssl-mode=DISABLED -h%s -u%s %s', // phpcs:ignore
-            /** @phpstan-ignore-next-line */
-            $connections[$connectionName]['password'],
-            /** @phpstan-ignore-next-line */
-            escapeshellarg($connections[$connectionName]['host']),
-            /** @phpstan-ignore-next-line */
-            escapeshellarg($connections[$connectionName]['user']),
-            escapeshellarg($dbName),
-            /** @phpstan-ignore-next-line */
-            $connections[$connectionName]['password'],
-            /** @phpstan-ignore-next-line */
-            escapeshellarg($connections[$connectionName]['host']),
-            /** @phpstan-ignore-next-line */
-            escapeshellarg($connections[$connectionName]['user']),
-            escapeshellarg($connections[$tempConnectionName]['dbname'])
-        );
-
-        exec($dumpCommand, $output, $returnVar);
-
-        if ($returnVar !== 0) {
-            throw new RuntimeException(
-                "Error cloning database {$dbName} to {$connections[$tempConnectionName]['dbname']}.",
-                Http::INTERNAL_SERVER_ERROR
             );
         }
     }
