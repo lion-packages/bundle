@@ -16,6 +16,7 @@ use Lion\Database\Connection;
 use Lion\Database\Driver;
 use Lion\Database\Drivers\Schema\MySQL;
 use Lion\Dependency\Injection\Container;
+use Lion\Request\Http;
 use Lion\Test\Test as Testing;
 use ReflectionClass;
 use ReflectionException;
@@ -309,63 +310,57 @@ abstract class Test extends Testing
             self::$migrations = $migrationsInstance;
         }
 
+        // Create isolated databases
         $connections = Connection::getConnections();
-
-        $defaultConnectionName = Connection::getDefaultConnectionName();
 
         $mysqlConnections = array_filter($connections, fn (array $conn) => $conn['type'] === Driver::MYSQL);
 
         $tempConnections = [];
 
         foreach ($mysqlConnections as $connectionName => $connection) {
-            $dbName = $connection['dbname'];
-
-            $tempDbName = "{$dbName}_" . dechex(mt_rand(0, 0xfffff));
+            $tempDbName = "{$connection['dbname']}_" . dechex(mt_rand(0, 0xfffff));
 
             $tempConnections[$connectionName] = $tempDbName;
 
-            self::$migrations->processingWithStaticConnections($connectionName, function () use (
-                $connectionName,
-                $connection,
-                $dbName,
-                $tempDbName
-            ): void {
-                MySQL::connection($connectionName)
-                    ->createDatabase($tempDbName)
-                    ->execute();
+            $response = MySQL::connection($connectionName)
+                ->createDatabase($tempDbName)
+                ->execute();
 
-                Connection::addConnection($tempDbName, [
-                    ...$connection,
-                    'dbname' => $tempDbName,
-                ]);
-
-                /** @phpstan-ignore-next-line */
-                self::$migrations->cloneDatabase($dbName, $connectionName, $tempDbName);
-            });
-        }
-
-        if (isset($tempConnections[$defaultConnectionName])) {
-            Connection::setDefaultConnectionName($tempConnections[$defaultConnectionName]);
-        }
-
-        try {
-            $callable($tempConnections);
-        } finally {
-            foreach ($tempConnections as $connectionName => $tempDbName) {
-                try {
-                    MySQL::connection($connectionName)
-                        ->dropDatabase($tempDbName)
-                        ->execute();
-                } catch (Throwable $e) {
-                    // Avoid stopping the flow if any databases have already been deleted.
-                }
-
-                Connection::removeConnection($tempDbName);
+            if (isError($response)) {
+                throw new RuntimeException(
+                    'An error occurred while creating the database.',
+                    Http::INTERNAL_SERVER_ERROR
+                );
             }
 
-            Connection::setDefaultConnectionName($defaultConnectionName);
-
-            self::$runningATemporaryDatabase = false;
+            Connection::addConnection($connectionName, [
+                ...$connection,
+                'dbname' => $tempDbName,
+            ]);
         }
+
+        // Run tests
+        $callable($tempConnections);
+
+        // Reset connections
+        foreach ($mysqlConnections as $connectionName => $connection) {
+            Connection::addConnection($connectionName, [
+                ...$connection,
+                'dbname' => $connection['dbname'],
+            ]);
+
+            $response = MySQL::connection($connectionName)
+                ->dropDatabase($tempConnections[$connectionName])
+                ->execute();
+
+            if (isError($response)) {
+                throw new RuntimeException(
+                    'An error occurred while deleting the database.',
+                    Http::INTERNAL_SERVER_ERROR
+                );
+            }
+        }
+
+        self::$runningATemporaryDatabase = false;
     }
 }

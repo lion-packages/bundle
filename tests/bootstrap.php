@@ -54,7 +54,7 @@ $privateConnections = [
         'type' => env('DB_TYPE_TEST'),
         'host' => env('DB_HOST_TEST'),
         'port' => env('DB_PORT_TEST'),
-        'dbname' => env('DB_NAME'),
+        'dbname' => env('DB_NAME_TEST'),
         'user' => env('DB_USER_TEST'),
         'password' => env('DB_PASSWORD_TEST'),
     ],
