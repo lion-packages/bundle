@@ -700,16 +700,16 @@
         },
         {
             "name": "laravel/serializable-closure",
-            "version": "v2.0.5",
+            "version": "v2.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/serializable-closure.git",
-                "reference": "3832547db6e0e2f8bb03d4093857b378c66eceed"
+                "reference": "038ce42edee619599a1debb7e81d7b3759492819"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/serializable-closure/zipball/3832547db6e0e2f8bb03d4093857b378c66eceed",
-                "reference": "3832547db6e0e2f8bb03d4093857b378c66eceed",
+                "url": "https://api.github.com/repos/laravel/serializable-closure/zipball/038ce42edee619599a1debb7e81d7b3759492819",
+                "reference": "038ce42edee619599a1debb7e81d7b3759492819",
                 "shasum": ""
             },
             "require": {
@@ -757,7 +757,7 @@
                 "issues": "https://github.com/laravel/serializable-closure/issues",
                 "source": "https://github.com/laravel/serializable-closure"
             },
-            "time": "2025-09-22T17:29:40+00:00"
+            "time": "2025-10-09T13:42:30+00:00"
         },
         {
             "name": "lion/command",
@@ -855,16 +855,16 @@
         },
         {
             "name": "lion/dependency-injection",
-            "version": "v4.11.0",
+            "version": "v4.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/dependency-injection.git",
-                "reference": "a0e467be1d246dca9bd1a5cd0298b167da35451a"
+                "reference": "cddbc4d227e17ed892e91e8f662473a14633c0da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/dependency-injection/zipball/a0e467be1d246dca9bd1a5cd0298b167da35451a",
-                "reference": "a0e467be1d246dca9bd1a5cd0298b167da35451a",
+                "url": "https://api.github.com/repos/lion-packages/dependency-injection/zipball/cddbc4d227e17ed892e91e8f662473a14633c0da",
+                "reference": "cddbc4d227e17ed892e91e8f662473a14633c0da",
                 "shasum": ""
             },
             "require": {
@@ -900,7 +900,7 @@
                 "issues": "https://github.com/lion-packages/dependency-injection/issues",
                 "source": "https://github.com/lion-packages/dependency-injection"
             },
-            "time": "2025-10-01T22:14:51+00:00"
+            "time": "2025-11-01T14:21:57+00:00"
         },
         {
             "name": "lion/exceptions",
