@@ -1171,16 +1171,16 @@
         },
         {
             "name": "lion/security",
-            "version": "v11.12.0",
+            "version": "v11.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/security.git",
-                "reference": "93169f3d135cf1301aef7bc4c4652dfece974d3b"
+                "reference": "c0085abb028f847675660e1228bef2221190b5e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/security/zipball/93169f3d135cf1301aef7bc4c4652dfece974d3b",
-                "reference": "93169f3d135cf1301aef7bc4c4652dfece974d3b",
+                "url": "https://api.github.com/repos/lion-packages/security/zipball/c0085abb028f847675660e1228bef2221190b5e9",
+                "reference": "c0085abb028f847675660e1228bef2221190b5e9",
                 "shasum": ""
             },
             "require": {
@@ -1219,7 +1219,7 @@
                 "issues": "https://github.com/lion-packages/security/issues",
                 "source": "https://github.com/lion-packages/security"
             },
-            "time": "2025-10-01T23:07:21+00:00"
+            "time": "2025-11-01T14:06:51+00:00"
         },
         {
             "name": "monolog/monolog",
