@@ -3,7 +3,6 @@ FROM php:8.4-apache
 ARG DEBIAN_FRONTEND=noninteractive
 # ----------------------------------------------------------------------------------------------------------------------
 USER root
-
 # Add User -------------------------------------------------------------------------------------------------------------
 RUN useradd -m lion && echo 'lion:lion' | chpasswd && usermod -aG sudo lion && usermod -s /bin/bash lion
 # Dependencies ---------------------------------------------------------------------------------------------------------
@@ -14,23 +13,10 @@ RUN apt-get update -y \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-
-RUN apt-get update -y \
-    && apt-get install -y wget lsb-release gnupg \
-    && wget https://dev.mysql.com/get/mysql-apt-config_0.8.29-1_all.deb \
-    && dpkg -i mysql-apt-config_0.8.29-1_all.deb \
-    && sed -i 's/trixie/bookworm/g' /etc/apt/sources.list.d/mysql.list \
-    && apt-get update -y \
-    && apt-get install -y mysql-client \
-    && rm -f mysql-apt-config_0.8.29-1_all.deb \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
 # Configure PHP-Extensions ---------------------------------------------------------------------------------------------
 RUN pecl install ev redis xdebug \
     && docker-php-ext-install mbstring gd zip pdo pdo_mysql pdo_pgsql \
     && docker-php-ext-enable xdebug redis gd zip pdo_pgsql
-
 # Configure Xdebug
 RUN echo "xdebug.mode=develop,coverage,debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
@@ -39,12 +25,10 @@ RUN echo "xdebug.mode=develop,coverage,debug" >> /usr/local/etc/php/conf.d/docke
     && echo "xdebug.log_level=0" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.client_port=9000" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-
 # ----------------------------------------------------------------------------------------------------------------------
 USER lion
 
 SHELL ["/bin/bash", "--login", "-i", "-c"]
-
 # Install nvm, Node.js and npm -----------------------------------------------------------------------------------------
 ENV NVM_DIR="/home/lion/.nvm"
 ENV PATH="$NVM_DIR/versions/node/v20/bin:$PATH"
@@ -60,7 +44,6 @@ RUN sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools
 USER root
 
 SHELL ["/bin/bash", "--login", "-c"]
-
 # Install logo-ls ------------------------------------------------------------------------------------------------------
 RUN ARCH=$(uname -m) && \
     if [ "$ARCH" = "x86_64" ]; then \
@@ -73,14 +56,12 @@ RUN ARCH=$(uname -m) && \
     dpkg -i logo-ls_*.deb && \
     rm logo-ls_*.deb && \
     curl https://raw.githubusercontent.com/UTFeight/logo-ls-modernized/master/INSTALL | bash
-
 # Add configuration in .zshrc ------------------------------------------------------------------------------------------
 RUN echo 'export NVM_DIR="$HOME/.nvm"' >> /home/lion/.zshrc \
     && echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> /home/lion/.zshrc \
     && echo '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"' >> /home/lion/.zshrc \
     && echo 'alias ls="logo-ls"' >> /home/lion/.zshrc \
     && source /home/lion/.zshrc
-
 # ----------------------------------------------------------------------------------------------------------------------
 # Copy Data
 COPY . .

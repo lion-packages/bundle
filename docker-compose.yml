@@ -1,6 +1,6 @@
 services:
-    app:
-        container_name: bundle-app
+    php:
+        container_name: bundle-php
         build:
             context: .
             dockerfile: Dockerfile
@@ -75,7 +75,7 @@ services:
             POSTGRES_USER: root
             POSTGRES_PASSWORD: lion
         volumes:
-            - postgres_data:/var/lib/postgresql/data
+            - postgres_data:/var/lib/postgresql
         networks:
             - lion
 
