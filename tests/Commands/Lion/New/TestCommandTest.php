@@ -20,7 +20,6 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class TestCommandTest extends Test
 {
-    private const string URL_PATH = './tests/';
     private const string CLASS_NAME = 'TestTest';
     private const string FILE_NAME = self::CLASS_NAME . '.php';
     private const string OUTPUT_MESSAGE = 'The test has been generated successfully.';
@@ -29,9 +28,8 @@ class TestCommandTest extends Test
     private TestCommand $testCommand;
 
     /**
-     * @throws DependencyException
-     * @throws NotFoundException
-     * @throws ReflectionException
+     * @throws DependencyException Error while resolving the entry.
+     * @throws NotFoundException No entry found for the given name.
      */
     protected function setUp(): void
     {
@@ -54,7 +52,7 @@ class TestCommandTest extends Test
      */
     protected function tearDown(): void
     {
-        new Store()->remove('./tests/' . self::FILE_NAME);
+        new Store()->remove(TestCommand::TEST_PATH . self::FILE_NAME);
     }
 
     /**
@@ -85,6 +83,6 @@ class TestCommandTest extends Test
         ]));
 
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
-        $this->assertFileExists(self::URL_PATH . self::FILE_NAME);
+        $this->assertFileExists(TestCommand::TEST_PATH . self::FILE_NAME);
     }
 }
