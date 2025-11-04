@@ -1123,16 +1123,16 @@
         },
         {
             "name": "lion/route",
-            "version": "v12.10.0",
+            "version": "v12.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/route.git",
-                "reference": "c692bade0db7035af8cea0da6ec7658dea276689"
+                "reference": "44f46b7e28841b9ca455e64157653270bbdb9b58"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/route/zipball/c692bade0db7035af8cea0da6ec7658dea276689",
-                "reference": "c692bade0db7035af8cea0da6ec7658dea276689",
+                "url": "https://api.github.com/repos/lion-packages/route/zipball/44f46b7e28841b9ca455e64157653270bbdb9b58",
+                "reference": "44f46b7e28841b9ca455e64157653270bbdb9b58",
                 "shasum": ""
             },
             "require": {
@@ -1141,7 +1141,7 @@
             },
             "require-dev": {
                 "guzzlehttp/guzzle": "^7.9",
-                "infection/infection": "^0.29.14",
+                "infection/infection": "^0.29.14 || ^0.31.0",
                 "lion/dependency-injection": "^4.2",
                 "lion/exceptions": "^2.0",
                 "lion/request": "^7.2",
@@ -1150,7 +1150,7 @@
                 "overtrue/phplint": "^9.5",
                 "phpstan/phpstan": "^2.1",
                 "phpunit/phpunit": "^12.0",
-                "squizlabs/php_codesniffer": "^3.11"
+                "squizlabs/php_codesniffer": "^3.11 || ^4.0"
             },
             "type": "library",
             "autoload": {
@@ -1165,9 +1165,9 @@
             "description": "This library has quick router usage with regular expressions.",
             "support": {
                 "issues": "https://github.com/lion-packages/route/issues",
-                "source": "https://github.com/lion-packages/route/tree/v12.10.0"
+                "source": "https://github.com/lion-packages/route/tree/v12.11.0"
             },
-            "time": "2025-07-10T16:51:05+00:00"
+            "time": "2025-11-03T16:38:20+00:00"
         },
         {
             "name": "lion/security",
