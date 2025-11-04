@@ -32,6 +32,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Migrations
 {
     /**
+     * @const MIGRATIONS_PATH
+     */
+    public const string MIGRATIONS_PATH = 'database/Migrations/';
+
+    /**
      * Manipulate system files.
      *
      * @var Store $store
@@ -100,7 +105,7 @@ class Migrations
      *
      * @internal
      */
-    public function getMigrations(): array
+    public function getMigrations(string $connectionFolder): array
     {
         /** @var array<string, array<string, MigrationUpInterface>> $allMigrations */
         $allMigrations = [
@@ -110,7 +115,7 @@ class Migrations
             StoredProcedureInterface::class => [],
         ];
 
-        foreach ($this->store->getFiles('./database/Migrations/') as $migration) {
+        foreach ($this->store->getFiles(self::MIGRATIONS_PATH . $connectionFolder) as $migration) {
             if (isSuccess($this->store->validate([$migration], ['php']))) {
                 $namespace = $this->store->getNamespaceFromFile($migration, 'Database\\Migrations\\', 'Migrations/');
 
@@ -285,85 +290,117 @@ class Migrations
     }
 
     /**
-     * Remove and rebuild all databases
-     *
-     * @param string $dbName Database name
-     * @param string $connectionName Connection name
-     * @param string $type Driver Type
-     * @param Closure|null $evaluate Performs the necessary operations during
-     * connections to the database server
+     * Delete databases from defined connections.
      *
      * @return void
      *
-     * @throws Exception If an error occurs while deleting the file
+     * @throws Exception If an error occurs while deleting the file.
+     *
+     * @codeCoverageIgnore
+     */
+    public function resetDatabases(): void
+    {
+        $connections = Connection::getConnections();
+
+        foreach ($connections as $connectionName => $connectionData) {
+            $this->processingWithStaticConnections(
+                connectionName: $connectionName,
+                callback: function () use ($connectionName, $connectionData): void {
+                    $this->resetDatabase(
+                        $connectionData[Connection::CONNECTION_DBNAME],
+                        $connectionName,
+                        $connectionData[Connection::CONNECTION_TYPE]
+                    );
+                }
+            );
+        }
+    }
+
+    /**
+     * Remove and rebuild all databases.
+     *
+     * @param string $dbName Database name.
+     * @param string $connectionName Connection name.
+     * @param string $type Driver Type.
+     * @param Closure|null $evaluate Performs the necessary operations during
+     * connections to the database server.
+     *
+     * @return void
+     *
+     * @throws Exception If an error occurs while deleting the file.
      */
     public function resetDatabase(string $dbName, string $connectionName, string $type, ?Closure $evaluate = null): void
     {
-        if (Driver::SQLITE === $type) {
-            $this->store->remove($dbName);
+        $this->processingWithStaticConnections(
+            connectionName: $connectionName,
+            callback: function () use ($dbName, $connectionName, $type, $evaluate): void {
+                if (Driver::SQLITE === $type) {
+                    $this->store->remove($dbName);
 
-            null !== $evaluate && $evaluate();
+                    null !== $evaluate && $evaluate();
 
-            file_put_contents($dbName, '');
+                    file_put_contents($dbName, '');
 
-            return;
-        }
+                    return;
+                }
 
-        if (Driver::MYSQL === $type) {
-            MySQL::connection($connectionName)
-                ->query(
-                    <<<SQL
-                    DROP DATABASE IF EXISTS `{$dbName}`;
-                    SQL
-                )
-                ->execute();
+                if (Driver::MYSQL === $type) {
+                    MySQL::connection($connectionName)
+                        ->query(
+                            <<<SQL
+                            DROP DATABASE IF EXISTS `{$dbName}`;
+                            SQL
+                        )
+                        ->execute();
 
-            null !== $evaluate && $evaluate();
+                    null !== $evaluate && $evaluate();
 
-            MySQL::connection($connectionName)
-                ->query(
-                    <<<SQL
-                    CREATE DATABASE `{$dbName}`;
-                    SQL
-                )
-                ->execute();
+                    MySQL::connection($connectionName)
+                        ->query(
+                            <<<SQL
+                            CREATE DATABASE `{$dbName}`;
+                            SQL
+                        )
+                        ->execute();
 
-            return;
-        }
+                    return;
+                }
 
-        if (Driver::POSTGRESQL === $type) {
-            PostgreSQL::connection($connectionName)
-                ->query(
-                    <<<SQL
-                    SELECT
-                        pg_terminate_backend(pg_stat_activity.pid)
-                    FROM pg_stat_activity
-                    WHERE datname = '{$dbName}'
-                    AND pid <> pg_backend_pid();
-                    SQL
-                )
-                ->execute();
+                if (Driver::POSTGRESQL === $type) {
+                    PostgreSQL::connection($connectionName)
+                        ->query(
+                            <<<SQL
+                            SELECT
+                                pg_terminate_backend(pg_stat_activity.pid)
+                            FROM pg_stat_activity
+                            WHERE datname = '{$dbName}'
+                            AND pid <> pg_backend_pid();
+                            SQL
+                        )
+                        ->execute();
 
-            usleep(500000);
+                    usleep(500000); // 0.5s
 
-            PostgreSQL::connection($connectionName)
-                ->query(
-                    <<<SQL
-                    DROP DATABASE IF EXISTS "{$dbName}";
-                    SQL
-                )
-                ->execute();
+                    PostgreSQL::connection($connectionName)
+                        ->query(
+                            <<<SQL
+                            DROP DATABASE IF EXISTS "{$dbName}";
+                            SQL
+                        )
+                        ->execute();
 
-            null !== $evaluate && $evaluate();
+                    null !== $evaluate && $evaluate();
 
-            PostgreSQL::connection($connectionName)
-                ->query(
-                    <<<SQL
-                    CREATE DATABASE "{$dbName}";
-                    SQL
-                )
-                ->execute();
-        }
+                    PostgreSQL::connection($connectionName)
+                        ->query(
+                            <<<SQL
+                            CREATE DATABASE "{$dbName}";
+                            SQL
+                        )
+                        ->execute();
+                }
+            }
+        );
     }
 
     /**
@@ -399,28 +436,5 @@ class Migrations
         }
 
         return null;
-    }
-
-    /**
-     * Delete databases from defined connections.
-     *
-     * @return void
-     *
-     * @throws Exception If an error occurs while deleting the file.
-     *
-     * @codeCoverageIgnore
-     */
-    public function resetDatabases(): void
-    {
-        $connections = Connection::getConnections();
-
-        foreach ($connections as $connectionName => $connectionData) {
-            $this->processingWithStaticConnections(
-                connectionName: $connectionName,
-                callback: function () use ($connectionName, $connectionData): void {
-                    $this->resetDatabase($connectionData['dbname'], $connectionName, $connectionData['type']);
-                }
-            );
-        }
     }
 }
