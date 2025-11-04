@@ -107,41 +107,38 @@ class Migrations
      */
     public function getMigrations(string $connectionFolder): array
     {
-        /** @var array<string, array<string, MigrationUpInterface>> $allMigrations */
-        $allMigrations = [
-            SchemaInterface::class => [],
-            TableInterface::class => [],
-            ViewInterface::class => [],
-            StoredProcedureInterface::class => [],
+        $interfaces = [
+            SchemaInterface::class,
+            TableInterface::class,
+            ViewInterface::class,
+            StoredProcedureInterface::class,
         ];
 
+        $allMigrations = array_fill_keys($interfaces, []);
+
         foreach ($this->store->getFiles(self::MIGRATIONS_PATH . $connectionFolder) as $migration) {
-            if (isSuccess($this->store->validate([$migration], ['php']))) {
-                $namespace = $this->store->getNamespaceFromFile($migration, 'Database\\Migrations\\', 'Migrations/');
+            if (!isSuccess($this->store->validate([$migration], ['php']))) {
+                continue;
+            }
 
-                if (!isset($this->loadedMigrations[$migration])) {
-                    /** @var MigrationUpInterface $migrationInstance */
-                    $migrationInstance = new $namespace();
+            $namespace = $this->store->getNamespaceFromFile(
+                $migration,
+                'Database\\Migrations\\',
+                'Migrations/'
+            );
 
-                    $this->loadedMigrations[$migration] = $migrationInstance;
-                }
+            if (!isset($this->loadedMigrations[$migration])) {
+                /** @var MigrationUpInterface $migrationInterface */
+                $migrationInterface = new $namespace();
 
-                $tableMigration = $this->loadedMigrations[$migration];
+                $this->loadedMigrations[$migration] = $migrationInterface;
+            }
 
-                if ($tableMigration instanceof SchemaInterface) {
-                    $allMigrations[SchemaInterface::class][$namespace] = $tableMigration;
-                }
+            $instance = $this->loadedMigrations[$migration];
 
-                if ($tableMigration instanceof TableInterface) {
-                    $allMigrations[TableInterface::class][$namespace] = $tableMigration;
-                }
-
-                if ($tableMigration instanceof ViewInterface) {
-                    $allMigrations[ViewInterface::class][$namespace] = $tableMigration;
-                }
-
-                if ($tableMigration instanceof StoredProcedureInterface) {
-                    $allMigrations[StoredProcedureInterface::class][$namespace] = $tableMigration;
+            foreach ($interfaces as $interface) {
+                if ($instance instanceof $interface) {
+                    $allMigrations[$interface][$namespace] = $instance;
                 }
             }
         }
