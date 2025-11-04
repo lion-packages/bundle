@@ -117,10 +117,6 @@ class Migrations
         $allMigrations = array_fill_keys($interfaces, []);
 
         foreach ($this->store->getFiles(self::MIGRATIONS_PATH . $connectionFolder) as $migration) {
-            if (!isSuccess($this->store->validate([$migration], ['php']))) {
-                continue;
-            }
-
             $namespace = $this->store->getNamespaceFromFile(
                 $migration,
                 'Database\\Migrations\\',
