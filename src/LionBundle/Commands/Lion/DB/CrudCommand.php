@@ -20,14 +20,13 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Generate a CRUD (Controllers, Models, Tests and Capsule Classes) of an entity
- *
- * @package Lion\Bundle\Commands\Lion\DB
+ * Generate a CRUD (Controllers, Models, Tests and Capsule Classes) of an
+ * entity.
  */
 class CrudCommand extends MenuCommand
 {
     /**
-     * Defined CRUD methods
+     * Defined CRUD methods.
      *
      * @const METHODS
      */
@@ -38,7 +37,7 @@ class CrudCommand extends MenuCommand
     ];
 
     /**
-     * Class that allows writing system files
+     * Class that allows writing system files.
      *
      * @var FileWriter $fileWriter
      */
@@ -46,14 +45,14 @@ class CrudCommand extends MenuCommand
 
     /**
      * Fabricates the data provided to manipulate information (folder, class,
-     * namespace)
+     * namespace).
      *
      * @var ClassFactory $classFactory
      */
     private ClassFactory $classFactory;
 
     /**
-     * Manages basic database engine processes
+     * Manages basic database engine processes.
      *
      * @var DatabaseEngine $databaseEngine
      */
@@ -84,7 +83,7 @@ class CrudCommand extends MenuCommand
     }
 
     /**
-     * Configures the current command
+     * Configures the current command.
      *
      * @return void
      */
@@ -93,28 +92,27 @@ class CrudCommand extends MenuCommand
         $this
             ->setName('db:crud')
             ->setDescription(
-                'Command to generate controller and model of an entity with their respective CRUD functions'
+                'Command to generate controller and model of an entity with their respective CRUD functions.'
             )
-            ->addArgument('entity', InputArgument::REQUIRED, 'Entity name');
+            ->addArgument('entity', InputArgument::REQUIRED, 'Entity name.');
     }
 
     /**
-     * Executes the current command
+     * Executes the current command.
      *
-     * This method is not abstract because you can use this class
-     * as a concrete class. In this case, instead of defining the
-     * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method
+     * This method is not abstract because you can use this class as a concrete
+     * class. In this case, instead of defining the execute() method, you set the
+     * code to execute by passing a Closure to the setCode() method.
      *
-     * @param InputInterface $input [InputInterface is the interface implemented
-     * by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
+     * @param InputInterface $input InputInterface is the interface implemented by
+     * all input classes.
+     * @param OutputInterface $output OutputInterface is the interface implemented
+     * by all Output classes.
      *
      * @return int
      *
      * @throws ExceptionInterface
-     * @throws LogicException [When this abstract method is not implemented]
+     * @throws LogicException When this abstract method is not implemented.
      *
      * @codeCoverageIgnore
      */
