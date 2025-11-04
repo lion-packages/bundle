@@ -339,28 +339,30 @@ abstract class Test extends Testing
             ]);
         }
 
-        // Run tests
-        $callable($tempConnections);
+        try {
+            // Run tests
+            $callable($tempConnections);
+        } finally {
+            // Reset connections
+            foreach ($mysqlConnections as $connectionName => $connection) {
+                Connection::addConnection($connectionName, [
+                    ...$connection,
+                    'dbname' => $connection['dbname'],
+                ]);
 
-        // Reset connections
-        foreach ($mysqlConnections as $connectionName => $connection) {
-            Connection::addConnection($connectionName, [
-                ...$connection,
-                'dbname' => $connection['dbname'],
-            ]);
+                $response = MySQL::connection($connectionName)
+                    ->dropDatabase($tempConnections[$connectionName])
+                    ->execute();
 
-            $response = MySQL::connection($connectionName)
-                ->dropDatabase($tempConnections[$connectionName])
-                ->execute();
-
-            if (isError($response)) {
-                throw new RuntimeException(
-                    'An error occurred while deleting the database.',
-                    Http::INTERNAL_SERVER_ERROR
-                );
+                if (isError($response)) {
+                    throw new RuntimeException(
+                        'An error occurred while deleting the database.',
+                        Http::INTERNAL_SERVER_ERROR
+                    );
+                }
             }
-        }
 
-        self::$runningATemporaryDatabase = false;
+            self::$runningATemporaryDatabase = false;
+        }
     }
 }
