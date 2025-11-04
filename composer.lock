@@ -1081,28 +1081,28 @@
         },
         {
             "name": "lion/request",
-            "version": "v7.11.0",
+            "version": "v7.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/request.git",
-                "reference": "07c6ae0ed541c1773bf659321c2d3dca477e805d"
+                "reference": "2b5da714dbe6efb39625965fde12e376fd015d52"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/request/zipball/07c6ae0ed541c1773bf659321c2d3dca477e805d",
-                "reference": "07c6ae0ed541c1773bf659321c2d3dca477e805d",
+                "url": "https://api.github.com/repos/lion-packages/request/zipball/2b5da714dbe6efb39625965fde12e376fd015d52",
+                "reference": "2b5da714dbe6efb39625965fde12e376fd015d52",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.4"
             },
             "require-dev": {
-                "infection/infection": "^0.29.14",
+                "infection/infection": "^0.29.14 || ^0.31.0",
                 "lion/test": "^2.0 || ^3.0",
                 "overtrue/phplint": "^9.5",
                 "phpstan/phpstan": "^2.0",
                 "phpunit/phpunit": "^12.0",
-                "squizlabs/php_codesniffer": "^3.11"
+                "squizlabs/php_codesniffer": "^3.11 || ^4.0"
             },
             "type": "library",
             "autoload": {
@@ -1117,9 +1117,9 @@
             "description": "Library created to request input data and response requests",
             "support": {
                 "issues": "https://github.com/lion-packages/request/issues",
-                "source": "https://github.com/lion-packages/request/tree/v7.11.0"
+                "source": "https://github.com/lion-packages/request/tree/v7.12.0"
             },
-            "time": "2025-09-06T18:47:44+00:00"
+            "time": "2025-11-03T00:00:20+00:00"
         },
         {
             "name": "lion/route",
