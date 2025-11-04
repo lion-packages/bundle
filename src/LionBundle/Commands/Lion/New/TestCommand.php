@@ -15,22 +15,22 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Generate a Test class
- *
- * @package Lion\Bundle\Commands\Lion\New
+ * Generate a Test class.
  */
 class TestCommand extends Command
 {
+    public const string TEST_PATH = 'tests/PHPUnit/';
+
     /**
      * Fabricates the data provided to manipulate information (folder, class,
-     * namespace)
+     * namespace).
      *
      * @var ClassFactory $classFactory
      */
     private ClassFactory $classFactory;
 
     /**
-     * Manipulate system files
+     * Manipulate system files.
      *
      * @var Store $store
      */
@@ -53,7 +53,7 @@ class TestCommand extends Command
     }
 
     /**
-     * Configures the current command
+     * Configures the current command.
      *
      * @return void
      */
@@ -61,33 +61,33 @@ class TestCommand extends Command
     {
         $this
             ->setName('new:test')
-            ->setDescription('Command required for the creation of new test')
-            ->addArgument('test', InputArgument::OPTIONAL, 'Test name', 'ExampleTest');
+            ->setDescription('Command required for the creation of new test.')
+            ->addArgument('test', InputArgument::OPTIONAL, 'Test name.', 'ExampleTest');
     }
 
     /**
-     * Executes the current command
+     * Executes the current command.
      *
      * This method is not abstract because you can use this class as a concrete
      * class. In this case, instead of defining the execute() method, you set the
-     * code to execute by passing a Closure to the setCode() method
+     * code to execute by passing a Closure to the setCode() method.
      *
      * @param InputInterface $input InputInterface is the interface implemented by
-     * all input classes
+     * all input classes.
      * @param OutputInterface $output OutputInterface is the interface implemented
-     * by all Output classes
+     * by all Output classes.
      *
      * @return int
      *
-     * @throws Exception If the file could not be opened
-     * @throws LogicException When this abstract method is not implemented
+     * @throws Exception If the file could not be opened.
+     * @throws LogicException When this abstract method is not implemented.
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         /** @var string $test */
         $test = $input->getArgument('test');
 
-        $this->classFactory->classFactory('tests/', $test);
+        $this->classFactory->classFactory(self::TEST_PATH, $test);
 
         $folder = $this->classFactory->getFolder();
 
@@ -114,15 +114,18 @@ class TestCommand extends Command
                 {
                     protected function setUp(): void
                     {
+                        // ...
                     }
 
                     protected function tearDown(): void
                     {
+                        // ...
                     }
 
                     #[Testing]
                     public function app(): void
                     {
+                        // ...
                     }
                 }
 

@@ -189,7 +189,7 @@ class CrudCommandTest extends Test
     {
         $execute = $this->commandTester
             ->setInputs([
-                '0',
+                env('DB_DEFAULT'),
             ])
             ->execute([
                 'entity' => self::ENTITY,
@@ -202,10 +202,14 @@ class CrudCommandTest extends Test
         $this->assertFileExists('app/Rules/LionDatabase/MySQL/Users/LastNameRule.php');
         $this->assertFileExists('app/Http/Controllers/LionDatabase/MySQL/UsersController.php');
         $this->assertFileExists('app/Models/LionDatabase/MySQL/UsersModel.php');
-        $this->assertFileExists('tests/App/Models/LionDatabase/MySQL/UsersModelTest.php');
-        $this->assertFileExists('tests/App/Http/Controllers/LionDatabase/MySQL/UsersControllerTest.php');
+        $this->assertFileExists(TestCommand::TEST_PATH . 'App/Models/LionDatabase/MySQL/UsersModelTest.php');
+
+        $this->assertFileExists(
+            TestCommand::TEST_PATH . 'App/Http/Controllers/LionDatabase/MySQL/UsersControllerTest.php'
+        );
+
         $this->assertFileExists('database/Class/LionDatabase/MySQL/Users.php');
-        $this->assertFileExists('tests/Database/Class/LionDatabase/MySQL/UsersTest.php');
+        $this->assertFileExists(TestCommand::TEST_PATH . 'Database/Class/LionDatabase/MySQL/UsersTest.php');
 
         $display = $this->commandTester->getDisplay();
 
@@ -214,28 +218,28 @@ class CrudCommandTest extends Test
         $this->assertStringContainsString('App\\Rules\\LionDatabase\\MySQL\\Users\\LastNameRule', $display);
         $this->assertStringContainsString('App\\Http\\Controllers\\LionDatabase\\MySQL\\UsersController', $display);
         $this->assertStringContainsString('App\\Models\\LionDatabase\\MySQL\\UsersModel', $display);
-        $this->assertStringContainsString('Tests\\App\\Models\\LionDatabase\\MySQL\\UsersModelTest', $display);
+        $this->assertStringContainsString('Tests\\PHPUnit\\App\\Models\\LionDatabase\\MySQL\\UsersModelTest', $display);
 
         $this->assertStringContainsString(
-            'Tests\\App\\Http\\Controllers\\LionDatabase\\MySQL\\UsersControllerTest',
+            'Tests\\PHPUnit\\App\\Http\\Controllers\\LionDatabase\\MySQL\\UsersControllerTest',
             $display
         );
 
         $this->assertStringContainsString('Database\\Class\\LionDatabase\\MySQL\\Users', $display);
-        $this->assertStringContainsString('Tests\\Database\\Class\\LionDatabase\\MySQL\\UsersTest', $display);
+        $this->assertStringContainsString('Tests\\PHPUnit\\Database\\Class\\LionDatabase\\MySQL\\UsersTest', $display);
 
         $this->rmdirRecursively('./app/');
 
         $this->rmdirRecursively('./database/');
 
-        $this->rmdirRecursively('./tests/App/');
+        $this->rmdirRecursively(TestCommand::TEST_PATH . 'App/');
 
-        $this->rmdirRecursively('./tests/Database/');
+        $this->rmdirRecursively(TestCommand::TEST_PATH . 'Database/');
 
         $this->assertDirectoryDoesNotExist('./app/');
         $this->assertDirectoryDoesNotExist('./database/');
-        $this->assertDirectoryDoesNotExist('./tests/App/');
-        $this->assertDirectoryDoesNotExist('./tests/Database/');
+        $this->assertDirectoryDoesNotExist(TestCommand::TEST_PATH . 'App/');
+        $this->assertDirectoryDoesNotExist(TestCommand::TEST_PATH . 'Database/');
 
         unset($_ENV['SELECTED_CONNECTION']);
 
@@ -247,7 +251,7 @@ class CrudCommandTest extends Test
     {
         $execute = $this->commandTester
             ->setInputs([
-                '2',
+                env('DB_NAME_TEST_POSTGRESQL'),
             ])
             ->execute([
                 'entity' => self::ENTITY,
@@ -260,10 +264,14 @@ class CrudCommandTest extends Test
         $this->assertFileExists('app/Rules/LionDatabase/PostgreSQL/Users/LastNameRule.php');
         $this->assertFileExists('app/Http/Controllers/LionDatabase/PostgreSQL/UsersController.php');
         $this->assertFileExists('app/Models/LionDatabase/PostgreSQL/UsersModel.php');
-        $this->assertFileExists('tests/App/Models/LionDatabase/PostgreSQL/UsersModelTest.php');
-        $this->assertFileExists('tests/App/Http/Controllers/LionDatabase/PostgreSQL/UsersControllerTest.php');
+        $this->assertFileExists(TestCommand::TEST_PATH . 'App/Models/LionDatabase/PostgreSQL/UsersModelTest.php');
+
+        $this->assertFileExists(
+            TestCommand::TEST_PATH . 'App/Http/Controllers/LionDatabase/PostgreSQL/UsersControllerTest.php'
+        );
+
         $this->assertFileExists('database/Class/LionDatabase/PostgreSQL/Users.php');
-        $this->assertFileExists('tests/Database/Class/LionDatabase/PostgreSQL/UsersTest.php');
+        $this->assertFileExists(TestCommand::TEST_PATH . 'Database/Class/LionDatabase/PostgreSQL/UsersTest.php');
 
         $display = $this->commandTester->getDisplay();
 
@@ -277,28 +285,36 @@ class CrudCommandTest extends Test
         );
 
         $this->assertStringContainsString('App\\Models\\LionDatabase\\PostgreSQL\\UsersModel', $display);
-        $this->assertStringContainsString('Tests\\App\\Models\\LionDatabase\\PostgreSQL\\UsersModelTest', $display);
 
         $this->assertStringContainsString(
-            'Tests\\App\\Http\\Controllers\\LionDatabase\\PostgreSQL\\UsersControllerTest',
+            'Tests\\PHPUnit\\App\\Models\\LionDatabase\\PostgreSQL\\UsersModelTest',
+            $display
+        );
+
+        $this->assertStringContainsString(
+            'Tests\\PHPUnit\\App\\Http\\Controllers\\LionDatabase\\PostgreSQL\\UsersControllerTest',
             $display
         );
 
         $this->assertStringContainsString('Database\\Class\\LionDatabase\\PostgreSQL\\Users', $display);
-        $this->assertStringContainsString('Tests\\Database\\Class\\LionDatabase\\PostgreSQL\\UsersTest', $display);
+
+        $this->assertStringContainsString(
+            'Tests\\PHPUnit\\Database\\Class\\LionDatabase\\PostgreSQL\\UsersTest',
+            $display
+        );
 
         $this->rmdirRecursively('./app/');
 
         $this->rmdirRecursively('./database/');
 
-        $this->rmdirRecursively('./tests/App/');
+        $this->rmdirRecursively(TestCommand::TEST_PATH . 'App/');
 
-        $this->rmdirRecursively('./tests/Database/');
+        $this->rmdirRecursively(TestCommand::TEST_PATH . 'Database/');
 
         $this->assertDirectoryDoesNotExist('./app/');
         $this->assertDirectoryDoesNotExist('./database/');
-        $this->assertDirectoryDoesNotExist('./tests/App/');
-        $this->assertDirectoryDoesNotExist('./tests/Database/');
+        $this->assertDirectoryDoesNotExist(TestCommand::TEST_PATH . 'App/');
+        $this->assertDirectoryDoesNotExist(TestCommand::TEST_PATH . 'Database/');
 
         unset($_ENV['SELECTED_CONNECTION']);
 
