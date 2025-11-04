@@ -8,11 +8,13 @@ use DI\Attribute\Inject;
 use Exception;
 use Lion\Bundle\Helpers\Commands\Migrations\Migrations;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
+use Lion\Bundle\Helpers\DatabaseEngine;
 use Lion\Bundle\Interface\Migrations\SchemaInterface;
 use Lion\Bundle\Interface\Migrations\StoredProcedureInterface;
 use Lion\Bundle\Interface\Migrations\TableInterface;
 use Lion\Bundle\Interface\Migrations\ViewInterface;
 use Lion\Bundle\Interface\MigrationUpInterface;
+use Lion\Database\Connection;
 use LogicException;
 use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -32,10 +34,25 @@ class FreshMigrationsCommand extends MenuCommand
      */
     private Migrations $migrations;
 
+    /**
+     * Manages basic database engine processes.
+     *
+     * @var DatabaseEngine $databaseEngine
+     */
+    private DatabaseEngine $databaseEngine;
+
     #[Inject]
     public function setMigrations(Migrations $migrations): FreshMigrationsCommand
     {
         $this->migrations = $migrations;
+
+        return $this;
+    }
+
+    #[Inject]
+    public function setDatabaseEngine(DatabaseEngine $databaseEngine): FreshMigrationsCommand
+    {
+        $this->databaseEngine = $databaseEngine;
 
         return $this;
     }
@@ -93,16 +110,36 @@ class FreshMigrationsCommand extends MenuCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if (isError($this->store->exist('database/Migrations/'))) {
+        $connectionName = $this->selectConnection($input, $output);
+
+        $connections = Connection::getConnections();
+
+        $connection = $connections[$connectionName];
+
+        /** @var string $dbNamePascal */
+        $dbNamePascal = $this->str
+            ->of($connection[Connection::CONNECTION_DBNAME])
+            ->replace('-', ' ')
+            ->replace('_', ' ')
+            ->pascal()
+            ->get();
+
+        $dbType = $this->databaseEngine->getDriver($connection[Connection::CONNECTION_TYPE]);
+
+        if (isError($this->store->exist(Migrations::MIGRATIONS_PATH . "{$dbNamePascal}/{$dbType}/"))) {
             $output->writeln($this->errorOutput("\t>> MIGRATION: There are no defined migrations."));
 
             return parent::FAILURE;
         }
 
-        $this->migrations->resetDatabases();
+        $this->migrations->resetDatabase(
+            $connection[Connection::CONNECTION_DBNAME],
+            $connectionName,
+            $connection[Connection::CONNECTION_TYPE]
+        );
 
         /** @var array<string, array<string, MigrationUpInterface>> $migrations */
-        $migrations = $this->migrations->getMigrations();
+        $migrations = $this->migrations->getMigrations("{$dbNamePascal}/{$dbType}/");
 
         /** @phpstan-ignore-next-line */
         $this->migrations->executeMigrations($this, $output, $migrations[SchemaInterface::class]);
@@ -120,7 +157,7 @@ class FreshMigrationsCommand extends MenuCommand
         /** @phpstan-ignore-next-line */
         $this->migrations->executeMigrations($this, $output, $migrations[StoredProcedureInterface::class]);
 
-        $output->writeln($this->infoOutput("\n\t>> Migrations executed successfully."));
+        $output->writeln($this->infoOutput("\n\t>> MIGRATIONS: Migrations executed successfully."));
 
         $seed = $input->getOption('seed');
 

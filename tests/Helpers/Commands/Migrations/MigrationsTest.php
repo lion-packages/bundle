@@ -10,6 +10,7 @@ use Exception;
 use Lion\Bundle\Commands\Lion\New\MigrationCommand;
 use Lion\Bundle\Helpers\Commands\Migrations\MigrationFactory;
 use Lion\Bundle\Helpers\Commands\Migrations\Migrations;
+use Lion\Bundle\Helpers\DatabaseEngine;
 use Lion\Bundle\Interface\Migrations\SchemaInterface;
 use Lion\Bundle\Interface\Migrations\StoredProcedureInterface;
 use Lion\Bundle\Interface\Migrations\TableInterface;
@@ -22,6 +23,7 @@ use Lion\Database\Drivers\PostgreSQL;
 use Lion\Database\Interface\ExecuteInterface;
 use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
+use Lion\Helpers\Str;
 use Lion\Request\Http;
 use Lion\Request\Status;
 use Lion\Test\Test;
@@ -145,7 +147,7 @@ class MigrationsTest extends Test
     {
         $commandExecute = $this->commandTester
             ->setInputs([
-                'local',
+                env('DB_DEFAULT'),
                 MigrationFactory::SCHEMA,
             ])
             ->execute([
@@ -166,7 +168,7 @@ class MigrationsTest extends Test
 
         $commandExecute = $this->commandTester
             ->setInputs([
-                'local',
+                env('DB_DEFAULT'),
                 MigrationFactory::TABLE,
             ])
             ->execute([
@@ -187,7 +189,7 @@ class MigrationsTest extends Test
 
         $commandExecute = $this->commandTester
             ->setInputs([
-                'local',
+                env('DB_DEFAULT'),
                 MigrationFactory::VIEW,
             ])
             ->execute([
@@ -208,7 +210,7 @@ class MigrationsTest extends Test
 
         $commandExecute = $this->commandTester
             ->setInputs([
-                'local',
+                env('DB_DEFAULT'),
                 MigrationFactory::STORED_PROCEDURE,
             ])
             ->execute([
@@ -227,7 +229,21 @@ class MigrationsTest extends Test
             StoredProcedureInterface::class,
         ]);
 
-        $list = $this->migrations->getMigrations();
+        $connections = Connection::getConnections();
+
+        $connection = $connections[env('DB_DEFAULT')];
+
+        /** @var string $dbNamePascal */
+        $dbNamePascal = new Str()
+            ->of($connection[Connection::CONNECTION_DBNAME])
+            ->replace('-', ' ')
+            ->replace('_', ' ')
+            ->pascal()
+            ->get();
+
+        $dbType = new DatabaseEngine()->getDriver($connection[Connection::CONNECTION_TYPE]);
+
+        $list = $this->migrations->getMigrations("{$dbNamePascal}/{$dbType}/");
 
         $this->assertNotEmpty($list);
         $this->assertArrayHasKey(TableInterface::class, $list);
