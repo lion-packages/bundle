@@ -173,7 +173,7 @@ class TestTest extends Test
                 ])
                 ->execute();
 
-            $rows = MySQL::connection(getDefaultConnection())
+            $rows = MySQL::connection($connection)
                 ->view('read_users')
                 ->select()
                 ->getAll();
