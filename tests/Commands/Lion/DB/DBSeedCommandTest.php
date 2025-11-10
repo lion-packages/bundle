@@ -6,11 +6,17 @@ namespace Tests\Commands\Lion\DB;
 
 use DI\DependencyException;
 use DI\NotFoundException;
+use InvalidArgumentException;
 use Lion\Bundle\Commands\Lion\DB\DBSeedCommand;
 use Lion\Bundle\Commands\Lion\New\SeedCommand;
+use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\Migrations\Migrations;
+use Lion\Bundle\Helpers\DatabaseEngine;
+use Lion\Database\Connection;
 use Lion\Dependency\Injection\Container;
 use Lion\Files\Store;
+use Lion\Helpers\Str;
+use Lion\Request\Http;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
 use ReflectionException;
@@ -20,7 +26,6 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class DBSeedCommandTest extends Test
 {
-    private const string URL_PATH = './database/Seed/';
     private const string CLASS_NAME = 'TestSeed';
     private const string FILE_NAME = self::CLASS_NAME . '.php';
     private const string OUTPUT_MESSAGE = 'OK';
@@ -32,9 +37,8 @@ class DBSeedCommandTest extends Test
     private DBSeedCommand $dbSeedCommand;
 
     /**
-     * @throws NotFoundException
-     * @throws ReflectionException
-     * @throws DependencyException
+     * @throws DependencyException Error while resolving the entry.
+     * @throws NotFoundException No entry found for the given name.
      */
     protected function setUp(): void
     {
@@ -62,7 +66,8 @@ class DBSeedCommandTest extends Test
     }
 
     /**
-     * @throws ReflectionException
+     * @throws ReflectionException If the property does not exist in the reflected
+     * class.
      */
     #[Testing]
     public function setStore(): void
@@ -72,7 +77,30 @@ class DBSeedCommandTest extends Test
     }
 
     /**
-     * @throws ReflectionException
+     * @throws ReflectionException If the property does not exist in the reflected
+     * class.
+     */
+    #[Testing]
+    public function setStr(): void
+    {
+        $this->assertInstanceOf(DBSeedCommand::class, $this->dbSeedCommand->setStr(new Str()));
+        $this->assertInstanceOf(Str::class, $this->getPrivateProperty('str'));
+    }
+
+    /**
+     * @throws ReflectionException If the property does not exist in the reflected
+     * class.
+     */
+    #[Testing]
+    public function setDatabaseEngine(): void
+    {
+        $this->assertInstanceOf(DBSeedCommand::class, $this->dbSeedCommand->setDatabaseEngine(new DatabaseEngine()));
+        $this->assertInstanceOf(DatabaseEngine::class, $this->getPrivateProperty('databaseEngine'));
+    }
+
+    /**
+     * @throws ReflectionException If the property does not exist in the reflected
+     * class.
      */
     #[Testing]
     public function setMigrations(): void
@@ -81,20 +109,64 @@ class DBSeedCommandTest extends Test
         $this->assertInstanceOf(Migrations::class, $this->getPrivateProperty('migrations'));
     }
 
+    /**
+     * @throws ReflectionException If the property does not exist in the reflected
+     * class.
+     */
+    #[Testing]
+    public function setClassFactory(): void
+    {
+        $this->assertInstanceOf(DBSeedCommand::class, $this->dbSeedCommand->setClassFactory(new ClassFactory()));
+        $this->assertInstanceOf(ClassFactory::class, $this->getPrivateProperty('classFactory'));
+    }
+
+    #[Testing]
+    public function executeWithoutConnection(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("The '--connection' option is required.");
+        $this->expectExceptionCode(Http::INTERNAL_SERVER_ERROR);
+
+        $this->commandTester->execute([]);
+    }
+
     #[Testing]
     public function execute(): void
     {
-        $this->createDirectory(self::URL_PATH);
+        $this->createDirectory(Migrations::SEEDS_PATH);
+
+        $connections = Connection::getConnections();
+
+        $connectionName = getDefaultConnection();
+
+        $connection = $connections[$connectionName];
+
+        /** @var string $dbNamePascal */
+        $dbNamePascal = new Str()
+            ->of($connection[Connection::CONNECTION_DBNAME])
+            ->replace('-', ' ')
+            ->replace('_', ' ')
+            ->pascal()
+            ->get();
+
+        $dbType = new DatabaseEngine()->getDriver($connection[Connection::CONNECTION_TYPE]);
+
+        $seedsPath = Migrations::SEEDS_PATH . "{$dbNamePascal}/{$dbType}/";
 
         $this->assertSame(Command::SUCCESS, $this->commandTesterNewSeed->execute([
             'seed' => self::CLASS_NAME,
+            '--connection' => $connectionName,
         ]));
 
         $this->assertStringContainsString(self::OUTPUT_MESSAGE_NEW_SEED, $this->commandTesterNewSeed->getDisplay());
-        $this->assertFileExists(self::URL_PATH . self::FILE_NAME);
-        $this->assertSame(Command::SUCCESS, $this->commandTester->setInputs(['0'])->execute([]));
+        $this->assertFileExists($seedsPath . self::FILE_NAME);
+
+        $this->assertSame(Command::SUCCESS, $this->commandTester->execute([
+            '--connection' => $connectionName,
+        ]));
+
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
-        $this->assertFileExists(self::URL_PATH . self::FILE_NAME);
+        $this->assertFileExists($seedsPath . self::FILE_NAME);
 
         $this->rmdirRecursively('./database/');
     }
@@ -102,7 +174,10 @@ class DBSeedCommandTest extends Test
     #[Testing]
     public function executeIfPathDoesNotExist(): void
     {
-        $this->assertSame(Command::FAILURE, $this->commandTester->execute([]));
+        $this->assertSame(Command::FAILURE, $this->commandTester->execute([
+            '--connection' => getDefaultConnection(),
+        ]));
+
         $this->assertStringContainsString(self::OUTPUT_MESSAGE_NOT_EXISTS_ERROR, $this->commandTester->getDisplay());
     }
 }

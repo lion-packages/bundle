@@ -104,11 +104,11 @@ class MigrationsTest extends Test
     {
         $commandExecute = $this->commandTester
             ->setInputs([
-                'local',
                 MigrationFactory::TABLE,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
+                '--connection' => env('DB_DEFAULT'),
             ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
@@ -117,6 +117,8 @@ class MigrationsTest extends Test
 
         /** @phpstan-ignore-next-line */
         $tableMigration = new (self::CLASS_NAMESPACE_TABLE . self::CLASS_NAME)();
+
+        $this->assertIsObject($tableMigration);
 
         $this->assertInstances($tableMigration, [
             MigrationUpInterface::class,
@@ -147,11 +149,11 @@ class MigrationsTest extends Test
     {
         $commandExecute = $this->commandTester
             ->setInputs([
-                env('DB_DEFAULT'),
                 MigrationFactory::SCHEMA,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
+                '--connection' => env('DB_DEFAULT'),
             ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
@@ -161,6 +163,8 @@ class MigrationsTest extends Test
         /** @phpstan-ignore-next-line */
         $tableMigration = new (self::CLASS_NAMESPACE_SCHEMA . self::CLASS_NAME)();
 
+        $this->assertIsObject($tableMigration);
+
         $this->assertInstances($tableMigration, [
             MigrationUpInterface::class,
             SchemaInterface::class,
@@ -168,11 +172,11 @@ class MigrationsTest extends Test
 
         $commandExecute = $this->commandTester
             ->setInputs([
-                env('DB_DEFAULT'),
                 MigrationFactory::TABLE,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
+                '--connection' => env('DB_DEFAULT'),
             ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
@@ -182,6 +186,8 @@ class MigrationsTest extends Test
         /** @phpstan-ignore-next-line */
         $tableMigration = new (self::CLASS_NAMESPACE_TABLE . self::CLASS_NAME)();
 
+        $this->assertIsObject($tableMigration);
+
         $this->assertInstances($tableMigration, [
             MigrationUpInterface::class,
             TableInterface::class,
@@ -189,11 +195,11 @@ class MigrationsTest extends Test
 
         $commandExecute = $this->commandTester
             ->setInputs([
-                env('DB_DEFAULT'),
                 MigrationFactory::VIEW,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
+                '--connection' => env('DB_DEFAULT'),
             ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
@@ -203,6 +209,8 @@ class MigrationsTest extends Test
         /** @phpstan-ignore-next-line */
         $viewMigration = new (self::CLASS_NAMESPACE_VIEW . self::CLASS_NAME)();
 
+        $this->assertIsObject($viewMigration);
+
         $this->assertInstances($viewMigration, [
             MigrationUpInterface::class,
             ViewInterface::class,
@@ -210,11 +218,11 @@ class MigrationsTest extends Test
 
         $commandExecute = $this->commandTester
             ->setInputs([
-                env('DB_DEFAULT'),
                 MigrationFactory::STORED_PROCEDURE,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
+                '--connection' => env('DB_DEFAULT'),
             ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
@@ -224,6 +232,8 @@ class MigrationsTest extends Test
         /** @phpstan-ignore-next-line */
         $viewMigration = new (self::CLASS_NAMESPACE_STORE_PROCEDURE . self::CLASS_NAME)();
 
+        $this->assertIsObject($viewMigration);
+
         $this->assertInstances($viewMigration, [
             MigrationUpInterface::class,
             StoredProcedureInterface::class,
@@ -231,6 +241,7 @@ class MigrationsTest extends Test
 
         $connections = Connection::getConnections();
 
+        /** @phpstan-ignore-next-line */
         $connection = $connections[env('DB_DEFAULT')];
 
         /** @var string $dbNamePascal */
@@ -280,13 +291,15 @@ class MigrationsTest extends Test
     #[Testing]
     public function executeMigrationsGroup(): void
     {
+        $connectionName = 'local';
+
         $commandExecute = $this->commandTester
             ->setInputs([
-                'local',
                 MigrationFactory::TABLE,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
+                '--connection' => $connectionName,
             ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
@@ -307,11 +320,11 @@ class MigrationsTest extends Test
 
         $commandExecute = $this->commandTester
             ->setInputs([
-                'local',
                 MigrationFactory::VIEW,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
+                '--connection' => $connectionName,
             ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
@@ -332,23 +345,20 @@ class MigrationsTest extends Test
 
         $commandExecute = $this->commandTester
             ->setInputs([
-                'local',
                 MigrationFactory::STORED_PROCEDURE,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
+                '--connection' => $connectionName,
             ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists(self::URL_PATH_MYSQL_STORED_PROCEDURE . self::FILE_NAME);
 
-        /**
-         * @var object $objClass
-         *
-         * @phpstan-ignore-next-line
-         */
         $objClass = new (self::CLASS_NAMESPACE_STORE_PROCEDURE . self::CLASS_NAME)();
+
+        $this->assertIsObject($objClass);
 
         $this->assertInstances($objClass, [
             MigrationUpInterface::class,
@@ -390,7 +400,7 @@ class MigrationsTest extends Test
                 $numberOfConnections = count($connections);
 
                 $this->assertSame(NUMBER_OF_ACTIVE_CONNECTIONS, $numberOfConnections);
-                $this->assertArrayNotHasKey('dbname', $connections[$defaultConnection]);
+                $this->assertArrayNotHasKey(Connection::CONNECTION_DBNAME, $connections[$defaultConnection]);
             });
 
         $connections = Connection::getConnections();
@@ -402,7 +412,7 @@ class MigrationsTest extends Test
         /** @var string $dbName */
         $dbName = env('DB_NAME');
 
-        $this->assertSame($dbName, $connections[$defaultConnection]['dbname']);
+        $this->assertSame($dbName, $connections[$defaultConnection][Connection::CONNECTION_DBNAME]);
     }
 
     /**

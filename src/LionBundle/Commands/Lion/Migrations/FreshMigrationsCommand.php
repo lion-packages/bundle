@@ -176,7 +176,9 @@ class FreshMigrationsCommand extends MenuCommand
             $this
                 ->getApplication()
                 ->find('db:seed')
-                ->run(new ArrayInput([]), $output);
+                ->run(new ArrayInput([
+                    '--connection' => $connectionName,
+                ]), $output);
         }
 
         return parent::SUCCESS;
