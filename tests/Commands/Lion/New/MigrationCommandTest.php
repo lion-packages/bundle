@@ -7,6 +7,7 @@ namespace Tests\Commands\Lion\New;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Exception;
+use InvalidArgumentException;
 use Lion\Bundle\Commands\Lion\New\MigrationCommand;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\Migrations\MigrationFactory;
@@ -91,7 +92,7 @@ class MigrationCommandTest extends Test
 
     /**
      * @throws ReflectionException If the property does not exist in the reflected
-     *  class.
+     * class.
      */
     #[Testing]
     public function setMigrationFactory(): void
@@ -106,7 +107,7 @@ class MigrationCommandTest extends Test
 
     /**
      * @throws ReflectionException If the property does not exist in the reflected
-     *  class.
+     * class.
      */
     #[Testing]
     public function setDatabaseEngine(): void
@@ -122,9 +123,25 @@ class MigrationCommandTest extends Test
     #[Testing]
     public function executeIsInvalid(): void
     {
-        $this->assertSame(Command::INVALID, $this->commandTester->execute([
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Migration cannot be inside subfolders.');
+        $this->expectExceptionCode(Http::INTERNAL_SERVER_ERROR);
+
+        $this->commandTester->execute([
             'migration' => 'users/create-users',
-        ]));
+        ]);
+    }
+
+    #[Testing]
+    public function executeWithoutConnection(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("The '--connection' option is required.");
+        $this->expectExceptionCode(Http::INTERNAL_SERVER_ERROR);
+
+        $this->commandTester->execute([
+            'migration' => self::MIGRATION_NAME,
+        ]);
     }
 
     #[Testing]
@@ -133,11 +150,11 @@ class MigrationCommandTest extends Test
     {
         $commandExecute = $this->commandTester
             ->setInputs([
-                'local',
                 MigrationFactory::SCHEMA,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
+                '--connection' => 'local',
             ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
@@ -146,6 +163,8 @@ class MigrationCommandTest extends Test
 
         /** @phpstan-ignore-next-line */
         $objClass = new (self::NAMESPACE_MYSQL_SCHEMA . self::CLASS_NAME)();
+
+        $this->assertIsObject($objClass);
 
         $this->assertInstances($objClass, [
             MigrationUpInterface::class,
@@ -163,11 +182,11 @@ class MigrationCommandTest extends Test
 
         $this->commandTester
             ->setInputs([
-                'lion_database_postgres',
                 MigrationFactory::SCHEMA,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
+                '--connection' => 'lion_database_postgres',
             ]);
     }
 
@@ -181,11 +200,11 @@ class MigrationCommandTest extends Test
 
         $this->commandTester
             ->setInputs([
-                'lion_database_sqlite',
                 MigrationFactory::SCHEMA,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
+                '--connection' => 'lion_database_sqlite',
             ]);
     }
 
@@ -195,11 +214,11 @@ class MigrationCommandTest extends Test
     {
         $commandExecute = $this->commandTester
             ->setInputs([
-                'local',
                 MigrationFactory::TABLE,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
+                '--connection' => 'local',
             ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
@@ -208,6 +227,8 @@ class MigrationCommandTest extends Test
 
         /** @phpstan-ignore-next-line */
         $objClass = new (self::NAMESPACE_MYSQL_TABLE . self::CLASS_NAME)();
+
+        $this->assertIsObject($objClass);
 
         $this->assertInstances($objClass, [
             MigrationUpInterface::class,
@@ -221,11 +242,11 @@ class MigrationCommandTest extends Test
     {
         $commandExecute = $this->commandTester
             ->setInputs([
-                'local',
                 MigrationFactory::VIEW,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
+                '--connection' => 'local',
             ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
@@ -234,6 +255,8 @@ class MigrationCommandTest extends Test
 
         /** @phpstan-ignore-next-line */
         $objClass = new (self::NAMESPACE_MYSQL_VIEW . self::CLASS_NAME)();
+
+        $this->assertIsObject($objClass);
 
         $this->assertInstances($objClass, [
             MigrationUpInterface::class,
@@ -247,11 +270,11 @@ class MigrationCommandTest extends Test
     {
         $commandExecute = $this->commandTester
             ->setInputs([
-                'local',
                 MigrationFactory::STORED_PROCEDURE,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
+                '--connection' => 'local',
             ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
@@ -260,6 +283,8 @@ class MigrationCommandTest extends Test
 
         /** @phpstan-ignore-next-line */
         $objClass = new (self::NAMESPACE_MYSQL_STORE_PROCEDURES . self::CLASS_NAME)();
+
+        $this->assertIsObject($objClass);
 
         $this->assertInstances($objClass, [
             MigrationUpInterface::class,
@@ -273,11 +298,11 @@ class MigrationCommandTest extends Test
     {
         $commandExecute = $this->commandTester
             ->setInputs([
-                'lion_database_postgres',
                 MigrationFactory::TABLE,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
+                '--connection' => 'lion_database_postgres',
             ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
@@ -286,6 +311,8 @@ class MigrationCommandTest extends Test
 
         /** @phpstan-ignore-next-line */
         $objClass = new (self::NAMESPACE_POSTGRESQL_TABLE . self::CLASS_NAME)();
+
+        $this->assertIsObject($objClass);
 
         $this->assertInstances($objClass, [
             MigrationUpInterface::class,
@@ -299,11 +326,11 @@ class MigrationCommandTest extends Test
     {
         $commandExecute = $this->commandTester
             ->setInputs([
-                'lion_database_postgres',
                 MigrationFactory::VIEW,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
+                '--connection' => 'lion_database_postgres',
             ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
@@ -312,6 +339,8 @@ class MigrationCommandTest extends Test
 
         /** @phpstan-ignore-next-line */
         $objClass = new (self::NAMESPACE_POSTGRESQL_VIEW . self::CLASS_NAME)();
+
+        $this->assertIsObject($objClass);
 
         $this->assertInstances($objClass, [
             MigrationUpInterface::class,
@@ -325,11 +354,11 @@ class MigrationCommandTest extends Test
     {
         $commandExecute = $this->commandTester
             ->setInputs([
-                'lion_database_postgres',
                 MigrationFactory::STORED_PROCEDURE,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
+                '--connection' => 'lion_database_postgres',
             ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
@@ -338,6 +367,8 @@ class MigrationCommandTest extends Test
 
         /** @phpstan-ignore-next-line */
         $objClass = new (self::NAMESPACE_POSTGRESQL_STORE_PROCEDURES . self::CLASS_NAME)();
+
+        $this->assertIsObject($objClass);
 
         $this->assertInstances($objClass, [
             MigrationUpInterface::class,

@@ -28,7 +28,7 @@
             "Tests\\": "tests/",
             "Database\\Class\\": "database/Class/",
             "Database\\Factory\\": "database/Factory/",
-            "Database\\Seed\\": "database/Seed/",
+            "Database\\Seeds\\": "database/Seeds/",
             "Database\\Migrations\\": "database/Migrations/"
         },
         "files": [
