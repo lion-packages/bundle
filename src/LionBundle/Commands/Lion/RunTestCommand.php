@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lion\Bundle\Commands\Lion;
 
+use Lion\Bundle\Commands\Lion\New\TestCommand;
 use Lion\Command\Command;
 use LogicException;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,7 +14,7 @@ use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 
 /**
- * Run the tests defined with PHPUnit
+ * Run the tests defined with PHPUnit.
  *
  * @codeCoverageIgnore
  */
@@ -88,6 +89,8 @@ class RunTestCommand extends Command
 
         $commandString = "{$phpBinaryPath} {$binary}";
 
+        $testPath = TestCommand::TEST_PATH;
+
         /**
          * -----------------------------------------------------------------------------
          * Defines what options are added to the command.
@@ -99,7 +102,7 @@ class RunTestCommand extends Command
         }
 
         if (!empty($class)) {
-            $commandString .= ' ./tests/' . escapeshellarg($class) . '.php';
+            $commandString .= " {$testPath}" . escapeshellarg($class) . '.php';
         }
 
         if (!empty($method)) {
@@ -111,7 +114,9 @@ class RunTestCommand extends Command
         }
 
         if ($withReport) {
-            $commandString .= ' --coverage-clover tests/build/logs/clover.xml --coverage-html tests/build/coverage';
+            $commandString .= " --coverage-clover {$testPath}/build/logs/clover.xml";
+
+            $commandString .= " --coverage-html {$testPath}/build/coverage";
         }
 
         /**
