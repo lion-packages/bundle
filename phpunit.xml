@@ -5,7 +5,7 @@
     backupGlobals="false"
     backupStaticProperties="false"
     bootstrap="tests/bootstrap.php"
-    cacheDirectory="tests/build/cache"
+    cacheDirectory="tests/PHPUnit/build/cache"
     cacheResult="true"
     colors="true"
     columns="80"
