@@ -156,7 +156,7 @@ jobs:
         run: php -d memory_limit=-1 vendor/bin/phplint tests
 
       - name: PHPStan (Src)
-        run: php -d memory_limit=-1 vendor/bin/phpstan analyse --level max src
+        run: php -d memory_limit=-1 vendor/bin/phpstan analyse --level 10 src
 
       - name: PHP CodeSniffer (Src)
         run: php -d memory_limit=-1 vendor/bin/phpcs --standard=PSR12 src

@@ -18,13 +18,17 @@ RUN pecl install ev redis xdebug \
     && docker-php-ext-install mbstring gd zip pdo pdo_mysql pdo_pgsql \
     && docker-php-ext-enable xdebug redis gd zip pdo_pgsql
 # Configure Xdebug
-RUN echo "xdebug.mode=develop,coverage,debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.idekey=docker" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.log=/dev/stdout" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.log_level=0" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.client_port=9000" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN { \
+      echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)"; \
+      echo "xdebug.mode=develop,debug,coverage"; \
+      echo "xdebug.start_with_request=yes"; \
+      echo "xdebug.idekey=PHPSTORM"; \
+      echo "xdebug.log=/tmp/xdebug.log"; \
+      echo "xdebug.log_level=7"; \
+      echo "xdebug.discover_client_host=false"; \
+      echo "xdebug.client_host=host.docker.internal"; \
+      echo "xdebug.client_port=9003"; \
+    } > /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 # ----------------------------------------------------------------------------------------------------------------------
 USER lion
 

@@ -21,6 +21,7 @@ use Lion\Test\Test as Testing;
 use ReflectionClass;
 use ReflectionException;
 use RuntimeException;
+use stdClass;
 use Throwable;
 
 /**
@@ -322,6 +323,7 @@ abstract class Test extends Testing
 
             $tempConnections[$connectionName] = $tempDbName;
 
+            /** @var stdClass $response */
             $response = MySQL::connection($connectionName)
                 ->createDatabase($tempDbName)
                 ->execute();
@@ -350,6 +352,7 @@ abstract class Test extends Testing
                     'dbname' => $connection['dbname'],
                 ]);
 
+                /** @var stdClass $response */
                 $response = MySQL::connection($connectionName)
                     ->dropDatabase($tempConnections[$connectionName])
                     ->execute();
