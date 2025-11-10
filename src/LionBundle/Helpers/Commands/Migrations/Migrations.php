@@ -37,6 +37,11 @@ class Migrations
     public const string MIGRATIONS_PATH = 'database/Migrations/';
 
     /**
+     * @const SEEDS_PATH
+     */
+    public const string SEEDS_PATH = 'database/Seeds/';
+
+    /**
      * Manipulate system files.
      *
      * @var Store $store

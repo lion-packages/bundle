@@ -6,24 +6,27 @@ namespace Lion\Bundle\Commands\Lion\New;
 
 use DI\Attribute\Inject;
 use Exception;
+use InvalidArgumentException;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\Migrations\MigrationFactory;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Bundle\Helpers\DatabaseEngine;
 use Lion\Database\Connection;
+use Lion\Request\Http;
 use LogicException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Generate a migration for database structure control
+ * Generate a migration for database structure control.
  */
 class MigrationCommand extends MenuCommand
 {
     /**
      * Fabricates the data provided to manipulate information (folder, class,
-     * namespace)
+     * namespace).
      *
      * @var ClassFactory $classFactory
      */
@@ -77,7 +80,8 @@ class MigrationCommand extends MenuCommand
         $this
             ->setName('new:migration')
             ->setDescription('Command required to generate a new migration')
-            ->addArgument('migration', InputArgument::REQUIRED, 'Migration name');
+            ->addArgument('migration', InputArgument::REQUIRED, 'Migration name')
+            ->addOption('connection', 'c', InputOption::VALUE_REQUIRED, 'The connection to run.');
     }
 
     /**
@@ -103,19 +107,24 @@ class MigrationCommand extends MenuCommand
         $migration = $input->getArgument('migration');
 
         if (STR->of($migration)->test("/.*\//")) {
-            $output->writeln($this->warningOutput("\t>>  MIGRATION: {$migration}"));
-
-            $output->writeln($this->errorOutput("\t>>  MIGRATION: Migration cannot be inside subfolders"));
-
-            return parent::INVALID;
+            throw new InvalidArgumentException('Migration cannot be inside subfolders.', Http::INTERNAL_SERVER_ERROR);
         }
 
-        $selectedConnection = $this->selectConnection($input, $output);
+        /** @var string|null $connectionName */
+        $connectionName = $input->getOption('connection');
 
-        $connectionName = Connection::getConnections()[$selectedConnection]['dbname'];
+        if (!$connectionName) {
+            throw new InvalidArgumentException("The '--connection' option is required.", Http::INTERNAL_SERVER_ERROR);
+        }
+
+        $connections = Connection::getConnections();
+
+        $connection = $connections[$connectionName];
+
+        $dbName = $connection[Connection::CONNECTION_DBNAME];
 
         /** @var string $databaseEngineType */
-        $databaseEngineType = $this->databaseEngine->getDatabaseEngineType($selectedConnection);
+        $databaseEngineType = $this->databaseEngine->getDatabaseEngineType($connectionName);
 
         $driver = $this->databaseEngine->getDriver($databaseEngineType);
 
@@ -132,7 +141,7 @@ class MigrationCommand extends MenuCommand
 
         /** @var string $dbPascal */
         $dbPascal = $this->str
-            ->of($connectionName)
+            ->of($dbName)
             ->replace('-', ' ')
             ->replace('_', ' ')
             ->pascal()
@@ -163,11 +172,11 @@ class MigrationCommand extends MenuCommand
 
         $output->writeln(
             $this->warningOutput(
-                "\t>>  MIGRATION: {$this->classFactory->getNamespace()}\\{$this->classFactory->getClass()}"
+                "\t>> MIGRATION: {$this->classFactory->getNamespace()}\\{$this->classFactory->getClass()}"
             )
         );
 
-        $output->writeln($this->successOutput("\t>>  MIGRATION: The migration was generated successfully."));
+        $output->writeln($this->successOutput("\t>> MIGRATION: The migration was generated successfully."));
 
         return parent::SUCCESS;
     }

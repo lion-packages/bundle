@@ -182,10 +182,10 @@ class ClassFactory
 
     /**
      * Generates the information required for the classes (class, namespace,
-     * folder)
+     * folder).
      *
-     * @param string $path [File path]
-     * @param string $fileName [File name]
+     * @param string $path File path.
+     * @param string $fileName File name.
      *
      * @return ClassFactory
      */

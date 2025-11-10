@@ -6,6 +6,7 @@ namespace Lion\Bundle\Commands\Lion\Migrations;
 
 use DI\Attribute\Inject;
 use Exception;
+use InvalidArgumentException;
 use Lion\Bundle\Helpers\Commands\Migrations\Migrations;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Bundle\Helpers\DatabaseEngine;
@@ -15,6 +16,7 @@ use Lion\Bundle\Interface\Migrations\TableInterface;
 use Lion\Bundle\Interface\Migrations\ViewInterface;
 use Lion\Bundle\Interface\MigrationUpInterface;
 use Lion\Database\Connection;
+use Lion\Request\Http;
 use LogicException;
 use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -67,7 +69,8 @@ class FreshMigrationsCommand extends MenuCommand
         $this
             ->setName('migrate:fresh')
             ->setDescription('Drop all tables and re-run all migrations')
-            ->addOption('seed', 's', InputOption::VALUE_OPTIONAL, 'Do you want to run the seeds?', 'none');
+            ->addOption('seed', 's', InputOption::VALUE_OPTIONAL, 'Do you want to run the seeds?', 'none')
+            ->addOption('connection', 'c', InputOption::VALUE_REQUIRED, 'The connection to run.');
     }
 
     /**
@@ -110,7 +113,12 @@ class FreshMigrationsCommand extends MenuCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $connectionName = $this->selectConnection($input, $output);
+        /** @var string|null $connectionName */
+        $connectionName = $input->getOption('connection');
+
+        if (!$connectionName) {
+            throw new InvalidArgumentException("The '--connection' option is required.", Http::INTERNAL_SERVER_ERROR);
+        }
 
         $connections = Connection::getConnections();
 
