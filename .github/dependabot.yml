@@ -1,9 +1,17 @@
 version: 2
-updates:
-  - package-ecosystem: "composer"
-    directory: "/"
+
+multi-ecosystem-groups:
+  maintenance:
     schedule:
       interval: "monthly"
       time: "05:15"
       timezone: "America/Bogota"
-    rebase-strategy: "auto"
+
+updates:
+  - package-ecosystem: "composer"
+    directory: "/"
+    patterns: ["*"]
+    multi-ecosystem-group: "maintenance"
+    labels:
+      - "php"
+      - "dependencies"
