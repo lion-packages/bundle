@@ -37,7 +37,7 @@ class RouteListCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($this->routeListCommand);
+        $application->addCommand($this->routeListCommand);
 
         $this->commandTester = new CommandTester($application->find('route:list'));
 

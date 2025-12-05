@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.3/phpunit.xsd"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/12.5/phpunit.xsd"
     backupGlobals="false"
     backupStaticProperties="false"
     bootstrap="tests/bootstrap.php"
@@ -17,7 +17,6 @@
     displayDetailsOnTestsThatTriggerNotices="true"
     displayDetailsOnTestsThatTriggerWarnings="true"
     processIsolation="false"
-    stopOnDefect="true"
     stopOnError="true"
     stopOnFailure="true"
     stopOnWarning="true"
@@ -29,6 +28,8 @@
         <ini name="date.timezone" value="America/Bogota" />
         <ini name="intl.default_locale" value="C.UTF-8" />
         <ini name="memory_limit" value="2048M" />
+        <ini name="error_reporting" value="-1"/>
+        <ini name="display_errors" value="1"/>
     </php>
 
     <source>

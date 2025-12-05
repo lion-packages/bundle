@@ -37,7 +37,7 @@ class AESTest extends Test
 
         $application = new Application();
 
-        $application->add($this->aesCommand);
+        $application->addCommand($this->aesCommand);
 
         $this->commandTester = new CommandTester($application->find('new:aes'));
 

@@ -12,39 +12,37 @@ use Lion\Files\Store;
 use Symfony\Component\Console\Application;
 
 /**
- * Initialize the command application to execute its functions
- *
- * @package Lion\Bundle\Commands
+ * Initialize the command application to execute its functions.
  *
  * @codeCoverageIgnore
  */
 class CommandHandler
 {
     /**
-     * [An Application is the container for a collection of commands]
+     * An Application is the container for a collection of commands.
      *
      * @var Application $application
      */
     private Application $application;
 
     /**
-     * [Dependency Injection Container Wrapper]
+     * Dependency Injection Container Wrapper.
      *
      * @var Container $container
      */
     private Container $container;
 
     /**
-     * [Manipulate system files]
+     * Manipulate system files.
      *
      * @var Store $store
      */
     private Store $store;
 
     /**
-     * Class constructor
+     * Class constructor.
      *
-     * @param string $name [Application name]
+     * @param string $name Application name.
      */
     public function __construct(string $name = '')
     {
@@ -58,28 +56,26 @@ class CommandHandler
     }
 
     /**
-     * Add commands in the application
+     * Add commands in the application.
      *
-     * @param array<int, Command> $commands [Command List]
+     * @param array<int, Command> $commands Command List.
      */
-    private function add(array $commands): void
+    private function addCommands(array $commands): void
     {
-        foreach ($commands as $command) {
-            $this->application->add($command);
-        }
+        $this->application->addCommands($commands);
     }
 
     /**
-     * Gets the list of routes with all available commands
+     * Gets the list of routes with all available commands.
      *
-     * @param string $pathCommands [Defined route]
-     * @param string $namespace [Namespace for Command classes]
-     * @param non-empty-string $pathSplit [Route separated]
+     * @param string $pathCommands Defined route.
+     * @param string $namespace Namespace for Command classes.
+     * @param non-empty-string $pathSplit Route separated.
      *
      * @return array<int, Command>
      *
-     * @throws DependencyException
-     * @throws NotFoundException
+     * @throws DependencyException Error while resolving the entry.
+     * @throws NotFoundException No entry found for the given name.
      */
     private function getCommands(string $pathCommands, string $namespace, string $pathSplit): array
     {
@@ -101,26 +97,28 @@ class CommandHandler
     }
 
     /**
-     * Record commands for a defined route
+     * Record commands for a defined route.
      *
-     * @param string $pathCommands [Defined route]
-     * @param string $namespace [Namespace for Command classes]
-     * @param non-empty-string $pathSplit [Route separated]
+     * @param string $pathCommands Defined route.
+     * @param string $namespace Namespace for Command classes.
+     * @param non-empty-string $pathSplit Route separated.
      *
      * @return CommandHandler
      *
-     * @throws DependencyException
-     * @throws NotFoundException
+     * @throws DependencyException Error while resolving the entry.
+     * @throws NotFoundException No entry found for the given name.
      */
     public function registerCommands(string $pathCommands, string $namespace, string $pathSplit): CommandHandler
     {
-        $this->add($this->getCommands($pathCommands, $namespace, $pathSplit));
+        $commands = $this->getCommands($pathCommands, $namespace, $pathSplit);
+
+        $this->addCommands($commands);
 
         return $this;
     }
 
     /**
-     * Get the app
+     * Get the app.
      *
      * @return Application
      */

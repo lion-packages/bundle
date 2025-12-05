@@ -47,7 +47,7 @@ class FactoryCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($this->factoryCommand);
+        $application->addCommand($this->factoryCommand);
 
         $this->commandTester = new CommandTester($application->find('new:factory'));
 

@@ -47,7 +47,7 @@ class RulesCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($this->rulesCommand);
+        $application->addCommand($this->rulesCommand);
 
         $this->commandTester = new CommandTester($application->find('new:rule'));
 

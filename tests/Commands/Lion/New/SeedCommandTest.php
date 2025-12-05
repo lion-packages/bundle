@@ -54,7 +54,7 @@ class SeedCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($this->seedCommand);
+        $application->addCommand($this->seedCommand);
 
         $this->commandTester = new CommandTester($application->find('new:seed'));
 

@@ -41,7 +41,7 @@ class TraitCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($this->traitCommand);
+        $application->addCommand($this->traitCommand);
 
         $this->commandTester = new CommandTester($application->find('new:trait'));
 

@@ -10,14 +10,17 @@ use Lion\Bundle\Commands\Lion\DB\DBCapsuleCommand;
 use Lion\Bundle\Commands\Lion\New\CapsuleCommand;
 use Lion\Bundle\Commands\Lion\New\InterfaceCommand;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
+use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Bundle\Helpers\DatabaseEngine;
 use Lion\Database\Drivers\Schema\MySQL as Schema;
+use Lion\Database\Interface\DatabaseCapsuleInterface;
 use Lion\Dependency\Injection\Container;
 use Lion\Helpers\Arr;
 use Lion\Helpers\Str;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
 use ReflectionException;
+use stdClass;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -37,7 +40,6 @@ class DBCapsuleCommandTest extends Test
 
     /**
      * @throws NotFoundException
-     * @throws ReflectionException
      * @throws DependencyException
      */
     protected function setUp(): void
@@ -57,11 +59,11 @@ class DBCapsuleCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($interfaceCommand);
+        $application->addCommand($interfaceCommand);
 
-        $application->add($capsuleCommand);
+        $application->addCommand($capsuleCommand);
 
-        $application->add($this->dbCapsuleCommand);
+        $application->addCommand($this->dbCapsuleCommand);
 
         $this->commandTester = new CommandTester($application->find('db:capsule'));
 
@@ -271,34 +273,49 @@ class DBCapsuleCommandTest extends Test
             })
             ->execute();
 
-        $mockCommand = $this->getMockBuilder(DBCapsuleCommand::class)
-            ->onlyMethods(['getTableForeigns'])
-            ->getMock();
+        $capsuleCommand = new class () extends DBCapsuleCommand {
+            /**
+             * Get the foreign keys of a table.
+             *
+             * @param string $driver Database engine.
+             * @param string $connectionName Database connection.
+             * @param string $databaseName Database name.
+             * @param string $entity Entity name.
+             *
+             * @return array<int, array<int|string, mixed>|DatabaseCapsuleInterface|stdClass>|stdClass
+             *
+             * @phpstan-ignore-next-line
+             */
+            protected function getTableForeigns(
+                string $driver,
+                string $connectionName,
+                string $databaseName,
+                string $entity
+            ): array|stdClass {
+                $class = new stdClass();
 
-        $mockCommand
+                $class->message = 'ERROR MESSAGE';
+
+                return $class;
+            }
+        };
+
+        $capsuleCommand
             ->setStr(new Str())
             ->setArr(new Arr());
 
-        $mockCommand
+        $capsuleCommand
             ->setDatabaseEngine(new DatabaseEngine());
-
-        $mockCommand->method('getTableForeigns')->willReturn((object) [
-            'message' => 'ERROR MESSAGE',
-        ]);
 
         $application = new Application();
 
-        $application->add($mockCommand);
+        $application->addCommand($capsuleCommand);
 
         $tester = new CommandTester($application->find('db:capsule'));
 
         $exitCode = $tester
-            ->setInputs([
-                '0',
-            ])
-            ->execute([
-                'entity' => 'users',
-            ]);
+            ->setInputs(['0'])
+            ->execute(['entity' => 'users']);
 
         $this->assertEquals(Command::FAILURE, $exitCode);
 

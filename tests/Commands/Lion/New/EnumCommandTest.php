@@ -41,7 +41,7 @@ class EnumCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($this->enumCommand);
+        $application->addCommand($this->enumCommand);
 
         $this->commandTester = new CommandTester($application->find('new:enum'));
 

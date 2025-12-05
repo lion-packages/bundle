@@ -66,9 +66,9 @@ class ControllerCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($this->controllerCommand);
+        $application->addCommand($this->controllerCommand);
 
-        $application->add($modelCommand);
+        $application->addCommand($modelCommand);
 
         $this->commandTester = new CommandTester($application->find('new:controller'));
 

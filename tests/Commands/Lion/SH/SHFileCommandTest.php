@@ -41,7 +41,7 @@ class SHFileCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($this->shFileCommand);
+        $application->addCommand($this->shFileCommand);
 
         $this->commandTester = new CommandTester($application->find('new:sh'));
 

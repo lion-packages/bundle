@@ -54,9 +54,9 @@ class DBSeedCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($seedCommand);
+        $application->addCommand($seedCommand);
 
-        $application->add($this->dbSeedCommand);
+        $application->addCommand($this->dbSeedCommand);
 
         $this->commandTester = new CommandTester($application->find('db:seed'));
 

@@ -39,7 +39,7 @@ class RSACommandTest extends Test
 
         $application = new Application();
 
-        $application->add($this->rsaCommand);
+        $application->addCommand($this->rsaCommand);
 
         $this->commandTester = new CommandTester($application->find('new:rsa'));
 
