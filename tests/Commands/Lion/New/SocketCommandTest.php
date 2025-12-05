@@ -41,7 +41,7 @@ class SocketCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($this->socketCommand);
+        $application->addCommand($this->socketCommand);
 
         $this->commandTester = new CommandTester($application->find('new:socket'));
 

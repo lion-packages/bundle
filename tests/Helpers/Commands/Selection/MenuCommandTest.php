@@ -144,7 +144,7 @@ class MenuCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($command);
+        $application->addCommand($command);
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -181,7 +181,7 @@ class MenuCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($menuCommand);
+        $application->addCommand($menuCommand);
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -221,7 +221,7 @@ class MenuCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($menuCommand);
+        $application->addCommand($menuCommand);
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -275,7 +275,7 @@ class MenuCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($menuCommand);
+        $application->addCommand($menuCommand);
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -330,7 +330,7 @@ class MenuCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($menuCommand);
+        $application->addCommand($menuCommand);
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -371,7 +371,7 @@ class MenuCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($menuCommand);
+        $application->addCommand($menuCommand);
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -410,7 +410,7 @@ class MenuCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($menuCommand);
+        $application->addCommand($menuCommand);
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -472,7 +472,7 @@ class MenuCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($menuCommand);
+        $application->addCommand($menuCommand);
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -522,7 +522,7 @@ class MenuCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($menuCommand);
+        $application->addCommand($menuCommand);
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -564,7 +564,7 @@ class MenuCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($menuCommand);
+        $application->addCommand($menuCommand);
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
@@ -619,7 +619,7 @@ class MenuCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($menuCommand);
+        $application->addCommand($menuCommand);
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 

@@ -34,7 +34,7 @@ class RunQueuedTasksCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($this->runQueuedTasksCommand);
+        $application->addCommand($this->runQueuedTasksCommand);
 
         $this->initReflection($this->runQueuedTasksCommand);
     }

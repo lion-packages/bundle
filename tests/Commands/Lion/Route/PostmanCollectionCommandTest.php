@@ -49,9 +49,9 @@ class PostmanCollectionCommandTest extends Test
 
         $this->postmanCollectionCommand = $postmanCollectionCommand;
 
-        $application->add($rulesCommand);
+        $application->addCommand($rulesCommand);
 
-        $application->add($this->postmanCollectionCommand);
+        $application->addCommand($this->postmanCollectionCommand);
 
         $this->commandTester = new CommandTester($application->find('route:postman'));
 

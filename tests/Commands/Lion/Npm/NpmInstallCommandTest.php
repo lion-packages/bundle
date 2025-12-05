@@ -46,9 +46,9 @@ class NpmInstallCommandTest extends Test
 
         $this->npmInstallCommand = $npmInstallCommand;
 
-        $application->add($npmInitCommand);
+        $application->addCommand($npmInitCommand);
 
-        $application->add($this->npmInstallCommand);
+        $application->addCommand($this->npmInstallCommand);
 
         $this->commandTesterNpmIn = new CommandTester($application->find('npm:init'));
 

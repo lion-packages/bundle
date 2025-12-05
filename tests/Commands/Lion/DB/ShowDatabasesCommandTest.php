@@ -24,7 +24,7 @@ class ShowDatabasesCommandTest extends Test
     {
         $application = new Application();
 
-        $application->add(new ShowDatabasesCommand());
+        $application->addCommand(new ShowDatabasesCommand());
 
         $this->commandTester = new CommandTester($application->find('db:show'));
     }

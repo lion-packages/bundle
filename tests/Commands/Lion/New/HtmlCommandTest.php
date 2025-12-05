@@ -45,7 +45,7 @@ class HtmlCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($this->htmlCommand);
+        $application->addCommand($this->htmlCommand);
 
         $this->commandTester = new CommandTester($application->find('new:html'));
 

@@ -36,7 +36,7 @@ class MigrationsDropCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($this->migrationsDropCommand);
+        $application->addCommand($this->migrationsDropCommand);
 
         $this->commandTester = new CommandTester($application->find('migrate:drop'));
 

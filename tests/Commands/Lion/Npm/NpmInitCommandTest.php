@@ -39,7 +39,7 @@ class NpmInitCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($this->npmInitCommand);
+        $application->addCommand($this->npmInitCommand);
 
         $this->commandTester = new CommandTester($application->find('npm:init'));
 

@@ -53,11 +53,11 @@ class NpmRunBuildCommandTest extends Test
 
         $this->npmRunBuildCommand = $npmRunBuildCommand;
 
-        $application->add($npmInitCommand);
+        $application->addCommand($npmInitCommand);
 
-        $application->add($npmInstallCommand);
+        $application->addCommand($npmInstallCommand);
 
-        $application->add($this->npmRunBuildCommand);
+        $application->addCommand($this->npmRunBuildCommand);
 
         $this->commandTesterNpmInit = new CommandTester($application->find('npm:init'));
 

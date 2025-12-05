@@ -52,11 +52,11 @@ class NpmUninstallCommandTest extends Test
 
         $this->npmUninstallCommand = $npmUninstallCommand;
 
-        $application->add($npmInitCommand);
+        $application->addCommand($npmInitCommand);
 
-        $application->add($npmInstallCommand);
+        $application->addCommand($npmInstallCommand);
 
-        $application->add($npmUninstallCommand);
+        $application->addCommand($npmUninstallCommand);
 
         $this->commandTesterNpmIn = new CommandTester($application->find('npm:init'));
 

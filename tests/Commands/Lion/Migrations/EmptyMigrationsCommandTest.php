@@ -27,7 +27,7 @@ class EmptyMigrationsCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($this->emptyMigrationsCommand);
+        $application->addCommand($this->emptyMigrationsCommand);
 
         $this->commandTester = new CommandTester($application->find('migrate:empty'));
 

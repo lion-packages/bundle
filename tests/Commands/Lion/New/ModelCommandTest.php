@@ -50,7 +50,7 @@ class ModelCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($this->modelCommand);
+        $application->addCommand($this->modelCommand);
 
         $this->commandTester = new CommandTester($application->find('new:model'));
 

@@ -41,7 +41,7 @@ class InterfaceCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($this->interfaceCommand);
+        $application->addCommand($this->interfaceCommand);
 
         $this->commandTester = new CommandTester($application->find('new:interface'));
 

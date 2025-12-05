@@ -58,9 +58,9 @@ class RulesDBCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($rulesCommand);
+        $application->addCommand($rulesCommand);
 
-        $application->add($this->rulesDBCommand);
+        $application->addCommand($this->rulesDBCommand);
 
         $this->commandTester = new CommandTester($application->find('db:rules'));
 

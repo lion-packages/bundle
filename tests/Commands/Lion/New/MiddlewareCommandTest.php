@@ -43,7 +43,7 @@ class MiddlewareCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($this->middlewareCommand);
+        $application->addCommand($this->middlewareCommand);
 
         $this->commandTester = new CommandTester($application->find('new:middleware'));
 

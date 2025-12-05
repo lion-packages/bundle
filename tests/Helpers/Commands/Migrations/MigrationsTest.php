@@ -76,7 +76,7 @@ class MigrationsTest extends Test
 
         $application = new Application();
 
-        $application->add($migrationCommand);
+        $application->addCommand($migrationCommand);
 
         $this->commandTester = new CommandTester($application->find('new:migration'));
 
