@@ -46,9 +46,9 @@ class NpmUpdateCommandTest extends Test
 
         $this->npmUpdateCommand = $npmUpdateCommand;
 
-        $application->add($npmInitCommand);
+        $application->addCommand($npmInitCommand);
 
-        $application->add($this->npmUpdateCommand);
+        $application->addCommand($this->npmUpdateCommand);
 
         $this->commandTesterNpmIn = new CommandTester($application->find('npm:init'));
 

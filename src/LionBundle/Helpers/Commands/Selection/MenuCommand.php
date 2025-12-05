@@ -433,12 +433,12 @@ class MenuCommand extends Command
     }
 
     /**
-     * Get the foreign keys of a table
+     * Get the foreign keys of a table.
      *
-     * @param string $driver Database engine
-     * @param string $connectionName Database connection
-     * @param string $databaseName Database name
-     * @param string $entity Entity name
+     * @param string $driver Database engine.
+     * @param string $connectionName Database connection.
+     * @param string $databaseName Database name.
+     * @param string $entity Entity name.
      *
      * @return array<int, array<int|string, mixed>|DatabaseCapsuleInterface|stdClass>|stdClass
      *

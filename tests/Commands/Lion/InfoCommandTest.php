@@ -35,7 +35,7 @@ class InfoCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($this->infoCommand);
+        $application->addCommand($this->infoCommand);
 
         $this->commandTester = new CommandTester($application->find('info'));
 

@@ -47,7 +47,7 @@ class ExceptionsCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($this->exceptionsCommand);
+        $application->addCommand($this->exceptionsCommand);
 
         $this->commandTester = new CommandTester($application->find('new:exception'));
 

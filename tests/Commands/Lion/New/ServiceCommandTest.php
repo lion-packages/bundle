@@ -43,7 +43,7 @@ class ServiceCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($this->serviceCommand);
+        $application->addCommand($this->serviceCommand);
 
         $this->commandTester = new CommandTester($application->find('new:service'));
 

@@ -47,9 +47,9 @@ class TestTest extends Test
 
         $application = new Application();
 
-        $application->add($interfaceCommand);
+        $application->addCommand($interfaceCommand);
 
-        $application->add($capsuleCommand);
+        $application->addCommand($capsuleCommand);
 
         $this->commandTester = new CommandTester($application->find('new:capsule'));
     }

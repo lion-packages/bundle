@@ -43,7 +43,7 @@ class ClassCommandTest extends Test
 
         $application = new Application();
 
-        $application->add($this->classCommand);
+        $application->addCommand($this->classCommand);
 
         $this->commandTester = new CommandTester($application->find('new:class'));
 
