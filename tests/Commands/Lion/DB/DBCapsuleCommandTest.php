@@ -273,7 +273,7 @@ class DBCapsuleCommandTest extends Test
             })
             ->execute();
 
-        $capsuleCommand = new class extends DBCapsuleCommand {
+        $capsuleCommand = new class () extends DBCapsuleCommand {
             /**
              * Get the foreign keys of a table.
              *
