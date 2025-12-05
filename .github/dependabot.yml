@@ -8,6 +8,7 @@ multi-ecosystem-groups:
       timezone: "America/Bogota"
 
 updates:
+  # Composer (PHP)
   - package-ecosystem: "composer"
     directory: "/"
     patterns: ["*"]
