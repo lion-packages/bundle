@@ -90,7 +90,7 @@ $commandHandler->registerCommands(
     'Commands/Lion/'
 );
 
-if (isSuccess((new Store())->exist('./app/Console/Commands/'))) {
+if (isSuccess(new Store()->exist('./app/Console/Commands/'))) {
     $commandHandler->registerCommands(
         './app/Console/Commands/',
         'App\\Console\\Commands\\',
