@@ -223,10 +223,10 @@ jobs:
           echo "Server running at http://localhost:8000"
 
       - name: Run tests
-        run: php vendor/bin/phpunit --coverage-clover tests/build/logs/clover.xml
+        run: php vendor/bin/phpunit --coverage-clover tests/PHPUnit/build/logs/clover.xml
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
-          files: tests/build/logs/clover.xml
+          files: tests/PHPUnit/build/logs/clover.xml
           token: ${{ secrets.CODECOV_TOKEN_LION_BUNDLE }}
