@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "09586920af7b3683fcb4694466d9eb82",
+    "content-hash": "42a8bfbb007eb1d14cc1104391b99970",
     "packages": [
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -4236,21 +4236,21 @@
         },
         {
             "name": "lion/test",
-            "version": "v3.14.0",
+            "version": "v4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/test.git",
-                "reference": "125e0bb33e4e84ecc8ca12dce04b8c19ed081217"
+                "reference": "87bfdf9dd80b9c4918c025e850e286f0272045fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/test/zipball/125e0bb33e4e84ecc8ca12dce04b8c19ed081217",
-                "reference": "125e0bb33e4e84ecc8ca12dce04b8c19ed081217",
+                "url": "https://api.github.com/repos/lion-packages/test/zipball/87bfdf9dd80b9c4918c025e850e286f0272045fa",
+                "reference": "87bfdf9dd80b9c4918c025e850e286f0272045fa",
                 "shasum": ""
             },
             "require": {
                 "ext-gd": "*",
-                "php": ">=8.4"
+                "php": ">=8.5"
             },
             "require-dev": {
                 "infection/infection": "^0.29.14 || ^0.31.0",
@@ -4270,7 +4270,7 @@
             "license": [
                 "MIT"
             ],
-            "description": "Library to implement testing with helpers that allow easy testing with PHPUnit",
+            "description": "Library to implement testing with helpers that allow easy testing with PHPUnit.",
             "homepage": "https://dev.lion-packages.com",
             "keywords": [
                 "lion",
@@ -4281,7 +4281,7 @@
                 "issues": "https://github.com/lion-packages/test/issues",
                 "source": "https://github.com/lion-packages/test"
             },
-            "time": "2025-12-01T13:31:59+00:00"
+            "time": "2025-12-21T23:48:23+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -6912,7 +6912,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=8.4",
+        "php": ">=8.5",
         "ext-pdo": "*",
         "ext-gd": "*",
         "ext-ctype": "*",
@@ -6924,5 +6924,5 @@
         "ext-tokenizer": "*"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }

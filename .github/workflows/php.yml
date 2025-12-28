@@ -3,24 +3,24 @@ name: Lion-Bundle (CI Workflow)
 on:
   push:
     branches:
-      - actions
+      - php-actions
   pull_request:
     branches:
-      - main
-      - 18.x
+      - 19.x
     paths:
       - 'src/**'
       - 'tests/**'
       - 'composer.json'
       - 'composer.lock'
       - 'phpunit.xml'
-      - 'phpstan.neon'
       - '.styleci.yml'
-      - '.gitignore'
       - '.env.actions'
       - '.github/workflows/**'
       - 'lion'
       - 'npm'
+
+env:
+  PHP_VERSION: 8.5
 
 jobs:
   install-dependencies:
@@ -33,7 +33,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.4
+          php-version: ${{ env.PHP_VERSION }}
           extensions: mbstring, gd, zip
 
       - name: Install PHP dependencies
@@ -45,13 +45,6 @@ jobs:
           path: vendor
           key: php-vendor-${{ runner.os }}-${{ github.run_id }}
           restore-keys: php-vendor-${{ runner.os }}-${{ github.run_id }}
-
-      - name: Cache composer.lock
-        uses: actions/cache@v4
-        with:
-          path: composer.lock
-          key: php-composer-lock-${{ runner.os }}-${{ github.run_id }}
-          restore-keys: php-composer-lock-${{ runner.os }}-${{ github.run_id }}
 
   composer-validation:
     runs-on: ubuntu-latest
@@ -65,15 +58,8 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: ${{ env.PHP_VERSION }}
           extensions: mbstring, gd, zip
-
-      - name: Restore composer.lock from cache
-        uses: actions/cache@v4
-        with:
-          path: composer.lock
-          key: php-composer-lock-${{ runner.os }}-${{ github.run_id }}
-          restore-keys: php-composer-lock-${{ runner.os }}-${{ github.run_id }}
 
       - name: Restore vendor directory from cache
         uses: actions/cache@v4
@@ -103,17 +89,10 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v4
 
-      - name: Restore composer.lock from cache
-        uses: actions/cache@v4
-        with:
-          path: composer.lock
-          key: php-composer-lock-${{ runner.os }}-${{ github.run_id }}
-          restore-keys: php-composer-lock-${{ runner.os }}-${{ github.run_id }}
-
       - name: Dependency Review
         uses: actions/dependency-review-action@v4
         with:
-          base-ref: main
+          base-ref: ${{ github.event.repository.default_branch }}
           head-ref: ${{ github.sha }}
           comment-summary-in-pr: true
           # Possible values: "critical", "high", "moderate", "low"
@@ -132,15 +111,8 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: ${{ env.PHP_VERSION }}
           extensions: mbstring, gd, zip
-
-      - name: Restore composer.lock from cache
-        uses: actions/cache@v4
-        with:
-          path: composer.lock
-          key: php-composer-lock-${{ runner.os }}-${{ github.run_id }}
-          restore-keys: php-composer-lock-${{ runner.os }}-${{ github.run_id }}
 
       - name: Restore vendor directory from cache
         uses: actions/cache@v4
@@ -202,7 +174,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.4
+          php-version: ${{ env.PHP_VERSION }}
           extensions: mbstring, gd, zip, pdo, xdebug, pdo_mysql, pdo_pgsql, redis
           coverage: xdebug
           ini-values: |
