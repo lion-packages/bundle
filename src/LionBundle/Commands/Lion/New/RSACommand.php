@@ -15,20 +15,20 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Generate public and private keys with RSA
+ * Generate public and private keys with RSA.
  */
 class RSACommand extends Command
 {
     /**
      * Allows you to generate the required configuration for public and private
-     * keys, has methods that allow you to encrypt and decrypt data with RSA
+     * keys, has methods that allow you to encrypt and decrypt data with RSA.
      *
      * @var RSA $rsa
      */
     private RSA $rsa;
 
     /**
-     * Manipulate system files
+     * Manipulate system files.
      *
      * @var Store $store
      */
@@ -51,7 +51,7 @@ class RSACommand extends Command
     }
 
     /**
-     * Configures the current command
+     * Configures the current command.
      *
      * @return void
      */
@@ -64,21 +64,21 @@ class RSACommand extends Command
     }
 
     /**
-     * Executes the current command
+     * Executes the current command.
      *
      * This method is not abstract because you can use this class as a concrete
      * class. In this case, instead of defining the execute() method, you set the
-     * code to execute by passing a Closure to the setCode() method
+     * code to execute by passing a Closure to the setCode() method.
      *
      * @param InputInterface $input InputInterface is the interface implemented by
-     * all input classes
+     * all input classes.
      * @param OutputInterface $output OutputInterface is the interface implemented
-     * by all Output classes
+     * by all Output classes.
      *
      * @return int
      *
-     * @throws Exception If the file could not be opened
-     * @throws LogicException When this abstract method is not implemented
+     * @throws Exception If the file could not be opened.
+     * @throws LogicException When this abstract method is not implemented.
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -94,12 +94,14 @@ class RSACommand extends Command
         /** @var string $rsaDefaultMd */
         $rsaDefaultMd = env('RSA_DEFAULT_MD');
 
-        $this->rsa->config([
-            'urlPath' => null === $path ? $this->rsa->getUrlPath() : storage_path($path),
-            'rsaConfig' => $rsaPath,
-            'rsaPrivateKeyBits' => (int) $rsaPrivateKeyBits,
-            'rsaDefaultMd' => $rsaDefaultMd,
-        ]);
+        $this->rsa
+            /** @phpstan-ignore-next-line */
+            ->config([
+                'urlPath' => null === $path ? $this->rsa->getUrlPath() : storage_path($path),
+                'rsaConfig' => $rsaPath,
+                'rsaPrivateKeyBits' => (int) $rsaPrivateKeyBits,
+                'rsaDefaultMd' => $rsaDefaultMd,
+            ]);
 
         $urlPath = $this->rsa->getUrlPath();
 
