@@ -423,13 +423,9 @@ class HelpersTest extends Test
     #[Testing]
     public function jwt(): void
     {
-        /**
-         * @var array{
-         *     iv: string
-         * } $config
-         */
+        /** @var array{ key: string } $config */
         $config = new AES()
-            ->create(AES::AES_256_CBC)
+            ->create()
             ->get();
 
         $jwt = new JWT();
@@ -438,7 +434,7 @@ class HelpersTest extends Test
         $tokenEncode = $jwt
             /** @phpstan-ignore-next-line */
             ->config([
-                'privateKey' => $config['iv'],
+                'key' => $config['key'],
                 'jwtServerUrl' => env('SERVER_URL'),
                 'jwtServerUrlAud' => env('SERVER_URL_AUD'),
                 'jwtExp' => (int) env('JWT_EXP'),

@@ -16,7 +16,7 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class AESTest extends Test
+class AESCommandTest extends Test
 {
     private const string OUTPUT_MESSAGE = 'Keys created successfully';
 
@@ -24,8 +24,8 @@ class AESTest extends Test
     private AESCommand $aesCommand;
 
     /**
-     * @throws DependencyException
-     * @throws NotFoundException
+     * @throws DependencyException Error while resolving the entry.
+     * @throws NotFoundException No entry found for the given name.
      */
     protected function setUp(): void
     {
