@@ -19,7 +19,7 @@
   </a>
 </p>
 
-🚀 **Lion-Blundle** Lion-Framework configuration and initialization package.
+🚀 **Lion-Bundle** Lion-Framework configuration and initialization package.
 
 ---
 
