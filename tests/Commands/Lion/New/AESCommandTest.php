@@ -24,7 +24,6 @@ class AESTest extends Test
     private AESCommand $aesCommand;
 
     /**
-     * @throws ReflectionException
      * @throws DependencyException
      * @throws NotFoundException
      */

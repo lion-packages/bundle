@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "42a8bfbb007eb1d14cc1104391b99970",
+    "content-hash": "823a99003bc12ebee83c1b66cc4fca7e",
     "packages": [
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -250,16 +250,16 @@
         },
         {
             "name": "firebase/php-jwt",
-            "version": "v6.11.1",
+            "version": "v7.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/firebase/php-jwt.git",
-                "reference": "d1e91ecf8c598d073d0995afa8cd5c75c6e19e66"
+                "reference": "5645b43af647b6947daac1d0f659dd1fbe8d3b65"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/d1e91ecf8c598d073d0995afa8cd5c75c6e19e66",
-                "reference": "d1e91ecf8c598d073d0995afa8cd5c75c6e19e66",
+                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/5645b43af647b6947daac1d0f659dd1fbe8d3b65",
+                "reference": "5645b43af647b6947daac1d0f659dd1fbe8d3b65",
                 "shasum": ""
             },
             "require": {
@@ -307,9 +307,9 @@
             ],
             "support": {
                 "issues": "https://github.com/firebase/php-jwt/issues",
-                "source": "https://github.com/firebase/php-jwt/tree/v6.11.1"
+                "source": "https://github.com/firebase/php-jwt/tree/v7.0.2"
             },
-            "time": "2025-04-09T20:32:01+00:00"
+            "time": "2025-12-16T22:17:28+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -1170,28 +1170,28 @@
         },
         {
             "name": "lion/security",
-            "version": "v11.15.0",
+            "version": "v12.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/security.git",
-                "reference": "6fe93d4b488c0432814d32d3c00e73fd4d9283ec"
+                "reference": "5e052415849b271b98e2d0f723798ff5a4479599"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/security/zipball/6fe93d4b488c0432814d32d3c00e73fd4d9283ec",
-                "reference": "6fe93d4b488c0432814d32d3c00e73fd4d9283ec",
+                "url": "https://api.github.com/repos/lion-packages/security/zipball/5e052415849b271b98e2d0f723798ff5a4479599",
+                "reference": "5e052415849b271b98e2d0f723798ff5a4479599",
                 "shasum": ""
             },
             "require": {
                 "ext-openssl": "*",
-                "firebase/php-jwt": "^6.1",
-                "php": ">=8.4",
+                "firebase/php-jwt": "^6.1 || ^7.0",
+                "php": ">=8.5",
                 "vlucas/valitron": "^1.4"
             },
             "require-dev": {
                 "guzzlehttp/guzzle": "^7.8",
-                "infection/infection": "^0.29.14 || ^0.31.0",
-                "lion/test": "^3.2",
+                "infection/infection": "^0.29.14 || ^0.31.0 || ^0.32.0",
+                "lion/test": "^3.2 || ^4.0",
                 "overtrue/phplint": "^9.5",
                 "phpstan/phpstan": "^2.1",
                 "phpunit/phpunit": "^12.0",
@@ -1207,7 +1207,7 @@
             "license": [
                 "MIT"
             ],
-            "description": "Library created with the function of implementing AES, RSA and JWT Security functions for PHP.",
+            "description": "Library created with the function of implementing AES, RSA and JWT security features for PHP.",
             "homepage": "https://dev.lion-packages.com",
             "keywords": [
                 "lion",
@@ -1218,7 +1218,7 @@
                 "issues": "https://github.com/lion-packages/security/issues",
                 "source": "https://github.com/lion-packages/security"
             },
-            "time": "2025-12-01T21:16:44+00:00"
+            "time": "2025-12-27T22:55:16+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -6913,13 +6913,13 @@
     "prefer-lowest": false,
     "platform": {
         "php": ">=8.5",
-        "ext-pdo": "*",
-        "ext-gd": "*",
         "ext-ctype": "*",
         "ext-filter": "*",
+        "ext-gd": "*",
         "ext-hash": "*",
         "ext-mbstring": "*",
         "ext-openssl": "*",
+        "ext-pdo": "*",
         "ext-session": "*",
         "ext-tokenizer": "*"
     },
