@@ -79,6 +79,7 @@ class Env
     public static function set(string $key, string|int|float|bool|null $value): void
     {
         if (self::isSandboxActive()) {
+            /** @phpstan-ignore-next-line */
             self::$sandboxes[self::$activeContext][$key] = $value;
         }
     }
