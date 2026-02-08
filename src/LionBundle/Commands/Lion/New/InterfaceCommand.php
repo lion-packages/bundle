@@ -15,22 +15,20 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Generate an interface
- *
- * @package Lion\Bundle\Commands\Lion\New
+ * Generate an interface.
  */
 class InterfaceCommand extends Command
 {
     /**
      * Fabricates the data provided to manipulate information (folder, class,
-     * amespace)
+     * amespace).
      *
      * @var ClassFactory $classFactory
      */
     private ClassFactory $classFactory;
 
     /**
-     * Manipulate system files
+     * Manipulate system files.
      *
      * @var Store $store
      */
@@ -53,7 +51,7 @@ class InterfaceCommand extends Command
     }
 
     /**
-     * Configures the current command
+     * Configures the current command.
      *
      * @return void
      */
@@ -61,26 +59,26 @@ class InterfaceCommand extends Command
     {
         $this
             ->setName('new:interface')
-            ->setDescription('Command required for interface creation')
-            ->addArgument('interface', InputArgument::OPTIONAL, 'Interface name', 'ExampleInterface');
+            ->setDescription('Command required for interface creation.')
+            ->addArgument('interface', InputArgument::OPTIONAL, 'Interface name.', 'ExampleInterface');
     }
 
     /**
-     * Executes the current command
+     * Executes the current command.
      *
      * This method is not abstract because you can use this class as a concrete
      * class. In this case, instead of defining the execute() method, you set the
-     * code to execute by passing a Closure to the setCode() method
+     * code to execute by passing a Closure to the setCode() method.
      *
      * @param InputInterface $input InputInterface is the interface implemented by
-     * all input classes
+     * all input classes.
      * @param OutputInterface $output OutputInterface is the interface implemented
-     * by all Output classes
+     * by all Output classes.
      *
      * @return int
      *
-     * @throws Exception If the file could not be opened
-     * @throws LogicException When this abstract method is not implemented
+     * @throws Exception If the file could not be opened.
+     * @throws LogicException When this abstract method is not implemented.
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -108,7 +106,7 @@ class InterfaceCommand extends Command
                 namespace {$namespace};
 
                 /**
-                 * Description of the '{$class}' interface
+                 * Description of the '{$class}' interface.
                  */
                 interface {$class}
                 {

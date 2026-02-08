@@ -18,29 +18,27 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Generates a capsule class and its defined properties
- *
- * @package Lion\Bundle\Commands\Lion\New
+ * Generates a capsule class and its defined properties.
  */
 class CapsuleCommand extends Command
 {
     /**
      * Fabricates the data provided to manipulate information (folder, class,
-     * namespace)
+     * namespace).
      *
      * @var ClassFactory $classFactory
      */
     private ClassFactory $classFactory;
 
     /**
-     * Manipulate system files
+     * Manipulate system files.
      *
      * @var Store $store
      */
     private Store $store;
 
     /**
-     * Manages the configuration and structure of a generated capsule class
+     * Manages the configuration and structure of a generated capsule class.
      *
      * @var CapsuleFactory $capsuleFactory
      */
@@ -71,7 +69,7 @@ class CapsuleCommand extends Command
     }
 
     /**
-     * Configures the current command
+     * Configures the current command.
      *
      * @return void
      */
@@ -79,35 +77,35 @@ class CapsuleCommand extends Command
     {
         $this
             ->setName('new:capsule')
-            ->setDescription('Command required for creating new custom capsules')
-            ->addArgument('capsule', InputArgument::OPTIONAL, 'Capsule name', 'Example')
+            ->setDescription('Command required for creating new custom capsules.')
+            ->addArgument('capsule', InputArgument::OPTIONAL, 'Capsule name.', 'Example')
             ->addOption(
                 'properties',
                 'p',
                 InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
-                'Defined properties for the capsule',
+                'Defined properties for the capsule.',
                 []
             )
-            ->addOption('entity', 'e', InputOption::VALUE_OPTIONAL, 'Entity name', '');
+            ->addOption('entity', 'e', InputOption::VALUE_OPTIONAL, 'Entity name.', '');
     }
 
     /**
-     * Executes the current command
+     * Executes the current command.
      *
      * This method is not abstract because you can use this class as a concrete
      * class. In this case, instead of defining the execute() method, you set the
-     * code to execute by passing a Closure to the setCode() method
+     * code to execute by passing a Closure to the setCode() method.
      *
      * @param InputInterface $input InputInterface is the interface implemented by
-     * all input classes
+     * all input classes.
      * @param OutputInterface $output OutputInterface is the interface implemented
-     * by all Output classes
+     * by all Output classes.
      *
      * @return int
      *
      * @throws Exception
      * @throws ExceptionInterface
-     * @throws LogicException When this abstract method is not implemented
+     * @throws LogicException When this abstract method is not implemented.
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
