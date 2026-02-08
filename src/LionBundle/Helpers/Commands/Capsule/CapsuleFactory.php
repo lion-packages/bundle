@@ -17,29 +17,27 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Manages the configuration and structure of a generated capsule class
- *
- * @package Lion\Bundle\Helpers\Commands\Capsule
+ * Manages the configuration and structure of a generated capsule class.
  */
 class CapsuleFactory
 {
     /**
      * Fabricates the data provided to manipulate information (folder, class,
-     * namespace)
+     * namespace).
      *
      * @var ClassFactory $classFactory
      */
     private ClassFactory $classFactory;
 
     /**
-     * Modify and construct strings with different formats
+     * Modify and construct strings with different formats.
      *
      * @var Str $str
      */
     private Str $str;
 
     /**
-     * Modify and build arrays with different indexes or values
+     * Modify and build arrays with different indexes or values.
      *
      * @var Arr $arr
      */
@@ -63,49 +61,49 @@ class CapsuleFactory
     ];
 
     /**
-     * OutputInterface is the interface implemented by all Output classes
+     * OutputInterface is the interface implemented by all Output classes.
      *
      * @var OutputInterface $output
      */
     private OutputInterface $output;
 
     /**
-     * An Application is the container for a collection of commands
+     * An Application is the container for a collection of commands.
      *
      * @var Application $application
      */
     private Application $application;
 
     /**
-     * Class that allows writing system files
+     * Class that allows writing system files.
      *
      * @var FileWriter $fileWriter
      */
     private FileWriter $fileWriter;
 
     /**
-     * Class name
+     * Class name.
      *
      * @var string $class
      */
     private string $class;
 
     /**
-     * Class namespace
+     * Class namespace.
      *
      * @var string $namespace
      */
     private string $namespace;
 
     /**
-     * Entity name
+     * Entity name.
      *
      * @var string $entity
      */
     private string $entity;
 
     /**
-     * List of interfaces
+     * List of interfaces.
      *
      * @var array<int, string> $interfaces
      */
@@ -156,10 +154,10 @@ class CapsuleFactory
     }
 
     /**
-     * Add the app to settings
+     * Add the app to settings.
      *
      * @param Application $application An Application is the container for a
-     * collection of commands
+     * collection of commands.
      *
      * @return CapsuleFactory
      */
@@ -171,9 +169,9 @@ class CapsuleFactory
     }
 
     /**
-     * Add the name of the class
+     * Add the name of the class.
      *
-     * @param string $class Class name
+     * @param string $class Class name.
      *
      * @return CapsuleFactory
      */
@@ -185,9 +183,9 @@ class CapsuleFactory
     }
 
     /**
-     * Add the class namespace
+     * Add the class namespace.
      *
-     * @param string $namespace Class namespace
+     * @param string $namespace Class namespace.
      *
      * @return CapsuleFactory
      */
@@ -199,9 +197,9 @@ class CapsuleFactory
     }
 
     /**
-     * Add the name of the entity
+     * Add the name of the entity.
      *
-     * @param string $entity Entity name
+     * @param string $entity Entity name.
      *
      * @return $this
      */
@@ -213,7 +211,7 @@ class CapsuleFactory
     }
 
     /**
-     * Returns the body of the generated class
+     * Returns the body of the generated class.
      *
      * @return string
      */
@@ -226,7 +224,7 @@ class CapsuleFactory
     }
 
     /**
-     * Gets the methods of the capsule class
+     * Gets the methods of the capsule class.
      *
      * @return array<int, array{
      *     getter: string,
@@ -240,7 +238,7 @@ class CapsuleFactory
     }
 
     /**
-     * Gets the properties of the capsule class
+     * Gets the properties of the capsule class.
      *
      * @return array<int, string>
      */
@@ -250,7 +248,7 @@ class CapsuleFactory
     }
 
     /**
-     * Returns the object that constructs the body
+     * Returns the object that constructs the body.
      *
      * @return Str
      */
@@ -260,9 +258,9 @@ class CapsuleFactory
     }
 
     /**
-     * Defines the properties of the class with its data type
+     * Defines the properties of the class with its data type.
      *
-     * @param string $propertyDef Defined property
+     * @param string $propertyDef Defined property.
      *
      * @return array{
      *      property: string,
@@ -287,9 +285,9 @@ class CapsuleFactory
     }
 
     /**
-     * Iterates the list of data to generate the Getter and Setter methods
+     * Iterates the list of data to generate the Getter and Setter methods.
      *
-     * @param array<int, string> $properties List of class properties
+     * @param array<int, string> $properties List of class properties.
      *
      * @return void
      */
@@ -363,7 +361,7 @@ class CapsuleFactory
     }
 
     /**
-     * Add the class and its implementations to the body
+     * Add the class and its implementations to the body.
      *
      * @return void
      */
@@ -452,13 +450,13 @@ class CapsuleFactory
             use Lion\Bundle\Traits\CapsuleTrait;
 
             /**
-             * Capsule for the '{$this->entity}' entity
+             * Capsule for the '{$this->entity}' entity.
              */
             {$implementsBlock}
                 use CapsuleTrait;
 
                 /**
-                 * Entity name
+                 * Entity name.
                  *
                  * @var string \$entity
                  *
@@ -472,7 +470,7 @@ class CapsuleFactory
     }
 
     /**
-     * Add the interfaces for each property
+     * Add the interfaces for each property.
      *
      * @return void
      *
@@ -551,21 +549,21 @@ class CapsuleFactory
                     'content' => <<<PHP
                 {
                     /**
-                     * Gets the name of the column '{$property}'
+                     * Gets the name of the column '{$property}'.
                      *
                      * @return string
                      */
                     public static function {$abstractName}(): string;
 
                     /**
-                     * Getter method for '{$property}'
+                     * Getter method for '{$property}'.
                      *
                      * @return {$getterType}|null
                      */
                     public function {$getterName}(): ?{$getterType};
 
                     /**
-                     * Setter method for '{$property}'
+                     * Setter method for '{$property}'.
                      *
                      * @param {$getterType}|null \${$property} Property for '{$property}'
                      *
@@ -597,7 +595,7 @@ class CapsuleFactory
     }
 
     /**
-     * Adds the class properties to the body
+     * Adds the class properties to the body.
      *
      * @return void
      */
@@ -622,7 +620,7 @@ class CapsuleFactory
     }
 
     /**
-     * Add the abstract methods to the body
+     * Add the abstract methods to the body.
      *
      * @return void
      */
@@ -734,7 +732,7 @@ class CapsuleFactory
     }
 
     /**
-     * Add getters and setters to the body
+     * Add getters and setters to the body.
      *
      * @return void
      */
@@ -758,7 +756,7 @@ class CapsuleFactory
     }
 
     /**
-     * Empty properties to avoid caching
+     * Empty properties to avoid caching.
      *
      * @return void
      */
