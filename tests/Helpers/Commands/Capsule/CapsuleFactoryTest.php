@@ -20,9 +20,6 @@ class CapsuleFactoryTest extends Test
 {
     private CapsuleFactory $capsuleFactory;
 
-    /**
-     * @throws ReflectionException
-     */
     protected function setUp(): void
     {
         $this->capsuleFactory = new CapsuleFactory()
@@ -42,7 +39,8 @@ class CapsuleFactoryTest extends Test
     }
 
     /**
-     * @throws ReflectionException
+     * @throws ReflectionException If the property does not exist in the reflected
+     * class.
      */
     #[Testing]
     public function setClassFactory(): void
@@ -52,7 +50,8 @@ class CapsuleFactoryTest extends Test
     }
 
     /**
-     * @throws ReflectionException
+     * @throws ReflectionException If the property does not exist in the reflected
+     * class.
      */
     #[Testing]
     public function setFileWriter(): void
@@ -62,7 +61,8 @@ class CapsuleFactoryTest extends Test
     }
 
     /**
-     * @throws ReflectionException
+     * @throws ReflectionException If the property does not exist in the reflected
+     * class.
      */
     #[Testing]
     public function setStr(): void
@@ -72,7 +72,8 @@ class CapsuleFactoryTest extends Test
     }
 
     /**
-     * @throws ReflectionException
+     * @throws ReflectionException If the property does not exist in the reflected
+     * class.
      */
     #[Testing]
     public function setArr(): void
@@ -82,7 +83,8 @@ class CapsuleFactoryTest extends Test
     }
 
     /**
-     * @throws ReflectionException
+     * @throws ReflectionException If the property does not exist in the reflected
+     * class.
      */
     #[Testing]
     public function setApplication(): void
@@ -92,7 +94,8 @@ class CapsuleFactoryTest extends Test
     }
 
     /**
-     * @throws ReflectionException
+     * @throws ReflectionException If the property does not exist in the reflected
+     * class.
      */
     #[Testing]
     public function setClass(): void
@@ -102,7 +105,8 @@ class CapsuleFactoryTest extends Test
     }
 
     /**
-     * @throws ReflectionException
+     * @throws ReflectionException If the property does not exist in the reflected
+     * class.
      */
     #[Testing]
     public function setNamespace(): void
@@ -112,7 +116,8 @@ class CapsuleFactoryTest extends Test
     }
 
     /**
-     * @throws ReflectionException
+     * @throws ReflectionException If the property does not exist in the reflected
+     * class.
      */
     #[Testing]
     public function setEntity(): void
@@ -122,7 +127,8 @@ class CapsuleFactoryTest extends Test
     }
 
     /**
-     * @throws ReflectionException
+     * @throws ReflectionException If the property does not exist in the reflected
+     * class.
      */
     #[Testing]
     #[TestWith(['word' => 'Testing'])]
@@ -141,7 +147,8 @@ class CapsuleFactoryTest extends Test
     }
 
     /**
-     * @throws ReflectionException
+     * @throws ReflectionException If the property does not exist in the reflected
+     * class.
      */
     #[Testing]
     public function getCapsuleMethods(): void
@@ -161,7 +168,8 @@ class CapsuleFactoryTest extends Test
     }
 
     /**
-     * @throws ReflectionException
+     * @throws ReflectionException If the property does not exist in the reflected
+     * class.
      */
     #[Testing]
     public function getCapsuleProperties(): void
@@ -195,7 +203,8 @@ class CapsuleFactoryTest extends Test
      *
      * @return void
      *
-     * @throws ReflectionException
+     * @throws ReflectionException If the property does not exist in the reflected
+     * class.
      */
     #[Testing]
     #[TestWith(['class' => 'Test', 'properties' => ['id:int'], 'count' => 1])]
@@ -258,14 +267,14 @@ class CapsuleFactoryTest extends Test
         use Lion\Bundle\Traits\CapsuleTrait;
 
         /**
-         * Capsule for the 'test' entity
+         * Capsule for the 'test' entity.
          */
         class Test implements CapsuleInterface
         {
             use CapsuleTrait;
 
             /**
-             * Entity name
+             * Entity name.
              *
              * @var string \$entity
              *
