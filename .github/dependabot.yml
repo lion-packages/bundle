@@ -4,13 +4,27 @@ multi-ecosystem-groups:
   maintenance:
     schedule:
       interval: "monthly"
-      time: "05:15"
-      timezone: "America/Bogota"
+
+  security:
+    schedule:
+      interval: "weekly"
 
 updates:
-  # Composer (PHP)
   - package-ecosystem: "composer"
     directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    labels:
+      - "security"
+      - "php"
+
+  - package-ecosystem: "composer"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+      time: "05:15"
+      timezone: "America/Bogota"
     patterns: ["*"]
     multi-ecosystem-group: "maintenance"
     labels:
