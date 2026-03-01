@@ -204,9 +204,9 @@ class CrudCommand extends MenuCommand
             'entity' => $entity,
         ]);
 
-        /** @phpstan-ignore-next-line */
         $this
             ->getApplication()
+            /** @phpstan-ignore-next-line */
             ->find('db:rules')
             ->run($arrayInput, $this->output);
     }
@@ -238,9 +238,9 @@ class CrudCommand extends MenuCommand
             '--model' => "{$connectionPascal}/{$driver}/{$entityPascal}Model",
         ]);
 
-        /** @phpstan-ignore-next-line */
         $this
             ->getApplication()
+            /** @phpstan-ignore-next-line */
             ->find('new:controller')
             ->run($arrayInputController, $this->output);
 
@@ -248,9 +248,9 @@ class CrudCommand extends MenuCommand
             'test' => "App/Http/Controllers/{$connectionPascal}/{$driver}/{$entityPascal}ControllerTest",
         ]);
 
-        /** @phpstan-ignore-next-line */
         $this
             ->getApplication()
+            /** @phpstan-ignore-next-line */
             ->find('new:test')
             ->run($arrayInputModel, $this->output);
 
@@ -258,9 +258,9 @@ class CrudCommand extends MenuCommand
             'test' => "App/Models/{$connectionPascal}/{$driver}/{$entityPascal}ModelTest",
         ]);
 
-        /** @phpstan-ignore-next-line */
         $this
             ->getApplication()
+            /** @phpstan-ignore-next-line */
             ->find('new:test')
             ->run($arrayInputTest, $this->output);
 
@@ -631,15 +631,15 @@ class CrudCommand extends MenuCommand
             'test' => "Database/Class/{$connectionPascal}/{$driver}/{$entityPascal}Test",
         ]);
 
-        /** @phpstan-ignore-next-line */
         $this
             ->getApplication()
+            /** @phpstan-ignore-next-line */
             ->find('db:capsule')
             ->run($inputArrayCapsule, $output);
 
-        /** @phpstan-ignore-next-line */
         $this
             ->getApplication()
+            /** @phpstan-ignore-next-line */
             ->find('new:test')
             ->run($inputArrayTest, $output);
     }
