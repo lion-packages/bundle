@@ -286,9 +286,9 @@ class ControllerCommand extends Command
                         'model' => $model,
                     ];
 
-                    /** @phpstan-ignore-next-line */
                     $this
                         ->getApplication()
+                        /** @phpstan-ignore-next-line */
                         ->find('new:model')
                         ->run(new ArrayInput($arrayInput), $output);
                 }

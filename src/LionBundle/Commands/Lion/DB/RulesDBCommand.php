@@ -223,9 +223,9 @@ class RulesDBCommand extends MenuCommand
             ->concat('Rule')
             ->get();
 
-        /** @phpstan-ignore-next-line */
         $this
             ->getApplication()
+            /** @phpstan-ignore-next-line */
             ->find('new:rule')
             ->run(
                 new ArrayInput([

@@ -172,9 +172,9 @@ class FreshMigrationsCommand extends MenuCommand
         if ($seed != 'none') {
             $output->writeln('');
 
-            /** @phpstan-ignore-next-line */
             $this
                 ->getApplication()
+                /** @phpstan-ignore-next-line */
                 ->find('db:seed')
                 ->run(new ArrayInput([
                     '--connection' => $connectionName,

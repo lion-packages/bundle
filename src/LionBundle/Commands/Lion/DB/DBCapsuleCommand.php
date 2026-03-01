@@ -196,8 +196,8 @@ class DBCapsuleCommand extends MenuCommand
             '--entity' => $entity,
         ]);
 
-        /** @phpstan-ignore-next-line */
         $this->getApplication()
+            /** @phpstan-ignore-next-line */
             ->find('new:capsule')
             ->run($arrayInput, $output);
 
