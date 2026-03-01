@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/12.5/phpunit.xsd"
-    backupGlobals="false"
-    backupStaticProperties="false"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/13.0/phpunit.xsd"
     bootstrap="tests/bootstrap.php"
     cacheDirectory="tests/PHPUnit/build/cache"
-    cacheResult="true"
     colors="true"
-    columns="80"
     defaultTestSuite="All-Test"
     displayDetailsOnIncompleteTests="true"
     displayDetailsOnSkippedTests="true"
@@ -16,17 +12,14 @@
     displayDetailsOnTestsThatTriggerErrors="true"
     displayDetailsOnTestsThatTriggerNotices="true"
     displayDetailsOnTestsThatTriggerWarnings="true"
-    processIsolation="false"
     stopOnError="true"
     stopOnFailure="true"
-    stopOnWarning="true"
     testdox="false"
 >
     <php>
         <env name="APP_ENV" value="testing" />
 
         <ini name="date.timezone" value="America/Bogota" />
-        <ini name="intl.default_locale" value="C.UTF-8" />
         <ini name="memory_limit" value="2048M" />
         <ini name="error_reporting" value="-1"/>
         <ini name="display_errors" value="1"/>
