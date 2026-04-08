@@ -4,29 +4,32 @@ multi-ecosystem-groups:
   maintenance:
     schedule:
       interval: "monthly"
-
-  security:
-    schedule:
-      interval: "weekly"
-
-updates:
-  - package-ecosystem: "composer"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-    labels:
-      - "security"
-      - "php"
-
-  - package-ecosystem: "composer"
-    directory: "/"
-    schedule:
-      interval: "monthly"
       time: "05:15"
       timezone: "America/Bogota"
+    milestone: 4
+
+updates:
+  # ========================
+  # Maintenance - PHP
+  # ========================
+  - package-ecosystem: "composer"
+    directory: "/"
     patterns: ["*"]
     multi-ecosystem-group: "maintenance"
     labels:
       - "php"
       - "dependencies"
+
+  # ========================
+  # Security - PHP
+  # ========================
+  - package-ecosystem: "composer"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 3
+    rebase-strategy: "auto"
+    labels:
+      - "php"
+      - "security"
+    milestone: 4
