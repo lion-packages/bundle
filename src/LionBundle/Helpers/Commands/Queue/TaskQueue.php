@@ -14,16 +14,27 @@ use Predis\Client;
 class TaskQueue
 {
     /**
+     * Reference constants for Redis initialization.
+     */
+    public const string SCHEME = 'scheme';
+
+    public const string HOST = 'host';
+
+    public const string PORT = 'port';
+
+    public const string DATABASE = 'database';
+
+    public const string PARAMETERS = 'parameters';
+
+    public const string PASSWORD = 'password';
+
+    /**
      * Defines the property that contains the queued task data.
-     *
-     * @const LION_TASKS
      */
     public const string LION_TASKS = 'lion-tasks';
 
     /**
      * Defines the database to connect to and manipulate tasks.
-     *
-     * @const LION_DATABASE
      */
     public const int LION_DATABASE = 0;
 
@@ -41,9 +52,9 @@ class TaskQueue
      *     scheme: string,
      *     host: string,
      *     port: int,
+     *     database: int,
      *     parameters: array{
-     *         password: string,
-     *         database: int
+     *         password: string
      *     }
      * } $parameters
      */
