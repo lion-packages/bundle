@@ -79,17 +79,19 @@ Route::init();
 
 Route::addMiddleware(Routes::getMiddleware());
 // -----------------------------------------------------------------------------
-Route::get('/', function (): stdClass {
-    /** @phpstan-ignore-next-line */
-    $taskQueue = new TaskQueue([
+Route::get('/{database:i}', function (string $database): stdClass {
+    $data = [
         'scheme' => env('REDIS_SCHEME'),
         'host' => env('REDIS_HOST'),
         'port' => env('REDIS_PORT'),
+        'database' => (int) $database,
         'parameters' => [
             'password' => env('REDIS_PASSWORD'),
-            'database' => TaskQueue::LION_DATABASE,
         ],
-    ]);
+    ];
+
+    /** @phpstan-ignore-next-line */
+    $taskQueue = new TaskQueue($data);
 
     $taskQueue
         ->push(
@@ -98,7 +100,9 @@ Route::get('/', function (): stdClass {
             new Task(ExampleProvider::class, 'generateError')
         );
 
-    return info('[index]');
+    return info(message: '[index]', data: [
+        'database' => $database,
+    ]);
 });
 
 Route::get('logger', function () {

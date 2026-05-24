@@ -15,15 +15,11 @@ class TaskQueue
 {
     /**
      * Defines the property that contains the queued task data.
-     *
-     * @const LION_TASKS
      */
     public const string LION_TASKS = 'lion-tasks';
 
     /**
      * Defines the database to connect to and manipulate tasks.
-     *
-     * @const LION_DATABASE
      */
     public const int LION_DATABASE = 0;
 
@@ -41,9 +37,9 @@ class TaskQueue
      *     scheme: string,
      *     host: string,
      *     port: int,
+     *     database: int,
      *     parameters: array{
-     *         password: string,
-     *         database: int
+     *         password: string
      *     }
      * } $parameters
      */

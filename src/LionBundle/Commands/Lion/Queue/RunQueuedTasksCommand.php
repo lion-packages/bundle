@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lion\Bundle\Commands\Lion\Queue;
 
 use DI\Attribute\Inject;
+use JsonException;
 use Lion\Bundle\Enums\LogTypeEnum;
 use Lion\Bundle\Helpers\Commands\Queue\TaskQueue;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
@@ -34,6 +35,13 @@ class RunQueuedTasksCommand extends MenuCommand
      */
     private TaskQueue $taskQueue;
 
+    /**
+     * Database in use.
+     *
+     * @var int $database
+     */
+    private int $database;
+
     #[Inject]
     public function setContainer(Container $container): RunQueuedTasksCommand
     {
@@ -51,14 +59,9 @@ class RunQueuedTasksCommand extends MenuCommand
     {
         $this
             ->setName('queue:run')
-            ->setDescription('Run queued tasks')
-            ->addOption(
-                'pause',
-                'p',
-                InputOption::VALUE_OPTIONAL,
-                'Defines the time to wait before retrieving tasks if all have been executed.',
-                60
-            );
+            ->setDescription('Run queued tasks.')
+            ->addOption('database', 'd', InputOption::VALUE_OPTIONAL, 'Redis database, default value 0 for internal operations.', TaskQueue::LION_DATABASE) // phpcs:ignore
+            ->addOption('pause', 'p', InputOption::VALUE_OPTIONAL, 'Defines the time to wait before retrieving tasks if all have been executed.', 60); // phpcs:ignore
     }
 
     /**
@@ -80,6 +83,11 @@ class RunQueuedTasksCommand extends MenuCommand
     {
         parent::initialize($input, $output);
 
+        /** @var string $database */
+        $database = $input->getOption('database');
+
+        $this->database = (int) $database;
+
         /** @var string $redisScheme */
         $redisScheme = env('REDIS_SCHEME');
 
@@ -96,9 +104,9 @@ class RunQueuedTasksCommand extends MenuCommand
             'scheme' => $redisScheme,
             'host' => $host,
             'port' => $port,
+            'database' => $this->database,
             'parameters' => [
                 'password' => $password,
-                'database' => TaskQueue::LION_DATABASE,
             ],
         ]);
     }
@@ -106,10 +114,9 @@ class RunQueuedTasksCommand extends MenuCommand
     /**
      * Executes the current command.
      *
-     * This method is not abstract because you can use this class
-     * as a concrete class. In this case, instead of defining the
-     * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method.
+     * This method is not abstract because you can use this class as a concrete
+     * class. In this case, instead of defining the execute() method, you set
+     * the code to execute by passing a Closure to the setCode() method.
      *
      * @param InputInterface $input InputInterface is the interface implemented
      * by all input classes.
@@ -118,6 +125,7 @@ class RunQueuedTasksCommand extends MenuCommand
      *
      * @return int
      *
+     * @throws JsonException If encoding to JSON fails.
      * @throws LogicException When this abstract method is not implemented.
      *
      * @codeCoverageIgnore
@@ -132,7 +140,7 @@ class RunQueuedTasksCommand extends MenuCommand
             $json = $this->taskQueue->get();
 
             if (null === $json) {
-                $output->writeln($this->infoOutput("\t>> SCHEDULE: no queued tasks available [OMITTED]"));
+                $output->writeln($this->infoOutput("\t>> TASK [DATABASE: {$this->database}]: There are no queued tasks available. [OMITTED]")); // phpcs:ignore
 
                 $this->taskQueue->pause((int) $pause);
 
@@ -147,11 +155,7 @@ class RunQueuedTasksCommand extends MenuCommand
              * } $queue */
             $queue = json_decode($json, true);
 
-            $output->writeln(
-                $this->warningOutput(
-                    "\t>> SCHEDULE: {$queue['id']} / {$queue['namespace']}::{$queue['method']} [PROCESSING]"
-                )
-            );
+            $output->writeln($this->warningOutput($this->getOutput('PROCESSING', $queue)));
 
             try {
                 $instance = $this->container->resolve($queue['namespace']);
@@ -172,25 +176,49 @@ class RunQueuedTasksCommand extends MenuCommand
 
                 logger("TASK: {$queue['id']}", LogTypeEnum::INFO, $log);
 
-                $output->writeln($this->successOutput("\t>> SCHEDULE: {$queue['id']} / {$queue['namespace']}::{$queue['method']} [COMPLETED]")); // phpcs:ignore
+                $output->writeln($this->successOutput($this->getOutput('COMPLETED', $queue)));
             } catch (Throwable $exception) {
-                logger(
-                    "TASK: {$queue['id']}",
-                    LogTypeEnum::ERROR,
-                    [
-                        'class' => "{$queue['namespace']}::{$queue['method']}",
-                        'params' => $queue['data'],
-                        'error' => [
-                            'message' => $exception->getMessage(),
-                            'file' => $exception->getFile(),
-                            'line' => $exception->getLine(),
-                            'trace' => $exception->getTraceAsString(),
-                        ],
+                $loggerData = [
+                    'class' => "{$queue['namespace']}::{$queue['method']}",
+                    'params' => $queue['data'],
+                    'error' => [
+                        'message' => $exception->getMessage(),
+                        'file' => $exception->getFile(),
+                        'line' => $exception->getLine(),
+                        'trace' => $exception->getTraceAsString(),
                     ],
-                );
+                ];
 
-                $output->writeln($this->errorOutput("\t>> SCHEDULE: {$queue['id']} / {$queue['namespace']}::{$queue['method']} [FAILED]")); // phpcs:ignore
+                logger("TASK [DATABASE: {$this->database}]: {$queue['id']}", LogTypeEnum::ERROR, $loggerData);
+
+                $output->writeln($this->errorOutput($this->getOutput('ERROR', $queue)));
             }
         }
+    }
+
+    /**
+     * @param string $type
+     * @param array{
+     *     id: string,
+     *     namespace: string,
+     *     method: string,
+     *     data: array<string, mixed>
+     * } $queue
+     *
+     * @return string
+     *
+     */
+    private function getOutput(string $type, array $queue): string
+    {
+        /** @var string $id */
+        $id = $queue['id'];
+
+        /** @var string $namespace */
+        $namespace = $queue['namespace'];
+
+        /** @var string $method */
+        $method = $queue['method'];
+
+        return "\t>> TASK [DATABASE: {$this->database}]: {$id} / {$namespace}::{$method} [{$type}]";
     }
 }
