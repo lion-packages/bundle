@@ -39,7 +39,7 @@ ENV PATH="$NVM_DIR/versions/node/v20/bin:$PATH"
 
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash \
     && source /home/lion/.bashrc \
-    && nvm install 20 \
+    && nvm install 24 \
     && npm install -g npm@11
 
 # Install OhMyZsh ------------------------------------------------------------------------------------------------------
