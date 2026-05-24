@@ -9,6 +9,7 @@ use JsonException;
 use Lion\Bundle\Enums\LogTypeEnum;
 use Lion\Bundle\Helpers\Commands\Queue\TaskQueue;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
+use Lion\Bundle\Support\Task;
 use Lion\Dependency\Injection\Container;
 use LogicException;
 use Symfony\Component\Console\Input\InputInterface;
@@ -158,29 +159,41 @@ class RunQueuedTasksCommand extends MenuCommand
             $output->writeln($this->warningOutput($this->getOutput('PROCESSING', $queue)));
 
             try {
-                $instance = $this->container->resolve($queue['namespace']);
+                /** @var string $id */
+                $id = $queue[Task::ID];
 
-                $instanceParams = ['queue' => $queue, ...$queue['data']];
+                /** @var string $namespace */
+                $namespace = $queue[Task::NAMESPACE];
 
-                $return = $this->container->callMethod($instance, $queue['method'], $instanceParams);
+                /** @var string $method */
+                $method = $queue['method'];
+
+                /** @var array $data */
+                $data = $queue[Task::DATA];
+
+                $instance = $this->container->resolve($namespace);
+
+                $instanceParams = ['queue' => $queue, ...$data];
+
+                $return = $this->container->callMethod($instance, $method, $instanceParams);
 
                 if (is_object($return)) {
                     $return = (array) $return;
                 }
 
                 $log = [
-                    'class' => "{$queue['namespace']}::{$queue['method']}",
-                    'params' => $queue['data'],
+                    'class' => "{$namespace}::{$method}",
+                    'params' => $data,
                     'return' => $return,
                 ];
 
-                logger("TASK: {$queue['id']}", LogTypeEnum::INFO, $log);
+                logger("TASK: {$id}", LogTypeEnum::INFO, $log);
 
                 $output->writeln($this->successOutput($this->getOutput('COMPLETED', $queue)));
             } catch (Throwable $exception) {
                 $loggerData = [
-                    'class' => "{$queue['namespace']}::{$queue['method']}",
-                    'params' => $queue['data'],
+                    'class' => "{$namespace}::{$method}",
+                    'params' => $data,
                     'error' => [
                         'message' => $exception->getMessage(),
                         'file' => $exception->getFile(),
@@ -189,7 +202,7 @@ class RunQueuedTasksCommand extends MenuCommand
                     ],
                 ];
 
-                logger("TASK [DATABASE: {$this->database}]: {$queue['id']}", LogTypeEnum::ERROR, $loggerData);
+                logger("TASK [DATABASE: {$this->database}]: {$id}", LogTypeEnum::ERROR, $loggerData);
 
                 $output->writeln($this->errorOutput($this->getOutput('ERROR', $queue)));
             }

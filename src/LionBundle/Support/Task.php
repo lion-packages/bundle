@@ -12,6 +12,17 @@ use JsonException;
 class Task
 {
     /**
+     * Reference constants for obtaining task data.
+     */
+    public const string ID = 'id';
+
+    public const string NAMESPACE = 'namespace';
+
+    public const string METHOD = 'method';
+
+    public const string DATA = 'data';
+
+    /**
      * Property for namespace.
      *
      * @var string $namespace
@@ -58,10 +69,10 @@ class Task
     public function getTask(): string
     {
         return json([
-            'id' => uniqid('task-'),
-            'namespace' => $this->namespace,
-            'method' => $this->method,
-            'data' => $this->data,
+            self::ID => uniqid('task-'),
+            self::NAMESPACE => $this->namespace,
+            self::METHOD => $this->method,
+            self::DATA => $this->data,
         ]);
     }
 }
