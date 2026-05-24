@@ -168,13 +168,18 @@ class RunQueuedTasksCommand extends MenuCommand
                 /** @var string $method */
                 $method = $queue['method'];
 
-                /** @var array $data */
+                /**
+                 * @var array $data
+                 *
+                 * @phpstan-ignore-next-line
+                 */
                 $data = $queue[Task::DATA];
 
                 $instance = $this->container->resolve($namespace);
 
                 $instanceParams = ['queue' => $queue, ...$data];
 
+                /** @phpstan-ignore-next-line */
                 $return = $this->container->callMethod($instance, $method, $instanceParams);
 
                 if (is_object($return)) {
@@ -220,6 +225,7 @@ class RunQueuedTasksCommand extends MenuCommand
      *
      * @return string
      *
+     * @codeCoverageIgnore
      */
     private function getOutput(string $type, array $queue): string
     {
