@@ -68,8 +68,8 @@ class RunQueuedTasksCommandTest extends Test
             'output' => $output
         ]);
 
-        $taskQueue = $this->getPrivateProperty('taskQueue');
+        $outputInstance = $this->getPrivateProperty('output');
 
-        $this->assertInstanceOf(TaskQueue::class, $taskQueue);
+        $this->assertInstanceOf(BufferedOutput::class, $outputInstance);
     }
 }
