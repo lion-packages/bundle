@@ -20,6 +20,7 @@ require_once(__DIR__ . '/../vendor/autoload.php');
 use Dotenv\Dotenv;
 use Lion\Bundle\Enums\LogTypeEnum;
 use Lion\Bundle\Helpers\Commands\Queue\TaskQueue;
+use Lion\Bundle\Support\Task;
 use Lion\Database\Driver;
 use Lion\Files\Store;
 use Lion\Route\Route;
@@ -92,10 +93,9 @@ Route::get('/', function (): stdClass {
 
     $taskQueue
         ->push(
-            new \Lion\Bundle\Support\Task(ExampleProvider::class, 'getArrExample', [
-                'name' => 'root',
-            ]),
-            new \Lion\Bundle\Support\Task(ExampleProvider::class, 'getResult')
+            new Task(ExampleProvider::class, 'getArrExample', ['name' => 'root']),
+            new Task(ExampleProvider::class, 'getResult'),
+            new Task(ExampleProvider::class, 'generateError')
         );
 
     return info('[index]');

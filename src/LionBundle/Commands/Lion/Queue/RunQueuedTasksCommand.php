@@ -13,6 +13,7 @@ use LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 
 /**
  * Allows queued tasks to run in the background.
@@ -62,16 +63,16 @@ class RunQueuedTasksCommand extends MenuCommand
 
     /**
      * Initializes the command after the input has been bound and before the
-     * input is validated
+     * input is validated.
      *
      * This is mainly useful when a lot of commands extends one main command
      * where some things need to be initialized based on the input arguments and
-     * options
+     * options.
      *
-     * @param InputInterface $input [InputInterface is the interface implemented
-     * by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
+     * @param InputInterface $input InputInterface is the interface implemented
+     * by all input classes.
+     * @param OutputInterface $output OutputInterface is the interface
+     * implemented by all Output classes.
      *
      * @return void
      */
@@ -103,27 +104,27 @@ class RunQueuedTasksCommand extends MenuCommand
     }
 
     /**
-     * Executes the current command
+     * Executes the current command.
      *
      * This method is not abstract because you can use this class
      * as a concrete class. In this case, instead of defining the
      * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method
+     * a Closure to the setCode() method.
      *
-     * @param InputInterface $input [InputInterface is the interface implemented
-     * by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
+     * @param InputInterface $input InputInterface is the interface implemented
+     * by all input classes.
+     * @param OutputInterface $output OutputInterface is the interface
+     * implemented by all Output classes.
      *
      * @return int
      *
-     * @throws LogicException [When this abstract method is not implemented]
+     * @throws LogicException When this abstract method is not implemented.
      *
      * @codeCoverageIgnore
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        /** @var int|string $pause */
+        /** @var string $pause */
         $pause = $input->getOption('pause');
 
         /** @phpstan-ignore-next-line */
@@ -131,7 +132,7 @@ class RunQueuedTasksCommand extends MenuCommand
             $json = $this->taskQueue->get();
 
             if (null === $json) {
-                $output->writeln($this->infoOutput("\t>> SCHEDULE: no queued tasks available"));
+                $output->writeln($this->infoOutput("\t>> SCHEDULE: no queued tasks available [OMITTED]"));
 
                 $this->taskQueue->pause((int) $pause);
 
@@ -152,32 +153,44 @@ class RunQueuedTasksCommand extends MenuCommand
                 )
             );
 
-            $return = $this->container->callMethod(
-                $this->container->resolve($queue['namespace']),
-                $queue['method'],
-                [
-                    'queue' => $queue,
-                    ...$queue['data'],
-                ],
-            );
+            try {
+                $instance = $this->container->resolve($queue['namespace']);
 
-            if (is_object($return)) {
-                $return = (array) $return;
+                $instanceParams = ['queue' => $queue, ...$queue['data']];
+
+                $return = $this->container->callMethod($instance, $queue['method'], $instanceParams);
+
+                if (is_object($return)) {
+                    $return = (array) $return;
+                }
+
+                $log = [
+                    'class' => "{$queue['namespace']}::{$queue['method']}",
+                    'params' => $queue['data'],
+                    'return' => $return,
+                ];
+
+                logger("TASK: {$queue['id']}", LogTypeEnum::INFO, $log);
+
+                $output->writeln($this->successOutput("\t>> SCHEDULE: {$queue['id']} / {$queue['namespace']}::{$queue['method']} [COMPLETED]")); // phpcs:ignore
+            } catch (Throwable $exception) {
+                logger(
+                    "TASK: {$queue['id']}",
+                    LogTypeEnum::ERROR,
+                    [
+                        'class' => "{$queue['namespace']}::{$queue['method']}",
+                        'params' => $queue['data'],
+                        'error' => [
+                            'message' => $exception->getMessage(),
+                            'file' => $exception->getFile(),
+                            'line' => $exception->getLine(),
+                            'trace' => $exception->getTraceAsString(),
+                        ],
+                    ],
+                );
+
+                $output->writeln($this->errorOutput("\t>> SCHEDULE: {$queue['id']} / {$queue['namespace']}::{$queue['method']} [FAILED]")); // phpcs:ignore
             }
-
-            $json = [
-                'class' => "{$queue['namespace']}::{$queue['method']}",
-                'params' => $queue['data'],
-                'return' => $return,
-            ];
-
-            logger("TASK: {$queue['id']}", LogTypeEnum::INFO, $json);
-
-            $output->writeln(
-                $this->successOutput(
-                    "\t>> SCHEDULE: {$queue['id']} / {$queue['namespace']}::{$queue['method']} [COMPLETED]"
-                )
-            );
         }
     }
 }
