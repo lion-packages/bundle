@@ -82,33 +82,6 @@ class RunQueuedTasksCommand extends MenuCommand
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         parent::initialize($input, $output);
-
-        /** @var string $database */
-        $database = $input->getOption('database');
-
-        $this->database = (int) $database;
-
-        /** @var string $redisScheme */
-        $redisScheme = env('REDIS_SCHEME');
-
-        /** @var string $host */
-        $host = env('REDIS_HOST');
-
-        /** @var int $port */
-        $port = env('REDIS_PORT');
-
-        /** @var string $password */
-        $password = env('REDIS_PASSWORD');
-
-        $this->taskQueue = new TaskQueue([
-            'scheme' => $redisScheme,
-            'host' => $host,
-            'port' => $port,
-            'database' => $this->database,
-            'parameters' => [
-                'password' => $password,
-            ],
-        ]);
     }
 
     /**
@@ -134,6 +107,33 @@ class RunQueuedTasksCommand extends MenuCommand
     {
         /** @var string $pause */
         $pause = $input->getOption('pause');
+
+        /** @var string $database */
+        $database = $input->getOption('database');
+
+        $this->database = (int) $database;
+
+        /** @var string $redisScheme */
+        $redisScheme = env('REDIS_SCHEME');
+
+        /** @var string $host */
+        $host = env('REDIS_HOST');
+
+        /** @var int $port */
+        $port = env('REDIS_PORT');
+
+        /** @var string $password */
+        $password = env('REDIS_PASSWORD');
+
+        $this->taskQueue = new TaskQueue(parameters: [
+            TaskQueue::SCHEME => $redisScheme,
+            TaskQueue::HOST => $host,
+            TaskQueue::PORT => $port,
+            TaskQueue::DATABASE => $this->database,
+            TaskQueue::PARAMETERS => [
+                TaskQueue::PASSWORD => $password,
+            ],
+        ]);
 
         /** @phpstan-ignore-next-line */
         while (true) {

@@ -79,12 +79,12 @@ Route::init();
 
 Route::addMiddleware(Routes::getMiddleware());
 // -----------------------------------------------------------------------------
-Route::get('/{database:i}', function (string $database): stdClass {
+Route::get('/', function (): stdClass {
     $data = [
         'scheme' => env('REDIS_SCHEME'),
         'host' => env('REDIS_HOST'),
         'port' => env('REDIS_PORT'),
-        'database' => (int) $database,
+        'database' => TaskQueue::LION_DATABASE,
         'parameters' => [
             'password' => env('REDIS_PASSWORD'),
         ],
@@ -100,9 +100,7 @@ Route::get('/{database:i}', function (string $database): stdClass {
             new Task(ExampleProvider::class, 'generateError')
         );
 
-    return info(message: '[index]', data: [
-        'database' => $database,
-    ]);
+    return info('[index]');
 });
 
 Route::get('logger', function () {

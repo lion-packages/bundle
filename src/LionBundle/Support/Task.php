@@ -8,8 +8,6 @@ use JsonException;
 
 /**
  * Tasks class to encapsulate tasks in queue.
- *
- * @package Lion\Bundle\Helpers\Commands\Schedule
  */
 class Task
 {
