@@ -40,7 +40,7 @@ jobs:
         run: composer install
 
       - name: Cache vendor directory
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: vendor
           key: php-vendor-${{ runner.os }}-${{ github.run_id }}
@@ -62,7 +62,7 @@ jobs:
           extensions: mbstring, gd, zip
 
       - name: Restore vendor directory from cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: vendor
           key: php-vendor-${{ runner.os }}-${{ github.run_id }}
@@ -115,7 +115,7 @@ jobs:
           extensions: mbstring, gd, zip
 
       - name: Restore vendor directory from cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: vendor
           key: php-vendor-${{ runner.os }}-${{ github.run_id }}
@@ -203,14 +203,14 @@ jobs:
           fi
 
       - name: Restore composer.lock from cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: composer.lock
           key: php-composer-lock-${{ runner.os }}-${{ github.run_id }}
           restore-keys: php-composer-lock-${{ runner.os }}-${{ github.run_id }}
 
       - name: Restore vendor directory from cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: vendor
           key: php-vendor-${{ runner.os }}-${{ github.run_id }}
