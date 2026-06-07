@@ -123,13 +123,13 @@ class CrudCommand extends MenuCommand
 
         $selectedConnection = $this->selectConnection($input, $output);
 
-        $connectionName = Connection::getConnections()[$selectedConnection]['dbname'];
+        $connectionName = Connection::getConnections()[$selectedConnection][Connection::CONNECTION_DBNAME];
 
         /** @var string $driver */
         $driver = $this->databaseEngine->getDatabaseEngineType($selectedConnection);
 
         if (Driver::SQLITE === $driver) {
-            $output->writeln($this->warningOutput('SQLite is not currently supported'));
+            $output->writeln($this->warningOutput('SQLite is not currently supported.'));
 
             return parent::SUCCESS;
         }
@@ -282,7 +282,7 @@ class CrudCommand extends MenuCommand
                 'replace' => true,
                 'content' => <<<EOT
                 *
-                     * @param {$entityPascal} \${$variableName} Capsule for the '{$entity}' entity
+                     * @param {$entityPascal} \${$variableName} Capsule for the '{$entity}' entity.
                 EOT,
                 'search' => '*'
             ],
@@ -300,7 +300,7 @@ class CrudCommand extends MenuCommand
                 'replace' => true,
                 'content' => <<<EOT
                 *
-                     * @param {$entityPascal} \${$variableName} Capsule for the 'users' entity
+                     * @param {$entityPascal} \${$variableName} Capsule for the '{$entity}' entity.
                 EOT,
 
                 'search' => '*'
@@ -319,7 +319,7 @@ class CrudCommand extends MenuCommand
                 'replace' => true,
                 'content' => <<<EOT
                 *
-                     * @param {$entityPascal} \${$variableName} Capsule for the 'users' entity
+                     * @param {$entityPascal} \${$variableName} Capsule for the '{$entity}' entity.
                 EOT,
                 'search' => '*'
             ],
@@ -347,35 +347,22 @@ class CrudCommand extends MenuCommand
             ];
 
             foreach ($gettersCallModel as $keyGetterCallModel => $methods) {
-                if (count($methods) > 1) {
-                    $sizeMethods = count($methods) - 1;
+                if ([] === $methods) {
+                    $listGettersCallModel[$keyGetterCallModel] = '[]';
 
-                    foreach ($methods as $key => $name) {
-                        if (0 === $key) {
-                            $listGettersCallModel[$keyGetterCallModel] .= <<<EOT
-                                        \${$variableName}->{$name}(),
-
-                            EOT;
-
-                            continue;
-                        }
-
-                        if ($sizeMethods === $key) {
-                            $listGettersCallModel[$keyGetterCallModel] .= <<<EOT
-                                            \${$variableName}->{$name}(),
-                            EOT;
-                        } else {
-                            $listGettersCallModel[$keyGetterCallModel] .= <<<EOT
-                                            \${$variableName}->{$name}(),
-
-                            EOT;
-                        }
-                    }
-                } else {
-                    $listGettersCallModel[$keyGetterCallModel] .= <<<EOT
-                                \${$variableName}->{$methods[0]}(),
-                    EOT;
+                    continue;
                 }
+
+                $listGettersCallModel[$keyGetterCallModel] =
+                    "[\n"
+                    . implode(
+                        ",\n",
+                        array_map(
+                            fn (string $method): string => '                $' . $variableName . '->' . $method . '()',
+                            $methods
+                        )
+                    )
+                    . "\n            ]";
             }
 
             $this->fileWriter->readFileRows($pathM, [
@@ -387,7 +374,7 @@ class CrudCommand extends MenuCommand
                     'replace' => true,
                     'content' => <<<EOT
                     *
-                         * @param {$entityPascal} \${$variableName} Capsule for the 'users' entity
+                         * @param {$entityPascal} \${$variableName} Capsule for the '{$entity}' entity.
                          *
                     EOT,
                     'search' => '*',
@@ -407,12 +394,8 @@ class CrudCommand extends MenuCommand
                             'search' => "''",
                         ],
                         [
-                            'content' => <<<EOT
-                            [
-                                {$listGettersCallModel['create']}
-                                        ]
-                            EOT,
                             'search' => '[]',
+                            'content' => $listGettersCallModel['create'],
                         ],
                     ],
                 ],
@@ -425,7 +408,7 @@ class CrudCommand extends MenuCommand
                     'replace' => true,
                     'content' => <<<EOT
                     *
-                         * @param {$entityPascal} \${$variableName} Capsule for the 'users' entity
+                         * @param {$entityPascal} \${$variableName} Capsule for the '{$entity}' entity.
                          *
                     EOT,
                     'search' => '*',
@@ -445,12 +428,8 @@ class CrudCommand extends MenuCommand
                             'search' => "''",
                         ],
                         [
-                            'content' => <<<EOT
-                            [
-                                {$listGettersCallModel['update']}
-                                    ]
-                            EOT,
                             'search' => '[]',
+                            'content' => $listGettersCallModel['update'],
                         ],
                     ],
                 ],
@@ -458,7 +437,7 @@ class CrudCommand extends MenuCommand
                     'replace' => true,
                     'content' => <<<EOT
                     *
-                         * @param {$entityPascal} \${$variableName} Capsule for the 'users' entity
+                         * @param {$entityPascal} \${$variableName} Capsule for the '{$entity}' entity.
                          *
                     EOT,
                     'search' => '*',
@@ -478,12 +457,8 @@ class CrudCommand extends MenuCommand
                             'search' => "''",
                         ],
                         [
-                            'content' => <<<EOT
-                            [
-                                {$listGettersCallModel['delete']}
-                                        ]
-                            EOT,
                             'search' => '[]',
+                            'content' => $listGettersCallModel['delete'],
                         ],
                     ],
                 ],
@@ -506,7 +481,7 @@ class CrudCommand extends MenuCommand
                     'search' => '*',
                     'content' => <<<EOT
                     *
-                         * @param {$entityPascal} \${$variableName} [Capsule for the 'users' entity]
+                         * @param {$entityPascal} \${$variableName} Capsule for the '{$entity}' entity.
                          *
                     EOT,
                 ],
@@ -542,7 +517,7 @@ class CrudCommand extends MenuCommand
                     'replace' => true,
                     'content' => <<<EOT
                     *
-                         * @param {$entityPascal} \${$variableName} [Capsule for the 'users' entity]
+                         * @param {$entityPascal} \${$variableName} Capsule for the '{$entity}' entity.
                          *
                     EOT,
                     'search' => '*',
@@ -571,7 +546,7 @@ class CrudCommand extends MenuCommand
                     'replace' => true,
                     'content' => <<<EOT
                     *
-                         * @param {$entityPascal} \${$variableName} [Capsule for the 'users' entity]
+                         * @param {$entityPascal} \${$variableName} Capsule for the '{$entity}' entity.
                          *
                     EOT,
                     'search' => '*',
