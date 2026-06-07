@@ -196,7 +196,7 @@ class ControllerCommand extends Command
                         use stdClass;
 
                         /**
-                         * Description of Controller '{$controllerClass}'
+                         * Description of Controller '{$controllerClass}'.
                          */
                         class {$controllerClass}
                         {\n
@@ -282,15 +282,11 @@ class ControllerCommand extends Command
                 );
 
                 if ('none' != $model) {
-                    $arrayInput = [
-                        'model' => $model,
-                    ];
-
                     $this
                         ->getApplication()
                         /** @phpstan-ignore-next-line */
                         ->find('new:model')
-                        ->run(new ArrayInput($arrayInput), $output);
+                        ->run(new ArrayInput(['model' => $model]), $output);
                 }
 
                 return parent::SUCCESS;

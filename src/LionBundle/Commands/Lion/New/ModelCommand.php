@@ -16,16 +16,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Generate a Request class
- *
- * @package Lion\Bundle\Commands\Lion\New
+ * Generate a Request class.
  */
 class ModelCommand extends Command
 {
     /**
-     * List of methods generated in the class
-     *
-     * @const METHODS
+     * List of methods generated in the class.
      */
     private const array METHODS = [
         'create',
@@ -36,21 +32,21 @@ class ModelCommand extends Command
 
     /**
      * Fabricates the data provided to manipulate information (folder, class,
-     * namespace)
+     * namespace).
      *
      * @var ClassFactory $classFactory
      */
     private ClassFactory $classFactory;
 
     /**
-     * Manipulate system files
+     * Manipulate system files.
      *
      * @var Store $store
      */
     private Store $store;
 
     /**
-     * Modify and construct strings with different formats
+     * Modify and construct strings with different formats.
      *
      * @var Str $str
      */
@@ -94,21 +90,21 @@ class ModelCommand extends Command
     }
 
     /**
-     * Executes the current command
+     * Executes the current command.
      *
      * This method is not abstract because you can use this class as a concrete
      * class. In this case, instead of defining the execute() method, you set the
-     * code to execute by passing a Closure to the setCode() method
+     * code to execute by passing a Closure to the setCode() method.
      *
      * @param InputInterface $input InputInterface is the interface implemented by
-     * all input classes
+     * all input classes.
      * @param OutputInterface $output OutputInterface is the interface implemented
-     * by all Output classes
+     * by all Output classes.
      *
      * @return int
      *
-     * @throws Exception If the file could not be opened
-     * @throws LogicException When this abstract method is not implemented
+     * @throws Exception If the file could not be opened.
+     * @throws LogicException When this abstract method is not implemented.
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -166,7 +162,7 @@ class ModelCommand extends Command
                 use stdClass;
 
                 /**
-                 * Description of Model '{$class}'
+                 * Description of Model '{$class}'.
                  */
                 class {$class}
                 {
@@ -215,14 +211,6 @@ class ModelCommand extends Command
 
             $this->str->concat($customMethod);
         }
-
-        /**
-         * -----------------------------------------------------------------------------
-         * Class content
-         * -----------------------------------------------------------------------------
-         * Gets the contents of the manufactured class
-         * -----------------------------------------------------------------------------
-         */
 
         /** @var string $content */
         $content = $this->str

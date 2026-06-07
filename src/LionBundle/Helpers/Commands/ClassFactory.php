@@ -502,27 +502,27 @@ class ClassFactory
                 $param = isset($split[1]) ? trim($split[0]) : trim($param);
 
                 $paramsAnnotation .= $key === ($paramsSize - 1)
-                    ? <<<EOT
-                         * @param {$param} Parameter Description
-                    EOT
-                    : <<<EOT
-                    * @param {$param} Parameter Description
+                    ? <<<PHP
+                         * @param {$param} Parameter Description.
+                    PHP
+                    : <<<PHP
+                    * @param {$param} Parameter Description.
 
-                    EOT;
+                    PHP;
             }
         } elseif ($paramsSize === 1) {
             $split = explode('=', $params);
 
             $params = isset($split[1]) ? trim($split[0]) : trim($params);
 
-            $paramsAnnotation .= <<<EOT
-            * @param {$params} Parameter Description
-            EOT;
+            $paramsAnnotation .= <<<PHP
+            * @param {$params} Parameter Description.
+            PHP;
         }
 
         $method = <<<EOT
             /**
-             * Description of '{$name}'
+             * Description of '{$name}'.
              *
 
         EOT;
