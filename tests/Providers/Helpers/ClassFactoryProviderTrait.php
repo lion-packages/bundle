@@ -585,7 +585,7 @@ trait ClassFactoryProviderTrait
                 'lineBreak' => 2,
                 'return' => <<<PHP
                     /**
-                     * Description of 'example'
+                     * Description of 'example'.
                      *
                      * @return null
                      */
@@ -606,7 +606,7 @@ trait ClassFactoryProviderTrait
                 'lineBreak' => 2,
                 'return' => <<<PHP
                     /**
-                     * Description of 'example'
+                     * Description of 'example'.
                      *
                      * @return null
                      */
@@ -627,7 +627,7 @@ trait ClassFactoryProviderTrait
                 'lineBreak' => 0,
                 'return' => <<<PHP
                     /**
-                     * Description of 'example'
+                     * Description of 'example'.
                      *
                      * @return null
                      */
@@ -646,10 +646,10 @@ trait ClassFactoryProviderTrait
                 'lineBreak' => 2,
                 'return' => <<<PHP
                     /**
-                     * Description of 'example'
+                     * Description of 'example'.
                      *
-                     * @param string \$param1 Parameter Description
-                     * @param int \$param2 Parameter Description
+                     * @param string \$param1 Parameter Description.
+                     * @param int \$param2 Parameter Description.
                      *
                      * @return null
                      */
@@ -670,9 +670,9 @@ trait ClassFactoryProviderTrait
                 'lineBreak' => 2,
                 'return' => <<<PHP
                     /**
-                     * Description of 'example'
+                     * Description of 'example'.
                      *
-                     * @param string \$param1 Parameter Description
+                     * @param string \$param1 Parameter Description.
                      *
                      * @return string
                      */
@@ -693,9 +693,9 @@ trait ClassFactoryProviderTrait
                 'lineBreak' => 2,
                 'return' => <<<PHP
                     /**
-                     * Description of 'example'
+                     * Description of 'example'.
                      *
-                     * @param array \$param1 Parameter Description
+                     * @param array \$param1 Parameter Description.
                      *
                      * @return array
                      */
@@ -719,9 +719,9 @@ trait ClassFactoryProviderTrait
                 'lineBreak' => 2,
                 'return' => <<<PHP
                     /**
-                     * Description of 'example'
+                     * Description of 'example'.
                      *
-                     * @param array \$param1 Parameter Description
+                     * @param array \$param1 Parameter Description.
                      *
                      * @return array<int, string>
                      */
@@ -742,9 +742,9 @@ trait ClassFactoryProviderTrait
                 'lineBreak' => 2,
                 'return' => <<<PHP
                     /**
-                     * Description of 'exampleLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongMethod'
+                     * Description of 'exampleLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongMethod'.
                      *
-                     * @param array \$param1 Parameter Description
+                     * @param array \$param1 Parameter Description.
                      *
                      * @return array
                      */
