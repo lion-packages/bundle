@@ -6,7 +6,7 @@ namespace Tests\Commands\Lion\Migrations;
 
 use DI\DependencyException;
 use DI\NotFoundException;
-use Lion\Bundle\Commands\Lion\Migrations\MigrationsDropCommand;
+use Lion\Bundle\Commands\Lion\Migrations\DropMigrationsCommand;
 use Lion\Bundle\Helpers\Commands\Migrations\Migrations;
 use Lion\Bundle\Test\Test;
 use Lion\Dependency\Injection\Container;
@@ -16,12 +16,12 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class MigrationsDropCommandTest extends Test
+class DropMigrationsCommandTest extends Test
 {
     private const string OUTPUT_MESSAGE = 'Drop the database schema.';
 
     private CommandTester $commandTester;
-    private MigrationsDropCommand $migrationsDropCommand;
+    private DropMigrationsCommand $migrationsDropCommand;
 
     /**
      * @throws DependencyException Error while resolving the entry.
@@ -29,8 +29,8 @@ class MigrationsDropCommandTest extends Test
      */
     protected function setUp(): void
     {
-        /** @var MigrationsDropCommand $migrationsDropCommand */
-        $migrationsDropCommand = new Container()->resolve(MigrationsDropCommand::class);
+        /** @var DropMigrationsCommand $migrationsDropCommand */
+        $migrationsDropCommand = new Container()->resolve(DropMigrationsCommand::class);
 
         $this->migrationsDropCommand = $migrationsDropCommand;
 
@@ -55,7 +55,7 @@ class MigrationsDropCommandTest extends Test
     public function setMigrations(): void
     {
         $this->assertInstanceOf(
-            MigrationsDropCommand::class,
+            DropMigrationsCommand::class,
             $this->migrationsDropCommand->setMigrations(new Migrations())
         );
 
