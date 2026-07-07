@@ -79,8 +79,8 @@ class MigrationCommand extends MenuCommand
     {
         $this
             ->setName('new:migration')
-            ->setDescription('Command required to generate a new migration')
-            ->addArgument('migration', InputArgument::REQUIRED, 'Migration name')
+            ->setDescription('Command required to generate a new migration.')
+            ->addArgument('migration', InputArgument::REQUIRED, 'Migration name.')
             ->addOption('connection', 'c', InputOption::VALUE_REQUIRED, 'The connection to run.');
     }
 

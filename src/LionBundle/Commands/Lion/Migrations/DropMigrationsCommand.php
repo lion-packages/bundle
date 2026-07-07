@@ -15,7 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Removes all defined schemas from the database.
  */
-class MigrationsDropCommand extends Command
+class DropMigrationsCommand extends Command
 {
     /**
      * Manages the processes of creating or executing migrations.
@@ -25,7 +25,7 @@ class MigrationsDropCommand extends Command
     private Migrations $migrations;
 
     #[Inject]
-    public function setMigrations(Migrations $migrations): MigrationsDropCommand
+    public function setMigrations(Migrations $migrations): DropMigrationsCommand
     {
         $this->migrations = $migrations;
 
