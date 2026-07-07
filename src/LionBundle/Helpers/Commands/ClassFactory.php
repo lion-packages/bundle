@@ -7,6 +7,7 @@ namespace Lion\Bundle\Helpers\Commands;
 use DI\Attribute\Inject;
 use Exception;
 use Lion\Files\Store;
+use Lion\Helpers\Str;
 use stdClass;
 
 /**
@@ -558,17 +559,11 @@ class ClassFactory
      */
     public function getClassFormat(string $className): string
     {
-        $className = str_replace('_', ' ', $className);
-
-        $className = str_replace('-', ' ', $className);
-
-        $className = str_replace(':', ' ', $className);
-
-        $className = str_replace('.', ' ', $className);
-
-        $className = str_replace(',', ' ', $className);
-
-        return trim(str_replace(' ', '', ucwords($className)));
+        return $className
+            |> (fn ($x) => str_replace(['_', '-', ':', '.', ','], ' ', $x))
+            |> ucwords(...)
+            |> (fn ($x) => str_replace(' ', '', $x))
+            |> trim(...);
     }
 
     /**
@@ -602,5 +597,64 @@ class ClassFactory
     public function omit(string $fileExtension): bool
     {
         return isSuccess($this->store->exist($this->getFolder() . $this->getClass() . ".{$fileExtension}"));
+    }
+
+    /**
+     * Replace all special characters to normalize a string with the replacement value.
+     *
+     * @param string $string Replacement text.
+     * @param string $replace Replacement value.
+     *
+     * @return string
+     */
+    public function replaceSpecialChars(string $string, string $replace): string
+    {
+        /** @var string $format */
+        $format = new Str()
+            ->of($string)
+            ->replace(' ', $replace)
+            ->replace('-', $replace)
+            ->replace(',', $replace)
+            ->replace('.', $replace)
+            ->replace('/', $replace)
+            ->replace('\\', $replace)
+            ->replace(':', $replace)
+            ->replace(';', $replace)
+            ->replace('!', $replace)
+            ->replace('¡', $replace)
+            ->replace('?', $replace)
+            ->replace('¿', $replace)
+            ->replace('"', $replace)
+            ->replace("'", $replace)
+            ->replace('`', $replace)
+            ->replace('~', $replace)
+            ->replace('@', $replace)
+            ->replace('#', $replace)
+            ->replace('$', $replace)
+            ->replace('%', $replace)
+            ->replace('^', $replace)
+            ->replace('&', $replace)
+            ->replace('*', $replace)
+            ->replace('(', $replace)
+            ->replace(')', $replace)
+            ->replace('[', $replace)
+            ->replace(']', $replace)
+            ->replace('{', $replace)
+            ->replace('}', $replace)
+            ->replace('<', $replace)
+            ->replace('>', $replace)
+            ->replace('|', $replace)
+            ->replace('+', $replace)
+            ->replace('=', $replace)
+            ->replace('°', $replace)
+            ->replace('¬', $replace)
+            ->replace('§', $replace)
+            ->replace('¦', $replace)
+            ->replace('©', $replace)
+            ->replace('®', $replace)
+            ->replace('™', $replace)
+            ->get();
+
+        return $format;
     }
 }
