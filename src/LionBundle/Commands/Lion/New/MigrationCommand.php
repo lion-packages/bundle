@@ -130,8 +130,8 @@ class MigrationCommand extends MenuCommand
 
         $selectedType = $this->selectMigrationType($input, $output, MigrationFactory::MIGRATIONS_OPTIONS);
 
-        /** @var string $migrationPascal */
-        $migrationPascal = $this->str
+        /** @var string $migrationClassName */
+        $migrationClassName = $this->str
             ->of($migration)
             ->replace('-', ' ')
             ->replace('_', ' ')
@@ -139,8 +139,8 @@ class MigrationCommand extends MenuCommand
             ->trim()
             ->get();
 
-        /** @var string $dbPascal */
-        $dbPascal = $this->str
+        /** @var string $dbNameFormat */
+        $dbNameFormat = $this->str
             ->of($dbName)
             ->replace('-', ' ')
             ->replace('_', ' ')
@@ -148,7 +148,7 @@ class MigrationCommand extends MenuCommand
             ->trim()
             ->get();
 
-        $dataMigration = $this->migrationFactory->getBody($migrationPascal, $selectedType, $dbPascal, $driver);
+        $dataMigration = $this->migrationFactory->getBody($migrationClassName, $selectedType, $dbNameFormat, $driver);
 
         /** @var string $path */
         $path = $dataMigration->path;
@@ -159,13 +159,13 @@ class MigrationCommand extends MenuCommand
         /** @var string $add */
         $add = $this->str
             ->of($body)
-            ->replace('--NAME--', $migration)
+            ->replace('--NAME--', $this->classFactory->replaceSpecialChars($migration, '_'))
             ->get();
 
         $this->store->folder($path);
 
         $this->classFactory
-            ->classFactory($path, $migrationPascal)
+            ->classFactory($path, $migrationClassName)
             ->create($this->classFactory->getClass(), ClassFactory::PHP_EXTENSION, $path)
             ->add($add)
             ->close();
