@@ -183,15 +183,10 @@ jobs:
             xdebug.log_level=0
           tools: composer
 
-      - name: Setup NodeJS and NPM
-        run: |
-          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-          export NVM_DIR="$HOME/.nvm"
-          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-          [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-          nvm install 20
-          nvm use 20
-          npm install -g npm@11
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
 
       - name: Copy .env.actions to .env
         run: |
