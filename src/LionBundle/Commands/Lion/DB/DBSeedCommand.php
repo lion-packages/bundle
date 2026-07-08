@@ -5,40 +5,21 @@ declare(strict_types=1);
 namespace Lion\Bundle\Commands\Lion\DB;
 
 use DI\Attribute\Inject;
-use InvalidArgumentException;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\Migrations\Migrations;
+use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Bundle\Helpers\DatabaseEngine;
 use Lion\Bundle\Interface\SeedInterface;
-use Lion\Command\Command;
 use Lion\Database\Connection;
-use Lion\Files\Store;
-use Lion\Helpers\Str;
-use Lion\Request\Http;
 use LogicException;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Execute the database connection seeds.
  */
-class DBSeedCommand extends Command
+class DBSeedCommand extends MenuCommand
 {
-    /**
-     * Manipulate system files.
-     *
-     * @var Store $store
-     */
-    private Store $store;
-
-    /**
-     * Modify and construct strings with different formats.
-     *
-     * @var Str $str
-     */
-    private Str $str;
-
     /**
      * Manages basic database engine processes.
      *
@@ -60,22 +41,6 @@ class DBSeedCommand extends Command
      * @var ClassFactory $classFactory
      */
     private ClassFactory $classFactory;
-
-    #[Inject]
-    public function setStore(Store $store): DBSeedCommand
-    {
-        $this->store = $store;
-
-        return $this;
-    }
-
-    #[Inject]
-    public function setStr(Str $str): DBSeedCommand
-    {
-        $this->str = $str;
-
-        return $this;
-    }
 
     #[Inject]
     public function setDatabaseEngine(DatabaseEngine $databaseEngine): DBSeedCommand
@@ -110,8 +75,7 @@ class DBSeedCommand extends Command
     {
         $this
             ->setName('db:seed')
-            ->setDescription('Run the available seeds.')
-            ->addOption('connection', 'c', InputOption::VALUE_REQUIRED, 'The connection to run.');
+            ->setDescription('Run the available seeds.');
     }
 
     /**
@@ -132,12 +96,7 @@ class DBSeedCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        /** @var string|null $connectionName */
-        $connectionName = $input->getOption('connection');
-
-        if (!$connectionName) {
-            throw new InvalidArgumentException("The '--connection' option is required.", Http::INTERNAL_SERVER_ERROR);
-        }
+        $connectionName = $this->selectConnection();
 
         $connections = Connection::getConnections();
 

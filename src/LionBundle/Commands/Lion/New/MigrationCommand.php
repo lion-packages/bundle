@@ -106,16 +106,13 @@ class MigrationCommand extends MenuCommand
         /** @var string $migration */
         $migration = $input->getArgument('migration');
 
-        if (STR->of($migration)->test("/.*\//")) {
+        if ($this->str->of($migration)->test("/.*\//")) {
             throw new InvalidArgumentException('Migration cannot be inside subfolders.', Http::INTERNAL_SERVER_ERROR);
         }
 
-        /** @var string|null $connectionName */
-        $connectionName = $input->getOption('connection');
+        $connectionName = $this->selectConnection();
 
-        if (!$connectionName) {
-            throw new InvalidArgumentException("The '--connection' option is required.", Http::INTERNAL_SERVER_ERROR);
-        }
+        $migrationType = $this->selectMigrationType(MigrationFactory::MIGRATIONS_OPTIONS, MigrationFactory::TABLE);
 
         $connections = Connection::getConnections();
 
@@ -127,8 +124,6 @@ class MigrationCommand extends MenuCommand
         $databaseEngineType = $this->databaseEngine->getDatabaseEngineType($connectionName);
 
         $driver = $this->databaseEngine->getDriver($databaseEngineType);
-
-        $selectedType = $this->selectMigrationType($input, $output, MigrationFactory::MIGRATIONS_OPTIONS);
 
         /** @var string $migrationClassName */
         $migrationClassName = $this->str
@@ -148,7 +143,7 @@ class MigrationCommand extends MenuCommand
             ->trim()
             ->get();
 
-        $dataMigration = $this->migrationFactory->getBody($migrationClassName, $selectedType, $dbNameFormat, $driver);
+        $dataMigration = $this->migrationFactory->getBody($migrationClassName, $migrationType, $dbNameFormat, $driver);
 
         /** @var string $path */
         $path = $dataMigration->path;

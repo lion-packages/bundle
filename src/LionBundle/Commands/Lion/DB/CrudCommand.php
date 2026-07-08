@@ -121,7 +121,7 @@ class CrudCommand extends MenuCommand
         /** @var string $entity */
         $entity = $input->getArgument('entity');
 
-        $selectedConnection = $this->selectConnection($input, $output);
+        $selectedConnection = $this->selectConnection();
 
         $connectionName = Connection::getConnections()[$selectedConnection][Connection::CONNECTION_DBNAME];
 

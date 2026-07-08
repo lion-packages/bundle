@@ -72,20 +72,24 @@ class MigrationFactory
     }
 
     /**
-     * Gets the data to generate the body of the selected migration type
+     * Gets the data to generate the body of the selected migration type.
      *
-     * @param string $className Class name
-     * @param string $selectedType Type of migration
-     * @param string $dbPascal Database in PascalCase format
-     * @param string $driver Database Engine Type
+     * @param string $className Class name.
+     * @param string $migrationType Type of migration.
+     * @param string $dbPascal Database in PascalCase format.
+     * @param string $driver Database Engine Type.
      *
      * @return stdClass
      *
      * @throws Exception If the driver is not supported.
      */
-    public function getBody(string $className, string $selectedType, string $dbPascal, string $driver): stdClass
+    public function getBody(string $className, string $migrationType, string $dbPascal, string $driver): stdClass
     {
-        if (self::SCHEMA === $selectedType && 'PostgreSQL' === $driver || 'SQLite' === $driver) {
+        if (
+            self::SCHEMA === $migrationType &&
+            $this->databaseEngine->getDriver(Driver::POSTGRESQL) === $driver ||
+            $this->databaseEngine->getDriver(Driver::SQLITE) === $driver
+        ) {
             throw new Exception(
                 'Currently, the driver does not support this type of migration.',
                 Http::INTERNAL_SERVER_ERROR
@@ -116,20 +120,20 @@ class MigrationFactory
             self::STORED_PROCEDURE => 'getPostgreSQLStoredProcedureBody',
         ];
 
-        if (isset($typeFolders[$selectedType])) {
-            $folder = $typeFolders[$selectedType];
+        if (isset($typeFolders[$migrationType])) {
+            $folder = $typeFolders[$migrationType];
 
             $path = "database/Migrations/{$dbPascal}/{$driver}/{$folder}/";
 
             $namespace = "Database\\Migrations\\{$dbPascal}\\{$driver}\\{$folder}";
 
             if ($this->databaseEngine->getDriver(Driver::MYSQL) === $driver) {
-                $method = $mysqlMethods[$selectedType];
+                $method = $mysqlMethods[$migrationType];
 
                 $body = $this->$method($className, $namespace);
             } elseif ($this->databaseEngine->getDriver(Driver::POSTGRESQL) === $driver) {
                 /** @phpstan-ignore-next-line */
-                $method = $pgsqlMethods[$selectedType];
+                $method = $pgsqlMethods[$migrationType];
 
                 $body = $this->$method($className, $namespace);
             }

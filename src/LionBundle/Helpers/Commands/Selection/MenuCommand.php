@@ -238,46 +238,47 @@ class MenuCommand extends Command
     }
 
     /**
-     * Selection menu to select a database
-     *
-     * @param InputInterface $input [InputInterface is the interface
-     * implemented by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
+     * Selection menu to select a database.
      *
      * @return string
      *
      * @internal
      */
-    protected function selectConnection(InputInterface $input, OutputInterface $output): string
+    protected function selectConnection(): string
     {
+        if (!empty($_ENV['SELECTED_CONNECTION'])) {
+            /** @var string $connectionName */
+            $connectionName = $_ENV['SELECTED_CONNECTION'];
+
+            return $connectionName;
+        }
+
         /** @var QuestionHelper $helper */
         $helper = $this->getHelper('question');
 
         $connections = Connection::getConnections();
 
-        $connectionKeys = array_keys($connections);
-
-        /** @var string $defaultConnection */
-        $defaultConnection = reset($connectionKeys);
+        $defaultConnection = Connection::getDefaultConnectionName();
 
         if ($this->arr->of($connections)->length() > 1) {
             /** @var array<int, string> $choiseConnections */
-            $choiseConnections = $this->arr
-                ->of($connections)
-                ->keys()
-                ->get();
+            $choiseConnections = [];
+
+            foreach ($connections as $connectionName => $connectionConfig) {
+                $choiseConnections[$connectionName] =
+                        "{$connectionName}[{$connectionConfig[Connection::CONNECTION_TYPE]}]";
+            }
 
             $choiseQuestion = new ChoiceQuestion(
                 'Select a connection ' . $this->warningOutput("(default: {$defaultConnection})"),
                 $choiseConnections,
-                0
+                $defaultConnection
             );
 
             /** @var string $selectedConnection */
-            $selectedConnection = $helper->ask($input, $output, $choiseQuestion);
+            $selectedConnection = $helper->ask($this->input, $this->output, $choiseQuestion);
         } else {
-            $output->writeln($this->warningOutput("default connection: ({$defaultConnection})"));
+            $this->output->writeln($this->warningOutput("Default connection: ({$defaultConnection})"));
 
             $selectedConnection = $defaultConnection;
         }
@@ -305,37 +306,34 @@ class MenuCommand extends Command
             return $_ENV['SELECTED_CONNECTION'];
         }
 
-        return $this->selectConnection($input, $output);
+        return $this->selectConnection();
     }
 
     /**
-     * Selection menu to select a database
+     * Selection menu to select a database.
      *
-     * @param InputInterface $input [InputInterface is the interface
-     * implemented by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
-     * @param array<int, string> $options [List of available migration types]
+     * @param array<int, string> $options List of available migration types.
+     * @param string $defaultOption Default option.
      *
      * @return string
      *
      * @internal
      */
-    protected function selectMigrationType(InputInterface $input, OutputInterface $output, array $options): string
-    {
-        $defaultOption = $options[0];
-
+    protected function selectMigrationType(
+        array $options,
+        string $defaultOption
+    ): string {
         /** @var QuestionHelper $helper */
         $helper = $this->getHelper('question');
 
         $choiceQuestion = new ChoiceQuestion(
             "Select the type of migration {$this->warningOutput("(default: {$defaultOption})")}",
             $options,
-            0
+            $defaultOption
         );
 
         /** @var string $migrationType */
-        $migrationType = $helper->ask($input, $output, $choiceQuestion);
+        $migrationType = $helper->ask($this->input, $this->output, $choiceQuestion);
 
         return $migrationType;
     }
