@@ -98,10 +98,12 @@ class SeedsTest extends Test
 
         $seedsPath = Migrations::SEEDS_PATH . "{$dbNamePascal}/{$dbType}/";
 
-        $this->assertSame(Command::SUCCESS, $this->commandTester->execute([
-            'seed' => self::CLASS_NAME,
-            '--connection' => $connectionName,
-        ]));
+        $this->assertSame(
+            Command::SUCCESS,
+            $this->commandTester
+                ->setInputs([getDefaultConnection()])
+                ->execute(['seed' => self::CLASS_NAME])
+        );
 
         $this->assertStringContainsString(self::MESSAGE_OUTPUT, $this->commandTester->getDisplay());
         $this->assertFileExists($seedsPath . self::FILE_NAME);

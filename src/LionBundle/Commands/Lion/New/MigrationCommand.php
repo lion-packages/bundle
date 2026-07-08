@@ -16,7 +16,6 @@ use Lion\Request\Http;
 use LogicException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -80,8 +79,26 @@ class MigrationCommand extends MenuCommand
         $this
             ->setName('new:migration')
             ->setDescription('Command required to generate a new migration.')
-            ->addArgument('migration', InputArgument::REQUIRED, 'Migration name.')
-            ->addOption('connection', 'c', InputOption::VALUE_REQUIRED, 'The connection to run.');
+            ->addArgument('migration', InputArgument::REQUIRED, 'Migration name.');
+    }
+
+    /**
+     * Initializes the command after the input has been bound and before the input
+     * is validated.
+     *
+     * This is mainly useful when a lot of commands extends one main command where
+     * some things need to be initialized based on the input arguments and options.
+     *
+     * @param InputInterface $input InputInterface is the interface implemented by
+     * all input classes.
+     * @param OutputInterface $output OutputInterface is the interface implemented
+     * by all Output classes.
+     *
+     * @return void
+     */
+    protected function initialize(InputInterface $input, OutputInterface $output): void
+    {
+        parent::initialize($input, $output);
     }
 
     /**
@@ -106,16 +123,13 @@ class MigrationCommand extends MenuCommand
         /** @var string $migration */
         $migration = $input->getArgument('migration');
 
-        if (STR->of($migration)->test("/.*\//")) {
+        if ($this->str->of($migration)->test("/.*\//")) {
             throw new InvalidArgumentException('Migration cannot be inside subfolders.', Http::INTERNAL_SERVER_ERROR);
         }
 
-        /** @var string|null $connectionName */
-        $connectionName = $input->getOption('connection');
+        $connectionName = $this->selectConnection();
 
-        if (!$connectionName) {
-            throw new InvalidArgumentException("The '--connection' option is required.", Http::INTERNAL_SERVER_ERROR);
-        }
+        $migrationType = $this->selectMigrationType();
 
         $connections = Connection::getConnections();
 
@@ -127,8 +141,6 @@ class MigrationCommand extends MenuCommand
         $databaseEngineType = $this->databaseEngine->getDatabaseEngineType($connectionName);
 
         $driver = $this->databaseEngine->getDriver($databaseEngineType);
-
-        $selectedType = $this->selectMigrationType($input, $output, MigrationFactory::MIGRATIONS_OPTIONS);
 
         /** @var string $migrationClassName */
         $migrationClassName = $this->str
@@ -148,7 +160,7 @@ class MigrationCommand extends MenuCommand
             ->trim()
             ->get();
 
-        $dataMigration = $this->migrationFactory->getBody($migrationClassName, $selectedType, $dbNameFormat, $driver);
+        $dataMigration = $this->migrationFactory->getBody($migrationClassName, $migrationType, $dbNameFormat, $driver);
 
         /** @var string $path */
         $path = $dataMigration->path;

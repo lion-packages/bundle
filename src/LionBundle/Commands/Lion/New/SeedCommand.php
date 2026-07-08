@@ -6,40 +6,21 @@ namespace Lion\Bundle\Commands\Lion\New;
 
 use DI\Attribute\Inject;
 use Exception;
-use InvalidArgumentException;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\Migrations\Migrations;
+use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Bundle\Helpers\DatabaseEngine;
-use Lion\Command\Command;
 use Lion\Database\Connection;
-use Lion\Files\Store;
-use Lion\Helpers\Str;
-use Lion\Request\Http;
 use LogicException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Generate a seed.
  */
-class SeedCommand extends Command
+class SeedCommand extends MenuCommand
 {
-    /**
-     * Modify and construct strings with different formats.
-     *
-     * @var Str $str
-     */
-    private Str $str;
-
-    /**
-     * Manipulate system files.
-     *
-     * @var Store $store
-     */
-    private Store $store;
-
     /**
      * Manages basic database engine processes.
      *
@@ -54,22 +35,6 @@ class SeedCommand extends Command
      * @var ClassFactory $classFactory
      */
     private ClassFactory $classFactory;
-
-    #[Inject]
-    public function setStr(Str $str): SeedCommand
-    {
-        $this->str = $str;
-
-        return $this;
-    }
-
-    #[Inject]
-    public function setStore(Store $store): SeedCommand
-    {
-        $this->store = $store;
-
-        return $this;
-    }
 
     #[Inject]
     public function setDatabaseEngine(DatabaseEngine $databaseEngine): SeedCommand
@@ -96,9 +61,27 @@ class SeedCommand extends Command
     {
         $this
             ->setName('new:seed')
-            ->setDescription('Command required for creating new seeds')
-            ->addArgument('seed', InputArgument::OPTIONAL, 'Seed name.', 'ExampleSeed')
-            ->addOption('connection', 'c', InputOption::VALUE_REQUIRED, 'The connection to run.');
+            ->setDescription('Command required for creating new seeds.')
+            ->addArgument('seed', InputArgument::OPTIONAL, 'Seed name.', 'ExampleSeed');
+    }
+
+    /**
+     * Initializes the command after the input has been bound and before the input
+     * is validated.
+     *
+     * This is mainly useful when a lot of commands extends one main command where
+     * some things need to be initialized based on the input arguments and options.
+     *
+     * @param InputInterface $input InputInterface is the interface implemented by
+     * all input classes.
+     * @param OutputInterface $output OutputInterface is the interface implemented
+     * by all Output classes.
+     *
+     * @return void
+     */
+    protected function initialize(InputInterface $input, OutputInterface $output): void
+    {
+        parent::initialize($input, $output);
     }
 
     /**
@@ -120,12 +103,7 @@ class SeedCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        /** @var string|null $connectionName */
-        $connectionName = $input->getOption('connection');
-
-        if (!$connectionName) {
-            throw new InvalidArgumentException("The '--connection' option is required.", Http::INTERNAL_SERVER_ERROR);
-        }
+        $connectionName = $this->selectConnection();
 
         $connections = Connection::getConnections();
 

@@ -167,12 +167,8 @@ class RulesDBCommandTest extends Test
         $this->createTables();
 
         $execute = $this->commandTester
-            ->setInputs([
-                '0',
-            ])
-            ->execute([
-                'entity' => self::ENTITY,
-            ]);
+            ->setInputs([getDefaultConnection()])
+            ->execute(['entity' => self::ENTITY]);
 
         $this->assertSame(Command::SUCCESS, $execute);
 
@@ -207,12 +203,8 @@ class RulesDBCommandTest extends Test
     public function executeWithoutColumns(): void
     {
         $execute = $this->commandTester
-            ->setInputs([
-                '0',
-            ])
-            ->execute([
-                'entity' => self::ENTITY,
-            ]);
+            ->setInputs([getDefaultConnection()])
+            ->execute(['entity' => self::ENTITY]);
 
         $this->assertSame(Command::FAILURE, $execute);
         $this->assertStringContainsString(self::OUTPUT_MESSAGE_ERROR, $this->commandTester->getDisplay());
@@ -224,12 +216,8 @@ class RulesDBCommandTest extends Test
         $this->createTables();
 
         $execute = $this->commandTester
-            ->setInputs([
-                '0',
-            ])
-            ->execute([
-                'entity' => self::ENTITY,
-            ]);
+            ->setInputs([getDefaultConnection()])
+            ->execute(['entity' => self::ENTITY]);
 
         $this->assertSame(Command::SUCCESS, $execute);
         $this->assertStringContainsString(self::OUTPUT_MESSAGE_FOREIGN, $this->commandTester->getDisplay());

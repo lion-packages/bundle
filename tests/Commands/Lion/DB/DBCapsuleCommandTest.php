@@ -10,7 +10,6 @@ use Lion\Bundle\Commands\Lion\DB\DBCapsuleCommand;
 use Lion\Bundle\Commands\Lion\New\CapsuleCommand;
 use Lion\Bundle\Commands\Lion\New\InterfaceCommand;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
-use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Bundle\Helpers\DatabaseEngine;
 use Lion\Database\Drivers\Schema\MySQL as Schema;
 use Lion\Database\Interface\DatabaseCapsuleInterface;
@@ -104,7 +103,9 @@ class DBCapsuleCommandTest extends Test
     #[Testing]
     public function execute(): void
     {
-        Schema::connection(getDefaultConnection())
+        $connectionName = getDefaultConnection();
+
+        Schema::connection($connectionName)
             ->createTable(self::ENTITY, function (): void {
                 Schema::int('id')
                     ->notNull()
@@ -117,12 +118,8 @@ class DBCapsuleCommandTest extends Test
             ->execute();
 
         $execute = $this->commandTester
-            ->setInputs([
-                '0',
-            ])
-            ->execute([
-                'entity' => self::ENTITY,
-            ]);
+            ->setInputs([$connectionName])
+            ->execute(['entity' => self::ENTITY]);
 
         $this->assertSame(Command::SUCCESS, $execute);
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
@@ -134,7 +131,7 @@ class DBCapsuleCommandTest extends Test
 
         $this->assertArrayNotHasKey('SELECTED_CONNECTION', $_ENV);
 
-        Schema::connection(getDefaultConnection())
+        Schema::connection($connectionName)
             ->dropTable(self::ENTITY)
             ->execute();
     }
@@ -142,7 +139,9 @@ class DBCapsuleCommandTest extends Test
     #[Testing]
     public function executeWithForeignKeys(): void
     {
-        Schema::connection(getDefaultConnection())
+        $connectionName = getDefaultConnection();
+
+        Schema::connection($connectionName)
             ->createTable('roles', function (): void {
                 Schema::int('idroles')
                     ->notNull()
@@ -154,7 +153,7 @@ class DBCapsuleCommandTest extends Test
             })
             ->execute();
 
-        Schema::connection(getDefaultConnection())
+        Schema::connection($connectionName)
             ->createTable('users', function (): void {
                 Schema::int('idusers')
                     ->notNull()
@@ -171,12 +170,8 @@ class DBCapsuleCommandTest extends Test
             ->execute();
 
         $execute = $this->commandTester
-            ->setInputs([
-                '0',
-            ])
-            ->execute([
-                'entity' => 'roles',
-            ]);
+            ->setInputs([$connectionName])
+            ->execute(['entity' => 'roles']);
 
         $this->assertSame(Command::SUCCESS, $execute);
 
@@ -195,12 +190,8 @@ class DBCapsuleCommandTest extends Test
         EOT, $display);
 
         $execute = $this->commandTester
-            ->setInputs([
-                '0',
-            ])
-            ->execute([
-                'entity' => 'users',
-            ]);
+            ->setInputs([$connectionName])
+            ->execute(['entity' => 'users']);
 
         $this->assertSame(Command::SUCCESS, $execute);
 
@@ -218,11 +209,11 @@ class DBCapsuleCommandTest extends Test
         >>  CAPSULE: Database\Class\LionDatabase\MySQL\Users
         EOT, $display);
 
-        Schema::connection(getDefaultConnection())
+        Schema::connection($connectionName)
             ->dropTable('users')
             ->execute();
 
-        Schema::connection(getDefaultConnection())
+        Schema::connection($connectionName)
             ->dropTable('roles')
             ->execute();
     }
@@ -231,12 +222,8 @@ class DBCapsuleCommandTest extends Test
     public function executeWithoutColumns(): void
     {
         $execute = $this->commandTester
-            ->setInputs([
-                '0',
-            ])
-            ->execute([
-                'entity' => self::ENTITY,
-            ]);
+            ->setInputs([getDefaultConnection()])
+            ->execute(['entity' => self::ENTITY]);
 
         $this->assertSame(Command::FAILURE, $execute);
         $this->assertStringContainsString(self::OUTPUT_MESSAGE_ERROR, $this->commandTester->getDisplay());
@@ -245,7 +232,9 @@ class DBCapsuleCommandTest extends Test
     #[Testing]
     public function executeWithForeignsReturningErrorObject(): void
     {
-        Schema::connection(getDefaultConnection())
+        $connectionName = getDefaultConnection();
+
+        Schema::connection($connectionName)
             ->createTable('roles', function (): void {
                 Schema::int('idroles')
                     ->notNull()
@@ -257,7 +246,7 @@ class DBCapsuleCommandTest extends Test
             })
             ->execute();
 
-        Schema::connection(getDefaultConnection())
+        Schema::connection($connectionName)
             ->createTable('users', function (): void {
                 Schema::int('idusers')
                     ->notNull()
@@ -314,18 +303,18 @@ class DBCapsuleCommandTest extends Test
         $tester = new CommandTester($application->find('db:capsule'));
 
         $exitCode = $tester
-            ->setInputs(['0'])
+            ->setInputs([$connectionName])
             ->execute(['entity' => 'users']);
 
         $this->assertEquals(Command::FAILURE, $exitCode);
 
         $this->assertStringContainsString('>>  CAPSULE: ERROR MESSAGE', $tester->getDisplay());
 
-        Schema::connection(getDefaultConnection())
+        Schema::connection($connectionName)
             ->dropTable('users')
             ->execute();
 
-        Schema::connection(getDefaultConnection())
+        Schema::connection($connectionName)
             ->dropTable('roles')
             ->execute();
     }

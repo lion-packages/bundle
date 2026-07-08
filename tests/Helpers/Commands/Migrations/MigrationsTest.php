@@ -52,7 +52,7 @@ class MigrationsTest extends Test
     private const string FILE_NAME = self::CLASS_NAME . '.php';
     private const string OUTPUT_MESSAGE = 'The migration was generated successfully.';
 
-    private CommandTester $commandTester;
+    private CommandTester $commandTesterNewMigration;
     private Migrations $migrations;
     private Store $store;
 
@@ -78,7 +78,7 @@ class MigrationsTest extends Test
 
         $application->addCommand($migrationCommand);
 
-        $this->commandTester = new CommandTester($application->find('new:migration'));
+        $this->commandTesterNewMigration = new CommandTester($application->find('new:migration'));
 
         $this->initReflection($this->migrations);
     }
@@ -102,17 +102,15 @@ class MigrationsTest extends Test
     #[Testing]
     public function orderList(): void
     {
-        $commandExecute = $this->commandTester
+        $commandExecute = $this->commandTesterNewMigration
             ->setInputs([
+                getDefaultConnection(),
                 MigrationFactory::TABLE,
             ])
-            ->execute([
-                'migration' => self::MIGRATION_NAME,
-                '--connection' => env('DB_DEFAULT'),
-            ]);
+            ->execute(['migration' => self::MIGRATION_NAME]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
-        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
+        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTesterNewMigration->getDisplay());
         $this->assertFileExists(self::URL_PATH_MYSQL_TABLE . self::FILE_NAME);
 
         /** @phpstan-ignore-next-line */
@@ -147,17 +145,17 @@ class MigrationsTest extends Test
     #[Testing]
     public function getMigrations(): void
     {
-        $commandExecute = $this->commandTester
+        $connectionName = getDefaultConnection();
+
+        $commandExecute = $this->commandTesterNewMigration
             ->setInputs([
+                $connectionName,
                 MigrationFactory::SCHEMA,
             ])
-            ->execute([
-                'migration' => self::MIGRATION_NAME,
-                '--connection' => env('DB_DEFAULT'),
-            ]);
+            ->execute(['migration' => self::MIGRATION_NAME]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
-        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
+        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTesterNewMigration->getDisplay());
         $this->assertFileExists(self::URL_PATH_MYSQL_SCHEMA . self::FILE_NAME);
 
         /** @phpstan-ignore-next-line */
@@ -170,17 +168,15 @@ class MigrationsTest extends Test
             SchemaInterface::class,
         ]);
 
-        $commandExecute = $this->commandTester
+        $commandExecute = $this->commandTesterNewMigration
             ->setInputs([
+                $connectionName,
                 MigrationFactory::TABLE,
             ])
-            ->execute([
-                'migration' => self::MIGRATION_NAME,
-                '--connection' => env('DB_DEFAULT'),
-            ]);
+            ->execute(['migration' => self::MIGRATION_NAME]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
-        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
+        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTesterNewMigration->getDisplay());
         $this->assertFileExists(self::URL_PATH_MYSQL_TABLE . self::FILE_NAME);
 
         /** @phpstan-ignore-next-line */
@@ -193,17 +189,15 @@ class MigrationsTest extends Test
             TableInterface::class,
         ]);
 
-        $commandExecute = $this->commandTester
+        $commandExecute = $this->commandTesterNewMigration
             ->setInputs([
+                $connectionName,
                 MigrationFactory::VIEW,
             ])
-            ->execute([
-                'migration' => self::MIGRATION_NAME,
-                '--connection' => env('DB_DEFAULT'),
-            ]);
+            ->execute(['migration' => self::MIGRATION_NAME]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
-        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
+        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTesterNewMigration->getDisplay());
         $this->assertFileExists(self::URL_PATH_MYSQL_VIEW . self::FILE_NAME);
 
         /** @phpstan-ignore-next-line */
@@ -216,17 +210,15 @@ class MigrationsTest extends Test
             ViewInterface::class,
         ]);
 
-        $commandExecute = $this->commandTester
+        $commandExecute = $this->commandTesterNewMigration
             ->setInputs([
+                $connectionName,
                 MigrationFactory::STORED_PROCEDURE,
             ])
-            ->execute([
-                'migration' => self::MIGRATION_NAME,
-                '--connection' => env('DB_DEFAULT'),
-            ]);
+            ->execute(['migration' => self::MIGRATION_NAME]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
-        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
+        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTesterNewMigration->getDisplay());
         $this->assertFileExists(self::URL_PATH_MYSQL_STORED_PROCEDURE . self::FILE_NAME);
 
         /** @phpstan-ignore-next-line */
@@ -291,19 +283,17 @@ class MigrationsTest extends Test
     #[Testing]
     public function executeMigrationsGroup(): void
     {
-        $connectionName = 'local';
+        $connectionName = getDefaultConnection();
 
-        $commandExecute = $this->commandTester
+        $commandExecute = $this->commandTesterNewMigration
             ->setInputs([
+                $connectionName,
                 MigrationFactory::TABLE,
             ])
-            ->execute([
-                'migration' => self::MIGRATION_NAME,
-                '--connection' => $connectionName,
-            ]);
+            ->execute(['migration' => self::MIGRATION_NAME]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
-        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
+        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTesterNewMigration->getDisplay());
         $this->assertFileExists(self::URL_PATH_MYSQL_TABLE . self::FILE_NAME);
 
         /**
@@ -318,17 +308,15 @@ class MigrationsTest extends Test
             TableInterface::class,
         ]);
 
-        $commandExecute = $this->commandTester
+        $commandExecute = $this->commandTesterNewMigration
             ->setInputs([
+                $connectionName,
                 MigrationFactory::VIEW,
             ])
-            ->execute([
-                'migration' => self::MIGRATION_NAME,
-                '--connection' => $connectionName,
-            ]);
+            ->execute(['migration' => self::MIGRATION_NAME]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
-        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
+        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTesterNewMigration->getDisplay());
         $this->assertFileExists(self::URL_PATH_MYSQL_VIEW . self::FILE_NAME);
 
         /**
@@ -343,19 +331,18 @@ class MigrationsTest extends Test
             ViewInterface::class,
         ]);
 
-        $commandExecute = $this->commandTester
+        $commandExecute = $this->commandTesterNewMigration
             ->setInputs([
+                $connectionName,
                 MigrationFactory::STORED_PROCEDURE,
             ])
-            ->execute([
-                'migration' => self::MIGRATION_NAME,
-                '--connection' => $connectionName,
-            ]);
+            ->execute(['migration' => self::MIGRATION_NAME]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
-        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
+        $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTesterNewMigration->getDisplay());
         $this->assertFileExists(self::URL_PATH_MYSQL_STORED_PROCEDURE . self::FILE_NAME);
 
+        /** @phpstan-ignore-next-line */
         $objClass = new (self::CLASS_NAMESPACE_STORE_PROCEDURE . self::CLASS_NAME)();
 
         $this->assertIsObject($objClass);
@@ -382,7 +369,7 @@ class MigrationsTest extends Test
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionCode(Http::INTERNAL_SERVER_ERROR);
-        $this->expectExceptionMessage("The connection '{$connectionName}' does not exist.");
+        $this->expectExceptionMessageIs("The connection '{$connectionName}' does not exist.");
 
         $this->migrations->processingWithStaticConnections($connectionName, fn (): bool => true);
     }

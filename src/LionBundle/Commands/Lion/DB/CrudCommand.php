@@ -91,10 +91,27 @@ class CrudCommand extends MenuCommand
     {
         $this
             ->setName('db:crud')
-            ->setDescription(
-                'Command to generate controller and model of an entity with their respective CRUD functions.'
-            )
+            ->setDescription('Command to generate controller and model of an entity with their respective CRUD functions.') // phpcs:ignore
             ->addArgument('entity', InputArgument::REQUIRED, 'Entity name.');
+    }
+
+    /**
+     * Initializes the command after the input has been bound and before the input
+     * is validated.
+     *
+     * This is mainly useful when a lot of commands extends one main command where
+     * some things need to be initialized based on the input arguments and options.
+     *
+     * @param InputInterface $input InputInterface is the interface implemented by
+     * all input classes.
+     * @param OutputInterface $output OutputInterface is the interface implemented
+     * by all Output classes.
+     *
+     * @return void
+     */
+    protected function initialize(InputInterface $input, OutputInterface $output): void
+    {
+        parent::initialize($input, $output);
     }
 
     /**
@@ -121,7 +138,7 @@ class CrudCommand extends MenuCommand
         /** @var string $entity */
         $entity = $input->getArgument('entity');
 
-        $selectedConnection = $this->selectConnection($input, $output);
+        $selectedConnection = $this->selectConnection();
 
         $connectionName = Connection::getConnections()[$selectedConnection][Connection::CONNECTION_DBNAME];
 

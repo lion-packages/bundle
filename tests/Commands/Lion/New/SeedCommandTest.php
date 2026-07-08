@@ -6,7 +6,6 @@ namespace Tests\Commands\Lion\New;
 
 use DI\DependencyException;
 use DI\NotFoundException;
-use InvalidArgumentException;
 use Lion\Bundle\Commands\Lion\New\SeedCommand;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
 use Lion\Bundle\Helpers\Commands\Migrations\Migrations;
@@ -14,9 +13,7 @@ use Lion\Bundle\Helpers\DatabaseEngine;
 use Lion\Bundle\Interface\SeedInterface;
 use Lion\Database\Connection;
 use Lion\Dependency\Injection\Container;
-use Lion\Files\Store;
 use Lion\Helpers\Str;
-use Lion\Request\Http;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
 use ReflectionException;
@@ -70,28 +67,6 @@ class SeedCommandTest extends Test
 
     /**
      * @throws ReflectionException If the property does not exist in the reflected
-     * class.
-     */
-    #[Testing]
-    public function setStr(): void
-    {
-        $this->assertInstanceOf(SeedCommand::class, $this->seedCommand->setStr(new Str()));
-        $this->assertInstanceOf(Str::class, $this->getPrivateProperty('str'));
-    }
-
-    /**
-     * @throws ReflectionException If the property does not exist in the reflected
-     *  class.
-     */
-    #[Testing]
-    public function setStore(): void
-    {
-        $this->assertInstanceOf(SeedCommand::class, $this->seedCommand->setStore(new Store()));
-        $this->assertInstanceOf(Store::class, $this->getPrivateProperty('store'));
-    }
-
-    /**
-     * @throws ReflectionException If the property does not exist in the reflected
      *  class.
      */
     #[Testing]
@@ -110,16 +85,6 @@ class SeedCommandTest extends Test
     {
         $this->assertInstanceOf(SeedCommand::class, $this->seedCommand->setClassFactory(new ClassFactory()));
         $this->assertInstanceOf(ClassFactory::class, $this->getPrivateProperty('classFactory'));
-    }
-
-    #[Testing]
-    public function executeWithoutConnection(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage("The '--connection' option is required.");
-        $this->expectExceptionCode(Http::INTERNAL_SERVER_ERROR);
-
-        $this->commandTester->execute([]);
     }
 
     #[Testing]
@@ -143,10 +108,12 @@ class SeedCommandTest extends Test
 
         $seedsPath = Migrations::SEEDS_PATH . "{$dbNamePascal}/{$dbType}/";
 
-        $this->assertSame(Command::SUCCESS, $this->commandTester->execute([
-            'seed' => self::CLASS_NAME,
-            '--connection' => getDefaultConnection(),
-        ]));
+        $this->assertSame(
+            Command::SUCCESS,
+            $this->commandTester
+                ->setInputs([Connection::getDefaultConnectionName()])
+                ->execute(['seed' => self::CLASS_NAME])
+        );
 
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
         $this->assertFileExists($seedsPath . self::FILE_NAME);
