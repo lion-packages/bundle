@@ -7,6 +7,7 @@ namespace Tests\Helpers\Commands\Selection;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Exception;
+use Lion\Bundle\Helpers\Commands\Migrations\MigrationFactory;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Database\Connection;
 use Lion\Database\Drivers\MySQL as DB;
@@ -118,7 +119,7 @@ class MenuCommandTest extends Test
     public function selectedProjectNotAvailable(): void
     {
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('there are no projects available');
+        $this->expectExceptionMessageIs('there are no projects available');
         $this->expectExceptionCode(Http::INTERNAL_SERVER_ERROR);
 
         $this->createDirectory(self::RESOURCES_PATH);
@@ -317,7 +318,7 @@ class MenuCommandTest extends Test
 
             protected function execute(InputInterface $input, OutputInterface $output): int
             {
-                $template = $this->selectedTemplate($input, $output, self::VITE_TEMPLATES, 'React', 2);
+                $template = $this->selectedTemplate($input, $output, self::VITE_TEMPLATES);
 
                 $output->write("({$template})");
 
@@ -397,7 +398,7 @@ class MenuCommandTest extends Test
 
             protected function execute(InputInterface $input, OutputInterface $output): int
             {
-                $connection = $this->selectConnection($input, $output);
+                $connection = $this->selectConnection();
 
                 $output->write("({$connection})");
 
@@ -414,12 +415,33 @@ class MenuCommandTest extends Test
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
-        $this->assertSame(Command::SUCCESS, $commandTester->setInputs(["0"])->execute([]));
-        $this->assertStringContainsString("(local)", $commandTester->getDisplay());
-        $this->assertSame($_ENV['SELECTED_CONNECTION'], 'local');
-        $this->assertSame(Command::SUCCESS, $commandTester->setInputs(["1"])->execute([]));
-        $this->assertStringContainsString("(lion_database_test)", $commandTester->getDisplay());
-        $this->assertSame($_ENV['SELECTED_CONNECTION'], 'lion_database_test');
+        $connectionName = getDefaultConnection();
+
+        $this->assertSame(
+            Command::SUCCESS,
+            $commandTester
+                ->setInputs([$connectionName])
+                ->execute([])
+        );
+
+        $this->assertStringContainsString('local[mysql]', $commandTester->getDisplay());
+        $this->assertSame($connectionName, $_ENV['SELECTED_CONNECTION']);
+
+        unset($_ENV['SELECTED_CONNECTION']);
+
+        $this->assertArrayNotHasKey('SELECTED_CONNECTION', $_ENV);
+
+        $connectionName = env('DB_NAME_TEST');
+
+        $this->assertSame(
+            Command::SUCCESS,
+            $commandTester
+                ->setInputs([$connectionName])
+                ->execute([])
+        );
+
+        $this->assertStringContainsString('lion_database_test[mysql]', $commandTester->getDisplay());
+        $this->assertSame($connectionName, $_ENV['SELECTED_CONNECTION']);
 
         unset($_ENV['SELECTED_CONNECTION']);
 
@@ -442,7 +464,7 @@ class MenuCommandTest extends Test
 
             protected function execute(InputInterface $input, OutputInterface $output): int
             {
-                $connection = $this->selectConnection($input, $output);
+                $connection = $this->selectConnection();
 
                 $output->write("({$connection})");
 
@@ -478,7 +500,7 @@ class MenuCommandTest extends Test
 
         $this->assertSame(Command::SUCCESS, $commandTester->setInputs([''])->execute([]));
         $this->assertStringContainsString('(local)', $commandTester->getDisplay());
-        $this->assertSame($_ENV['SELECTED_CONNECTION'], 'local');
+        $this->assertSame('local', $_ENV['SELECTED_CONNECTION']);
 
         unset($_ENV['SELECTED_CONNECTION']);
 
@@ -526,9 +548,17 @@ class MenuCommandTest extends Test
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
-        $this->assertSame(Command::SUCCESS, $commandTester->setInputs(['0'])->execute([]));
-        $this->assertStringContainsString('(local)', $commandTester->getDisplay());
-        $this->assertSame($_ENV['SELECTED_CONNECTION'], 'local');
+        $connectionName = getDefaultConnection();
+
+        $this->assertSame(
+            Command::SUCCESS,
+            $commandTester
+                ->setInputs([$connectionName])
+                ->execute([])
+        );
+
+        $this->assertStringContainsString($connectionName, $commandTester->getDisplay());
+        $this->assertSame($connectionName, $_ENV['SELECTED_CONNECTION']);
 
         unset($_ENV['SELECTED_CONNECTION']);
 
@@ -568,12 +598,27 @@ class MenuCommandTest extends Test
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
-        $this->assertSame(Command::SUCCESS, $commandTester->setInputs(["0"])->execute([]));
-        $this->assertStringContainsString("(local)", $commandTester->getDisplay());
-        $this->assertSame($_ENV['SELECTED_CONNECTION'], 'local');
-        $this->assertSame(Command::SUCCESS, $commandTester->setInputs(["0"])->execute([]));
-        $this->assertStringContainsString("(local)", $commandTester->getDisplay());
-        $this->assertSame($_ENV['SELECTED_CONNECTION'], 'local');
+        $connectionName = getDefaultConnection();
+
+        $this->assertSame(
+            Command::SUCCESS,
+            $commandTester
+                ->setInputs([$connectionName])
+                ->execute([])
+        );
+
+        $this->assertStringContainsString("$connectionName", $commandTester->getDisplay());
+        $this->assertSame($connectionName, $_ENV['SELECTED_CONNECTION']);
+
+        $this->assertSame(
+            Command::SUCCESS,
+            $commandTester
+                ->setInputs([$connectionName])
+                ->execute([])
+        );
+
+        $this->assertStringContainsString($connectionName, $commandTester->getDisplay());
+        $this->assertSame($connectionName, $_ENV['SELECTED_CONNECTION']);
 
         unset($_ENV['SELECTED_CONNECTION']);
 
@@ -588,17 +633,6 @@ class MenuCommandTest extends Test
     public function selectMigrationType(): void
     {
         $command = new class () extends MenuCommand {
-            private const string SCHEMA = 'Schema';
-            private const string TABLE = 'Table';
-            private const string VIEW = 'View';
-            private const string STORE_PROCEDURE = 'Store-Procedure';
-            private const array OPTIONS = [
-                self::SCHEMA,
-                self::TABLE,
-                self::VIEW,
-                self::STORE_PROCEDURE,
-            ];
-
             protected function configure(): void
             {
                 $this->setName('test:menu:command');
@@ -606,7 +640,7 @@ class MenuCommandTest extends Test
 
             protected function execute(InputInterface $input, OutputInterface $output): int
             {
-                $connection = $this->selectMigrationType($input, $output, self::OPTIONS);
+                $connection = $this->selectMigrationType();
 
                 $output->write("({$connection})");
 
@@ -623,14 +657,41 @@ class MenuCommandTest extends Test
 
         $commandTester = new CommandTester($application->find('test:menu:command'));
 
-        $this->assertSame(Command::SUCCESS, $commandTester->setInputs(['0'])->execute([]));
-        $this->assertStringContainsString('(Schema)', $commandTester->getDisplay());
-        $this->assertSame(Command::SUCCESS, $commandTester->setInputs(['1'])->execute([]));
-        $this->assertStringContainsString('(Table)', $commandTester->getDisplay());
-        $this->assertSame(Command::SUCCESS, $commandTester->setInputs(['2'])->execute([]));
-        $this->assertStringContainsString('(View)', $commandTester->getDisplay());
-        $this->assertSame(Command::SUCCESS, $commandTester->setInputs(['3'])->execute([]));
-        $this->assertStringContainsString('(Store-Procedure)', $commandTester->getDisplay());
+        $this->assertSame(
+            Command::SUCCESS,
+            $commandTester
+                ->setInputs([MigrationFactory::SCHEMA])
+                ->execute([])
+        );
+
+        $this->assertStringContainsString(MigrationFactory::SCHEMA, $commandTester->getDisplay());
+
+        $this->assertSame(
+            Command::SUCCESS,
+            $commandTester
+                ->setInputs([MigrationFactory::TABLE])
+                ->execute([])
+        );
+
+        $this->assertStringContainsString(MigrationFactory::TABLE, $commandTester->getDisplay());
+
+        $this->assertSame(
+            Command::SUCCESS,
+            $commandTester
+                ->setInputs([MigrationFactory::VIEW])
+                ->execute([])
+        );
+
+        $this->assertStringContainsString(MigrationFactory::VIEW, $commandTester->getDisplay());
+
+        $this->assertSame(
+            Command::SUCCESS,
+            $commandTester
+                ->setInputs([MigrationFactory::STORED_PROCEDURE])
+                ->execute([])
+        );
+
+        $this->assertStringContainsString(MigrationFactory::STORED_PROCEDURE, $commandTester->getDisplay());
     }
 
     /**

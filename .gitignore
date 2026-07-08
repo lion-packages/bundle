@@ -7,6 +7,7 @@
 /tests/App/
 /tests/Database/
 /tests/lion_database.sqlite
+/public/lion_database.sqlite
 .phpunit.result.cache
 # Ignore dependency files ----------------------------------------------------------------------------------------------
 /vendor/

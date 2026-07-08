@@ -6,12 +6,12 @@ namespace Tests\Commands\Lion\Migrations;
 
 use DI\DependencyException;
 use DI\NotFoundException;
-use InvalidArgumentException;
 use Lion\Bundle\Commands\Lion\DB\DBSeedCommand;
 use Lion\Bundle\Commands\Lion\Migrations\FreshMigrationsCommand;
 use Lion\Bundle\Commands\Lion\New\MigrationCommand;
 use Lion\Bundle\Commands\Lion\New\SeedCommand;
 use Lion\Bundle\Helpers\Commands\ClassFactory;
+use Lion\Bundle\Helpers\Commands\Migrations\MigrationFactory;
 use Lion\Bundle\Helpers\Commands\Migrations\Migrations;
 use Lion\Bundle\Helpers\DatabaseEngine;
 use Lion\Bundle\Interface\SeedInterface;
@@ -20,7 +20,6 @@ use Lion\Database\Connection;
 use Lion\Database\Drivers\Schema\MySQL;
 use Lion\Dependency\Injection\Container;
 use Lion\Helpers\Str;
-use Lion\Request\Http;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
 use ReflectionException;
@@ -36,7 +35,7 @@ class FreshMigrationsCommandTest extends Test
     private const string SEED_CLASS = 'ExampleSeed';
     private const string SEED_FILE = 'ExampleSeed.php';
 
-    private CommandTester $commandTesterNew;
+    private CommandTester $commandTesterMigrationNew;
     private CommandTester $commandTesterSeed;
     private CommandTester $commandTesterFresh;
     private FreshMigrationsCommand $freshMigrationsCommand;
@@ -80,7 +79,7 @@ class FreshMigrationsCommandTest extends Test
 
         $application = $kernel->getApplication();
 
-        $this->commandTesterNew = new CommandTester($application->find('new:migration'));
+        $this->commandTesterMigrationNew = new CommandTester($application->find('new:migration'));
 
         $this->commandTesterSeed = new CommandTester($application->find('new:seed'));
 
@@ -120,21 +119,9 @@ class FreshMigrationsCommandTest extends Test
     }
 
     #[Testing]
-    public function executeWithoutConnection(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage("The '--connection' option is required.");
-        $this->expectExceptionCode(Http::INTERNAL_SERVER_ERROR);
-
-        $this->commandTesterFresh->execute([]);
-    }
-
-    #[Testing]
     public function executePathDoesNotExist(): void
     {
-        $this->assertSame(Command::FAILURE, $this->commandTesterFresh->execute([
-            '--connection' => getDefaultConnection(),
-        ]));
+        $this->assertSame(Command::FAILURE, $this->commandTesterFresh->execute([]));
 
         $this->assertStringContainsString(self::OUTPUT_MESSAGE_ERROR_PATH, $this->commandTesterFresh->getDisplay());
     }
@@ -144,18 +131,27 @@ class FreshMigrationsCommandTest extends Test
     {
         $this->createDirectory(Migrations::MIGRATIONS_PATH);
 
-        $connectionName = 'local';
+        $this->assertSame(
+            Command::SUCCESS,
+            $this->commandTesterMigrationNew
+                ->setInputs([
+                    Connection::getDefaultConnectionName(),
+                    MigrationFactory::TABLE,
+                ])
+                ->execute(['migration' => 'test'])
+        );
 
-        $this->assertSame(Command::SUCCESS, $this->commandTesterNew->execute([
-            'migration' => 'test',
-            '--connection' => $connectionName,
-        ]));
+        $this->assertStringContainsString(
+            self::OUTPUT_MIGRATION_CREATE_MESSAGE,
+            $this->commandTesterMigrationNew->getDisplay()
+        );
 
-        $this->assertStringContainsString(self::OUTPUT_MIGRATION_CREATE_MESSAGE, $this->commandTesterNew->getDisplay());
-
-        $this->assertSame(Command::SUCCESS, $this->commandTesterFresh->execute([
-            '--connection' => $connectionName,
-        ]));
+        $this->assertSame(
+            Command::SUCCESS,
+            $this->commandTesterFresh
+                ->setInputs([Connection::getDefaultConnectionName()])
+                ->execute([])
+        );
 
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTesterFresh->getDisplay());
 
@@ -194,10 +190,12 @@ class FreshMigrationsCommandTest extends Test
 
         $this->classFactory->classFactory($seedsPath, self::SEED_CLASS);
 
-        $this->assertSame(Command::SUCCESS, $this->commandTesterSeed->execute([
-            'seed' => self::SEED_CLASS,
-            '--connection' => $connectionName,
-        ]));
+        $this->assertSame(
+            Command::SUCCESS,
+            $this->commandTesterSeed
+                ->setInputs([Connection::getDefaultConnectionName()])
+                ->execute(['seed' => self::SEED_CLASS])
+        );
 
         $this->assertStringContainsString(self::OUTPUT_SEED_CREATE_MESSAGE, $this->commandTesterSeed->getDisplay());
         $this->assertFileExists($seedsPath . self::SEED_FILE);
@@ -206,17 +204,27 @@ class FreshMigrationsCommandTest extends Test
 
         $this->assertInstanceOf(SeedInterface::class, $objClass);
 
-        $this->assertSame(Command::SUCCESS, $this->commandTesterNew->execute([
-            'migration' => 'test',
-            '--connection' => $connectionName,
-        ]));
+        $this->assertSame(
+            Command::SUCCESS,
+            $this->commandTesterMigrationNew
+                ->setInputs([
+                    Connection::getDefaultConnectionName(),
+                    MigrationFactory::TABLE,
+                ])
+                ->execute(['migration' => 'test'])
+        );
 
-        $this->assertStringContainsString(self::OUTPUT_MIGRATION_CREATE_MESSAGE, $this->commandTesterNew->getDisplay());
+        $this->assertStringContainsString(
+            self::OUTPUT_MIGRATION_CREATE_MESSAGE,
+            $this->commandTesterMigrationNew->getDisplay()
+        );
 
-        $this->assertSame(Command::SUCCESS, $this->commandTesterFresh->execute([
-            '--seed' => null,
-            '--connection' => $connectionName,
-        ]));
+        $this->assertSame(
+            Command::SUCCESS,
+            $this->commandTesterFresh
+                ->setInputs([Connection::getDefaultConnectionName()])
+                ->execute(['--seed' => null])
+        );
 
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTesterFresh->getDisplay());
 

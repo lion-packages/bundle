@@ -16,7 +16,6 @@ use Lion\Request\Http;
 use LogicException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -80,8 +79,26 @@ class MigrationCommand extends MenuCommand
         $this
             ->setName('new:migration')
             ->setDescription('Command required to generate a new migration.')
-            ->addArgument('migration', InputArgument::REQUIRED, 'Migration name.')
-            ->addOption('connection', 'c', InputOption::VALUE_REQUIRED, 'The connection to run.');
+            ->addArgument('migration', InputArgument::REQUIRED, 'Migration name.');
+    }
+
+    /**
+     * Initializes the command after the input has been bound and before the input
+     * is validated.
+     *
+     * This is mainly useful when a lot of commands extends one main command where
+     * some things need to be initialized based on the input arguments and options.
+     *
+     * @param InputInterface $input InputInterface is the interface implemented by
+     * all input classes.
+     * @param OutputInterface $output OutputInterface is the interface implemented
+     * by all Output classes.
+     *
+     * @return void
+     */
+    protected function initialize(InputInterface $input, OutputInterface $output): void
+    {
+        parent::initialize($input, $output);
     }
 
     /**
@@ -112,7 +129,7 @@ class MigrationCommand extends MenuCommand
 
         $connectionName = $this->selectConnection();
 
-        $migrationType = $this->selectMigrationType(MigrationFactory::MIGRATIONS_OPTIONS, MigrationFactory::TABLE);
+        $migrationType = $this->selectMigrationType();
 
         $connections = Connection::getConnections();
 

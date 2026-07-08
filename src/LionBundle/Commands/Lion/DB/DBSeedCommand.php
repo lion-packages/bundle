@@ -79,6 +79,25 @@ class DBSeedCommand extends MenuCommand
     }
 
     /**
+     * Initializes the command after the input has been bound and before the input
+     * is validated.
+     *
+     * This is mainly useful when a lot of commands extends one main command where
+     * some things need to be initialized based on the input arguments and options.
+     *
+     * @param InputInterface $input InputInterface is the interface implemented by
+     * all input classes.
+     * @param OutputInterface $output OutputInterface is the interface implemented
+     * by all Output classes.
+     *
+     * @return void
+     */
+    protected function initialize(InputInterface $input, OutputInterface $output): void
+    {
+        parent::initialize($input, $output);
+    }
+
+    /**
      * Executes the current command.
      *
      * This method is not abstract because you can use this class as a concrete

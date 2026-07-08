@@ -17,6 +17,7 @@ use Lion\Bundle\Interface\Migrations\StoredProcedureInterface;
 use Lion\Bundle\Interface\Migrations\TableInterface;
 use Lion\Bundle\Interface\Migrations\ViewInterface;
 use Lion\Bundle\Interface\MigrationUpInterface;
+use Lion\Database\Connection;
 use Lion\Dependency\Injection\Container;
 use Lion\Request\Http;
 use Lion\Test\Test;
@@ -124,24 +125,12 @@ class MigrationCommandTest extends Test
     public function executeIsInvalid(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Migration cannot be inside subfolders.');
+        $this->expectExceptionMessageIs('Migration cannot be inside subfolders.');
         $this->expectExceptionCode(Http::INTERNAL_SERVER_ERROR);
 
-        $this->commandTester->execute([
-            'migration' => 'users/create-users',
-        ]);
-    }
-
-    #[Testing]
-    public function executeWithoutConnection(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage("The '--connection' option is required.");
-        $this->expectExceptionCode(Http::INTERNAL_SERVER_ERROR);
-
-        $this->commandTester->execute([
-            'migration' => self::MIGRATION_NAME,
-        ]);
+        $this->commandTester
+            ->setInputs([Connection::getDefaultConnectionName()])
+            ->execute(['migration' => 'users/create-users']);
     }
 
     #[Testing]
@@ -150,12 +139,10 @@ class MigrationCommandTest extends Test
     {
         $commandExecute = $this->commandTester
             ->setInputs([
+                Connection::getDefaultConnectionName(),
                 MigrationFactory::SCHEMA,
             ])
-            ->execute([
-                'migration' => self::MIGRATION_NAME,
-                '--connection' => 'local',
-            ]);
+            ->execute(['migration' => self::MIGRATION_NAME]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
         $this->assertStringContainsString(self::OUTPUT_MESSAGE, $this->commandTester->getDisplay());
@@ -178,16 +165,14 @@ class MigrationCommandTest extends Test
     {
         $this->expectException(Exception::class);
         $this->expectExceptionCode(Http::INTERNAL_SERVER_ERROR);
-        $this->expectExceptionMessage('Currently, the driver does not support this type of migration.');
+        $this->expectExceptionMessageIs('Currently, the driver does not support this type of migration.');
 
         $this->commandTester
             ->setInputs([
+                env('DB_NAME_TEST_POSTGRESQL'),
                 MigrationFactory::SCHEMA,
             ])
-            ->execute([
-                'migration' => self::MIGRATION_NAME,
-                '--connection' => 'lion_database_postgres',
-            ]);
+            ->execute(['migration' => self::MIGRATION_NAME]);
     }
 
     #[Testing]
@@ -196,15 +181,15 @@ class MigrationCommandTest extends Test
     {
         $this->expectException(Exception::class);
         $this->expectExceptionCode(Http::INTERNAL_SERVER_ERROR);
-        $this->expectExceptionMessage('Currently, the driver does not support this type of migration.');
+        $this->expectExceptionMessageIs('Currently, the driver does not support this type of migration.');
 
         $this->commandTester
             ->setInputs([
+                'lion_database_sqlite',
                 MigrationFactory::SCHEMA,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
-                '--connection' => 'lion_database_sqlite',
             ]);
     }
 
@@ -214,11 +199,11 @@ class MigrationCommandTest extends Test
     {
         $commandExecute = $this->commandTester
             ->setInputs([
+                Connection::getDefaultConnectionName(),
                 MigrationFactory::TABLE,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
-                '--connection' => 'local',
             ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
@@ -242,11 +227,11 @@ class MigrationCommandTest extends Test
     {
         $commandExecute = $this->commandTester
             ->setInputs([
+                Connection::getDefaultConnectionName(),
                 MigrationFactory::VIEW,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
-                '--connection' => 'local',
             ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
@@ -270,11 +255,11 @@ class MigrationCommandTest extends Test
     {
         $commandExecute = $this->commandTester
             ->setInputs([
+                Connection::getDefaultConnectionName(),
                 MigrationFactory::STORED_PROCEDURE,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
-                '--connection' => 'local',
             ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
@@ -298,11 +283,11 @@ class MigrationCommandTest extends Test
     {
         $commandExecute = $this->commandTester
             ->setInputs([
+                env('DB_NAME_TEST_POSTGRESQL'),
                 MigrationFactory::TABLE,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
-                '--connection' => 'lion_database_postgres',
             ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
@@ -326,11 +311,11 @@ class MigrationCommandTest extends Test
     {
         $commandExecute = $this->commandTester
             ->setInputs([
+                env('DB_NAME_TEST_POSTGRESQL'),
                 MigrationFactory::VIEW,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
-                '--connection' => 'lion_database_postgres',
             ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);
@@ -354,11 +339,11 @@ class MigrationCommandTest extends Test
     {
         $commandExecute = $this->commandTester
             ->setInputs([
+                env('DB_NAME_TEST_POSTGRESQL'),
                 MigrationFactory::STORED_PROCEDURE,
             ])
             ->execute([
                 'migration' => self::MIGRATION_NAME,
-                '--connection' => 'lion_database_postgres',
             ]);
 
         $this->assertSame(Command::SUCCESS, $commandExecute);

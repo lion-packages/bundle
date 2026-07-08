@@ -6,6 +6,7 @@ namespace Lion\Bundle\Helpers\Commands\Selection;
 
 use DI\Attribute\Inject;
 use Exception;
+use Lion\Bundle\Helpers\Commands\Migrations\MigrationFactory;
 use Lion\Command\Command;
 use Lion\Database\Connection;
 use Lion\Database\Driver;
@@ -310,26 +311,23 @@ class MenuCommand extends Command
     }
 
     /**
-     * Selection menu to select a database.
-     *
-     * @param array<int, string> $options List of available migration types.
-     * @param string $defaultOption Default option.
+     * Select the migration type.
      *
      * @return string
      *
      * @internal
      */
-    protected function selectMigrationType(
-        array $options,
-        string $defaultOption
-    ): string {
+    protected function selectMigrationType(): string
+    {
+        $defaultOption = MigrationFactory::TABLE;
+
         /** @var QuestionHelper $helper */
         $helper = $this->getHelper('question');
 
         $choiceQuestion = new ChoiceQuestion(
             "Select the type of migration {$this->warningOutput("(default: {$defaultOption})")}",
-            $options,
-            $defaultOption
+            MigrationFactory::MIGRATIONS_OPTIONS,
+            MigrationFactory::TABLE
         );
 
         /** @var string $migrationType */
