@@ -39,16 +39,12 @@ class ControllerCommand extends Command
     ];
 
     /**
-     * Controller path
-     *
-     * @const PATH_CONTROLLER
+     * Controller path.
      */
     public const string PATH_CONTROLLER = 'app/Http/Controllers/';
 
     /**
-     * Model path
-     *
-     * @const PATH_MODEL
+     * Model path.
      */
     public const string PATH_MODEL = 'app/Models/';
 
