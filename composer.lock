@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "48c17b295b402993471c87b1bc75dd93",
+    "content-hash": "cffbb5ff374ca83ed4d10c66308c0770",
     "packages": [
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -912,23 +912,23 @@
         },
         {
             "name": "lion/exceptions",
-            "version": "v3.0.4",
+            "version": "v3.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/exceptions.git",
-                "reference": "80b59b749f3e05b4bf2a3a8b4805cf135ca20e28"
+                "reference": "a8de70f67bbf45f2a9bb67a238694f265ef7bbb3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/exceptions/zipball/80b59b749f3e05b4bf2a3a8b4805cf135ca20e28",
-                "reference": "80b59b749f3e05b4bf2a3a8b4805cf135ca20e28",
+                "url": "https://api.github.com/repos/lion-packages/exceptions/zipball/a8de70f67bbf45f2a9bb67a238694f265ef7bbb3",
+                "reference": "a8de70f67bbf45f2a9bb67a238694f265ef7bbb3",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.5"
             },
             "require-dev": {
-                "guzzlehttp/guzzle": "^7.9",
+                "guzzlehttp/guzzle": "^7.9 || ^8.0",
                 "infection/infection": "^0.29.14 || ^0.32.0 || ^0.33.0 || ^0.34.0",
                 "lion/test": "^3.2 || ^4.0",
                 "overtrue/phplint": "^9.5",
@@ -949,9 +949,9 @@
             "description": "Exception handling and serializations.",
             "support": {
                 "issues": "https://github.com/lion-packages/exceptions/issues",
-                "source": "https://github.com/lion-packages/exceptions/tree/v3.0.4"
+                "source": "https://github.com/lion-packages/exceptions/tree/v3.0.6"
             },
-            "time": "2026-07-04T18:20:10+00:00"
+            "time": "2026-09-08T16:38:55+00:00"
         },
         {
             "name": "lion/files",
@@ -1089,16 +1089,16 @@
         },
         {
             "name": "lion/request",
-            "version": "v8.1.4",
+            "version": "v8.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/request.git",
-                "reference": "421be0c7dbe467cf66e90311227a6e52d377043b"
+                "reference": "585d967c2c1de010f3994d1a4c9eae8615bb577e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/request/zipball/421be0c7dbe467cf66e90311227a6e52d377043b",
-                "reference": "421be0c7dbe467cf66e90311227a6e52d377043b",
+                "url": "https://api.github.com/repos/lion-packages/request/zipball/585d967c2c1de010f3994d1a4c9eae8615bb577e",
+                "reference": "585d967c2c1de010f3994d1a4c9eae8615bb577e",
                 "shasum": ""
             },
             "require": {
@@ -1125,9 +1125,9 @@
             "description": "Library created to request input data and response requests",
             "support": {
                 "issues": "https://github.com/lion-packages/request/issues",
-                "source": "https://github.com/lion-packages/request/tree/v8.1.4"
+                "source": "https://github.com/lion-packages/request/tree/v8.1.6"
             },
-            "time": "2026-07-04T18:15:14+00:00"
+            "time": "2026-09-08T17:09:48+00:00"
         },
         {
             "name": "lion/route",
