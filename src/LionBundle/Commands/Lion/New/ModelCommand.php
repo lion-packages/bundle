@@ -85,8 +85,8 @@ class ModelCommand extends Command
     {
         $this
             ->setName('new:model')
-            ->setDescription('Command required for the creation of new Models')
-            ->addArgument('model', InputArgument::OPTIONAL, 'Model name', 'ExampleModel');
+            ->setDescription('Command required for the creation of new Models.')
+            ->addArgument('model', InputArgument::OPTIONAL, 'Model name.', 'ExampleModel');
     }
 
     /**
@@ -157,7 +157,7 @@ class ModelCommand extends Command
 
                 namespace {$namespace};
 
-                use Lion\Database\Drivers\MySQL as DB;
+                use Lion\Database\Drivers\MySQL;
                 use Lion\Database\Interface\DatabaseCapsuleInterface;
                 use stdClass;
 
@@ -188,13 +188,13 @@ class ModelCommand extends Command
 
             $methodBody = $method === 'read'
                 ? <<<PHP
-                return DB::connection(getDefaultConnection())
+                return MySQL::connection(getDefaultConnection())
                             ->table('')
                             ->select()
                             ->getAll();
                 PHP
                 : <<<PHP
-                return DB::connection(getDefaultConnection())
+                return MySQL::connection(getDefaultConnection())
                             ->call('', [])
                             ->execute();
                 PHP;
