@@ -22,6 +22,7 @@ class NpmInstallCommandTest extends Test
     private const string PROJECT_NAME = 'test-app';
     private const string OUTPUT_MESSAGE_INIT_PROJECT = 'project has been generated successfully';
     private const string OUTPUT_MESSAGE_INSTALL = 'Dependencies have been installed';
+    private const string OUTPUT_MESSAGE_DEV_INSTALL = 'Dependencies have been installed (devDependencies)';
 
     private CommandTester $commandTesterNpmIn;
     private CommandTester $commandTesterNpmI;
@@ -76,10 +77,42 @@ class NpmInstallCommandTest extends Test
     {
         $this->assertSame(Command::SUCCESS, $this->commandTesterNpmIn->execute(['project' => self::PROJECT_NAME]));
         $this->assertStringContainsString(self::OUTPUT_MESSAGE_INIT_PROJECT, $this->commandTesterNpmIn->getDisplay());
+
         $this->assertSame(Command::SUCCESS, $this->commandTesterNpmI->execute(['packages' => ['']]));
+
         $this->assertSame(Command::SUCCESS, $this->commandTesterNpmI->execute(['packages' => ['axios']]));
         $this->assertStringContainsString(self::OUTPUT_MESSAGE_INSTALL, $this->commandTesterNpmI->getDisplay());
+
         $this->assertSame(Command::SUCCESS, $this->commandTesterNpmI->execute(['packages' => ['dayjs jwt-decode']]));
         $this->assertStringContainsString(self::OUTPUT_MESSAGE_INSTALL, $this->commandTesterNpmI->getDisplay());
+    }
+
+    #[Testing]
+    public function executeWithDevOption(): void
+    {
+        $this->assertSame(Command::SUCCESS, $this->commandTesterNpmIn->execute(['project' => self::PROJECT_NAME]));
+        $this->assertStringContainsString(self::OUTPUT_MESSAGE_INIT_PROJECT, $this->commandTesterNpmIn->getDisplay());
+
+        $this->assertSame(
+            Command::SUCCESS,
+            $this->commandTesterNpmI->execute([
+                'packages' => ['typescript'],
+                '--dev' => true,
+            ])
+        );
+
+        $this->assertStringContainsString(self::OUTPUT_MESSAGE_DEV_INSTALL, $this->commandTesterNpmI->getDisplay());
+        $this->assertStringContainsString('typescript', $this->commandTesterNpmI->getDisplay());
+
+        $this->assertSame(
+            Command::SUCCESS,
+            $this->commandTesterNpmI->execute([
+                'packages' => ['@types/node', 'prettier'],
+                '-D' => true,
+            ])
+        );
+
+        $this->assertStringContainsString(self::OUTPUT_MESSAGE_DEV_INSTALL, $this->commandTesterNpmI->getDisplay());
+        $this->assertStringContainsString('@types/node, prettier', $this->commandTesterNpmI->getDisplay());
     }
 }

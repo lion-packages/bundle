@@ -11,6 +11,7 @@ use Lion\Command\Kernel;
 use LogicException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -44,7 +45,8 @@ class NpmInstallCommand extends MenuCommand
         $this
             ->setName('npm:install')
             ->setDescription('Command to install dependencies with npm for a certain vite project.')
-            ->addArgument('packages', InputArgument::IS_ARRAY | InputArgument::OPTIONAL, 'Package name.', []);
+            ->addArgument('packages', InputArgument::IS_ARRAY | InputArgument::OPTIONAL, 'Package name.', [])
+            ->addOption('dev', 'D', InputOption::VALUE_NONE, 'Install packages as devDependencies (--save-dev).');
     }
 
     /**
@@ -68,6 +70,9 @@ class NpmInstallCommand extends MenuCommand
     {
         $project = $this->selectedProject();
 
+        /** @var bool $isDev */
+        $isDev = $input->getOption('dev');
+
         /** @var array<int, string> $packagesList */
         $packagesList = $input->getArgument('packages');
 
@@ -81,9 +86,11 @@ class NpmInstallCommand extends MenuCommand
             ->trim()
             ->get();
 
+        $devFlag = $isDev ? '--save-dev' : '';
+
         /** @var string $command */
         $command = $this->str
-            ->of("cd resources/{$project}/ && npm install --silent {$packages}")
+            ->of("cd resources/{$project}/ && npm install --silent {$devFlag} {$packages}")
             ->trim()
             ->get();
 
@@ -94,7 +101,11 @@ class NpmInstallCommand extends MenuCommand
         if ('' != $packages) {
             $join = $this->arr->of(explode(' ', $packages))->join(', ');
 
-            $output->writeln($this->successOutput("\t>>  RESOURCES: Dependencies have been installed: {$join}"));
+            $devText = $isDev ? ' (devDependencies)' : '';
+
+            $output->writeln(
+                $this->successOutput("\t>>  RESOURCES: Dependencies have been installed{$devText}: {$join}")
+            );
         } else {
             $output->writeln($this->successOutput("\t>>  RESOURCES: Dependencies have been installed"));
         }
