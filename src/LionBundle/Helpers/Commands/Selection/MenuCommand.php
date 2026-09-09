@@ -176,23 +176,17 @@ class MenuCommand extends Command
     }
 
     /**
-     * Open a menu to select a template to create a project with vite
+     * Open a menu to select a template to create a project with vite.
      *
-     * @param InputInterface $input [InputInterface is the interface
-     * implemented by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
-     * @param array<int, string> $templates [List of available templates]
-     * @param string $defaultTemplate [Default template]
-     * @param int $defaultIndex [Default index]
+     * @param array<int, string> $templates List of available templates.
+     * @param string $defaultTemplate Default template.
+     * @param int $defaultIndex Default index.
      *
      * @return string
      *
      * @internal
      */
     protected function selectedTemplate(
-        InputInterface $input,
-        OutputInterface $output,
         array $templates,
         string $defaultTemplate = 'React',
         int $defaultIndex = 2
@@ -207,7 +201,7 @@ class MenuCommand extends Command
         );
 
         /** @var string $template */
-        $template = $helper->ask($input, $output, $choiceQuestion);
+        $template = $helper->ask($this->input, $this->output, $choiceQuestion);
 
         return $template;
     }
@@ -215,17 +209,13 @@ class MenuCommand extends Command
     /**
      * Selection menu for different types of languages
      *
-     * @param InputInterface $input [InputInterface is the interface
-     * implemented by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
-     * @param array<int, string> $types [description]
+     * @param list<string> $types Types of technologies.
      *
      * @return string
      *
      * @internal
      */
-    protected function selectedTypes(InputInterface $input, OutputInterface $output, array $types): string
+    protected function selectedTypes(array $types): string
     {
         /** @var QuestionHelper $helper */
         $helper = $this->getHelper('question');
@@ -233,7 +223,7 @@ class MenuCommand extends Command
         $choiceQuestion = new ChoiceQuestion("Select type {$this->warningOutput("(default: 'js')")}", $types, 0);
 
         /** @var string $type */
-        $type = $helper->ask($input, $output, $choiceQuestion);
+        $type = $helper->ask($this->input, $this->output, $choiceQuestion);
 
         return $type;
     }
