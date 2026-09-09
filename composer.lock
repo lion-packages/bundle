@@ -1131,16 +1131,16 @@
         },
         {
             "name": "lion/route",
-            "version": "v13.1.4",
+            "version": "v13.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/route.git",
-                "reference": "760cddd31833c675008888f8734b31abd6ffd83e"
+                "reference": "de5ce41a10bedf885e00e2404842447392935c62"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/route/zipball/760cddd31833c675008888f8734b31abd6ffd83e",
-                "reference": "760cddd31833c675008888f8734b31abd6ffd83e",
+                "url": "https://api.github.com/repos/lion-packages/route/zipball/de5ce41a10bedf885e00e2404842447392935c62",
+                "reference": "de5ce41a10bedf885e00e2404842447392935c62",
                 "shasum": ""
             },
             "require": {
@@ -1148,7 +1148,7 @@
                 "php": ">=8.5"
             },
             "require-dev": {
-                "guzzlehttp/guzzle": "^7.9",
+                "guzzlehttp/guzzle": "^7.9 || ^8.0",
                 "infection/infection": "^0.29.14 || ^0.31.0 || ^0.32.0 || ^0.33.0 || ^0.34.0",
                 "lion/dependency-injection": "^4.2 || ^5.0",
                 "lion/exceptions": "^2.0 || ^3.0",
@@ -1173,9 +1173,9 @@
             "description": "This library has quick router usage with regular expressions.",
             "support": {
                 "issues": "https://github.com/lion-packages/route/issues",
-                "source": "https://github.com/lion-packages/route/tree/v13.1.4"
+                "source": "https://github.com/lion-packages/route/tree/v13.1.5"
             },
-            "time": "2026-07-05T03:58:50+00:00"
+            "time": "2026-09-09T21:13:56+00:00"
         },
         {
             "name": "lion/security",
