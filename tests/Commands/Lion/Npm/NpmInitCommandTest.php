@@ -7,28 +7,27 @@ namespace Tests\Commands\Lion\Npm;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Lion\Bundle\Commands\Lion\Npm\NpmInitCommand;
-use Lion\Command\Command;
 use Lion\Command\Kernel;
 use Lion\Dependency\Injection\Container;
 use Lion\Test\Test;
 use PHPUnit\Framework\Attributes\Test as Testing;
 use ReflectionException;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class NpmInitCommandTest extends Test
 {
     private const string PROJECT_NAME = 'test-app';
     private const string OUTPUT_MESSAGE = 'project has been generated successfully';
-    private const string OUTPUT_MESSAGE_ERROR = 'a resource with this name already exists';
+    private const string OUTPUT_MESSAGE_ERROR = 'A resource with this name already exists';
 
     private CommandTester $commandTester;
     private NpmInitCommand $npmInitCommand;
 
     /**
-     * @throws ReflectionException
-     * @throws DependencyException
-     * @throws NotFoundException
+     * @throws DependencyException Error while resolving the entry.
+     * @throws NotFoundException No entry found for the given name.
      */
     protected function setUp(): void
     {
@@ -52,7 +51,8 @@ class NpmInitCommandTest extends Test
     }
 
     /**
-     * @throws ReflectionException
+     * @throws ReflectionException If the property does not exist in the reflected
+     * class.
      */
     #[Testing]
     public function setKernel(): void

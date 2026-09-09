@@ -23,8 +23,8 @@ class NpmRunBuildCommandTest extends Test
     private const string PROJECT_NAME = 'test-app';
     private const string DIST_PATH = 'resources/' . self::PROJECT_NAME . '/dist/';
     private const string OUTPUT_MESSAGE_INIT_PROJECT = 'project has been generated successfully';
-    private const string OUTPUT_MESSAGE_INSTALL = 'dependencies have been installed';
-    private const string OUTPUT_MESSAGE_BUILD = 'project dist has been generated';
+    private const string OUTPUT_MESSAGE_INSTALL = 'Dependencies have been installed';
+    private const string OUTPUT_MESSAGE_BUILD = 'Project dist has been generated';
 
     private CommandTester $commandTesterNpmInit;
     private CommandTester $commandTesterNpmInstall;
@@ -32,9 +32,8 @@ class NpmRunBuildCommandTest extends Test
     private NpmRunBuildCommand $npmRunBuildCommand;
 
     /**
-     * @throws NotFoundException
-     * @throws DependencyException
-     * @throws ReflectionException
+     * @throws DependencyException Error while resolving the entry.
+     * @throws NotFoundException No entry found for the given name.
      */
     protected function setUp(): void
     {

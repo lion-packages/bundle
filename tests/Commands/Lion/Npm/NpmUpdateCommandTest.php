@@ -21,16 +21,15 @@ class NpmUpdateCommandTest extends Test
 {
     private const string PROJECT_NAME = 'test-app';
     private const string OUTPUT_MESSAGE_INIT_PROJECT = 'project has been generated successfully';
-    private const string OUTPUT_MESSAGE_UPDATE = 'dependencies have been updated';
+    private const string OUTPUT_MESSAGE_UPDATE = 'Dependencies have been updated';
 
     private CommandTester $commandTesterNpmIn;
     private CommandTester $commandTesterNpmU;
     private NpmUpdateCommand $npmUpdateCommand;
 
     /**
-     * @throws DependencyException
-     * @throws NotFoundException
-     * @throws ReflectionException
+     * @throws DependencyException Error while resolving the entry.
+     * @throws NotFoundException No entry found for the given name.
      */
     protected function setUp(): void
     {

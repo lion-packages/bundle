@@ -7,6 +7,7 @@ namespace Tests\Helpers\Commands\Selection;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Exception;
+use Lion\Bundle\Commands\Lion\Npm\NpmInitCommand;
 use Lion\Bundle\Helpers\Commands\Migrations\MigrationFactory;
 use Lion\Bundle\Helpers\Commands\Selection\MenuCommand;
 use Lion\Database\Connection;
@@ -119,7 +120,7 @@ class MenuCommandTest extends Test
     public function selectedProjectNotAvailable(): void
     {
         $this->expectException(Exception::class);
-        $this->expectExceptionMessageIs('there are no projects available');
+        $this->expectExceptionMessageIs('There are no projects available.');
         $this->expectExceptionCode(Http::INTERNAL_SERVER_ERROR);
 
         $this->createDirectory(self::RESOURCES_PATH);
@@ -132,7 +133,7 @@ class MenuCommandTest extends Test
 
             protected function execute(InputInterface $input, OutputInterface $output): int
             {
-                $project = $this->selectedProject($input, $output);
+                $project = $this->selectedProject();
 
                 $output->write("({$project})");
 
@@ -169,7 +170,7 @@ class MenuCommandTest extends Test
 
             protected function execute(InputInterface $input, OutputInterface $output): int
             {
-                $project = $this->selectedProject($input, $output);
+                $project = $this->selectedProject();
 
                 $output->write("({$project})");
 
@@ -209,7 +210,7 @@ class MenuCommandTest extends Test
 
             protected function execute(InputInterface $input, OutputInterface $output): int
             {
-                $project = $this->selectedProject($input, $output);
+                $project = $this->selectedProject();
 
                 $output->write("({$project})");
 
@@ -263,7 +264,7 @@ class MenuCommandTest extends Test
 
             protected function execute(InputInterface $input, OutputInterface $output): int
             {
-                $project = $this->selectedProject($input, $output);
+                $project = $this->selectedProject();
 
                 $output->write("({$project})");
 
@@ -291,6 +292,9 @@ class MenuCommandTest extends Test
     }
 
     /**
+     * @param string $output
+     * @param list<string> $inputs
+     *
      * @throws DependencyException
      * @throws NotFoundException
      */
@@ -299,18 +303,6 @@ class MenuCommandTest extends Test
     public function selectedTemplate(string $output, array $inputs): void
     {
         $command = new class () extends MenuCommand {
-            private const array VITE_TEMPLATES = [
-                'Vanilla',
-                'Vue',
-                'React',
-                'Preact',
-                'Lit',
-                'Svelte',
-                'Solid',
-                'Qwik',
-                'Electron',
-            ];
-
             protected function configure(): void
             {
                 $this->setName('test:menu:command');
@@ -318,11 +310,11 @@ class MenuCommandTest extends Test
 
             protected function execute(InputInterface $input, OutputInterface $output): int
             {
-                $template = $this->selectedTemplate($input, $output, self::VITE_TEMPLATES);
+                $template = $this->selectedTemplate(NpmInitCommand::TEMPLATES_VITE);
 
                 $output->write("({$template})");
 
-                return Command::SUCCESS;
+                return parent::SUCCESS;
             }
         };
 
@@ -347,11 +339,6 @@ class MenuCommandTest extends Test
     public function selectedTypes(): void
     {
         $command = new class () extends MenuCommand {
-            private const array TYPES = [
-                'js',
-                'ts',
-            ];
-
             protected function configure(): void
             {
                 $this->setName('test:menu:command');
@@ -359,11 +346,11 @@ class MenuCommandTest extends Test
 
             protected function execute(InputInterface $input, OutputInterface $output): int
             {
-                $type = $this->selectedTypes($input, $output, self::TYPES);
+                $type = $this->selectedTypes(NpmInitCommand::TYPES);
 
                 $output->write("({$type})");
 
-                return Command::SUCCESS;
+                return parent::SUCCESS;
             }
         };
 
