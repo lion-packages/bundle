@@ -157,7 +157,7 @@ class FreshMigrationsCommand extends MenuCommand
         /** @phpstan-ignore-next-line */
         $this->migrations->executeMigrations($this, $output, $migrations[StoredProcedureInterface::class]);
 
-        $output->writeln($this->infoOutput("\n\t>> MIGRATIONS: Migrations executed successfully."));
+        $output->writeln($this->infoOutput("\t>> MIGRATIONS: Migrations executed successfully."));
 
         $seed = $input->getOption('seed');
 

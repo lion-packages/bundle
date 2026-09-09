@@ -179,7 +179,7 @@ class DBSeedCommand extends MenuCommand
             }
         }
 
-        $output->writeln($this->infoOutput("\n\t>>  SEEDS: Seeds executed."));
+        $output->writeln($this->infoOutput("\t>>  SEEDS: Seeds executed."));
 
         return parent::SUCCESS;
     }
