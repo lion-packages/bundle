@@ -7,9 +7,7 @@ namespace Lion\Bundle\Commands\Npm;
 use Lion\Bundle\Commands\Lion\Npm\NpmUpdateCommand as LionNpmUpdateCommand;
 
 /**
- * Update Vite.JS project dependencies
- *
- * @package Lion\Bundle\Commands\Lion\Npm
+ * Update project dependencies using NPM.
  */
 class NpmUpdateCommand extends LionNpmUpdateCommand
 {

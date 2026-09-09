@@ -22,8 +22,8 @@ class NpmUninstallCommandTest extends Test
 {
     private const string PROJECT_NAME = 'test-app';
     private const string OUTPUT_MESSAGE_INIT_PROJECT = 'project has been generated successfully';
-    private const string OUTPUT_MESSAGE_INSTALL = 'dependencies have been installed';
-    private const string OUTPUT_MESSAGE_UNINSTALL = 'dependencies have been uninstalled';
+    private const string OUTPUT_MESSAGE_INSTALL = 'Dependencies have been installed';
+    private const string OUTPUT_MESSAGE_UNINSTALL = 'Dependencies have been uninstalled';
 
     private CommandTester $commandTesterNpmIn;
     private CommandTester $commandTesterNpmI;
@@ -31,9 +31,8 @@ class NpmUninstallCommandTest extends Test
     private NpmUninstallCommand $npmUninstallCommand;
 
     /**
-     * @throws NotFoundException
-     * @throws DependencyException
-     * @throws ReflectionException
+     * @throws DependencyException Error while resolving the entry.
+     * @throws NotFoundException No entry found for the given name.
      */
     protected function setUp(): void
     {

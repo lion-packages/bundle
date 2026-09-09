@@ -13,15 +13,13 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Generate the dist of the Vite.JS project
- *
- * @package Lion\Bundle\Commands\Lion\Npm
+ * Generates the project's distribution folder (dist).
  */
 class NpmRunBuildCommand extends MenuCommand
 {
     /**
-     * [Adds functions to execute commands, allows you to create an Application
-     * object to run applications with your custom commands]
+     * Adds functions to execute commands, allows you to create an Application
+     * object to run applications with your custom commands.
      *
      * @property Kernel $kernel
      */
@@ -36,7 +34,7 @@ class NpmRunBuildCommand extends MenuCommand
     }
 
     /**
-     * Configures the current command
+     * Configures the current command.
      *
      * @return void
      */
@@ -44,38 +42,37 @@ class NpmRunBuildCommand extends MenuCommand
     {
         $this
             ->setName('npm:build')
-            ->setDescription('Command to generate dist for a vite project');
+            ->setDescription('Command to generate dist for a vite project.');
     }
 
     /**
-     * Executes the current command
+     * Executes the current command.
      *
-     * This method is not abstract because you can use this class
-     * as a concrete class. In this case, instead of defining the
-     * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method
+     * This method is not abstract because you can use this class as a concrete
+     * class. In this case, instead of defining the execute() method, you set the
+     * code to execute by passing a Closure to the setCode() method.
      *
-     * @param InputInterface $input [InputInterface is the interface implemented
-     * by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
+     * @param InputInterface $input InputInterface is the interface implemented by
+     * all input classes.
+     * @param OutputInterface $output OutputInterface is the interface implemented
+     * by all Output classes.
      *
      * @return int
      *
      * @throws Exception
-     * @throws LogicException [When this abstract method is not implemented]
+     * @throws LogicException When this abstract method is not implemented.
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $project = $this->selectedProject($input, $output);
+        $project = $this->selectedProject();
 
         $projectPath = "resources/{$project}/";
 
-        $this->kernel->execute("cd {$projectPath} && npm run build");
+        $this->kernel->execute("cd {$projectPath} && npm run --silent build");
 
         $output->writeln($this->warningOutput("\n\t>>  RESOURCES: {$project}"));
 
-        $output->writeln($this->successOutput("\t>>  RESOURCES: project dist has been generated: {$projectPath}"));
+        $output->writeln($this->successOutput("\t>>  RESOURCES: Project dist has been generated: {$projectPath}"));
 
         return parent::SUCCESS;
     }

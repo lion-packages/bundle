@@ -7,14 +7,12 @@ namespace Lion\Bundle\Commands\Npm;
 use Lion\Bundle\Commands\Lion\Npm\NpmInstallCommand as LionNpmInstallCommand;
 
 /**
- * Install the Vite.JS project dependencies
- *
- * @package Lion\Bundle\Commands\Lion\Npm
+ * Install the project dependencies using NPM.
  */
 class NpmInstallCommand extends LionNpmInstallCommand
 {
     /**
-     * Configures the current command
+     * Configures the current command.
      *
      * @return void
      */
