@@ -127,7 +127,7 @@ class FreshMigrationsCommand extends MenuCommand
         $dbType = $this->databaseEngine->getDriver($connection[Connection::CONNECTION_TYPE]);
 
         if (isError($this->store->exist(Migrations::MIGRATIONS_PATH . "{$dbNamePascal}/{$dbType}/"))) {
-            $output->writeln($this->errorOutput("\t>> MIGRATION: There are no defined migrations."));
+            $output->writeln($this->errorOutput("\t>> MIGRATIONS: There are no defined migrations."));
 
             return parent::FAILURE;
         }

@@ -159,7 +159,7 @@ class DBSeedCommand extends MenuCommand
 
         /** @phpstan-ignore-next-line */
         foreach ($this->migrations->orderList($files) as $seedInterface) {
-            $output->writeln($this->warningOutput("\t>>  SEED: " . $seedInterface::class));
+            $output->writeln($this->warningOutput("\t>>  SEEDS: " . $seedInterface::class));
 
             if ($seedInterface instanceof SeedInterface) {
                 $response = $seedInterface->run();

@@ -172,9 +172,9 @@ class Migrations
             }
 
             /** @phpstan-ignore-next-line */
-            $message = "\t>> MIGRATION: {$response->message}";
+            $message = "\t>> MIGRATIONS: {$response->message}";
 
-            $output->writeln($command->warningOutput("\t>> MIGRATION: {$namespace}"));
+            $output->writeln($command->warningOutput("\t>> MIGRATIONS: {$namespace}"));
 
             if (isError($response)) {
                 $output->writeln($command->errorOutput($message));
