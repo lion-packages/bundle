@@ -112,20 +112,15 @@ class MenuCommand extends Command
     }
 
     /**
-     * Selection menu to obtain a Vite.JS project
-     *
-     * @param InputInterface $input [InputInterface is the interface
-     * implemented by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
+     * Selection menu to obtain a Vite.JS project.
      *
      * @return string
      *
-     * @throws Exception [If there are no projects available]
+     * @throws Exception If there are no projects available.
      *
      * @internal
      */
-    protected function selectedProject(InputInterface $input, OutputInterface $output): string
+    protected function selectedProject(): string
     {
         $projects = [];
 
@@ -148,14 +143,14 @@ class MenuCommand extends Command
         }
 
         if (empty($projects)) {
-            throw new Exception('there are no projects available', Http::INTERNAL_SERVER_ERROR);
+            throw new Exception('There are no projects available.', Http::INTERNAL_SERVER_ERROR);
         }
 
         /** @var string $defaultProject */
         $defaultProject = reset($projects);
 
         if (count($projects) <= 1) {
-            $output->writeln($this->warningOutput('(default: ' . $defaultProject . ')'));
+            $this->output->writeln($this->warningOutput('(default: ' . $defaultProject . ')'));
 
             return $defaultProject;
         }
@@ -170,7 +165,7 @@ class MenuCommand extends Command
         );
 
         /** @var string $response */
-        $response = $helper->ask($input, $output, $choiseQuestion);
+        $response = $helper->ask($this->input, $this->output, $choiseQuestion);
 
         return $response;
     }

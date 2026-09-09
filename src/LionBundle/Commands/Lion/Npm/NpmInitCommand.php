@@ -106,11 +106,11 @@ class NpmInitCommand extends MenuCommand
     }
 
     /**
-     * Initializes the command after the input has been bound and before the input
-     * is validated.
+     * Initializes the command after the input has been bound and before the input is
+     * validated.
      *
-     * This is mainly useful when a lot of commands extends one main command where
-     * some things need to be initialized based on the input arguments and options.
+     * This is mainly useful when a lot of commands extends one main command where some
+     * things need to be initialized based on the input arguments and options.
      *
      * @param InputInterface $input InputInterface is the interface implemented by
      * all input classes.
@@ -157,7 +157,7 @@ class NpmInitCommand extends MenuCommand
         $this->project = $project;
 
         if (isSuccess($this->store->exist("resources/{$this->project}/"))) {
-            $output->writeln($this->warningOutput("\t>>  RESOURCES: a resource with this name already exists."));
+            $output->writeln($this->warningOutput("\t>>  RESOURCES: A resource with this name already exists."));
 
             return parent::FAILURE;
         }
@@ -214,7 +214,7 @@ class NpmInitCommand extends MenuCommand
      */
     private function createAstroProject(): void
     {
-        $command = "cd resources/ && echo | npm create astro@latest {$this->project} ";
+        $command = "cd resources/ && echo | npm create --silent astro@latest {$this->project} ";
 
         $command .= "-- --no-install --no-git --yes --skip-houston";
 
@@ -232,7 +232,7 @@ class NpmInitCommand extends MenuCommand
     {
         $type = $this->selectedTypes(self::TYPES);
 
-        $command = "cd resources/ && echo | npm create vite@latest {$this->project}";
+        $command = "cd resources/ && echo | npm create --silent vite@latest {$this->project}";
 
         $command .= " -- --template {$template}" . ('js' === $type ? '' : '-ts');
 
@@ -250,7 +250,7 @@ class NpmInitCommand extends MenuCommand
     {
         $type = $this->selectedTypes(self::TYPES);
 
-        $command = "cd resources/ && echo | npm create @quick-start/electron";
+        $command = "cd resources/ && echo | npm create --silent @quick-start/electron";
 
         $command .= " {$this->project} -- --template {$template}" . ('js' === $type ? '' : '-ts') . ' --skip';
 

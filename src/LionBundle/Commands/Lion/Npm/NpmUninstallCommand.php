@@ -14,15 +14,13 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Uninstall the Vite.JS project dependencies
- *
- * @package Lion\Bundle\Commands\Lion\Npm
+ * Uninstall project dependencies using NPM.
  */
 class NpmUninstallCommand extends MenuCommand
 {
     /**
-     * [Adds functions to execute commands, allows you to create an Application
-     * object to run applications with your custom commands]
+     * Adds functions to execute commands, allows you to create an Application
+     * object to run applications with your custom commands.
      *
      * @property Kernel $kernel
      */
@@ -37,7 +35,7 @@ class NpmUninstallCommand extends MenuCommand
     }
 
     /**
-     * Configures the current command
+     * Configures the current command.
      *
      * @return void
      */
@@ -45,31 +43,30 @@ class NpmUninstallCommand extends MenuCommand
     {
         $this
             ->setName('npm:uninstall')
-            ->setDescription('Command to uninstall dependencies with npm from a vite project')
-            ->addArgument('packages', InputArgument::IS_ARRAY | InputArgument::OPTIONAL, 'Package name', []);
+            ->setDescription('Command to uninstall dependencies with npm from a vite project.')
+            ->addArgument('packages', InputArgument::IS_ARRAY | InputArgument::OPTIONAL, 'Package name.', []);
     }
 
     /**
-     * Executes the current command
+     * Executes the current command.
      *
-     * This method is not abstract because you can use this class
-     * as a concrete class. In this case, instead of defining the
-     * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method
+     * This method is not abstract because you can use this class as a concrete
+     * class. In this case, instead of defining the execute() method, you set the
+     * code to execute by passing a Closure to the setCode() method.
      *
-     * @param InputInterface $input [InputInterface is the interface implemented
-     * by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
+     * @param InputInterface $input InputInterface is the interface implemented by
+     * all input classes.
+     * @param OutputInterface $output OutputInterface is the interface implemented
+     * by all Output classes.
      *
      * @return int
      *
-     * @throws Exception
-     * @throws LogicException [When this abstract method is not implemented]
+     * @throws Exception If there are no projects available.
+     * @throws LogicException When this abstract method is not implemented.
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $project = $this->selectedProject($input, $output);
+        $project = $this->selectedProject();
 
         /** @var array<int, string> $packagesList */
         $packagesList = $input->getArgument('packages');
@@ -86,7 +83,7 @@ class NpmUninstallCommand extends MenuCommand
 
         /** @var string $command */
         $command = $this->str
-            ->of("cd resources/{$project}/ && npm uninstall {$packages}")
+            ->of("cd resources/{$project}/ && npm uninstall --silent {$packages}")
             ->trim()
             ->get();
 
@@ -95,7 +92,7 @@ class NpmUninstallCommand extends MenuCommand
         $output->writeln($this->warningOutput("\n\t>>  RESOURCES: {$project}"));
 
         $output->writeln($this->successOutput(
-            "\t>>  RESOURCES: dependencies have been uninstalled: {$this->arr->of(explode(' ', $packages))->join(', ')}"
+            "\t>>  RESOURCES: Dependencies have been uninstalled: {$this->arr->of(explode(' ', $packages))->join(', ')}"
         ));
 
         return parent::SUCCESS;

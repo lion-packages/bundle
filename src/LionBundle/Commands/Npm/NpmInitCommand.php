@@ -7,14 +7,12 @@ namespace Lion\Bundle\Commands\Npm;
 use Lion\Bundle\Commands\Lion\Npm\NpmInitCommand as LionNpmInitCommand;
 
 /**
- * Initialize a project with Vite.JS
- *
- * @package Lion\Bundle\Commands\Lion\Npm
+ * Initialize a project with Vite.JS/Astro.
  */
 class NpmInitCommand extends LionNpmInitCommand
 {
     /**
-     * Configures the current command
+     * Configures the current command.
      *
      * @return void
      */

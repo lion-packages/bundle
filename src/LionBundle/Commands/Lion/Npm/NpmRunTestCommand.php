@@ -12,10 +12,13 @@ use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Run the tests using NPM.
+ */
 class NpmRunTestCommand extends MenuCommand
 {
     /**
-     * Configures the current command
+     * Configures the current command.
      *
      * @return void
      */
@@ -23,33 +26,32 @@ class NpmRunTestCommand extends MenuCommand
     {
         $this
             ->setName('npm:test')
-            ->setDescription('Run the tests configured in a vite project');
+            ->setDescription('Run the tests configured in a vite project.');
     }
 
     /**
-     * Executes the current command
+     * Executes the current command.
      *
-     * This method is not abstract because you can use this class
-     * as a concrete class. In this case, instead of defining the
-     * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method
+     * This method is not abstract because you can use this class as a concrete
+     * class. In this case, instead of defining the execute() method, you set the
+     * code to execute by passing a Closure to the setCode() method.
      *
-     * @param InputInterface $input [InputInterface is the interface implemented
-     * by all input classes]
-     * @param OutputInterface $output [OutputInterface is the interface
-     * implemented by all Output classes]
+     * @param InputInterface $input InputInterface is the interface implemented by
+     * all input classes.
+     * @param OutputInterface $output OutputInterface is the interface implemented
+     * by all Output classes.
      *
      * @return int
      *
-     * @throws Exception
-     * @throws LogicException [When this abstract method is not implemented]
+     * @throws Exception If there are no projects available.
+     * @throws LogicException When this abstract method is not implemented.
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $project = $this->selectedProject($input, $output);
+        $project = $this->selectedProject();
 
         ProcessCommand::run("cd resources/{$project} && npm run test");
 
-        return Command::SUCCESS;
+        return parent::SUCCESS;
     }
 }

@@ -7,14 +7,12 @@ namespace Lion\Bundle\Commands\Npm;
 use Lion\Bundle\Commands\Lion\Npm\NpmRunBuildCommand as LionNpmRunBuildCommand;
 
 /**
- * Generate the dist of the Vite.JS project
- *
- * @package Lion\Bundle\Commands\Lion\Npm
+ * Generates the project's distribution folder (dist).
  */
 class NpmRunBuildCommand extends LionNpmRunBuildCommand
 {
     /**
-     * Configures the current command
+     * Configures the current command.
      *
      * @return void
      */

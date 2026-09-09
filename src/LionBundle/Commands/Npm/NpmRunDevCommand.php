@@ -7,9 +7,7 @@ namespace Lion\Bundle\Commands\Npm;
 use Lion\Bundle\Commands\Lion\Npm\NpmRunDevCommand as NpmNpmRunDevCommand;
 
 /**
- * Run the local vite environment for development
- *
- * @package Lion\Bundle\Commands\Npm
+ * Run the local vite environment for development.
  */
 class NpmRunDevCommand extends NpmNpmRunDevCommand
 {
