@@ -19,9 +19,8 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class SHFileCommandTest extends Test
 {
-    private const string URL_PATH = './storage/sh/';
     private const string FILE_NAME = 'test-app';
-    private const string FILE = self::URL_PATH . self::FILE_NAME . '.sh';
+    private const string FILE = SHFileCommand::PATH_SH . self::FILE_NAME . '.sh';
     private const string OUTPUT_MESSAGE = 'The script was generated successfully.';
 
     private CommandTester $commandTester;
@@ -45,14 +44,14 @@ class SHFileCommandTest extends Test
 
         $this->commandTester = new CommandTester($application->find('new:sh'));
 
-        $this->createDirectory(self::URL_PATH);
+        $this->createDirectory(SHFileCommand::PATH_SH);
 
         $this->initReflection($this->shFileCommand);
     }
 
     protected function tearDown(): void
     {
-        $this->rmdirRecursively(self::URL_PATH);
+        $this->rmdirRecursively(SHFileCommand::PATH_SH);
     }
 
     /**

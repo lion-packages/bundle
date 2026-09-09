@@ -15,21 +15,25 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Generates a .sh file
- *
- * @package Lion\Bundle\Commands\Lion\New
+ * Generates a .sh file.
  */
 class SHFileCommand extends Command
 {
     /**
-     * Fabricates the data provided to manipulate information (folder, class, namespace)
+     * SH path.
+     */
+    public const string PATH_SH = 'storage/Sh/';
+
+    /**
+     * Fabricates the data provided to manipulate information (folder, class,
+     * namespace).
      *
      * @var ClassFactory $classFactory
      */
     private ClassFactory $classFactory;
 
     /**
-     * Manipulate system files
+     * Manipulate system files.
      *
      * @var Store $store
      */
@@ -52,7 +56,7 @@ class SHFileCommand extends Command
     }
 
     /**
-     * Configures the current command
+     * Configures the current command.
      *
      * @return void
      */
@@ -60,42 +64,46 @@ class SHFileCommand extends Command
     {
         $this
             ->setName('new:sh')
-            ->setDescription('Command required to create files with sh extension')
-            ->addArgument('sh', InputArgument::OPTIONAL, 'SH name', 'Example');
+            ->setDescription('Command required to create files with sh extension.')
+            ->addArgument('sh', InputArgument::OPTIONAL, '.sh file name.', 'example');
     }
 
     /**
-     * Executes the current command
+     * Executes the current command.
      *
      * This method is not abstract because you can use this class as a concrete
      * class. In this case, instead of defining the execute() method, you set the
-     * code to execute by passing a Closure to the setCode() method
+     * code to execute by passing a Closure to the setCode() method.
      *
      * @param InputInterface $input InputInterface is the interface implemented by
-     * all input classes
+     * all input classes.
      * @param OutputInterface $output OutputInterface is the interface implemented
-     * by all Output classes
+     * by all Output classes.
      *
      * @return int
      *
-     * @throws Exception If the file could not be opened
-     * @throws LogicException When this abstract method is not implemented
+     * @throws Exception If the file could not be opened.
+     * @throws LogicException When this abstract method is not implemented.
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         /** @var string $sh */
         $sh = $input->getArgument('sh');
 
-        $this->store->folder('storage/sh/');
+        $this->classFactory->classFactory(self::PATH_SH, $sh);
+
+        $fileName = basename($sh);
+
+        $folder = $this->classFactory->getFolder();
+
+        $this->store->folder($folder);
 
         $this->classFactory
-            ->create($sh, ClassFactory::SH_EXTENSION, 'storage/sh/')
+            ->create($fileName, ClassFactory::SH_EXTENSION, $folder)
             ->add("#!/bin/bash\n")
             ->close();
 
-        chmod("storage/sh/{$sh}.sh", 0755);
-
-        $output->writeln($this->warningOutput("\t>>  SH: {$sh}"));
+        $output->writeln($this->warningOutput("\t>>  SH: {$folder}{$fileName}." . ClassFactory::SH_EXTENSION));
 
         $output->writeln($this->successOutput("\t>>  SH: The script was generated successfully."));
 
