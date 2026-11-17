@@ -783,16 +783,16 @@
         },
         {
             "name": "lion/command",
-            "version": "v6.2.5",
+            "version": "v6.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/command.git",
-                "reference": "9bba22badd363821c20d269a8f700b5a086cf17c"
+                "reference": "0d0b7ba7bc93bbd2024c8bff728e9157614df77b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/command/zipball/9bba22badd363821c20d269a8f700b5a086cf17c",
-                "reference": "9bba22badd363821c20d269a8f700b5a086cf17c",
+                "url": "https://api.github.com/repos/lion-packages/command/zipball/0d0b7ba7bc93bbd2024c8bff728e9157614df77b",
+                "reference": "0d0b7ba7bc93bbd2024c8bff728e9157614df77b",
                 "shasum": ""
             },
             "require": {
@@ -820,22 +820,23 @@
             "description": "library created with the function of executing commands from PHP.",
             "support": {
                 "issues": "https://github.com/lion-packages/command/issues",
-                "source": "https://github.com/lion-packages/command/tree/v6.2.5"
+                "source": "https://github.com/lion-packages/command/tree/v6.2.6"
             },
-            "time": "2026-09-03T14:50:59+00:00"
+            "time": "2026-11-16T16:53:26+00:00",
+            "published-time": "2026-11-16T16:53:59+00:00"
         },
         {
             "name": "lion/database",
-            "version": "v12.1.5",
+            "version": "v12.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/database.git",
-                "reference": "72cea8fbcbf4dde7a7066714ed18be5424483a69"
+                "reference": "34e5665fa0105b66c5abbf32ed391f525850d5d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/database/zipball/72cea8fbcbf4dde7a7066714ed18be5424483a69",
-                "reference": "72cea8fbcbf4dde7a7066714ed18be5424483a69",
+                "url": "https://api.github.com/repos/lion-packages/database/zipball/34e5665fa0105b66c5abbf32ed391f525850d5d8",
+                "reference": "34e5665fa0105b66c5abbf32ed391f525850d5d8",
                 "shasum": ""
             },
             "require": {
@@ -872,20 +873,21 @@
                 "issues": "https://github.com/lion-packages/database/issues",
                 "source": "https://github.com/lion-packages/database"
             },
-            "time": "2026-09-03T14:57:32+00:00"
+            "time": "2026-11-17T14:35:54+00:00",
+            "published-time": "2026-11-17T14:36:30+00:00"
         },
         {
             "name": "lion/dependency-injection",
-            "version": "v5.1.4",
+            "version": "v5.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/dependency-injection.git",
-                "reference": "b767924ef2f158a02abc0202474501c697b4c8d1"
+                "reference": "81d07b9cfb35a4ad0964dcac6da0c2673445d542"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/dependency-injection/zipball/b767924ef2f158a02abc0202474501c697b4c8d1",
-                "reference": "b767924ef2f158a02abc0202474501c697b4c8d1",
+                "url": "https://api.github.com/repos/lion-packages/dependency-injection/zipball/81d07b9cfb35a4ad0964dcac6da0c2673445d542",
+                "reference": "81d07b9cfb35a4ad0964dcac6da0c2673445d542",
                 "shasum": ""
             },
             "require": {
@@ -893,7 +895,7 @@
                 "php-di/php-di": "^7.0"
             },
             "require-dev": {
-                "infection/infection": "^0.29.14 || ^0.31.0 || ^0.32.0 || ^0.33.0 || ^0.34.0",
+                "infection/infection": "^0.29.14 || ^0.31.0 || ^0.32.0 || ^0.33.0 || ^0.34.0 || ^0.35.0",
                 "lion/test": "^2.1 || ^3.0 || ^4.0",
                 "overtrue/phplint": "^9.5",
                 "phpstan/phpstan": "^2.1",
@@ -921,20 +923,21 @@
                 "issues": "https://github.com/lion-packages/dependency-injection/issues",
                 "source": "https://github.com/lion-packages/dependency-injection"
             },
-            "time": "2026-07-04T18:17:34+00:00"
+            "time": "2026-11-16T15:51:13+00:00",
+            "published-time": "2026-11-16T15:58:27+00:00"
         },
         {
             "name": "lion/exceptions",
-            "version": "v3.0.6",
+            "version": "v3.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/exceptions.git",
-                "reference": "a8de70f67bbf45f2a9bb67a238694f265ef7bbb3"
+                "reference": "6933f5717fa00bd08cadb20086627604cdec64d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/exceptions/zipball/a8de70f67bbf45f2a9bb67a238694f265ef7bbb3",
-                "reference": "a8de70f67bbf45f2a9bb67a238694f265ef7bbb3",
+                "url": "https://api.github.com/repos/lion-packages/exceptions/zipball/6933f5717fa00bd08cadb20086627604cdec64d4",
+                "reference": "6933f5717fa00bd08cadb20086627604cdec64d4",
                 "shasum": ""
             },
             "require": {
@@ -942,11 +945,11 @@
             },
             "require-dev": {
                 "guzzlehttp/guzzle": "^7.9 || ^8.0",
-                "infection/infection": "^0.29.14 || ^0.32.0 || ^0.33.0 || ^0.34.0",
+                "infection/infection": "^0.29.14 || ^0.32.0 || ^0.33.0 || ^0.34.0 || ^0.35.0",
                 "lion/test": "^3.2 || ^4.0",
                 "overtrue/phplint": "^9.5",
                 "phpstan/phpstan": "^2.0",
-                "phpunit/phpunit": "^12.0 || ^13.0",
+                "phpunit/phpunit": "^13.4",
                 "squizlabs/php_codesniffer": "^3.11 || ^4.0"
             },
             "type": "library",
@@ -962,22 +965,23 @@
             "description": "Exception handling and serializations.",
             "support": {
                 "issues": "https://github.com/lion-packages/exceptions/issues",
-                "source": "https://github.com/lion-packages/exceptions/tree/v3.0.6"
+                "source": "https://github.com/lion-packages/exceptions/tree/v3.0.7"
             },
-            "time": "2026-09-08T16:38:55+00:00"
+            "time": "2026-11-17T15:40:17+00:00",
+            "published-time": "2026-11-17T15:40:47+00:00"
         },
         {
             "name": "lion/files",
-            "version": "v9.1.5",
+            "version": "v9.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/files.git",
-                "reference": "02373062454a72a9e9616284457b8305e143326c"
+                "reference": "ef77d64c917bd86b537ee886a5ed792cacdbd192"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/files/zipball/02373062454a72a9e9616284457b8305e143326c",
-                "reference": "02373062454a72a9e9616284457b8305e143326c",
+                "url": "https://api.github.com/repos/lion-packages/files/zipball/ef77d64c917bd86b537ee886a5ed792cacdbd192",
+                "reference": "ef77d64c917bd86b537ee886a5ed792cacdbd192",
                 "shasum": ""
             },
             "require": {
@@ -986,7 +990,7 @@
                 "php": ">=8.5"
             },
             "require-dev": {
-                "infection/infection": "^0.29.14 || ^0.31.0 || ^0.32.0 || ^0.33.0 || ^0.34.0",
+                "infection/infection": "^0.29.14 || ^0.31.0 || ^0.32.0 || ^0.33.0 || ^0.34.0 || ^0.35.0",
                 "lion/test": "^4.1",
                 "overtrue/phplint": "^9.5",
                 "phpstan/phpstan": "^2.1",
@@ -1006,29 +1010,30 @@
             "description": "Library created with the function of working with internal system files.",
             "support": {
                 "issues": "https://github.com/lion-packages/files/issues",
-                "source": "https://github.com/lion-packages/files/tree/v9.1.5"
+                "source": "https://github.com/lion-packages/files/tree/v9.1.6"
             },
-            "time": "2026-09-03T15:00:41+00:00"
+            "time": "2026-11-17T16:09:02+00:00",
+            "published-time": "2026-11-17T16:09:37+00:00"
         },
         {
             "name": "lion/helpers",
-            "version": "v6.1.5",
+            "version": "v6.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/helpers.git",
-                "reference": "9836b018880190e1f30dbcbacaa3bdeedbef2d24"
+                "reference": "0e01304a69687c4c22e20ac39d0b7e8710d54e76"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/helpers/zipball/9836b018880190e1f30dbcbacaa3bdeedbef2d24",
-                "reference": "9836b018880190e1f30dbcbacaa3bdeedbef2d24",
+                "url": "https://api.github.com/repos/lion-packages/helpers/zipball/0e01304a69687c4c22e20ac39d0b7e8710d54e76",
+                "reference": "0e01304a69687c4c22e20ac39d0b7e8710d54e76",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.5"
             },
             "require-dev": {
-                "infection/infection": "^0.29.14 || ^0.31.0 || ^0.32.0 || ^0.33.0 || ^0.34.0",
+                "infection/infection": "^0.29.14 || ^0.31.0 || ^0.32.0 || ^0.33.0 || ^0.34.0 || ^0.35.0",
                 "lion/test": "^2.0 || ^3.0 || ^4.0",
                 "overtrue/phplint": "^9.5",
                 "phpstan/phpstan": "^2.1",
@@ -1048,9 +1053,10 @@
             "description": "Easy-to-use helpers for handling chains or arrangements.",
             "support": {
                 "issues": "https://github.com/lion-packages/helpers/issues",
-                "source": "https://github.com/lion-packages/helpers/tree/v6.1.5"
+                "source": "https://github.com/lion-packages/helpers/tree/v6.1.6"
             },
-            "time": "2026-09-03T16:13:54+00:00"
+            "time": "2026-11-16T14:49:29+00:00",
+            "published-time": "2026-11-16T14:49:57+00:00"
         },
         {
             "name": "lion/phroute",
@@ -1098,27 +1104,28 @@
                 "issues": "https://github.com/lion-packages/phroute/issues",
                 "source": "https://github.com/lion-packages/phroute/tree/v2.3.0"
             },
-            "time": "2025-01-13T14:40:24+00:00"
+            "time": "2025-01-13T14:40:24+00:00",
+            "published-time": "2025-01-13T14:37:42+00:00"
         },
         {
             "name": "lion/request",
-            "version": "v8.1.6",
+            "version": "v8.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/request.git",
-                "reference": "585d967c2c1de010f3994d1a4c9eae8615bb577e"
+                "reference": "f2b98539e22d129d273a3073aa74438b820860e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/request/zipball/585d967c2c1de010f3994d1a4c9eae8615bb577e",
-                "reference": "585d967c2c1de010f3994d1a4c9eae8615bb577e",
+                "url": "https://api.github.com/repos/lion-packages/request/zipball/f2b98539e22d129d273a3073aa74438b820860e5",
+                "reference": "f2b98539e22d129d273a3073aa74438b820860e5",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.5"
             },
             "require-dev": {
-                "infection/infection": "^0.29.14 || ^0.31.0 || ^0.32.0 || ^0.33.0 || ^0.34.0",
+                "infection/infection": "^0.29.14 || ^0.31.0 || ^0.32.0 || ^0.33.0 || ^0.34.0 || ^0.35.0",
                 "lion/test": "^2.0 || ^3.0 || ^4.0",
                 "overtrue/phplint": "^9.5",
                 "phpstan/phpstan": "^2.0",
@@ -1138,22 +1145,23 @@
             "description": "Library created to request input data and response requests",
             "support": {
                 "issues": "https://github.com/lion-packages/request/issues",
-                "source": "https://github.com/lion-packages/request/tree/v8.1.6"
+                "source": "https://github.com/lion-packages/request/tree/v8.1.7"
             },
-            "time": "2026-09-08T17:09:48+00:00"
+            "time": "2026-11-16T16:41:00+00:00",
+            "published-time": "2026-11-16T16:41:31+00:00"
         },
         {
             "name": "lion/route",
-            "version": "v13.1.5",
+            "version": "v13.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/route.git",
-                "reference": "de5ce41a10bedf885e00e2404842447392935c62"
+                "reference": "3dedf6c27682c09dcdcbc34c3d8a056aa454622a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/route/zipball/de5ce41a10bedf885e00e2404842447392935c62",
-                "reference": "de5ce41a10bedf885e00e2404842447392935c62",
+                "url": "https://api.github.com/repos/lion-packages/route/zipball/3dedf6c27682c09dcdcbc34c3d8a056aa454622a",
+                "reference": "3dedf6c27682c09dcdcbc34c3d8a056aa454622a",
                 "shasum": ""
             },
             "require": {
@@ -1162,7 +1170,7 @@
             },
             "require-dev": {
                 "guzzlehttp/guzzle": "^7.9 || ^8.0",
-                "infection/infection": "^0.29.14 || ^0.31.0 || ^0.32.0 || ^0.33.0 || ^0.34.0",
+                "infection/infection": "^0.29.14 || ^0.31.0 || ^0.32.0 || ^0.33.0 || ^0.34.0 || ^0.35.0",
                 "lion/dependency-injection": "^4.2 || ^5.0",
                 "lion/exceptions": "^2.0 || ^3.0",
                 "lion/request": "^7.2 || ^8.0",
@@ -1186,22 +1194,23 @@
             "description": "This library has quick router usage with regular expressions.",
             "support": {
                 "issues": "https://github.com/lion-packages/route/issues",
-                "source": "https://github.com/lion-packages/route/tree/v13.1.5"
+                "source": "https://github.com/lion-packages/route/tree/v13.1.6"
             },
-            "time": "2026-09-09T21:13:56+00:00"
+            "time": "2026-11-17T16:40:03+00:00",
+            "published-time": "2026-11-17T16:40:34+00:00"
         },
         {
             "name": "lion/security",
-            "version": "v12.0.5",
+            "version": "v12.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/security.git",
-                "reference": "70873ea343581e8bf12c4b5cab38ce6563bd285c"
+                "reference": "1af55c2b3df6514b33f35bf073bf2c387fd01023"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/security/zipball/70873ea343581e8bf12c4b5cab38ce6563bd285c",
-                "reference": "70873ea343581e8bf12c4b5cab38ce6563bd285c",
+                "url": "https://api.github.com/repos/lion-packages/security/zipball/1af55c2b3df6514b33f35bf073bf2c387fd01023",
+                "reference": "1af55c2b3df6514b33f35bf073bf2c387fd01023",
                 "shasum": ""
             },
             "require": {
@@ -1212,7 +1221,7 @@
             },
             "require-dev": {
                 "guzzlehttp/guzzle": "^7.8 || ^8.0",
-                "infection/infection": "^0.29.14 || ^0.31.0 || ^0.32.0 || ^0.33.0 || ^0.34.0",
+                "infection/infection": "^0.29.14 || ^0.31.0 || ^0.32.0 || ^0.33.0 || ^0.34.0 || ^0.35.0",
                 "lion/test": "^3.2 || ^4.0",
                 "overtrue/phplint": "^9.5",
                 "phpstan/phpstan": "^2.1",
@@ -1240,7 +1249,8 @@
                 "issues": "https://github.com/lion-packages/security/issues",
                 "source": "https://github.com/lion-packages/security"
             },
-            "time": "2026-09-03T15:50:12+00:00"
+            "time": "2026-11-15T23:14:24+00:00",
+            "published-time": "2026-11-15T23:14:46+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -4357,16 +4367,16 @@
         },
         {
             "name": "lion/test",
-            "version": "v4.1.5",
+            "version": "v4.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lion-packages/test.git",
-                "reference": "9b721765a29318a5aa6ae261eaa6b7e51fecd59b"
+                "reference": "316b7496b8f244f230138b8a368fb3f4cd3871e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lion-packages/test/zipball/9b721765a29318a5aa6ae261eaa6b7e51fecd59b",
-                "reference": "9b721765a29318a5aa6ae261eaa6b7e51fecd59b",
+                "url": "https://api.github.com/repos/lion-packages/test/zipball/316b7496b8f244f230138b8a368fb3f4cd3871e5",
+                "reference": "316b7496b8f244f230138b8a368fb3f4cd3871e5",
                 "shasum": ""
             },
             "require": {
@@ -4374,9 +4384,9 @@
                 "php": ">=8.5"
             },
             "require-dev": {
-                "infection/infection": "^0.29.14 || ^0.31.0 || ^0.32.0 || ^0.33.0 || ^0.34.0",
+                "infection/infection": "^0.29.14 || ^0.31.0 || ^0.32.0 || ^0.33.0 || ^0.34.0 || ^0.35.0",
                 "lion/exceptions": "^2.0 || ^3.0",
-                "overtrue/phplint": "^9.5",
+                "overtrue/phplint": "^9.8",
                 "phpstan/phpstan": "^2.0",
                 "phpunit/phpunit": "^12.0 || ^13.0",
                 "squizlabs/php_codesniffer": "^3.11 || ^4.0"
@@ -4402,7 +4412,8 @@
                 "issues": "https://github.com/lion-packages/test/issues",
                 "source": "https://github.com/lion-packages/test"
             },
-            "time": "2026-09-03T16:03:56+00:00"
+            "time": "2026-11-17T17:33:19+00:00",
+            "published-time": "2026-11-17T17:34:14+00:00"
         },
         {
             "name": "myclabs/deep-copy",
