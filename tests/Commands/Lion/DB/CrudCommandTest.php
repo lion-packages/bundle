@@ -100,13 +100,13 @@ class CrudCommandTest extends Test
 
     private function createTables(): void
     {
-        /** @var string $dbName */
-        $dbName = env('DB_DEFAULT');
+        /** @var string $defaultConnection */
+        $defaultConnection = env('DB_DEFAULT');
 
         /** @var string $dbNameTestPostgresql */
         $dbNameTestPostgresql = env('DB_NAME_TEST_POSTGRESQL');
 
-        Schema::connection($dbName)
+        Schema::connection($defaultConnection)
             ->createTable(self::ENTITY, function (): void {
                 Schema::int('id')->notNull()->autoIncrement()->primaryKey();
                 Schema::varchar('name', 25)->notNull();
