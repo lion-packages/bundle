@@ -121,11 +121,8 @@ jobs:
           key: php-vendor-${{ runner.os }}-${{ github.run_id }}
           restore-keys: php-vendor-${{ runner.os }}-${{ github.run_id }}
 
-      - name: PHPLint (Src)
-        run: php -d memory_limit=-1 vendor/bin/phplint src
-
-      - name: PHPLint (Tests)
-        run: php -d memory_limit=-1 vendor/bin/phplint tests
+      - name: PHPLint (Src/Tests)
+        run: php -d memory_limit=-1 vendor/bin/phplint
 
       - name: PHPStan (Src)
         run: php -d memory_limit=-1 vendor/bin/phpstan analyse --level 10 src

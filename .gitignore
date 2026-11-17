@@ -6,6 +6,7 @@
 /tests/PHPUnit/
 /tests/App/
 /tests/Database/
+/tests/build/
 /tests/lion_database.sqlite
 /public/lion_database.sqlite
 .phpunit.result.cache
