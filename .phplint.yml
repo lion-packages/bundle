@@ -1,0 +1,8 @@
+path:
+  - src
+  - tests
+exclude:
+  - vendor
+  - tests/build
+file-extensions:
+  - php
